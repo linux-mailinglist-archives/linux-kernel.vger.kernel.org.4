@@ -2,186 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7088774E38C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05EA74E2CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjGKBic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S230263AbjGKAxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjGKBi0 (ORCPT
+        with ESMTP id S230155AbjGKAxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:38:26 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::609])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69F2127;
-        Mon, 10 Jul 2023 18:38:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LFS8o9pFEV0dUIgVUcMRBquji1fKNklvXJUe9TPxRIPbH0ayfsuARzocOICBZcwLvR4HJqyUKOfQAp9t0j9nM2elNSsKbTLfUK4Nh13cyRswEKBeH4kDnznuzq7t5Ex6noYcOXf645Xx8qAfvYQcK/+V7G/PVT8FvFfaFuGqX8KIdk3WsQDHc+DcHXugqtIzTPvKPi8RUPrb+Kx8PPGnMj3tTmX/FPXmM9LLjqqKyJpAPBTGXahqhWuDbrUn2HI3ipwMUX206oF1UgF/rx8GZNj4M1lARx2n27HZEaHrVMIGJ1ld8WujtmdHVOZpk13M0fJra1ArSDp3ATc7JqR9zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xjqRBZV/BRWYoL1Op7sNBPP8iaAjNShEAKeUMswYBQM=;
- b=g7zLOLTfUhYL6y7wi8xI9IISSE++190BhRUxnTBgV+WwTx8RuoFsDYO6T0dnY2FIZYEC6tRC9UGYn8Yr4hjsspj3gWZckt0xafFoBlUt0jCte3ijzpYaw+4XxIXcse7dzsCZOcvPhIWJKI7V208kKwEzwDIqaDW7B30+IAZ9o8t24FGKpcLTnNZ0Bk8CeneveyXjn6xY1BPJOwz4E3nF8a8CoBewb56hBYKfGJym7mlKWSUrItx94y5kqSg3jmZFXRt68qTxysRlIS3lDY69afGYMvlEspHLt4itjXfgUZ3RHEnP0FKO+eQMBGMEowtTbGPzLFMQCv4arj6l+kz+Sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xjqRBZV/BRWYoL1Op7sNBPP8iaAjNShEAKeUMswYBQM=;
- b=Z7DiiqgT2KQNQBKnRJrO7ZTTGiI3xx2Fu3OkGkjvRLUDQIQxLdz8hTwZ/SeqhZCnsGDSlZDAg4bfJTw8iqtDll1aU+f2pM/wHh5PaVh9hGdbUOXxSEPg0x8fbXlmKImXHPObRn3aJjuEn2gf2VUShYrmo8ZqbnaGL+MSerm2sxo=
-Received: from MW4PR03CA0047.namprd03.prod.outlook.com (2603:10b6:303:8e::22)
- by CY5PR12MB6035.namprd12.prod.outlook.com (2603:10b6:930:2d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Tue, 11 Jul
- 2023 01:38:23 +0000
-Received: from CO1NAM11FT091.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8e:cafe::ca) by MW4PR03CA0047.outlook.office365.com
- (2603:10b6:303:8e::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31 via Frontend
- Transport; Tue, 11 Jul 2023 01:38:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT091.mail.protection.outlook.com (10.13.175.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6588.19 via Frontend Transport; Tue, 11 Jul 2023 01:38:22 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 10 Jul
- 2023 20:38:21 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Iain Lane <iain@orangesquash.org.uk>,
-        "Kuppuswamy Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v7 2/2] PCI: Don't put non-power manageable PCIe root ports into D3
-Date:   Mon, 10 Jul 2023 19:53:25 -0500
-Message-ID: <20230711005325.1499-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230711005325.1499-1-mario.limonciello@amd.com>
-References: <20230711005325.1499-1-mario.limonciello@amd.com>
+        Mon, 10 Jul 2023 20:53:43 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3297EAF;
+        Mon, 10 Jul 2023 17:53:42 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b8a6ca994eso4514551a34.1;
+        Mon, 10 Jul 2023 17:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689036821; x=1691628821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlH6F/OufMM8Ka/LNuOcbo5rYmpkl9l/kq7tYFybC5o=;
+        b=XuCZOc6WJ1crJ6/ynTjn6wD0VJ7nGUtHeSlU0puj77UbrrcA71Tqhqsb2VCWnmQy/M
+         5vu2HKoKCbYrx4kqN6OG/RlHlw6YJoYNqBt1+ZeKRnEDDbjJK/d9Dpy6ZAT52pf8UgrO
+         PiVST+pweOb+/mRCxGSB+TcqVxw73rbFSDMHKMykIVtjLWd2eMYn8DKad8LQevbnXG8T
+         ZnJ+z1/kl+wSyUuWUYc360bEMoqx3NvuPrhoX/scs/q/cwOZclPwbZYnmmHfzqHtduuq
+         ZHRB59EJqM1yWDMc5APMPqYeYSNN3+sF30lXn43u5PN386WMItdfxSIedcZm9aDkOMDS
+         Oxfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689036821; x=1691628821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TlH6F/OufMM8Ka/LNuOcbo5rYmpkl9l/kq7tYFybC5o=;
+        b=UqN6zLRhFyQWuV0Ld6qeneMlvZWDnLieaE22Na6TEL5WK0iSYXNFErU0Es5ojtSON0
+         +2nAHEf+kWNF/Vn00J3NOBWc+g5klRQVGE9qTDTOUBhR55rsYRPY40OQfmAt49fDtIz/
+         d9efb2W94/Vk5fK4BnCMYt/3zH5L6cTZgiAax40C4GP3qqLqzUjaFSsUXdvlWJ/pjPTc
+         iIs8C7eSZNcKZfy4JmLRdv8tHCzaKJkJ7R3SQlWWJBTMp03fm+P0jLhDGJkg0X5AkX5z
+         E3W5k8BhZ9Q+3vJAcDEipr52S3WwQk3I/GvjKIVtlS0eedTyn2z2neLYphkLjTb5rw8Y
+         Le8w==
+X-Gm-Message-State: ABy/qLbwzTLDzZm9Q7zPswupixY0QXJ/ZlyHERNteKXPWveUZ/9tjRUr
+        ApKf57hgrRevlb341EaURIs=
+X-Google-Smtp-Source: APBJJlFGQ3yZMJHHulUmPV5TtKIfi0FMQWSyswOOo0THiqarbZQml2R6/2NevozOESSq9etcx4oFPA==
+X-Received: by 2002:a05:6870:46a0:b0:1b3:7e8e:2b1b with SMTP id a32-20020a05687046a000b001b37e8e2b1bmr14916279oap.34.1689036821231;
+        Mon, 10 Jul 2023 17:53:41 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id 24-20020a17090a035800b00263f5ac814esm7407929pjf.38.2023.07.10.17.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 17:53:40 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 229758197D16; Tue, 11 Jul 2023 07:53:35 +0700 (WIB)
+Date:   Tue, 11 Jul 2023 07:53:35 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Chris Dunlop <chris@onthe.net.au>,
+        Linux XFS <linux-xfs@vger.kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Linux Stable <stable@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: rm hanging, v6.1.35
+Message-ID: <ZKyoD7WDKfzsKAaT@debian.me>
+References: <20230710215354.GA679018@onthe.net.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT091:EE_|CY5PR12MB6035:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5aa9c40c-0637-49db-111b-08db81af8380
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mCdjBFgUZLGYswVaPHe2ZHQZbl3MRpYU2rKZmm48nggnmAZnGQdQ+CKaWKp6k4bSdJsEyClI4j79SJMdwQPf7IADkmyrwPCiEVuqnAMc16eTMqO1RwGiUFwuGMjwQAJEJUogoZe2yPoDVCG6IbX2IItc7yxGXjGylDKF3+zMCFsxgQG5JNoFupRFEGOp8qk/NI1sFalN8KIAtKl+IiZUFJAuX+7aQpB8U07sJUgepJEwOmHzGzS1AL2gktVP82DAssvKc0+kNVQO6ozZa5Uq7oUO+6xGS5IqTLMRYu/lND02a+XQB+RKBGnCpC2i99WpqgIibCfn2jxCwOK1bb2TRr9j0/gO1pA+YavXBxny+LVAKf1UP9XDfVH74IMiJsU0Vcq3vSl1YSIHRVKXaFUZmlSoyO7kWfEGw4+rGnOzE5OtSZVPNZAoNFdZNVMyuDdxUy39TZoWcRaJnvjYzS3ZYjk2zrM3cjtMZXLy5NeKrKtrAjh2LU511Tuee0+CkeF1LUG3MB1tx06WhDZSEUuaZmfVNSJuzd/dpPm3Am6g4+qfHskA+fdYk2HqS5+9EHo8CnibGXo27tmFsp+ZyB7hmqQjC0XavtPhqkmrdANnkL6jpkoE5xbMfGtotdJoiBs2XQdfUKEENXof5Gp0wEm12xrPtfsOUfipvYvmgCSd/4h0j88S2jkGWJCXGK/03dH28I5osVVlqj1t/DwqUQWJawmVWohMDrYv8USK9vD3LPquqqjdSp1RblDEwsIQsOC+aITOE167YlVRe7JtFvs0xvNsZXScrsMnT1G6Um3a51w=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(336012)(426003)(2616005)(41300700001)(26005)(1076003)(83380400001)(16526019)(186003)(36860700001)(966005)(47076005)(478600001)(81166007)(82740400003)(356005)(110136005)(54906003)(7696005)(40460700003)(4326008)(44832011)(70206006)(70586007)(40480700001)(316002)(86362001)(8936002)(82310400005)(5660300002)(8676002)(2906002)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 01:38:22.6806
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5aa9c40c-0637-49db-111b-08db81af8380
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT091.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6035
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GhqsgA1hSdl/QpsA"
+Content-Disposition: inline
+In-Reply-To: <20230710215354.GA679018@onthe.net.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-PCIe ports from modern machines (>2015) are allowed to be put into D3 by
-storing a flag in the `struct pci_dev` structure.
 
-pci_power_manageable() uses this flag to indicate a PCIe port can enter D3.
-pci_pm_suspend_noirq() uses the return from pci_power_manageable() to
-decide whether to try to put a device into its target state for a sleep
-cycle via pci_prepare_to_sleep().
+--GhqsgA1hSdl/QpsA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For devices that support D3, the target state is selected by this policy:
-1. If platform_pci_power_manageable():
-   Use platform_pci_choose_state()
-2. If the device is armed for wakeup:
-   Select the deepest D-state that supports a PME.
-3. Else:
-   Use D3hot.
+On Tue, Jul 11, 2023 at 07:53:54AM +1000, Chris Dunlop wrote:
+> Hi,
+>=20
+> This box is newly booted into linux v6.1.35 (2 days ago), it was previous=
+ly
+> running v5.15.118 without any problems (other than that fixed by
+> "5e672cd69f0a xfs: non-blocking inodegc pushes", the reason for the
+> upgrade).
+>=20
+> I have rm operations on two files that have been stuck for in excess of 22
+> hours and 18 hours respectively:
+>=20
+> $ ps -opid,lstart,state,wchan=3DWCHAN-xxxxxxxxxxxxxxx,cmd -C rm
+>     PID                  STARTED S WCHAN-xxxxxxxxxxxxxxx CMD
+> 2379355 Mon Jul 10 09:07:57 2023 D vfs_unlink            /bin/rm -rf /aaa=
+/5539_tmp
+> 2392421 Mon Jul 10 09:18:27 2023 D down_write_nested     /bin/rm -rf /aaa=
+/5539_tmp
+> 2485728 Mon Jul 10 09:28:57 2023 D down_write_nested     /bin/rm -rf /aaa=
+/5539_tmp
+> 2488254 Mon Jul 10 09:39:27 2023 D down_write_nested     /bin/rm -rf /aaa=
+/5539_tmp
+> 2491180 Mon Jul 10 09:49:58 2023 D down_write_nested     /bin/rm -rf /aaa=
+/5539_tmp
+> 3014914 Mon Jul 10 13:00:33 2023 D vfs_unlink            /bin/rm -rf /bbb=
+/5541_tmp
+> 3095893 Mon Jul 10 13:11:03 2023 D down_write_nested     /bin/rm -rf /bbb=
+/5541_tmp
+> 3098809 Mon Jul 10 13:21:35 2023 D down_write_nested     /bin/rm -rf /bbb=
+/5541_tmp
+> 3101387 Mon Jul 10 13:32:06 2023 D down_write_nested     /bin/rm -rf /bbb=
+/5541_tmp
+> 3195017 Mon Jul 10 13:42:37 2023 D down_write_nested     /bin/rm -rf /bbb=
+/5541_tmp
+>=20
+> The "rm"s are run from a process that's obviously tried a few times to get
+> rid of these files.
+>=20
+> There's nothing extraordinary about the files in terms of size:
+>=20
+> $ ls -ltrn --full-time /aaa/5539_tmp /bbb/5541_tmp
+> -rw-rw-rw- 1 1482 1482 7870643 2023-07-10 06:07:58.684036505 +1000 /aaa/5=
+539_tmp
+> -rw-rw-rw- 1 1482 1482  701240 2023-07-10 10:00:34.181064549 +1000 /bbb/5=
+541_tmp
+>=20
+> As hinted by the WCHAN in the ps output above, each "primary" rm (i.e. the
+> first one run on each file) stack trace looks like:
+>=20
+> [<0>] vfs_unlink+0x48/0x270
+> [<0>] do_unlinkat+0x1f5/0x290
+> [<0>] __x64_sys_unlinkat+0x3b/0x60
+> [<0>] do_syscall_64+0x34/0x80
+> [<0>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>=20
+> And each "secondary" rm (i.e. the subsequent ones on each file) stack tra=
+ce
+> looks like:
+>=20
+> =3D=3D blog-230710-xfs-rm-stuckd
+> [<0>] down_write_nested+0xdc/0x100
+> [<0>] do_unlinkat+0x10d/0x290
+> [<0>] __x64_sys_unlinkat+0x3b/0x60
+> [<0>] do_syscall_64+0x34/0x80
+> [<0>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>=20
+> Multiple kernel strack traces don't show vfs_unlink or anything related t=
+hat
+> I can see, or anything else consistent or otherwise interesting. Most cor=
+es
+> are idle.
+>=20
+> Each of /aaa and /bbb are separate XFS filesystems:
+>=20
+> $ xfs_info /aaa
+> meta-data=3D/dev/mapper/aaa        isize=3D512    agcount=3D2, agsize=3D2=
+68434432 blks
+>          =3D                       sectsz=3D4096  attr=3D2, projid32bit=
+=3D1
+>          =3D                       crc=3D1        finobt=3D1, sparse=3D1,=
+ rmapbt=3D1
+>          =3D                       reflink=3D1    bigtime=3D1 inobtcount=
+=3D1
+> data     =3D                       bsize=3D4096   blocks=3D536868864, ima=
+xpct=3D5
+>          =3D                       sunit=3D256    swidth=3D256 blks
+> naming   =3Dversion 2              bsize=3D4096   ascii-ci=3D0, ftype=3D1
+> log      =3Dinternal log           bsize=3D4096   blocks=3D262143, versio=
+n=3D2
+>          =3D                       sectsz=3D4096  sunit=3D1 blks, lazy-co=
+unt=3D1
+> realtime =3Dnone                   extsz=3D4096   blocks=3D0, rtextents=
+=3D0
+>=20
+> $ xfs_info /bbb
+> meta-data=3D/dev/mapper/bbb        isize=3D512    agcount=3D8, agsize=3D2=
+68434432 blks
+>          =3D                       sectsz=3D4096  attr=3D2, projid32bit=
+=3D1
+>          =3D                       crc=3D1        finobt=3D1, sparse=3D1,=
+ rmapbt=3D1
+>          =3D                       reflink=3D1    bigtime=3D1 inobtcount=
+=3D1
+> data     =3D                       bsize=3D4096   blocks=3D1879047168, im=
+axpct=3D5
+>          =3D                       sunit=3D256    swidth=3D256 blks
+> naming   =3Dversion 2              bsize=3D4096   ascii-ci=3D0, ftype=3D1
+> log      =3Dinternal log           bsize=3D4096   blocks=3D521728, versio=
+n=3D2
+>          =3D                       sectsz=3D4096  sunit=3D1 blks, lazy-co=
+unt=3D1
+> realtime =3Dnone                   extsz=3D4096   blocks=3D0, rtextents=
+=3D0
+>=20
+> There's plenty of free space at the fs level:
+>=20
+> $ df -h /aaa /bbb
+> Filesystem          Size  Used Avail Use% Mounted on
+> /dev/mapper/aaa     2.0T  551G  1.5T  27% /aaa
+> /dev/mapper/bbb     7.0T  3.6T  3.5T  52% /bbb
+>=20
+> The fses are on sparse ceph/rbd volumes, the underlying storage tells me
+> they're 50-60% utilised:
+>=20
+> aaa: provisioned=3D"2048G" used=3D"1015.9G"
+> bbb: provisioned=3D"7168G" used=3D"4925.3G"
+>=20
+> Where to from here?
+>=20
+> I'm guessing only a reboot is going to unstick this. Anything I should be
+> looking at before reverting to v5.15.118?
+>=20
+> ...subsequent to starting writing all this down I have another two sets of
+> rms stuck, again on unremarkable files, and on two more separate
+> filesystems.
+>=20
+> ...oh. And an 'ls' on those files is hanging. The reboot has become more
+> urgent.
+>=20
 
-Devices are considered power manageable by the platform when they have
-one or more objects described in the table in section 7.3 of the ACPI 6.4
-specification.
+Smells like regression resurfaced, right? I mean, does 5e672cd69f0a53 not
+completely fix your reported blocking regression earlier?
 
-At suspend Linux puts PCIe root ports that are not power manageable by
-the platform into D3hot. Windows only puts PCIe root ports into D3 when
-they are power manageable by the platform.
+I'm kinda confused...
 
-The policy selected for Linux to put non-power manageable PCIe root ports
-into D3hot at system suspend doesn't match anything in the PCIe or ACPI
-specs.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Linux shouldn't assume PCIe root ports support D3 just because
-they're on a machine newer than 2015, the ports should also be considered
-power manageable by the platform.
+--GhqsgA1hSdl/QpsA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Add an extra check for PCIe root ports to ensure D3 isn't selected for
-them if they are not power-manageable through platform firmware.
-This will avoid pci_pm_suspend_noirq() changing the power state
-via pci_prepare_to_sleep().
+-----BEGIN PGP SIGNATURE-----
 
-The check is focused on PCIe root ports because they are part of
-the platform.  Other PCIe bridges may be connected externally and thus
-cannot impose platform specific limitations.
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKyoCwAKCRD2uYlJVVFO
+ox6KAQD2Aa2hpid2mNF13QCdctw+xIPLLJVu7x29O65bMaQgBAEAxY/5ZQTSxAIa
+9kjCu9oKY1syCtfQKaf0dXrQixI9/gY=
+=P7Ru
+-----END PGP SIGNATURE-----
 
-Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mgmt/device-power-management-objects.html [1]
-Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-Reported-by: Iain Lane <iain@orangesquash.org.uk>
-Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v6->v7:
-* revert back to v5 code, rewrite commit message to specific examples
-  and be more generic
----
- drivers/pci/pci.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index f916fd76eba79..4be8c6f8f4ebe 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3041,6 +3041,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
- 	if (dmi_check_system(bridge_d3_blacklist))
- 		return false;
- 
-+	/*
-+	 * It's not safe to put root ports that aren't power manageable
-+	 * by the platform into D3.
-+	 */
-+	if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
-+	    !platform_pci_power_manageable(bridge))
-+		return false;
-+
- 	/*
- 	 * It should be safe to put PCIe ports from 2015 or newer
- 	 * to D3.
--- 
-2.34.1
-
+--GhqsgA1hSdl/QpsA--
