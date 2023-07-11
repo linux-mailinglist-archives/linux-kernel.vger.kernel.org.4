@@ -2,169 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1274874FB3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2516174FB51
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjGKWrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S231856AbjGKWvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGKWru (ORCPT
+        with ESMTP id S231202AbjGKWvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:47:50 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE536E60;
-        Tue, 11 Jul 2023 15:47:48 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3a3efee1d44so3508985b6e.3;
-        Tue, 11 Jul 2023 15:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689115668; x=1691707668;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BpcCgQS0gXCD+hvSguR3UnFG1qnT0lm+T8n1vVCxIxM=;
-        b=KjTLIEMy/UOKJS1nUesRrgNqETtpUU0ym+GtGAS0nFpmlOsPFT0VC/jMhiTqKwR7x3
-         tfYaqWNaR4ur3HpMyd3W+6YOkE561EpXrBmhhMWYXTBP6LnMYlvWxTzwOFmFqdsnEwcL
-         snkaXVqvV4e1gS6bEc5wMcRFH41l/KzwrKQwnftmp4+xhprfLzdF/PHafuYWzblnuGe5
-         3paEvWudVifKhm1nRSzBUrntu6IUDNQ7HTI0uIKEKGkRJMNXX5Ovimtp460oe/LG+pBA
-         Y8okBDt7o/qGr9yFlfPgtAsXL6pErNaLJzgxtAy+EnUPM/DBWFzas+/8GvI3k96PWhTM
-         W8Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689115668; x=1691707668;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BpcCgQS0gXCD+hvSguR3UnFG1qnT0lm+T8n1vVCxIxM=;
-        b=Ws/s8Od7gKKUHof1aS6a9pLtnTFiflWWTygt1ay/2KvHcWdG58/O2DXPSPd3UepCDs
-         pJsflMgCz9PO6oFce3OuuRMWmxugC1SvVTNEu1bgPjeE02ZGSP03ftm7rqoAPrNUbo9E
-         EuK3jmsompG+cpc4RGpsyLZY39qo23tqVQhx390EIbieFISHTBR2yMUWCByz4oGLXuQJ
-         zjSoZO3R7qn0f9EIY4nmH5GnZMH/9IgEZkDHASeSk/LTT+JqxozD/WEo3XX45zcg/lGE
-         c+3NY9XZZy1h+HqXDPlqokGPuYOcadmV/hfnCSe5Bw1bTXjvl7sLFMjK6fNBMOjxICBN
-         lypg==
-X-Gm-Message-State: ABy/qLaHlObQRytc23U621Dp8uhg8Xy+nKYI/6eMtORfMudm+QwqxEf4
-        /gxK/Vjt90aargzPLOIv6eEuD4hT4o4=
-X-Google-Smtp-Source: APBJJlHv0PeOyk7BhG/GOv1k9Z29OiBGd6p6xJrUCOn9UGhShD6VDfAqkzbNdM8f7Sm9K9D+9ipTOw==
-X-Received: by 2002:a54:4f8e:0:b0:3a3:ffb7:a28 with SMTP id g14-20020a544f8e000000b003a3ffb70a28mr7749566oiy.45.1689115668098;
-        Tue, 11 Jul 2023 15:47:48 -0700 (PDT)
-Received: from [10.69.46.142] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bv11-20020a05622a0a0b00b003fdebf1a634sm1580898qtb.75.2023.07.11.15.47.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 15:47:47 -0700 (PDT)
-Message-ID: <0605ac36-16d5-2026-d3c6-62d346db6dfb@gmail.com>
-Date:   Tue, 11 Jul 2023 15:47:45 -0700
+        Tue, 11 Jul 2023 18:51:52 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEEBE60;
+        Tue, 11 Jul 2023 15:51:51 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BMhBw9019399;
+        Tue, 11 Jul 2023 22:51:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=E+XLmP9vvV6+Iuom+ooIwxz5tceGTgkIEgVqiggsEgQ=;
+ b=ESy7PQ+nRggBjfrtOcyz9N0JqWoDDSfWaTI6FKCw9WvCSt80uuqTrgBaTOD7Dl7zSoCS
+ N4hEPc9jYaAw5AAmNBcMAsteYId22NgeL/fwPL+rgVXB/9Net3VPrBtFpXqomG2Su9xF
+ grcJ4YCSgQ1gwUZfWjVy0mIpDR/OO66asG7GsbPV33nWgWmunNl5zUIQPPglGkG/zCNt
+ vKL+YFXqZoTvRl4DeX7f+eEd70aUfjt9ZnMzR4J7q1yUt36Sb3e+l4vj+qt/Qy/H37F6
+ U+Ne82kMrI35T9hVEvy0yqcfrCgwsbAdSJ3UvJCqUh0vdphCGOldC4TAkTSBkGPRDSOb vQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsct58bvs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 22:51:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BMpa9q019942
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 22:51:36 GMT
+Received: from [10.110.62.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 15:51:35 -0700
+Message-ID: <af332749-fdd7-e744-16f1-21f972161589@quicinc.com>
+Date:   Tue, 11 Jul 2023 15:51:35 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
 Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>, Ewan Milne <emilne@redhat.com>
-References: <20230620133711.22840-1-dwagner@suse.de>
- <20230620133711.22840-5-dwagner@suse.de>
- <594f73f2-59b0-bbcb-d7a0-6d89e2446830@gmail.com>
- <7kcc75btp5bo5oqjnpqlwwo37l2f4atwfemknbmvqagrqicl2i@njn4tai7e4m7>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <7kcc75btp5bo5oqjnpqlwwo37l2f4atwfemknbmvqagrqicl2i@njn4tai7e4m7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
+ <20230711174320.24058-4-quic_eserrao@quicinc.com>
+ <20230711220748.vmnvwwcu5nhrvyvi@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230711220748.vmnvwwcu5nhrvyvi@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: y2sIB-0-wFr-DV5sA0MqAecVr-qT1OOC
+X-Proofpoint-ORIG-GUID: y2sIB-0-wFr-DV5sA0MqAecVr-qT1OOC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110208
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/2023 5:07 AM, Daniel Wagner wrote:
-> Hi James,
-> 
-> On Sat, Jul 01, 2023 at 05:11:11AM -0700, James Smart wrote:
->> As much as you want to make this change to make transports "similar", I am
->> dead set against it unless you are completing a long qualification of the
->> change on real FC hardware and FC-NVME devices. There is probably 1.5 yrs of
->> testing of different race conditions that drove this change. You cannot
->> declare success from a simplistic toy tool such as fcloop for validation.
+
+
+On 7/11/2023 3:07 PM, Thinh Nguyen wrote:
+> On Tue, Jul 11, 2023, Elson Roy Serrao wrote:
+>> The current implementation blocks the runtime pm operations when cable
+>> is connected. This would block platforms from entering system wide suspend
+>> during bus suspend scenario. Modify the runtime pm ops to handle bus
+>> suspend case for such platforms where the controller low power mode
+>> entry/exit is handled by the glue driver. This enablement is controlled
+>> through a dt property and platforms capable of detecting bus resume can
+>> benefit from this feature. Also modify the remote wakeup operations to
+>> trigger runtime resume before sending wakeup signal.
 >>
->> The original issues exist, probably have even morphed given the time from
->> the original change, and this will seriously disrupt the transport and any
->> downstream releases.  So I have a very strong NACK on this change.
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c   | 26 ++++++++++++++++++++++---
+>>   drivers/usb/dwc3/core.h   |  3 +++
+>>   drivers/usb/dwc3/gadget.c | 40 ++++++++++++++++++++++++++++++++-------
+>>   3 files changed, 59 insertions(+), 10 deletions(-)
 >>
->> Yes - things such as the connect failure results are difficult to return
->> back to nvme-cli. I have had many gripes about the nvme-cli's behavior over
->> the years, especially on negative cases due to race conditions which
->> required retries. It still fails this miserably.  The async reconnect path
->> solved many of these issues for fc.
->>
->> For the auth failure, how do we deal with things if auth fails over time as
->> reconnects fail due to a credential changes ?  I would think commonality of
->> this behavior drives part of the choice.
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index f6689b731718..898c0f68e190 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1534,6 +1534,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>   	dwc->dis_split_quirk = device_property_read_bool(dev,
+>>   				"snps,dis-split-quirk");
+>>   
+>> +	dwc->allow_rtsusp_on_u3 = device_property_read_bool(dev,
+>> +				"snps,allow-rtsusp-on-u3");
+>> +
+>>   	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+>>   	dwc->tx_de_emphasis = tx_de_emphasis;
+>>   
+>> @@ -1984,11 +1987,21 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>   {
+>>   	unsigned long	flags;
+>>   	u32 reg;
+>> +	int link_state;
+>>   
+>>   	switch (dwc->current_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_DEVICE:
+>>   		if (pm_runtime_suspended(dwc->dev))
+>>   			break;
+>> +
+>> +		if (dwc->connected) {
+>> +			link_state = dwc3_gadget_get_link_state(dwc);
+>> +			/* bus suspend case */
+>> +			if (dwc->allow_rtsusp_on_u3 &&
+>> +			    link_state == DWC3_LINK_STATE_U3)
+>> +				break;
+>> +			return -EBUSY;
+>> +		}
+>>   		dwc3_gadget_suspend(dwc);
+>>   		synchronize_irq(dwc->irq_gadget);
+>>   		dwc3_core_exit(dwc);
+>> @@ -2045,6 +2058,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>>   
+>>   	switch (dwc->current_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_DEVICE:
+>> +		/* bus resume case */
+>> +		if (dwc->connected)
+>> +			break;
+>>   		ret = dwc3_core_init_for_resume(dwc);
+>>   		if (ret)
+>>   			return ret;
+>> @@ -2123,9 +2139,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+>>   	struct dwc3     *dwc = dev_get_drvdata(dev);
+>>   	int		ret;
+>>   
+>> -	if (dwc3_runtime_checks(dwc))
+>> -		return -EBUSY;
+>> -
+>>   	ret = dwc3_suspend_common(dwc, PMSG_AUTO_SUSPEND);
+>>   	if (ret)
+>>   		return ret;
+>> @@ -2160,9 +2173,15 @@ static int dwc3_runtime_resume(struct device *dev)
+>>   static int dwc3_runtime_idle(struct device *dev)
+>>   {
+>>   	struct dwc3     *dwc = dev_get_drvdata(dev);
+>> +	int		link_state;
+>>   
+>>   	switch (dwc->current_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_DEVICE:
+>> +		link_state = dwc3_gadget_get_link_state(dwc);
+>> +		/* for bus suspend case return success */
+>> +		if (dwc->allow_rtsusp_on_u3 && dwc->connected &&
+>> +		    link_state == DWC3_LINK_STATE_U3)
+>> +			goto autosuspend;
+>>   		if (dwc3_runtime_checks(dwc))
+>>   			return -EBUSY;
+>>   		break;
+>> @@ -2172,6 +2191,7 @@ static int dwc3_runtime_idle(struct device *dev)
+>>   		break;
+>>   	}
+>>   
+>> +autosuspend:
+>>   	pm_runtime_mark_last_busy(dev);
+>>   	pm_runtime_autosuspend(dev);
+>>   
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index 8b1295e4dcdd..33b2ccbbd963 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1127,6 +1127,8 @@ struct dwc3_scratchpad_array {
+>>    * @num_ep_resized: carries the current number endpoints which have had its tx
+>>    *		    fifo resized.
+>>    * @debug_root: root debugfs directory for this device to put its files in.
+>> + * @allow_rtsusp_on_u3: true if dwc3 runtime suspend is allowed during bus
+>> + *			suspend scenario.
+>>    */
+>>   struct dwc3 {
+>>   	struct work_struct	drd_work;
+>> @@ -1343,6 +1345,7 @@ struct dwc3 {
+>>   	int			last_fifo_depth;
+>>   	int			num_ep_resized;
+>>   	struct dentry		*debug_root;
+>> +	bool			allow_rtsusp_on_u3;
+>>   };
+>>   
+>>   #define INCRX_BURST_MODE 0
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 5fd067151fbf..0797cffa2d48 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2401,15 +2401,21 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> -	spin_lock_irqsave(&dwc->lock, flags);
+>>   	if (!dwc->gadget->wakeup_armed) {
+>>   		dev_err(dwc->dev, "not armed for remote wakeup\n");
+>> -		spin_unlock_irqrestore(&dwc->lock, flags);
+>>   		return -EINVAL;
+>>   	}
+>> -	ret = __dwc3_gadget_wakeup(dwc, true);
+>>   
+>> +	ret = pm_runtime_resume_and_get(dwc->dev);
+>> +	if (ret < 0) {
+>> +		pm_runtime_set_suspended(dwc->dev);
+>> +		return ret;
+>> +	}
+>> +
+>> +	spin_lock_irqsave(&dwc->lock, flags);
+>> +	ret = __dwc3_gadget_wakeup(dwc, true);
+>>   	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	pm_runtime_put_noidle(dwc->dev);
+>>   
+>>   	return ret;
+>>   }
+>> @@ -2428,6 +2434,12 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> +	ret = pm_runtime_resume_and_get(dwc->dev);
+>> +	if (ret < 0) {
+>> +		pm_runtime_set_suspended(dwc->dev);
+>> +		return ret;
+>> +	}
+>> +
+>>   	spin_lock_irqsave(&dwc->lock, flags);
+>>   	/*
+>>   	 * If the link is in U3, signal for remote wakeup and wait for the
+>> @@ -2438,6 +2450,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+>>   		ret = __dwc3_gadget_wakeup(dwc, false);
+>>   		if (ret) {
+>>   			spin_unlock_irqrestore(&dwc->lock, flags);
+>> +			pm_runtime_put_noidle(dwc->dev);
+>>   			return -EINVAL;
+>>   		}
+>>   		dwc3_resume_gadget(dwc);
+>> @@ -2452,6 +2465,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+>>   		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
+>>   
+>>   	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	pm_runtime_put_noidle(dwc->dev);
+>>   
+>>   	return ret;
+>>   }
+>> @@ -2732,21 +2746,23 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>   	/*
+>>   	 * Avoid issuing a runtime resume if the device is already in the
+>>   	 * suspended state during gadget disconnect.  DWC3 gadget was already
+>> -	 * halted/stopped during runtime suspend.
+>> +	 * halted/stopped during runtime suspend except for bus suspend case
+>> +	 * where we would have skipped the controller halt.
+>>   	 */
+>>   	if (!is_on) {
+>>   		pm_runtime_barrier(dwc->dev);
+>> -		if (pm_runtime_suspended(dwc->dev))
+>> +		if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
+>>   			return 0;
+>>   	}
+>>   
+>>   	/*
+>>   	 * Check the return value for successful resume, or error.  For a
+>>   	 * successful resume, the DWC3 runtime PM resume routine will handle
+>> -	 * the run stop sequence, so avoid duplicate operations here.
+>> +	 * the run stop sequence except for bus resume case, so avoid
+>> +	 * duplicate operations here.
+>>   	 */
+>>   	ret = pm_runtime_get_sync(dwc->dev);
+>> -	if (!ret || ret < 0) {
+>> +	if ((!ret && !dwc->connected) || ret < 0) {
+>>   		pm_runtime_put(dwc->dev);
+>>   		if (ret < 0)
+>>   			pm_runtime_set_suspended(dwc->dev);
+>> @@ -4331,6 +4347,8 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
+>>   	}
+>>   
+>>   	dwc->link_state = next;
+>> +	pm_runtime_mark_last_busy(dwc->dev);
+>> +	pm_request_autosuspend(dwc->dev);
+>>   }
+>>   
+>>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+>> @@ -4718,7 +4736,15 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+>>   {
+>>   	if (dwc->pending_events) {
+>>   		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
+>> +		pm_runtime_put(dwc->dev);
+>>   		dwc->pending_events = false;
+>>   		enable_irq(dwc->irq_gadget);
+>> +		/*
+>> +		 * We have only stored the pending events as part
+>> +		 * of dwc3_interrupt() above, but those events are
+>> +		 * not yet handled. So explicitly invoke the
+>> +		 * interrupt handler for handling those events.
+>> +		 */
+>> +		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
 > 
-> Alright, what do you think about the idea to introduce a new '--sync' option to
-> nvme-cli which forwards this info to the kernel that we want to wait for the
-> initial connect to succeed or fail? Obviously, this needs to handle signals too.
+> Why do we have to do this? If there are events, the threaded interrupt
+> should be woken up.
 > 
->  From what I understood this is also what Ewan would like to have
-To me this is not sync vs non-sync option, it's a max_reconnects value 
-tested for in nvmf_should_reconnect(). Which, if set to 0 (or 1), should 
-fail if the initial connect fails.
 
-Right now max_reconnects is calculated by the ctrl_loss_tmo and 
-reconnect_delay. So there's already a way via the cli to make sure 
-there's only 1 connect attempt. I wouldn't mind seeing an exact cli 
-option that sets it to 1 connection attempt w/o the user calculation and 
-2 value specification.
+dwc3_thread_interrupt will be woken up only if dwc3_interrupt() handler 
+is invoked by the interrupt framework when the return value of 
+IRQ_WAKE_THREAD is handled. But while processing the pending events the 
+interrupt framework is not involved. We explicitly invoke the 
+dwc3_interrupt() above within the dwc3 driver. So the 
+dwc3_thread_interrupt() has to be explicitly invoked as well for 
+processing those pending events.
 
-I also assume that this is not something that would be set by default in 
-the auto-connect scripts or automated cli startup scripts.
-
-
-> 
-> Hannes thought it would make sense to use the same initial connect logic in
-> tcp/rdma, because there could also be transient erros (e.g. spanning tree
-> protocol). In short making the tcp/rdma do the same thing as fc?
-
-I agree that the same connect logic makes sense for tcp/rdma. Certainly 
-one connect/teardown path vs one at create and one at reconnect makes 
-sense. The transient errors during 1st connect was the why FC added it 
-and I would assume tcp/rdma has it's own transient errors or timing 
-relationships at initial connection setups, etc.
-
-For FC, we're trying to work around errors to transport commands (FC 
-NVME ELS's) that fail (dropped or timeout) or commands used to 
-initialize the controller which may be dropped/timeout thus fail 
-controller init. Although NVMe-FC does have a retransmission option, it 
-generally doesn't apply to the FC NVME LS's, and few of the FC devices 
-have yet to turn on the retransmission option to deal with the errors. 
-So the general behavior is connection termination and/or association 
-termination which then depends on the reconnect path to retry. It's also 
-critical as connection requests are automated on FC based on 
-connectivity events. If we fail out to the cli due to the fabric 
-dropping some up front command, there's no guarantee there will be 
-another connectivity event to restart the controller create and we end 
-up without device connectivity. The other issue we had to deal with was 
-how long sysadm hung out waiting for the auto-connect script to 
-complete. We couldn't wait the entire multiple retry case, and returning 
-before the 1st attempt was complete was against the spirit of the cli - 
-so we waited for the 1st attempt to try, released sysadm and let the 
-reconnect go on in the background.
-
-
-> 
-> So let's drop the final patch from this series for the time. Could you give some
-> feedback on the rest of the patches?
-> 
-> Thanks,
-> Daniel
-
-I'll look at them.
-
--- james
-
+Thanks
+Elson
 
