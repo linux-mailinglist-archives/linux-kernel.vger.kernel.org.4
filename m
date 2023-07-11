@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF5674F936
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766C974F939
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjGKUoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
+        id S229959AbjGKUoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGKUoB (ORCPT
+        with ESMTP id S229964AbjGKUoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:44:01 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DB7195
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:44:00 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-682eef7d752so842153b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:44:00 -0700 (PDT)
+        Tue, 11 Jul 2023 16:44:03 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24847195
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:44:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-682ae5d4184so1334063b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689108240; x=1689713040;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689108241; x=1691700241;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RhnrJF2dPLoBWUU12VjDOt5vBH0HKwmnbELH9GE6Oiw=;
-        b=3aCbceAwkgWqnj5/9VsREWCy67MDdUmA90tFIDvfByUxgd6lufiCgfQow5eLzCwAOr
-         OLtIvB7uwtRtb1XARNCwQorqqwefVLZdlTcfKN4W86BdzonS5yVEStw9AymGna+7pgvL
-         TW5QaH09WQy3ojKNx1oXs/4Tj++BorYbtHoiKFrbgHToLx4dBRJmLxmu5IfK8DhLkKws
-         pGjaec3mdL5+FLZmFB+eXR80DAWnROaRF3etC8mAR080NZ+HMp0JC6RU9y0Du2/33ouz
-         3/DF3L9z0Xd6uO6G3gnuOKchAW5UcCnwcSByavl1FZ6JGnOqI2jahJ8OTMPQSutH2mXP
-         IZDw==
+        bh=KZsZ8f6snXSrxb5rxjwdGIt7zdNvfSU6bnPqicjdHws=;
+        b=3N0SJijDU79cAiD9z1CvyfDS/0x4aovQkXowXuC+Qe1dNPjhu6fJB7n6LWQMnowsAe
+         gKjPDzKnsWBD/lwJgTSNQfJjXo2iY3sW1mTttU10WMNXtDzZA5helUetsfpokXL0VIeR
+         qTBoIj6i6NslICeWocfhD5cpKS6rzMp1yweglA3MTbo83yNW33FIAEGIjHXn/SoQ10R4
+         0c/62G9XNASoHReTCnZT5a8jQggpIPw0IrSNebcBBMmqmZz7Kd4c97bpfncwLb3pvQHf
+         XqIU1WdKzQ6bf48mwEaIVRV4aVQharmr6OAiPZ2Cbz6Rzaluuo4ZPzmSvUnzWVUfmKsQ
+         GYhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689108240; x=1689713040;
+        d=1e100.net; s=20221208; t=1689108241; x=1691700241;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RhnrJF2dPLoBWUU12VjDOt5vBH0HKwmnbELH9GE6Oiw=;
-        b=NjkxesJFyCy08RCo6Y8Uv1R5cFAGDg9sG6PMq0CaTNiBJhPk6kpZJMpUIWqwtUyPM4
-         M5ULTIHg1WIZfpPSSjQB/LLszUfeo71HJWv5RUekmNTQsa5Gg5sGEKknmku8B5VuQMnO
-         J4MdA/E1silDA2+hqnnWBf93KOplMJRr1mf8MKOJ0u0SLUgC3bwMf7fmGU052uof7r+G
-         NEq+6g/c+kX/XZ0JiB2BNO+DRNxontiiAxou+6Uk4HTnffZTqdq7hoZFnnYKzYa4enWq
-         ++4Qf/wlDGzlRyhVOljurUQCoz+wgxwJiDBhKnbBLofXb0aqS8ngebtBF+5c9Tj6VrSp
-         V7lA==
-X-Gm-Message-State: ABy/qLaNLhjnb/FQYsfKH+0Wvu9P6Jh0yOBozu4jRnUbaFKjdnUn0KKP
-        Pw73wSN0EHrA8/LGd4FxRDooyA==
-X-Google-Smtp-Source: APBJJlH1WI4NxORv1Syze1cWnO86O3fT/I1N2IycCPN6Q6rYEkYelyb+zzWE/YFlXO5xjXQ/JgdcGA==
-X-Received: by 2002:a05:6a00:39a1:b0:67f:8ef5:2643 with SMTP id fi33-20020a056a0039a100b0067f8ef52643mr18904466pfb.2.1689108240070;
-        Tue, 11 Jul 2023 13:44:00 -0700 (PDT)
+        bh=KZsZ8f6snXSrxb5rxjwdGIt7zdNvfSU6bnPqicjdHws=;
+        b=kJfk7nyzezqncYn3LZtvd2FeIzNB95KSpJmNWRVuucGhWFfQJpvq8WlKOEsVW14x3a
+         IrEfLwUVgzOlk91ucnYDRNNYxafWz400yhuaLBnZ4W6NcOfMFYGxW6WrOiadN2Qs/BjY
+         1wVNFEmbmlExu+apJnNpMh/0IYQo1lfrCLX0Sb5YCYJl9Hx/AuSTIFGGpZ0h42ZOd31c
+         dT110eOpC3jbF1kxEuxGMgLwPHMnk8gfomfHxsWGBvgIoetargLX83osBLAQkES+AnHL
+         eDrHNFims2ioAsQlJUd5sMdgoHt9EobaEBkoK1Zvr2uBpBnLXDXAL/F4WRAhdsMWIKET
+         kU7Q==
+X-Gm-Message-State: ABy/qLa5iJM/4Pax5OnPTEjzfWsjFahYgLoY55aRXSTgbxZF2EkjQT9H
+        1JaaZBPg9eNZNY3re27191/H0g==
+X-Google-Smtp-Source: APBJJlFUmKm5liBmfPCLe8ejx6eVIvyRfxMcXMOo2baI8F8tmJRbdIQrgiMCuzIJcf+oMF+SPGqA2A==
+X-Received: by 2002:a05:6a20:3d0d:b0:123:149b:a34f with SMTP id y13-20020a056a203d0d00b00123149ba34fmr22664283pzi.1.1689108241461;
+        Tue, 11 Jul 2023 13:44:01 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id f7-20020aa78b07000000b00640ddad2e0dsm2124461pfd.47.2023.07.11.13.43.58
+        by smtp.gmail.com with ESMTPSA id f7-20020aa78b07000000b00640ddad2e0dsm2124461pfd.47.2023.07.11.13.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 13:43:59 -0700 (PDT)
+        Tue, 11 Jul 2023 13:44:00 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     brauner@kernel.org, arnd@arndb.de, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/5] exit: abtract out should_wake helper for child_wait_callback()
-Date:   Tue, 11 Jul 2023 14:43:48 -0600
-Message-Id: <20230711204352.214086-2-axboe@kernel.dk>
+Subject: [PATCH 2/5] exit: move core of do_wait() into helper
+Date:   Tue, 11 Jul 2023 14:43:49 -0600
+Message-Id: <20230711204352.214086-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230711204352.214086-1-axboe@kernel.dk>
 References: <20230711204352.214086-1-axboe@kernel.dk>
@@ -70,55 +70,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Abstract out the helper that decides if we should wake up following
-a wake_up() callback on our internal waitqueue.
+Rather than have a maze of gotos, put the actual logic in __do_wait()
+and have do_wait() loop deal with waitqueue setup/teardown and whether
+to call __do_wait() again.
 
 No functional changes intended in this patch.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- kernel/exit.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ kernel/exit.c | 49 ++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 30 insertions(+), 19 deletions(-)
 
 diff --git a/kernel/exit.c b/kernel/exit.c
-index edb50b4c9972..2809dad69492 100644
+index 2809dad69492..d8fb124cc038 100644
 --- a/kernel/exit.c
 +++ b/kernel/exit.c
-@@ -1520,6 +1520,17 @@ static int ptrace_do_wait(struct wait_opts *wo, struct task_struct *tsk)
+@@ -1590,16 +1590,10 @@ static int do_wait_pid(struct wait_opts *wo)
  	return 0;
  }
  
-+static bool pid_child_should_wake(struct wait_opts *wo, struct task_struct *p)
-+{
-+	if (!eligible_pid(wo, p))
-+		return false;
+-static long do_wait(struct wait_opts *wo)
++static long __do_wait(struct wait_opts *wo)
+ {
+-	int retval;
+-
+-	trace_sched_process_wait(wo->wo_pid);
++	long retval;
+ 
+-	init_waitqueue_func_entry(&wo->child_wait, child_wait_callback);
+-	wo->child_wait.private = current;
+-	add_wait_queue(&current->signal->wait_chldexit, &wo->child_wait);
+-repeat:
+ 	/*
+ 	 * If there is nothing that can match our criteria, just get out.
+ 	 * We will clear ->notask_error to zero if we see any child that
+@@ -1617,18 +1611,18 @@ static long do_wait(struct wait_opts *wo)
+ 	if (wo->wo_type == PIDTYPE_PID) {
+ 		retval = do_wait_pid(wo);
+ 		if (retval)
+-			goto end;
++			return retval;
+ 	} else {
+ 		struct task_struct *tsk = current;
+ 
+ 		do {
+ 			retval = do_wait_thread(wo, tsk);
+ 			if (retval)
+-				goto end;
++				return retval;
+ 
+ 			retval = ptrace_do_wait(wo, tsk);
+ 			if (retval)
+-				goto end;
++				return retval;
+ 
+ 			if (wo->wo_flags & __WNOTHREAD)
+ 				break;
+@@ -1638,14 +1632,31 @@ static long do_wait(struct wait_opts *wo)
+ 
+ notask:
+ 	retval = wo->notask_error;
+-	if (!retval && !(wo->wo_flags & WNOHANG)) {
+-		retval = -ERESTARTSYS;
+-		if (!signal_pending(current)) {
+-			schedule();
+-			goto repeat;
+-		}
+-	}
+-end:
++	if (!retval && !(wo->wo_flags & WNOHANG))
++		return -ERESTARTSYS;
 +
-+	if ((wo->wo_flags & __WNOTHREAD) && wo->child_wait.private != p->parent)
-+		return false;
-+
-+	return true;
++	return retval;
 +}
 +
- static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
- 				int sync, void *key)
- {
-@@ -1527,13 +1538,10 @@ static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
- 						child_wait);
- 	struct task_struct *p = key;
- 
--	if (!eligible_pid(wo, p))
--		return 0;
-+	if (pid_child_should_wake(wo, p))
-+		return default_wake_function(wait, mode, sync, key);
- 
--	if ((wo->wo_flags & __WNOTHREAD) && wait->private != p->parent)
--		return 0;
--
--	return default_wake_function(wait, mode, sync, key);
-+	return 0;
- }
- 
- void __wake_up_parent(struct task_struct *p, struct task_struct *parent)
++static long do_wait(struct wait_opts *wo)
++{
++	int retval;
++
++	trace_sched_process_wait(wo->wo_pid);
++
++	init_waitqueue_func_entry(&wo->child_wait, child_wait_callback);
++	wo->child_wait.private = current;
++	add_wait_queue(&current->signal->wait_chldexit, &wo->child_wait);
++
++	do {
++		retval = __do_wait(wo);
++		if (retval != -ERESTARTSYS)
++			break;
++		if (signal_pending(current))
++			break;
++		schedule();
++	} while (1);
++
+ 	__set_current_state(TASK_RUNNING);
+ 	remove_wait_queue(&current->signal->wait_chldexit, &wo->child_wait);
+ 	return retval;
 -- 
 2.40.1
 
