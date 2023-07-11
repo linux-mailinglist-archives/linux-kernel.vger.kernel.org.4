@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01E374F8C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF97A74F8D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjGKULI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S231764AbjGKUMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGKULG (ORCPT
+        with ESMTP id S231690AbjGKUMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:11:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0385F139;
-        Tue, 11 Jul 2023 13:11:04 -0700 (PDT)
+        Tue, 11 Jul 2023 16:12:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20EE12F;
+        Tue, 11 Jul 2023 13:12:18 -0700 (PDT)
 Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:10:88d9::7a9])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 15CC666015A0;
-        Tue, 11 Jul 2023 21:11:01 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3453E66015A0;
+        Tue, 11 Jul 2023 21:12:16 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689106262;
-        bh=AKjjGI8lL4tEqfREwzTgvlPuVvgwqFyiKTV08IkeLzk=;
+        s=mail; t=1689106337;
+        bh=FhG74NE8si1G+ZAOGq0ZNS37Tth3K0fwaXfGnneex0A=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=HaeF40IlzjmqqwfQZg9PAKghdL28cbFV+6QFAjoIfPClwiySBvGsG5O4cv9zCtRyH
-         Nf5tEH91hGyyS9fTPuakswByOyf0dJXsM8JRSqGwV5znGfM/pNdA6bcyRSpW6+QaHk
-         LW1VA/izd51O7LTN9aOX+nHNyGgyAuLuLRsBbusKqca67eScl4K6AaecsUoYgRl9ue
-         rOGdvLD5S0aTv61OcpMigfk5MxUterk+4s6fW+1QF6TXCfHIRODcLY66MrcjJSgHCw
-         e4QJXM7KyR3SFKLGbNNa3VUftHHWUMFG+iunmywA7JT5aqJ/UathT8h0R8AB2C+iPv
-         gRjpq3PmRuJiA==
-Message-ID: <dde98017c6c96f0e6f410ec2f568d932ea4f0b04.camel@collabora.com>
-Subject: Re: [PATCH 0/3] media: mediatek: vcodec: Add driver to support 10bit
+        b=n/mTwnhaTtC1ySSdp+4xdsjPhc20JBpAaKDt0DXeT8GXLYXkaD5wrcy1qFLT509pT
+         1egRfsfWy5lva+Iu2KarPSZ7H+9/Z4M/is4W3NRFlVwCXz90eQUjfaOU3uWAPXjDe+
+         tCInE4eyBVV7gt6s9OBTcfWnOytLS4xuL4UTIXucLWCIL6Nz4jIVt9lXccKwNCe2+s
+         r4lVf602/vR1mqdnmOu5xY6uUdgsz8O5EsDwfsQgHGDlwH3MSbXrlGz83REV8ToS9C
+         A+jwhailtn204EktVodB+8SVcWoXGFAYQ+n/DLzIhtxl9nzpA1t3YcECcrstlDnwrm
+         g1DjZawBinv5g==
+Message-ID: <fbf227d6a681e9c028a6348dbc6a57658b9c49e1.camel@collabora.com>
+Subject: Re: [PATCH 3/3] media: mediatek: vcodec: Add driver to support 10bit
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado" 
-        <nfraprado@collabora.com>
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        =?ISO-8859-1?Q?N=EDcolas?= "F . R . A . Prado" 
+        <nfraprado@collabora.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
+        Nathan Hebert <nhebert@chromium.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Fritz Koenig <frkoenig@chromium.org>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -53,282 +52,323 @@ Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Tue, 11 Jul 2023 16:10:52 -0400
-In-Reply-To: <807a44d6-232a-400a-bfe6-441f46f4223b@notapiano>
+Date:   Tue, 11 Jul 2023 16:12:08 -0400
+In-Reply-To: <20230711125749.15555-4-yunfei.dong@mediatek.com>
 References: <20230711125749.15555-1-yunfei.dong@mediatek.com>
-         <af101e6831affc2e7152455ded1d779d38f1cb35.camel@collabora.com>
-         <807a44d6-232a-400a-bfe6-441f46f4223b@notapiano>
+         <20230711125749.15555-4-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 11 juillet 2023 =C3=A0 15:40 -0400, N=C3=ADcolas F. R. A. Prado a =
-=C3=A9crit=C2=A0:
-> On Tue, Jul 11, 2023 at 03:15:33PM -0400, Nicolas Dufresne wrote:
-> [..]
-> > > Reference series:
-> > > [1]: this series depends on v6 which is send by Yunfei Dong.
-> > >      message-id: 20230704131349.8354-1-yunfei.dong@mediatek.com
-> >=20
-> > Its seems like 6.5.0-rc1 with the depedency and this patchset does not =
-boot on
-> > MT8195 Chromebooks. Which paltform has this been validated on ?
+Le mardi 11 juillet 2023 =C3=A0 20:57 +0800, Yunfei Dong a =C3=A9crit=C2=A0=
+:
+> From: Mingjia Zhang <mingjia.zhang@mediatek.com>
 >=20
-> Are you sure this was caused by these patches?
+> Adding to support capture formats V4L2_PIX_FMT_MT2110T and
+> V4L2_PIX_FMT_MT2110R for 10bit playback. Need to get the size
+> of each plane again when user space setting syntax to get 10bit
+> information.
 >=20
-> I've recently noticed two issues that cause MT8195 Tomato to softlock the=
- CPU
-> similar to your trace below.
+> V4L2_PIX_FMT_MT2110T for AV1/VP9/HEVC.
+> V4L2_PIX_FMT_MT2110R for H264.
 >=20
-> One of them is caused by having CONFIG_ARM_DSU_PMU=3Dm. Note that it is p=
-resent in
-> the arm64 defconfig. To workaround, the config needs to be disabled.
-
-This isn't set in my config.
-
-  # CONFIG_ARM_DSU_PMU is not set
-
+> Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
+> Co-developed-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  22 ++-
+>  .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   5 +
+>  .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 140 +++++++++++++++++-
+>  3 files changed, 163 insertions(+), 4 deletions(-)
 >=20
-> The other is caused by commit 46600ab142f8 ("regulator: Set
-> PROBE_PREFER_ASYNCHRONOUS for drivers between 5.10 and 5.15"). The whole =
-machine
-> gets really slow, including the serial. This issue only happens sometimes=
-. To
-> workaround that commit can be reverted.
->=20
-> I intend to look into those issues and provide proper fixes in the follow=
-ing
-> days.
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
+> index 5acb7dff18f2..91ed576d6821 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
+> @@ -37,7 +37,9 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_dec_=
+ctx *ctx, int format_inde
+>  {
+>  	const struct mtk_vcodec_dec_pdata *dec_pdata =3D ctx->dev->vdec_pdata;
+>  	const struct mtk_video_fmt *fmt;
+> +	struct mtk_q_data *q_data;
+>  	int num_frame_count =3D 0, i;
+> +	bool ret =3D false;
+> =20
+>  	fmt =3D &dec_pdata->vdec_formats[format_index];
+>  	for (i =3D 0; i < *dec_pdata->num_formats; i++) {
+> @@ -47,10 +49,26 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_de=
+c_ctx *ctx, int format_inde
+>  		num_frame_count++;
+>  	}
+> =20
+> -	if (num_frame_count =3D=3D 1 || fmt->fourcc =3D=3D V4L2_PIX_FMT_MM21)
+> +	if (num_frame_count =3D=3D 1 || (!ctx->is_10bit_bitstream && fmt->fourc=
+c =3D=3D V4L2_PIX_FMT_MM21))
+>  		return true;
+> =20
+> -	return false;
+> +	q_data =3D &ctx->q_data[MTK_Q_DATA_SRC];
+> +	switch (q_data->fmt->fourcc) {
+> +	case V4L2_PIX_FMT_H264_SLICE:
+> +		if (ctx->is_10bit_bitstream && fmt->fourcc =3D=3D V4L2_PIX_FMT_MT2110R=
+)
+> +			ret =3D true;
+> +		break;
+> +	case V4L2_PIX_FMT_VP9_FRAME:
+> +	case V4L2_PIX_FMT_AV1_FRAME:
+> +	case V4L2_PIX_FMT_HEVC_SLICE:
+> +		if (ctx->is_10bit_bitstream && fmt->fourcc =3D=3D V4L2_PIX_FMT_MT2110T=
+)
+> +			ret =3D true;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return ret;
+>  }
+> =20
+>  static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_dec_ctx =
+*ctx,
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv=
+.h
+> index c8b4374c5e6c..cd607e90fe9c 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> @@ -31,6 +31,7 @@ enum mtk_vdec_format_types {
+>  	MTK_VDEC_FORMAT_AV1_FRAME =3D 0x800,
+>  	MTK_VDEC_FORMAT_HEVC_FRAME =3D 0x1000,
+>  	MTK_VCODEC_INNER_RACING =3D 0x20000,
+> +	MTK_VDEC_IS_SUPPORT_10BIT =3D 0x40000,
+>  };
+> =20
+>  /*
+> @@ -160,6 +161,8 @@ struct mtk_vcodec_dec_pdata {
+>   * @hw_id: hardware index used to identify different hardware.
+>   *
+>   * @msg_queue: msg queue used to store lat buffer information.
+> + *
+> + * @is_10bit_bitstream: set to true if it's 10bit bitstream
+>   */
+>  struct mtk_vcodec_dec_ctx {
+>  	enum mtk_instance_type type;
+> @@ -202,6 +205,8 @@ struct mtk_vcodec_dec_ctx {
+>  	int hw_id;
+> =20
+>  	struct vdec_msg_queue msg_queue;
+> +
+> +	bool is_10bit_bitstream;
+>  };
+> =20
+>  /**
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c_stateless.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_d=
+ec_stateless.c
+> index 99a84c7e1901..cef937fdf462 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_state=
+less.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_state=
+less.c
+> @@ -200,7 +200,7 @@ static const struct mtk_stateless_control mtk_statele=
+ss_controls[] =3D {
+> =20
+>  #define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
+> =20
+> -static struct mtk_video_fmt mtk_video_formats[7];
+> +static struct mtk_video_fmt mtk_video_formats[9];
+> =20
+>  static struct mtk_video_fmt default_out_format;
+>  static struct mtk_video_fmt default_cap_format;
+> @@ -387,6 +387,134 @@ static int mtk_vdec_flush_decoder(struct mtk_vcodec=
+_dec_ctx *ctx)
+>  	return vdec_if_decode(ctx, NULL, NULL, &res_chg);
+>  }
+> =20
+> +static int mtk_vcodec_get_pic_info(struct mtk_vcodec_dec_ctx *ctx)
+> +{
+> +	struct mtk_q_data *q_data;
+> +	int ret =3D 0;
+> +
+> +	q_data =3D &ctx->q_data[MTK_Q_DATA_DST];
+> +	if (q_data->fmt->num_planes =3D=3D 1) {
+> +		mtk_v4l2_vdec_err(ctx, "[%d]Error!! 10bit mode not support one plane",=
+ ctx->id);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ctx->capture_fourcc =3D q_data->fmt->fourcc;
+> +	ret =3D vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo);
+> +	if (ret) {
+> +		mtk_v4l2_vdec_err(ctx, "[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail", =
+ctx->id);
+> +		return ret;
+> +	}
+> +
+> +	ctx->last_decoded_picinfo =3D ctx->picinfo;
+> +
+> +	q_data->sizeimage[0] =3D ctx->picinfo.fb_sz[0];
+> +	q_data->bytesperline[0] =3D ctx->picinfo.buf_w * 5 / 4;
+> +
+> +	q_data->sizeimage[1] =3D ctx->picinfo.fb_sz[1];
+> +	q_data->bytesperline[1] =3D ctx->picinfo.buf_w * 5 / 4;
+> +
+> +	q_data->coded_width =3D ctx->picinfo.buf_w;
+> +	q_data->coded_height =3D ctx->picinfo.buf_h;
+> +	mtk_v4l2_vdec_dbg(1, ctx, "[%d] wxh=3D%dx%d pic wxh=3D%dx%d sz[0]=3D0x%=
+x sz[1]=3D0x%x",
+> +			  ctx->id, ctx->picinfo.buf_w, ctx->picinfo.buf_h,
+> +			  ctx->picinfo.pic_w, ctx->picinfo.pic_h,
+> +			  q_data->sizeimage[0], q_data->sizeimage[1]);
+> +
+> +	return ret;
+> +}
+> +
+> +static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct mtk_vcodec_dec_ctx *ctx =3D ctrl_to_dec_ctx(ctrl);
+> +	struct v4l2_ctrl_h264_sps *h264;
+> +	struct v4l2_ctrl_hevc_sps *h265;
+> +	struct v4l2_ctrl_vp9_frame *frame;
+> +	struct v4l2_ctrl_av1_sequence *seq;
+> +	struct v4l2_ctrl *hdr_ctrl;
+> +	const struct mtk_vcodec_dec_pdata *dec_pdata =3D ctx->dev->vdec_pdata;
+> +	const struct mtk_video_fmt *fmt;
+> +	int i =3D 0, ret =3D 0;
+> +
+> +	hdr_ctrl =3D ctrl;
+> +	if (!hdr_ctrl || !hdr_ctrl->p_cur.p)
+> +		return -EINVAL;
+> +
+> +	switch (hdr_ctrl->id) {
+> +	case V4L2_CID_STATELESS_H264_SPS:
+> +		h264 =3D (struct v4l2_ctrl_h264_sps *)hdr_ctrl->p_new.p;
+> +		if (h264->bit_depth_chroma_minus8 =3D=3D 2 && h264->bit_depth_luma_min=
+us8 =3D=3D 2) {
+> +			ctx->is_10bit_bitstream =3D true;
+> +		} else if (h264->bit_depth_chroma_minus8 !=3D 0 &&
+> +			   h264->bit_depth_luma_minus8 !=3D 0) {
+> +			mtk_v4l2_vdec_err(ctx, "H264: chroma_minus8:%d, luma_minus8:%d",
+> +					  h264->bit_depth_chroma_minus8,
+> +					  h264->bit_depth_luma_minus8);
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	case V4L2_CID_STATELESS_HEVC_SPS:
+> +		h265 =3D (struct v4l2_ctrl_hevc_sps *)hdr_ctrl->p_new.p;
+> +		if (h265->bit_depth_chroma_minus8 =3D=3D 2 && h265->bit_depth_luma_min=
+us8 =3D=3D 2) {
+> +			ctx->is_10bit_bitstream =3D true;
+> +		} else if (h265->bit_depth_chroma_minus8 !=3D 0 &&
+> +			   h265->bit_depth_luma_minus8 !=3D 0) {
+> +			mtk_v4l2_vdec_err(ctx, "HEVC: chroma_minus8:%d, luma_minus8:%d",
+> +					  h265->bit_depth_chroma_minus8,
+> +					  h265->bit_depth_luma_minus8);
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	case V4L2_CID_STATELESS_VP9_FRAME:
+> +		frame =3D (struct v4l2_ctrl_vp9_frame *)hdr_ctrl->p_new.p;
+> +		if (frame->bit_depth =3D=3D 10) {
+> +			ctx->is_10bit_bitstream =3D true;
+> +		} else if (frame->bit_depth !=3D 8) {
+> +			mtk_v4l2_vdec_err(ctx, "VP9: bit_depth:%d", frame->bit_depth);
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	case V4L2_CID_STATELESS_AV1_SEQUENCE:
+> +		seq =3D (struct v4l2_ctrl_av1_sequence *)hdr_ctrl->p_new.p;
+> +		if (seq->bit_depth =3D=3D 10) {
+> +			ctx->is_10bit_bitstream =3D true;
+> +		} else if (seq->bit_depth !=3D 8) {
+> +			mtk_v4l2_vdec_err(ctx, "AV1: bit_depth:%d", seq->bit_depth);
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	default:
+> +		mtk_v4l2_vdec_err(ctx, "Not supported ctrl id: 0x%x\n", hdr_ctrl->id);
+> +		return -EINVAL;
 
-If by slow you mean the self stall detection triggers, maybe, I haven't spe=
-nt
-time studying the current delta from 6.5.0-rc1 and Collabora forci branch, =
-but
-its non-null. Also, applying the same patches on top did not break the boot=
-, so
-quite unlikely. Here's a snapshot of my branch I made, I simply revert some
-conflicting  changes related to VP9 racing, then it applied cleanly.
+I can confirm we hit this for every single codec and decoding fails. Writte=
+n
+this way, this code should never have worked, even for 10bit decoding.
 
-https://gitlab.collabora.com/nicolas/linux/-/commits/mt8195-10bit-2
-
-Nicolas
-
->=20
-> Thanks,
-> N=C3=ADcolas
->=20
-> >=20
-> >=20
-> > For the record:
-> >=20
-> >=20
-> > [   13.286252] platform 1c015000.dp-intf: deferred probe pending
-> > [   13.292007] platform 1c113000.dp-intf: deferred probe pending
-> > [   28.523484] rcu: INFO: rcu_preempt self-detected stall on CPU
-> > [   28.529231] rcu: 	5-....: (5250 ticks this GP)
-> > idle=3D51c4/1/0x4000000000000000 softirq=3D1434/1447 fqs=3D2471
-> > [   28.538706] rcu: 	(t=3D5254 jiffies g=3D-119 q=3D13320 ncpus=3D8)
-> > [   28.544095] Task dump for CPU 0:
-> > [   28.547313] task:cpuhp/0         state:R  running task     stack:0  =
-   pid:17
-> > ppid:2      flags:0x0000000a
-> > [   28.557221] Call trace:
-> > [   28.559658]  __switch_to+0xe4/0x15c
-> > [   28.563147]  0xffff776000196740
-> > [   28.566282] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
-> > [   28.572453] Hardware name: Acer Tomato (rev3 - 4) board (DT)
-> > [   28.578101] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BT=
-YPE=3D--)
-> > [   28.585053] pc : smp_call_function_single+0x1a4/0x1bc
-> > [   28.590098] lr : smp_call_function_single+0x178/0x1bc
-> > [   28.595140] sp : ffff80008008b9c0
-> > [   28.598444] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff776=
-00515c858
-> > [   28.605572] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000=
-000000000
-> > [   28.612699] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff800=
-08008bbb0
-> > [   28.619825] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000=
-000000000
-> > [   28.626952] x17: ffffa66484655000 x16: ffff800080028000 x15: 0000000=
-79c8b8c8b
-> > [   28.634078] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000=
-000000000
-> > [   28.641204] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000=
-000000000
-> > [   28.648331] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0f=
-cb8de2af4
-> > [   28.655458] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff800=
-08008ba08
-> > [   28.662585] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000=
-000000000
-> > [   28.669711] Call trace:
-> > [   28.672148]  smp_call_function_single+0x1a4/0x1bc
-> > [   28.676843]  perf_cgroup_attach+0x74/0xd8
-> > [   28.680847]  cgroup_migrate_execute+0x374/0x444
-> > [   28.685368]  cgroup_migrate+0x74/0x8c
-> > [   28.689021]  cgroup_attach_task+0x114/0x120
-> > [   28.693195]  __cgroup_procs_write+0x108/0x230
-> > [   28.697543]  cgroup_procs_write+0x1c/0x34
-> > [   28.701543]  cgroup_file_write+0xa0/0x1a4
-> > [   28.705545]  kernfs_fop_write_iter+0x118/0x1a8
-> > [   28.709983]  vfs_write+0x2d0/0x39c
-> > [   28.713376]  ksys_write+0x68/0xf4
-> > [   28.716682]  __arm64_sys_write+0x1c/0x28
-> > [   28.720594]  invoke_syscall+0x48/0x114
-> > [   28.724337]  el0_svc_common.constprop.0+0x44/0xe4
-> > [   28.729034]  do_el0_svc+0x38/0xa4
-> > [   28.732341]  el0_svc+0x2c/0x84
-> > [   28.735386]  el0t_64_sync_handler+0xc0/0xc4
-> > [   28.739561]  el0t_64_sync+0x190/0x194
-> > [   33.759553] vproc2: disabling
-> > [   33.762551] vproc1: disabling
-> > [   33.765548] vaud18: disabling
-> > [   33.768760] va09: disabling
-> > [   33.771599] vsram_md: disabling
-> > [   91.755483] rcu: INFO: rcu_preempt self-detected stall on CPU
-> > [   91.761220] rcu: 	5-....: (21005 ticks this GP)
-> > idle=3D51c4/1/0x4000000000000000 softirq=3D1434/1447 fqs=3D8569
-> > [   91.770778] rcu: 	(t=3D21062 jiffies g=3D-119 q=3D13628 ncpus=3D8)
-> > [   91.776253] Task dump for CPU 0:
-> > [   91.779471] task:cpuhp/0         state:R  running task     stack:0  =
-   pid:17
-> > ppid:2      flags:0x0000000a
-> > [   91.789376] Call trace:
-> > [   91.791812]  __switch_to+0xe4/0x15c
-> > [   91.795294]  0xffff776000196740
-> > [   91.798426] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
-> > [   91.804597] Hardware name: Acer Tomato (rev3 - 4) board (DT)
-> > [   91.810244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BT=
-YPE=3D--)
-> > [   91.817195] pc : smp_call_function_single+0x1a4/0x1bc
-> > [   91.822237] lr : smp_call_function_single+0x178/0x1bc
-> > [   91.827278] sp : ffff80008008b9c0
-> > [   91.830582] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff776=
-00515c858
-> > [   91.837709] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000=
-000000000
-> > [   91.844835] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff800=
-08008bbb0
-> > [   91.851962] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000=
-000000000
-> > [   91.859089] x17: ffffa66484655000 x16: ffff800080028000 x15: 0000000=
-79c8b8c8b
-> > [   91.866215] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000=
-000000000
-> > [   91.873342] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000=
-000000000
-> > [   91.880468] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0f=
-cb8de2af4
-> > [   91.887595] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff800=
-08008ba08
-> > [   91.894721] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000=
-000000000
-> > [   91.901848] Call trace:
-> > [   91.904284]  smp_call_function_single+0x1a4/0x1bc
-> > [   91.908979]  perf_cgroup_attach+0x74/0xd8
-> > [   91.912981]  cgroup_migrate_execute+0x374/0x444
-> > [   91.917502]  cgroup_migrate+0x74/0x8c
-> > [   91.921155]  cgroup_attach_task+0x114/0x120
-> > [   91.925329]  __cgroup_procs_write+0x108/0x230
-> > [   91.929677]  cgroup_procs_write+0x1c/0x34
-> > [   91.933677]  cgroup_file_write+0xa0/0x1a4
-> > [   91.937679]  kernfs_fop_write_iter+0x118/0x1a8
-> > [   91.942117]  vfs_write+0x2d0/0x39c
-> > [   91.945509]  ksys_write+0x68/0xf4
-> > [   91.948814]  __arm64_sys_write+0x1c/0x28
-> > [   91.952726]  invoke_syscall+0x48/0x114
-> > [   91.956467]  el0_svc_common.constprop.0+0x44/0xe4
-> > [   91.961164]  do_el0_svc+0x38/0xa4
-> > [   91.964472]  el0_svc+0x2c/0x84
-> > [   91.967517]  el0t_64_sync_handler+0xc0/0xc4
-> > [   91.971691]  el0t_64_sync+0x190/0x194
-> > [  154.987483] rcu: INFO: rcu_preempt self-detected stall on CPU
-> > [  154.993218] rcu: 	5-....: (36760 ticks this GP)
-> > idle=3D51c4/1/0x4000000000000000 softirq=3D1434/1447 fqs=3D14547
-> > [  155.002862] rcu: 	(t=3D36870 jiffies g=3D-119 q=3D13628 ncpus=3D8)
-> > [  155.008337] Task dump for CPU 0:
-> > [  155.011554] task:cpuhp/0         state:R  running task     stack:0  =
-   pid:17
-> > ppid:2      flags:0x0000000a
-> > [  155.021458] Call trace:
-> > [  155.023894]  __switch_to+0xe4/0x15c
-> > [  155.027376]  0xffff776000196740
-> > [  155.030507] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
-> > [  155.036676] Hardware name: Acer Tomato (rev3 - 4) board (DT)
-> > [  155.042323] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BT=
-YPE=3D--)
-> > [  155.049274] pc : smp_call_function_single+0x1a4/0x1bc
-> > [  155.054316] lr : smp_call_function_single+0x178/0x1bc
-> > [  155.059358] sp : ffff80008008b9c0
-> > [  155.062662] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff776=
-00515c858
-> > [  155.069788] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000=
-000000000
-> > [  155.076914] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff800=
-08008bbb0
-> > [  155.084041] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000=
-000000000
-> > [  155.091168] x17: ffffa66484655000 x16: ffff800080028000 x15: 0000000=
-79c8b8c8b
-> > [  155.098294] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000=
-000000000
-> > [  155.105421] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000=
-000000000
-> > [  155.112548] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0f=
-cb8de2af4
-> > [  155.119675] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff800=
-08008ba08
-> > [  155.126801] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000=
-000000000
-> > [  155.133928] Call trace:
-> > [  155.136363]  smp_call_function_single+0x1a4/0x1bc
-> > [  155.141059]  perf_cgroup_attach+0x74/0xd8
-> > [  155.145060]  cgroup_migrate_execute+0x374/0x444
-> > [  155.149581]  cgroup_migrate+0x74/0x8c
-> > [  155.153234]  cgroup_attach_task+0x114/0x120
-> > [  155.157408]  __cgroup_procs_write+0x108/0x230
-> > [  155.161755]  cgroup_procs_write+0x1c/0x34
-> > [  155.165756]  cgroup_file_write+0xa0/0x1a4
-> > [  155.169757]  kernfs_fop_write_iter+0x118/0x1a8
-> > [  155.174195]  vfs_write+0x2d0/0x39c
-> > [  155.177587]  ksys_write+0x68/0xf4
-> > [  155.180893]  __arm64_sys_write+0x1c/0x28
-> > [  155.184805]  invoke_syscall+0x48/0x114
-> > [  155.188547]  el0_svc_common.constprop.0+0x44/0xe4
-> > [  155.193243]  do_el0_svc+0x38/0xa4
-> > [  155.196551]  el0_svc+0x2c/0x84
-> > [  155.199595]  el0t_64_sync_handler+0xc0/0xc4
-> > [  155.203769]  el0t_64_sync+0x190/0x194
-> >=20
-> >=20
-> > >=20
-> > > Mingjia Zhang (3):
-> > >   media: mediatek: vcodec: Add capture format to support 10bit tile m=
-ode
-> > >   media: mediatek: vcodec: Add capture format to support 10bit raster
-> > >     mode
-> > >   media: mediatek: vcodec: Add driver to support 10bit
-> > >=20
-> > >  .../media/v4l/pixfmt-reserved.rst             |  15 ++
-> > >  .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  22 ++-
-> > >  .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   5 +
-> > >  .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 140 ++++++++++++++++=
-+-
-> > >  drivers/media/v4l2-core/v4l2-common.c         |   4 +
-> > >  drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
-> > >  include/uapi/linux/videodev2.h                |   2 +
-> > >  7 files changed, 186 insertions(+), 4 deletions(-)
-> > >=20
-> >=20
+> +	}
+> +
+> +	if (!ctx->is_10bit_bitstream)
+> +		return ret;
+> +
+> +	for (i =3D 0; i < *dec_pdata->num_formats; i++) {
+> +		fmt =3D &dec_pdata->vdec_formats[i];
+> +		if (fmt->fourcc =3D=3D V4L2_PIX_FMT_MT2110R &&
+> +		    hdr_ctrl->id =3D=3D V4L2_CID_STATELESS_H264_SPS) {
+> +			ctx->q_data[MTK_Q_DATA_DST].fmt =3D fmt;
+> +			break;
+> +		}
+> +
+> +		if (fmt->fourcc =3D=3D V4L2_PIX_FMT_MT2110T &&
+> +		    (hdr_ctrl->id =3D=3D V4L2_CID_STATELESS_HEVC_SPS ||
+> +		    hdr_ctrl->id =3D=3D V4L2_CID_STATELESS_VP9_FRAME ||
+> +		    hdr_ctrl->id =3D=3D V4L2_CID_STATELESS_AV1_SEQUENCE)) {
+> +			ctx->q_data[MTK_Q_DATA_DST].fmt =3D fmt;
+> +			break;
+> +		}
+> +	}
+> +	ret =3D mtk_vcodec_get_pic_info(ctx);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_ctrl_ops mtk_vcodec_dec_ctrl_ops =3D {
+> +	.s_ctrl =3D mtk_vdec_s_ctrl,
+> +};
+> +
+>  static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
+>  {
+>  	unsigned int i;
+> @@ -399,7 +527,7 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcod=
+ec_dec_ctx *ctx)
+> =20
+>  	for (i =3D 0; i < NUM_CTRLS; i++) {
+>  		struct v4l2_ctrl_config cfg =3D mtk_stateless_controls[i].cfg;
+> -
+> +		cfg.ops =3D &mtk_vcodec_dec_ctrl_ops;
+>  		v4l2_ctrl_new_custom(&ctx->ctrl_hdl, &cfg, NULL);
+>  		if (ctx->ctrl_hdl.error) {
+>  			mtk_v4l2_vdec_err(ctx, "Adding control %d failed %d", i,
+> @@ -466,6 +594,8 @@ static void mtk_vcodec_add_formats(unsigned int fourc=
+c,
+>  		break;
+>  	case V4L2_PIX_FMT_MM21:
+>  	case V4L2_PIX_FMT_MT21C:
+> +	case V4L2_PIX_FMT_MT2110T:
+> +	case V4L2_PIX_FMT_MT2110R:
+>  		mtk_video_formats[count_formats].fourcc =3D fourcc;
+>  		mtk_video_formats[count_formats].type =3D MTK_FMT_FRAME;
+>  		mtk_video_formats[count_formats].num_planes =3D 2;
+> @@ -491,6 +621,12 @@ static void mtk_vcodec_get_supported_formats(struct =
+mtk_vcodec_dec_ctx *ctx)
+>  		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT21C, ctx);
+>  		cap_format_count++;
+>  	}
+> +	if (ctx->dev->dec_capability & MTK_VDEC_IS_SUPPORT_10BIT) {
+> +		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT2110T, ctx);
+> +		cap_format_count++;
+> +		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT2110R, ctx);
+> +		cap_format_count++;
+> +	}
+>  	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_MM21) {
+>  		mtk_vcodec_add_formats(V4L2_PIX_FMT_MM21, ctx);
+>  		cap_format_count++;
 
