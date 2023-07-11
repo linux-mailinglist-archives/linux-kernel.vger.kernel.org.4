@@ -2,120 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970A374F58E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407F274F53E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbjGKQdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S232240AbjGKQcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbjGKQdH (ORCPT
+        with ESMTP id S232142AbjGKQcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:33:07 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5422110CB;
-        Tue, 11 Jul 2023 09:32:55 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BG3O1f022902;
-        Tue, 11 Jul 2023 16:32:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=+4V1nFRqwTelDtAcI310e7e7t3xc9C8kzlyU277DNxs=;
- b=ymbOEdbzGq63lkQ0RO+iBGkUQEcS4UO/lxjF5K2PqFLto+ysV4TEsKigi8pkSD+0XbV3
- XL1VOnexhj0u4/lo6XBn/xKbWSCP26vhMmRAizm8IRK0RiyBmzMxWVgii4+mt2saQDoe
- WQkfBM6MOBixvv4+SnNsom8ajpTprr/jzywgI6bM0UJ9nti/578BpsbF+a3T3kS3400U
- qjrAwqeuyDNTIGrKLmM9yjvATi3gM7M2TcV35rsN6hK23qmhlVJ+Q2GA+3HbmZr/Ok6j
- 74UXMpMsv5v2yolmJdhg0gscYbkGqAGt8XqOJSHUbr49tqGPzkT/fCW47BE+ftkelpr9 sA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpyud5e6f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 16:32:04 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36BGUtBm007087;
-        Tue, 11 Jul 2023 16:32:03 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx854cdv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 16:32:03 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36BGQBXP019529;
-        Tue, 11 Jul 2023 16:32:02 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3rpx854c4h-4;
-        Tue, 11 Jul 2023 16:32:02 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-hyperv@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel-janitors@vger.kernel.org, keescook@chromium.org,
-        christophe.jaillet@wanadoo.fr, kuba@kernel.org,
-        kasan-dev@googlegroups.com,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, iommu@lists.linux.dev,
-        linux-tegra@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        virtualization@lists.linux-foundation.org,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        linux-scsi@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org, John Stultz <jstultz@google.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Laura Abbott <labbott@redhat.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Shailend Chand <shailend@google.com>,
-        linux-rdma@vger.kernel.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-sgx@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 00/24] use vmalloc_array and vcalloc
-Date:   Tue, 11 Jul 2023 12:31:45 -0400
-Message-Id: <168909306205.1197987.4062725942946508296.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr>
-References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
+        Tue, 11 Jul 2023 12:32:18 -0400
+Received: from out-28.mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3021E12F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:32:15 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1689093133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AOe2sK5corMJVr8s18spKTEHFO7S6COQNSRgsjkc54A=;
+        b=ixKAhLu28/nq1vazDkLtGsR/XEiVHt1ra2tNTmdDLo9BPHekHQ7OViZ9PZCadSk3DSxHL1
+        6Md7s5pSxG/rbDPk5WiAXKGCJ9q1jxF9DVPaEOAcGbdFMUXTFAqhY+mtay7NocxBghXDdE
+        nl8Q8HRCQmWsB+O7po7KrEn9IlnkOKE=
+From:   Sui Jingfeng <sui.jingfeng@linux.dev>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jocelyn Falempe <jfalempe@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Helge Deller <deller@gmx.de>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Subject: [PATCH v3 0/9] PCI/VGA: Improve the default VGA device selection
+Date:   Wed, 12 Jul 2023 00:31:46 +0800
+Message-Id: <20230711163155.791522-1-sui.jingfeng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=801
- adultscore=0 mlxscore=0 spamscore=0 phishscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110148
-X-Proofpoint-ORIG-GUID: VdiqWRAD5JOoA45uglvHtoSxe29wDWJY
-X-Proofpoint-GUID: VdiqWRAD5JOoA45uglvHtoSxe29wDWJY
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 16:43:15 +0200, Julia Lawall wrote:
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-> The functions vmalloc_array and vcalloc were introduced in
-> 
-> commit a8749a35c399 ("mm: vmalloc: introduce array allocation functions")
-> 
-> but are not used much yet.  This series introduces uses of
-> these functions, to protect against multiplication overflows.
-> 
-> [...]
+Currently, the default VGA device selection is not perfect. Potential
+problems are:
 
-Applied to 6.5/scsi-fixes, thanks!
+1) This function is a no-op on non-x86 architectures.
+2) It does not take the PCI Bar may get relocated into consideration.
+3) It is not effective for the PCI device without a dedicated VRAM Bar.
+4) It is device-agnostic, thus it has to waste the effort to iterate all
+   of the PCI Bar to find the VRAM aperture.
+5) It has invented lots of methods to determine which one is the default
+   boot device on a multiple video card coexistence system. But this is
+   still a policy because it doesn't give the user a choice to override.
 
-[07/24] scsi: fnic: use vmalloc_array and vcalloc
-        https://git.kernel.org/mkp/scsi/c/b34c7dcaf311
-[24/24] scsi: qla2xxx: use vmalloc_array and vcalloc
-        https://git.kernel.org/mkp/scsi/c/04d91b783acf
+With the observation that device drivers or video aperture helpers may
+have better knowledge about which PCI bar contains the firmware FB,
+
+This patch tries to solve the above problems by introducing a function
+callback to the vga_client_register() function interface. DRM device
+drivers for the PCI device need to register the is_boot_device() function
+callback during the driver loading time. Once the driver binds the device
+successfully, VRAARB will call back to the driver. This gives the device
+drivers a chance to provide accurate boot device identification. Which in
+turn unlock the abitration service to non-x86 architectures. A device
+driver can also pass a NULL pointer to keep the original behavior.
+
+This series is applied on the drm-tip branch (with a cleanup patch set[1]
+applied beforehand)
+
+[1] https://patchwork.freedesktop.org/series/120548/
+
+v2:
+	* Add a simple implemment for drm/i915 and drm/ast
+	* Pick up all tags (Mario)
+v3:
+	* Fix a mistake for drm/i915 implement
+	* Fix patch can not be applied problem because of drm/amdgpu merged
+          other people's patch.
+
+Sui Jingfeng (9):
+  video/aperture: Add a helper to detect if an aperture contains
+    firmware FB
+  video/aperture: Add a helper for determining if an unmoved aperture
+    contain FB
+  PCI/VGA: Switch to aperture_contain_firmware_fb_nonreloc()
+  PCI/VGA: Improve the default VGA device selection
+  drm/amdgpu: Implement the is_primary_gpu callback of
+    vga_client_register()
+  drm/radeon: Add an implement for the is_primary_gpu function callback
+  drm/i915: Add an implement for the is_primary_gpu hook
+  drm/ast: Register as a vga client to vgaarb by calling
+    vga_client_register()
+  drm/loongson: Add an implement for the is_primary_gpu function
+    callback
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 12 +++-
+ drivers/gpu/drm/ast/ast_drv.c              | 29 +++++++++
+ drivers/gpu/drm/drm_aperture.c             | 16 +++++
+ drivers/gpu/drm/i915/display/intel_vga.c   | 31 ++++++++-
+ drivers/gpu/drm/loongson/lsdc_drv.c        | 10 ++-
+ drivers/gpu/drm/nouveau/nouveau_vga.c      |  2 +-
+ drivers/gpu/drm/radeon/radeon_device.c     | 12 +++-
+ drivers/pci/vgaarb.c                       | 74 ++++++++++++++++------
+ drivers/vfio/pci/vfio_pci_core.c           |  2 +-
+ drivers/video/aperture.c                   | 65 +++++++++++++++++++
+ include/drm/drm_aperture.h                 |  2 +
+ include/linux/aperture.h                   | 14 ++++
+ include/linux/vgaarb.h                     |  8 ++-
+ 13 files changed, 247 insertions(+), 30 deletions(-)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.25.1
+
