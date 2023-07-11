@@ -2,152 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C8B74E6A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE0B74E6AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjGKF7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S229576AbjGKGA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjGKF73 (ORCPT
+        with ESMTP id S231241AbjGKGAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:59:29 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A354EE49
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 22:59:25 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-570553a18deso63547077b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 22:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689055165; x=1691647165;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vHH47SfpScUGFxKQhJm1mmTUrzJDod/Xuvw5vyIRsxc=;
-        b=LpOBs94ljdTymoJcs1ClmQDribais2EEw9Mpx8cWUs53b5omHGBZyOnhd+PmexP81P
-         MTR8rdrVo3R0tXs7mey0rTyT5+ey3M6Ve0BrJNJGP0a6GbKPeMkLUPhcLR42qoWzjA8s
-         jZK76di5xMnvrFuEwlKsChLtWCJiIBlyHh6lo789oztEywH7fjfTI17qyulKXqoyJ+Hp
-         O99ZDXhJP0p/1rRSm7rWeRT5b6c6Zs3iPzmoa9hln2yemsXeIdmdwTpWtFQ8J/iIk5Jz
-         TqfsxWZeoyD7x3owN+Hc2o+VTQu1Y7JqJSPu7gbcTkWrpDCfcHsegVBd60ufNp2nI4SC
-         0cEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689055165; x=1691647165;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vHH47SfpScUGFxKQhJm1mmTUrzJDod/Xuvw5vyIRsxc=;
-        b=YD8utBe9Z7ljtcuxh/HMG4t10PP5nXkAXo3RsV84AX9dVmotX/IXXtLIbKqRp4FV4g
-         9p/0fayN43fVGJWJrvTIDhx7KjgeJc42zANSDLQPUbjCffkwvJrDT5Yw1rYPPg9T5Ex8
-         6MspXhMT7JMVreL2LuvN3NoZee2+XIsCw2qUW3FrimZxFYclQw7dNmZh5flt0Okf1SeV
-         TYmZoqmVLuf+h9b29WgwH/ayKzkzLDEY8NHKBAEFd7PRaprbbeTL3icBDFLZhYA2ZN0z
-         HHeLzo0PiPOnsY+MWFlpzRlKoKeQaThv3mf4rG1bJ/dMJ6pUDpZ/fRP6ZD1osfQAqRaR
-         JYag==
-X-Gm-Message-State: ABy/qLavKYTje1Hkoksl0bMA0NJJxk6+hfjum4ssppGRkeuMesgMfrBW
-        Ecn0vZn2aJsIIlTMPJ4eTrutJ53L/Dpg
-X-Google-Smtp-Source: APBJJlEWwPStaCrLA06Y628txzlo5JavMlFYwkiXOj/gztJc11CCwAbnT9FqlwSBkfNm4U927gRchxVv6xIS
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:2efd:fc0f:9eaa:3bd5])
- (user=irogers job=sendgmr) by 2002:a81:e30d:0:b0:576:a5a8:f686 with SMTP id
- q13-20020a81e30d000000b00576a5a8f686mr112446ywl.9.1689055164831; Mon, 10 Jul
- 2023 22:59:24 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 22:58:59 -0700
-In-Reply-To: <20230711055859.1242497-1-irogers@google.com>
-Message-Id: <20230711055859.1242497-4-irogers@google.com>
-Mime-Version: 1.0
-References: <20230711055859.1242497-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
-Subject: [PATCH v1 3/3] perf pmus: Don't print PMU suffix in list
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        Tue, 11 Jul 2023 02:00:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C033D195;
+        Mon, 10 Jul 2023 23:00:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0EB3520455;
+        Tue, 11 Jul 2023 06:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689055222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N+md8tCCcb/XcgwK2O8x/Jn0J6p717ThkC2lo0+nTZw=;
+        b=UAFlabp9xOyAThJZecIPdU+uOM8qe7NMyksdL8t5Exrkbn/qCfI0YNPhtwnq8uY8Z2FrQ5
+        5wAWNfwGTvVQNjpeEyVL1o0i4YkC5jFPQJ6z63ZL8aKppiNMSTdcve27QYlWvBgO3+ybGS
+        VCbQ7Zm6HIQ1jG8+UAS484Gfeky7wiA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689055222;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N+md8tCCcb/XcgwK2O8x/Jn0J6p717ThkC2lo0+nTZw=;
+        b=M2SLNyPdAc+LORyma9dDAKNWsOUZYDeh8/97Zt1KJ8SVcYz7B2RGh2sjxflV4Kk2E2hI1c
+        KR9YvZIfwDWeecCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B7EA81391C;
+        Tue, 11 Jul 2023 06:00:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jun1K/XvrGTuBAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 11 Jul 2023 06:00:21 +0000
+Message-ID: <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
+Date:   Tue, 11 Jul 2023 08:00:20 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] of: Preserve "of-display" device name for compatibility
+To:     Rob Herring <robh@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Michal Suchanek <msuchanek@suse.de>
+Cc:     devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Cyril Brulebois <cyril@debamax.com>,
+        dri-devel@lists.freedesktop.org
+References: <20230710174007.2291013-1-robh@kernel.org>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230710174007.2291013-1-robh@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------EJlFeu4ajUbibragQamf4Zcq"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Duplicate PMUs are no longer printed but the suffix of the first is
-printed. Avoid printing the suffix as multiple PMUs are matched.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------EJlFeu4ajUbibragQamf4Zcq
+Content-Type: multipart/mixed; boundary="------------rrE1gd9xgtDN66LPMEindtwb";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rob Herring <robh@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
+ Michal Suchanek <msuchanek@suse.de>
+Cc: devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Cyril Brulebois <cyril@debamax.com>,
+ dri-devel@lists.freedesktop.org
+Message-ID: <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
+Subject: Re: [PATCH] of: Preserve "of-display" device name for compatibility
+References: <20230710174007.2291013-1-robh@kernel.org>
+In-Reply-To: <20230710174007.2291013-1-robh@kernel.org>
 
-Before:
-```
-$ perf list
-...
-  uncore_imc_free_running_0/data_read/               [Kernel PMU event]
-  uncore_imc_free_running_0/data_total/              [Kernel PMU event]
-  uncore_imc_free_running_0/data_write/              [Kernel PMU event]
-```
+--------------rrE1gd9xgtDN66LPMEindtwb
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-After:
-```
-$ perf list
-...
-  uncore_imc_free_running/data_read/                 [Kernel PMU event]
-  uncore_imc_free_running/data_total/                [Kernel PMU event]
-  uncore_imc_free_running/data_write/                [Kernel PMU event]
-```
+DQoNCkFtIDEwLjA3LjIzIHVtIDE5OjQwIHNjaHJpZWIgUm9iIEhlcnJpbmc6DQo+IFNpbmNl
+IGNvbW1pdCAyNDFkMmZiNTZhMTggKCJvZjogTWFrZSBPRiBmcmFtZWJ1ZmZlciBkZXZpY2Ug
+bmFtZXMgdW5pcXVlIiksDQo+IGFzIHNwb3R0ZWQgYnkgRnLDqWTDqXJpYyBCb25uYXJkLCB0
+aGUgaGlzdG9yaWNhbCAib2YtZGlzcGxheSIgZGV2aWNlIGlzDQo+IGdvbmU6IHRoZSB1cGRh
+dGVkIGxvZ2ljIGNyZWF0ZXMgIm9mLWRpc3BsYXkuMCIgaW5zdGVhZCwgdGhlbiBhcyBtYW55
+DQo+ICJvZi1kaXNwbGF5Lk4iIGFzIHJlcXVpcmVkLg0KPiANCj4gVGhpcyBtZWFucyB0aGF0
+IG9mZmIgbm8gbG9uZ2VyIGZpbmRzIHRoZSBleHBlY3RlZCBkZXZpY2UsIHdoaWNoIHByZXZl
+bnRzDQo+IHRoZSBEZWJpYW4gSW5zdGFsbGVyIGZyb20gc2V0dGluZyB1cCBpdHMgaW50ZXJm
+YWNlLCBhdCBsZWFzdCBvbiBwcGM2NGVsLg0KPiANCj4gRml4IHRoaXMgYnkga2VlcGluZyAi
+b2YtZGlzcGxheSIgZm9yIHRoZSBmaXJzdCBkZXZpY2UgYW5kICJvZi1kaXNwbGF5Lk4iDQo+
+IGZvciBzdWJzZXF1ZW50IGRldmljZXMuDQo+IA0KPiBMaW5rOiBodHRwczovL2J1Z3ppbGxh
+Lmtlcm5lbC5vcmcvc2hvd19idWcuY2dpP2lkPTIxNzMyOA0KPiBMaW5rOiBodHRwczovL2J1
+Z3MuZGViaWFuLm9yZy8xMDMzMDU4DQo+IEZpeGVzOiAyNDFkMmZiNTZhMTggKCJvZjogTWFr
+ZSBPRiBmcmFtZWJ1ZmZlciBkZXZpY2UgbmFtZXMgdW5pcXVlIikNCj4gQ2M6IHN0YWJsZUB2
+Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IEN5cmlsIEJydWxlYm9pcyA8Y3lyaWxAZGViYW1heC5j
+b20+DQo+IENjOiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4g
+Q2M6IEhlbGdlIERlbGxlciA8ZGVsbGVyQGdteC5kZT4NCj4gU2lnbmVkLW9mZi1ieTogUm9i
+IEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJt
+YW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvb2YvcGxh
+dGZvcm0uYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
+ZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL29mL3BsYXRmb3JtLmMg
+Yi9kcml2ZXJzL29mL3BsYXRmb3JtLmMNCj4gaW5kZXggMDUxZTI5YjdhZDJiLi4wYzM0NzVl
+N2QyZmYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvb2YvcGxhdGZvcm0uYw0KPiArKysgYi9k
+cml2ZXJzL29mL3BsYXRmb3JtLmMNCj4gQEAgLTU1Miw3ICs1NTIsNyBAQCBzdGF0aWMgaW50
+IF9faW5pdCBvZl9wbGF0Zm9ybV9kZWZhdWx0X3BvcHVsYXRlX2luaXQodm9pZCkNCj4gICAJ
+CQlpZiAoIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgsb3BlbmVkIiwgTlVMTCkgfHwN
+Cj4gICAJCQkgICAgIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgsYm9vdC1kaXNwbGF5
+IiwgTlVMTCkpDQo+ICAgCQkJCWNvbnRpbnVlOw0KPiAtCQkJZGV2ID0gb2ZfcGxhdGZvcm1f
+ZGV2aWNlX2NyZWF0ZShub2RlLCAib2YtZGlzcGxheS4wIiwgTlVMTCk7DQo+ICsJCQlkZXYg
+PSBvZl9wbGF0Zm9ybV9kZXZpY2VfY3JlYXRlKG5vZGUsICJvZi1kaXNwbGF5IiwgTlVMTCk7
+DQo+ICAgCQkJb2Zfbm9kZV9wdXQobm9kZSk7DQo+ICAgCQkJaWYgKFdBUk5fT04oIWRldikp
+DQo+ICAgCQkJCXJldHVybiAtRU5PTUVNOw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
+cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
+YW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55
+DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGll
+biBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/pmus.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+--------------rrE1gd9xgtDN66LPMEindtwb--
 
-diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-index 87e5fb74e121..c25b9cb70050 100644
---- a/tools/perf/util/pmus.c
-+++ b/tools/perf/util/pmus.c
-@@ -443,7 +443,8 @@ static char *format_alias(char *buf, int len, const struct perf_pmu *pmu,
- 			  const struct perf_pmu_alias *alias)
- {
- 	struct parse_events_term *term;
--	int used = snprintf(buf, len, "%s/%s", pmu->name, alias->name);
-+	int pmu_name_len = pmu_name_len_no_suffix(pmu->name, /*num=*/NULL);
-+	int used = snprintf(buf, len, "%.*s/%s", pmu_name_len, pmu->name, alias->name);
- 
- 	list_for_each_entry(term, &alias->terms, list) {
- 		if (term->type_val == PARSE_EVENTS__TERM_TYPE_STR)
-@@ -512,6 +513,7 @@ void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *p
- 			*desc = NULL, *long_desc = NULL,
- 			*encoding_desc = NULL, *topic = NULL,
- 			*pmu_name = NULL;
-+		int pmu_name_len;
- 		bool deprecated = false;
- 		size_t buf_used;
- 
-@@ -522,7 +524,8 @@ void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *p
- 		if (!aliases[j].event) {
- 			/* A selectable event. */
- 			pmu_name = aliases[j].pmu->name;
--			buf_used = snprintf(buf, sizeof(buf), "%s//", pmu_name) + 1;
-+			pmu_name_len = pmu_name_len_no_suffix(pmu_name, /*num=*/NULL);
-+			buf_used = snprintf(buf, sizeof(buf), "%.*s//", pmu_name_len, pmu_name) + 1;
- 			name = buf;
- 		} else {
- 			if (aliases[j].event->desc) {
-@@ -548,8 +551,10 @@ void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *p
- 			long_desc = aliases[j].event->long_desc;
- 			topic = aliases[j].event->topic;
- 			encoding_desc = buf + buf_used;
-+			pmu_name_len = pmu_name_len_no_suffix(pmu_name, /*num=*/NULL);
- 			buf_used += snprintf(buf + buf_used, sizeof(buf) - buf_used,
--					"%s/%s/", pmu_name, aliases[j].event->str) + 1;
-+					"%.*s/%s/", pmu_name_len, pmu_name,
-+					aliases[j].event->str) + 1;
- 			deprecated = aliases[j].event->deprecated;
- 		}
- 		print_cb->print_event(print_state,
--- 
-2.41.0.390.g38632f3daf-goog
+--------------EJlFeu4ajUbibragQamf4Zcq
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSs7/QFAwAAAAAACgkQlh/E3EQov+By
+PA/9EW57Zs5sk3iddg/7LyeGpSXcv35PnNZUpqCm6rBQ/bmDziTNKi2cPDvg/qC50cEwuH4RSJsH
+MfKrUOVg7vxOwYKnTf3caz264mGVlI1xFwf9GiVeURyw5SnCVguOL5yObxfCveZtNWqyIkE+3NG0
+aHzLnkjhNxoW6Pv69DyLxrIjMxAXQduWwG6+3Otajh8KFqC+3KeOJzyLqb/q/3kOknw5KhFlV/4E
+QHCpBQ4Il3w2wazFi+53ePGgZyqwJOB/BLTyozq7f/2DBa5mXruqtUUT7j/IwI84eqYGWxXaIVPb
+T0IfjhBXdoBAUpgtB4jT0paoWFhcKK7zq7I3MbyiIMT/7V8wuYfaI4rOC5AlpDYeJ7uPCQuB7Fgo
+88xX9+2/rleh6zwYM+Y+rec90gkKS/AuUOPVfrPMi38Y0MpvX9/JY4eSEAkYzLxZ2ikbKScdg9c3
+GktsZ3kEDo28Y6ZfRfk9lOfdl+xQHM22pd3pIBdy/cyR7y7Q2uCV9kkta6dHA8dUjANJONevcsW5
+hda2NQYx4pzkFvJd+rPVfVEvdgqYvrfz+2jWmfJgM97O6coJqof3jd52Sob0yH2cRoGtV5T0AYMZ
+us9FLSraDImc+FXkMqq5PHLbvKEGetHcpc+9uxeLST7AJ60KO3dpHzJd2W5gDFBHTFSMsQfdyhm7
+eSI=
+=KYfa
+-----END PGP SIGNATURE-----
+
+--------------EJlFeu4ajUbibragQamf4Zcq--
