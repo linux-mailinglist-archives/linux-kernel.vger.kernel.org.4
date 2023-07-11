@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A3174F30B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0BC74F310
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjGKPJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S231518AbjGKPKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjGKPI6 (ORCPT
+        with ESMTP id S230175AbjGKPKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:08:58 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490DAA0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:08:57 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6ff1ada5dso93010101fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:08:57 -0700 (PDT)
+        Tue, 11 Jul 2023 11:10:47 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CD210EF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:10:28 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4036bd4fff1so273971cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:10:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1689088135; x=1691680135;
+        d=google.com; s=20221208; t=1689088227; x=1691680227;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ELbRN/LifTQ/7zfClfcRkCTRTEOE/j2wLv/6DGZBUz4=;
-        b=bHShCj9WG6pWGVLraRILWTJ5Y6Mng+dA241HQjJRiFC35Gq1C/o5NW6At9jKzg/rbX
-         Zqokjm0nSV5C4DYOXykaXAsu32+8OkBgyjAE4UuMzsJqVnpFMREp+43yARPuzrWVvnqP
-         4JSK+5PwF1fY/5hcE/B7w1V4JrnX142QDccqWs4eAZ83DYQ5Etg9/pJV+h9iwON/dpSb
-         Efw8rDIr7GVWNglfdYQjccwsfKpqH7BhHMrA35G7xEoSGEh7G5fSwXA8dmLiDufUwcfk
-         nVvAKnFlI6ihu4nxJpkF4BAHv//PG48mX8nsoijXRUKtIQJT+JCQjVflSVZvglMin8TM
-         Og3A==
+        bh=FXXgBlGDAgzLkutcHZ7sASFFDrpsYXVUKvAHMEtR4rw=;
+        b=N6klHx+eyuoIjfiaI0v1z47RRdpGs97orCUlDc8RWQBS8JGIZsDQR2lmYLZktkTL7N
+         utNpaypyO6MgRQhLkmG+MiHyu3WQMEloe6KTLQndlWJfNqEcA6mZSjHzBQC19GAibNRp
+         ddcle7Shm+PTvtuPzRKxJouBbpmz7LbYPIAptzrgyLHrSsQ2+38QF8G+bubLsmlF6B6r
+         ozfVkIePgd80QubPNfkGVCxZa0ohVvNBPy1pT2Kf8YXjGTZsoUjlfc88Pb6vH1GpAHbg
+         EvyzocZL3wWdUtJHwm/rZPZFrI7at3X9eBzi6AKlJZYxQKFQTKwON7ANgQIc2iWo91xz
+         KiOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689088135; x=1691680135;
+        d=1e100.net; s=20221208; t=1689088227; x=1691680227;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ELbRN/LifTQ/7zfClfcRkCTRTEOE/j2wLv/6DGZBUz4=;
-        b=ioM9naAuAWpxPtKMlNoFbraHdU9uRkufgqUv5qYoOMS4AlETX/4xViHw5bbEhhviA0
-         yQWnuXZdw7DfcnQP3XRF+/2sNJvH6DC0oJ++BcdZFJ3NYEevWzpI7/bKDpAVu7MePiY7
-         o8TncjdshNJnpn/11jA9xgfGNSDX5zbYr33U7x8NzuLmY6Vue9hKGmd2ymXqcv8ELAxz
-         GYgwBm9izWijntf4oTQYkKK6pWRNumoFdPXa4K9kui92wJs45WxnFqtV+3oBlOjJq/Sm
-         IavzxX1SjrFjJfaqccZIpRLY56MEExcRBtSPoCGRbShK/suvT9zo74gdt3NAA0pP1kG/
-         emaQ==
-X-Gm-Message-State: ABy/qLZMYy020uTFyIN3KTO18ZPKDZ2fGUfWrjhMaNXsSC8ZdFPGbHJI
-        D4Z9A2hRYmX7JpEkwewMITLl15OPUuux9V075rbCHA==
-X-Google-Smtp-Source: APBJJlFyHgLU0mFIDZnS5y64MOAa8Euz64fKBxKrauS2sfQG8LwcHwrFCtcUV/dbu7fZM9mUz4o8e49Feg8R5ByUPWU=
-X-Received: by 2002:a2e:b0c6:0:b0:2b6:fa3f:9230 with SMTP id
- g6-20020a2eb0c6000000b002b6fa3f9230mr11813753ljl.46.1689088135367; Tue, 11
- Jul 2023 08:08:55 -0700 (PDT)
+        bh=FXXgBlGDAgzLkutcHZ7sASFFDrpsYXVUKvAHMEtR4rw=;
+        b=WGsoIzXF6X66OE0mrXYapNOWzxgTkBHC8D6HWcbK7NISAaQydDixGmoNXAiYunNFoL
+         cSYllowIv3UJpuQMMlCPOQ4DvuoaZIp/iKVvaUiaQIQMTR8sU6UnXCT2I0thsXR1cpe1
+         D1Ww9Vt5iJKrBgSPYhF3xfZPfTTpTjRengTfwDaWPpfoysy0ksM/MAIiPoFBD3vSi6RG
+         O1A+yrvgbed/eQETkiK+5jZ4X26Ac8yRxxKSGL2cPKrWYplXWuS7XcHHmuqnnYbQxavr
+         YLLCR9BFffApv9OIsSBBtgQI8BZCn8sQDeGvllSIDrMOdI4z2o5gCvGbt11FgM07toPh
+         UNeQ==
+X-Gm-Message-State: ABy/qLaudCRs8MgyiSkXIYHvfzS6IBMCc/k9RSxO4OLhwMpt125p8Xt6
+        cqGp/T4QGFJfvMcCzZ2Yup2Uba+r0RuJ4bzDsBkV1w==
+X-Google-Smtp-Source: APBJJlFZZhaRI8ygieCTBZxLDpHmKmobNdZcLK+Gcqk61HWR1zTWR1ySAr85pNZwVmhZc3CTTku2gSWjKJCK+skFdZk=
+X-Received: by 2002:a05:622a:315:b0:3f9:ab2c:88b9 with SMTP id
+ q21-20020a05622a031500b003f9ab2c88b9mr207655qtw.25.1689088227475; Tue, 11 Jul
+ 2023 08:10:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230616063210.19063-1-eric.lin@sifive.com> <20230616063210.19063-3-eric.lin@sifive.com>
- <20230616-revision-speed-a83dc926b334@wendy> <CAPqJEFo5genyjY7qJBaESzeppbEnTiDe9qzv98ETLhWfMZeG4A@mail.gmail.com>
- <74385f9d-ed8d-8906-13e3-b3091dae7993@codethink.co.uk>
-In-Reply-To: <74385f9d-ed8d-8906-13e3-b3091dae7993@codethink.co.uk>
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Tue, 11 Jul 2023 23:08:44 +0800
-Message-ID: <CAPqJEFpSkN9fJgNut6bdZUzpTvNp_mikWdCSrE=TNnajf5BRRw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] soc: sifive: Add SiFive private L2 cache PMU driver
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     will@kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
+References: <20230711055859.1242497-1-irogers@google.com> <182675ca-0905-0ed2-de94-0f7d4a256082@oracle.com>
+In-Reply-To: <182675ca-0905-0ed2-de94-0f7d4a256082@oracle.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 11 Jul 2023 08:10:15 -0700
+Message-ID: <CAP-5=fXrOvkwrbEB0GGv6Xr5JOdrW7dzjOL=MkDdxX2McfnzYA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] perf list: Remove duplicate PMUs
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,113 +79,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ben,
-
-On Tue, Jul 11, 2023 at 4:41=E2=80=AFPM Ben Dooks <ben.dooks@codethink.co.u=
-k> wrote:
+On Tue, Jul 11, 2023 at 1:26=E2=80=AFAM John Garry <john.g.garry@oracle.com=
+> wrote:
 >
-> On 20/06/2023 04:14, Eric Lin wrote:
-> > On Fri, Jun 16, 2023 at 6:13=E2=80=AFPM Conor Dooley <conor.dooley@micr=
-ochip.com> wrote:
-> >>
-> >> On Fri, Jun 16, 2023 at 02:32:09PM +0800, Eric Lin wrote:
-> >>> From: Greentime Hu <greentime.hu@sifive.com>
-> >>>
-> >>> This adds SiFive private L2 cache PMU driver. User
-> >>> can use perf tool to profile by event name and event id.
-> >>>
-> >>> Example:
-> >>> $ perf stat -C 0 -e /sifive_pl2_pmu/inner_acquire_block_btot/
-> >>>                  -e /sifive_pl2_pmu/inner_acquire_block_ntob/
-> >>>                  -e /sifive_pl2_pmu/inner_acquire_block_ntot/ ls
-> >>>
-> >>>   Performance counter stats for 'CPU(s) 0':
-> >>>
-> >>>                 300      sifive_pl2_pmu/inner_acquire_block_btot/
-> >>>               17801      sifive_pl2_pmu/inner_acquire_block_ntob/
-> >>>                5253      sifive_pl2_pmu/inner_acquire_block_ntot/
-> >>>
-> >>>         0.088917326 seconds time elapsed
-> >>>
-> >>> $ perf stat -C 0 -e /sifive_pl2_pmu/event=3D0x10001/
-> >>>                  -e /sifive_pl2_pmu/event=3D0x4001/
-> >>>                  -e /sifive_pl2_pmu/event=3D0x8001/ ls
-> >>>
-> >>>   Performance counter stats for 'CPU(s) 0':
-> >>>
-> >>>                 251      sifive_pl2_pmu/event=3D0x10001/
-> >>>                2620      sifive_pl2_pmu/event=3D0x4001/
-> >>>                 644      sifive_pl2_pmu/event=3D0x8001/
-> >>>
-> >>>         0.092827110 seconds time elapsed
-> >>>
-> >>> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> >>> Signed-off-by: Eric Lin <eric.lin@sifive.com>
-> >>> Reviewed-by: Zong Li <zong.li@sifive.com>
-> >>> Reviewed-by: Nick Hu <nick.hu@sifive.com>
-> >>> ---
-> >>>   drivers/soc/sifive/Kconfig            |   9 +
-> >>>   drivers/soc/sifive/Makefile           |   1 +
-> >>>   drivers/soc/sifive/sifive_pl2.h       |  20 +
-> >>>   drivers/soc/sifive/sifive_pl2_cache.c |  16 +
-> >>>   drivers/soc/sifive/sifive_pl2_pmu.c   | 669 +++++++++++++++++++++++=
-+++
-> >>
-> >> Perf drivers should be in drivers/perf, no?
-> >>
+> On 11/07/2023 06:58, Ian Rogers wrote:
+> > When there are multiple PMUs differing by ordered suffixes only
+> > display one. This avoids repeated listing of events, in particular
+> > when there are 10s of uncore PMUs. This also helps speed the all PMU
+> > event tests.
 > >
-> > Hi Conor,
-> >
-> > Yes, I see most of the drivers are in the drivers/perf.
-> >
-> > But I grep perf_pmu_register(), it seems not all the pmu drivers are
-> > in drivers/perf as below:
-> >
-> > arch/arm/mach-imx/mmdc.c:517:   ret =3D
-> > perf_pmu_register(&(pmu_mmdc->pmu), name, -1);
-> > arch/arm/mm/cache-l2x0-pmu.c:552:       ret =3D
-> > perf_pmu_register(l2x0_pmu, l2x0_name, -1);
+> > Before:
+> > ```
+> > $ perf list
 > > ...
-> > drivers/dma/idxd/perfmon.c:627: rc =3D perf_pmu_register(&idxd_pmu->pmu=
-,
-> > idxd_pmu->name, -1);
-> > drivers/fpga/dfl-fme-perf.c:904:static int
-> > fme_perf_pmu_register(struct platform_device *pdev,
-> > drivers/fpga/dfl-fme-perf.c:929:        ret =3D perf_pmu_register(pmu, =
-name, -1);
-> > ...
-> > drivers/gpu/drm/amd/amdgpu/amdgpu_pmu.c:549:    ret =3D
-> > perf_pmu_register(&pmu_entry->pmu, pmu_name, -1);
-> > drivers/gpu/drm/i915/i915_pmu.c:1190:   ret =3D
-> > perf_pmu_register(&pmu->base, pmu->name, -1);
-> > drivers/hwtracing/coresight/coresight-etm-perf.c:907:   ret =3D
-> > perf_pmu_register(&etm_pmu, CORESIGHT_ETM_PMU_NAME, -1);
-> > drivers/hwtracing/ptt/hisi_ptt.c:895:   ret =3D
-> > perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
-> > drivers/iommu/intel/perfmon.c:570:      return
-> > perf_pmu_register(&iommu_pmu->pmu, iommu_pmu->pmu.name, -1);
-> > drivers/nvdimm/nd_perf.c:309:   rc =3D perf_pmu_register(&nd_pmu->pmu,
-> > nd_pmu->pmu.name, -1);
-> > ...
+> >    uncore_imc_free_running_0/data_read/               [Kernel PMU event=
+]
+> >    uncore_imc_free_running_0/data_total/              [Kernel PMU event=
+]
+> >    uncore_imc_free_running_0/data_write/              [Kernel PMU event=
+]
+> >    uncore_imc_free_running_1/data_read/               [Kernel PMU event=
+]
+> >    uncore_imc_free_running_1/data_total/              [Kernel PMU event=
+]
+> >    uncore_imc_free_running_1/data_write/              [Kernel PMU event=
+]
+> > ```
 > >
-> > I just wondering what kind of pmu drivers should be in drivers/perf
-> > and what kind of pmu drivers should not be in drivers/perf.
-> > Thanks.
+> > After:
+> > ```
+> > $ perf list
+> > ...
+> >    uncore_imc_free_running/data_read/                 [Kernel PMU event=
+]
+> >    uncore_imc_free_running/data_total/                [Kernel PMU event=
+]
+> >    uncore_imc_free_running/data_write/                [Kernel PMU event=
+]
+>
+> So with this change can we run something like:
+>
+> perf stat -e uncore_imc_free_running/data_read/
+>
+> ?
+
+It is a long standing behavior of the event parser that we match the
+numeric suffixes, so:
+
+```
+$ sudo perf stat -e uncore_imc_free_running/data_read/ -a sleep 1
+
+Performance counter stats for 'system wide':
+
+         6,969.93 MiB  uncore_imc_free_running/data_read/
+
+      1.001163027 seconds time elapsed
+```
+
+The "uncore_" at the beginning is also optional, I kind of wish the
+"free_running" was too. The code doing this is:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/parse-events.y?h=3Dperf-tools-next#n316
+adding a * after the PMU name in:
+asprintf(&pattern, "%s*", $1)
+Then using fnmatch here:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/pmu.c?h=3Dperf-tools-next#n1707
+
+> If so, does that match all PMUs whose name beings with
+> "uncore_imc_free_running" (and give aggregate result for those PMUs)?
+
+Yep. As we're matching with a filename '*' glob then it will actually
+potentially grab a bunch more. I think this should likely be made a
+lot more precise.
+
+The merging of the counters happens throughout the code, but it is set up h=
+ere:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/stat.c?h=3Dperf-tools-next#n559
+
+I didn't write this behavior, it has pre-existed my contributions. I'm
+hoping to change the perf list behavior as we're seeing large server
+systems with getting on toward 100 PMUs, the events are replicated for
+each one and the perf list and testing behaviors are somewhat
+exploding in size.
+
+Thanks,
+Ian
+
+> Thanks,
+> John
+>
+> > ```
 > >
->
-> Given the registers for the l2 cache controls and l2 pmu don't overlap
-> do we need the pmu and general cache drivers together?
->
-
-From Will's suggestion, I'll put the pl2 pmu driver to drivers/perf in
-v2. Thanks.
-
-Best Regards,
-Eric Lin.
-
-> --
-> Ben Dooks                               http://www.codethink.co.uk/
-> Senior Engineer                         Codethink - Providing Genius
->
-> https://www.codethink.co.uk/privacy.html
+> > The PMUs are sorted by name then suffix as a part of this change.
+> >
+> > Ian Rogers (3):
+> >    perf pmus: Sort pmus by name then suffix
+> >    perf pmus: Add scan that ignores duplicates, use for perf list
+> >    perf pmus: Don't print PMU suffix in list
+> >
+> >   tools/perf/util/pmus.c | 107 +++++++++++++++++++++++++++++++++++++++-=
+-
+> >   1 file changed, 102 insertions(+), 5 deletions(-)
+> >
 >
