@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D8C74EC86
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67FD74EC89
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjGKLVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S231731AbjGKLVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjGKLVT (ORCPT
+        with ESMTP id S231127AbjGKLVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:21:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272AC120
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1689074479; x=1720610479;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BtwdLSiym59o1DrznC492yD2dJ/cAL9RGvqKk4h6Y+A=;
-  b=GwuWbc+M+DVuWld8f96tEQ3ILBlyGOZ+0G220wac1sPoxGsOySWMw1Q9
-   XuG2WxPPC2jILB0wz3mKB7a84tVr6EuB/DwOW8a634eUjpMaCUT4HKkAR
-   fNDmzajmZCrZYvmQ+eQ5hlzNayDciXmp8J77IjcbS5wbJfOmkWl5bcdIH
-   A4PPpgGNEnm5Tc6GYUOWQBaO+Wnq6a/cYcWaTzKsq2xkmU9ymwbgkRIFr
-   OpPpir4K/akOfDi3oiPckq8fmZC814KqHStvhMKfvxQdeUUgmo4g1UA3U
-   CPTH4wZmmi0XeQ7NVBe03mvqBG67st8vIKVD5O98iIPGfpGMmo605S1gh
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="asc'?scan'208";a="223099167"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jul 2023 04:21:18 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Jul 2023 04:21:17 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Jul 2023 04:21:15 -0700
-Date:   Tue, 11 Jul 2023 12:20:43 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Conor Dooley <conor@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] Misc RISC-V timer driver improvements
-Message-ID: <20230711-remission-from-581829b1ff05@wendy>
-References: <20230710131902.1459180-1-apatel@ventanamicro.com>
+        Tue, 11 Jul 2023 07:21:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58239E7A;
+        Tue, 11 Jul 2023 04:21:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0920A1FE81;
+        Tue, 11 Jul 2023 11:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689074501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vowglESr1KoOEcY4XXmA0mTe20uS/zqvChy0ToqbJlw=;
+        b=GwL+qkZnIy2QFgfpjgTPLJlEV//u+2813Bb38189aR7Zm2/gNFOmWRZ8RAhRnJyIYzbwNI
+        t72sniEI3ZdmVcZtwEBOnhAZhIJXBLes2THAO86pREcYVEDzLzTMFDk4/pbpK2S19BzEBe
+        xEkiN2Fos24yBO10UsreHSv79mJOKQM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB7FA1390F;
+        Tue, 11 Jul 2023 11:21:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5PGMNEQ7rWRIGQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 11 Jul 2023 11:21:40 +0000
+Date:   Tue, 11 Jul 2023 13:21:39 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: remove unneeded return value of
+ cgroup_rm_cftypes_locked()
+Message-ID: <cwqcmeqxglkd32crmc7fw57hhrrihtqnkle5ympniuthkg6j6w@fmyd7jxvffhi>
+References: <20230701073856.2095425-1-linmiaohe@huawei.com>
+ <ue4duahv6scnn64zgduuhiyq2gh33w7x5ftdffw3uqcn4ahyd2@txxtxf2fkzp2>
+ <7d3323ab-f796-6846-ab08-5d48734595e1@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pOCE+3HdPQhgGlY6"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fhkx5cds4otewh5u"
 Content-Disposition: inline
-In-Reply-To: <20230710131902.1459180-1-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7d3323ab-f796-6846-ab08-5d48734595e1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---pOCE+3HdPQhgGlY6
+
+--fhkx5cds4otewh5u
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 10, 2023 at 06:49:00PM +0530, Anup Patel wrote:
-> This series does two improvements to the RISC-V timer driver:
-> 1) Keep timer interrupt enable state in-sync with interrupt subsystem
-> 2) Increase rating of clock event device when Sstc is available
+On Tue, Jul 11, 2023 at 10:58:48AM +0800, Miaohe Lin <linmiaohe@huawei.com>=
+ wrote:
+> +/* It builds upon cgroup_addrm_files()'s. */
+>  static void cgroup_rm_cftypes_locked(struct cftype *cfts)
+>  {
+>         lockdep_assert_held(&cgroup_mutex);
 >=20
-> These patches can also be found in the riscv_timer_imp_v1 branch at:
-> https://github.com/avpatel/linux.git
 
-Other than wondering why you opted for 450 (curiosity really), this
-stuff looks fine to me.
+I meant adding the reasoning to the commit message -- swallowing errors
+on removal is fine because cgroup_addrm_files() won't fail at removal.
+It's a minor remark for the future readers ;-)
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Michal
 
-Cheers,
-Conor.
-
---pOCE+3HdPQhgGlY6
+--fhkx5cds4otewh5u
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK07CwAKCRB4tDGHoIJi
-0j7pAQCJ35VuI5FCicsChC20YXbYXFS71ClF3UbO+6hIao19zwEAork915p5cLPc
-U/+WO9wBead32JpGTrl+GduNOhTD0wg=
-=i+Kq
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZK07QQAKCRAGvrMr/1gc
+jq21AQCWPqVs+XV9Vu8QeN38R34dWAgvPGj9y4EfFgTQDIWk4QEAqcd+aEHRGC2i
+onMUJSBPVSf3GqVIjpW7MNZ5aAaKPAE=
+=GCjq
 -----END PGP SIGNATURE-----
 
---pOCE+3HdPQhgGlY6--
+--fhkx5cds4otewh5u--
