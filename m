@@ -2,58 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7407B74E25B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2324874E25F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjGJX6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S230327AbjGKAAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjGJX6n (ORCPT
+        with ESMTP id S229752AbjGKAAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:58:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EC81A8;
-        Mon, 10 Jul 2023 16:58:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDCA261142;
-        Mon, 10 Jul 2023 23:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3260EC433C8;
-        Mon, 10 Jul 2023 23:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689033521;
-        bh=irRYoyD2g2+00LlYqM5wE8Ub9YnQWH+M3sbXLQm91hQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SJeSt6n1RSXZToMdezxkj1NDAFYtgzm1PY9cyhRtCtnDfAxX9bXFZff+zJh1uE8q6
-         g+T9MinEvdr8yF8VL/mEt+cr8kl78oTd421IHbzPl/F5EhGLZ93zeevjXVvA+BivPO
-         7m9r6uhGad09LL5csHd/xClQoxeZWbdOot4vNNRdblQYJGIa+qE9cFAwvpYMWfMZO8
-         SDEUgwFVKdyvvHwBcCIyS1qxM/UbvYRwZArJxwJ2B+p4KNU3cfmIBM4pI/9fHgKvh5
-         mLcW1Q9oYzV+99ylZbvJkVdSohyGxlPcaJeBxc+8/A55a7SB3meXKNleUoc8AtlnUn
-         4ecxOx+AdiWWQ==
-Date:   Tue, 11 Jul 2023 08:58:37 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] x86/kprobes: Prohibit probing on compiler
- generated CFI checking code
-Message-Id: <20230711085837.fac80c964ea7667cb75bd6e5@kernel.org>
-In-Reply-To: <20230710161643.GB3040258@hirez.programming.kicks-ass.net>
-References: <168899125356.80889.17967397360941194229.stgit@devnote2>
-        <168899127520.80889.15418363018799407058.stgit@devnote2>
-        <20230710161643.GB3040258@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 10 Jul 2023 20:00:15 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C45C1A7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:00:14 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-346258cf060so27735ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689033614; x=1691625614;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bzjqKyy3RJozxwYzvwQHf7u8DmmIJyuitJSCSOORBzg=;
+        b=FskCZG8NomIVXpbo5BJcg8DNkZ4gYsvg1bKtVjoYvTUzWtnnFCRrLL/WrSthQXdxhA
+         LwGzokwy1AECgtb/oK4pAJSYcSTar8aGCV/R01dEbRsoyamafl9xJYaMeeMoybR38O/a
+         Mpx0IXl4fGwFz0K2f+tzwKc06eScCnoNY15kSqkVBbWJ+MtQyGOQmYKO8YLgcsvI6QNz
+         1kWnmy1O+aJzdcDd54YAQJBMQ2zi8so2qmbIa5ikdnMdQGe9UluBlv89/5/dv6fMSeO5
+         d8BJE76Wb9SRis3zaj0DAVAtbtGKSTPHVvYg68yYRbvaFNq900uUXCN2332bXkkTAOmG
+         j4Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689033614; x=1691625614;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bzjqKyy3RJozxwYzvwQHf7u8DmmIJyuitJSCSOORBzg=;
+        b=i2ljAtnLZJYUW5EzdeWgNwssDIN4bHgZOqeJBNWNHORbrZNNoJjW2OV+OAFi/Ng6xE
+         TMifT/Ge4GWuoKiuaFt129fJi69wYMKGHwjvLDLd7j31iZaeRnpg4kOolOGf06FWqhpK
+         x/pqV+pYVOTjO/MYietYZMw0epgmuwMc/TL5sbuYgkzigMM0pXZIXetXZNVkXnmrdHP7
+         33Xn1D94ZYrse9FdSaY3FWxgysvLcQyrm49qh6SWVYk7nVtwuA0koCA7hFjiVO0DZxaj
+         FSnPdW/2xJdmG+BhWKVe+yoGPtSxjCU+4LJJMXz7KTTebJKTeDfhAnuo4zhPS6FaeVO/
+         5Oiw==
+X-Gm-Message-State: ABy/qLZTZ3DSq4KcRKta0Y6diG8rrfqcm+ya+/Vg8RW5ZwFe4CaNa4sk
+        49BzuIYe5JiyJ/lX+L8q1Mhyvw==
+X-Google-Smtp-Source: APBJJlFlSqWv8QWWG9+dmVP5iYH+CAIh/AyRcMmGjrQXYHMZ4/UO+Ro9uzHGJsZq0C8Rx8J1t8FBxg==
+X-Received: by 2002:a05:6e02:1542:b0:346:3e9:427f with SMTP id j2-20020a056e02154200b0034603e9427fmr54987ilu.7.1689033613762;
+        Mon, 10 Jul 2023 17:00:13 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
+        by smtp.gmail.com with ESMTPSA id n10-20020a63b44a000000b0054fb537ca5dsm200309pgu.92.2023.07.10.17.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 17:00:13 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v5 1/2] sched, cgroup: Restore meaning to
+ hierarchical_quota
+References: <20230707195748.2918490-1-pauld@redhat.com>
+        <20230707195748.2918490-2-pauld@redhat.com>
+Date:   Mon, 10 Jul 2023 17:00:11 -0700
+In-Reply-To: <20230707195748.2918490-2-pauld@redhat.com> (Phil Auld's message
+        of "Fri, 7 Jul 2023 15:57:47 -0400")
+Message-ID: <xm26h6qbfhbo.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,189 +84,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 18:16:43 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+Phil Auld <pauld@redhat.com> writes:
 
-> On Mon, Jul 10, 2023 at 09:14:35PM +0900, Masami Hiramatsu (Google) wrote:
-> > +	if (IS_ENABLED(CONFIG_CFI_CLANG)) {
-> > +		/*
-> > +		 * The compiler generates the following instruction sequence
-> > +		 * for indirect call checks and cfi.c decodes this;
-> > +		 *
-> > +		 *   movl    -<id>, %r10d       ; 6 bytes
-> > +		 *   addl    -4(%reg), %r10d    ; 4 bytes
-> > +		 *   je      .Ltmp1             ; 2 bytes
-> > +		 *   ud2                        ; <- regs->ip
-> > +		 *   .Ltmp1:
-> > +		 *
-> > +		 * Also, these movl and addl are used for showing expected
-> > +		 * type. So those must not be touched.
-> > +		 */
-> > +		__addr = recover_probed_instruction(buf, addr);
-> > +		if (!__addr)
-> > +			return 0;
-> > +
-> > +		if (insn_decode_kernel(&insn, (void *)__addr) < 0)
-> > +			return 0;
-> > +
-> > +		if (insn.opcode.value == 0xBA)
-> > +			offset = 12;
-> > +		else if (insn.opcode.value == 0x3)
-> > +			offset = 6;
-> > +		else
-> > +			goto out;
-> 
-> Notably, the JE will already be avoided?
-> 
-> > +
-> > +		/* This movl/addl is used for decoding CFI. */
-> > +		if (is_cfi_trap(addr + offset))
-> > +			return 0;
-> > +	}
-> >  
-> > +out:
-> >  	return (addr == paddr);
-> >  }
-> 
-> Hmm, so I was thinking something like the below, which also catches
-> things when we rewrite kCFI to FineIBT, except I don't think we care if
-> the FineIBT callsite gets re-written. FineIBT only relies on the __cfi_
-> symbol not getting poked at (which the previous patches should ensure).
+> In cgroupv2 cfs_b->hierarchical_quota is set to -1 for all task
+> groups due to the previous fix simply taking the min.  It should
+> reflect a limit imposed at that level or by an ancestor. Even
+> though cgroupv2 does not require child quota to be less than or
+> equal to that of its ancestors the task group will still be
+> constrained by such a quota so this should be shown here. Cgroupv1
+> continues to set this correctly.
+>
+> In both cases, add initialization when a new task group is created
+> based on the current parent's value (or RUNTIME_INF in the case of
+> root_task_group). Otherwise, the field is wrong until a quota is
+> changed after creation and __cfs_schedulable() is called.
 
-Oh, is FineIBT different from kCFI? I thought those are same. But anyway
-for kCFI=y && FineIBT=n case, I think this code still needed.
+Reviewed-by: Ben Segall <bsegall@google.com>
 
-> 
-> Additionally is_cfi_trap() is horrifically slow -- it's a full linear
-> search of the entire kcfi_traps array, it doesn't have any smarts on
-> (#UD can hardly be considered a fast path).
-
-Yeah, register_kprobe() is not a fast path in most cases. So I think
-this is OK at this point. We can speed it up by sorting the array by
-address and binary search later.
-
-> 
-> So I tihnk I'm ok with the above, just adding the below for reference
-> (completely untested and everything).
-
-I wonder the distance can be used outside of x86. CFI implementation
-depends on the arch?
-
-> 
-> 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-Thanks!
-
-> 
-> 
-> ---
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index f7f6042eb7e6..b812dee76909 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -293,6 +293,11 @@ static int can_probe(unsigned long paddr)
->  #endif
->  		addr += insn.length;
->  	}
-> +	/*
-> +	 * Don't allow poking the kCFI/FineIBT callsites.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_CFI_CLANG) && cfi_call_site(addr))
-> +		return 0;
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index a68d1276bab0..1b214e10c25d 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -11038,11 +11038,14 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
 >  
->  	return (addr == paddr);
->  }
-> diff --git a/kernel/cfi.c b/kernel/cfi.c
-> index 08caad776717..2656e6ffa013 100644
-> --- a/kernel/cfi.c
-> +++ b/kernel/cfi.c
-> @@ -31,16 +31,22 @@ static inline unsigned long trap_address(s32 *p)
->  	return (unsigned long)((long)p + (long)*p);
+>  		/*
+>  		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
+> -		 * always take the min.  On cgroup1, only inherit when no
+> -		 * limit is set:
+> +		 * always take the non-RUNTIME_INF min.  On cgroup1, only
+> +		 * inherit when no limit is set:
+>  		 */
+>  		if (cgroup_subsys_on_dfl(cpu_cgrp_subsys)) {
+> -			quota = min(quota, parent_quota);
+> +			if (quota == RUNTIME_INF)
+> +				quota = parent_quota;
+> +			else if (parent_quota != RUNTIME_INF)
+> +				quota = min(quota, parent_quota);
+>  		} else {
+>  			if (quota == RUNTIME_INF)
+>  				quota = parent_quota;
+
+I suppose you could also set RUNTIME_INF to be a positive value or
+better yet just compare at unsigned, but it's not like config needs to
+be fast, so no need to mess with that.
+
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 373ff5f55884..92381f9ecf37 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6005,13 +6005,14 @@ static enum hrtimer_restart sched_cfs_period_timer(struct hrtimer *timer)
+>  	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
 >  }
 >  
-> -static bool is_trap(unsigned long addr, s32 *start, s32 *end)
-> +static long cfi_trap_distance(unsigned long addr, s32 *start, s32 *end)
+> -void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+> +void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent)
 >  {
-> +	long dist = LONG_MAX;
->  	s32 *p;
->  
->  	for (p = start; p < end; ++p) {
-> -		if (trap_address(p) == addr)
-> -			return true;
-> +		long d = trap_address(p) - addr;
-> +
-> +		if (abs(dist) < abs(d)) {
-> +			dist = d;
-> +			if (dist == 0)
-> +				return 0;
-> +		}
->  	}
->  
-> -	return false;
-> +	return dist;
->  }
->  
->  #ifdef CONFIG_MODULES
-> @@ -66,25 +72,25 @@ void module_cfi_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
->  	}
->  }
->  
-> -static bool is_module_cfi_trap(unsigned long addr)
-> +static long module_cfi_trap_distance(unsigned long addr)
->  {
->  	struct module *mod;
-> -	bool found = false;
-> +	long dist = LONG_MAX;
->  
->  	rcu_read_lock_sched_notrace();
->  
->  	mod = __module_address(addr);
->  	if (mod)
-> -		found = is_trap(addr, mod->kcfi_traps, mod->kcfi_traps_end);
-> +		dist = cfi_trap_distance(addr, mod->kcfi_traps, mod->kcfi_traps_end);
->  
->  	rcu_read_unlock_sched_notrace();
->  
->  	return found;
->  }
->  #else /* CONFIG_MODULES */
-> -static inline bool is_module_cfi_trap(unsigned long addr)
-> +static long module_cfi_trap_distance(unsigned long addr)
->  {
-> -	return false;
-> +	return LONG_MAX;
->  }
->  #endif /* CONFIG_MODULES */
->  
-> @@ -93,9 +99,24 @@ extern s32 __stop___kcfi_traps[];
->  
->  bool is_cfi_trap(unsigned long addr)
->  {
-> -	if (is_trap(addr, __start___kcfi_traps, __stop___kcfi_traps))
-> +	long dist = cfi_trap_distance(addr, __start___kcfi_traps, __stop___kcfi_traps);
-> +	if (!dist)
-> +		return true;
-> +
-> +	return module_cfi_trap_distance(addr) == 0;
-> +}
-> +
-> +bool cfi_call_site(unsigned long addr)
-> +{
-> +	long dist = cfi_trap_distance(addr, __start___kcfi_traps, __stop___kcfi_traps);
-> +	if (dist >= -12 && dist <= 0)
-> +		return true;
-> +
-> +	dist = module_cfi_trap_distance(addr);
-> +	if (dist >= -12 && dist <= 0)
->  		return true;
->  
-> -	return is_module_cfi_trap(addr);
-> +	return false;
->  }
-> +
->  #endif /* CONFIG_ARCH_USES_CFI_TRAPS */
+>  	raw_spin_lock_init(&cfs_b->lock);
+>  	cfs_b->runtime = 0;
+>  	cfs_b->quota = RUNTIME_INF;
+>  	cfs_b->period = ns_to_ktime(default_cfs_period());
+>  	cfs_b->burst = 0;
+> +	cfs_b->hierarchical_quota = ((parent) ? parent->hierarchical_quota : RUNTIME_INF);
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Minor style nit: don't need any of these parens here.
