@@ -2,114 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D7974E5A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265BB74E5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjGKECk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 00:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S230286AbjGKEG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 00:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjGKECh (ORCPT
+        with ESMTP id S229583AbjGKEGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:02:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAAA188;
-        Mon, 10 Jul 2023 21:02:36 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B2r9GQ026472;
-        Tue, 11 Jul 2023 04:02:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=iTB3oKekh3v/P5mRdFmw2Ck60e2TQ9FDGLFSuFnAUpY=;
- b=DT0javzcou1lMebwxt6CGdFIjRuQhxjRYPXoHTu9ssPnnL4IbFCKPlrCHbLpW0+Wi14h
- PqK471X71c9Sq/EBbo0uV9dk8cvGnVvxE1Ma7mzWtTf5ujo7WHdw8rCeZKbX03QEk2al
- T8VqsrXRSF8N7eACwk6tYe0ZZnPfC1AOQb3j5poKYlRYWEndYN2f9J48CEvSmQEbbux4
- BllUNzm/J90MrGeV7wwIvq4MlGTed9MBKc6dta3fwgh8hCR1I8WNFE1ymOYCDXI/F/aL
- lZYGq4lq6ZP2pzgD9yqCxhnJqNmdl42+/bIYgOCDvjjTxYCKfv8iiB7yCNJokXqYTrxA Bg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rrxpdg34x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 04:02:27 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B42R63020736
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 04:02:27 GMT
-Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
- 2023 21:02:24 -0700
-Message-ID: <5cf15f85-0397-96f7-4110-13494551b53b@quicinc.com>
-Date:   Tue, 11 Jul 2023 12:02:22 +0800
+        Tue, 11 Jul 2023 00:06:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAB1135
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 21:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689048337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sanp52G7qe4emaxcQItrkn4g0y24nEg66UbSkbqz794=;
+        b=e+Z9cLEzq+yZ4M+eUzzHl1G9CV6nL7emo9Qy+kzQciQ9BDP/ymVgNPUOLVUaaisUVpYQED
+        w1yU5zwUEOTdjmAp/6m5g32Y33Y7I3hqd8PZhvt+mTJAExxHB9b2kVvZTUgl94LqRTxsoG
+        JtaYX65U+J+9kvga/ayGgt4vfGpasAI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-459-usLv1MgwPzqyMLFYEeDmjQ-1; Tue, 11 Jul 2023 00:05:36 -0400
+X-MC-Unique: usLv1MgwPzqyMLFYEeDmjQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6351121aa10so55607866d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 21:05:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689048336; x=1691640336;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sanp52G7qe4emaxcQItrkn4g0y24nEg66UbSkbqz794=;
+        b=E6FRnouoEweQig7fswyPWzicvFBr/BO1vnSBn7dKC9zHShraaW9eCcuJHtYReMyqMZ
+         rR1vxwj6GRO5B2sHtRrT6zFnJHDLYYBafFTJLsLIKpf2jdv5loyyjD59IXVOYm3S7qfQ
+         exHpKTaz3rEnRs3NhKJUHpfUh789JFvAwSKdhDGSz73MVBIInfE2iW7mLUxXjHwesewH
+         BmiSxsfd9KeWUnSdmcTmPf5dpvmRB4a+ZWZVYXcMkTHflNRZBWLwi0pgLSgJDF2JW0+g
+         KNmuA8G+vbysbh6OkHDtfEVdDsMXVUoCHgxph+8c/bwRU1TejBo+C45EnSonvpRoNtTP
+         1hnQ==
+X-Gm-Message-State: ABy/qLYTZ6bIWhIW7r7xm5p3kcNUo+eGn7VYkLWBeB6R9dKtaim1N89F
+        4WfFq03v3yncLz36FUOfkLP3auHwf15fyDl/n53rVNZZZcjhZ6FYaxnv5VQ8mz2T39netExrXt3
+        xHA493AeLYYd4nOSHftBgz6rIs9fDvOgHvKxgAv/w
+X-Received: by 2002:a0c:e44d:0:b0:62d:ef66:ff1c with SMTP id d13-20020a0ce44d000000b0062def66ff1cmr12076653qvm.24.1689048335874;
+        Mon, 10 Jul 2023 21:05:35 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEGTtnbv4lplqsuwMA0lcF/2QRhbSnqCLDEDGVhD6GZ6v3vRL7xgj3ixm6UdOxJvERNjVYrT8Aw+QUQlev+2Ls=
+X-Received: by 2002:a0c:e44d:0:b0:62d:ef66:ff1c with SMTP id
+ d13-20020a0ce44d000000b0062def66ff1cmr12076645qvm.24.1689048335643; Mon, 10
+ Jul 2023 21:05:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
-To:     Will Deacon <will@kernel.org>
-CC:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <maz@kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
-        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
-        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
- <20230710093751.GC32673@willie-the-truck>
-From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
-In-Reply-To: <20230710093751.GC32673@willie-the-truck>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: JHx4b0WH-pw4ugh7VLyM_HW0t49wQcuf
-X-Proofpoint-GUID: JHx4b0WH-pw4ugh7VLyM_HW0t49wQcuf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_01,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- adultscore=0 mlxlogscore=583 priorityscore=1501 phishscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110035
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230708020259.1343736-1-ming.lei@redhat.com> <20230708020259.1343736-3-ming.lei@redhat.com>
+ <20230710064109.GB24519@lst.de> <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+In-Reply-To: <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+From:   Pingfan Liu <piliu@redhat.com>
+Date:   Tue, 11 Jul 2023 12:05:24 +0800
+Message-ID: <CAF+s44T5Hn5ikNq+YMp2Nucb6rBT=e4VHW8WN8YDhZHe9JmqGw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] nvme-pci: use blk_mq_max_nr_hw_queues() to calculate
+ io queues
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        Wen Xiong <wenxiong@linux.ibm.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/2023 5:37 PM, Will Deacon wrote:
-> On Mon, Jul 10, 2023 at 01:59:55PM +0800, Maria Yu wrote:
->> In order to be able to disable lse_atomic even if cpu
->> support it, most likely because of memory controller
->> cannot deal with the lse atomic instructions, use a
->> new idreg override to deal with it.
-> 
-> This should not be a problem for cacheable memory though, right?
-> 
-> Given that Linux does not issue atomic operations to non-cacheable mappings,
-> I'm struggling to see why there's a problem here.
+Hi Ming,
 
-The lse atomic operation can be issued on non-cacheable mappings as 
-well. Even if it is cached data, with different CPUECTLR_EL1 setting, it 
-can also do far lse atomic operations.
+Having no [PATCH 1/2] blk-mq: add blk_mq_max_nr_hw_queues() in inbox.
+So I reply here.
 
-> 
-> Please can you explain the problem that you are trying to solve?
+At first glance, I think that  the cpu hot plug callback hook should
+be the remedy for the newly introduced blk_mq_max_nr_hw_queues(),
+although it is more complicated.
 
-In our current case, it is a 100% reproducible issue that happened for 
-uncached data, the cpu which support LSE atomic, but the system's DDR 
-subsystem is not support this and caused a NOC error and thus 
-synchronous external abort happened.
-> 
-> Will
+Consider the scene where nr_cpus=3D4, which can speed up the dumping
+process, the blk_mq_max_nr_hw_queues() can not utilize the other three
+cpus.
 
--- 
-Thx and BRs,
-Aiqun(Maria) Yu
+
+Thanks,
+
+Pingfan
+
+On Mon, Jul 10, 2023 at 5:16=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrot=
+e:
+>
+> On Mon, Jul 10, 2023 at 08:41:09AM +0200, Christoph Hellwig wrote:
+> > On Sat, Jul 08, 2023 at 10:02:59AM +0800, Ming Lei wrote:
+> > > Take blk-mq's knowledge into account for calculating io queues.
+> > >
+> > > Fix wrong queue mapping in case of kdump kernel.
+> > >
+> > > On arm and ppc64, 'maxcpus=3D1' is passed to kdump command line, see
+> > > `Documentation/admin-guide/kdump/kdump.rst`, so num_possible_cpus()
+> > > still returns all CPUs.
+> >
+> > That's simply broken.  Please fix the arch code to make sure
+> > it does not return a bogus num_possible_cpus value for these
+>
+> That is documented in Documentation/admin-guide/kdump/kdump.rst.
+>
+> On arm and ppc64, 'maxcpus=3D1' is passed for kdump kernel, and "maxcpu=
+=3D1"
+> simply keep one of CPU cores as online, and others as offline.
+>
+> So Cc our arch(arm & ppc64) & kdump guys wrt. passing 'maxcpus=3D1' for
+> kdump kernel.
+>
+> > setups, otherwise you'll have to paper over it in all kind of
+> > drivers.
+>
+> The issue is only triggered for drivers which use managed irq &
+> multiple hw queues.
+>
+>
+> Thanks,
+> Ming
+>
+>
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+>
 
