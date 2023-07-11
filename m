@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A38474F6B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F0674F6EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjGKRSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 13:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S232356AbjGKRUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbjGKRSA (ORCPT
+        with ESMTP id S232224AbjGKRUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:18:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80EA1;
-        Tue, 11 Jul 2023 10:17:59 -0700 (PDT)
+        Tue, 11 Jul 2023 13:20:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D91F1998;
+        Tue, 11 Jul 2023 10:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689095879; x=1720631879;
+  t=1689095994; x=1720631994;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AaJS6i6oBeO9EHp15z+Qk/kBsYr58o4Zqaz8k2QQyPM=;
-  b=kUhHkmwZtXGl5qK/QySrElLdCefUlHjBGSj57ajA6UXCgagYG41Mo9im
-   hVCFU1dW7dbu585GZtRnbY0PkYkQn7RNeWrp+uzWAZ0ApSl6aPIq9ESpo
-   fcqeYx99OmmA/M/S9iDjb/T6dPrWGG/tjjl9/3yMk36hGVGz1p8hkdTkj
-   zgTxe0+2v/e55+z39hGQKYMQchiJ9srOdaOF4/qGAr0GiOarHjGZ+4jrk
-   6T8+zQmQonMkBH2YFcsyvvSBspqAKf/OAkoOpV6XaX7OlVvm54T5+lLHk
-   3gDIZgKAy/KxkgIgLuZllblqojOT59Y+whWVsgr8a4Z6t/zdnRqmwGy+1
+  bh=i6xTQM/M83VGl5L40MPme6/MD9lIrLsXxW1pfo9MYv4=;
+  b=JaStsnYzeTg9oBfhx467Zmd/FHYV1dzltl25Ux6hq1+gU5PSdnER42jw
+   Mi7SZBFIV/rA3bO1h32I1eZrOly6nE6WhuxA3BTj3Fc07UONhBU8tgpOA
+   8AkhXeQsLNNoS2p+6KCS1pQN0IHW4NnfL6IxMsb7ikBcec52R9a67gegq
+   snxhkOVSbwYwkhLVn/eO53FqgP8dJSPSEuLVYRNiYwPhyn+GLmU1lMGd2
+   2J7qFwXgg+NTm8dndbB1HshS6H9cN1HY8OG1eUxQpN08dlXdXaPhS13iM
+   BL6g89tnh/ugOYxgfxM865lKrVD4xhKJxe6Pd743qh3qN7O4yBFmKf21z
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="451044983"
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="362148714"
 X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="451044983"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 10:17:59 -0700
+   d="scan'208";a="362148714"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 10:19:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="698501352"
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="715240870"
 X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="698501352"
+   d="scan'208";a="715240870"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 11 Jul 2023 10:17:58 -0700
+  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 10:17:58 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4C9884BD; Tue, 11 Jul 2023 20:17:59 +0300 (EEST)
+        id 5C3475FC; Tue, 11 Jul 2023 20:17:59 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
@@ -95,9 +95,9 @@ Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH v3 04/14] spi: Remove code duplication in spi_add_device*()
-Date:   Tue, 11 Jul 2023 20:17:46 +0300
-Message-Id: <20230711171756.86736-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 05/14] spi: Kill spi_add_device_locked()
+Date:   Tue, 11 Jul 2023 20:17:47 +0300
+Message-Id: <20230711171756.86736-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230711171756.86736-1-andriy.shevchenko@linux.intel.com>
 References: <20230711171756.86736-1-andriy.shevchenko@linux.intel.com>
@@ -113,75 +113,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 0c79378c0199 ("spi: add ancillary device support")
-added a dozen of duplicating lines of code. We may move them
-to the __spi_add_device(). Note, that the code may be called
-under the mutex.
+Now, spi_add_device_locked() has just a line on top of __spi_add_device().
+Besides that, it has a single caller. So, just kill it and embed its parts
+into the caller.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi.c | 32 ++++++++++----------------------
- 1 file changed, 10 insertions(+), 22 deletions(-)
+ drivers/spi/spi.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 6d74218cf38e..876d40d2c708 100644
+index 876d40d2c708..57b5e4488416 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -631,6 +631,16 @@ static int __spi_add_device(struct spi_device *spi)
- 	struct device *dev = ctlr->dev.parent;
- 	int status;
+@@ -708,14 +708,6 @@ int spi_add_device(struct spi_device *spi)
+ }
+ EXPORT_SYMBOL_GPL(spi_add_device);
  
-+	/* Chipselects are numbered 0..max; validate. */
-+	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
-+		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
-+			ctlr->num_chipselect);
-+		return -EINVAL;
-+	}
-+
-+	/* Set the bus ID string */
-+	spi_dev_set_name(spi);
-+
- 	/*
- 	 * We need to make sure there's no other device with this
- 	 * chipselect **BEFORE** we call setup(), else we'll trash
-@@ -689,19 +699,8 @@ static int __spi_add_device(struct spi_device *spi)
- int spi_add_device(struct spi_device *spi)
+-static int spi_add_device_locked(struct spi_device *spi)
+-{
+-	struct spi_controller *ctlr = spi->controller;
+-
+-	WARN_ON(!mutex_is_locked(&ctlr->add_lock));
+-	return __spi_add_device(spi);
+-}
+-
+ /**
+  * spi_new_device - instantiate one new SPI device
+  * @ctlr: Controller to which device is connected
+@@ -2417,11 +2409,12 @@ static void of_register_spi_devices(struct spi_controller *ctlr) { }
+ struct spi_device *spi_new_ancillary_device(struct spi_device *spi,
+ 					     u8 chip_select)
  {
- 	struct spi_controller *ctlr = spi->controller;
--	struct device *dev = ctlr->dev.parent;
- 	int status;
++	struct spi_controller *ctlr = spi->controller;
+ 	struct spi_device *ancillary;
+ 	int rc = 0;
  
--	/* Chipselects are numbered 0..max; validate. */
--	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
--		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
--			ctlr->num_chipselect);
--		return -EINVAL;
--	}
--
--	/* Set the bus ID string */
--	spi_dev_set_name(spi);
--
- 	mutex_lock(&ctlr->add_lock);
- 	status = __spi_add_device(spi);
- 	mutex_unlock(&ctlr->add_lock);
-@@ -712,17 +711,6 @@ EXPORT_SYMBOL_GPL(spi_add_device);
- static int spi_add_device_locked(struct spi_device *spi)
- {
- 	struct spi_controller *ctlr = spi->controller;
--	struct device *dev = ctlr->dev.parent;
--
--	/* Chipselects are numbered 0..max; validate. */
--	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
--		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
--			ctlr->num_chipselect);
--		return -EINVAL;
--	}
--
--	/* Set the bus ID string */
--	spi_dev_set_name(spi);
+ 	/* Alloc an spi_device */
+-	ancillary = spi_alloc_device(spi->controller);
++	ancillary = spi_alloc_device(ctlr);
+ 	if (!ancillary) {
+ 		rc = -ENOMEM;
+ 		goto err_out;
+@@ -2436,8 +2429,10 @@ struct spi_device *spi_new_ancillary_device(struct spi_device *spi,
+ 	ancillary->max_speed_hz = spi->max_speed_hz;
+ 	ancillary->mode = spi->mode;
  
- 	WARN_ON(!mutex_is_locked(&ctlr->add_lock));
- 	return __spi_add_device(spi);
++	WARN_ON(!mutex_is_locked(&ctlr->add_lock));
++
+ 	/* Register the new device */
+-	rc = spi_add_device_locked(ancillary);
++	rc = __spi_add_device(ancillary);
+ 	if (rc) {
+ 		dev_err(&spi->dev, "failed to register ancillary device\n");
+ 		goto err_out;
 -- 
 2.40.0.1.gaa8946217a0b
 
