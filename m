@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AFD74E3AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D07274E383
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjGKBp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S230020AbjGKBiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjGKBpz (ORCPT
+        with ESMTP id S229451AbjGKBiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:45:55 -0400
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB04DB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:45:53 -0700 (PDT)
+        Mon, 10 Jul 2023 21:38:02 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E15BDB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:38:00 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id DB1B726126F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:37:51 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id 628E1881DE0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:38:00 +0000 (UTC)
 Received: from pdx1-sub0-mail-a234.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 61F602610FE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:37:51 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1689039471; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id E48C7881ACA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:37:59 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1689039479; a=rsa-sha256;
         cv=none;
-        b=uSZlxF6+pYd8OM/WZZuBv9c6cKlKvpTSY1kSrwZtYFEI2M9rqys1/tjO8T7lGTRpH4N2G8
-        fsYCb9eJyVDMTHJz8rWAcGoMgGpwteTraS2UQcEs0gDKHmpGKlAQucV5oKOxc0Np4z4Fzi
-        MSZY0qdrMhHdUkl4MpmOc4U4B/h8CDDPnEV7O3UKfZjNSKJlZ3JHpkb7txkk9HPpjckFmL
-        2ow5/Ovbpa2Bu3VilAfWmubZL/anP/moh6dp6ZlE/xkPBGoZqOMf5NWwmVXhE63D42ZvH9
-        pkJNHkVYpXTUg1i5Jt4ApQA5P8OVab5b53ktIJf298/CxS9eDrOLaX60RoRPsw==
+        b=jnTyM6/ONl42zgR7CN7mpMvMC+kB7yaNiLiQ76RxAnkX0b4kX4eKRfTIB+oP8EYZ0tvvty
+        QZvQ6YmiG+cPOBvXxVq8lnESRwVneyGXMVg2yOqDMavBlfhfAYR6dUzcXvbxf9ss9/fJ3p
+        Shha+nS5BuRMdQbc99t1ldkaSsmhH7gZOzz6gmB/OEbk7kuQ5/KySO+mZGLZT77kgf7SeF
+        NAuNsCKJrkR085aW8DLzJZ0PMzWdPonn436w/h9z2JxuLfwDjVqrSc2ZegIA4A2ocVxLoF
+        3Si6IXv6H4ffdIMmZdfajztT5slbaUQbkxBLtvDk3QJ0Q88se/LRG77TDbbgmw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1689039471;
+        s=arc-2022; t=1689039479;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=nM5r4kLoXtTj1OB8dGhlf8+7pkGcDvR2giSHwak5XTQ=;
-        b=0DTWRP7pGwRBilyMz6AeJ5uFDe9ay9OD3Go5OnoRehdUeDxgS3OJSZWS+xMfr4uIKsEDES
-        XshA/evfn3llrk0AYh7Z5xsV7MwfRT/dHnZ6d7mUlJKLZlu7GovgvQsCRt/Lpm5tye2dzY
-        lmP7YNIF+gdp4i/vCgW7lXwnZK7dV/peScnP2m6lNe3yVGpR5ZyPb8iSr8Zp0ez1Y9zK4M
-        WAMCLinNZahzVmx2TTYDWG4oE99pIkq5Q4kG2zd9b7JenUppUEmwit++P0bN6tgrjq7jCd
-        7hhE7l/OPja9TaTzEpf8cg7BYBH4asMVI//ad2B334DLdS5vZxdHpsHgPxopMg==
+        bh=5PpiEQMklI816ebRSrfaSOe/p+XsnMxbP2nT9Lvxh7E=;
+        b=to4hU8cJzlO8PDPWiTowg/cG0e1zYc+tbmBWaD8SHJ/3or4C+JoJvxD46BIJptwrFriLCu
+        tOTQF0uRQELQ4l7z9/UAjdmOqLjodgBdDqt2WFOqCpRm87RWu4FvUWhg2NzkbnrI57GAr2
+        Cu5VM4C749gMxY43ERrvtPcultl6oCwVS0LLo2eMJgtP8AseLnehvU+5YOg/7nCo6iGl15
+        c8d/2qYDMTGoAWwjSunKzSB6mICQrwj8F1d0A891EmSu82kBraJBNQnv5rBl7qGe28oG5s
+        qV7uRJ789TOVXvQ7Rnzgj0RclunfTH/CpjOHvyMHYNFeI8PTmeiGhBU4rUrlag==
 ARC-Authentication-Results: i=1;
-        rspamd-7d9c4d5c9b-d2xk7;
+        rspamd-7d9c4d5c9b-rgbjh;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MailChannels-Auth-Id: dreamhost
-X-Spill-Trouble: 5559d8162ae76da4_1689039471646_3482250127
-X-MC-Loop-Signature: 1689039471646:3958711742
-X-MC-Ingress-Time: 1689039471646
+X-Spill-Wide-Eyed: 5630d96d22087f69_1689039480163_2871403147
+X-MC-Loop-Signature: 1689039480163:693807151
+X-MC-Ingress-Time: 1689039480162
 Received: from pdx1-sub0-mail-a234.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.119.120.47 (trex/6.9.1);
-        Tue, 11 Jul 2023 01:37:51 +0000
+        by 100.126.30.12 (trex/6.9.1);
+        Tue, 11 Jul 2023 01:38:00 +0000
 Received: from kmjvbox (unknown [71.198.86.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a234.dreamhost.com (Postfix) with ESMTPSA id 4R0NmH187jzy7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:37:51 -0700 (PDT)
+        by pdx1-sub0-mail-a234.dreamhost.com (Postfix) with ESMTPSA id 4R0NmR4QjFzYJ
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1689039471;
-        bh=nM5r4kLoXtTj1OB8dGhlf8+7pkGcDvR2giSHwak5XTQ=;
+        s=dreamhost; t=1689039479;
+        bh=5PpiEQMklI816ebRSrfaSOe/p+XsnMxbP2nT9Lvxh7E=;
         h=Date:From:To:Cc:Subject:Content-Type;
-        b=cl1sWhlgJDAUx+Fp8BqpjD0TB1F9tdkiF6lbGUQuKmzOVx4SI/cKyW3bVMURgeSOT
-         LjqaTol9KsPyJ4xRMRRE5dceMeTxEiXoE3pKABgPp6SaWS++gvAPdIyFBSmM9btvd3
-         l+ZDKsLXd4WMlXg4x/oJhV9wEVeoo6Yew1/jgloU=
+        b=GnyelvYY+4t170d0F5+gLLM5nhFNtQejR4H0kvM4fklyug0IWxbWM7kdASi4snYoL
+         yspaikeJEA1iZZXTgSMcsx4wOcyYpvtXjf5oyYEYvuaYIN16AT9x2gmj0kMMP5ojas
+         XgiqBUfHSxCpnNSuF9E4JBsR4+xfmmCgV5i+odjM=
 Received: from johansen (uid 1000)
         (envelope-from kjlx@templeofstupid.com)
         id e0085
         by kmjvbox (DragonFly Mail Agent v0.12);
-        Mon, 10 Jul 2023 18:37:14 -0700
-Date:   Mon, 10 Jul 2023 18:37:14 -0700
+        Mon, 10 Jul 2023 18:37:23 -0700
+Date:   Mon, 10 Jul 2023 18:37:23 -0700
 From:   Krister Johansen <kjlx@templeofstupid.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         German Maglione <gmaglione@redhat.com>,
         Greg Kurz <groug@kaod.org>, Max Reitz <mreitz@redhat.com>
-Subject: [RFC PATCH 1/2] fuse: revalidate: move lookup into a separate
- function
-Message-ID: <b4947a6d3c2b9b82441a4c1b362048c834ddab6c.1689038902.git.kjlx@templeofstupid.com>
+Subject: [RFC PATCH 2/2] fuse: ensure that submounts lookup their root
+Message-ID: <69bb95c34deb25f56b3b842528edcb40a098d38d.1689038902.git.kjlx@templeofstupid.com>
 References: <cover.1689038902.git.kjlx@templeofstupid.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -100,140 +99,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If this refactoring seems cumbersome, it's because the goal is to move
-the lookup parts of fuse_dentry_revalidate into a common function.  This
-function will be used elsewhere in a separate commit.  In the meantime,
-the new function fuse_dentry_revalidate_lookup is responsible for just
-the lookup and validation portions of the revalidate dance.  The
-fuse_dentry_revalidate function retains the responsibility for
-invalidating and mutating any state associated with the origial
-fuse_inode and dentry.
+Prior to this commit, the submount code assumed that the inode for the
+root filesystem could not be evicted.  When eviction occurs the server
+may forget the inode.  This author has observed a submount get an EBADF
+from a virtiofsd server that resulted from the sole dentry / inode
+pair getting evicted from a mount namespace and superblock where they
+were originally referenced.  The dentry shrinker triggered a forget
+after killing the dentry with the last reference.
+
+As a result, a container that was also using this submount failed to
+access its filesystem because it had borrowed the reference instead of
+taking its own when setting up its superblock for the submount.
+
+Fix by ensuring that submount superblock configuration looks up the
+nodeid for the submount as well.
 
 Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
 ---
- fs/fuse/dir.c | 87 +++++++++++++++++++++++++++++++++++----------------
- 1 file changed, 60 insertions(+), 27 deletions(-)
+ fs/fuse/dir.c    | 10 +++++-----
+ fs/fuse/fuse_i.h |  6 ++++++
+ fs/fuse/inode.c  | 32 ++++++++++++++++++++++++++++----
+ 3 files changed, 39 insertions(+), 9 deletions(-)
 
 diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index f67bef9d83c4..bdf5526a0733 100644
+index bdf5526a0733..fe6b3fd4a49c 100644
 --- a/fs/fuse/dir.c
 +++ b/fs/fuse/dir.c
-@@ -193,6 +193,59 @@ static void fuse_lookup_init(struct fuse_conn *fc, struct fuse_args *args,
+@@ -193,11 +193,11 @@ static void fuse_lookup_init(struct fuse_conn *fc, struct fuse_args *args,
  	args->out_args[0].value = outarg;
  }
  
-+static int fuse_dentry_revalidate_lookup(struct fuse_mount *fm,
-+					 struct dentry *entry,
-+					 struct inode *inode,
-+					 struct fuse_entry_out *outarg,
-+					 bool *lookedup)
-+{
-+	struct dentry *parent;
-+	struct fuse_forget_link *forget;
-+	struct fuse_inode *fi;
-+	FUSE_ARGS(args);
+-static int fuse_dentry_revalidate_lookup(struct fuse_mount *fm,
+-					 struct dentry *entry,
+-					 struct inode *inode,
+-					 struct fuse_entry_out *outarg,
+-					 bool *lookedup)
++int fuse_dentry_revalidate_lookup(struct fuse_mount *fm,
++				  struct dentry *entry,
++				  struct inode *inode,
++				  struct fuse_entry_out *outarg,
++				  bool *lookedup)
+ {
+ 	struct dentry *parent;
+ 	struct fuse_forget_link *forget;
+diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+index 9b7fc7d3c7f1..77b123eddb6d 100644
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -1309,6 +1309,12 @@ void fuse_dax_dontcache(struct inode *inode, unsigned int flags);
+ bool fuse_dax_check_alignment(struct fuse_conn *fc, unsigned int map_alignment);
+ void fuse_dax_cancel_work(struct fuse_conn *fc);
+ 
++/* dir.c */
++int fuse_dentry_revalidate_lookup(struct fuse_mount *fm, struct dentry *entry,
++				  struct inode *inode,
++				  struct fuse_entry_out *outarg,
++				  bool *lookedup);
++
+ /* ioctl.c */
+ long fuse_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+ long fuse_file_compat_ioctl(struct file *file, unsigned int cmd,
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index f19d748890f0..1032e4b05d9c 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -1441,6 +1441,10 @@ static int fuse_fill_super_submount(struct super_block *sb,
+ 	struct super_block *parent_sb = parent_fi->inode.i_sb;
+ 	struct fuse_attr root_attr;
+ 	struct inode *root;
++	struct inode *parent;
++	struct dentry *pdent;
++	bool lookedup = false;
 +	int ret;
-+
-+	forget = fuse_alloc_forget();
-+	ret = -ENOMEM;
-+	if (!forget)
-+		goto out;
-+
-+	parent = dget_parent(entry);
-+	fuse_lookup_init(fm->fc, &args, get_node_id(d_inode(parent)),
-+			 &entry->d_name, outarg);
-+	ret = fuse_simple_request(fm, &args);
-+	dput(parent);
-+
-+	/* Zero nodeid is same as -ENOENT */
-+	if (!ret && !outarg->nodeid)
-+		ret = -ENOENT;
-+	if (!ret) {
-+		fi = get_fuse_inode(inode);
-+		if (outarg->nodeid != get_node_id(inode) ||
-+		    (bool) IS_AUTOMOUNT(inode) != (bool) (outarg->attr.flags & FUSE_ATTR_SUBMOUNT)) {
-+			fuse_queue_forget(fm->fc, forget,
-+					  outarg->nodeid, 1);
-+			goto invalid;
-+		}
-+		*lookedup = true;
-+	}
-+	kfree(forget);
-+	if (ret == -ENOMEM || ret == -EINTR)
-+		goto out;
-+	if (ret || fuse_invalid_attr(&outarg->attr) ||
-+	    fuse_stale_inode(inode, outarg->generation, &outarg->attr)) {
-+		goto invalid;
-+	}
-+
-+	ret = 1;
-+out:
-+	return ret;
-+
-+invalid:
-+	ret = 0;
-+	goto out;
-+}
-+
- /*
-  * Check whether the dentry is still valid
-  *
-@@ -216,9 +269,8 @@ static int fuse_dentry_revalidate(struct dentry *entry, unsigned int flags)
- 	else if (time_before64(fuse_dentry_time(entry), get_jiffies_64()) ||
- 		 (flags & (LOOKUP_EXCL | LOOKUP_REVAL | LOOKUP_RENAME_TARGET))) {
- 		struct fuse_entry_out outarg;
--		FUSE_ARGS(args);
--		struct fuse_forget_link *forget;
- 		u64 attr_version;
-+		bool lookedup = false;
  
- 		/* For negative dentries, always do a fresh lookup */
- 		if (!inode)
-@@ -230,38 +282,19 @@ static int fuse_dentry_revalidate(struct dentry *entry, unsigned int flags)
+ 	fuse_sb_defaults(sb);
+ 	fm->sb = sb;
+@@ -1456,14 +1460,34 @@ static int fuse_fill_super_submount(struct super_block *sb,
+ 	if (parent_sb->s_subtype && !sb->s_subtype)
+ 		return -ENOMEM;
  
- 		fm = get_fuse_mount(inode);
- 
--		forget = fuse_alloc_forget();
--		ret = -ENOMEM;
--		if (!forget)
--			goto out;
--
- 		attr_version = fuse_get_attr_version(fm->fc);
- 
--		parent = dget_parent(entry);
--		fuse_lookup_init(fm->fc, &args, get_node_id(d_inode(parent)),
--				 &entry->d_name, &outarg);
--		ret = fuse_simple_request(fm, &args);
--		dput(parent);
--		/* Zero nodeid is same as -ENOENT */
--		if (!ret && !outarg.nodeid)
--			ret = -ENOENT;
--		if (!ret) {
-+		ret = fuse_dentry_revalidate_lookup(fm, entry, inode, &outarg,
++	/*
++	 * It is necessary to lookup the parent_if->nodeid in case the dentry
++	 * that triggered the automount of the submount is later evicted.
++	 * If this dentry is evicted without the lookup count getting increased
++	 * on the submount root, then the server can subsequently forget this
++	 * nodeid which leads to errors when trying to access the root of the
++	 * submount.
++	 */
++	parent = &parent_fi->inode;
++	pdent = d_find_alias(parent);
++	if (pdent) {
++		struct fuse_entry_out outarg;
++
++		ret = fuse_dentry_revalidate_lookup(fm, pdent, parent, &outarg,
 +						    &lookedup);
-+		if (ret == -ENOMEM || ret == -EINTR)
-+			goto out;
-+		if (lookedup) {
- 			fi = get_fuse_inode(inode);
--			if (outarg.nodeid != get_node_id(inode) ||
--			    (bool) IS_AUTOMOUNT(inode) != (bool) (outarg.attr.flags & FUSE_ATTR_SUBMOUNT)) {
--				fuse_queue_forget(fm->fc, forget,
--						  outarg.nodeid, 1);
--				goto invalid;
--			}
- 			spin_lock(&fi->lock);
- 			fi->nlookup++;
- 			spin_unlock(&fi->lock);
- 		}
--		kfree(forget);
--		if (ret == -ENOMEM || ret == -EINTR)
--			goto out;
--		if (ret || fuse_invalid_attr(&outarg.attr) ||
--		    fuse_stale_inode(inode, outarg.generation, &outarg.attr))
-+		if (ret <= 0)
- 			goto invalid;
- 
- 		forget_all_cached_acls(inode);
++		dput(pdent);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	fuse_fill_attr_from_inode(&root_attr, parent_fi);
+ 	root = fuse_iget(sb, parent_fi->nodeid, 0, &root_attr, 0, 0);
+ 	/*
+-	 * This inode is just a duplicate, so it is not looked up and
+-	 * its nlookup should not be incremented.  fuse_iget() does
+-	 * that, though, so undo it here.
++	 * fuse_iget() sets nlookup to 1 at creation time.  If this nodeid was
++	 * not successfully looked up then decrement the count.
+ 	 */
+-	get_fuse_inode(root)->nlookup--;
++	if (!lookedup)
++		get_fuse_inode(root)->nlookup--;
+ 	sb->s_d_op = &fuse_dentry_operations;
+ 	sb->s_root = d_make_root(root);
+ 	if (!sb->s_root)
 -- 
 2.25.1
 
