@@ -2,143 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1243774F076
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E0674F075
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjGKNly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S232079AbjGKNlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjGKNlq (ORCPT
+        with ESMTP id S231964AbjGKNle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:41:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637A2E74
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689082864;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hvnb7JiwKvSnMAgyEjcswiUDuBLsnC0rp2JWm3dcW0o=;
-        b=bWL35WPz81GAY9D7D8s1Cuyv63QW7IWS/P4QCAh1YpH7GuoSEZyYLujZ/+DdWmyxDPQkbL
-        PmgpmO5y93238y1JHoQepULNB+ZWczi2A3JfoxrA+g1nB3eQlCcWQUk88G6bRAqOMhUrMg
-        U6JTCvj07lx+HxQ3kYyc6bMfla8Vepc=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-539-7abNTeUOPuGma0Fm1367sg-1; Tue, 11 Jul 2023 09:41:03 -0400
-X-MC-Unique: 7abNTeUOPuGma0Fm1367sg-1
-Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-c5cea5773e8so6815861276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:41:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689082862; x=1691674862;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hvnb7JiwKvSnMAgyEjcswiUDuBLsnC0rp2JWm3dcW0o=;
-        b=h0Ifrs5WKJItinUEBuGOL/aIRVyvlnEU8CunrLmh2rG5SW3/n+VKYfQedF2MKlZk2x
-         vjTQ+zM1wvo34unFLKXrffm7hVAYlKdf5VScV+qE3QRBnw5ImGwpIGM+IgeAS1afiRTV
-         eKsEjs+FjhLp77bZL6RAlHdPmrna6ipxGEfOU5iFYVlLe/6InKoW7FSsvser+VfZwng/
-         /iBF0zZliYOJvrG/2lxWp67BgP6BtRdCDAE/6RPNdDTBEJoOv204HZ7tBkf2LzqpTvrB
-         sj3A5/BkBSZ8Ov8mxHnhsZjpX9ZPO0Rb3Loj7Yl0z27uruFPCjJugcpGafd3mhxeCOhJ
-         fTwg==
-X-Gm-Message-State: ABy/qLbIXc60ciUP2EvYAb3iU0u3WjHR9Kbj/Rn637jDZzi6vqjQf6HT
-        kfgRaJrDcn/5KEhVIULdLnkNu+AyZX/OTHZnD23hOKXSDru3KsrGxQX5qXs3No9vswwUqo8IBtT
-        zViKMvCp+5m+nuclzwkIEojO2bt2h7jNWLSZIZcKf
-X-Received: by 2002:a25:23d1:0:b0:c69:cf1f:ec0a with SMTP id j200-20020a2523d1000000b00c69cf1fec0amr13124359ybj.15.1689082862667;
-        Tue, 11 Jul 2023 06:41:02 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlE4ZLOqIjO/yyFhHoIBVoAPEbGrTyKrYmJlC4AJrQfREkKw9AcsD5OXndLzLtud1cBfWt6TWIx1ymEODA6SenA=
-X-Received: by 2002:a25:23d1:0:b0:c69:cf1f:ec0a with SMTP id
- j200-20020a2523d1000000b00c69cf1fec0amr13124347ybj.15.1689082862425; Tue, 11
- Jul 2023 06:41:02 -0700 (PDT)
+        Tue, 11 Jul 2023 09:41:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5631610CA;
+        Tue, 11 Jul 2023 06:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689082893; x=1720618893;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=dxME0Zys7vT/pFBpwkj80hNNsU8yTqns5rOzcHDTwMQ=;
+  b=OThB08fj836LPaWfOdOdm02AXHQoCgJSq+p34QAZ5NWwlHlrC3gwojcb
+   Yptkd3s4Vz+6snTwFszpZ+7JSx0BQY9PKKvtej3ENFw//2v5b6Vo6pae9
+   zgIep2BlJC9dqwylW6zIONPf1DFlCtJIEwgOmm89uiiO21ObeNk9WAwGu
+   c4VeIUNwXVzVSzW5RYTub6t8m7UZhSskt/m69PjM2X7MzJ9UCRzE7+YJ9
+   kHBIrZF4Wo9xLUqAW/BKKDH5sZmhsrOEiAg3q5xi/Vx4Fsq+0F7bU3aeI
+   loRkjRc98RKzJtt6j7FvLuU9a1pefeaECyr4o1aBGW6KE/b6vnyqb1whn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367198502"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="367198502"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 06:41:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865735985"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="865735985"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 06:41:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJDcL-001rY7-2H;
+        Tue, 11 Jul 2023 16:41:25 +0300
+Date:   Tue, 11 Jul 2023 16:41:25 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 06/13] ASoC: Intel: Skylake: Use global PCI match macro
+Message-ID: <ZK1cBWO4KWFDJMcA@smile.fi.intel.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-7-amadeuszx.slawinski@linux.intel.com>
 MIME-Version: 1.0
-References: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
- <2023062156-trespass-pandemic-7f4f@gregkh> <qbvmv3eexohswyagmllfh3xsxoftwa3wbmsdafmwak2bxlnlft@jz74dijlfxlz>
- <31ce32e018a9fa410e9e1f3e5900621b16a56091.camel@hadess.net>
- <CAO-hwJLFSUJaGK5DAOz30+YyC1hGgHnbeJbc5iQ47jxBcbRSCg@mail.gmail.com> <cfa28818-9eaf-0dc9-cb4a-1b3de318e627@leemhuis.info>
-In-Reply-To: <cfa28818-9eaf-0dc9-cb4a-1b3de318e627@leemhuis.info>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 11 Jul 2023 15:40:51 +0200
-Message-ID: <CAO-hwJLc0wzv2a3JARkPDW+ZgbnvwggfRHcAJmWsKy_FMA13=g@mail.gmail.com>
-Subject: Re: [PATCH] HID: logitech-hidpp: rework one more time the retries attempts
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230711125726.3509391-7-amadeuszx.slawinski@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 3:10=E2=80=AFPM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> On 26.06.23 16:02, Benjamin Tissoires wrote:
-> > On Sun, Jun 25, 2023 at 10:30=E2=80=AFAM Bastien Nocera <hadess@hadess.=
-net> wrote:
-> >> On Fri, 2023-06-23 at 10:37 +0200, Benjamin Tissoires wrote:
-> >>> On Jun 21 2023, Greg KH wrote:
-> >>>> On Wed, Jun 21, 2023 at 11:42:30AM +0200, Benjamin Tissoires wrote:
-> >>>>> Make the code looks less like Pascal.
-> >>>>>
-> >>>>> Extract the internal code inside a helper function, fix the
-> >>>>> initialization of the parameters used in the helper function
-> >>>>> (`hidpp->answer_available` was not reset and `*response` wasn't
-> >>>>> too),
-> >>>>> and use a `do {...} while();` loop.
-> >>>>>
-> >>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when
-> >>>>> device is busy")
-> >>>>> Cc: stable@vger.kernel.org
-> >>>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >>>>> ---
-> >>>>> as requested by
-> >>>>> https://lore.kernel.org/all/CAHk-=3DwiMbF38KCNhPFiargenpSBoecSXTLQA=
-CKS2UMyo_Vu2ww@mail.gmail.com/
-> >>>>> This is a rewrite of that particular piece of code.
-> >>>>> ---
-> >>>>>  drivers/hid/hid-logitech-hidpp.c | 102 +++++++++++++++++++++++--
-> >>>>> --------------
-> >>>>>  1 file changed, 61 insertions(+), 41 deletions(-)
-> > [...]
-> >
-> > Some people on the Bz were able to reproduce with multiple reboots.
-> > But it's not as urgent as previously, and we were close to the 6.4
-> > final when I sent it. I'll make sure this goes into 6.5 and gets
-> > proper stable backports FWIW.
->
-> Did that happen? Doesn't look like it from here, but maybe I'm missing
-> something. Where there maybe other changes to resolve the remaining
-> problems some users encounter sporadically since the urgent fixes went in=
-?
+On Tue, Jul 11, 2023 at 02:57:19PM +0200, Amadeusz Sławiński wrote:
+> Instead of using local macro to match PCI device, use global one.
 
-No, there were no other changes that could have solved this. I guess
-the randomness of the problem makes it way harder to detect and to
-reproduce.
+Same comment as per another patch, i.e. explain CFL/BXT --> APL (*).
+With that,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I'll send a v2 of that patch with the reviews today or tomorrow and we
-can probably get it through the current 6.5 cycle.
+*) I think it's something like "the BXT/APL/CFL line of SoCs has the same
+(compatible?) HDA IP blablabla".
 
-Cheers,
-Benjamin
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> ---
+>  include/sound/hda_codec.h         | 3 ---
+>  sound/soc/intel/skylake/skl-pcm.c | 3 ++-
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/sound/hda_codec.h b/include/sound/hda_codec.h
+> index bbb7805e85d8..5497dc9c396a 100644
+> --- a/include/sound/hda_codec.h
+> +++ b/include/sound/hda_codec.h
+> @@ -18,9 +18,6 @@
+>  #include <sound/hda_verbs.h>
+>  #include <sound/hda_regmap.h>
+>  
+> -#define IS_BXT(pci) ((pci)->vendor == 0x8086 && (pci)->device == 0x5a98)
+> -#define IS_CFL(pci) ((pci)->vendor == 0x8086 && (pci)->device == 0xa348)
+> -
+>  /*
+>   * Structures
+>   */
+> diff --git a/sound/soc/intel/skylake/skl-pcm.c b/sound/soc/intel/skylake/skl-pcm.c
+> index a4209d88b0c6..ac3dc8c63c26 100644
+> --- a/sound/soc/intel/skylake/skl-pcm.c
+> +++ b/sound/soc/intel/skylake/skl-pcm.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/pci.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/delay.h>
+> +#include <sound/hdaudio.h>
+>  #include <sound/pcm_params.h>
+>  #include <sound/soc.h>
+>  #include "skl.h"
+> @@ -152,7 +153,7 @@ int skl_pcm_host_dma_prepare(struct device *dev, struct skl_pipe_params *params)
+>  	 * The recommended SDxFMT programming sequence for BXT
+>  	 * platforms is to couple the stream before writing the format
+>  	 */
+> -	if (IS_BXT(skl->pci)) {
+> +	if (HDA_CONTROLLER_IS_APL(skl->pci)) {
+>  		snd_hdac_ext_stream_decouple(bus, stream, false);
+>  		err = snd_hdac_stream_setup(hdac_stream(stream));
+>  		snd_hdac_ext_stream_decouple(bus, stream, true);
+> -- 
+> 2.34.1
+> 
 
->
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
->
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
