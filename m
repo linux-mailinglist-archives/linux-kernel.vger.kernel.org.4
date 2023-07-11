@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AC674F508
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DB674F50C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjGKQWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S230266AbjGKQYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjGKQWM (ORCPT
+        with ESMTP id S230119AbjGKQYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:22:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14E910FD;
-        Tue, 11 Jul 2023 09:22:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60E516155B;
-        Tue, 11 Jul 2023 16:22:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FB7C433C7;
-        Tue, 11 Jul 2023 16:22:09 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 12:22:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 5/5] tracing/probes: Fix to record 0-length data_loc
- in fetch_store_string*() if fails
-Message-ID: <20230711122206.531a6504@gandalf.local.home>
-In-Reply-To: <168908496683.123124.4761206188794205601.stgit@devnote2>
-References: <168908491977.123124.16583481716284477889.stgit@devnote2>
-        <168908496683.123124.4761206188794205601.stgit@devnote2>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 11 Jul 2023 12:24:31 -0400
+Received: from out-30.mta0.migadu.com (out-30.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DA099
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:24:29 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1689092667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Gt34itJE/Z3AqIvun7fuPxxD4OBg9/zlMYtPRzQmwvc=;
+        b=CveunfMoLoenMr5OGZobNJQ0Ahx2c1s+DqSOG6s8FiGLfu7Oo/WQgpjaKVNvBT1SeAh+yR
+        78jSZpr40BFZMQL3Ve3xy2e/X6YsnS6BDGI2LRkDEPYqS/d2NVaQy4ya/w712nfSiDJC3O
+        omPo5euMd43YRRatqnsebFx3hnuP724=
+From:   Cixi Geng <cixi.geng@linux.dev>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com, arnd@arndb.de
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cixi.geng1@unisoc.com
+Subject: [PATCH] arm64: dts: sprd: fix the cpu node for UMS512
+Date:   Wed, 12 Jul 2023 00:23:46 +0800
+Message-Id: <20230711162346.5978-1-cixi.geng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 23:16:07 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Fix to record 0-length data to data_loc in fetch_store_string*() if it fails
-> to get the string data.
-> Currently those expect that the data_loc is updated by store_trace_args() if
-> it returns the error code. However, that does not work correctly if the
-> argument is an array of strings. In that case, store_trace_args() only clears
-> the first entry of the array (which may have no error) and leaves other
-> entries. So it should be cleared by fetch_store_string*() itself.
-> Also, 'dyndata' and 'maxlen' in store_trace_args() should be updated
-> only if it is used (ret > 0 and argument is a dynamic data.)
-> 
-> Fixes: 40b53b771806 ("tracing: probeevent: Add array type support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  Changes in v4:
->   - Simplify the updating data_loc code with set_data_loc().
->  Changes in v5:
->   - Move out arg->dynamic check from unlikely() and use likely().
-> ---
->  kernel/trace/trace_probe_kernel.h |   13 +++++++++----
->  kernel/trace/trace_probe_tmpl.h   |   10 +++-------
->  kernel/trace/trace_uprobe.c       |    3 ++-
->  3 files changed, 14 insertions(+), 12 deletions(-)
-> 
+The UMS512 Socs have 8 cores contains 6 a55 and 2 a75.
+modify the cpu nodes to correct information.
 
+Fixes: 2b4881839a39 ("arm64: dts: sprd: Add support for Unisoc's UMS512")
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+---
+ arch/arm64/boot/dts/sprd/ums512.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+diff --git a/arch/arm64/boot/dts/sprd/ums512.dtsi b/arch/arm64/boot/dts/sprd/ums512.dtsi
+index 024be594c47d..97ac550af2f1 100644
+--- a/arch/arm64/boot/dts/sprd/ums512.dtsi
++++ b/arch/arm64/boot/dts/sprd/ums512.dtsi
+@@ -96,7 +96,7 @@ CPU5: cpu@500 {
+ 
+ 		CPU6: cpu@600 {
+ 			device_type = "cpu";
+-			compatible = "arm,cortex-a55";
++			compatible = "arm,cortex-a75";
+ 			reg = <0x0 0x600>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&CORE_PD>;
+@@ -104,7 +104,7 @@ CPU6: cpu@600 {
+ 
+ 		CPU7: cpu@700 {
+ 			device_type = "cpu";
+-			compatible = "arm,cortex-a55";
++			compatible = "arm,cortex-a75";
+ 			reg = <0x0 0x700>;
+ 			enable-method = "psci";
+ 			cpu-idle-states = <&CORE_PD>;
+-- 
+2.34.1
 
