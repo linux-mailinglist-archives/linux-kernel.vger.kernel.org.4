@@ -2,156 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9304F74F0BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F3F74F0C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjGKNyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S233086AbjGKNy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKNx5 (ORCPT
+        with ESMTP id S232947AbjGKNy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:53:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBDA94;
-        Tue, 11 Jul 2023 06:53:56 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BDgFZU032373;
-        Tue, 11 Jul 2023 13:53:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=IppzMroP1qhzHzibMwQb7urLmDbLU3ctwMXcQ4ZJrxY=;
- b=hVv3xa0L2Z0DAiiNAXHtPGte3FKPDbrhjgmZVj/w9lduB42HHx/47VuDpEOhdGXyjQeW
- fIjYwzbJLpI07Ld4ZpEgRAY48VQKJgNVMTTobaA3XU8UVWgdo/fTNs/5s/qtytZwbwOS
- XU9i52j9F7danZCXFxN6As9eazjUD71QGVVbC5WgRPt9Op9gguLtl64g7AgqSOCpnwlV
- g0NOKawfYMP9MpG/BisfPOeIEvidJ5iVi8Asy6rjjpb7MmhsKCRx3O0GdyOI5gtjYdQJ
- RBlT9ny33hewlRjL6Egbn6dcT8iGAncemxQXE3GBbVSSVa4rVWtjm5hwFdKuxwK/Qkc/ pA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs86u0jc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 13:53:52 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6v6PN011434;
-        Tue, 11 Jul 2023 13:53:49 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rpye51bpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 13:53:48 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BDrj4M43123186
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 13:53:45 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F15C42004F;
-        Tue, 11 Jul 2023 13:53:44 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB76820040;
-        Tue, 11 Jul 2023 13:53:44 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jul 2023 13:53:44 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, jolsa@kernel.org, rostedt@goodmis.org
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH v2] perf/build: fix broken dependency check for libtracefs
-Date:   Tue, 11 Jul 2023 15:53:38 +0200
-Message-Id: <20230711135338.397473-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ORUko_NciuHZ5uRhcEMvXe0bGJxJMMr7
-X-Proofpoint-ORIG-GUID: ORUko_NciuHZ5uRhcEMvXe0bGJxJMMr7
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 11 Jul 2023 09:54:28 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06AE10CB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:54:20 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3a04e5baffcso4690245b6e.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689083660; x=1691675660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BmBs7dMpOgCcY+Y7gepuTjNdLZ2FF6VMfQg4tdkaSMA=;
+        b=FqisUMV94Fso4dE0buXGHlgYAuJ9DeHdEUcuu5i0pZMRfT305sv+T4SNsBNcEwi6VU
+         IwAxIkGF851YZDZa/HrIEb9BDKqdNt5UnWR/yrNME2SDNwzwh+pKOwFg1OzcYy/oemag
+         AOnTnTfJY22HdNi3ucZaXdJUraPkrozrWThyeafiNWHhgVHsSQzOImWxoOaN8OjF0CGL
+         YXR/5ypeUDbo+8gq/EqYbbFQWzYH/mLZUaZp/qsqBNTpbvGfnANFx2LHZ09fgIxt2Vhm
+         b57pBE/Qt9BNPPAhhmBaLPkUO8z0dHm7/WUs7ZwsbiLITqzQP7rl6zzUgVeO69p1IV76
+         A2pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689083660; x=1691675660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BmBs7dMpOgCcY+Y7gepuTjNdLZ2FF6VMfQg4tdkaSMA=;
+        b=UOME5TNLvO9Qg4GcoT1/+kSJELPRKuGgNiF3XNzDkewfOiPE36y5YrxhFuTWXG8H0a
+         zmc/KxcpJIptBJqZYLbLET9PTVTgkLgMuWNsYj6Q0GVdC8PuALiI2DtjfBEZz7+ChGVJ
+         znGOBcgL2nkvKUZu1bziE5VQUhpczLHVZZPYwRPSPyrBuzhYBNN3QmBcic3xY2pUXuzo
+         4VbX+KWnUH+m4lJTxYoezKarjH+vxTZtP5H382rRJgna9dVkcbGKLY3ZreMb1LOuU25e
+         sAwnB/gdBXLpLofubWv7iXnzMdOiazE4vwiOrQomvTzwmi7T6094V5EecwlQSEWBXjBR
+         SfZQ==
+X-Gm-Message-State: ABy/qLbyEK+FoSMCcqiYPZRBd+bAtYMX/NXsS1GCBbBM01POYc/2DXdQ
+        B7HpIAUAgXe6UAatX/XA/5FZT0pVn6O7/d1N1VfkgQ==
+X-Google-Smtp-Source: APBJJlFmi9UYswIWDnLAqXqYfnTilQgR3H211aP23H1X7Ft5c2mXca80qAldI9m/X/q/veQneAtnZVWA/383V1vIrTI=
+X-Received: by 2002:a05:6808:1205:b0:3a2:7f5:c4a with SMTP id
+ a5-20020a056808120500b003a207f50c4amr19436320oil.25.1689083660137; Tue, 11
+ Jul 2023 06:54:20 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501 suspectscore=0
- mlxscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=885 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307110123
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-10-ulf.hansson@linaro.org> <CAMuHMdUcmbv7vRKJWACN9dobqKeZuLqjpd8sLgt7FeTBi4uKfA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUcmbv7vRKJWACN9dobqKeZuLqjpd8sLgt7FeTBi4uKfA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 11 Jul 2023 15:53:44 +0200
+Message-ID: <CAPDyKFrsBV=7CDDiZcAJDRiZsze4fcWq5tCR8zYCRyeTUu5hqA@mail.gmail.com>
+Subject: Re: [PATCH 09/18] soc: renesas: Move power-domain drivers to the
+ genpd dir
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Perf build auto-detects features and packages already installed
-for its build. This is done in directory tools/build/feature. This
-directory contains small sample programs. When they successfully
-compile the necessary prereqs in form of libraries and header
-files are present.
+On Mon, 10 Jul 2023 at 14:53, Geert Uytterhoeven <geert@linux-m68k.org> wro=
+te:
+>
+> Hi Ulf,
+>
+> On Fri, Jul 7, 2023 at 4:04=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
+> > Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Cc: Magnus Damm <magnus.damm@gmail.com>
+> > Cc: <linux-renesas-soc@vger.kernel.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> Thanks for your patch!
+>
+> > ---
+> >  MAINTAINERS                                   |  1 +
+> >  drivers/genpd/Makefile                        |  1 +
+> >  drivers/genpd/renesas/Makefile                | 30 +++++++++++++++++++
+> >  drivers/{soc =3D> genpd}/renesas/r8a7742-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7743-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7745-sysc.c |  0
+> >  .../{soc =3D> genpd}/renesas/r8a77470-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a774a1-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a774b1-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a774c0-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a774e1-sysc.c    |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7779-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7790-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7791-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7792-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7794-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7795-sysc.c |  0
+> >  drivers/{soc =3D> genpd}/renesas/r8a7796-sysc.c |  0
+> >  .../{soc =3D> genpd}/renesas/r8a77965-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a77970-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a77980-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a77990-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a77995-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a779a0-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a779f0-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/r8a779g0-sysc.c    |  0
+> >  .../{soc =3D> genpd}/renesas/rcar-gen4-sysc.c   |  0
+> >  .../{soc =3D> genpd}/renesas/rcar-gen4-sysc.h   |  0
+> >  drivers/{soc =3D> genpd}/renesas/rcar-sysc.c    |  0
+> >  drivers/{soc =3D> genpd}/renesas/rcar-sysc.h    |  0
+> >  drivers/{soc =3D> genpd}/renesas/rmobile-sysc.c |  0
+> >  drivers/soc/renesas/Makefile                  | 27 -----------------
+> >  32 files changed, 32 insertions(+), 27 deletions(-)
+>
+> LGTM.
 
-Such a check is also done for libtracefs. And this check fails:
+Thanks! I defer to your formal ack, before adding your tag.
 
-Output before:
- # rm -f test-libtracefs.bin; make test-libtracefs.bin
- gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
-	 > test-libtracefs.make.output 2>&1 -ltracefs
- make: *** [Makefile:211: test-libtracefs.bin] Error 1
- # cat test-libtracefs.make.output
- In file included from test-libtracefs.c:2:
- /usr/include/tracefs/tracefs.h:11:10: fatal error: \
-	 event-parse.h: No such file or directory
-   11 | #include <event-parse.h>
-      |          ^~~~~~~~~~~~~~~
- compilation terminated.
- #
+>
+> Is there any specific reason why you're not moving the SYSC_* symbols
+> from drivers/soc/renesas/Kconfig to drivers/genpd/renesas/Kconfig?
 
-The root cause of this compile error is
-commit 880885d9c22e ("libtracefs: Remove "traceevent/" from referencing libtraceevent headers")
-in the libtracefs project hosted here:
- https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+I was looking into moving the corresponding Kconfig options for all
+SoCs/platforms, but I found it being a bit controversial at this
+point. One could argue that it looks easier to understand the Kconfig
+files, by keeping the SoC specific options together as there are
+simply always some kind of dependency that needs to be described too.
 
-That mentioned patch removes the traceevent/ directory name from
-the include statement, causing the file not to be included even
-when the libtraceevent-devel package is installed. This package contains
-the file referred to in tracefs/tracefs.h:
- # rpm -ql libtraceevent-devel
- /usr/include/traceevent
- /usr/include/traceevent/event-parse.h  <----- here
- /usr/include/traceevent/event-utils.h
- /usr/include/traceevent/kbuffer.h
- /usr/include/traceevent/trace-seq.h
- /usr/lib64/libtraceevent.so
- /usr/lib64/pkgconfig/libtraceevent.pc
- #
+Moreover, we currently don't have a menu option for the
+CONFIG_GENERIC_PM_DOMAINS. I guess that could be discussed too,
+especially if we should want to move the Kconfig files to the genpd
+directory.
 
-With this patch the compile succeeds.
+That said, for now, I suggest we keep the Kconfig files in the soc
+directory. Or at least address this separately on top of the $subject
+series.
 
-Output after:
- # rm -f test-libtracefs.bin; make test-libtracefs.bin
- gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
-	 > test-libtracefs.make.output 2>&1 -I/usr/include/traceevent -ltracefs
- #
-
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Cc: jolsa@kernel.org
-Cc: rostedt@goodmis.org
----
- tools/build/feature/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 0f0aa9b7d7b5..2cd6dbbee088 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -208,7 +208,7 @@ $(OUTPUT)test-libtraceevent.bin:
- 	$(BUILD) -ltraceevent
- 
- $(OUTPUT)test-libtracefs.bin:
--	$(BUILD) -ltracefs
-+	 $(BUILD) $(shell $(PKG_CONFIG) --cflags libtraceevent 2>/dev/null) -ltracefs
- 
- $(OUTPUT)test-libcrypto.bin:
- 	$(BUILD) -lcrypto
--- 
-2.41.0
-
+Kind regards
+Uffe
