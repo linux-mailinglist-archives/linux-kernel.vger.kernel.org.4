@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40F374E55B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7FC74E55D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjGKDeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 23:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
+        id S230426AbjGKDea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 23:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjGKDeG (ORCPT
+        with ESMTP id S229906AbjGKDe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 23:34:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D72E8;
-        Mon, 10 Jul 2023 20:34:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18037612D5;
-        Tue, 11 Jul 2023 03:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1523C433C7;
-        Tue, 11 Jul 2023 03:34:03 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 23:34:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 4/4] tracing/probes: Fix to record 0-length data_loc
- in fetch_store_string*() if fails
-Message-ID: <20230710233400.5aaf024e@gandalf.local.home>
-In-Reply-To: <168904151104.2908673.8401909922292791503.stgit@mhiramat.roam.corp.google.com>
-References: <168904147563.2908673.18054267804278861545.stgit@mhiramat.roam.corp.google.com>
-        <168904151104.2908673.8401909922292791503.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 10 Jul 2023 23:34:28 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122F9116
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:34:23 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R0RLh32gYzBJJjv
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:34:20 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689046460; x=1691638461; bh=6ZIvBKyTDToEuxpYq+WPdlVRvsd
+        sgjAeBAYi1t201Go=; b=oM/9maOl0zk8HJwP0Qi3lax5f6SXFaQdwLBaxDEHGIa
+        tjqujcmdSF7uDMW36JIm8MiqLwvpF7TRTstUCWi1aiLqkVZqxCYwcONmaKx7xO5b
+        A9Wpu2T2FBDz/gcFpwHuN78uj18HpBzu5NgxNYn6A5atJUXYU0C/V21yMD5UnKGp
+        hTtzfwuV1JhMSJlH9alM1bMJKsw4eTXBS1fqKpeGfikiZGiAuNUDPyF/mw8L67hD
+        I7l7/wlHWjfvwAIdfNahDEiCbeTnf7hQBpaxCKQAHE5RnOuH1sz5oMMtcTQ/wulY
+        eMtcHwYb/tHlFf7wqWcMBmeVVTxylWT2igc8Vx+wLuw==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id FQUWVQhYiFsa for <linux-kernel@vger.kernel.org>;
+        Tue, 11 Jul 2023 11:34:20 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R0RLh0N2CzBJ8kq;
+        Tue, 11 Jul 2023 11:34:20 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Date:   Tue, 11 Jul 2023 11:34:19 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/clk: remove spaces before ','
+In-Reply-To: <20230711033246.79078-1-xujianghui@cdjrlc.com>
+References: <20230711033246.79078-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <757078717970984a2ba9642044e37259@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 11:11:51 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Remove spaces to clear checkpatch errors.
 
-> --- a/kernel/trace/trace_probe_tmpl.h
-> +++ b/kernel/trace/trace_probe_tmpl.h
-> @@ -267,9 +267,7 @@ store_trace_args(void *data, struct trace_probe *tp, void *rec,
->  		if (unlikely(arg->dynamic))
->  			*dl = make_data_loc(maxlen, dyndata - base);
->  		ret = process_fetch_insn(arg->code, rec, dl, base);
-> -		if (unlikely(ret < 0 && arg->dynamic)) {
-> -			*dl = make_data_loc(0, dyndata - base);
-> -		} else {
-> +		if (unlikely(ret > 0 && arg->dynamic)) {
+ERROR: space prohibited before that ',' (ctx:WxW)
 
-To match the current code, that should be:
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  .../gpu/drm/nouveau/nvkm/subdev/clk/gf100.c   | 20 +++++++++----------
+  1 file changed, 10 insertions(+), 10 deletions(-)
 
-		if (likely(ret >= 0 || !arg->dynamic)) {
-
-But I'm guessing that the original code was buggy, as the else block should
-only have been processed if arg->dynamic was set? That is, it should have been:
-
-	if (arg->dynamic) {
-		if (unlikely(ret < 0)) {
-			*dl = make_data_loc(0, dyndata - base);
-		} else {
-  			dyndata += ret;
-  			maxlen -= ret;
-  		}
-	}
-
-
-I guess you only want to update if arg->dynamic is true (even though that
-wasn't the case before :-/) But in any case, I think you want likely() and
-not unlikely().
-
-		if (arg->dynamic && likely(ret > 0)) {
-
-That is, if we only want to updated this if the arg is dynamic.
-
-And I don't think that the arg->dynamic() should have likely/unlikely
-around it, as that's determined by user space, and the kernel should not be
-adding assumptions about what user space wants.
-
--- Steve
-
->  			dyndata += ret;
->  			maxlen -= ret;
->  		}
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gf100.c 
+b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gf100.c
+index 6eea11aefb70..09face813805 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gf100.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gf100.c
+@@ -453,16 +453,16 @@ gf100_clk = {
+      .tidy = gf100_clk_tidy,
+      .domains = {
+          { nv_clk_src_crystal, 0xff },
+-        { nv_clk_src_href   , 0xff },
+-        { nv_clk_src_hubk06 , 0x00 },
+-        { nv_clk_src_hubk01 , 0x01 },
+-        { nv_clk_src_copy   , 0x02 },
+-        { nv_clk_src_gpc    , 0x03, NVKM_CLK_DOM_FLAG_VPSTATE, "core", 
+2000 },
+-        { nv_clk_src_rop    , 0x04 },
+-        { nv_clk_src_mem    , 0x05, 0, "memory", 1000 },
+-        { nv_clk_src_vdec   , 0x06 },
+-        { nv_clk_src_pmu    , 0x0a },
+-        { nv_clk_src_hubk07 , 0x0b },
++        { nv_clk_src_href, 0xff },
++        { nv_clk_src_hubk06, 0x00 },
++        { nv_clk_src_hubk01, 0x01 },
++        { nv_clk_src_copy, 0x02 },
++        { nv_clk_src_gpc, 0x03, NVKM_CLK_DOM_FLAG_VPSTATE, "core", 2000 
+},
++        { nv_clk_src_rop, 0x04 },
++        { nv_clk_src_mem, 0x05, 0, "memory", 1000 },
++        { nv_clk_src_vdec, 0x06 },
++        { nv_clk_src_pmu, 0x0a },
++        { nv_clk_src_hubk07, 0x0b },
+          { nv_clk_src_max }
+      }
+  };
