@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BA774E905
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD94674E906
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjGKIZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S231433AbjGKIZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjGKIZd (ORCPT
+        with ESMTP id S231406AbjGKIZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:25:33 -0400
+        Tue, 11 Jul 2023 04:25:42 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 125D610F0;
-        Tue, 11 Jul 2023 01:25:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F1091728;
+        Tue, 11 Jul 2023 01:25:32 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D984F2B;
-        Tue, 11 Jul 2023 01:26:08 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DD5B2B;
+        Tue, 11 Jul 2023 01:26:14 -0700 (PDT)
 Received: from a077893.arm.com (unknown [10.163.47.87])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AB0F63F740;
-        Tue, 11 Jul 2023 01:25:21 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 405B23F740;
+        Tue, 11 Jul 2023 01:25:27 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
@@ -33,9 +33,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH V13 - RESEND 03/10] arm64/perf: Add branch stack support in struct arm_pmu
-Date:   Tue, 11 Jul 2023 13:54:48 +0530
-Message-Id: <20230711082455.215983-4-anshuman.khandual@arm.com>
+Subject: [PATCH V13 - RESEND 04/10] arm64/perf: Add branch stack support in struct pmu_hw_events
+Date:   Tue, 11 Jul 2023 13:54:49 +0530
+Message-Id: <20230711082455.215983-5-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230711082455.215983-1-anshuman.khandual@arm.com>
 References: <20230711082455.215983-1-anshuman.khandual@arm.com>
@@ -50,14 +50,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This updates 'struct arm_pmu' for branch stack sampling support being added
-later. This adds an element 'reg_trbidr' to capture BRBE attribute details.
-These updates here will help in tracking any branch stack sampling support.
-
-This also enables perf branch stack sampling event on all 'struct arm pmu',
-supporting the feature but after removing the current gate that blocks such
-events unconditionally in armpmu_event_init(). Instead a quick probe can be
-initiated via arm_pmu->has_branch_stack to ascertain the support.
+This adds branch records buffer pointer in 'struct pmu_hw_events' which can
+be used to capture branch records during PMU interrupt. This percpu pointer
+here needs to be allocated first before usage.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
@@ -65,53 +60,39 @@ Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 Tested-by: James Clark <james.clark@arm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- drivers/perf/arm_pmu.c       | 3 +--
- include/linux/perf/arm_pmu.h | 9 ++++++++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ include/linux/perf/arm_pmu.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index c0475a96c2a0..fe456a46fe8d 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -512,8 +512,7 @@ static int armpmu_event_init(struct perf_event *event)
- 		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
- 		return -ENOENT;
- 
--	/* does not support taken branch sampling */
--	if (has_branch_stack(event))
-+	if (has_branch_stack(event) && !armpmu->has_branch_stack)
- 		return -EOPNOTSUPP;
- 
- 	return __hw_perf_event_init(event);
 diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 3d3bd944d630..5ecd3d0e7645 100644
+index 5ecd3d0e7645..2dd5bcd3080d 100644
 --- a/include/linux/perf/arm_pmu.h
 +++ b/include/linux/perf/arm_pmu.h
-@@ -104,7 +104,9 @@ struct arm_pmu {
- 	int		(*map_event)(struct perf_event *event);
- 	void		(*sched_task)(struct perf_event_pmu_context *pmu_ctx, bool sched_in);
- 	int		num_events;
--	bool		secure_access; /* 32-bit ARM only */
-+	unsigned int	secure_access	: 1, /* 32-bit ARM only */
-+			has_branch_stack: 1, /* 64-bit ARM only */
-+			reserved	: 30;
- #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
- 	DECLARE_BITMAP(pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
- #define ARMV8_PMUV3_EXT_COMMON_EVENT_BASE	0x4000
-@@ -120,6 +122,11 @@ struct arm_pmu {
+@@ -46,6 +46,13 @@ static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_63BIT) == ARMPMU_EVT_63BIT);
+ 	},								\
+ }
  
- 	/* Only to be used by ACPI probing code */
- 	unsigned long acpi_cpuid;
++#define MAX_BRANCH_RECORDS 64
 +
-+	/* Implementation specific attributes */
-+#ifdef CONFIG_ARM64_BRBE
-+	u64		reg_brbidr;
-+#endif
++struct branch_records {
++	struct perf_branch_stack	branch_stack;
++	struct perf_branch_entry	branch_entries[MAX_BRANCH_RECORDS];
++};
++
+ /* The events for a given PMU register set. */
+ struct pmu_hw_events {
+ 	/*
+@@ -72,6 +79,8 @@ struct pmu_hw_events {
+ 	struct arm_pmu		*percpu_pmu;
+ 
+ 	int irq;
++
++	struct branch_records	*branches;
  };
  
- #define to_arm_pmu(p) (container_of(p, struct arm_pmu, pmu))
+ enum armpmu_attr_groups {
 -- 
 2.25.1
 
