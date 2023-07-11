@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B6474EE02
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A8674EE0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjGKMS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S231625AbjGKMTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjGKMSf (ORCPT
+        with ESMTP id S231669AbjGKMSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:18:35 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854E4E67
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:18:32 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b703c900e3so87380261fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:18:32 -0700 (PDT)
+        Tue, 11 Jul 2023 08:18:36 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C914CE7E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:18:33 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b703a0453fso88402441fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:18:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689077911; x=1691669911;
+        d=linaro.org; s=google; t=1689077912; x=1691669912;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=faHQYvRA6dB51H+b9tyyGHRVQXd132zqJVmf3cqbbls=;
-        b=brq9ju23RQDGjfkhEyoXhKY+P8VySGW00DIGULzYnHAAI+I48EOu4YpnO5WhOCuKz7
-         h5L8KvxPVmdv2t2QxlyNyC7EhGnV7JvN/DSmG5Aa+G3zGEkkDguxhxZFtnzIe4VvjjjZ
-         1tlUDoTAmweBrYNGvZCGDH5Ejs7xSPRsBZjNVo5tfu5FQe6iGbTQKUVu2EK1l1Ut+jl+
-         RCuvqdSuOapROklyZaznNj4HDQzr3x+shVvGRON8fyilGYwF141OPl6rzmHIr/LHgwAM
-         8red/2zW5isBkUY7ekKEhFkauRrPurTza8WY1sVA+sakkh/ruS7ne8izjS0wetcQQsVM
-         uoEA==
+        bh=ccaHxWEA1SHNBLA/pJ32RMxAjEs2vftCpusuOqWZkaE=;
+        b=AAa407DAcUUBZbNB2i1waM4u2+UaESZbSIFTb8IWbolXR5HnC39wh0iKZ/nEkWNsuS
+         /u8mLAN7PTTfYQ08LT1jOQ0uDTK3C8RVGgauvdIqRJDEMrcDAcm7fVVD6qrEe87r+bvb
+         o/dpbyN5EfbKehUidsB2RGJQpV4LJ1muPhk/tdE/XngfxGrbONlIFMF1Bq89JNUYTWCI
+         OkuV8QkN31TY1YHRFpXYrlbdKEM6Zxahwf5yNcErl9JVNA5t1yYr/tWH1j+sVNTVutKu
+         sAv743aQBCXiygGfItZCTDkSx20u4sQA3IMHNS/lZw8ZWoDyoZ+1ULpKH+yVl8rIaYbv
+         x7ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689077911; x=1691669911;
+        d=1e100.net; s=20221208; t=1689077912; x=1691669912;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=faHQYvRA6dB51H+b9tyyGHRVQXd132zqJVmf3cqbbls=;
-        b=UwLYJ49rhtcGtEoPNKj+fX+8z7PcGFZrMAVVKi5g3GTcIbHW842fmbPFRCe3+kFi+L
-         iKbMHfJajSS/04FnTElmYzJaGlxDlQVzpQdQCjvjWELXN2HNV8rPl4MjOemHmCIl7TgG
-         gITlbLWA4ufvyjwjRg5bZpFzww3+1CdxgteBWccS5V54nP8xTf4gbi15nig0chPSnh7n
-         Gts6eUBH7rQ/Z1474Q1qhBzIvfHfw22NcGi4KOLNNwNjfPncmFZipOjXoB4jA6yxxduI
-         HrnH7iJBtfptK/k510zLjjxNXrF0NoLbaBOtnEo8hGXJ23fWjJsg2UwHNcUcfKprSv+q
-         3PQw==
-X-Gm-Message-State: ABy/qLaJz5D6iarhJ75W6wq9SA3qua0HN5PMZFqj0+TC1WZDtjS5pYVO
-        +87COZzV6l1AAZWId3bEDbZbkw==
-X-Google-Smtp-Source: APBJJlE45x3XxwQUe9r/v4a2VECOkUhVOEpocZ3fhx/SWa4yjJt84PjPj5lJ3ehQVS19lkg1mvNg/Q==
-X-Received: by 2002:a2e:2e17:0:b0:2b6:df00:b3d1 with SMTP id u23-20020a2e2e17000000b002b6df00b3d1mr12295023lju.51.1689077910800;
-        Tue, 11 Jul 2023 05:18:30 -0700 (PDT)
+        bh=ccaHxWEA1SHNBLA/pJ32RMxAjEs2vftCpusuOqWZkaE=;
+        b=Ijhsy1PGo+Uuu/9/eUAE/fbC8TOU6MFRdTguDSyca3pvAGIwT6IUAoikYrbD6d14sT
+         nG0iAaI9gzRs/XrGjAHcqfDSjulOQbwDh64o0wx/TIjhEiDRmyIjLP4tPjwbI2Ma/3VE
+         jO6RHhc2d06FVYSd2GCChZ5IRLu3etbbNLfH+oyEXlU0ZOe6E0yGRTL78nr0a88AVb5l
+         nRXRPFtT2pZAjtibyu7nDGLcpbeXvYC157xi0Qlk/wIPw5WqNrZCYRdnk9P0LIt3rfKX
+         z9VTsvaJ83GGt47e3/pvHb56MMigAmPhxe2z/qtUpdT/5KlIA546Yaj6nCefUq6crTw0
+         MBWA==
+X-Gm-Message-State: ABy/qLZxoGU+N9pKNlMNOouB84BzhFcWN8LzVdGYxkScjfX8UJ0tQj5H
+        soGWYHneY5CaucKwFdk6TxE16uGeSduN7xhmPwqDVQ==
+X-Google-Smtp-Source: APBJJlF3TDNp52qVnWvnuIz7/SR0d+mgazonvPucboip+HYCyKqB81kRMjkq1+V2da/wMQB0zmk42g==
+X-Received: by 2002:a2e:7a06:0:b0:2b6:bd82:80b1 with SMTP id v6-20020a2e7a06000000b002b6bd8280b1mr13846968ljc.37.1689077912056;
+        Tue, 11 Jul 2023 05:18:32 -0700 (PDT)
 Received: from [192.168.1.101] (abyl96.neoplus.adsl.tpnet.pl. [83.9.31.96])
-        by smtp.gmail.com with ESMTPSA id d18-20020a2e96d2000000b002b708450951sm435563ljj.88.2023.07.11.05.18.29
+        by smtp.gmail.com with ESMTPSA id d18-20020a2e96d2000000b002b708450951sm435563ljj.88.2023.07.11.05.18.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 05:18:30 -0700 (PDT)
+        Tue, 11 Jul 2023 05:18:31 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 11 Jul 2023 14:18:03 +0200
-Subject: [PATCH 04/53] interconnect: qcom: icc-rpmh: Retire dead code
+Date:   Tue, 11 Jul 2023 14:18:04 +0200
+Subject: [PATCH 05/53] interconnect: qcom: icc-rpmh: Implement voting on
+ non-APPS RSCs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230708-topic-rpmh_icc_rsc-v1-4-b223bd2ac8dd@linaro.org>
+Message-Id: <20230708-topic-rpmh_icc_rsc-v1-5-b223bd2ac8dd@linaro.org>
 References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
 In-Reply-To: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -71,11 +72,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689077904; l=2754;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689077904; l=3399;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6mcS5eZovBnK2nwqFQIK7RBsbNQhwBhsQk+oBWRxNK4=;
- b=3ESDmMghTA6TIXl1ds/z4EpMEk5yAVv8VC1Tp1dLP/zINjykK+fbVDiJIiARIDeqq+KEQrt8B
- nrdFX/8/EnIALZGZh9DZJCTIFG3oUiASEHts3K8O46uCivUgJ4qPqU7
+ bh=qxa5myzMVst/ng/FRMS5QwwZ8ABXjqpOGI10XxQPCBc=;
+ b=YTn8PsYOLKHdJ4Oifs+Jok/jlVwavascvy0uIPmwXcmQnyELG4gnpyZgozP0wLWdDR7INKJYf
+ FKpv39ljyUsDLC8wn1QDYP1tm30T7i3e8mbyhY3odnYIh4XD9fY7ZnA
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,90 +89,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_bcm_voter_get is no longer necessary. Remove its ugly remnants.
+Linux can cast votes on resources through different RSCs (e.g. DISP). This
+can be done for many reasons, from latency to fine-grain on-SoC-power-grid
+management.
+
+With all the necessary bits in place, add the loops and ifs necessary to
+vote through different RSCs.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/bcm-voter.c | 46 -----------------------------------
- drivers/interconnect/qcom/bcm-voter.h |  1 -
- 2 files changed, 47 deletions(-)
+ drivers/interconnect/qcom/icc-rpmh.c | 49 ++++++++++++++++++++++++++++++------
+ 1 file changed, 42 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
-index f8fbddb87e6b..0ce3874f60d2 100644
---- a/drivers/interconnect/qcom/bcm-voter.c
-+++ b/drivers/interconnect/qcom/bcm-voter.c
-@@ -16,7 +16,6 @@
- #include "bcm-voter.h"
- #include "icc-rpmh.h"
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index 53298148f24b..3cdd9106b0c0 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -22,6 +22,8 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
+ {
+ 	struct qcom_icc_provider *qp;
+ 	struct qcom_icc_node *qn;
++	struct qcom_icc_bcm *bcm;
++	int voter_idx;
+ 	int i;
  
--static LIST_HEAD(bcm_voters);
- static DEFINE_MUTEX(bcm_voter_lock);
- 
- struct bcm_voter *qcom_icc_bcm_voters[ICC_BCM_VOTER_MAX] = { };
-@@ -182,51 +181,6 @@ static void tcs_list_gen(struct bcm_voter *voter, int bucket,
+ 	qn = node->data;
+@@ -32,8 +34,17 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
+ 		qn->max_peak[i] = 0;
  	}
+ 
+-	for (i = 0; i < qn->num_bcms; i++)
+-		qcom_icc_bcm_voter_add(qcom_icc_bcm_voters[ICC_BCM_VOTER_APPS], qn->bcms[i]);
++	for (i = 0; i < qn->num_bcms; i++) {
++		bcm = qn->bcms[i];
++
++		/* Old and incomplete device trees may not specify all voters. */
++		if (qcom_icc_bcm_voters[bcm->voter_idx])
++			voter_idx = bcm->voter_idx;
++		else
++			voter_idx = ICC_BCM_VOTER_APPS;
++
++		qcom_icc_bcm_voter_add(qcom_icc_bcm_voters[voter_idx], bcm);
++	}
  }
+ EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
  
--/**
-- * of_bcm_voter_get - gets a bcm voter handle from DT node
-- * @dev: device pointer for the consumer device
-- * @name: name for the bcm voter device
-- *
-- * This function will match a device_node pointer for the phandle
-- * specified in the device DT and return a bcm_voter handle on success.
-- *
-- * Returns bcm_voter pointer or ERR_PTR() on error. EPROBE_DEFER is returned
-- * when matching bcm voter is yet to be found.
-- */
--struct bcm_voter *of_bcm_voter_get(struct device *dev, const char *name)
--{
--	struct bcm_voter *voter = ERR_PTR(-EPROBE_DEFER);
--	struct bcm_voter *temp;
--	struct device_node *np, *node;
--	int idx = 0;
--
--	if (!dev || !dev->of_node)
--		return ERR_PTR(-ENODEV);
--
--	np = dev->of_node;
--
--	if (name) {
--		idx = of_property_match_string(np, "qcom,bcm-voter-names", name);
--		if (idx < 0)
--			return ERR_PTR(idx);
--	}
--
--	node = of_parse_phandle(np, "qcom,bcm-voters", idx);
--
--	mutex_lock(&bcm_voter_lock);
--	list_for_each_entry(temp, &bcm_voters, voter_node) {
--		if (temp->np == node) {
--			voter = temp;
--			break;
--		}
--	}
--	mutex_unlock(&bcm_voter_lock);
--
--	of_node_put(node);
--	return voter;
--}
--EXPORT_SYMBOL_GPL(of_bcm_voter_get);
--
- /**
-  * qcom_icc_bcm_voter_add - queues up the bcm nodes that require updates
-  * @voter: voter that the bcms are being added to
-diff --git a/drivers/interconnect/qcom/bcm-voter.h b/drivers/interconnect/qcom/bcm-voter.h
-index 0f64c0bab2c0..30b324fcb2ee 100644
---- a/drivers/interconnect/qcom/bcm-voter.h
-+++ b/drivers/interconnect/qcom/bcm-voter.h
-@@ -20,7 +20,6 @@ static struct qcom_icc_bcm _name = {					       \
- 	.nodes = { __VA_ARGS__ },					       \
+@@ -87,6 +98,7 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ {
+ 	struct qcom_icc_provider *qp;
+ 	struct icc_node *node;
++	int i, ret;
+ 
+ 	if (!src)
+ 		node = dst;
+@@ -95,7 +107,11 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 
+ 	qp = to_qcom_provider(node->provider);
+ 
+-	qcom_icc_bcm_voter_commit(qcom_icc_bcm_voters[ICC_BCM_VOTER_APPS]);
++	for (i = 0; i < ICC_BCM_VOTER_MAX; i++) {
++		ret = qcom_icc_bcm_voter_commit(qcom_icc_bcm_voters[i]);
++		if (ret)
++			return ret;
++	}
+ 
+ 	return 0;
  }
+@@ -168,6 +184,7 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 	struct qcom_icc_node * const *qnodes, *qn;
+ 	struct qcom_icc_provider *qp;
+ 	struct device_node *bcm_node;
++	u32 val, voter_count = 0;
+ 	struct icc_node *node;
+ 	size_t num_nodes, i, j;
+ 	int ret;
+@@ -201,10 +218,28 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 	qp->bcms = desc->bcms;
+ 	qp->num_bcms = desc->num_bcms;
  
--struct bcm_voter *of_bcm_voter_get(struct device *dev, const char *name);
- void qcom_icc_bcm_voter_add(struct bcm_voter *voter, struct qcom_icc_bcm *bcm);
- int qcom_icc_bcm_voter_commit(struct bcm_voter *voter);
+-	/* Ensure the BCM voter is reachable (unless we don't have any) */
+-	qp->voter = qcom_icc_bcm_voters[ICC_BCM_VOTER_APPS];
+-	if (qp->num_bcms && !qp->voter)
+-		return -EPROBE_DEFER;
++	for (i = 0; i < ICC_BCM_VOTER_MAX; i++) {
++		bcm_node = of_parse_phandle(dev->of_node, "qcom,bcm-voters", voter_count);
++		if (!bcm_node)
++			break;
++
++		voter_count++;
++
++		ret = of_property_read_u32(bcm_node, "qcom,bcm-voter-idx", &val);
++		of_node_put(bcm_node);
++		/* Legacy DTs only ever referenced the APPS BCM voter */
++		if (ret == -EINVAL)
++			val = ICC_BCM_VOTER_APPS;
++		else if (ret)
++			return ret;
++
++		if (!qcom_icc_bcm_voters[val])
++			return -EPROBE_DEFER;
++	}
++
++	/* Let's not forget to add qcom,bcm-voters to the provider node! */
++	if (qp->num_bcms && !voter_count)
++		return -EINVAL;
  
+ 	for (i = 0; i < qp->num_bcms; i++)
+ 		qcom_icc_bcm_init(qp->bcms[i], dev);
 
 -- 
 2.41.0
