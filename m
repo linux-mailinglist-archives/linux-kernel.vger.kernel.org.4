@@ -2,292 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A77D74F5B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4B574F5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjGKQjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S231690AbjGKQjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjGKQjp (ORCPT
+        with ESMTP id S229972AbjGKQjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:39:45 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A308CA;
-        Tue, 11 Jul 2023 09:39:39 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1689093568tma672az
-Received: from localhost.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 00:39:27 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 7jw2iSiCazpo/LBoTHiWUTFOO0T2xxVuLXpc0XNSJCcOdmxfxczJzCGNWvpSP
-        O3MTKSEmLAA6Oqt1rjKurirN48Op1YM6jvIoybGvWrueLI9SKopBDAs6DHcRPYNw/H3suyr
-        9PtlYkSHMpqq8yULFzMckX2Tp9TfhrttXvFss7CQ+d/vrmNuPzsglqUj9mrKHE1ke/jDNx2
-        K2UbqeCat0L1ekFXYGehneLAVYF4OrSkdlZz0JIibJ1x2qGQ3bCZaOesfIshEBccxZQaPN4
-        PL7fDw+etfIy6XdslbucE2luDDFoNYsNnWPwRPxpyTOJbXMsnF4io3p2fKn3HtfpSRFYVUi
-        LhNpfm86HcGpHnbY8sB7heyZUdvFZ55klm1gj2ErEEFV/8NFeI=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4955814651562134539
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v2 01/12] tools/nolibc: rename arch-<ARCH>.h to <ARCH>/arch.h
-Date:   Wed, 12 Jul 2023 00:38:30 +0800
-Message-Id: <20230711163830.10271-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZK0HouRo8g6jqkTi@1wt.eu>
-References: <ZK0HouRo8g6jqkTi@1wt.eu>
+        Tue, 11 Jul 2023 12:39:41 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2123.outbound.protection.outlook.com [40.107.243.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B4E54;
+        Tue, 11 Jul 2023 09:39:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UkVbkrvZXL5NVp2Mp1ZP4WmeMlM8Y4uvuvAqopdzNCWSR1rhEq3cc2k2Vt7TDJuZCUEv9/xQmvIwkY8Yu8ZMw2qKNWXWtkk63+Rd62HNQbY/zhCtJNcg3MFnRNb7ZpmNw6EFsAIB6YA3CJLLHQf4fXhcxb40FG71+BVBrzuoo15jLnqwIHLahRfqeixKO57wsVjfVFSHe84SWl5LQLgi2Qvy9sMTHVtGPNIcZigORgkjACYw/jKdEgy5S32QrgYyxXVgOTg39PjMcEV2X6zBiKwsqJSorMgo1rXiaJTY0VeJqApB1j7tBCLlvuyYG6/S8T+14RG6IV20C0jxqCiDmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tx6A1fuYcAtC9ylVbt7r/PrRgyDq68Z4655vQJaqb1o=;
+ b=YPYrm1IMZjto01ZgXHwKXuhTB5XX61rgjc/HmQbPqMzkvDubekLbWYM4sA7dddUDraeCfRwBEt/wGuXSXjblo5Co4CuMZX49/WUDXOIJ2FLs8BXBZ4f0+Fo1eglhN51X6dJlfDdQqX4SLPZvHZaNrZbtg5us17L+1AdIONj0hTJQAqXJogl1P/jJwhhFt8v9aSGDuB3UjTjyVC7QPhb3mEVJXiz/eor+erN2LeRb51slxDnKX0KYBGJfGnuz7WkOQrI2ZA+btckKSmjjPktQdhLpfsIqEyLWn+APwaMHa/HJ4qPiFTyq65wkYV4Tgxpp6cjccL+ZUe1uLQL8lY9ibw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tx6A1fuYcAtC9ylVbt7r/PrRgyDq68Z4655vQJaqb1o=;
+ b=tUvnHhLjl5v3DmAcFgqJMwpVuFiACQpSfaIAGW1N5ZnqRbyEp3oKY88coYZkYUwgzm0J8FngsAolNnQS6H4zdjXparD3Ioahp4kFQ6Io3v2e2o64Z0IgYIgmlz6dR34RhKHQBLOYmiB19WjlAg8AveLnVBqbavzLPUQ8pXesTSY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BL0PR13MB4481.namprd13.prod.outlook.com (2603:10b6:208:1c9::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Tue, 11 Jul
+ 2023 16:39:36 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::d23a:8c12:d561:470]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::d23a:8c12:d561:470%6]) with mapi id 15.20.6588.017; Tue, 11 Jul 2023
+ 16:39:36 +0000
+Date:   Tue, 11 Jul 2023 17:39:27 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Xin Liu <liuxin350@huawei.com>
+Cc:     daniel@iogearbox.net, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        hsinweih@uci.edu, jakub@cloudflare.com, john.fastabend@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yanan@huawei.com,
+        wuchangye@huawei.com, xiesongyang@huawei.com,
+        kongweibin2@huawei.com, zhangmingyi5@huawei.com
+Subject: Re: [PATCH bpf-next] bpf, sockops: Enhance the return capability of
+ sockops
+Message-ID: <ZK2Fvzl8yygg4/sT@corigine.com>
+References: <20230706100243.318109-1-liuxin350@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706100243.318109-1-liuxin350@huawei.com>
+X-ClientProxiedBy: LO4P123CA0650.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:296::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL0PR13MB4481:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0a5d501-0a82-4e50-9065-08db822d6984
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0LNmtYZUdKqa8rQyaTPnYF+CszC0UotT0ZhE3ikb0bzObipBrBgKwJCWrZoHbkTIGejwGZiXJ7yE4Absnr/UVeng3yP8NVJYnQtVRvU+4JpubUZ+QFOm47+Th1ujycZSJUmhzRyoSqe8SNltbUh475w/PaadlIdc+hMUSAwS1QG9T/x1+6asGhrBXQfThhxvb+B24DPnSzvfUGVMOJAF+5fCqxiGrPQHK33VK8EUua+rkIMmyJ5vN/zxhirFGkBTkCX2juqGw87xIM0MSx4uzQJ6PHR2FT0WWLmtpNYpTOhAuHO7tIJdYCLbO0Qd3Ap+XA9u+CdFVF+W7kpMAjtlsZwirOtDCiALXoFVlts24ijzzDDOr8pwTe8JarU2h7gQicIXv1PhychAq87Z5cl2SdJyv20OQQ7PaOtBraMsv7YFHbOGohufKoFR1ND3cucnJ03wONOnp0r7DWC861GENcLVSXf3/30E/QIwSFK9tuvPFQcKNoHfvu0TJjiD2OnsqJ0F/zp2XklPXXjxq5L+TAEXuMfeAARXzV6ldaO4dSQS90xneeAip4xZvLkxWfdu6tFJ0stmg5Td0AXQ9pmydp+l4dNDspu6vXhTe+nXQUU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(376002)(136003)(366004)(346002)(451199021)(6486002)(186003)(6666004)(86362001)(2616005)(478600001)(6506007)(26005)(44832011)(7416002)(316002)(36756003)(8936002)(8676002)(41300700001)(5660300002)(558084003)(6512007)(66476007)(66556008)(66946007)(6916009)(2906002)(4326008)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ld8NzC1Ygcu42fPM/2Kn7l+wCwVXS4dPUmM0GmxeOXiVzE4OQGhxAWtRybvi?=
+ =?us-ascii?Q?9Oi6EhtJNcSqiKkAXZ4r03f+tdRVHvE/Qc+TdP8T9VVHrctizQCjOUO5hEMX?=
+ =?us-ascii?Q?T32POJa8FZSbYSiGlOb2dUknNogLWyTr6tATM9cKgKREQmHqrNGWe9W2AN6Q?=
+ =?us-ascii?Q?uSRZ0x1HsLf+RrcLvnTH3ry9gj/N8qS5N22vo9ipx7mLOwQLTToUtkTQUU3y?=
+ =?us-ascii?Q?/HS/s510gaP6wSEpGsWqJgtFiOCHamdraJYOteP6F47TDUuLwN2Y/3olG0ef?=
+ =?us-ascii?Q?e/BYcbyu65HPKr4VTD7GhVGD7bSH2YqZ7WAMpCBSk3QK3f7tRoORzp7VgWPb?=
+ =?us-ascii?Q?+Rsq1rC0xJ5hMjlbQLwUdIxiNsV1P1VTIghg7/9ALKwqsn9h1ChGGqxp3S+C?=
+ =?us-ascii?Q?oNZJRb4xih7bO1bjn+5borLzofHXWQOBwc5KfDVzKWveT2X0/5p5ijehiKd+?=
+ =?us-ascii?Q?OZ0v5N+kCwz1enFM749IAvmQiz2uvw07biWZbH+M3Vy38xJCxrjB2dLllJeg?=
+ =?us-ascii?Q?Ghtik05o0g5/JuOppdC/8xaV3A/IqLBPWNF08rcEzKloMMu1D3C/9DIWBlpG?=
+ =?us-ascii?Q?izsSRr/WDE3jUL3uI8Nug3ita5pR3yjNdbdJk5jlIBXISbwXNVN7dhk3YT4E?=
+ =?us-ascii?Q?seKfLGPId5tHeSND72qV+ClS97zhNWmoCiBJBTJAy2Bb8tggJgOnuziCkdQZ?=
+ =?us-ascii?Q?pIPJUgBXELsHfKZHZDVzCDc4oYd3J8I+2uhalpySzv2HyYcW+wUD7I6xzCG4?=
+ =?us-ascii?Q?gb57M7V+t6Y/2jqFIoRXFcVYuTYOOFUz9G8If8haCBdGTKbgDK7oH2iHi8/T?=
+ =?us-ascii?Q?HimVE6iSG/IEdnnRf9ijxOmXbiM0YhjjY+OFDK2fzbniJ2pGu6e7OJEtGI1f?=
+ =?us-ascii?Q?QU/8NhUwX12JSa6aVwjX/T0lo4GNCzfuBZ0ATbfvVaQQCSZSzIPs9Pwg7xnN?=
+ =?us-ascii?Q?I+TCSE28lt6SPn1QK7+kWJUPYNeYhoiYFPv0inFlPA85h7cFgn7nEkA0HnSv?=
+ =?us-ascii?Q?cOkqUaNBbdJipg3yd4SpU9VOLoB0A0q9VqYVNnNgiXOsstYYi1FzeHKxRLEH?=
+ =?us-ascii?Q?4wLLsVhPhZWqbnCVCGysu0M1s6MgD0iP4n5pjU8Y167H3Ss2RCgUY1K4xx2X?=
+ =?us-ascii?Q?Vksnl1fHMwtYkrh77XQ+wyzowWAw8Pb1O3B5EUdmc7fd5BaQ8D7WWBrh/y0X?=
+ =?us-ascii?Q?4Xe2tFv1bRLS78xzrxII8Pvw2MPF5YeWIvqRV2BfYL1sfUpjmB9SUUhvT2Vk?=
+ =?us-ascii?Q?tyKNdoMD6Bnpe6obpeXvO4ewKg/n6swkpFdL9fizbvA2ZvJTwKUgad1DVP0B?=
+ =?us-ascii?Q?TFFuMW13PnxSRiF81ssRwVdxIsAOt+gEQgwrByR/+dx/HgPvglYzZgX36lhi?=
+ =?us-ascii?Q?qciSMadPSlZlEMeK8QB1qW7JIXYmE8IDgTbwJl40Bba3cId/uxf0AbTq/4hy?=
+ =?us-ascii?Q?aohH8JTVlNUhOlOSeLK2q9G/I4iDfRFiGaZpyQTkWEJn5IPulDWmNlV3H6nJ?=
+ =?us-ascii?Q?pvl5RDcGveeqJANfEbFHkT7sOHRWLvLZq16jrCujquFyczqLLARHd++zksMc?=
+ =?us-ascii?Q?/K/Sp3EGeUVZH7leAoxA1UuKLK4hsEqC3SMRzQ4NXdXbkvK8fb4MMovkFpVz?=
+ =?us-ascii?Q?7w=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0a5d501-0a82-4e50-9065-08db822d6984
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 16:39:35.9774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LnS7PdO8uFEHb2te4tFYIzdVxH6PP94pFvvaKCnH9TIMyxh90dEyj0h46aIs1R5n28Dz0iEav75dCKOo/4n35aiYSsLMz6CYwnfxGurpRBw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR13MB4481
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
+On Thu, Jul 06, 2023 at 06:02:43PM +0800, Xin Liu wrote:
+> Since commit 2585cd62f098 ("bpf: Only reply field should be writeable"),
+> sockops is not allowd to modify the replylong field except replylong[0].
 
-> Hi Thomas, Zhangjin,
-> 
-> On Mon, Jul 10, 2023 at 05:51:39PM +0200, Thomas Weißschuh wrote:
-> > On 2023-07-10 15:23:40+0800, Zhangjin Wu wrote:
-> > > > On Sat, Jul 08, 2023 at 11:26:42PM +0800, Zhangjin Wu wrote:
-> > 
-> > > [..]
-> > 
-> > > > > As a preparation, this creates the architecture specific directory and
-> > > > > moves tools/include/nolibc/arch-<ARCH>.h to
-> > > > > tools/include/nolibc/<ARCH>/arch.h.
-> > > > 
-> > > > I'm sorry but I still don't understand what it *provides*. I'm reading
-> > > > it as "we *can* do this so let's do it". But what is the specific
-> > > > purpose of adding this extra directory structure ? It's really unclear
-> > > > to me and worries me that it'll only result in complicating maintenance
-> > > > by adding even more files, thus even more "include" lines and cross
-> > > > dependencies.
-> > > 
-> > > Willy, I was assuming you had a look at the discussion between Thomas
-> > > and me, so, I didn't add the link to our discussion, it is more about
-> > > the 'clarity' of code "include" [1].
-> > > 
-> > > I have proposed the idea in the discussion but got no response yet, so,
-> > > sent this revision for more discussion, obviously, it is better to
-> > > discuss more there and get more feedback from Thomas and you.
-> > 
-> > To be honest I got overwhelmed at some point and instead of figuring out
-> > to which series' I already responded and which not I only responded to
-> > those where I had time to do so immediately.
-> > 
-> > Keeping the amount of in-flight serieses lower would help this.
-> 
-> +1 on this. First it's difficult for me to assign contiguous time on
-> the subject so I can't grasp all series at once, and I'm terribly bad
-> at context-switching, which takes even more time and induces confusion.
-> Less topics at once, more focused with less reviews of reorganizations
-> will definitely help.
-
-me too, let's go back to the original rv32 support asap ;-)
-
-> 
-> > > The v0 included "crt.h" before "arch.h", Thomas suggested me include
-> > > "crt.h" in arch_<ARCH>.h, just like the "compiler.h" did. His suggestion
-> > > did inspire me to think about how to treat the relationship among crt.h,
-> > > sys.h and arch.h.
-> > > 
-> > > The idea behind is we have many directions to divide nolibc to different
-> > > parts/modules:
-> 
-> Again above I'm seeing an opportunity but no explanation of why this
-> is needed. Thomas already mentioned that you're speaking about just
-> trying to factor out a few tens of lines. I'm not seeing *why* we
-> need to re-split everything yet again.
->
-> > > - one is arch specific (arch.h) and non-arch specific (the others)
-> > > 
-> > >   This method is used by us currently, It is very good to put all of the
-> > >   arch specific parts together to simplify (in the files to be
-> > >   added/maintained) the porting of a new architecture.
-> > > 
-> > >   But to be honest, It also confuse the modularity a little, for
-> > >   example, like sys.h, crt.h should be a core function/feature of
-> > >   nolibc, arch.h is not so. arch.h only provides the necessary minimal
-> > >   assembly "pieces".
-> 
-> But that's precisely the principle: keep arch-specific stuff as minimal
-> as possible, keep most of the rest generic but easily overloadable if
-> needed as we know that archs are not all 1:1 equivalent.
->
-
-This patchset applies the same principle but mixes some other
-requirements ;-)
-
-Agree with "archs are not all 1:1 equivalent".
-
-> > >   both sys.h and crt.h are not a sub modules of arch.h (although they
-> > >   have minimal arch specific code), so, like sys.h, crt.h should be
-> > >   included in the top-level headers, not in arch.h,
-> 
-> Why ? Keep in mind that these are only include files, to in the end,
-> *all* of them are included. The ordering is the only thing that really
-> matters.
->
-
-Yeah, I know this. The only thing confused me is the relationship among
-crt.h, sys.h and arch.h, the include position should better reflects
-their relationship, currently, we have mixed two "divide" methods
-together, one is arch and non-arch, another is the parallel
-functions/features.
-
-so, the only left question is where should we include crt.h in? Firstly,
-I put it like sys.h (In my mind, it should be), If you two both agree to
-put it in arch-<ARCH.h>, I will renew this series with it, this is
-definitely a lighter way than the reorg method, I don't persist ;-)
-
-> > >   reversely, the
-> > >   minimal arch specific should be included in crt.h. To do so and to
-> > >   avoid include the non-crt part, the split of arch.h is required, and
-> > >   therefore, the <ARCH>/ is created to put the divided <ARCH>/sys.h and
-> > >   <ARCH>/crt.h, otherwise, there will be many sys-<ARCH>.h and
-> > >   crt-<ARCH>.h in the top-level directory of nolibc.
-> 
-> Then doesn't it prove that you don't need that crt-<ARCH>.h and that
-> instead it should just be in arch-<ARCH> like the rest of the same arch ?
-> 
-> > > - another is the parallel functions/features (like crt.h, sys.h, stack protector ...)
-> > > 
-> > >   This is used by musl and glibc, before sending this proposal, I have
-> > >   taken a look at both of them, musl is simpler and clearer, we apply
-> > >   the similar method:
-> > > 
-> > >   musl:
-> > >       crt/crt1.c
-> > >                  #include "crt_arch.h"  /* arch/<ARCH>/crt_arch.h */
-> > 
-> > In musl crt_arch.h seems to be used in different ways. So it makes sense
-> > to split it from syscall_arch.h. In nolibc there is no such distinction.
-> > And everything will end up in a global namespace anyways.
-> 
-> Exactly. Musl is musl and nolibc is nolibc. Musl is a regular libc in that
-> it provides a .so that is built from many .c files. As such it's desirable
-> to split along certain edges. nolibc contains no single C file. It's only
-> meant to be included as-is in the user's C file. This changes a lot of
-> things, even in terms of splitting. Also keep in mind that musl is a
-> general-purpose libc, and that some distros are entirely built on it.
-> nolibc doesn't have such goal nor expectation, the first user was a
-> preinit code I wrote long ago, and the second one is rcutorture which
-> contains a while() loop around gettimeofday() IIRC. We must not just
-> blindly imitate other components' choices because they work, when we're
-> dealing with different constraints. If ours are acceptable, no need to
-> complicate everything.
->
-
-Willy, I know the difference between musl and nolibc, the musl code
-referenced here is only used to clear my confusion about "the
-relationship among crt.h, sys.h and arch.h" I mentiond above.
-
-BTW, I do think nolibc have more using scenes, I like it very much and
-have used it in my own "Linux Lab" open source project [1] to let it
-work as the minimal rootfs to speed up kernel features learning and
-development, I do like the 'kernel-only deployments' feature behind
-nolibc [2], although there is something like "Unikernel Linux" [3], but
-that differs from a normal Linux system and is more complicated ;-)
-
-I'm even imaging using it with a pure-header shell and a pure-header gui
-to let them further work together as a tiny rtos ;-)
-
-[1]: https://github.com/tinyclub/linux-lab
-[2]: https://lwn.net/Articles/920158/
-[3]: https://github.com/unikernelLinux/ukl
-
-> > >   With this method, the "crt_arch.h + crt.h" together provide the C
-> > >   RunTime (startup code, stack protector, environ and _auxv currently)
-> > >   function, the "sys_arch.h + sys.h" together provide the syscall
-> > >   definitions. The arch specific parts are hidden behind, and only
-> > >   require to include the crt_arch.h in crt.h and sys_arch.h in sys.h, no
-> > >   need to include the whole arch.h for all.
-> 
-> Everything is included all the time. *everything*. The more files we
-> create, the more "#ifdef FOO_H" gets evaluated, and the more maintenance
-> burden it adds.
->
-
-Agree with less "#ifdef"s.
-
-> > > As a summary, the core obvious reason here is, to this crt.h itself, it
-> > > is ok for us to include crt.h in arch.h in code side, but reversely, I
-> > > do prefer to include arch.h (and therefore the crt_arch.h) in crt.h,
-> > > crt.h is the core function should be exported, arch.h is not, it only
-> > > provide some low-level helpers for crt.h. If we treat sys.h as a core
-> > > function and crt.h as a arch specific thing, it does confuse a little.
-> > > This reorg may also help the similar future functions who require arch
-> > > specific support, but of course, it does require to add/maintain more
-> > > files for a new architecture, but it also allow to develop/debug at a
-> > > smaller fineness.
-> > > 
-> > > In current stage, include crt.h in arch.h is not that unacceptable, but
-> > 
-> > Why would it be more unacceptable in the future?
-> > 
-> > > if reorg is a better direction, why not do it currently, because we do
-> > > have two functions (crt.h and sys.h) in <ARCH>/, if only one, it is not
-> > > urgent ;-)
-> > 
-> > > Is this explanation better than before? welcome to discuss more ;-)
-> > 
-> > Personally I'm not convinced :-)
-> 
-> Neither am I.
-> 
-> > The arch-specific code in nolibc in mainline is currentl ~200 lines per
-> > arch. With this series in general it will be even less.
-> > If at some point there are many more architectures it may make sense to
-> > introduce an arch/ directory then.
-> 
-> And even then I'm not convinced because the number of archs will remain
-> low anyway.
->
-
-We have 8 now, the maximum may be 'ls -d arch/*/ | wc -l', it is 22
-currently ;-)
-
-> > > Like musl, if required, another top-level arch/ may be required to put
-> > > all of the <ARCH>/ directories together to clean up the top-level nolibc
-> > > directory.
-> > 
-> > At the moment in mainline there are 26 files in nolibc.
-> > That does not seem excessive, in fact it looks to be less than most
-> > other kernel directories.
-> 
-> Indeed :-)  Note that it started with a single one!
-
-Yeah, I learned the history, but I do think we will have more, as the
-requirements become more and more ;-)
-
-> 
-> > > As explained in another reply, it is really hard to write a just ok
-> > > commit message for every change, sometimes, the justification is
-> > > 'obvious' to some develoers who have the background information or who
-> > > have dicussed together, sometimes,
-> 
-> Sometimes yes, but most of the series come with propositions to improve
-> something. The commits making the major changes (and the cover letter)
-> should justify why this is a desirable change, what it implies not to
-> have it and what it may imply to have it, what possible alternatives
-> were considered and dropped sometimes (e.g. when hesitating between two
-> approaches), etc.
-
-Ok. 
-
-Thanks,
-Zhangjin
-
-> 
-> Thanks,
-> Willy
+nit: allowd -> allowed
