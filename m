@@ -2,135 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3442574EB86
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727A374EB8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjGKKKu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 06:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S229742AbjGKKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjGKKKt (ORCPT
+        with ESMTP id S229468AbjGKKNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:10:49 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4A99E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:10:48 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-c17534f4c63so6826649276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:10:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689070247; x=1691662247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NklhkwlNR5eEmz7lf9gHixIXUDPU7r/AgZFQC+NZaNg=;
-        b=PPTOP23yYuE/IlTWJNikWapf5fsQ8dAvlfSiatoKhMjNhjuO7T+GZI3lUZD4gCVGvu
-         VwGaVR9uIisoPII+w703p4R7GtntDd585kXLBagshCCw25M9XDEdfaVTuxcFuj2Yr+Mk
-         GsM8xOsLch/vtKOA2Td3L7Rgfcli8mUmhmMKipsRLUot/xECvXTz6+/tgvtl0qsmfuxI
-         7zY3IhU2kHm6DFDoAfvCE175yimtr10uYSPTBpamBctIt7xe75YisiTyNu4gwqaG0B8N
-         X0NRAes7t8wtXjy8faJwEX5i463f0mPfRF/wY8GAUhzyhRu/hIpCkhrVob7x3yrzNgzy
-         xCwA==
-X-Gm-Message-State: ABy/qLaSKn3UrG2N6xXfNpiZ558jOU1sJ/lo5daqM5i853emOuhq+fDF
-        OPU1g6Pz5Y63lbH1fiYocK7YLj6ib0i+zw==
-X-Google-Smtp-Source: APBJJlEX4RnqqKoDLp3DXZXMUywpFRfIB4anUQJoTz046ukMFKcDZW3zu6dt5WCW1H+3DSd6SffcBA==
-X-Received: by 2002:a81:e94e:0:b0:56d:824e:d93f with SMTP id e14-20020a81e94e000000b0056d824ed93fmr14030707ywm.38.1689070247453;
-        Tue, 11 Jul 2023 03:10:47 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id l124-20020a0dc982000000b00578942e2a86sm473202ywd.60.2023.07.11.03.10.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 03:10:46 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-57a551ce7e9so61014837b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:10:46 -0700 (PDT)
-X-Received: by 2002:a81:4f4a:0:b0:57a:5c79:482a with SMTP id
- d71-20020a814f4a000000b0057a5c79482amr10682578ywb.50.1689070245876; Tue, 11
- Jul 2023 03:10:45 -0700 (PDT)
+        Tue, 11 Jul 2023 06:13:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1069E;
+        Tue, 11 Jul 2023 03:13:09 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B9jPC2008987;
+        Tue, 11 Jul 2023 10:12:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=kuo7CikGsbdgndk67bwg/O5cTt5iHexi8B0jVS6YzSs=;
+ b=GC581uu0EOQ+SJf4NvEZkfVez9ODBcBR8E6E3MsDR61Tc0IGwqThTk6Cxd3QPwol/rVY
+ NMPZhOGotKdb1pqKy1XKQoS+ReX6F5d5jwvsPXyIQ1wZSZLoIrAf+vEEoVXReAUWvIs+
+ QzKXpSbNpOafocqE8bnQArRbTFZ99LGXtpTyjOuh6k/P1nRLn0nEkwtmevsCzt2tDF5/
+ xCQgmV9LYWZV2656zoqL1ftfOyHHTDpOdCey2UVIsYsQ1ts7cyD6qdoNjDUO5dHKdqOk
+ rMl11Yxvb8CUl3vl2vVTyCJjphY7Ro5TjOeTF44mrG4G1yq/jSpqNd4hykheNJ2WlqPT Sg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs4qp01mr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 10:12:54 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BACrVO010152
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 10:12:53 GMT
+Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 03:12:50 -0700
+Message-ID: <8a950aa5-fdd8-f983-0411-4b39ade596f4@quicinc.com>
+Date:   Tue, 11 Jul 2023 18:12:48 +0800
 MIME-Version: 1.0
-References: <20230711035444.526-1-zhangpeng.00@bytedance.com>
-In-Reply-To: <20230711035444.526-1-zhangpeng.00@bytedance.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Jul 2023 12:10:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVtHXnm0EvPV7tVMeF7Z9JEhjyKMmg19aS3hdj2qRDhWw@mail.gmail.com>
-Message-ID: <CAMuHMdVtHXnm0EvPV7tVMeF7Z9JEhjyKMmg19aS3hdj2qRDhWw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] Improve the validation for maple tree and some cleanup
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <will@kernel.org>, <corbet@lwn.net>, <catalin.marinas@arm.com>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+ <875y6s8bwb.wl-maz@kernel.org>
+ <32f442e3-3d5c-4cec-9791-0da039f88287@quicinc.com>
+ <874jmc8654.wl-maz@kernel.org>
+ <6e07ad52-2629-346e-6217-ec07777ebc5b@quicinc.com>
+ <86lefnvsto.wl-maz@kernel.org>
+From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+In-Reply-To: <86lefnvsto.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Bkzf8wlK7wOARRdwB-QYAjYggnEEcQKb
+X-Proofpoint-GUID: Bkzf8wlK7wOARRdwB-QYAjYggnEEcQKb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ phishscore=0 impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110089
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+On 7/11/2023 2:57 PM, Marc Zyngier wrote:
+> On Tue, 11 Jul 2023 04:30:44 +0100,
+> "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+>>
+>> On 7/10/2023 5:31 PM, Marc Zyngier wrote:
+>>> On Mon, 10 Jul 2023 09:19:54 +0100,
+>>> "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+>>>>
+>>>> On 7/10/2023 3:27 PM, Marc Zyngier wrote:
+>>>>> On Mon, 10 Jul 2023 06:59:55 +0100,
+>>>>> Maria Yu <quic_aiquny@quicinc.com> wrote:
+>>>>>>
+>>>>>> In order to be able to disable lse_atomic even if cpu
+>>>>>> support it, most likely because of memory controller
+>>>>>> cannot deal with the lse atomic instructions, use a
+>>>>>> new idreg override to deal with it.
+>>>>>
+>>>>> In general, the idreg overrides are *not* there to paper over HW bugs.
+>>>>> They are there to force the kernel to use or disable a feature for
+>>>>> performance reason or to guide the *enabling* of a feature, but not
+>>>>> because the HW is broken.
+>>>>>
+>>>>> The broken status of a HW platform must also be documented so that we
+>>>>> know what to expect when we look at, for example, a bad case of memory
+>>>>> corruption (something I'd expect to see on a system that only
+>>>>> partially implements atomic memory operations).
+>>>>>
+>>>>
+>>>> good idea. A noc error would be happened if the lse atomic instruction
+>>>> happened during a memory controller doesn't support lse atomic
+>>>> instructions.
+>>>> I can put the information in next patchset comment message. Pls feel
+>>>> free to let know if there is other place to have this kind of
+>>>> information with.
+>>>
+>>> For a start, Documentation/arch/arm64/silicon-errata.rst should
+>>> contain an entry for the actual erratum, and a description of the
+>>> symptoms of the issue (you're mentioning a "noc error": how is that
+>>> reported to the CPU?).
+>>
+>> This is not a cpu's errata as my understanding. It is the DDR
+>> subsystem which don't have the LSE atomic feature supported.
+> 
+> CPU or not doesn't matter. We also track system errata.
 
-On Tue, Jul 11, 2023 at 5:56 AM Peng Zhang <zhangpeng.00@bytedance.com> wrote:
-> These patches do the following:
-> 001 - 002: Small cleanup to maple tree.
-> 003 - 006: Improve the validation for maple tree.
-> 007 - 008: Drop some functions that will no longer be used.
->
-> Thanks Liam for the review.
->
-> Changes since v1:
->  - Add fixes tag and the necessary Cc. [1/8]
->  - Add the verification that gaps beyond the node limit are zero. [3/8]
->  - Revise comment. [5/8]
->  - Reformat the code. [6/8]
->
-> Peng Zhang (8):
->   maple_tree: set the node limit when creating a new root node
->   maple_tree: don't use MAPLE_ARANGE64_META_MAX to indicate no gap
->   maple_tree: make mas_validate_gaps() to check metadata
->   maple_tree: fix mas_validate_child_slot() to check last missed slot
->   maple_tree: make mas_validate_limits() check root node and node limit
->   maple_tree: update mt_validate()
->   maple_tree: replace mas_logical_pivot() with mas_safe_pivot()
->   maple_tree: drop mas_first_entry()
->
->  include/linux/maple_tree.h |   2 -
->  lib/maple_tree.c           | 258 ++++++++++++-------------------------
->  2 files changed, 79 insertions(+), 181 deletions(-)
+Thank you for clarify on this.
+If I am correct understanding, are you suggesting system errata with DT 
+seperate compatible (or similar) to runtime disable this feature instead 
+of idreg override with arm64.nolse options?
 
-Thanks for your series!
+While it is better to finally affect the host arm64_ftr_regs value since 
+it can also derived to kvm sys reg as well.
+> 
+>>>
+>>> The workaround should also be detected at runtime -- we cannot rely on
+>>> the user to provide a command-line argument to disable an essential
+>>> feature that anyone has taken for granted for most of a decade...
+>>
+>> We are also seeking help from DDR Subsystem POC to see whether it is
+>> possible to detect the LSE atomic feature support or not at runtime.
+> 
+> Keying it off a DT compatible (or something similar) would work.
+> 
+>> In my opinion, LSE atomic is a system level feature instead of a cpu
+>> only feature. So currently solution we is that even if cpu support lse
+>> atomic, but it still needed to be disabled if the cpu working with a
+>> lse atomic not support by current system's DDR subsystem.
+> 
+> In the absence of a detection mechanism for anything past the CPU,
+> this is a moot point. At this stage, this is a bit like saying
+> "writing to memory is a system thing, not only a CPU feature".
+> 
+> And this also breaks KVM if these CPUs don't have FWB, as a guest can
+> always map a piece of memory as non-cacheable, and trigger the issue
+> you describe in your reply to Will, even if you hide the atomics on
+> the host.
+> 
 
-I gave it a try with test_maple_tree on m68k/ARAnyM, and the net
-impact is:
+For the KVM part, per my understanding, as long as the current feature 
+id being overriden, the KVM system also get the current vcpu without the 
+lse atomic feature enabled.
+KVM vcpu will read the sys reg from host arm64_ftr_regs which is already 
+been controled by the idreg_overrides.
 
-     TEST STARTING
+check reference from:
+https://elixir.bootlin.com/linux/v6.5-rc1/source/arch/arm64/kernel/cpufeature.c#L680
 
-     BUG at next_prev_test:2014 (1)
-     Pass: 3749128 Run:3749129
-    -BUG at check_empty_area_window:2655 (1)
-    -Pass: 3754275 Run:3754277
-    -BUG at check_empty_area_window:2656 (1)
-    -Pass: 3754275 Run:3754278
-    -BUG at check_empty_area_window:2657 (1)
-    -Pass: 3754275 Run:3754279
-    -BUG at check_empty_area_window:2661 (1)
-    -Pass: 3754275 Run:3754280
-    -BUG at check_empty_area_window:2662 (1)
-    -Pass: 3754275 Run:3754281
-    -maple_tree: 3804518 of 3804524 tests passed
-    +maple_tree: 3804523 of 3804524 tests passed
+https://elixir.bootlin.com/linux/v6.5-rc1/source/arch/arm64/kvm/sys_regs.c#L1360
 
-So only one bug left to squash ;-)
-
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+> 	M.
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thx and BRs,
+Aiqun(Maria) Yu
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
