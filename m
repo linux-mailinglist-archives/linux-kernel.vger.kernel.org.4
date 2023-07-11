@@ -2,157 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D6D74F0A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A631B74F09E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjGKNrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S232784AbjGKNqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjGKNrE (ORCPT
+        with ESMTP id S230163AbjGKNqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:47:04 -0400
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2158.outbound.protection.outlook.com [40.92.63.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BDC10FC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:46:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mtsJCdjXd7uMn1GFzQWJdyen5I3S0ceEKr64rgWQfc1AoqV/fm77YuqOUtlEfCJ2mokJgI1lOnF6Ipee0fDx5/aCujXMQyPtPUnFAMmC2/rMxA4niYd3VoFOYvS93sNrGVwmfEpQ301/j3qWkWBkozAsH7mFA91ptq+3NpnMizDwjI5vWBUWr1flr7x9uU8sknEo/o8nQ2GolvAwHvByHC090iSW6kiTHrE9fLDWil+wND7QEClB31RjelOQj5rAjye+j9JPVVQM0Ki2Hjl/IT2afxlwEiAknyZoCXioFDKi54O4zVxjNHRbcmy0KrwUl72lFQvtHHgyDyimq8XP+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UCvp/X7U+N0UkiSMgXUxLVQodxkCAByu8EHTE1hXihs=;
- b=XAC2msA4bgUAQUHzclVe1kicUqeHPwJZlZ6sFmAiY9fyUUGizB+AbRexdehYCyDg2uPBtogBqMfUNonBQfBlYucxZta9al24GgtFktNGhtRwmOZHhtJIwRcHoen9hDY0VHDwRa3KhVMe9gNMK+YniLoH2j/M4ZO4Aue5fwvEPGuoaiIR/5VX4/pKVJrnqonIHS8lT8p247DnrrgQfMITcEpWItJwhaJWhFgu8FEa7mXz4cM/Sbz1e5cOmECIeFKnqiO1BNwmLWMELwqtxu5GaKw42g2D03rSddkC3vs/SVCkgBrzG88QX7JYzf6MhdVP5Sz03Ksgq1sPtpXMvyUoCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UCvp/X7U+N0UkiSMgXUxLVQodxkCAByu8EHTE1hXihs=;
- b=MOH4Vfjyc+61ueaAjmZYWDk/6m3IpZucf1OaRafBpiYnhC5J0dPO2JKtJifOUh8lxzZFJRVYI5dHE3aPeMGvZFwWBO94xTRCtbATJwIiGiaMGTkGAlS3sC5NELdH7HYT8eIKJtsQlBFE0LtOiNPR7gJWRzDLbgUT29I+ZGWqDCbi4uiWrN/jiMitlsxuNkeLJ2k0EXQil+RI1tQa1btw4ztselLi9CTREnSdfAek255O9c9wN+ABYzGLxW4XvvH+eFP7/qPhWtNxHW7fxjVrr+6mMK3+wfDuFqH3GEDNm9tkkX6wTH6CUwKW93AOrVee04YTSWIFlvCFC+RysVSmWg==
-Received: from MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:128::9)
- by MEYP282MB4155.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:170::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Tue, 11 Jul
- 2023 13:46:53 +0000
-Received: from MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM
- ([fe80::46f9:569d:f1c:4f6f]) by MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM
- ([fe80::46f9:569d:f1c:4f6f%4]) with mapi id 15.20.6588.017; Tue, 11 Jul 2023
- 13:46:53 +0000
-From:   Dong Zhihong <donmor3000@hotmail.com>
-To:     chenhuacai@kernel.org, kernel@xen0n.name
-Cc:     ardb@kernel.org, tangyouling@loongson.cn, zhoubinbin@loongson.cn,
-        yangtiezhu@loongson.cn, donmor3000@hotmail.com, tglx@linutronix.de,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] LoongArch: Make CONFIG_CMDLINE work with CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER
-Date:   Tue, 11 Jul 2023 21:45:41 +0800
-Message-ID: <MEYP282MB2597B4BD3CDA1ED340691C9CD931A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [MgJygUeTMYcr8uxQ73jZKXrF5vLJwvZw8oVVwrnEQUrVREO54NIeBi5ZvdD8BB71]
-X-ClientProxiedBy: SI1PR02CA0008.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::14) To MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:220:128::9)
-X-Microsoft-Original-Message-ID: <20230711134540.3737578-1-donmor3000@hotmail.com>
+        Tue, 11 Jul 2023 09:46:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D12E6A;
+        Tue, 11 Jul 2023 06:46:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0FF911FDA0;
+        Tue, 11 Jul 2023 13:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1689083195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=RXHIYdVmdQJX5tnkNjy37yeBssRnaU5MoOmNGkfF484=;
+        b=DVO93ktxjFk3VzkffNtwh1rU0QfweANLsy9oVYvFPGIeNVcpRdrrIpFNYcej2rYKY7sNDM
+        bKjN4dQau8CtiYI7D6FON8xDb/M5h8wTke2ei4xM5jMAt+o+bwDX12JNsoetppguRUTmiI
+        3TOWlE4qXwwHHyr5h/3JYzS4DmEamL4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1689083195;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=RXHIYdVmdQJX5tnkNjy37yeBssRnaU5MoOmNGkfF484=;
+        b=EJTlIqxlmAlFa+9Nk7qpsjsA6kWKHmE0gNx/pb6blh/Evb+jPLWa82Nz2lgRY5oF1+D5vB
+        AEpWeIfOau7q79BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C1D2D1390F;
+        Tue, 11 Jul 2023 13:46:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NXqMLjpdrWTSYwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 11 Jul 2023 13:46:34 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Matteo Rizzo <matteorizzo@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        kasan-dev@googlegroups.com, Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 1/2] mm/slub: remove redundant kasan_reset_tag() from freelist_ptr calculations
+Date:   Tue, 11 Jul 2023 15:46:24 +0200
+Message-ID: <20230711134623.12695-3-vbabka@suse.cz>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MEYP282MB2597:EE_|MEYP282MB4155:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e30e647-c0ff-4cbe-878e-08db821548fa
-X-MS-Exchange-SLBlob-MailProps: YfhX3sd/0TX0vpKMQo3yIkRA/xfh+JfFsx6TQdTdyDvaa/qFOUmlJbm+/gVVwi2XmoVhQ+vdAK6h753C3kYd0G+UlfuyWscPk97VNf/2FSZhNL06YpxgoE+puZKiz3Vw6aR0XbEjQZtLK+6LfvArU5fTrfiz2ND4wQIFl7j1QttrmcahUu+fN1nWd2tZPFf0HSZbQ9UTZHmPdKMNJipRDleA7/ODHSDbU7gnweefE3CflJPbd3hZHZMfs5b0CvHB4lwATJz4WND17gVGOEKp1fe6pxttH/PmleMTaBtDIzn9pqcbp4rDX3pBlXX0Gzw8chhZ9gjxEXDqxbo3PuuVdaDFKLXotZL2JWdhTFOVmUJ0V1IlZc3UhnOim7eZ8V/flmXpyfjsIdFY2iexjeUyPsHJb1dYx2qIBPK6+8Y/kwtvGU/iZvn3NPUK/f+th6oh9nMM+8qaUWL63eX0qrZvg3dm9FTK6ZIUhs/ayOKdgN6EWcCyAzJaVxayD1PXS1y0n8NxO4bKLKqgzDyfA9yp2JegqRoBa1YbrU+x9E92X49vPmd2HgFECFvjLBOBh8mdsKYGgWRN287BUn0i3l2MYrQM8vrqj/vW7IPPsjnqT4hKs4EClOFeR8k5pgIZ4eqyR+hZBWaRloP3n1NzluFkSRr+02/UfeyuqnXqMMKWY/hZHjhG5GYe94Qb/ym36kfLktDrlWZ/ULPXapxM27WS//veb0OSGzk6hpyXjJS8LlwW0/Qb2LDKkzyQQvXAkyWWY0aKgwgpbk6QOmwYE+ZLFTO5PwbOZ7IIHPn8y1PBNuM=
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RzAWoI8YBZRt+9AYNfNOo2lxvWo6sMkx3P3OnWKVIrAHwtbvEhe3fOhcGhd40i0D7BnrukgLosf9oCweO8a+4BaLLrTYu6VTmFJDAqKZ71UgO0eiHgGzXdJ4pWYf6+EyVO/UUBGx9GLqFvafYLeWFvMlUjfLtLJymdVcfsMCKLahlAAafKF1swXREifUV9QVg2WkENdgULj04tfCV3s/i3CDWzFh/QpAozTw9fpkKtbk73El81bwqMUtRrhLaIQCF5ISClKtgacj5s5CwUFWSs/53CISExDndcdfm+S6opqdyh5H9EvTFvmstVy4PY0NOTQ24oyRVGCN1l8QRVJfWioMD+2wLvv85YHbxyO2CGK0QjChWeKKvelNGKqd8tQfURcX76lQyBzU6EuixpSdHhyRjR1AINeIuKf8vurwg7NdEktOynC6j7+ub5z7ps1Ri2mIVB4LZ8aMGUt75IQ3mUpRrhn2TqfUYrKKh/iG9OEZk1yesQnbb2A81yGc5pVlXU+BRfDYbM0LDAPe+TclHFDs1Yuqdhd2gys8LJ1Rsi//tynltGxUC+Z5sjyeHf3YBH2SfzeEftHMBEhfQvz8Dfn07xpr9tr3WynSxa6M7cYgrFHzH0JQIZWriqeZQ+zv
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3Zop6i99p4R3/1uInj6RUcX2a0ZHchMDCWWHgWKfasXC4TQ9AO15+HbJopTr?=
- =?us-ascii?Q?YAbmSM3wBzFhtJ10JZiq0N6NHSqUFM8qJ5rTrHGbDdQUIgh3D7S7v+WNmzpr?=
- =?us-ascii?Q?gWeS5LKYZWAKhFmJR1e0fMKIg1fsOFAEBzIClhH8xLZIa2UXRrVkA1VjDyRV?=
- =?us-ascii?Q?o2RHr00eo+mAWf/NlzrgkZMmvTsXWv6idlo/BwUFLJO4awGxjlJwEytDakRE?=
- =?us-ascii?Q?L8PMeH2u+JAnf8ewqEsIWycm8lWC3qbghVVyEE25dshrLY4lPfhwmhBfwAEE?=
- =?us-ascii?Q?3aYoMWEhGz+40/aBG0Rh52QG9qbEa6zO/z0DIP8RzPUwtWgMlyuXSSewkNii?=
- =?us-ascii?Q?hAjYqAp5Xjf0lkbkzg0KhuNznq0VG/8AppX+squy+kF0aqQxc2Pjd1R8HXdv?=
- =?us-ascii?Q?Yn8VXMP9VT1298wSFb8dSoyr74LMivwkwvggzWuTnlAmTehYdyd91M8oCzar?=
- =?us-ascii?Q?sto54oIOmnHIHwNwTHCXqm5pNRAAQe5xzKYJuVK8HFSFowL3771HTXdcanH+?=
- =?us-ascii?Q?ozQKIujVvMmgDDn+qlQpSGKPo+w8DOqGpBzghBK8laIppMNO3jMGitwaDzq1?=
- =?us-ascii?Q?0l7XGaiE4ymJ5YXJxi1HA6vFR7bEWfLrSodC8LPEnFWuFsqQHE6P9WkWVOQ+?=
- =?us-ascii?Q?ysgQvySs4AZtxXpYZIIEqXXSwjQHx16xg2cMONoBzjYEh/dKT2dl+AyeJ0Sj?=
- =?us-ascii?Q?uPva3u06aKre5k1stDOX1i8w264ynctIDJWlwzuQy5+IJeFL2ZdWAXUgVJE6?=
- =?us-ascii?Q?0l1qmXHw0HPGxuxkh7Z/VXDkQuvIEm3d4kl2+/d1sxajYTLjCHamY4J1iKFh?=
- =?us-ascii?Q?kYaFnxzLrNyDG68k/nHWgsjUFpH0SaZOuzNJusBNLU9PemWsep7ugVrocgr7?=
- =?us-ascii?Q?eEEEmH6QAtbGlYzDh0V4eVD8XC1DGFKQb8aLmbRbCmx9pxxTlbkNYy4ShgzB?=
- =?us-ascii?Q?joM96pRKwLoUjU1SWlD9Bg2Yy89cXIL/azsHBS6Tikyg64EcOjPZsV9wP0/c?=
- =?us-ascii?Q?dxGDK8kWoxvjoizxjuSu7/Osvj26kQ+Xcbmgs9ez6VXgmmTr10MifIWwT0W/?=
- =?us-ascii?Q?MFoKUDdUjQhs4QgQAFt8RL9n3YzVx1+15J3e2jC3cCTBJvXOJoAfyxuZhlcS?=
- =?us-ascii?Q?2ymNVg5mN7Q4alZXRv0JqaQLYnqwRJ6GY6GK8/9I8xbwSZSWvVX0seizBcn/?=
- =?us-ascii?Q?svpYiNgNXDJtAZbEzdtsKAaMr467dzCTpZ+tlE9szqDxvg3l0bEvDZvCi5ko?=
- =?us-ascii?Q?hbtkmVQj8TJ/vwZHb9mtzIGNb2Xi1dSCYx/eTbt2iY5l3CYeMgsfLYJLCumN?=
- =?us-ascii?Q?VWs=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e30e647-c0ff-4cbe-878e-08db821548fa
-X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 13:46:53.7963
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEYP282MB4155
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make CONFIG_CMDLINE work with CONFIG_CMDLINE_EXTEND and
-CONFIG_CMDLINE_BOOTLOADER. The touched function is bootcmdline_init()`.
-There's already code handling CONFIG_CMDLINE_FORCE, which replaces
-`boot_command_line` with CONFIG_CMDLINE and immediately`goto out`. It'd be
-similar way to handle CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER,
-so some code is added after OF_FLATTREE part to handle them.
+Commit d36a63a943e3 ("kasan, slub: fix more conflicts with
+CONFIG_SLAB_FREELIST_HARDENED") has introduced kasan_reset_tags() to
+freelist_ptr() encoding/decoding when CONFIG_SLAB_FREELIST_HARDENED is
+enabled to resolve issues when passing tagged or untagged pointers
+inconsistently would lead to incorrect calculations.
 
-Signed-off-by: Dong Zhihong <donmor3000@hotmail.com>
+Later, commit aa1ef4d7b3f6 ("kasan, mm: reset tags when accessing
+metadata") made sure all pointers have tags reset regardless of
+CONFIG_SLAB_FREELIST_HARDENED, because there was no other way to access
+the freepointer metadata safely with hw tag-based KASAN.
+
+Therefore the kasan_reset_tag() usage in freelist_ptr_encode()/decode()
+is now redundant, as all callers use kasan_reset_tag() unconditionally
+when constructing ptr_addr. Remove the redundant calls and simplify the
+code and remove obsolete comments.
+
+Also in freelist_ptr_encode() introduce an 'encoded' variable to make
+the lines shorter and make it similar to the _decode() one.
+
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
+These 2 patches build on top of:
+https://lore.kernel.org/all/20230704135834.3884421-1-matteorizzo@google.com/
 
-v3 -> v2: Reworded the commit message again to make it imperative (Ruoyao)
-v2 -> v1: Reworded the commit message so it's more imperative (Markus);
-	Added `goto out` to FDT part (Huacai)
+ mm/slub.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
- arch/loongarch/kernel/setup.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 78a00359bde3..3cafda1a409e 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -332,7 +332,24 @@ static void __init bootcmdline_init(char **cmdline_p)
- 			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
- 
- 		strlcat(boot_command_line, init_command_line, COMMAND_LINE_SIZE);
-+		goto out;
-+	}
-+#endif
+diff --git a/mm/slub.c b/mm/slub.c
+index f8cc47eff742..07edad305512 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -374,22 +374,14 @@ typedef struct { unsigned long v; } freeptr_t;
+ static inline freeptr_t freelist_ptr_encode(const struct kmem_cache *s,
+ 					    void *ptr, unsigned long ptr_addr)
+ {
++	unsigned long encoded;
 +
-+#ifdef CONFIG_CMDLINE
-+	/*
-+	 * If CONFIG_CMDLINE_BOOTLOADER is enabled then we use thei built-in
-+	 * command line if no command line given, or we append given command
-+	 * line to the built-in one if CONFIG_CMDLINE_EXTEND is enabled.
-+	 */
-+	if (IS_ENABLED(CONFIG_CMDLINE_EXTEND)) {
-+		strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
-+		strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
-+		strlcat(boot_command_line, init_command_line, COMMAND_LINE_SIZE);
- 	}
-+
-+	if (IS_ENABLED(CONFIG_CMDLINE_BOOTLOADER) && !boot_command_line[0])
-+		strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ #ifdef CONFIG_SLAB_FREELIST_HARDENED
+-	/*
+-	 * When CONFIG_KASAN_SW/HW_TAGS is enabled, ptr_addr might be tagged.
+-	 * Normally, this doesn't cause any issues, as both set_freepointer()
+-	 * and get_freepointer() are called with a pointer with the same tag.
+-	 * However, there are some issues with CONFIG_SLUB_DEBUG code. For
+-	 * example, when __free_slub() iterates over objects in a cache, it
+-	 * passes untagged pointers to check_object(). check_object() in turns
+-	 * calls get_freepointer() with an untagged pointer, which causes the
+-	 * freepointer to be restored incorrectly.
+-	 */
+-	return (freeptr_t){.v = (unsigned long)ptr ^ s->random ^
+-			swab((unsigned long)kasan_reset_tag((void *)ptr_addr))};
++	encoded = (unsigned long)ptr ^ s->random ^ swab(ptr_addr);
+ #else
+-	return (freeptr_t){.v = (unsigned long)ptr};
++	encoded = (unsigned long)ptr;
  #endif
++	return (freeptr_t){.v = encoded};
+ }
  
- out:
+ static inline void *freelist_ptr_decode(const struct kmem_cache *s,
+@@ -398,9 +390,7 @@ static inline void *freelist_ptr_decode(const struct kmem_cache *s,
+ 	void *decoded;
+ 
+ #ifdef CONFIG_SLAB_FREELIST_HARDENED
+-	/* See the comment in freelist_ptr_encode */
+-	decoded = (void *)(ptr.v ^ s->random ^
+-		swab((unsigned long)kasan_reset_tag((void *)ptr_addr)));
++	decoded = (void *)(ptr.v ^ s->random ^ swab(ptr_addr));
+ #else
+ 	decoded = (void *)ptr.v;
+ #endif
 -- 
-2.25.1
+2.41.0
 
