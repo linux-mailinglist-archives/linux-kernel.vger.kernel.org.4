@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13C174EF3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7694774EF47
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjGKMpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S231700AbjGKMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbjGKMpj (ORCPT
+        with ESMTP id S229637AbjGKMsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:45:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE97610A;
-        Tue, 11 Jul 2023 05:45:38 -0700 (PDT)
+        Tue, 11 Jul 2023 08:48:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B69135;
+        Tue, 11 Jul 2023 05:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689079539; x=1720615539;
+  t=1689079694; x=1720615694;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=X5b73jKPqveoAydI+sEyVgy13u2RunmFko8n93zESTQ=;
-  b=bYNxZkmiuBvEyR4NfmD0Y7J2dN+hn0YDNqttCP9Z4J3z5JVg2L35VbPY
-   uBJ9MXBcBiYYA/2gCXIZHLooB9/KB3xoHE2GtRuearg0LPNvQ5u45WsSW
-   zI2EmSAdMzPZsxBH6g1LrCykK0Foef4hr6WBPlIpDpCcFZ1ecRM592Dnw
-   oKi0gzdKBaehlNpWU7Edb/fnBZ878hDDeSxaGmwXpayoEj3r2Zo/lVjdl
-   dyIBUwrutZ69hrtWsRecZETsthw8C8WS64eKSUoajRno96g0jC6/1m5gi
-   W02oJfe6hGvd67jHnNfzqodPKcTIg0oFJQbcILNm+ypz7zk2IEJazZqZR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349416626"
+  bh=nee+8F3UgjHiHBrgA29lPenNEyq01aBvrZNu0iQvTPs=;
+  b=gkXp+Uwhe4htgOPQlLvPKwEYJ87AuGK4oRDPFCl9H/4KxahunwYnzCxt
+   F5Shi4r69loeghlKwFItgM4JRNhTKAYIeC3k3n5qKRyvOjKCREg3QIwS2
+   wf3thcO/tqqYNqzv7/yv20tfFrNe6+31O3Xh5LUzwtXX8k9okVrbdyF1N
+   T/DWP0DB0gKj5dBVyNj74CCfNytKU8jmDXKzsFcngkedEGDEvDInOTeLW
+   w4WcqDxgjA/KmkKemgCgLCTm9bwkfQU0/s0CosD7fCxq3xcyJLxhIwEh0
+   FW9nDWoRdsIwwbo0z1p8qlpiYpjRDBS9WAOYjaN6QQgQ0zfPtN6eJTnrM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="430694931"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="349416626"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:45:38 -0700
+   d="scan'208";a="430694931"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:48:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="845246106"
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="967787376"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="845246106"
+   d="scan'208";a="967787376"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 11 Jul 2023 05:45:36 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 11 Jul 2023 05:48:00 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJCkI-001qi6-29;
-        Tue, 11 Jul 2023 15:45:34 +0300
-Date:   Tue, 11 Jul 2023 15:45:34 +0300
+        id 1qJCmb-001qkh-0z;
+        Tue, 11 Jul 2023 15:47:57 +0300
+Date:   Tue, 11 Jul 2023 15:47:57 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
- in netlink_update_socket_mc()
-Message-ID: <ZK1O7lBF1vH7/7UM@smile.fi.intel.com>
-References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
- <20230711063348.GB41919@unreal>
- <2a2d55f167a06782eb9dfa6988ec96c2eedb7fba.camel@redhat.com>
- <ZK002l0AojjdJptC@smile.fi.intel.com>
- <20230711122012.GR41919@unreal>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
+ spi_add_device_locked()
+Message-ID: <ZK1PfXsUJipjcCH6@smile.fi.intel.com>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
+ <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
+ <ZK03rBqoQ0IZz617@smile.fi.intel.com>
+ <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230711122012.GR41919@unreal>
+In-Reply-To: <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -73,23 +120,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:20:12PM +0300, Leon Romanovsky wrote:
-> On Tue, Jul 11, 2023 at 01:54:18PM +0300, Andy Shevchenko wrote:
-> > On Tue, Jul 11, 2023 at 12:21:12PM +0200, Paolo Abeni wrote:
-> > > On Tue, 2023-07-11 at 09:33 +0300, Leon Romanovsky wrote:
-> > > > On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
+On Tue, Jul 11, 2023 at 02:01:33PM +0200, Sebastian Reichel wrote:
+> On Tue, Jul 11, 2023 at 02:06:20PM +0300, Andy Shevchenko wrote:
+> > On Mon, Jul 10, 2023 at 06:16:22PM +0100, Mark Brown wrote:
+> > > On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
 
 ...
 
-> > > > So what is the outcome of "int - bool + bool" in the line above?
+> > > > -	struct device *dev = ctlr->dev.parent;
+> > > > -
+> > > > -	/* Chipselects are numbered 0..max; validate. */
+> > > > -	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
+> > > > -		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
+> > > > -			ctlr->num_chipselect);
+> > > > -		return -EINVAL;
+> > > > -	}
+> > > > -
+> > > > -	/* Set the bus ID string */
+> > > > -	spi_dev_set_name(spi);
+> > > 
+> > > I see that this is duplicating spi_add_device() (and we really could do
+> > > better with code sharing there I think) but I can't immediately see
+> > > where the duplication that's intended to be elimiated is here - where
+> > > else in the one call path that spi_add_device_locked() has would we do
+> > > the above?  Based on the changelog I was expecting to see some
+> > > duplicated code in the function itself.
 > > 
-> > The same as with int - int [0 .. 1] + int [0 .. 1].
+> > Oh, by some reason Sebastian wasn't in this rather long Cc list.
+> > Added him.
+> > 
+> > Reading again I don't see any useful explanation why that piece of code has to
+> > be duplicated among these two functions. It's 100% a copy.
+> > 
+> > Sebastian, can you shed some light here?
 > 
-> No, it is not. bool is defined as _Bool C99 type, so strictly speaking
-> you are mixing types int - _Bool + _Bool.
+> The patch in this thread is obviously wrong. It results in the
+> checks never beeing called for spi_add_device_locked(). The copy is
+> in spi_add_device() and those two are not calling into each other.
 
-1. The original code already does that. You still haven't reacted on that.
-2. Is what you are telling a problem?
+Ah, now I see, I missed __ in the name.
+Thank you for opening my eyes!
+
+> But it should be fine to move the code to the start of
+> __spi_add_device(), which allows removing the duplication. In that
+> case the code will be run with the add_lock held, which is probably
+> what I was worried about two years ago. Looking at it again, the
+> lock is held anyways in case of spi_add_device_locked().
+
+Right, I will re-do that.
 
 -- 
 With Best Regards,
