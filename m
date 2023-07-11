@@ -2,150 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654F874F89D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E1974F8B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjGKUB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S230119AbjGKUEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjGKUB1 (ORCPT
+        with ESMTP id S229521AbjGKUEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:01:27 -0400
-Received: from out-62.mta1.migadu.com (out-62.mta1.migadu.com [IPv6:2001:41d0:203:375::3e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3AA10D2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:01:26 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689105685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HDm8x68ARVpO0YxOTdTpajZpNzbe/t0JXfpMESSJgsY=;
-        b=qJOhbqMBrfn77QHzNqQzHCNpwGtXzLSaOL94loSqfIFoeGFrdMmTCrsIFaiaSDPtw5oMQ/
-        3uK+Qdih8lOU2vsCO/mxAG84iOwGkGIdlK7NLW3FKycMYoBfIR2Q8gRllgWVw9S1omi2aY
-        dWQuoGH16ooT/RCqNkFrrTyxvSgsgxs=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] KVM: arm64: Handle kvm_arm_init failure correctly in finalize_pkvm
-Date:   Tue, 11 Jul 2023 20:00:48 +0000
-Message-ID: <168910562678.2605377.2888121955545772800.b4-ty@linux.dev>
-In-Reply-To: <20230704193243.3300506-1-sudeep.holla@arm.com>
-References: <20230704193243.3300506-1-sudeep.holla@arm.com>
+        Tue, 11 Jul 2023 16:04:13 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD0A1998;
+        Tue, 11 Jul 2023 13:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=nsxDvjZn0aaZzEg/V4iHkOqBFaX/vWatq1iU6hkirzQ=; b=SzDycq1fnh7mg5GT4C964ejV/L
+        gMiTwe9bZ4JoSlubC57fJSYcGjlmuy8DUniSdk1DxEL5wujrJYEx7QVGt0s/W7EtyJjP7A7/M3qDI
+        alTwcPCQtyG/9LKr6ICOXNSW6EUuWhWlF4c0nsD2w3a/hrNHadly1AEi4hFeWsh5VwJV6mj3ORk+8
+        WIlg8Z+I76mAuJdx+4hhra581suCfAtAbtT1O5NRkXsxMr/rGNnCkbC1YYJGpgNVWgCPX8mAj7XkW
+        YltsXuH8/02LT1s7B0nAHivBGjMuBGkD5MI0oVyCtXcU6Ymg77Ck6hh709Tp7C5zUghcsf2HyYVOk
+        y6DYkwmw==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qJJaO-0000qT-Rs; Tue, 11 Jul 2023 22:03:49 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qJJaO-000PfD-62; Tue, 11 Jul 2023 22:03:48 +0200
+Subject: Re: [PATCH bpf] riscv, bpf: Fix inconsistent JIT image generation
+To:     Palmer Dabbelt <palmer@dabbelt.com>, bjorn@kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Bjorn Topel <bjorn@rivosinc.com>,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, pulehui@huawei.com,
+        luke.r.nels@gmail.com, xi.wang@gmail.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@rivosinc.com
+References: <mhng-37770bfd-e982-4b87-a202-7cc08005b483@palmer-ri-x1c9a>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <830ab76b-ea2a-d522-73f9-b9392aecd0a4@iogearbox.net>
+Date:   Tue, 11 Jul 2023 22:03:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <mhng-37770bfd-e982-4b87-a202-7cc08005b483@palmer-ri-x1c9a>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26966/Tue Jul 11 09:28:31 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 20:32:43 +0100, Sudeep Holla wrote:
-> Currently there is no synchronisation between finalize_pkvm() and
-> kvm_arm_init() initcalls. The finalize_pkvm() proceeds happily even if
-> kvm_arm_init() fails resulting in the following warning on all the CPUs
-> and eventually a HYP panic:
+On 7/11/23 7:50 PM, Palmer Dabbelt wrote:
+> On Mon, 10 Jul 2023 00:41:31 PDT (-0700), bjorn@kernel.org wrote:
+>> From: BjÃ¶rn TÃ¶pel <bjorn@rivosinc.com>
+>>
+>> In order to generate the prologue and epilogue, the BPF JIT needs to
+>> know which registers that are clobbered. Therefore, the during
+>> pre-final passes, the prologue is generated after the body of the
+>> program body-prologue-epilogue. Then, in the final pass, a proper
+>> prologue-body-epilogue JITted image is generated.
+>>
+>> This scheme has worked most of the time. However, for some large
+>> programs with many jumps, e.g. the test_kmod.sh BPF selftest with
+>> hardening enabled (blinding constants), this has shown to be
+>> incorrect. For the final pass, when the proper prologue-body-epilogue
+>> is generated, the image has not converged. This will lead to that the
+>> final image will have incorrect jump offsets. The following is an
+>> excerpt from an incorrect image:
+>>
+>>    | ...
+>>    |     3b8:       00c50663                beq     a0,a2,3c4 <.text+0x3c4>
+>>    |     3bc:       0020e317                auipc   t1,0x20e
+>>    |     3c0:       49630067                jalr    zero,1174(t1) # 20e852 <.text+0x20e852>
+>>    | ...
+>>    |  20e84c:       8796                    c.mv    a5,t0
+>>    |  20e84e:       6422                    c.ldsp  s0,8(sp)    # Epilogue start
+>>    |  20e850:       6141                    c.addi16sp      sp,16
+>>    |  20e852:       853e                    c.mv    a0,a5       # Incorrect jump target
+>>    |  20e854:       8082                    c.jr    ra
+>>
+>> The image has shrunk, and the epilogue offset is incorrect in the
+>> final pass.
+>>
+>> Correct the problem by always generating proper prologue-body-epilogue
+>> outputs, which means that the first pass will only generate the body
+>> to track what registers that are touched.
+>>
+>> Fixes: 2353ecc6f91f ("bpf, riscv: add BPF JIT for RV64G")
+>> Signed-off-by: BjÃ¶rn TÃ¶pel <bjorn@rivosinc.com>
+>> ---
+>>   arch/riscv/net/bpf_jit.h      |  6 +++---
+>>   arch/riscv/net/bpf_jit_core.c | 19 +++++++++++++------
+>>   2 files changed, 16 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>> index bf9802a63061..2717f5490428 100644
+>> --- a/arch/riscv/net/bpf_jit.h
+>> +++ b/arch/riscv/net/bpf_jit.h
+>> @@ -69,7 +69,7 @@ struct rv_jit_context {
+>>   	struct bpf_prog *prog;
+>>   	u16 *insns;		/* RV insns */
+>>   	int ninsns;
+>> -	int body_len;
+>> +	int prologue_len;
+>>   	int epilogue_offset;
+>>   	int *offset;		/* BPF to RV */
+>>   	int nexentries;
+>> @@ -216,8 +216,8 @@ static inline int rv_offset(int insn, int off, struct rv_jit_context *ctx)
+>>   	int from, to;
+>>
+>>   	off++; /* BPF branch is from PC+1, RV is from PC */
+>> -	from = (insn > 0) ? ctx->offset[insn - 1] : 0;
+>> -	to = (insn + off > 0) ? ctx->offset[insn + off - 1] : 0;
+>> +	from = (insn > 0) ? ctx->offset[insn - 1] : ctx->prologue_len;
+>> +	to = (insn + off > 0) ? ctx->offset[insn + off - 1] : ctx->prologue_len;
+>>   	return ninsns_rvoff(to - from);
+>>   }
+>>
+>> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+>> index 737baf8715da..7a26a3e1c73c 100644
+>> --- a/arch/riscv/net/bpf_jit_core.c
+>> +++ b/arch/riscv/net/bpf_jit_core.c
+>> @@ -44,7 +44,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   	unsigned int prog_size = 0, extable_size = 0;
+>>   	bool tmp_blinded = false, extra_pass = false;
+>>   	struct bpf_prog *tmp, *orig_prog = prog;
+>> -	int pass = 0, prev_ninsns = 0, prologue_len, i;
+>> +	int pass = 0, prev_ninsns = 0, i;
+>>   	struct rv_jit_data *jit_data;
+>>   	struct rv_jit_context *ctx;
+>>
+>> @@ -83,6 +83,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   		prog = orig_prog;
+>>   		goto out_offset;
+>>   	}
+>> +
+>> +	if (build_body(ctx, extra_pass, NULL)) {
+>> +		prog = orig_prog;
+>> +		goto out_offset;
+>> +	}
+>> +
+>>   	for (i = 0; i < prog->len; i++) {
+>>   		prev_ninsns += 32;
+>>   		ctx->offset[i] = prev_ninsns;
+>> @@ -91,12 +97,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   	for (i = 0; i < NR_JIT_ITERATIONS; i++) {
+>>   		pass++;
+>>   		ctx->ninsns = 0;
+>> +
+>> +		bpf_jit_build_prologue(ctx);
+>> +		ctx->prologue_len = ctx->ninsns;
+>> +
+>>   		if (build_body(ctx, extra_pass, ctx->offset)) {
+>>   			prog = orig_prog;
+>>   			goto out_offset;
+>>   		}
+>> -		ctx->body_len = ctx->ninsns;
+>> -		bpf_jit_build_prologue(ctx);
+>> +
+>>   		ctx->epilogue_offset = ctx->ninsns;
+>>   		bpf_jit_build_epilogue(ctx);
+>>
+>> @@ -162,10 +171,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>
+>>   	if (!prog->is_func || extra_pass) {
+>>   		bpf_jit_binary_lock_ro(jit_data->header);
+>> -		prologue_len = ctx->epilogue_offset - ctx->body_len;
+>>   		for (i = 0; i < prog->len; i++)
+>> -			ctx->offset[i] = ninsns_rvoff(prologue_len +
+>> -						      ctx->offset[i]);
+>> +			ctx->offset[i] = ninsns_rvoff(ctx->offset[i]);
+>>   		bpf_prog_fill_jited_linfo(prog, ctx->offset);
+>>   out_offset:
+>>   		kfree(ctx->offset);
+>>
+>> base-commit: 496720b7cfb6574a8f6f4d434f23e3d1e6cfaeb9
 > 
->   | kvm [1]: IPA Size Limit: 48 bits
->   | kvm [1]: Failed to init hyp memory protection
->   | kvm [1]: error initializing Hyp mode: -22
->   |
->   | <snip>
->   |
->   | WARNING: CPU: 0 PID: 0 at arch/arm64/kvm/pkvm.c:226 _kvm_host_prot_finalize+0x30/0x50
->   | Modules linked in:
->   | CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0 #237
->   | Hardware name: FVP Base RevC (DT)
->   | pstate: 634020c5 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
->   | pc : _kvm_host_prot_finalize+0x30/0x50
->   | lr : __flush_smp_call_function_queue+0xd8/0x230
->   |
->   | Call trace:
->   |  _kvm_host_prot_finalize+0x3c/0x50
->   |  on_each_cpu_cond_mask+0x3c/0x6c
->   |  pkvm_drop_host_privileges+0x4c/0x78
->   |  finalize_pkvm+0x3c/0x5c
->   |  do_one_initcall+0xcc/0x240
->   |  do_initcall_level+0x8c/0xac
->   |  do_initcalls+0x54/0x94
->   |  do_basic_setup+0x1c/0x28
->   |  kernel_init_freeable+0x100/0x16c
->   |  kernel_init+0x20/0x1a0
->   |  ret_from_fork+0x10/0x20
->   | Failed to finalize Hyp protection: -22
->   |     dtb=fvp-base-revc.dtb
->   | kvm [95]: nVHE hyp BUG at: arch/arm64/kvm/hyp/nvhe/mem_protect.c:540!
->   | kvm [95]: nVHE call trace:
->   | kvm [95]:  [<ffff800081052984>] __kvm_nvhe_hyp_panic+0xac/0xf8
->   | kvm [95]:  [<ffff800081059644>] __kvm_nvhe_handle_host_mem_abort+0x1a0/0x2ac
->   | kvm [95]:  [<ffff80008105511c>] __kvm_nvhe_handle_trap+0x4c/0x160
->   | kvm [95]:  [<ffff8000810540fc>] __kvm_nvhe___skip_pauth_save+0x4/0x4
->   | kvm [95]: ---[ end nVHE call trace ]---
->   | kvm [95]: Hyp Offset: 0xfffe8db00ffa0000
->   | Kernel panic - not syncing: HYP panic:
->   | PS:a34023c9 PC:0000f250710b973c ESR:00000000f2000800
->   | FAR:ffff000800cb00d0 HPFAR:000000000880cb00 PAR:0000000000000000
->   | VCPU:0000000000000000
->   | CPU: 3 PID: 95 Comm: kworker/u16:2 Tainted: G        W          6.4.0 #237
->   | Hardware name: FVP Base RevC (DT)
->   | Workqueue: rpciod rpc_async_schedule
->   | Call trace:
->   |  dump_backtrace+0xec/0x108
->   |  show_stack+0x18/0x2c
->   |  dump_stack_lvl+0x50/0x68
->   |  dump_stack+0x18/0x24
->   |  panic+0x138/0x33c
->   |  nvhe_hyp_panic_handler+0x100/0x184
->   |  new_slab+0x23c/0x54c
->   |  ___slab_alloc+0x3e4/0x770
->   |  kmem_cache_alloc_node+0x1f0/0x278
->   |  __alloc_skb+0xdc/0x294
->   |  tcp_stream_alloc_skb+0x2c/0xf0
->   |  tcp_sendmsg_locked+0x3d0/0xda4
->   |  tcp_sendmsg+0x38/0x5c
->   |  inet_sendmsg+0x44/0x60
->   |  sock_sendmsg+0x1c/0x34
->   |  xprt_sock_sendmsg+0xdc/0x274
->   |  xs_tcp_send_request+0x1ac/0x28c
->   |  xprt_transmit+0xcc/0x300
->   |  call_transmit+0x78/0x90
->   |  __rpc_execute+0x114/0x3d8
->   |  rpc_async_schedule+0x28/0x48
->   |  process_one_work+0x1d8/0x314
->   |  worker_thread+0x248/0x474
->   |  kthread+0xfc/0x184
->   |  ret_from_fork+0x10/0x20
->   | SMP: stopping secondary CPUs
->   | Kernel Offset: 0x57c5cb460000 from 0xffff800080000000
->   | PHYS_OFFSET: 0x80000000
->   | CPU features: 0x00000000,1035b7a3,ccfe773f
->   | Memory Limit: none
->   | ---[ end Kernel panic - not syncing: HYP panic:
->   | PS:a34023c9 PC:0000f250710b973c ESR:00000000f2000800
->   | FAR:ffff000800cb00d0 HPFAR:000000000880cb00 PAR:0000000000000000
->   | VCPU:0000000000000000 ]---
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 > 
-> [...]
+> I'm assuming this is aimed at the BPF tree, but LMK if you guys want me
+> to pick it up -- I've already got something for this week, so it's easy
+> on my end.  I'm dropping it from my queue and patchwork for now, though.
 
-Applied to kvmarm/fixes, thanks!
+Sounds good, we applied it to bpf already.
 
-[1/1] KVM: arm64: Handle kvm_arm_init failure correctly in finalize_pkvm
-      https://git.kernel.org/kvmarm/kvmarm/c/fa729bc7c9c8
-
---
-Best,
-Oliver
+Thanks,
+Daniel
