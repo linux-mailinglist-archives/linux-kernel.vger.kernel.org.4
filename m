@@ -2,175 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7694774EF47
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CE374EF50
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjGKMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S231348AbjGKMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKMsP (ORCPT
+        with ESMTP id S229637AbjGKMtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:48:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B69135;
-        Tue, 11 Jul 2023 05:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689079694; x=1720615694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nee+8F3UgjHiHBrgA29lPenNEyq01aBvrZNu0iQvTPs=;
-  b=gkXp+Uwhe4htgOPQlLvPKwEYJ87AuGK4oRDPFCl9H/4KxahunwYnzCxt
-   F5Shi4r69loeghlKwFItgM4JRNhTKAYIeC3k3n5qKRyvOjKCREg3QIwS2
-   wf3thcO/tqqYNqzv7/yv20tfFrNe6+31O3Xh5LUzwtXX8k9okVrbdyF1N
-   T/DWP0DB0gKj5dBVyNj74CCfNytKU8jmDXKzsFcngkedEGDEvDInOTeLW
-   w4WcqDxgjA/KmkKemgCgLCTm9bwkfQU0/s0CosD7fCxq3xcyJLxhIwEh0
-   FW9nDWoRdsIwwbo0z1p8qlpiYpjRDBS9WAOYjaN6QQgQ0zfPtN6eJTnrM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="430694931"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="430694931"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:48:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="967787376"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="967787376"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Jul 2023 05:48:00 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJCmb-001qkh-0z;
-        Tue, 11 Jul 2023 15:47:57 +0300
-Date:   Tue, 11 Jul 2023 15:47:57 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
- spi_add_device_locked()
-Message-ID: <ZK1PfXsUJipjcCH6@smile.fi.intel.com>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
- <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
- <ZK03rBqoQ0IZz617@smile.fi.intel.com>
- <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
+        Tue, 11 Jul 2023 08:49:22 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAAD127;
+        Tue, 11 Jul 2023 05:49:20 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36BCn2tr005755;
+        Tue, 11 Jul 2023 07:49:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1689079742;
+        bh=av9sGF2ONuxDxSWWPnCmNyIdnsN1IROS42kMnF1IAY8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=JEk/EjNRLW0M4e3YbItgX/tL0aMp+bTbAnACEuCpgvNcYYqE10Klr8n/q/LT6eVwP
+         zwH3jNXkrv4diQ1oGbQwt97dGosg7oXBcDlr86gUJo8luL4WwmaahosHLo2dGH+dlu
+         xkgDbNzrVuz8KFIKlPc+5SFRg4s7RkEtaBrN60a8=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36BCn24C017855
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Jul 2023 07:49:02 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
+ Jul 2023 07:49:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 11 Jul 2023 07:49:01 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36BCn1Gc117977;
+        Tue, 11 Jul 2023 07:49:01 -0500
+Date:   Tue, 11 Jul 2023 07:49:01 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Tony Lindgren <tony@atomide.com>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH 15/18] soc: ti: Mover power-domain drivers to the genpd
+ dir
+Message-ID: <20230711124901.7b3tw374n7eldjpj@puppy>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-16-ulf.hansson@linaro.org>
+ <20230707175048.6yees6d3evcomyux@vacation>
+ <CAPDyKFoc0hr=9LEtwwwe3R6rMn0b7TB1MCZN0ArUq+h9Pud08Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFoc0hr=9LEtwwwe3R6rMn0b7TB1MCZN0ArUq+h9Pud08Q@mail.gmail.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:01:33PM +0200, Sebastian Reichel wrote:
-> On Tue, Jul 11, 2023 at 02:06:20PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 10, 2023 at 06:16:22PM +0100, Mark Brown wrote:
-> > > On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
-
-...
-
-> > > > -	struct device *dev = ctlr->dev.parent;
-> > > > -
-> > > > -	/* Chipselects are numbered 0..max; validate. */
-> > > > -	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
-> > > > -		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
-> > > > -			ctlr->num_chipselect);
-> > > > -		return -EINVAL;
-> > > > -	}
-> > > > -
-> > > > -	/* Set the bus ID string */
-> > > > -	spi_dev_set_name(spi);
-> > > 
-> > > I see that this is duplicating spi_add_device() (and we really could do
-> > > better with code sharing there I think) but I can't immediately see
-> > > where the duplication that's intended to be elimiated is here - where
-> > > else in the one call path that spi_add_device_locked() has would we do
-> > > the above?  Based on the changelog I was expecting to see some
-> > > duplicated code in the function itself.
-> > 
-> > Oh, by some reason Sebastian wasn't in this rather long Cc list.
-> > Added him.
-> > 
-> > Reading again I don't see any useful explanation why that piece of code has to
-> > be duplicated among these two functions. It's 100% a copy.
-> > 
-> > Sebastian, can you shed some light here?
+On 11:16-20230711, Ulf Hansson wrote:
+> On Fri, 7 Jul 2023 at 19:50, Nishanth Menon <nm@ti.com> wrote:
+> >
+> > On 16:04-20230707, Ulf Hansson wrote:
+> > > Cc: Nishanth Menon <nm@ti.com>
+> > > Cc: Santosh Shilimkar <ssantosh@kernel.org>
+> > > Cc: Tero Kristo <kristo@kernel.org>
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  MAINTAINERS                                   | 3 ++-
+> > >  drivers/genpd/Makefile                        | 1 +
+> > >  drivers/genpd/ti/Makefile                     | 3 +++
+> > >  drivers/{soc => genpd}/ti/omap_prm.c          | 0
+> > >  drivers/{soc => genpd}/ti/ti_sci_pm_domains.c | 0
+> > >  drivers/soc/ti/Makefile                       | 2 --
+> > >  6 files changed, 6 insertions(+), 3 deletions(-)
+> > >  create mode 100644 drivers/genpd/ti/Makefile
+> > >  rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
+> > >  rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
+> > >
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 9e580df3e5db..3cf16ffac892 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -21101,7 +21101,7 @@ F:    drivers/irqchip/irq-ti-sci-inta.c
+> > >  F:   drivers/irqchip/irq-ti-sci-intr.c
+> > >  F:   drivers/reset/reset-ti-sci.c
+> > >  F:   drivers/soc/ti/ti_sci_inta_msi.c
+> > > -F:   drivers/soc/ti/ti_sci_pm_domains.c
+> > > +F:   drivers/genpd/ti/ti_sci_pm_domains.c
+> > >  F:   include/dt-bindings/soc/ti,sci_pm_domain.h
+> > >  F:   include/linux/soc/ti/ti_sci_inta_msi.h
+> > >  F:   include/linux/soc/ti/ti_sci_protocol.h
+> > > @@ -21335,6 +21335,7 @@ L:    linux-kernel@vger.kernel.org
+> > >  L:   linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> > >  S:   Maintained
+> > >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+> > > +F:   drivers/genpd/ti/omap_prm.c
+> >
+> > Probably the wrong place for this as omap_prm is'nt a keystone navigator
+> > driver set. Maybe Tony has a suggestion?
 > 
-> The patch in this thread is obviously wrong. It results in the
-> checks never beeing called for spi_add_device_locked(). The copy is
-> in spi_add_device() and those two are not calling into each other.
+> I guess we could add it to the OMAP2+ section then?
 
-Ah, now I see, I missed __ in the name.
-Thank you for opening my eyes!
+That would be my suggestion.
 
-> But it should be fine to move the code to the start of
-> __spi_add_device(), which allows removing the duplication. In that
-> case the code will be run with the add_lock held, which is probably
-> what I was worried about two years ago. Looking at it again, the
-> lock is held anyways in case of spi_add_device_locked().
+> 
+> In any case, I suggest we consider that as a separate patch on top, as
+> I am just obeying to the existing pattern that the get_maintainers
+> script provides.
+> 
 
-Right, I will re-do that.
+OK. otherwise, this looks good to me.
 
+Reviewed-by: Nishanth Menon <nm@ti.com>
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
