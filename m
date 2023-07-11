@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB95974E690
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D1274E692
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjGKFy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S230344AbjGKFyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 01:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjGKFy1 (ORCPT
+        with ESMTP id S229585AbjGKFya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:54:27 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE98195;
-        Mon, 10 Jul 2023 22:54:26 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-55adfa61199so3907808a12.2;
-        Mon, 10 Jul 2023 22:54:26 -0700 (PDT)
+        Tue, 11 Jul 2023 01:54:30 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C0E195;
+        Mon, 10 Jul 2023 22:54:29 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-55bac17b442so4041832a12.3;
+        Mon, 10 Jul 2023 22:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689054866; x=1691646866;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=idZkGEwcPYLun83FvCWg1+YIM8kK5l5ERo4f+wG74Mg=;
-        b=HQwHGoa78JiuFxic1UOWoF4nOBLTkWpMPxaXiSl9HqXqhdDq8bAVLKru2unBN83PRe
-         UyOUlDsYnDmajU8wW4W31hACqoY7aTew0iIrjpgaHtXANS6KlbQTgZpJnIm6aW1KYg+S
-         +RsWKdKgEhsFdxXZN+jzwoIbCFIahSnblVmfBsjlJq2ATua4hZCE+f7+j6Kwbiq2FHGQ
-         YPE7LbHZTIf7ob/LTSeceUX8z2128LyTBleXujZoRVTNGGs/L15hIgcOIaxksEZoBxPE
-         v7gUOfYh/dmIO5UY5CiQ26/fg6vQ5r89psWQl+AG/cbIqvKqsIbsK2eb2Rn9aLOkgQRX
-         /uhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689054866; x=1691646866;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1689054869; x=1691646869;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=idZkGEwcPYLun83FvCWg1+YIM8kK5l5ERo4f+wG74Mg=;
-        b=UYhCLXJF/BJVmmEIbc4T+3lWJnborvVEABzua4ynsT0/CP6OL24jtavZbRERrO/xW3
-         0mvXa9sxSIGTldVWG8QOYARH6vN8ZZ+XVhj+b3JnHfX3Ym185d74BYK/xXpFgvTAKBh3
-         ARca6DKuFiUr4w8uIbMP4Ngpx6uJJMWdRQr4XutzZJLj8cUho2rXxD3qtJE7NXml8+or
-         ed9pU1CNbWCfhWZddQJttFsmzO0wkgeTlqFzBLF4ncNCss5KoA50h+ocrvHgH8ZH15zt
-         y/cVE5yFmYRPQUtgGxbad5S6AwVqGPNNJLL84b1/79FuRQnPjqQVI3ubcvoCfUO5D/Wj
-         WcxQ==
-X-Gm-Message-State: ABy/qLZ54QA+a+l6zlS9fLNxwFwl2HbORCt3c4SBM7hJ2R5ZLSdtYBqr
-        imQFY3ACMWyWp40fppRTdFidDvne+Yo=
-X-Google-Smtp-Source: APBJJlEJLPtbp4fsWDZRTf3W9Klzf3jvgD67qLUPDgN4/MFBx7XBk2/Aq0a4Ko/5udg1PjsoluxDjg==
-X-Received: by 2002:a17:902:d342:b0:1b5:32f2:5af with SMTP id l2-20020a170902d34200b001b532f205afmr13144327plk.59.1689054866176;
-        Mon, 10 Jul 2023 22:54:26 -0700 (PDT)
+        bh=pATxnRjw1kvbkvJOwnrnm5lR+PWjwDmKzZaehDZNMZU=;
+        b=J2YdBxXTObGU48Mlg1QDs9/IFFLJTaAdZHwxFx67EdkgpuaTy9VzUan8q62OndaNBK
+         krWqsHjhli9TJv4piybN/VGrEhfIg88Reqn1rorGP/xkRN3qVjSUuRs5/xNKkWIZn3dj
+         D4+Xb1BnGbAWjxZAs6Qa9+wZpaSokuxonMC68/0c6MjqrBfq7MFXaWs9DKpBC3j3AlHH
+         llHkjZtUkqehSGVHQup4Q4zmtrb/dBblnV28R/NMSZ19RbK13D74xVnHReSvwezEiGmt
+         5mCFawl60m7HbTqkUeslWnHXAyeYUEqkK4FrxjbQuwBwORM1sExFmXoNQ0lQ3TbrjVfS
+         mqcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689054869; x=1691646869;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pATxnRjw1kvbkvJOwnrnm5lR+PWjwDmKzZaehDZNMZU=;
+        b=dhA0sz41J8QCCnuXiC/brncggNx6xXcBzsvxkCsZT9p4wrqgErnYsiWMJ+t6MerlkR
+         pRAudO/sjDceXmaJMKsHGVKmBj3Co+9XwwvnGspHkdw6W4wp1DGZbfLyRYyo12k51iBx
+         cuGykEssN2Pr0ZEyify2GitZ9rm/n0gGsEpOoRQ/Gvlbfn4D2qGI/kC1VBfb02v8oowx
+         zZzzLSCDoSFI6jWEHICpstJPrF1UsZ4HlQ16BpYfe6tbPaFsknHZOt5OaIfdDRZpSL0t
+         qdeVtp8ZneBd/xzyLHmPxRiiLSkxGVLk5gicathujKBERRd1jhKptiH7KOsNwsXDH7KH
+         mdLA==
+X-Gm-Message-State: ABy/qLaWeMGxgNT+6VYntoF4N23C4PfR6fP1sLihK+2a7uYp/OJD9pmp
+        qNmNQsPXJJma98l/HLn1c+sRmrjjVm8=
+X-Google-Smtp-Source: APBJJlFbC2r2TbKbAv2XntBUqFc4qfvmGXL0dlkqVhIHaiYtvBxuxn7DfaqhmSspLR2fLdd3xEO1Fg==
+X-Received: by 2002:a05:6a20:1612:b0:125:87b1:a30d with SMTP id l18-20020a056a20161200b0012587b1a30dmr19359235pzj.1.1689054869144;
+        Mon, 10 Jul 2023 22:54:29 -0700 (PDT)
 Received: from j293.lan ([2400:4051:ea3:5910:5676:1078:8b85:c18f])
-        by smtp.gmail.com with ESMTPSA id bd5-20020a170902830500b001b8761c739csm878053plb.271.2023.07.10.22.54.23
+        by smtp.gmail.com with ESMTPSA id bd5-20020a170902830500b001b8761c739csm878053plb.271.2023.07.10.22.54.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 22:54:25 -0700 (PDT)
+        Mon, 10 Jul 2023 22:54:28 -0700 (PDT)
 From:   Kazuki Hashimoto <kazukih0205@gmail.com>
-Subject: [PATCH 0/2] s2idle fixes for systems without cpuidle
-Date:   Tue, 11 Jul 2023 14:54:20 +0900
-Message-Id: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
+Date:   Tue, 11 Jul 2023 14:54:21 +0900
+Subject: [PATCH 1/2] cpuidle: Don't pass any values to
+ cpuidle_not_available
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIzurGQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2MDcwNL3eSC0syUnFRdi2RTEzNLcwuLNHNzJaDqgqLUtMwKsEnRsbW1ABb
- YuWBZAAAA
+Message-Id: <20230711-cpuidle-v1-1-f391224b3140@gmail.com>
+References: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
+In-Reply-To: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -69,11 +70,11 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hector Martin <marcan@marcan.st>,
         Kazuki Hashimoto <kazukih0205@gmail.com>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689054863; l=762;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689054863; l=2377;
  i=kazukih0205@gmail.com; s=20230709; h=from:subject:message-id;
- bh=j5NYA/cWUwU8zPrqAOAmXhuilLtRqKNLjK9L23BUYFw=;
- b=jWlB3vckae5Vtnn/+aYOfDXmupSLN1kDF7eO4gCcG/u5EKWpbYNOqTimDReNI0fbI3emDFrn5
- LBnJETOVREfAQ7lz1NykrjDT0z21TxnjrdRhTZ8YG22ycLuxJ+3tM/X
+ bh=KEMzFSoNpLPvIqVf3L5RPIfQHsabNi9qRgonhXVECcU=;
+ b=YeQaYzdMq0SvFc5ST91wRuJNDDD5zIEm+g2+iXejUAUavkAROyVFrnoHun4n0BUc5Dj4GUPAp
+ 6alWWHJszE5D+XmnFhkpAv+C20AeVj21LgIN352NvjB8S8bhv9rfMvd
 X-Developer-Key: i=kazukih0205@gmail.com; a=ed25519;
  pk=r8m5wVK5lljix+hYnqXRT/GsxNkTADqXGmhdl7kykYY=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,28 +87,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in V2:
-Redo implementation following input from Hector Martin
+There's no reason to pass any values to cpuidle_not_available() as the
+function works standalone. Since we're planning to use the function in
+other places, make it so to avoid code duplication.
 
-Changes in V3:
-Rewrite commit message following input from Rafael J. Wysocki
-
+Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
 ---
-Kazuki Hashimoto (2):
-      cpuidle: Don't pass any values to cpuidle_not_available
-      PM: s2idle: Fully prevent the system from entering s2idle when cpuidle isn't supported
+ drivers/cpuidle/cpuidle.c | 6 ++++--
+ include/linux/cpuidle.h   | 6 ++----
+ kernel/sched/idle.c       | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
- drivers/cpuidle/cpuidle.c |  6 ++++--
- include/linux/cpuidle.h   |  6 ++----
- kernel/power/main.c       | 12 +++++++++---
- kernel/power/suspend.c    |  5 +++++
- kernel/sched/idle.c       |  2 +-
- 5 files changed, 21 insertions(+), 10 deletions(-)
----
-base-commit: 8fc3b8f082cc2f5faa6eae315b938bc5e79c332e
-change-id: 20230709-cpuidle-8c5469788f77
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 737a026ef58a..c9ba51e0fa38 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -49,9 +49,11 @@ void disable_cpuidle(void)
+ 	off = 1;
+ }
+ 
+-bool cpuidle_not_available(struct cpuidle_driver *drv,
+-			   struct cpuidle_device *dev)
++bool cpuidle_not_available(void)
+ {
++	struct cpuidle_device *dev = cpuidle_get_device();
++	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
++
+ 	return off || !initialized || !drv || !dev || !dev->enabled;
+ }
+ 
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index 3183aeb7f5b4..a0ce9b6d16ce 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -169,8 +169,7 @@ struct cpuidle_driver {
+ 
+ #ifdef CONFIG_CPU_IDLE
+ extern void disable_cpuidle(void);
+-extern bool cpuidle_not_available(struct cpuidle_driver *drv,
+-				  struct cpuidle_device *dev);
++extern bool cpuidle_not_available(void);
+ 
+ extern int cpuidle_select(struct cpuidle_driver *drv,
+ 			  struct cpuidle_device *dev,
+@@ -204,8 +203,7 @@ static inline struct cpuidle_device *cpuidle_get_device(void)
+ {return __this_cpu_read(cpuidle_devices); }
+ #else
+ static inline void disable_cpuidle(void) { }
+-static inline bool cpuidle_not_available(struct cpuidle_driver *drv,
+-					 struct cpuidle_device *dev)
++static inline bool cpuidle_not_available(void)
+ {return true; }
+ static inline int cpuidle_select(struct cpuidle_driver *drv,
+ 				 struct cpuidle_device *dev, bool *stop_tick)
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index 342f58a329f5..865674d2e420 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -164,7 +164,7 @@ static void cpuidle_idle_call(void)
+ 	 * step to the grace period
+ 	 */
+ 
+-	if (cpuidle_not_available(drv, dev)) {
++	if (cpuidle_not_available()) {
+ 		tick_nohz_idle_stop_tick();
+ 
+ 		default_idle_call();
 
-Best regards,
 -- 
-Kazuki Hashimoto <kazukih0205@gmail.com>
+2.41.0
 
