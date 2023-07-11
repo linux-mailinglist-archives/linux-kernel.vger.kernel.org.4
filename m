@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F7774F573
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADBF74F587
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbjGKQcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S233393AbjGKQd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjGKQcc (ORCPT
+        with ESMTP id S233421AbjGKQdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:32:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EC2173A;
-        Tue, 11 Jul 2023 09:32:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D065F6155E;
-        Tue, 11 Jul 2023 16:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058E9C433C9;
-        Tue, 11 Jul 2023 16:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689093146;
-        bh=/yz1VNIx8w5vnZQUrnW46zn2dCf4xJSJ/w4OLb6WBAk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yg4EUjxEPD06/Bn6reOhE6TdmtCBNfXmQqLeCVeuc3B4GVfMn6aCEif09HCeYn0Uz
-         Uh06QjoXyuXz76Qh5WxlMsRGgkCEP7GU/xz19BFKHWMX9QP3c0f6H0pfTBv/CMzFNR
-         Gce9NhJ0EAOEBKlWz+3t/42M+JkZEBcqbImWn7g+k7QPFZpUzXnG2Z1YmAU3XT7xgc
-         etgVuONKYWYaRKo7d3AavNFlRtsW7kOs9f5RUjTcfpugo5ljkNFTIaY6eHMNaVhk9c
-         uHeshfY+jsKSE6st5tdcIBLc4raTCwWlwmHFJSEDn5De4UwjLIv6N+Hw3CwjBc6UeH
-         ZQDhJ2SfdHm6Q==
-Date:   Tue, 11 Jul 2023 09:32:24 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>,
-        Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230711093224.1bf30ed5@kernel.org>
-In-Reply-To: <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
-References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
-        <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
-        <ZKNA9Pkg2vMJjHds@ziepe.ca>
-        <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
-        <ZKxDZfVAbVHgNgIM@ziepe.ca>
-        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
-        <ZKyZBbKEpmkFkpWV@ziepe.ca>
-        <20230711042708.GA18658@lst.de>
-        <20230710215906.49514550@kernel.org>
-        <20230711050445.GA19323@lst.de>
-        <ZK1FbjG+VP/zxfO1@ziepe.ca>
-        <20230711090047.37d7fe06@kernel.org>
-        <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
+        Tue, 11 Jul 2023 12:33:05 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DE210C4;
+        Tue, 11 Jul 2023 09:32:51 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-66c729f5618so5174496b3a.1;
+        Tue, 11 Jul 2023 09:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689093170; x=1691685170;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UhCv7ij8x1pOlset39Oaz9+RB/0V1BBSqVlCMCRIhxI=;
+        b=GDG6/MLFxdRV/HIVa34aoxVfgdHvb+65IuZcu4RJeSzjj7Lgggdw2TNhg2ZI2jqKDS
+         ioe0AcKVhyRN4e4XWrJl+KGatb1kPWP0BonPFcArWJQnFJqSfqMYQQNwX0Z0NB10Vz0F
+         T2VII+6TCbCw/uX8WtPYA7TFpGdB6q1xyervSEgpsGYToVcQqtkZZdS2aKCy+/G0p8jE
+         9EBgh9EJx1Q73rRgKDcrMHjuMHQn0ljIIH8BY2YQPQ5x0g6D0mRdk3IgK9e8qFRLGf3c
+         mzExEvkK1iFL7dGYO5f8D0JVT3sADOaK1x0t4djb3+tACQFrfOn9B7DIbp66RTHPjaan
+         Ky5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689093170; x=1691685170;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UhCv7ij8x1pOlset39Oaz9+RB/0V1BBSqVlCMCRIhxI=;
+        b=Y+Xk+YcTrlZ4VNKlLTzL5OPb1gdhhO+j1eAooKOyvzBYZ2M1AePITtvOIVRueoQpYl
+         jr2CCUC6dftU7n54ukSy4kGxiQsMddB2QyfvSqRVvtefz7JMmjVXme7L6zrjdL9lHyCS
+         8D1O6oJvHKn3L5nh9jZNR8jB/Up562xkHMJeVtrYC9YVEYnC55djorPOy7IY0hYYVP8H
+         6sLbDuzRN1Zn5Rdgu7ojl0KIbRgmBLZSdMnm4WG3zU5bxkeDdC+4TVYxOmyd2dF579+F
+         xkcuSfGE+6jcNVT6te7pZseMzszW7BlKMsdSfZ6Kd9bB23KO8jrhhJ3Q0fOxuky0+2JZ
+         86/w==
+X-Gm-Message-State: ABy/qLZgJg2c2JDS6LAmUDSeIcQC+AySAnf5O0+/eBtExzqRfCysCYvb
+        VxwlZLIQMHiUFgSf3DgjoI7QuVT6961a7Wcz
+X-Google-Smtp-Source: APBJJlEYX8MP7cdCsuhoVmMV0duMmMivth79k3DahAyDgJT8EIrgNpWQhckIbIT8w78EAZQzlWT24w==
+X-Received: by 2002:a05:6a00:cce:b0:682:537f:2cb8 with SMTP id b14-20020a056a000cce00b00682537f2cb8mr21087293pfv.26.1689093169971;
+        Tue, 11 Jul 2023 09:32:49 -0700 (PDT)
+Received: from [192.168.255.10] ([114.84.31.161])
+        by smtp.gmail.com with ESMTPSA id j23-20020aa79297000000b006636c4f57a6sm1930119pfa.27.2023.07.11.09.32.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 09:32:49 -0700 (PDT)
+Message-ID: <81c32ae2-ff21-131f-e498-f87b1e7fe3b5@gmail.com>
+Date:   Wed, 12 Jul 2023 00:32:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH 4/4] KVM: x86/pmu: Move .hw_event_available() check out of
+ PMC filter helper
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230607010206.1425277-1-seanjc@google.com>
+ <20230607010206.1425277-5-seanjc@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20230607010206.1425277-5-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 10:20:58 -0600 David Ahern wrote:
-> On 7/11/23 10:00 AM, Jakub Kicinski wrote:
-> >> RDMA works with the AMD and Intel intree drivers using DMABUF without
-> >> requiring struct pages using the DRM hacky scatterlist approach.  
-> > I see, thanks. We need pages primarily for refcounting. Avoiding all
-> > the infamous problems with memory pins. Oh well.  
+On 2023/6/7 09:02, Sean Christopherson wrote:
+> Move the call to kvm_x86_pmu.hw_event_available(), which has nothing to
+> with the userspace PMU filter, out of check_pmu_event_filter() and into
+> its sole caller pmc_event_is_allowed().  pmc_event_is_allowed() didn't
+> exist when commit 7aadaa988c5e ("KVM: x86/pmu: Drop amd_event_mapping[]
+> in the KVM context"), so presumably the motivation for invoking
+> .hw_event_available() from check_pmu_event_filter() was to avoid having
+> to add multiple call sites.
+
+The event unavailability check based on intel cpuid is, in my opinion,
+part of our pmu_event_filter mechanism. Unavailable events can be
+defined either by KVM userspace or by architectural cpuid (if any).
+
+The bigger issue here is what happens when the two rules conflict, and
+the answer can be found more easily by putting the two parts in one
+function (the architectural cpuid rule takes precedence).
+
 > 
-> io_uring for example already manages the page pinning. An skb flag was
-> added for ZC Tx API to avoid refcounting in the core networking layer.
-
-Right, we can refcount in similar fashion. Still tracking explicitly
-when buffers are handed over to the NIC.
-
-> Any reason not to allow an alternative representation for skb frags than
-> struct page?
-
-I don't think there's a hard technical reason. We can make it work.
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/kvm/pmu.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 1690d41c1830..2a32dc6aa3f7 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -387,9 +387,6 @@ static bool check_pmu_event_filter(struct kvm_pmc *pmc)
+>   	struct kvm_x86_pmu_event_filter *filter;
+>   	struct kvm *kvm = pmc->vcpu->kvm;
+>   
+> -	if (!static_call(kvm_x86_pmu_hw_event_available)(pmc))
+> -		return false;
+> -
+>   	filter = srcu_dereference(kvm->arch.pmu_event_filter, &kvm->srcu);
+>   	if (!filter)
+>   		return true;
+> @@ -403,6 +400,7 @@ static bool check_pmu_event_filter(struct kvm_pmc *pmc)
+>   static bool pmc_event_is_allowed(struct kvm_pmc *pmc)
+>   {
+>   	return pmc_is_globally_enabled(pmc) && pmc_speculative_in_use(pmc) &&
+> +	       static_call(kvm_x86_pmu_hw_event_available)(pmc) &&
+>   	       check_pmu_event_filter(pmc);
+>   }
+>   
