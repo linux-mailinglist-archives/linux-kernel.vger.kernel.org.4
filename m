@@ -2,134 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A5474F894
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D631974F8AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjGKT6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 15:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S231755AbjGKUCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjGKT6D (ORCPT
+        with ESMTP id S231544AbjGKUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:58:03 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1140310D2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:58:02 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-76571dae5feso584990485a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:58:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689105481; x=1691697481;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TQFgOAvocFb3uFicWRBty+nRGBWhrTx83zx8+lYf5UI=;
-        b=Nh5OtOWjr8PIw1hoZfUfV9c8OaWytk2lPtda8FnHvJDUo2/KgMncyXCyn4UaLdghUL
-         3gFW96jxTMm40+KBgrWARdzYMlEzK+6NlKXm0C0zRKB6Me890hm7oY1tbG9cv0sO4ykr
-         +RlgkKUdKvqNd8KHatzFafattuE9Hg5KNLBa6uq77pDT+phuFDjYjPLv2eGN9YBZPZ0V
-         hvbqFVtlKNCUkTSGDwhzAjGuoc0SQCh9HIIn8u7YPoj3/bqD/K8eNxtHDvMbtR2fEMAK
-         RSM7AX2LWWi2gei0nnEmvgEjgVlEY4ZLhdTQIaZTZZEYQ4bYKyDt7fHeyBSoD6ocP7Lm
-         VmHg==
-X-Gm-Message-State: ABy/qLZjDpYeM7wFk6ks4kBkJMZlRzo2MMagW4Hf1x7JJfi9Q/x3qoud
-        mDeA5LLBTR++7fmb3kbfYV4=
-X-Google-Smtp-Source: APBJJlHEoNHVZnxZQkppyqBivT9NmqZati2D1iR4d54PXOGxZOlGpe4oIPpMtdc4+Hl+guk3/lTuTw==
-X-Received: by 2002:a05:620a:4788:b0:765:a984:ac52 with SMTP id dt8-20020a05620a478800b00765a984ac52mr16048820qkb.9.1689105480946;
-        Tue, 11 Jul 2023 12:58:00 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:1d49])
-        by smtp.gmail.com with ESMTPSA id w14-20020a05620a148e00b00767b4fa5d96sm1362791qkj.27.2023.07.11.12.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 12:58:00 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 14:57:57 -0500
-From:   David Vernet <void@manifault.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        gautham.shenoy@amd.com, kprateek.nayak@amd.com, aaron.lu@intel.com,
-        clm@meta.com, tj@kernel.org, roman.gushchin@linux.dev,
-        kernel-team@meta.com
-Subject: Re: [PATCH v2 6/7] sched: Shard per-LLC shared runqueues
-Message-ID: <20230711195757.GD389526@maniforge>
-References: <20230710200342.358255-1-void@manifault.com>
- <20230710200342.358255-7-void@manifault.com>
- <20230711104958.GG3062772@hirez.programming.kicks-ass.net>
+        Tue, 11 Jul 2023 16:01:56 -0400
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C570A170E;
+        Tue, 11 Jul 2023 13:01:53 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 73991100004;
+        Tue, 11 Jul 2023 23:01:50 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 73991100004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1689105710;
+        bh=yzS1NWXRo9VE0h7AmNisIIAscgwxAKFA0/jyaDwnvn8=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=Cz6ypHI7KLOI/xmQDkUjQKRJGEwA2gYUC39UB3QZ4GITVjMemdoXYmA59GlsAJds7
+         cUhLUWbY/hrJXygg6izSsq3I/W6FUtnA2cSn24JanXTaiDLze2ZgX1Qm+hmiu/Hhfi
+         JfmSR1kzbmi4QSraIcyOLVfdQm81JtHTfTD7++Khewzx+uP1TCa1LCrBExXKVHkQg5
+         2b5Mnex5Hxta4jJi0f0P9cZVY51FB1a7lI4B+tgh9vxbCYdd4asrFhAELDI3GpmRoO
+         sMuAo64gYzv8yrbiq0LpbcVhNuMpna0DJyguvcz2bhkZ36fwid8OhbXQAHfBeIbKZt
+         sowu9sTbx7HXQ==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue, 11 Jul 2023 23:01:50 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 11 Jul 2023 23:01:39 +0300
+From:   George Stark <gnstark@sberdevices.ru>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
+        <gnstark@sberdevices.ru>
+CC:     <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>
+Subject: [PATCH v5 0/6] iio: adc: meson: add iio channels to read channel 7 mux inputs
+Date:   Tue, 11 Jul 2023 23:00:16 +0300
+Message-ID: <20230711200141.239025-1-gnstark@sberdevices.ru>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711104958.GG3062772@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178558 [Jul 11 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: GNStark@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 521 521 0c3391dd6036774f2e1052158c81e48587b96e95, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;www.spinics.net:7.1.1;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/11 15:25:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/11 13:47:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/11 13:07:00 #21597915
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 12:49:58PM +0200, Peter Zijlstra wrote:
-> On Mon, Jul 10, 2023 at 03:03:41PM -0500, David Vernet wrote:
-> 
-> > +struct shared_runq_shard {
-> >  	struct list_head list;
-> >  	spinlock_t lock;
-> >  } ____cacheline_aligned;
-> >  
-> > +struct shared_runq {
-> > +	u32 num_shards;
-> > +	struct shared_runq_shard shards[];
-> > +} ____cacheline_aligned;
-> > +
-> > +/* This would likely work better as a configurable knob via debugfs */
-> > +#define SHARED_RUNQ_SHARD_SZ 6
-> > +
-> >  #ifdef CONFIG_SMP
-> >  static struct shared_runq *rq_shared_runq(struct rq *rq)
-> >  {
-> >  	return rq->cfs.shared_runq;
-> >  }
-> >  
-> > -static struct task_struct *shared_runq_pop_task(struct rq *rq)
-> > +static struct shared_runq_shard *rq_shared_runq_shard(struct rq *rq)
-> > +{
-> > +	return rq->cfs.shard;
-> > +}
-> > +
-> > +static int shared_runq_shard_idx(const struct shared_runq *runq, int cpu)
-> > +{
-> > +	return cpu % runq->num_shards;
-> 
-> I would suggest either:
-> 
-> 	(cpu >> 1) % num_shards
->
-> or keeping num_shards even, to give SMT siblings a fighting chance to
-> hit the same bucket.
+Changelog:
 
-Given that neither of these approaches guarantees that the SMT siblings
-are in the same bucket, I'll just go with your suggestion which is
-simpler.
+v1->v2:
+split refactoring patch [1] into 4 smaller patches, fix comment style
 
-Seems inevitable that we'll want to have another debugfs knob to adjust
-the number of shards, but IMO it's preferable to just apply your
-suggestion in v3 and hold off on adding that complexity until we know we
-need it.
+[1] https://lore.kernel.org/lkml/20230621062715.455652-2-gnstark@sberdevices.ru/
 
-> (I've no idea how SMT4 (or worse SMT8) is typically enumerated, so
-> someone from the Power/Sparc/MIPS world would have to go play with that
-> if they so care)
+v2->v3:
+remove patch 'meson saradc: unite iio channel array definitions' [1] after discussion
 
-Yeah, no idea either. If these things end up varying a lot across
-different architectures then we can look into making shard assignment
-architecture specific.
+patch 'meson saradc: add enum for iio channel array indexes'
+  - change enum items prefix from INDEX_ to NUM_ since name 'channel index' is
+  more relevant to channel array index in iio world and with 2 tables our array index is
+  not always equal to channel number
+  - resolve conflicts after deleting [1]
+  - update commit message, previous patch [2]
+  - return channel number for temp channel. It wasn't used and isn't used currently
+  but may need later
 
-> 
-> > +}
-> 
-> > +			num_shards = max(per_cpu(sd_llc_size, i) /
-> > +					 SHARED_RUNQ_SHARD_SZ, 1);
-> 
-> > +			shared_runq->num_shards = num_shards;
-> 
-> 
+patch meson saradc: support reading from channel 7 mux inputs
+  - resolve conflicts after deleting [1]
+  - update commit message, previous patch [3]
+  - add routine find_channel_by_num to get channel by channel number
+
+[1] https://lore.kernel.org/lkml/20230623022334.791026-4-gnstark@sberdevices.ru/
+[2] https://lore.kernel.org/lkml/20230623022334.791026-5-gnstark@sberdevices.ru/
+[3] https://lore.kernel.org/lkml/20230623022334.791026-7-gnstark@sberdevices.ru/
+
+v3->v4:
+add new patch 'iio: adc: meson: remove unused timestamp channel' [1]
+
+patch 'iio: adc: meson: move enums declaration before'
+	update commit message, previous patch [2]
+patch 'iio: adc: meson: move meson_sar_adc_set_chan7_mux'
+	update commit message, previous patch [3]
+patch 'iio: adc: meson: add enum for iio channel numbers'
+	update commit message, previous patch [4]
+patch 'iio: adc: meson: add channel labels'
+	update commit message, previous patch [5]
+	change sprintf(label, "%s\n", "temp-sensor") to sprintf(label, "temp-sensor\n")
+patch 'iio: adc: meson: support reading from channel 7 mux'
+	rewrite enum meson_sar_adc_chan7_mux_sel definition and
+		read_label routine proposed by Andy [7], previous patch [6]
+
+[1] https://lore.kernel.org/lkml/20230705160413.000062e7@Huawei.com/
+[2] https://lore.kernel.org/lkml/20230627224017.1724097-2-gnstark@sberdevices.ru/
+[3] https://lore.kernel.org/lkml/20230627224017.1724097-3-gnstark@sberdevices.ru/
+[4] https://lore.kernel.org/lkml/20230627224017.1724097-4-gnstark@sberdevices.ru/
+[5] https://lore.kernel.org/lkml/20230627224017.1724097-5-gnstark@sberdevices.ru/
+[6] https://lore.kernel.org/lkml/20230627224017.1724097-6-gnstark@sberdevices.ru/
+[7] https://lore.kernel.org/lkml/ZJwGCNA+ZURri24i@smile.fi.intel.com/
+
+v4->v5:
+patch 'iio: adc: meson: move enums declaration before variables declaration'
+	update commit message, previous patch [1]
+patch 'iio: adc: meson: move meson_sar_adc_set_chan7_mux routine upper'
+	update commit message, previous patch [2]
+patch 'iio: adc: meson: add channel labels'
+	update commit message, previous patch [3]
+patch 'iio: adc: meson: support reading from channel 7 mux inputs'
+	update commit message, previous patch [4]
+
+[1] https://lore.kernel.org/lkml/20230707153322.114302-3-gnstark@sberdevices.ru/
+[2] https://www.spinics.net/lists/linux-iio/msg80226.html
+[3] https://www.spinics.net/lists/linux-iio/msg80227.html
+[4] https://www.spinics.net/lists/linux-iio/msg80230.html
+
+George Stark (6):
+  iio: adc: meson: remove unused timestamp channel
+  iio: adc: meson: move enums declaration before variables declaration
+  iio: adc: meson: move meson_sar_adc_set_chan7_mux routine upper
+  iio: adc: meson: add enum for iio channel numbers
+  iio: adc: meson: add channel labels
+  iio: adc: meson: support reading from channel 7 mux inputs
+
+ drivers/iio/adc/meson_saradc.c | 173 +++++++++++++++++++++++++--------
+ 1 file changed, 134 insertions(+), 39 deletions(-)
+
+-- 
+2.38.4
+
