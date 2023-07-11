@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838B574E5D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A294D74E5D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjGKE1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 00:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S229959AbjGKE3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 00:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGKE1O (ORCPT
+        with ESMTP id S229479AbjGKE3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:27:14 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EE890;
-        Mon, 10 Jul 2023 21:27:12 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 381696732D; Tue, 11 Jul 2023 06:27:08 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 06:27:08 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230711042708.GA18658@lst.de>
-References: <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com> <20230619110705.106ec599@kernel.org> <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com> <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org> <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com> <ZKNA9Pkg2vMJjHds@ziepe.ca> <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com> <ZKxDZfVAbVHgNgIM@ziepe.ca> <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com> <ZKyZBbKEpmkFkpWV@ziepe.ca>
+        Tue, 11 Jul 2023 00:29:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65DFE42;
+        Mon, 10 Jul 2023 21:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=mW7N0YhrzylXcrfqMfjApU7mfEYrVUHUJlt95bsUitU=; b=OqWi+UGYC5HZPpjSBD0gZksSuD
+        OVDBGJaNUt1iGKG4+Qrt1VgqVODze1JQVzjASXXJFEi7pm0cc4NFKBJIkcF601fIX5fvuSn3qFq0L
+        5avSMRwfHqEr8EOZMGBCHqQUe3dxR0NcTzAzhTPToEppwOJcAe/CRK9Dw51mem4GFLmYOy73BDU6+
+        o0R9ZuhnVttdNEipNE27gS2/yBVw8Vi3lUwi53XmiHb8QDbwmrza1SlkWOqycDLC/re+iKSS26klo
+        tFAtdpAgJSBo4t+DJ4svmd0Jymz+EpGyjSLq/xW3TObzdL3j78HGFP8LKg404LuFBOtVqUWJODbvS
+        YJymTB0A==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJ4zk-00DclO-2O;
+        Tue, 11 Jul 2023 04:29:00 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH 1/2] kconfig: gconfig: drop the Show Debug Info help text
+Date:   Mon, 10 Jul 2023 21:28:59 -0700
+Message-ID: <20230711042859.17927-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKyZBbKEpmkFkpWV@ziepe.ca>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 08:49:25PM -0300, Jason Gunthorpe wrote:
-> The entire point of DEVICE_PRIVATE is that the page content, and
-> access to the page's physical location, is *explicitly* unavailable to
-> anyone but the pgmap owner.
+The Show Debug Info option was removed eons ago. Now finish the job
+by removing the help text for it also.
 
-DEVICE_PRIVATE is in fact availably to no one at all.  It is a place
-holder for memory not addressable at all.
+Fixes: 7b5d87215b38 ("gconfig: remove show_debug option")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org
+---
+ scripts/kconfig/gconf.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Not going to comment on the rest of this as it seems bat shit crazy
-hacks for out of tree junk.  Why is anyone even wasting time on this?
+diff -- a/scripts/kconfig/gconf.c b/scripts/kconfig/gconf.c
+--- a/scripts/kconfig/gconf.c
++++ b/scripts/kconfig/gconf.c
+@@ -647,10 +647,7 @@ void on_introduction1_activate(GtkMenuIt
+ 	    "Although there is no cross reference yet to help you figure out\n"
+ 	    "what other options must be enabled to support the option you\n"
+ 	    "are interested in, you can still view the help of a grayed-out\n"
+-	    "option.\n"
+-	    "\n"
+-	    "Toggling Show Debug Info under the Options menu will show \n"
+-	    "the dependencies, which you can then match by examining other options.";
++	    "option.";
+ 
+ 	dialog = gtk_message_dialog_new(GTK_WINDOW(main_wnd),
+ 					GTK_DIALOG_DESTROY_WITH_PARENT,
