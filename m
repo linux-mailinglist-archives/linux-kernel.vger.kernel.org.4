@@ -2,184 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2248474FACB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344FE74FAD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjGKWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S231944AbjGKWSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjGKWP0 (ORCPT
+        with ESMTP id S232002AbjGKWR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:15:26 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E959110EF;
-        Tue, 11 Jul 2023 15:15:24 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1qJLdg-0074mC-7o; Tue, 11 Jul 2023 22:15:20 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8mp: add imx8mp-venice-gw74xx-imx219 overlay for rpi v2 camera
-Date:   Tue, 11 Jul 2023 15:15:18 -0700
-Message-Id: <20230711221518.2127861-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jul 2023 18:17:56 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A62B10DD;
+        Tue, 11 Jul 2023 15:17:55 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89cfb4571so46780625ad.3;
+        Tue, 11 Jul 2023 15:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689113874; x=1691705874;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GUQ/8zCRZuDXl9Bj16DtG+5Txck+M49Fz3vYnY4FgQc=;
+        b=ARXS4+iJF7czWLwSLs3uaant6Rd7iPZWrVB+mB2ZqjJuIlIygjiSudDipepnELI/3x
+         JOhbeMt9Sd8sWzsK/vDruGsWToq1MCbP6+Hp/TboDopRI2RKtdOeg/rjGBmdSs0G5GRf
+         HWq6EIzhbA39r6vmEXpBX+yBAbQKMICh2YQmi0kOqLHzR3AE/Rfpe58PUNNZ5YwfWoIr
+         OldbsoCDG41DMYgsV2dueQGmjKmwClHsMNdKOE8LetFAQ2210Mqs+rGUoFRzhtdyh8+8
+         DjpBv52aB4BV9qkMoAGMoSRt7oLRZ8RodheH1dNWLH5EOQzQYi/C3G9XxTyUC7Xm1afZ
+         30qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689113874; x=1691705874;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GUQ/8zCRZuDXl9Bj16DtG+5Txck+M49Fz3vYnY4FgQc=;
+        b=iEKmcU15MKW2oR02dq5POVgXAjpwt8P9pIcchXqe97GLi7jd3CuKWSIF3pRBU4VwmZ
+         XuB7sS+33V3VO989vVRyk+V/eAnp2sCxTrKAppyPw71mI+RZv5f3tI78LwvDN67GBdZe
+         mJc+wCJlRM7nyHvIzp7XsV7f+EtSZqbq18Wv+8MLxVw8ECOs9VycOQvRQShEqxjP8yz1
+         loDABLkHOa48rQIRPvyoPVXhSeYX3um6EWf8tazITtedpDBrDXTf5rxEcZQGmZXlA845
+         u9H95qfYz4ReHkDaHuuOZXFyURafji3Zx6P9mhOewrpaXOH47vFFTUVyl+mK105ZPCEs
+         Lvkw==
+X-Gm-Message-State: ABy/qLbtbgDQ/fMRcLXSx94pN7L2j6EQYyB/XAKpzJ/UdJ02SqTApGWP
+        YZ4pcRLewVVbWVxj3YroVNWLcvdP8ZqzgA==
+X-Google-Smtp-Source: APBJJlEeB9eQ9zhBAmdgyKXmkeARvRdkh7Lo22MREuuIBb+xm1J4qul+hzI5KiIy84cA5L72/MTDyw==
+X-Received: by 2002:a17:902:a614:b0:1b8:9225:4367 with SMTP id u20-20020a170902a61400b001b892254367mr15708150plq.65.1689113874468;
+        Tue, 11 Jul 2023 15:17:54 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:9374])
+        by smtp.gmail.com with ESMTPSA id w19-20020a1709027b9300b001ae3f73b9c1sm2427013pll.101.2023.07.11.15.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 15:17:54 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 11 Jul 2023 12:17:52 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v3 0/9] rust: workqueue: add bindings for the workqueue
+Message-ID: <ZK3VEPeBEyErmerR@slm.duckdns.org>
+References: <20230711093303.1433770-1-aliceryhl@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711093303.1433770-1-aliceryhl@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the RaspberryPi Camera v2 which is an IMX219 8MP module:
- - https://datasheets.raspberrypi.com/camera/camera-v2-schematics.pdf
- - has its own on-board 24MHz osc so no clock required from baseboard
- - pin 11 enables 1.8V and 2.8V LDO which is connected to
-   GW74xx MIPI_GPIO4 (IMX8MP GPIO1_IO4) so we use this as a gpio
+Hello,
 
-Support is added via a device-tree overlay.
+On Tue, Jul 11, 2023 at 09:32:54AM +0000, Alice Ryhl wrote:
+> This patchset contains Rust bindings for the kernel workqueue.
+> 
+> One of the primary goals behind the design used in this patch is that we
+> must support embedding the `work_struct` as a field in user-provided
+> types, because this allows you to submit things to the workqueue without
+> having to allocate, making the submission infallible. If we didn't have
+> to support this, then the patch would be much simpler. One of the main
+> things that make it complicated is that we must ensure that the function
+> pointer in the `work_struct` is compatible with the struct it is
+> contained within.
+> 
+> The original version of the workqueue bindings was written by Wedson,
+> but I have rewritten much of it so that it uses the pin-init
+> infrastructure and can be used with containers other than `Arc`.
 
-The IMX219 supports RAW8/RAW10 image formats.
+I don't understand a lot but the part that I understand (Alice helped me a
+lot, thanks) and the example usages look fine to me. While the interface
+leaves some workqueue features uncovered (e.g. flushing, creating custom
+workqueues, queueing on a specific CPU), there's nothing blocking adding
+them later and this looks like a good place to start. So, from workqueue
+POV:
 
-Example configuration:
-media-ctl -l "'imx219 3-0010':0->'csis-32e40000.csi':0[1]"
-media-ctl -v -V "'imx219 3-0010':0 [fmt:SRGGB8/640x480 field:none]"
-media-ctl -v -V "'crossbar':0 [fmt:SRGGB8/640x480 field:none]"
-media-ctl -v -V "'mxc_isi.0':0 [fmt:SRGGB8/640x480 field:none]"
-v4l2-ctl --set-fmt-video=width=640,height=480,pixelformat=RGGB
-v4l2-ctl --stream-mmap --stream-to=frame.raw --stream-count=1
-convert -size 640x480 -depth 8 gray:frame.raw frame.png
-gst-launch-1.0 v4l2src ! \
-  video/x-bayer,format=rggb,width=640,height=480,framerate=10/1 ! \
-  bayer2rgb ! fbdevsink
+ Acked-by: Tejun Heo <tj@kernel.org>
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
- arch/arm64/boot/dts/freescale/Makefile        |  2 +
- .../imx8mp-venice-gw74xx-imx219.dtso          | 80 +++++++++++++++++++
- 2 files changed, 82 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx-imx219.dtso
+Please feel free to route the patches through the rust tree. If you want
+them to go through the workqueue tree, please let me know.
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 60a69e114442..9dc3c1be1899 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -156,6 +156,7 @@ imx8mm-venice-gw73xx-0x-rpidsi-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice
- imx8mm-venice-gw73xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
- imx8mm-venice-gw73xx-0x-rs422-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs422.dtbo
- imx8mm-venice-gw73xx-0x-rs485-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs485.dtbo
-+imx8mp-venice-gw74xx-imx219-dtbs	:= imx8mp-venice-gw74xx.dtb imx8mp-venice-gw74xx-imx219.dtbo
- imx8mp-venice-gw74xx-rpidsi-dtbs	:= imx8mp-venice-gw74xx.dtb imx8mp-venice-gw74xx-rpidsi.dtbo
- 
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-imx219.dtb
-@@ -168,6 +169,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rpidsi.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx-imx219.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx-rpidsi.dtb
- 
- dtb-$(CONFIG_ARCH_S32) += s32g274a-evb.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx-imx219.dtso b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx-imx219.dtso
-new file mode 100644
-index 000000000000..270a9114da97
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx-imx219.dtso
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+#include "imx8mp-pinfunc.h"
-+
-+/dts-v1/;
-+/plugin/;
-+
-+&{/} {
-+	compatible = "gw,imx8mp-gw74xx", "fsl,imx8mp";
-+
-+	reg_cam: regulator-cam {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_cam>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "reg_cam";
-+		gpio = <&gpio1 4 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	cam24m: cam24m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <24000000>;
-+		clock-output-names = "cam24m";
-+	};
-+};
-+
-+&i2c4 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	imx219: sensor@10 {
-+		compatible = "sony,imx219";
-+		reg = <0x10>;
-+		clocks = <&cam24m>;
-+		VDIG-supply = <&reg_cam>;
-+
-+		port {
-+			/* MIPI CSI-2 bus endpoint */
-+			imx219_to_mipi_csi2: endpoint {
-+				remote-endpoint = <&mipi_csi_0_in>;
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+				link-frequencies = /bits/ 64 <456000000>;
-+			};
-+		};
-+	};
-+};
-+
-+&isi_0 {
-+	status = "okay";
-+};
-+
-+&mipi_csi_0 {
-+	status = "okay";
-+
-+	ports {
-+		port@0 {
-+			mipi_csi_0_in: endpoint {
-+				remote-endpoint = <&imx219_to_mipi_csi2>;
-+				data-lanes = <1 2>;
-+			};
-+		};
-+	};
-+};
-+
-+&iomuxc {
-+	pinctrl_reg_cam: regcamgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO04__GPIO1_IO04	0x41
-+		>;
-+	};
-+};
+Thanks.
+
 -- 
-2.25.1
-
+tejun
