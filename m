@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6F874FABC
+	by mail.lfdr.de (Postfix) with ESMTP id 66B1E74FABB
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjGKWLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S231148AbjGKWLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjGKWLA (ORCPT
+        with ESMTP id S231888AbjGKWLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:11:00 -0400
+        Tue, 11 Jul 2023 18:11:12 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E971BE4;
-        Tue, 11 Jul 2023 15:10:28 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BIDS3s025206;
-        Tue, 11 Jul 2023 22:09:55 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DC61987;
+        Tue, 11 Jul 2023 15:10:46 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BIDDsJ011193;
+        Tue, 11 Jul 2023 22:09:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=2DxMbws++KqvbwdoPM7T8RtLODfPW5/jpMuy/WlrZ88=;
- b=eKAdZdsaxIHv9OmULW5zzvEnlnTqoL0XrAk1Ssz5H2EKQZmWCW4Y4vu1x0IEa2VKFPDR
- 8Vm2PW0yQgHySvmS1WYaAXxTjLoQJ8DwGPciSxKbok+2AhmzLXbX7X+EJe8y1/sTHpbJ
- peUuRjcBsHQw/QSS6So7WgyisuH+c1JI/cMVjDdA0r0RSLqwPnVyRoYvWtpEM452KRem
- vWhdhQi2fy9z7R9vPLBPDQ4j2/8WliNSzZxwyWW3UPjuUSxNDLWZu1L1Zkw7JIeuxELz
- khPPFAKJemackWmwiV/couf4WaFIykx30frRu8052k3GgUVrBi9fnKSwQSqW2HKL/IXq ow== 
+ s=corp-2023-03-30; bh=sJdYG9TJ5ptIRFIrt8AEeUT1n1ZOgrXWD30BKh22RXw=;
+ b=B730hXWspKxIFzPsDkBCLW3TbN8j/P9oPAX/CXEKdtUj9uTDtSD+Z+n2b3tN8xkA2qbP
+ MNUZxdahyX2QqOHwonC5cs6oK8FvhR4BjzMYtpW3Wra4ipQ7CCa9n7qJ5h/C2fj/5lDM
+ v7LmRdMcnZAZ0Iu3tdThAQ5rNve/+8qqyMJ6xUhEqY2JXWDUOcZnVKp3Ox0JIBir2f6M
+ tMxeAWIICtBUO89XSgYZva7XyObWmj16o2e8QpyA5/s0kO/eNlDODFT6Od+a4InLSOsa
+ OGo7+Do6YaMckyfE4wlTlOzJ/eRshkiBfZBCkJOVvY0yzfEfZscZAB5pW0dyeLFZ7j5G CQ== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rrjmhbjem-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rrfj63xxp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 22:09:54 +0000
+        Tue, 11 Jul 2023 22:09:57 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36BLd7ie008596;
-        Tue, 11 Jul 2023 22:09:53 GMT
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36BLnjKf008288;
+        Tue, 11 Jul 2023 22:09:55 GMT
 Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx8btb17-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx8btb1y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 22:09:53 +0000
+        Tue, 11 Jul 2023 22:09:55 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QYhzqgM6xJNEMkAevI8c7HHevzEO7Al0/1SyfhGfjoX56HuF2ILLzqZEWzgwZkV5BHExoXbLIXcH6hU5Jm4Rk7ibsGKm++5zVDiVLuum6SUaPtGx9Xkzgve9bhJfhV3KwW8zZXj9WZpzp/j+wwqYzMWWR5Xy88Qm+VbBAt7Vc4wq+Z8SB8NVTOrzcTek7wOBwCcnL0QMhjsOBD08qhj+uINnU8E2lPpNFR56kcWW1Xy6jOmN7oQjUyVZsD05Ma9BEzLGHOSrY+tvmvaaWGT+i8mKbIqudFbT4rZT8A9TU4fuxIxECBLpSGgNjjE5iyCtHiehCA/WIXXXxX4OME89+A==
+ b=dUO+eDAsJ6kNquJMWHFVBD1kaNI3AIEJG3r3zwqCLTMPEtKoXQ/kOgBzNe4h+xX3RPSg08O2Njp3s1SZNULXpjtqtLLy2H7CYQhPbj/ekhzrTkoc1rxAIvNm1v+5kCC4qST3J186yHIm+5pUy3JGrisam/SyyVaiqo6tZsQc9p7vO3nsIadmsOlSR1R5T4+ampCwIbVylD2R2JmjnwGpAuqqmZ2d2h8IDNKfoT28HVtCC2sx1mSrQAIMmg30NiITkXNIywwmE223Cdpctji/CFqtTJXWghGxc6ioVyx0jrWK+8kNe35VgxLT5wFE+PdZUpBIoR8MsbRIXd4KqFp4Og==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2DxMbws++KqvbwdoPM7T8RtLODfPW5/jpMuy/WlrZ88=;
- b=j/y1RrVoP8NwdfviOCNxu4V2x9aOiQmpl3DSQ5766CPHRpgpoJdKusPR/NKe0TSiIycLLnaqKRNPqLQ7eqFRQg68SQPep7sKz2wr1EfsgauPzWs6sgTwckMDfHQtG1zUGlv3q0cfVOZrLYRU9BkyDDstY9oGJKWmXluKbV2y+4rYk6taq2auuHClgPkQBLY+RQmhezJRjKLKAfyA4GQQxxtR3obuUzE277v2A+s1+hRPmw9GnXmvFY7PjpqXPDl1ypw2QqLsDtHOEbWYKybOTxv9qrpEAVRftER3QrZMqBcGL6D1qlsosuyhBTh3Th8vZJ42cxCL45Wa6+KqRI3sUg==
+ bh=sJdYG9TJ5ptIRFIrt8AEeUT1n1ZOgrXWD30BKh22RXw=;
+ b=ZUhvJjlnHv9cjrAdPJ+uOBRgrTOBp3EpzvjBiYTGwO9e3dnY9K4Is4dFQ+HMW1Fm4yACZdRVIkh7qCUkDRh/d+PCXDrPuK3GXWsJqAw6zJ40tbX5MO26bUsZ33FMaH5yHyN2OMD0ZASIBASjbvt2ZK07mEsiBQqmbNYR2KNd1FIDbw0vFCQmPo1XKnMqxonHq0TvvCY/v9Qb4EzemcHj8FE2dykFS+E4GyMoctYi2MuGMEr8IBE7SJ3GPC0VSEt8VHpL+8vJUYVaIiJKmgvO3Ob6+HDYa9DUHXjV+SjMzAuH5a16Ejek+ewOrbyvTvFHKB5Cbl4SBNlKVE+Z/dZqQg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2DxMbws++KqvbwdoPM7T8RtLODfPW5/jpMuy/WlrZ88=;
- b=h2MfyXZnYM4H68WzPfak2QLnIRhnfk7puMmKoxvDtFGmOO3DC8ihvn1cs57aSlsKslccgRyBTbHEeGAZVF9hxgRpPoAt0pKXw3abAGCHzR+umaMUkYrSI6EukllP8eThImBoLaoH6Q7yFb8I/NtiIm3+egskrY3prfdrbcR1Zrk=
+ bh=sJdYG9TJ5ptIRFIrt8AEeUT1n1ZOgrXWD30BKh22RXw=;
+ b=yD29ExCrpmdnqrgTaYjIdWK3xGw0luEX/GhTKNu8rYd0sVZB4d7P0iGBmf8nSdAnFatOv5ZTGKwTYBvGCR1v8Hl8u5YZk2/G8VhXKUo8KGYgZniKCtGLEERaiY5fFGljeqBjPtDnfYWfX7CawKqk7tnbYl6DE8nn54sDKWwNqYQ=
 Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
  by PH0PR10MB4775.namprd10.prod.outlook.com (2603:10b6:510:38::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Tue, 11 Jul
- 2023 22:09:51 +0000
+ 2023 22:09:54 +0000
 Received: from BY5PR10MB4196.namprd10.prod.outlook.com
  ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
  ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6588.017; Tue, 11 Jul 2023
- 22:09:51 +0000
+ 22:09:54 +0000
 From:   Mike Kravetz <mike.kravetz@oracle.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Jiaqi Yan <jiaqiyan@google.com>,
@@ -73,84 +73,84 @@ Cc:     Jiaqi Yan <jiaqiyan@google.com>,
         Michal Hocko <mhocko@suse.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Kravetz <mike.kravetz@oracle.com>, stable@vger.kernel.org
-Subject: [PATCH 1/2] hugetlb: Do not clear hugetlb dtor until allocating vmemmap
-Date:   Tue, 11 Jul 2023 15:09:41 -0700
-Message-ID: <20230711220942.43706-2-mike.kravetz@oracle.com>
+Subject: [PATCH 2/2] hugetlb: optimize update_and_free_pages_bulk to avoid lock cycles
+Date:   Tue, 11 Jul 2023 15:09:42 -0700
+Message-ID: <20230711220942.43706-3-mike.kravetz@oracle.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230711220942.43706-1-mike.kravetz@oracle.com>
 References: <20230711220942.43706-1-mike.kravetz@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0188.namprd03.prod.outlook.com
- (2603:10b6:303:b8::13) To BY5PR10MB4196.namprd10.prod.outlook.com
+X-ClientProxiedBy: MW4PR03CA0054.namprd03.prod.outlook.com
+ (2603:10b6:303:8e::29) To BY5PR10MB4196.namprd10.prod.outlook.com
  (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB4775:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0a996e5-c080-4473-f866-08db825b8c4c
+X-MS-Office365-Filtering-Correlation-Id: 30e7a8e0-80dc-41ef-8262-08db825b8df0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5mwe7JKbpJf29CNH4kRC8GpUL39E6/bHPjuS+IRvT4WNW6ZoeWBHj888gWBxKLo36lNsRLgXnb2GYtGcV0leQYAz5kTSf0AdFCDE2jXaWrWbo4UhGVHHMkERRiVB/+JtNkL6lPug/ple/sFlBYk+SDPlqHLNOqypzSmdZqvhphnRsVZwCdpTSgMxNZ2w4k07tw1aRoTCr37AfiSxuD4I4lgwDSzLXAbd+VvsoNUOHz7jS4/4rQFvu/7ZuSOtcTx/+Ez+9HA5kKjlaVI/FOHCUbLyuPwWyox2oS/3xwEH1DbSBKEFl4LJ569ShoprQuFPJFuLw6PN99fDjQq3e8t2UsnYPyyJqtO9enkDCLPD+JsZuc/GexPs2MfMYbg1LFw7i1cjIV5/WyFLtQsTpfdk2qyyPvCAxP8PdhtID0cOGKJlwPAzHmGa6zu50E+SLtEZaOXMmzsu/a2lnaInqbYIBil0SA07kYwFls7uLRjgiFq1fuvwTaMunMogqxgiRZRwy7JirLO7Mb1/bT6Bt6grFNK3xdZmXkpCuw3KdO5h+tGlrxd4CRc0BX9WzLuSBK0X
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(39860400002)(366004)(346002)(136003)(451199021)(6486002)(186003)(54906003)(86362001)(6666004)(2616005)(478600001)(6506007)(1076003)(26005)(44832011)(7416002)(316002)(36756003)(8936002)(8676002)(41300700001)(5660300002)(83380400001)(6512007)(66476007)(66556008)(66946007)(2906002)(4326008)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dpmyNp5nzk/kh69KnARlekYnOH7h33pDQ85apHgfprMZx5yUThMCufUXEzwiWBZ2f0KqsIUKmYAuiXcvL1kdNDAoU/O0k5AN/yn//ZzIZ/wnG9zJQFVzgttRW/AiO3dWQWPXZco9rdwnk7EdrijQGg70V/wWKBFO0YeYMeQMvibx27JHV1R+eCBQiVD8kEgj0lW3qtgLsres/d6Bi+RmZzjX69ImaiKUYfWRqfWsYxM0de8TaJoxlg+0HiV0Akw6KYwyL1YNirm7kuRl0IrG/uDtkP+4pmDi7gtwYVLR8H7n2Pi5JLMta5Nq5GxtjNcKQ/SS/uGuUwvA1NWD8mZDoliPMiv6Asq8MVFWxUG8Hntc/aOglOqJM35WSVCYyICM9tAETwzjqUxmjtLaTMX4zlh+FdIkkAC69peUEhNA1mtyq6CyooT544vE0Q9Z1m10q44rrrDO1sqeD6lM/HBK7VaBWCDAQDWmlXX/cCTWPMgfTPipTA2JWzbcHJyTJBm8xefwIe9cgxMV1/XN0EHMEzjCKax2Q8TozW5u57uLcIGp55VsndLtrsSH/ndeF8QV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(39860400002)(366004)(346002)(136003)(451199021)(6486002)(186003)(54906003)(86362001)(6666004)(2616005)(478600001)(6506007)(1076003)(26005)(44832011)(7416002)(15650500001)(316002)(36756003)(8936002)(8676002)(41300700001)(5660300002)(83380400001)(6512007)(66476007)(66556008)(66946007)(2906002)(4326008)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e0+yv8DHY7oSBdfd+soeJDcjjp5yzDnwGVfiH/tvf88UN60nMJVOnlS7lwyr?=
- =?us-ascii?Q?05EY9NfGMm/Bs1Sn8Zm6lV5oMX4jmEnAYSatnmDB/6vXMt11tYLLFrdMZm4n?=
- =?us-ascii?Q?O4kaQuO/BmSVUGC5bXLB+uRqCVTwg+qsAJgwwTd5SAAVhFvws1xhCZEL+DZe?=
- =?us-ascii?Q?bKqb/sKsrTMqsvVfIvRMnNt9UhragO9DitrYW4lruNLtn10OZu8Tmvkj7KlJ?=
- =?us-ascii?Q?NojSS9+idyp5a1L7X038+dPyBeL3PO2keKTb1eZeuWaNOS1zY+AkoQ9OwQBW?=
- =?us-ascii?Q?HkoXrURD6AlPI3LtwdbTjGNpIUW1WHHEVKr9UrhyOL69bwyq1kTTNFX3ixHQ?=
- =?us-ascii?Q?04cv0FOE1P3ipszBv9cUpIa3+h7HLL6/w+t6jfw35zLKOBJYDA1Y0QqaCIzA?=
- =?us-ascii?Q?2qsQBUEf7/Auq1Fvygy4w9zeyGtiT4gTDZm8xvcsTHDV7Pzox7st6Q1AAdAK?=
- =?us-ascii?Q?qMjeYYbeGQErsEwDYw0q79GCRhMWHKw5j3BdpFZMqkPAcb5xtGZALc31S/q8?=
- =?us-ascii?Q?kIA714Vzus2XblpnSx+LvVUy3jVbE0DwUlG/UQylSW/6BLTrrSV3AEp/c6nS?=
- =?us-ascii?Q?aZChEIKPtMpfhi4+FSkokk3mNc1R30tFzbaudYZuLVjCuFVS3wo0o+9eGpEX?=
- =?us-ascii?Q?hQFQu/QZl+jY2jO49WwDAX3cteUba8Y8uxWy12chiXVbwPjAVi1BlMNaOx03?=
- =?us-ascii?Q?J7N7s7tQS7QtsbSG+rrUZCTK7g6ae6mj65QO4Ms2LSbKCAt/WUFvyYH7HQxF?=
- =?us-ascii?Q?1mQsL4q5SaCqBDHESeqgx8aZlMw0oWVimxGsY7m1OFdMM3zoYO+OyW6u4RDo?=
- =?us-ascii?Q?RXpOyK8WEbabAoaqGKQ0QPGgQ5L2gatrUt66vGjTPDCyFHjYGtQW72t6vidA?=
- =?us-ascii?Q?0wRoWl/oBUEfFjsEjwtg7SARQhAoiZDZSR/cpexr3A++SKxJb7kkg7XTEiBh?=
- =?us-ascii?Q?dOTGAZNKXu8xC6SxMXVMsLlr/pnNmLZneE0kGO53iNy+m0ZOChQ2ijZp9dUD?=
- =?us-ascii?Q?b3DT15nF/rJReCb5J+AHA52Dkq06wc6BFzbUsZhK5FnFMI4hf+KeTfMpuqF1?=
- =?us-ascii?Q?t3Xjkp3z0zfJ6zA+0mZfeKdLIFPh9ECjO47ezEBIk9HVuB/gkfoKbStXOqgc?=
- =?us-ascii?Q?fDAqSXKfQOjZlOqsQLqk6LiM+NGWopWsmoHAo56DR/xdPwRjLxwjeyy+f1Yu?=
- =?us-ascii?Q?0KOw+crpVacHqnfUUiXh/fZTVxRks74v6S7fzI0tjzWjAOh9HPlsLZqKwnPr?=
- =?us-ascii?Q?cjeWtxNQjjeAXeorLKv6r5QrD7PaGpbj52kaom3c6qBP6UnzR2BFvpGpY8f/?=
- =?us-ascii?Q?4kRjk0TgLvOU6mlkS472HXDKtdi7Xok0mHxcNmFYv6EAxoBKxBRjhts3uxoy?=
- =?us-ascii?Q?A1oRlAIG5SJOBd9q6OthVYRlM1fVx2/qci4u1GnCkKb+uGGao6tclfJwEzU/?=
- =?us-ascii?Q?DMB8l/ECEJ8JxYDqmtH1AGOfejyzCe7egMWVdxEUL0bqDkGui5QJCa2KUHOs?=
- =?us-ascii?Q?/F0gLuDXG46LwLSF3XT7qipDuSUmdGXqoHgK/d7ea+/NbCYkQX6QCmtg+76Z?=
- =?us-ascii?Q?cejkoXlAXQjYlqI+vmvRCt/TSvoLpwtWH8dTDmXFiJd1lDKxyySz1vc0RfC1?=
- =?us-ascii?Q?wg=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JYI5W7j+tdTzC/YSvdnug1hzyZVqlK+mgfAxG7BAPGGzoJNbnbA7BpQ8GJdf?=
+ =?us-ascii?Q?hVJ+Tb+tZdsNbCWsbsgM7eppLyM0rxCIprnZJZy3nrBkiXcpvjUDTjN61Cb9?=
+ =?us-ascii?Q?hL2mq8sCAwpu3pTWmkWC7XcOOvYquzLeyHAQCK9qKKmn57/7FNIdvwuD2W53?=
+ =?us-ascii?Q?AZE8X4Ansi0Vnlpp0xt7/eFc+I1qsloVtBJpA2OuHhQgE8vveHLVfppsyeQn?=
+ =?us-ascii?Q?Kz1TsgrE6VtQ8PHY/TrVi0Vym4HGEMWh0B/ZmvhbtlLxqDOpepInG0dbJ4BP?=
+ =?us-ascii?Q?wjnSH2X8k/h6uiXBRy73y9NZ3jt1VHN3/b0i+DL/FF3q/RaG9xL3xmP9wFSj?=
+ =?us-ascii?Q?icYSV68H7uxlCIoEh/nHx2Oa0+y0hAh2cZENOGzTUuF13Uoh+KZui5nGHJt2?=
+ =?us-ascii?Q?AFieKr6EnYBdmbEKkw3yGab4AXKdGJdOnetAKHVLd6U4elX0KaR9/xucbl2w?=
+ =?us-ascii?Q?hlr96eNai8n4A82Idb0+HzQvEKZ0elDfUAS3JYdzbDc1Wo3a8wn7Zf8JGJbm?=
+ =?us-ascii?Q?bIqSsgc1DSXVkB1Yp2tpD+bI07zSCsZ/4SzcENXllPrm3A7GbPfCxHIxw7vk?=
+ =?us-ascii?Q?8xAa02hYoAhQkkebT5xa7b9rPme0woDYPLC5qlHsHZja0qsYWgDN/5TCDN8C?=
+ =?us-ascii?Q?CYxHhMclcIo3vpv2tnKcovrabF0AEsWv2oOKGBqhKJpd/PoaFUlW0aNZ8JQh?=
+ =?us-ascii?Q?XvO2OI/slVnwOyMdJSn/MgpwslY1OR0WlRBQsSksgSHYCeEKLStxe2p7Rw+F?=
+ =?us-ascii?Q?ZUNJgr9BKf8zjUrL+JL5xNBUcbvBUPbMZXqy2Yel1Lv+R7y9N4WmKsGPGmQ0?=
+ =?us-ascii?Q?7J/C9/gOjOFI3pkb6aq7fajbqkpMjJnX/ZM3+tM2YgA7eq/GUIUeT6fZMNFt?=
+ =?us-ascii?Q?3f3KgN1yujOioOaUnzkNriRU3OQ2Bf0Kv6j3f0TIHFQ+3Kkac8L1oGz2oMKk?=
+ =?us-ascii?Q?FhkRE1nvOaFgmlx/NKEeq70jw3KWW/e0XJyl9EJaQtjM79z8tzgHxRUx1Das?=
+ =?us-ascii?Q?ZbfTONP74K85FEviZkJS1Dr6HEgMiKVIWMkIXJ1c8TZKBQDdhTgyK1tA1/g1?=
+ =?us-ascii?Q?tvqS6VbODwaeLYqnfReSEM/jepNsGXxPRdhXJBrhhCoHfY1Is8oUEzbh57ZE?=
+ =?us-ascii?Q?nCW0TKgTd5w2Sw6Ps1wnBICLfNsz1a3+nslL4TnKDduISgP0j98dEHVIlzbV?=
+ =?us-ascii?Q?0v1CCTLyOy3xkayw5YPGc5C9geu3sVSeZrLprjCEnxEkXKZRATjzj/l5p+/l?=
+ =?us-ascii?Q?seN6a0+snQk6dcmN0hg6k8ioX3uWinX8BUIbbUTz325ARoKta8++o3YhJbXu?=
+ =?us-ascii?Q?UBgyznfbMQCdHDoYnf0oN9DP8WAt+pBQ9TtRpiWdsmWWcmhG5pV1VHFTJVAK?=
+ =?us-ascii?Q?6xDch8uRlt/o+ehUypa9JXTd1a2Ijp6TAVxuJvIEL9ur4nx5bmKPXTYgOSg3?=
+ =?us-ascii?Q?HED+8RvweF1U2j8+DEnbAfRu5KKzAFCz7WD52W3CEqDuheZjB7fXuZCZALJ0?=
+ =?us-ascii?Q?ltq6veyWNqrcvbw5SW576HxvaJwPkjU1uU6H8xbMlRtbzh+dpHB6erwEt51J?=
+ =?us-ascii?Q?hckim7bFGoMVUSFQYV36lHt8BKBaoMth8KxUXRK1QnCxo7aTk90+eIvVMuua?=
+ =?us-ascii?Q?MA=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?vLEcaqYu6newdwZwkDE8TRQ7c3Lzmhf8MEkzQyLfnRF6fofnevbQ7DYXkfql?=
- =?us-ascii?Q?DsN1wfnZei/2KHCcKhiXmGOWsy2YDfHijz9iBfGic3HH0s5amQjtngZiy7Pz?=
- =?us-ascii?Q?uXumBIT5kB3q939Ys4/DduK4r94aVjUGur1JVGnBtRDDemZGaMc97nE7Ea5f?=
- =?us-ascii?Q?TPmxehzGxmJlvSwpkFxvLQE47kOJSyagV/MSPc0Pc1Yt6k9LBeVxObmzh58x?=
- =?us-ascii?Q?UWtqmmHCXaFr7uAbyKKp8u6wyaP8yTcmPYqhZbiMtltf4rWDuf0FEjBU4ntl?=
- =?us-ascii?Q?YjIqIzS4wUfYue6qmmcRTuWQg64+keHYpalB7oQVbDkXyYkWaitfebak5wvy?=
- =?us-ascii?Q?79WU8xdTggvKVw+0D2GRwgp+m+bWpjn3dTauYzWwTcJSMDL8TKQwTi+2wvG+?=
- =?us-ascii?Q?VwKpFg0oVTfPU0UvbfsiXolY6me/63sSKH7r+HT7ie3HI1DdicJwtJcMq5xT?=
- =?us-ascii?Q?OraPlX3Aztb5BNOLUSnn3Q3bp1bX+fUVS+5XEfeosAF6+QXpVn6439dNMUMQ?=
- =?us-ascii?Q?FO2la1QdgjnMtRYQymnk8yA+OaQqRRGXRSpNOlivjzITRmHfEN6z3P4eulj+?=
- =?us-ascii?Q?B/uOykhpcPSu77fKO7ZkNenqQMceutRQgKSLmZLx7/lCYD+JHxpV+UQC+GL2?=
- =?us-ascii?Q?UM41CT5bqBd8FoO2BaByS5R+a897wdGKS24Ml0QxSlKjhyoW9tdTatNEv5dM?=
- =?us-ascii?Q?iS/DJ7Fiwnr7DimCz3CFIpyRBnaBoDocCWXOwH9OVAnaW8axoeSZ2bTRv3yT?=
- =?us-ascii?Q?9nS80YEUP2uAJLJ33+LFZiqWMyXSsQFK2ItQzkxkNTbQIABON9WlkUAHYoLI?=
- =?us-ascii?Q?X67lES3mZBBpy9iSadVcw5+HDx26ifG9/Nw8zw50Ujf/75yM/qMHK8ioJxDS?=
- =?us-ascii?Q?TwHlgrQPl2sPZyUtpFaX1N53kt41c70ZET5C/Jgwj6yFoq9UtfSDQMjX5gPv?=
- =?us-ascii?Q?i0v9Zcw4Ln+U7UZ1Txk5CqA8Zc+wSa+uzNr1EbcoJ2g+5lffzioCwDkomUSz?=
- =?us-ascii?Q?BtuO?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?exV0cB5lgJw7yLa9LCOGPFF/Jj58qZ8WqSGJtDS2Y2bHc8zlyc8gSaVYfPrr?=
+ =?us-ascii?Q?4stdjZXchPi86vGJWCQGGcTjp1swDyy6SKKDsctfTHopXHrBypCJsEpwStMO?=
+ =?us-ascii?Q?JDmqw42yEKME18pcXpKkn09XRkrAkp/3MZLtGqsaD1kMlC+Aaaec6r2nN2SZ?=
+ =?us-ascii?Q?wnRai2PfGJPY7vZIdI2lNHImSvzfMaErX+Q9o9XyOFQtY+9glCFO9YDBJvd3?=
+ =?us-ascii?Q?uLf1iaF31mbBZOVkMsB0IfL4y6VdRiNZKMA0OnZ/YJP0YSyowsAScPjAaTBF?=
+ =?us-ascii?Q?/FCojMBkRrg0Yebj36hKDfDKe5plDF9FkaJt2AwXOeZIRDUEcaJ53yj7yDs6?=
+ =?us-ascii?Q?0hiaBKxl6sdH0wukay/jJqjYtMdXSRv5DDd8Y2T9FRsKxubeKSLeAs4FSsOE?=
+ =?us-ascii?Q?8lF+AqyYem2GxUkD8VYBzzdyqIweVm0CEaUy5pOfvC/Y32R9guT7cfvbY4Ft?=
+ =?us-ascii?Q?dfuka9RjeqAIx47njwToj0Hf1VFFmD1HlM6Raake8cMIK19ayWN16LKkvJok?=
+ =?us-ascii?Q?L31/ecnWUJSUTY0fnMvGnTl4qPeNz/Ie+1k8r1H1xGfAvwCKfjiq2Yax97ar?=
+ =?us-ascii?Q?7LTkqqlgGnKyypgj4z4TMAayzVafyytvROC05h/GoxtSi4xPHIy7wLT4Qv8c?=
+ =?us-ascii?Q?7AHMer5XNE10dbxzozghsZej3GZJXMlx3BdUzYwBPY0bLhLu0db9eyjdemeK?=
+ =?us-ascii?Q?6FdXNi3iorMSNe5Uqkk/IvM5xsC80h3kU7qlYxjeoeelAj8ZfhAVSkTi/aig?=
+ =?us-ascii?Q?1VRRSeEn8hG9YUfhw7jD9YqSXCn8ldITPGbmIJb23fwZKX5RinzfGKc/bvTb?=
+ =?us-ascii?Q?ogO5m/wBHCGSJeJGHMVVZOGJz8/0gyMakJoSv7mzSaML8EWDfWPr0jVqpPi/?=
+ =?us-ascii?Q?bSugFSuQ9Ecik/p7WhP0X00eGEYRLUs7mSrOPOZLIPvkDalF/Lsm8vsiD7+U?=
+ =?us-ascii?Q?wd53xTtz2YcAVaCYy2Fhg6mBoTBSZ7HTF0gm39hKPCk06Vg9TgMVn2HHvR7p?=
+ =?us-ascii?Q?0syr?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0a996e5-c080-4473-f866-08db825b8c4c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30e7a8e0-80dc-41ef-8262-08db825b8df0
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 22:09:51.1812
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 22:09:53.9310
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: akqNV6v6s6FVxxU7PTC58AxW0TXs1Cx9E454OQchD6j01fchQKmgC0BlPiho8rQGmeK6B3RGThQhh74jjN5Jhw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2v/hRvAo7zkngH0dyxoMRbSbIqXTXZZ/Z+QdYaFpKrHw/gKDVbCrxPiwqpitoD/xQGtkUhqFTHN8eEOyXco8aQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4775
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
@@ -159,8 +159,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spams
  adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
  definitions=main-2307110202
-X-Proofpoint-ORIG-GUID: zQdPaF_yMgoqbdw8IN-rbPkGgq1QEPSK
-X-Proofpoint-GUID: zQdPaF_yMgoqbdw8IN-rbPkGgq1QEPSK
+X-Proofpoint-GUID: sz9sOU-g3vTel-g6IUEDkDhHKVQ3_okA
+X-Proofpoint-ORIG-GUID: sz9sOU-g3vTel-g6IUEDkDhHKVQ3_okA
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -171,159 +171,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Freeing a hugetlb page and releasing base pages back to the underlying
-allocator such as buddy or cma is performed in two steps:
-- remove_hugetlb_folio() is called to remove the folio from hugetlb
-  lists, get a ref on the page and remove hugetlb destructor.  This
-  all must be done under the hugetlb lock.  After this call, the page
-  can be treated as a normal compound page or a collection of base
-  size pages.
-- update_and_free_hugetlb_folio() is called to allocate vmemmap if
-  needed and the free routine of the underlying allocator is called
-  on the resulting page.  We can not hold the hugetlb lock here.
+update_and_free_pages_bulk is designed to free a list of hugetlb pages
+back to their associated lower level allocators.  This may require
+allocating vmemmmap pages associated with each hugetlb page.  The
+hugetlb page destructor must be changed before pages are freed to lower
+level allocators.  However, the destructor must be changed under the
+hugetlb lock.  This means there is potentially one lock cycle per page.
 
-One issue with this scheme is that a memory error could occur between
-these two steps.  In this case, the memory error handling code treats
-the old hugetlb page as a normal compound page or collection of base
-pages.  It will then try to SetPageHWPoison(page) on the page with an
-error.  If the page with error is a tail page without vmemmap, a write
-error will occur when trying to set the flag.
-
-Address this issue by modifying remove_hugetlb_folio() and
-update_and_free_hugetlb_folio() such that the hugetlb destructor is not
-cleared until after allocating vmemmap.  Since clearing the destructor
-requires holding the hugetlb lock, the clearing is done in
-remove_hugetlb_folio() if the vmemmap is present.  This saves a
-lock/unlock cycle.  Otherwise, destructor is cleared in
-update_and_free_hugetlb_folio() after allocating vmemmap.
-
-Note that this will leave hugetlb pages in a state where they are marked
-free (by hugetlb specific page flag) and have a ref count.  This is not
-a normal state.  The only code that would notice is the memory error
-code, and it is set up to retry in such a case.
-
-A subsequent patch will create a routine to do bulk processing of
-vmemmap allocation.  This will eliminate a lock/unlock cycle for each
-hugetlb page in the case where we are freeing a large number of pages.
+Minimize the number of lock cycles in update_and_free_pages_bulk by:
+1) allocating necessary vmemmap for all hugetlb pages on the list
+2) take hugetlb lock and clear destructor for all pages on the list
+3) free all pages on list back to low level allocators
 
 Fixes: ad2fa3717b74 ("mm: hugetlb: alloc the vmemmap pages associated with each HugeTLB page")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
- mm/hugetlb.c | 75 +++++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 51 insertions(+), 24 deletions(-)
+ mm/hugetlb.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e4a28ce0667f..1b67bf341c32 100644
+index 1b67bf341c32..e751fced870a 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -1580,9 +1580,37 @@ static inline void destroy_compound_gigantic_folio(struct folio *folio,
- 						unsigned int order) { }
- #endif
- 
-+static inline void __clear_hugetlb_destructor(struct hstate *h,
-+						struct folio *folio)
-+{
-+	lockdep_assert_held(&hugetlb_lock);
-+
-+	/*
-+	 * Very subtle
-+	 *
-+	 * For non-gigantic pages set the destructor to the normal compound
-+	 * page dtor.  This is needed in case someone takes an additional
-+	 * temporary ref to the page, and freeing is delayed until they drop
-+	 * their reference.
-+	 *
-+	 * For gigantic pages set the destructor to the null dtor.  This
-+	 * destructor will never be called.  Before freeing the gigantic
-+	 * page destroy_compound_gigantic_folio will turn the folio into a
-+	 * simple group of pages.  After this the destructor does not
-+	 * apply.
-+	 *
-+	 */
-+	if (hstate_is_gigantic(h))
-+		folio_set_compound_dtor(folio, NULL_COMPOUND_DTOR);
-+	else
-+		folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
-+}
-+
- /*
-- * Remove hugetlb folio from lists, and update dtor so that the folio appears
-- * as just a compound page.
-+ * Remove hugetlb folio from lists.
-+ * If vmemmap exists for the folio, update dtor so that the folio appears
-+ * as just a compound page.  Otherwise, wait until after allocating vmemmap
-+ * to update dtor.
-  *
-  * A reference is held on the folio, except in the case of demote.
-  *
-@@ -1613,31 +1641,19 @@ static void __remove_hugetlb_folio(struct hstate *h, struct folio *folio,
- 	}
- 
- 	/*
--	 * Very subtle
--	 *
--	 * For non-gigantic pages set the destructor to the normal compound
--	 * page dtor.  This is needed in case someone takes an additional
--	 * temporary ref to the page, and freeing is delayed until they drop
--	 * their reference.
--	 *
--	 * For gigantic pages set the destructor to the null dtor.  This
--	 * destructor will never be called.  Before freeing the gigantic
--	 * page destroy_compound_gigantic_folio will turn the folio into a
--	 * simple group of pages.  After this the destructor does not
--	 * apply.
--	 *
--	 * This handles the case where more than one ref is held when and
--	 * after update_and_free_hugetlb_folio is called.
--	 *
--	 * In the case of demote we do not ref count the page as it will soon
--	 * be turned into a page of smaller size.
-+	 * We can only clear the hugetlb destructor after allocating vmemmap
-+	 * pages.  Otherwise, someone (memory error handling) may try to write
-+	 * to tail struct pages.
-+	 */
-+	if (!folio_test_hugetlb_vmemmap_optimized(folio))
-+		__clear_hugetlb_destructor(h, folio);
-+
-+	 /*
-+	  * In the case of demote we do not ref count the page as it will soon
-+	  * be turned into a page of smaller size.
- 	 */
- 	if (!demote)
- 		folio_ref_unfreeze(folio, 1);
--	if (hstate_is_gigantic(h))
--		folio_set_compound_dtor(folio, NULL_COMPOUND_DTOR);
--	else
--		folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
- 
- 	h->nr_huge_pages--;
- 	h->nr_huge_pages_node[nid]--;
-@@ -1706,6 +1722,7 @@ static void __update_and_free_hugetlb_folio(struct hstate *h,
+@@ -1856,11 +1856,44 @@ static void update_and_free_pages_bulk(struct hstate *h, struct list_head *list)
  {
- 	int i;
- 	struct page *subpage;
-+	bool clear_dtor = folio_test_hugetlb_vmemmap_optimized(folio);
- 
- 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
- 		return;
-@@ -1736,6 +1753,16 @@ static void __update_and_free_hugetlb_folio(struct hstate *h,
- 	if (unlikely(folio_test_hwpoison(folio)))
- 		folio_clear_hugetlb_hwpoison(folio);
+ 	struct page *page, *t_page;
+ 	struct folio *folio;
++	bool clear_dtor = false;
  
 +	/*
-+	 * If vmemmap pages were allocated above, then we need to clear the
-+	 * hugetlb destructor under the hugetlb lock.
++	 * First allocate required vmemmmap for all pages on list.  If vmemmap
++	 * can not be allocated, we can not free page to lower level allocator,
++	 * so add back as hugetlb surplus page.
++	 */
++	list_for_each_entry_safe(page, t_page, list, lru) {
++		if (HPageVmemmapOptimized(page)) {
++			clear_dtor = true;
++			if (hugetlb_vmemmap_restore(h, page)) {
++				spin_lock_irq(&hugetlb_lock);
++				add_hugetlb_folio(h, folio, true);
++				spin_unlock_irq(&hugetlb_lock);
++			}
++			cond_resched();
++		}
++	}
++
++	/*
++	 * If vmemmmap allocation performed above, then take lock * to clear
++	 * destructor of all pages on list.
 +	 */
 +	if (clear_dtor) {
 +		spin_lock_irq(&hugetlb_lock);
-+		__clear_hugetlb_destructor(h, folio);
++		list_for_each_entry(page, list, lru)
++			__clear_hugetlb_destructor(h, page_folio(page));
 +		spin_unlock_irq(&hugetlb_lock);
 +	}
 +
- 	for (i = 0; i < pages_per_huge_page(h); i++) {
- 		subpage = folio_page(folio, i);
- 		subpage->flags &= ~(1 << PG_locked | 1 << PG_error |
++	/*
++	 * Free pages back to low level allocators.  vmemmap and destructors
++	 * were taken care of above, so update_and_free_hugetlb_folio will
++	 * not need to take hugetlb lock.
++	 */
+ 	list_for_each_entry_safe(page, t_page, list, lru) {
+ 		folio = page_folio(page);
+ 		update_and_free_hugetlb_folio(h, folio, false);
+-		cond_resched();
+ 	}
+ }
+ 
 -- 
 2.41.0
 
