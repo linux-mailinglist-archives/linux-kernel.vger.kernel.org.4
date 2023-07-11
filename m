@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F327F74E657
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CA374E65B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjGKF3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S230395AbjGKFcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 01:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGKF3p (ORCPT
+        with ESMTP id S229449AbjGKFcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:29:45 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47F7134;
-        Mon, 10 Jul 2023 22:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1689053363; x=1689658163; i=deller@gmx.de;
- bh=4QllDK5N6KW5ySDanE63Wz0r1DuAJrr5WWCDUK8NUBc=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=EIHdv7Rp18tH8i6AVqcdweFs/dheQ84sw1NiLc3eMs4MTKCbmIxyWKYCqsONqU+0S3WpBsa
- ZFkH2jXDmWitNp8vO+Ffr9nlCS6RTGw4uEEPkapyf4gYSNuE4N5n70/gdSaS4LtlM6VJdJEms
- ZglnOXkz0AtWOO2QLyzJ2GgrFjdPPLkcLJJo6acr/oVnK2Poy88isgBKT3bKdyZ8Ks1uci4o4
- qnHrM/XeRk20ofkkKKgs1WVBSeNhRNWB+WZG+lYJHnpyXf5d3UqD6wWLP5S7z4JdgPphnlOoW
- VHN0I890c2Ia0VvJqhP4eXQpv27rPVM/1EUKzltXlw92gOdvczoA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.149.147]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3bX1-1ptHe40ERX-010YmL; Tue, 11
- Jul 2023 07:29:23 +0200
-Message-ID: <c3e67df5-c25a-1123-4b64-cd5816a5642e@gmx.de>
-Date:   Tue, 11 Jul 2023 07:29:22 +0200
+        Tue, 11 Jul 2023 01:32:12 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D5C134;
+        Mon, 10 Jul 2023 22:32:10 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B53qBL023938;
+        Tue, 11 Jul 2023 05:31:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=m/CC5OB0w71/IgL8c8C7UM203werPDp0QoX4/Uvu5Jc=;
+ b=Le53YbwOg/otVxIZhSejurIBnulnt7WtP7wWstCvf7fHAKQ8kG8r5J89QmkEmI98M3s6
+ zjWQ+j0MKE9NerYF3E4ROwRTfijgW6s4dx6ivkiMOwMZUA5AmtEIxvEr8eBbRbBi8+lT
+ sQ5BKwZhrbQEzMyZfOtPfo3XZOVfcxXiNQPLVFYqE3JUckbKYTdtywMWD7EGCexjBI4f
+ Ih8L/7LTqPhgNO9IhH3bBHt/CcMfdwKQa/yxQ9PLwkyCw7XOcIPYEcOsttc583JYv4VZ
+ 7AbvmnUy6W13wf3Su2/eBCLICujBDJDBtyEqGlUT1k4tilTykX10nXPWOHg0VowiGV5s qA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0kpg1b5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 05:31:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B5VIjW024546
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 05:31:18 GMT
+Received: from [10.50.43.38] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 22:31:14 -0700
+Message-ID: <de6a5d53-4b69-8dc9-648b-aa3f6ff772ac@quicinc.com>
+Date:   Tue, 11 Jul 2023 11:00:59 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/4] fbdev: imxfb: Removed unneeded release_mem_region
+Subject: Re: [PATCH V7 0/2] firmware: Add support for boot_stats
+To:     Brian Masney <bmasney@redhat.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1688533340.git.quic_schowdhu@quicinc.com>
+ <ZKwhwUnKR7vqQZms@brian-x1>
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-fbdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230710132001.50764-1-frank.li@vivo.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230710132001.50764-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qhJUziMMhMozDpBHJhmj8WIcMHW5BDfy1dWmyboQDPzVPsnGowl
- drexJdoeA6i3GjZ5QGqjeAnX8rvxzUwzLngqOBX8cO/NFisUG0Eh3t1iUwRc+H1aXGjq/eg
- 4D3+jrLdfSDT6028/0XUsElylI+99FKU6iJPkbVOmKmzonofI5xjT9h/jtPkh2jO0WXvkPQ
- Hy2by1LxZhIZG9ox5MT4Q==
-UI-OutboundReport: notjunk:1;M01:P0:EG/PweqhG9Q=;duFnQUTnZGQ6CV9gE+bpwUwVofd
- rGERjbZp9CpdbXiyyXxgg8IG3AZoPTJMEYRsyKn9AQ0zXNMCbRc3LuBwrPWEwRgOxt4UvOeYt
- 3Ja6j2Er4GeUAqKw7KN1w2cSSoLttOLl3FSDUXgkLJKKR58Wt6qPeTx6FIZt6/0b6INPNxH0C
- E0QREFvGT3s+Ayo/ZmjtdjPKGgpaMq17IL67w2ev7vRz0p7kxSkvCNp+T6+Zo6PP5mwJ60/8z
- nGgc5ce77CB+U93zDiaKxr+pUj6+0bneX9WZf8rZmVlDiHRPJC5dDjW5z7JTPKZBDzRHNS2+C
- RJLCUMx/QaJ408O8BLKHD+2eLGC7k1nbhBCQ1vWT98ljSjCobw6aAGwsJgC7E6nupyPID+sif
- 6WMuw3kPqp8WrP6KvHhvYeDkr+rm+CM16FGgPZV5rggK4pxrhuw5Ui+uFMK6R+yDWD/06IKws
- I4zh2IPmgJI6P1iKuLV8QKSMY18FHk9A+atGJth8/5sYGbgZ1tnTcq2ltqa3qqclpAwE46HLh
- G862Pj9KMyIzqP90QxxfKH6M77X9K2lGcHg0J/a11+h9UE0VfjZY5+pXdWCkQMKJX/vlOF2SO
- xmjT+uz0Trlgg1N5MibBb1mWGmNmwPzmER84VbthQyugXDigpa9Vc8TxXPCF2X+RK7vf9fQlm
- VWXOVm99NmWNTiLhUhB6GW3zgETSH4xdjnrMymuvxRdlEH0gkPHZxcA8ZF5IewSWLJGc5fdKT
- 8hLRa80BJ8PCfuovDlsGhLAswIm6bBo3jnCVzaVxRU/UWVYHkxQAqSfwRtN4iT58UMlNPWtZw
- G5xMAi9wLX2sCbqi7zaWgtBFvUgjcYpzdQQkH0HvcAT2kwzoxdOiFoCAomFpOeVv6/euYmFU1
- 7y7s5EAThKuGi6ziqCtLp/1ebobaJ27MKHSKiT+5bvsFIv6BhMZNHCsKGhVDp5iO0ihYCBIgv
- 7fF6PQ==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <ZKwhwUnKR7vqQZms@brian-x1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SbiCwzJyJJ0oeB5LrmC2A6lA_byGY6BT
+X-Proofpoint-ORIG-GUID: SbiCwzJyJJ0oeB5LrmC2A6lA_byGY6BT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_02,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 phishscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=754 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110048
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/23 15:19, Yangtao Li wrote:
-> Remove unnecessary release_mem_region from the error path to prevent
-> mem region from being released twice, which could avoid resource leak
-> or other unexpected issues.
->
-> Fixes: b083c22d5114 ("video: fbdev: imxfb: Convert request_mem_region + =
-ioremap to devm_ioremap_resource")
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-I've applied that series (and fixed minor grammar typos in the commit logs=
-).
 
-Thanks!
-Helge
+On 7/10/2023 8:50 PM, Brian Masney wrote:
+> On Wed, Jul 05, 2023 at 11:02:30AM +0530, Souradeep Chowdhury wrote:
+>> Qualcomm's proprietary Android boot-loaders capture boot time
+>> stats, like the time when the bootloader started execution and at what
+>> point the bootloader handed over control to the kernel etc. in the IMEM
+>> region. This information is captured by the bootloader and populated on
+>> the device tree properties "pre-abl-time" and "abl-time" which can be
+>> be viewed from the user space like as follows:-
+>>
+>> /sys/firmware/devicetree/base/bootstats # cat abl_time
+>> 17898
+>>
+>> As a part of this patch series added the bindings for boot-stats which
+>> was suggested in the v6 of the series. The link for the same is as
+>> follows:-
+> 
+> Should boot statistics be exposed to userspace through the qcom socinfo
+> driver? I see that the socinfo v19 metadata has fields for the boot core
+> and boot cluster [1], so boot timing wouldn't be out of place.
 
-> ---
->   drivers/video/fbdev/imxfb.c | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
-> index 04f3bf30a529..385c4715c7b7 100644
-> --- a/drivers/video/fbdev/imxfb.c
-> +++ b/drivers/video/fbdev/imxfb.c
-> @@ -1043,7 +1043,6 @@ static int imxfb_probe(struct platform_device *pde=
-v)
->   failed_map:
->   failed_ioremap:
->   failed_getclock:
-> -	release_mem_region(res->start, resource_size(res));
->   failed_of_parse:
->   	kfree(info->pseudo_palette);
->   failed_init:
+"Boot Cluster" and "boot core" are soc specific info which are fixed for 
+a particular qcom soc recorded in smem region of memory. "Boot_stats" is
+not a property of a soc as such, they are KPI measurements in the boot 
+time path stored in the imem region. So I not sure if this is the right 
+home for it.
 
+> 
+> Brian
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/soc/qcom/socinfo.c#n572
+> 
