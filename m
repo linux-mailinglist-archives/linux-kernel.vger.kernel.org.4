@@ -2,98 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2A574F0FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D916374F0FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbjGKOBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S233237AbjGKOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbjGKOBV (ORCPT
+        with ESMTP id S232798AbjGKOCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:01:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77DBB0;
-        Tue, 11 Jul 2023 07:01:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 554A861504;
-        Tue, 11 Jul 2023 14:01:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD1DC433C7;
-        Tue, 11 Jul 2023 14:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689084078;
-        bh=cdE+rFjbrFVLmzVrU6vfdc/Au2vs/4K/KtQWUN2iOVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uFC0KFw6/M6i8iNMypafGbl8Cu47AhRfSYX/xpea89PI4ZoMwe92EJqP3skNe1e6r
-         wdNiag9bpyADI4zIDbvsfEfC5gi5cG0LiI+uy+iziLVFM+p32F6ViRjBHJmXzejh3K
-         hGryvnrWcowWB4v9G6Utb47tLMTtfXf0Jk5KlXTXblJ68+Ehl7NBgEro6SYLZcBbuG
-         SEhMMw8zZvhNH953cv8zDMYVJb4nE9cNKmW9VcGjlVykyXZpRuOY205drYPWTtbPxy
-         Nee7XyVCXNFnj+xKEgPCEgPFhFOWJaEQgr+bospaDMUJydxlVz0ktUF8W7K96PF8x7
-         FoGj2nXcIV0Uw==
-Date:   Tue, 11 Jul 2023 16:01:03 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        christian@brauner.io, Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        David Howells <dhowells@redhat.com>, fenghua.yu@intel.com,
-        firoz.khan@linaro.org, Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
-        Kim Phillips <kim.phillips@arm.com>, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linuxppc-dev@lists.ozlabs.org, Andy Lutomirski <luto@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>, paul.burton@mips.com,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Zijlstra <peterz@infradead.org>, ralf@linux-mips.org,
-        rth@twiddle.net, schwidefsky@de.ibm.com,
-        sparclinux@vger.kernel.org, stefan@agner.ch,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, tycho@tycho.ws,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
-Message-ID: <20230711-verpennen-turnier-717bb9682e19@brauner>
-References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
- <cover.1689074739.git.legion@kernel.org>
- <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
- <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
- <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
- <ZK1QNRidZuGcfOSd@example.org>
+        Tue, 11 Jul 2023 10:02:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E229E;
+        Tue, 11 Jul 2023 07:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689084151; x=1720620151;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=akEEbdgIackI+bwcJjUC7oCu6EgQWkViNrk7VaPnBp4=;
+  b=D7hfNuCdcNwDfVazU4Z8zAtFPMYB7BVwbhx8HFaBhmFqmdGYGhcBE3pL
+   wrerP9R36yVq9EAhsYWA/hSLeJFJ+rXhGZOlA59aMHVANHSdCeLTwqNmc
+   wWp7spD9rq4TvWrCPwF9Qpdubeva5Vv4UWuYp1ATqtDSPyuklBGrLbYB8
+   /o9/+J171OIJzD/f8lxz3sFeG9J7LI+VFJl6m24NeaJCRI8V+y+2GAwEV
+   xBLQTt5tJ39e9AK4WKhP8P8z+sh7athpuK3mmYBQHsodoHnjaAVeSQUuJ
+   yNa3r/st/WCVfe1B58F2HF7qWOn5YLVx5Ad2xOqshP/JjLFizxwPPRjRb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="344223042"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="344223042"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:02:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="671381929"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="671381929"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2023 07:02:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJDwf-001rsM-2M;
+        Tue, 11 Jul 2023 17:02:25 +0300
+Date:   Tue, 11 Jul 2023 17:02:25 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 09/13] ASoC: Intel: avs: Convert to PCI device IDs defines
+Message-ID: <ZK1g8VgO8PHwbWy4@smile.fi.intel.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-10-amadeuszx.slawinski@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZK1QNRidZuGcfOSd@example.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230711125726.3509391-10-amadeuszx.slawinski@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,46 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:51:01PM +0200, Alexey Gladkov wrote:
-> On Tue, Jul 11, 2023 at 01:52:01PM +0200, Christian Brauner wrote:
-> > On Tue, Jul 11, 2023 at 01:42:19PM +0200, Arnd Bergmann wrote:
-> > > On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
-> > > > From: Palmer Dabbelt <palmer@sifive.com>
-> > > >
-> > > > On the userspace side fchmodat(3) is implemented as a wrapper
-> > > > function which implements the POSIX-specified interface. This
-> > > > interface differs from the underlying kernel system call, which does not
-> > > > have a flags argument. Most implementations require procfs [1][2].
-> > > >
-> > > > There doesn't appear to be a good userspace workaround for this issue
-> > > > but the implementation in the kernel is pretty straight-forward.
-> > > >
-> > > > The new fchmodat4() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
-> > > > unlike existing fchmodat.
-> > > >
-> > > > [1] 
-> > > > https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
-> > > > [2] 
-> > > > https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
-> > > >
-> > > > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> > > > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > > 
-> > > I don't know the history of why we ended up with the different
-> > > interface, or whether this was done intentionally in the kernel
-> > > or if we want this syscall.
-> > > 
-> > > Assuming this is in fact needed, I double-checked that the
-> > > implementation looks correct to me and is portable to all the
-> > > architectures, without the need for a compat wrapper.
-> > > 
-> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The system call itself is useful afaict. But please,
-> > 
-> > s/fchmodat4/fchmodat2/
-> 
-> Sure. I will.
+On Tue, Jul 11, 2023 at 02:57:22PM +0200, Amadeusz Sławiński wrote:
+> Use PCI device IDs from pci_ids.h header and while at it change to using
+> PCI_DEVICE_DATA() macro, to simplify declarations.
 
-Thanks. Can you also wire this up for every architecture, please?
-I don't see that this has been done in this series.
+FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> ---
+>  sound/soc/intel/avs/core.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/sound/soc/intel/avs/core.c b/sound/soc/intel/avs/core.c
+> index 637501850728..859b217fc761 100644
+> --- a/sound/soc/intel/avs/core.c
+> +++ b/sound/soc/intel/avs/core.c
+> @@ -745,14 +745,14 @@ static const struct avs_spec apl_desc = {
+>  };
+>  
+>  static const struct pci_device_id avs_ids[] = {
+> -	{ PCI_VDEVICE(INTEL, 0x9d70), (unsigned long)&skl_desc }, /* SKL */
+> -	{ PCI_VDEVICE(INTEL, 0xa170), (unsigned long)&skl_desc }, /* SKL-H */
+> -	{ PCI_VDEVICE(INTEL, 0x9d71), (unsigned long)&skl_desc }, /* KBL */
+> -	{ PCI_VDEVICE(INTEL, 0xa171), (unsigned long)&skl_desc }, /* KBL-H */
+> -	{ PCI_VDEVICE(INTEL, 0xa2f0), (unsigned long)&skl_desc }, /* KBL-S */
+> -	{ PCI_VDEVICE(INTEL, 0xa3f0), (unsigned long)&skl_desc }, /* CML-V */
+> -	{ PCI_VDEVICE(INTEL, 0x5a98), (unsigned long)&apl_desc }, /* APL */
+> -	{ PCI_VDEVICE(INTEL, 0x3198), (unsigned long)&apl_desc }, /* GML */
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_SKL_LP, &skl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_SKL, &skl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_KBL_LP, &skl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_KBL, &skl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_KBL_H, &skl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_CML_S, &skl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_APL, &apl_desc) },
+> +	{ PCI_DEVICE_DATA(INTEL, HDA_GML, &apl_desc) },
+>  	{ 0 }
+>  };
+>  MODULE_DEVICE_TABLE(pci, avs_ids);
+> -- 
+> 2.34.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
