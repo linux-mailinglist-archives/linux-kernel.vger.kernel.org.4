@@ -2,373 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8240474E89A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DDF74E88C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjGKIAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        id S230103AbjGKIAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjGKIAm (ORCPT
+        with ESMTP id S229458AbjGKIAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:00:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E32F12F;
-        Tue, 11 Jul 2023 01:00:37 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B7r69x016338;
-        Tue, 11 Jul 2023 08:00:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PQbXdi5c+KowifPmhI2Iw3sqR/stFtZFRjjgGgL19h8=;
- b=WJctRqc3b7h6Kvu+DGDFlsj6UwaAJmPydShuzKVmHWvPDi3++L6qQ+4fhsEci0eDY9Lv
- YRVmX8Te+3KlWccncXyzxzETLVJ7uh/siRWCiOskP8jY5vrztkp2S7JqFOEYMEPwHirK
- MNrqurpUk/VZ7J4VsOnwPdHty63SR+As1bkGE5P+yb5LiPxY2hI/QQe/8myoyj5s72LY
- kSsFDr9CovBmZyaEoAgRots6CBLg3m6rD95fdzRenO4YJ6Z4tmwTMtgJRuHfMjVsjilp
- rvxIQ6lWim8xcKvsrHzjooHyIre4ukRYht2IaPqOhbE5pHfSGcFdCyVwGZmdEDvNbOzl DQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0vqr8gg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 08:00:33 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B80XE5003419
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 08:00:33 GMT
-Received: from [10.201.162.56] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
- 2023 01:00:28 -0700
-Message-ID: <250d6776-5aca-67e9-ac4c-73d8d43b0592@quicinc.com>
-Date:   Tue, 11 Jul 2023 13:30:24 +0530
+        Tue, 11 Jul 2023 04:00:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20633AF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:00:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFD426136E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:00:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60765C433C7;
+        Tue, 11 Jul 2023 08:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689062428;
+        bh=Vh8wJERkeoJAH7WZTn6GTTqD0L/T8dhTkMXGSs9gnIU=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=jpAl+B/LrT3bdYz0t+fF6kSb10UGId090DOAV8pHKt0KOR35ExAOC2E9c6Sqmxk11
+         55V/GIGiaSqwg8OCp5F+J4MOLOGINGqkpeNHZAJTxpgA6y7AiTuk50LmhNI7/4t8Ll
+         FjYeGyQdtpYi5svnFYmxRGMpBrq/deVqoy5X5YnUy0xGuNx/PHR6zu0yVLb9jE4ux7
+         uyyC8es16WDa3nqdI9rDq75XxdNznZw7EYrKOyLYEpKsflY9YnOikXRNOS5gItCO97
+         gAnlEJ3m2On+K9Mk4xg0582JdV9tVKyr3HVVDzZaWwJrzHx7Ju7CCmUP/l7yeEGSDC
+         3P1qkRM0huGrA==
+Message-ID: <94b767a3-e768-54d6-3653-90aeaf8edd4a@kernel.org>
+Date:   Tue, 11 Jul 2023 16:00:25 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Vignesh Viswanathan <quic_viswanat@quicinc.com>
-Subject: Re: [PATCH] remoteproc: qcom: Add NOTIFY_FATAL event type to SSR
- subdevice
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_devipriy@quicinc.com>,
-        <quic_sjaganat@quicinc.com>
-References: <20230503062146.3891-1-quic_viswanat@quicinc.com>
- <f7a0c15d-a7d7-c2ed-875d-c8c24ebf0dab@quicinc.com>
- <cfe32c1c-6d9b-1c74-c7d1-6597591edf77@quicinc.com>
- <3687b420-0993-7f76-7116-114b1784de05@quicinc.com>
- <d6b07470-983b-fd50-6b88-239ab0607e39@quicinc.com>
+ Thunderbird/102.13.0
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: do not issue small discard commands
+ during checkpoint
 Content-Language: en-US
-In-Reply-To: <d6b07470-983b-fd50-6b88-239ab0607e39@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230613203947.2745943-1-jaegeuk@kernel.org>
+ <ZInmkgjDnAUD5Nk0@google.com>
+ <50d5fa8c-4fe9-8a03-be78-0b5383e55b62@kernel.org>
+ <ZKP6EJ5dZ4f4wScp@google.com>
+ <65143701-4c19-ab66-1500-abd1162639cd@kernel.org>
+ <ZKWovWZDiHjMavtB@google.com>
+ <cadfb8d7-f5d0-a3ec-cafb-a0c06ad7d290@kernel.org>
+In-Reply-To: <cadfb8d7-f5d0-a3ec-cafb-a0c06ad7d290@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SUxL535dJFs4tYTA4S7Bp-CHf6wD_Rcm
-X-Proofpoint-ORIG-GUID: SUxL535dJFs4tYTA4S7Bp-CHf6wD_Rcm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999 clxscore=1011
- priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110070
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/15/2023 4:10 PM, Vignesh Viswanathan wrote:
-> 
-> 
-> On 5/29/2023 9:27 AM, Vignesh Viswanathan wrote:
->> Gentle Reminder.
+On 2023/7/6 8:46, Chao Yu wrote:
+> On 2023/7/6 1:30, Jaegeuk Kim wrote:
+>> On 07/04, Chao Yu wrote:
+>>> On 2023/7/4 18:53, Jaegeuk Kim wrote:
+>>>> On 07/03, Chao Yu wrote:
+>>>>> On 2023/6/15 0:10, Jaegeuk Kim wrote:
+>>>>>> If there're huge # of small discards, this will increase checkpoint latency
+>>>>>> insanely. Let's issue small discards only by trim.
+>>>>>>
+>>>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>>>>> ---
+>>>>>>
+>>>>>>     Change log from v1:
+>>>>>>      - move the skip logic to avoid dangling objects
+>>>>>>
+>>>>>>     fs/f2fs/segment.c | 2 +-
+>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>>>>> index 8c7af8b4fc47..0457d620011f 100644
+>>>>>> --- a/fs/f2fs/segment.c
+>>>>>> +++ b/fs/f2fs/segment.c
+>>>>>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+>>>>>>                 len = next_pos - cur_pos;
+>>>>>>                 if (f2fs_sb_has_blkzoned(sbi) ||
+>>>>>> -                (force && len < cpc->trim_minlen))
+>>>>>> +                    !force || len < cpc->trim_minlen)
+>>>>>>                     goto skip;
+>>>>>
+>>>>> Sorry for late reply.
+>>>>>
+>>>>> We have a configuration for such case, what do you think of setting
+>>>>> max_small_discards to zero? otherwise, w/ above change, max_small_discards
+>>>>> logic may be broken?
+>>>>>
+>>>>> What:           /sys/fs/f2fs/<disk>/max_small_discards
+>>>>> Date:           November 2013
+>>>>> Contact:        "Jaegeuk Kim" <jaegeuk.kim@samsung.com>
+>>>>> Description:    Controls the issue rate of discard commands that consist of small
+>>>>>                   blocks less than 2MB. The candidates to be discarded are cached until
+>>>>>                   checkpoint is triggered, and issued during the checkpoint.
+>>>>>                   By default, it is disabled with 0.
+>>>>>
+>>>>> Or, if we prefer to disable small_discards by default, what about below change:
+>>>>
+>>>> I think small_discards is fine, but need to avoid long checkpoint latency only.
+>>>
+>>> I didn't get you, do you mean we can still issue small discard by
+>>> fstrim, so small_discards functionality is fine?
 >>
->> On 5/22/2023 3:03 PM, Mukesh Ojha wrote:
->>>
->>>
->>> On 5/3/2023 4:56 PM, Mukesh Ojha wrote:
->>>>
->>>>
->>>> On 5/3/2023 11:51 AM, Vignesh Viswanathan wrote:
->>>>> Currently the SSR subdevice notifies the client driver on crash of the
->>>>> rproc from the recovery workqueue using the BEFORE_SHUTDOWN event.
->>>>> However the client driver might be interested to know that the device
->>>>> has crashed immediately to pause any further transactions with the
->>>>> rproc. This calls for an event to be sent to the driver in the IRQ
->>>>> context as soon as the rproc crashes.
->>>>>
->>>>> Add NOTIFY_FATAL event to SSR subdevice to atomically notify rproc has
->>>>> crashed to the client driver.
->>>>>
->>>>> Validated the event in IPQ9574 and IPQ5332 by forcing the rproc to 
->>>>> crash
->>>>> and ensuring the registered notifier function receives the 
->>>>> notification
->>>>> in IRQ context.
->>>>
->>>> This was one of valid use case we encounter in android, We have some 
->>>> other way of doing the same thing without core kernel change with
->>>> something called early notifiers.
->>>>
->>>> https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/7583d24de337aa1bf7c375a7da706af9b995b9a1#a840754ebb0e24e88adbf48177e1abd0830b72d2
->>>>
->>>> https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/257de41c63a5a51a081cc7887cdaa4a46e4d1744
->>>>
->>>> But good to address this if possible.
->>>
->>> Ack the idea of early notifier;
->>> But here, atomic does not guarantees it to be atomic.
->>>
->>> Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>
->>> -- Mukesh
->>>
-> Gentle Reminder!
+>> You got the point.
 > 
-> Thanks,
-> Vignesh
+> Well, actually, what I mean is max_small_discards sysfs entry's functionality
+> is broken. Now, the entry can not be used to control number of small discards
+> committed by checkpoint.
 > 
+> I think there is another way to achieve "avoid long checkpoint latency caused
+> by committing huge # of small discards", the way is we can set max_small_discards
+> to small value or zero, w/ such configuration, it will take checkpoint much less
+> time or no time to committing small discard due to below control logic:
 
-Gentle reminder for review!
+Jaegeuk, any comments?
 
 Thanks,
-Vignesh
 
+> 
+> f2fs_flush_sit_entries()
+> {
+> ...
+>              if (!(cpc->reason & CP_DISCARD)) {
+>                  cpc->trim_start = segno;
+>                  add_discard_addrs(sbi, cpc, false);
+>              }
+> ...
+> }
+> 
+> add_discard_addrs()
+> {
+> ...
+>      while (force || SM_I(sbi)->dcc_info->nr_discards <=
+>                  SM_I(sbi)->dcc_info->max_discards) {
+> 
+> It will break the loop once nr_discards is larger than max_discards, if
+> max_discards is set to zero, checkpoint won't take time to handle small discards.
+> 
+> ...
+>          if (!de) {
+>              de = f2fs_kmem_cache_alloc(discard_entry_slab,
+>                          GFP_F2FS_ZERO, true, NULL);
+>              de->start_blkaddr = START_BLOCK(sbi, cpc->trim_start);
+>              list_add_tail(&de->list, head);
+>          }
+> ...
+>      }
+> ...
+> 
+> Thanks,
+> 
+>>
+>>>
+>>> Thanks,
 >>>
 >>>>
->>>> -Mukesh
 >>>>>
->>>>> Signed-off-by: Vignesh Viswanathan <quic_viswanat@quicinc.com>
+>>>>>   From eb89d9b56e817e3046d7fa17165b12416f09d456 Mon Sep 17 00:00:00 2001
+>>>>> From: Chao Yu <chao@kernel.org>
+>>>>> Date: Mon, 3 Jul 2023 09:06:53 +0800
+>>>>> Subject: [PATCH] Revert "f2fs: enable small discard by default"
+>>>>>
+>>>>> This reverts commit d618ebaf0aa83d175658aea5291e0c459d471d39 in order
+>>>>> to disable small discard by default, so that if there're huge number of
+>>>>> small discards, it will decrease checkpoint's latency obviously.
+>>>>>
+>>>>> Also, this patch reverts 9ac00e7cef10 ("f2fs: do not issue small discard
+>>>>> commands during checkpoint"), due to it breaks small discard feature which
+>>>>> may be configured via sysfs entry max_small_discards.
+>>>>>
+>>>>> Fixes: 9ac00e7cef10 ("f2fs: do not issue small discard commands during checkpoint")
+>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
 >>>>> ---
->>>>>   drivers/remoteproc/qcom_common.c     | 60 
->>>>> +++++++++++++++++++++++++++
->>>>>   drivers/remoteproc/remoteproc_core.c  | 12 ++++++
->>>>>   include/linux/remoteproc.h            |  3 ++
->>>>>   include/linux/remoteproc/qcom_rproc.h | 17 ++++++++
->>>>>   4 files changed, 92 insertions(+)
+>>>>>    fs/f2fs/segment.c | 4 ++--
+>>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
 >>>>>
->>>>> diff --git a/drivers/remoteproc/qcom_common.c 
->>>>> b/drivers/remoteproc/qcom_common.c
->>>>> index a0d4238492e9..76542229aeb6 100644
->>>>> --- a/drivers/remoteproc/qcom_common.c
->>>>> +++ b/drivers/remoteproc/qcom_common.c
->>>>> @@ -84,6 +84,7 @@ struct minidump_global_toc {
->>>>>   struct qcom_ssr_subsystem {
->>>>>       const char *name;
->>>>>       struct srcu_notifier_head notifier_list;
->>>>> +    struct atomic_notifier_head atomic_notifier_list;
->>>>>       struct list_head list;
->>>>>   };
->>>>> @@ -366,6 +367,7 @@ static struct qcom_ssr_subsystem 
->>>>> *qcom_ssr_get_subsys(const char *name)
->>>>>       }
->>>>>       info->name = kstrdup_const(name, GFP_KERNEL);
->>>>>       srcu_init_notifier_head(&info->notifier_list);
->>>>> +    ATOMIC_INIT_NOTIFIER_HEAD(&info->atomic_notifier_list);
->>>>>       /* Add to global notification list */
->>>>>       list_add_tail(&info->list, &qcom_ssr_subsystem_list);
->>>>> @@ -417,6 +419,51 @@ int qcom_unregister_ssr_notifier(void *notify, 
->>>>> struct notifier_block *nb)
->>>>>   }
->>>>>   EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
->>>>> +/**
->>>>> + * qcom_register_ssr_atomic_notifier() - register SSR Atomic 
->>>>> notification
->>>>> + *                     handler
->>>>> + * @name:    Subsystem's SSR name
->>>>> + * @nb:    notifier_block to be invoked upon subsystem's state change
->>>>> + *
->>>>> + * This registers the @nb notifier block as part the atomic notifier
->>>>> + * chain for a remoteproc associated with @name. The notifier 
->>>>> block's callback
->>>>> + * will be invoked when the remote processor crashes in atomic 
->>>>> context before
->>>>> + * the recovery process is queued.
->>>>> + *
->>>>> + * Return: a subsystem cookie on success, ERR_PTR on failure.
->>>>> + */
->>>>> +void *qcom_register_ssr_atomic_notifier(const char *name,
->>>>> +                    struct notifier_block *nb)
->>>>> +{
->>>>> +    struct qcom_ssr_subsystem *info;
->>>>> +
->>>>> +    info = qcom_ssr_get_subsys(name);
->>>>> +    if (IS_ERR(info))
->>>>> +        return info;
->>>>> +
->>>>> +    atomic_notifier_chain_register(&info->atomic_notifier_list, nb);
->>>>> +
->>>>> +    return &info->atomic_notifier_list;
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(qcom_register_ssr_atomic_notifier);
->>>>> +
->>>>> +/**
->>>>> + * qcom_unregister_ssr_atomic_notifier() - unregister SSR Atomic 
->>>>> notification
->>>>> + *                       handler
->>>>> + * @notify:    subsystem cookie returned from 
->>>>> qcom_register_ssr_notifier
->>>>> + * @nb:        notifier_block to unregister
->>>>> + *
->>>>> + * This function will unregister the notifier from the atomic 
->>>>> notifier
->>>>> + * chain.
->>>>> + *
->>>>> + * Return: 0 on success, %ENOENT otherwise.
->>>>> + */
->>>>> +int qcom_unregister_ssr_atomic_notifier(void *notify, struct 
->>>>> notifier_block *nb)
->>>>> +{
->>>>> +    return atomic_notifier_chain_unregister(notify, nb);
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(qcom_unregister_ssr_atomic_notifier);
->>>>> +
->>>>>   static int ssr_notify_prepare(struct rproc_subdev *subdev)
->>>>>   {
->>>>>       struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->>>>> @@ -467,6 +514,18 @@ static void ssr_notify_unprepare(struct 
->>>>> rproc_subdev *subdev)
->>>>>                    QCOM_SSR_AFTER_SHUTDOWN, &data);
->>>>>   }
->>>>> +static void ssr_notify_crash(struct rproc_subdev *subdev)
->>>>> +{
->>>>> +    struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->>>>> +    struct qcom_ssr_notify_data data = {
->>>>> +        .name = ssr->info->name,
->>>>> +        .crashed = true,
->>>>> +    };
->>>>> +
->>>>> +    atomic_notifier_call_chain(&ssr->info->atomic_notifier_list,
->>>>> +                   QCOM_SSR_NOTIFY_CRASH, &data);
->>>>> +}
->>>>> +
->>>>>   /**
->>>>>    * qcom_add_ssr_subdev() - register subdevice as restart 
->>>>> notification source
->>>>>    * @rproc:    rproc handle
->>>>> @@ -493,6 +552,7 @@ void qcom_add_ssr_subdev(struct rproc *rproc, 
->>>>> struct qcom_rproc_ssr *ssr,
->>>>>       ssr->subdev.start = ssr_notify_start;
->>>>>       ssr->subdev.stop = ssr_notify_stop;
->>>>>       ssr->subdev.unprepare = ssr_notify_unprepare;
->>>>> +    ssr->subdev.notify_crash = ssr_notify_crash;
->>>>>       rproc_add_subdev(rproc, &ssr->subdev);
->>>>>   }
->>>>> diff --git a/drivers/remoteproc/remoteproc_core.c 
->>>>> b/drivers/remoteproc/remoteproc_core.c
->>>>> index 695cce218e8c..3de0ece158ea 100644
->>>>> --- a/drivers/remoteproc/remoteproc_core.c
->>>>> +++ b/drivers/remoteproc/remoteproc_core.c
->>>>> @@ -1139,6 +1139,16 @@ static void 
->>>>> rproc_unprepare_subdevices(struct rproc *rproc)
->>>>>       }
->>>>>   }
->>>>> +static void rproc_notify_crash_subdevices(struct rproc *rproc)
->>>>> +{
->>>>> +    struct rproc_subdev *subdev;
->>>>> +
->>>>> +    list_for_each_entry_reverse(subdev, &rproc->subdevs, node) {
->>>>> +        if (subdev->notify_crash)
->>>>> +            subdev->notify_crash(subdev);
->>>>> +    }
->>>>> +}
->>>>> +
->>>>>   /**
->>>>>    * rproc_alloc_registered_carveouts() - allocate all carveouts 
->>>>> registered
->>>>>    * in the list
->>>>> @@ -2687,6 +2697,8 @@ void rproc_report_crash(struct rproc *rproc, 
->>>>> enum rproc_crash_type type)
->>>>>       dev_err(&rproc->dev, "crash detected in %s: type %s\n",
->>>>>           rproc->name, rproc_crash_to_string(type));
->>>>> +    rproc_notify_crash_subdevices(rproc);
->>>>> +
->>>>>       queue_work(rproc_recovery_wq, &rproc->crash_handler);
->>>>>   }
->>>>>   EXPORT_SYMBOL(rproc_report_crash);
->>>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->>>>> index fe8978eb69f1..f3c0e0103e81 100644
->>>>> --- a/include/linux/remoteproc.h
->>>>> +++ b/include/linux/remoteproc.h
->>>>> @@ -596,6 +596,8 @@ struct rproc {
->>>>>    * @stop: stop function, called before the rproc is stopped; the 
->>>>> @crashed
->>>>>    *        parameter indicates if this originates from a recovery
->>>>>    * @unprepare: unprepare function, called after the rprochas 
->>>>> been stopped
->>>>> + * @notify_crash: notify_crash function, called in atomic context 
->>>>> to notify
->>>>> + *          rproc has crashed and recovery is about to start
->>>>>    */
->>>>>   struct rproc_subdev {
->>>>>       struct list_head node;
->>>>> @@ -604,6 +606,7 @@ struct rproc_subdev {
->>>>>       int (*start)(struct rproc_subdev *subdev);
->>>>>       void (*stop)(struct rproc_subdev *subdev, bool crashed);
->>>>>       void (*unprepare)(struct rproc_subdev *subdev);
->>>>> +    void (*notify_crash)(struct rproc_subdev *subdev);
->>>>>   };
->>>>>   /* we currently support only two vrings per rvdev */
->>>>> diff --git a/include/linux/remoteproc/qcom_rproc.h 
->>>>> b/include/linux/remoteproc/qcom_rproc.h
->>>>> index 82b211518136..f3d06900f297 100644
->>>>> --- a/include/linux/remoteproc/qcom_rproc.h
->>>>> +++ b/include/linux/remoteproc/qcom_rproc.h
->>>>> @@ -11,12 +11,14 @@ struct notifier_block;
->>>>>    * @QCOM_SSR_AFTER_POWERUP:    Remoteproc is running (start stage)
->>>>>    * @QCOM_SSR_BEFORE_SHUTDOWN:    Remoteproc crashed or shutting 
->>>>> down (stop stage)
->>>>>    * @QCOM_SSR_AFTER_SHUTDOWN:    Remoteprocis down (unprepare stage)
->>>>> + * @QCOM_SSR_NOTIFY_CRASH:    Remoteproc crashed
->>>>>    */
->>>>>   enum qcom_ssr_notify_type {
->>>>>       QCOM_SSR_BEFORE_POWERUP,
->>>>>       QCOM_SSR_AFTER_POWERUP,
->>>>>       QCOM_SSR_BEFORE_SHUTDOWN,
->>>>>       QCOM_SSR_AFTER_SHUTDOWN,
->>>>> +    QCOM_SSR_NOTIFY_CRASH,
->>>>>   };
->>>>>   struct qcom_ssr_notify_data {
->>>>> @@ -29,6 +31,10 @@ struct qcom_ssr_notify_data {
->>>>>   void *qcom_register_ssr_notifier(const char *name, struct 
->>>>> notifier_block *nb);
->>>>>   int qcom_unregister_ssr_notifier(void *notify, struct 
->>>>> notifier_block *nb);
->>>>> +void *qcom_register_ssr_atomic_notifier(const char *name,
->>>>> +                    struct notifier_block *nb);
->>>>> +int qcom_unregister_ssr_atomic_notifier(void *notify,
->>>>> +                    struct notifier_block *nb);
->>>>>   #else
->>>>>   static inline void *qcom_register_ssr_notifier(const char *name,
->>>>> @@ -43,6 +49,17 @@ static inline int 
->>>>> qcom_unregister_ssr_notifier(void *notify,
->>>>>       return 0;
->>>>>   }
->>>>> +static inline void *qcom_register_ssr_atomic_notifier(const char 
->>>>> *name,
->>>>> +                              struct notifier_block *nb)
->>>>> +{
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static inline int qcom_unregister_ssr_atomic_notifier(void *notify,
->>>>> +                              struct notifier_block *nb)
->>>>> +{
->>>>> +    return 0;
->>>>> +}
->>>>>   #endif
->>>>>   #endif
->>>>
+>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>>>> index 14c822e5c9c9..0a313368f18b 100644
+>>>>> --- a/fs/f2fs/segment.c
+>>>>> +++ b/fs/f2fs/segment.c
+>>>>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+>>>>>                len = next_pos - cur_pos;
+>>>>>
+>>>>>                if (f2fs_sb_has_blkzoned(sbi) ||
+>>>>> -                    !force || len < cpc->trim_minlen)
+>>>>> +                (force && len < cpc->trim_minlen))
+>>>>>                    goto skip;
+>>>>>
+>>>>>                f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
+>>>>> @@ -2269,7 +2269,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
+>>>>>        atomic_set(&dcc->queued_discard, 0);
+>>>>>        atomic_set(&dcc->discard_cmd_cnt, 0);
+>>>>>        dcc->nr_discards = 0;
+>>>>> -    dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
+>>>>> +    dcc->max_discards = 0;
+>>>>>        dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
+>>>>>        dcc->min_discard_issue_time = DEF_MIN_DISCARD_ISSUE_TIME;
+>>>>>        dcc->mid_discard_issue_time = DEF_MID_DISCARD_ISSUE_TIME;
+>>>>> -- 
+>>>>> 2.40.1
+>>>>>
+>>>>>
+>>>>>
+>>>>>>                 f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
