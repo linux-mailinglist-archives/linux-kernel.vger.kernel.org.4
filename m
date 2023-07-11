@@ -2,140 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AD274F4A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360DD74F4B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjGKQPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S232216AbjGKQRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjGKQPf (ORCPT
+        with ESMTP id S231575AbjGKQQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:15:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD1EE7E;
-        Tue, 11 Jul 2023 09:15:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 11 Jul 2023 12:16:58 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232DD10CA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:16:55 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-imzzeDBEMu-0xqerZ7W6tg-1; Tue, 11 Jul 2023 12:16:53 -0400
+X-MC-Unique: imzzeDBEMu-0xqerZ7W6tg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E39D61549;
-        Tue, 11 Jul 2023 16:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A382FC433C8;
-        Tue, 11 Jul 2023 16:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689092131;
-        bh=bJhJ5ldqh1RC4u2ucoivoNiS+23oP96DkhoEyS6UazY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y2nW+rWmftosc01WmZ8NJ7bttTZcZT8YyUX5AcF1p9XE2oDkFijgHysYyRzuO8wR8
-         k0qrpc+Xt4OrMhqkjpzvNe8ic6CKy1KEDa9GS7o12lStT8qoaDRmYq2803uU5Rg4G2
-         Ni42N1f8UlbNkD30Z8AS82rj1A6RI2I3V2EVATkpAGKxm7gzXyhDoYYICoWxdF/XHA
-         hwRx5q9WqnbmZYCoA3aOYnpa7HuzU/81/pH7xdLYhh50S+n5l3w7G+e2Tck3VCfK89
-         1I/SjU+Dh5mrHaoaWWiWXv4lw9DoQXqwqVTiRwDww+isTaunx8rUIs/l9HMkRuwXER
-         bIMC52Fnjz1Ug==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 550DE40516; Tue, 11 Jul 2023 13:15:29 -0300 (-03)
-Date:   Tue, 11 Jul 2023 13:15:29 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        jolsa@kernel.org, rostedt@goodmis.org, svens@linux.ibm.com,
-        gor@linux.ibm.com, sumanthk@linux.ibm.com, hca@linux.ibm.com
-Subject: Re: [PATCH v2] perf/build: fix broken dependency check for libtracefs
-Message-ID: <ZK2AISIWZX5GlOZv@kernel.org>
-References: <20230711135338.397473-1-tmricht@linux.ibm.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B32529AB45B;
+        Tue, 11 Jul 2023 16:16:49 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.45.225.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 67B04200B406;
+        Tue, 11 Jul 2023 16:16:36 +0000 (UTC)
+From:   Alexey Gladkov <legion@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Cc:     James.Bottomley@HansenPartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        dhowells@redhat.com, fenghua.yu@intel.com, fweimer@redhat.com,
+        geert@linux-m68k.org, glebfm@altlinux.org, gor@linux.ibm.com,
+        hare@suse.com, hpa@zytor.com, ink@jurassic.park.msu.ru,
+        jhogan@kernel.org, kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
+        luto@kernel.org, mattst88@gmail.com, mingo@redhat.com,
+        monstr@monstr.eu, mpe@ellerman.id.au, namhyung@kernel.org,
+        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
+        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
+        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
+        x86@kernel.org, ysato@users.sourceforge.jp
+Subject: [PATCH v4 0/5] Add a new fchmodat2() syscall
+Date:   Tue, 11 Jul 2023 18:16:02 +0200
+Message-Id: <cover.1689092120.git.legion@kernel.org>
+In-Reply-To: <cover.1689074739.git.legion@kernel.org>
+References: <cover.1689074739.git.legion@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711135338.397473-1-tmricht@linux.ibm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jul 11, 2023 at 03:53:38PM +0200, Thomas Richter escreveu:
-> Perf build auto-detects features and packages already installed
-> for its build. This is done in directory tools/build/feature. This
-> directory contains small sample programs. When they successfully
-> compile the necessary prereqs in form of libraries and header
-> files are present.
-> 
-> Such a check is also done for libtracefs. And this check fails:
-> 
-> Output before:
->  # rm -f test-libtracefs.bin; make test-libtracefs.bin
->  gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
-> 	 > test-libtracefs.make.output 2>&1 -ltracefs
->  make: *** [Makefile:211: test-libtracefs.bin] Error 1
->  # cat test-libtracefs.make.output
->  In file included from test-libtracefs.c:2:
->  /usr/include/tracefs/tracefs.h:11:10: fatal error: \
-> 	 event-parse.h: No such file or directory
->    11 | #include <event-parse.h>
->       |          ^~~~~~~~~~~~~~~
->  compilation terminated.
->  #
-> 
-> The root cause of this compile error is
-> commit 880885d9c22e ("libtracefs: Remove "traceevent/" from referencing libtraceevent headers")
-> in the libtracefs project hosted here:
->  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
-> 
-> That mentioned patch removes the traceevent/ directory name from
-> the include statement, causing the file not to be included even
-> when the libtraceevent-devel package is installed. This package contains
-> the file referred to in tracefs/tracefs.h:
->  # rpm -ql libtraceevent-devel
->  /usr/include/traceevent
->  /usr/include/traceevent/event-parse.h  <----- here
->  /usr/include/traceevent/event-utils.h
->  /usr/include/traceevent/kbuffer.h
->  /usr/include/traceevent/trace-seq.h
->  /usr/lib64/libtraceevent.so
->  /usr/lib64/pkgconfig/libtraceevent.pc
->  #
-> 
-> With this patch the compile succeeds.
-> 
-> Output after:
->  # rm -f test-libtracefs.bin; make test-libtracefs.bin
->  gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
-> 	 > test-libtracefs.make.output 2>&1 -I/usr/include/traceevent -ltracefs
->  #
+In glibc, the fchmodat(3) function has a flags argument according to the
+POSIX specification [1], but kernel syscalls has no such argument.
+Therefore, libc implementations do workarounds using /proc. However,
+this requires procfs to be mounted and accessible.
 
-Thanks! I test it like this:
+This patch set adds fchmodat2(), a new syscall. The syscall allows to
+pass the AT_SYMLINK_NOFOLLOW flag to disable LOOKUP_FOLLOW. In all other
+respects, this syscall is no different from fchmodat().
 
-Committer testing:
+[1] https://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html
 
-  $ make -k BUILD_BPF_SKEL=1 CORESIGHT=1 O=/tmp/build/perf-tools -C tools/perf install-bin
+Changes since v3 [cover.1689074739.git.legion@kernel.org]:
 
-Before:
+* Rebased to master because a new syscall has appeared in master.
+* Increased __NR_compat_syscalls as pointed out by Arnd Bergmann.
+* Syscall renamed fchmodat4 -> fchmodat2 as suggested by Christian Brauner.
+* Returned do_fchmodat4() the original name. We don't need to version
+  internal functions.
+* Fixed warnings found by checkpatch.pl.
 
-  $ cat /tmp/build/perf-tools/feature/test-libtracefs.make.output
-  In file included from test-libtracefs.c:2:
-  /usr/include/tracefs/tracefs.h:11:10: fatal error: event-parse.h: No such file or directory
-     11 | #include <event-parse.h>
-        |          ^~~~~~~~~~~~~~~
-  compilation terminated.
-  $
-  $ grep -i tracefs /tmp/build/perf-tools/FEATURE-DUMP
-  feature-libtracefs=0
-  $
+Changes since v2 [20190717012719.5524-1-palmer@sifive.com]:
 
-After:
+* Rebased to master.
+* The lookup_flags passed to sys_fchmodat4 as suggested by Al Viro.
+* Selftest added.
 
-  $ cat /tmp/build/perf-tools/feature/test-libtracefs.make.output
-  $
-  $ grep -i tracefs /tmp/build/perf-tools/FEATURE-DUMP
-  feature-libtracefs=1
-  $
+Changes since v1 [20190531191204.4044-1-palmer@sifive.com]:
 
-Applied to perf-tools, for v6.5.
+* All architectures are now supported, which support squashed into a
+  single patch.
+* The do_fchmodat() helper function has been removed, in favor of directly
+  calling do_fchmodat4().
+* The patches are based on 5.2 instead of 5.1.
 
-- Arnaldo
+---
+
+Alexey Gladkov (2):
+  fs: Add fchmodat2()
+  selftests: Add fchmodat2 selftest
+
+Palmer Dabbelt (3):
+  Non-functional cleanup of a "__user * filename"
+  arch: Register fchmodat2, usually as syscall 452
+  tools headers UAPI: Sync files changed by new fchmodat2 syscall
+
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/open.c                                     |  18 +-
+ include/linux/syscalls.h                      |   4 +-
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ tools/include/uapi/asm-generic/unistd.h       |   5 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   2 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   2 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   2 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   2 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/fchmodat2/.gitignore  |   2 +
+ tools/testing/selftests/fchmodat2/Makefile    |   6 +
+ .../selftests/fchmodat2/fchmodat2_test.c      | 162 ++++++++++++++++++
+ 30 files changed, 223 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/fchmodat2/.gitignore
+ create mode 100644 tools/testing/selftests/fchmodat2/Makefile
+ create mode 100644 tools/testing/selftests/fchmodat2/fchmodat2_test.c
+
+-- 
+2.33.8
+
