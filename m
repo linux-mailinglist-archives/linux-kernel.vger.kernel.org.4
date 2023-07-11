@@ -2,85 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2770F74F614
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809C874F618
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjGKQud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S231124AbjGKQwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjGKQu3 (ORCPT
+        with ESMTP id S230155AbjGKQwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:50:29 -0400
+        Tue, 11 Jul 2023 12:52:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E399FE75
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:50:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8390E75;
+        Tue, 11 Jul 2023 09:52:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79D7F61585
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4869C433CA;
-        Tue, 11 Jul 2023 16:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689094226;
-        bh=9MiOiMOs5+VWea1gr0KqPNVMAfzAFLnJIKEhFO9iDHk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=eqxhl31OaXhY7xJQ6BJkKiX2EAm/Afe8InXwasdaLIlnG79zKqAay5ozoRpKJDPC8
-         fkHLW2UxEm0NsmOO5Z2WlT/qgtJGqTmP51XTkLsJLhWcdMQIpVOY8eCWjdHfIh1Fzf
-         YHcbBZYPVG/lTQHHwLQLIuUki+seaiBLXuepvPOxW7dy66ho00eRFLQK3/fJDG1znd
-         P1RksMeavtW0skt166OofHUgR709eKQUOzu11AdnQvv2HFZmxoSaGFYSotEQ828VTV
-         w7eUJpeDGuTg3igHvtQM7w8AkRBFm/burtNhXUoLMg6USv2N/eBgvry7cs2rzeYMCe
-         RHTB42SgDCQoA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B86A6E4D021;
-        Tue, 11 Jul 2023 16:50:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] libbpf: remove HASHMAP_INIT static initialization helper
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168909422675.4543.5041944985378816466.git-patchwork-notify@kernel.org>
-Date:   Tue, 11 Jul 2023 16:50:26 +0000
-References: <20230711070712.2064144-1-sanpeqf@gmail.com>
-In-Reply-To: <20230711070712.2064144-1-sanpeqf@gmail.com>
-To:     John Sanpe <sanpeqf@gmail.com>
-Cc:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D3B661578;
+        Tue, 11 Jul 2023 16:52:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66564C433C7;
+        Tue, 11 Jul 2023 16:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1689094354;
+        bh=tPUlfpdEgVeWU0fEHmbznxG/fGtFy4lDdLUuzVWVgqU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ifj3AekL98UeHTVQ1xETMb3/VKh08B5fL854XmdDUd9ksG2I7VYkY1ZcVn/9Sb/o4
+         rHd70rHd4B6iP9MbnqQa+A8/Jn/zkdH/rHsGz7ViYLrSxCXhSl4G4alFIgvCeF4YbB
+         0SCL1lbtyu6s3X2g84bDvTB/gZumLGBIdOMqY1jE=
+Date:   Tue, 11 Jul 2023 09:52:33 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH v5 00/38] New page table range API
+Message-Id: <20230711095233.aa74320d729c1da818a6a4ed@linux-foundation.org>
+In-Reply-To: <20230711172440.77504856@p-imbrenda>
+References: <20230710204339.3554919-1-willy@infradead.org>
+        <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
+        <ZK1My5hQYC2Kb6G1@casper.infradead.org>
+        <20230711172440.77504856@p-imbrenda>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 11 Jul 2023 17:24:40 +0200 Claudio Imbrenda <imbrenda@linux.ibm.com> wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue, 11 Jul 2023 15:07:12 +0800 you wrote:
-> Remove the wrong HASHMAP_INIT. It's not used anywhere in libbpf.
+> On Tue, 11 Jul 2023 13:36:27 +0100
+> Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> Signed-off-by: John Sanpe <sanpeqf@gmail.com>
-> ---
->  tools/lib/bpf/hashmap.h | 10 ----------
->  1 file changed, 10 deletions(-)
+> > On Tue, Jul 11, 2023 at 11:07:06AM +0200, Christian Borntraeger wrote:
+> > > Am 10.07.23 um 22:43 schrieb Matthew Wilcox (Oracle):  
+> > > > This patchset changes the API used by the MM to set up page table entries.
+> > > > The four APIs are:
+> > > >      set_ptes(mm, addr, ptep, pte, nr)
+> > > >      update_mmu_cache_range(vma, addr, ptep, nr)
+> > > >      flush_dcache_folio(folio)
+> > > >      flush_icache_pages(vma, page, nr)
+> > > > 
+> > > > flush_dcache_folio() isn't technically new, but no architecture
+> > > > implemented it, so I've done that for them.  The old APIs remain around
+> > > > but are mostly implemented by calling the new interfaces.
+> > > > 
+> > > > The new APIs are based around setting up N page table entries at once.
+> > > > The N entries belong to the same PMD, the same folio and the same VMA,
+> > > > so ptep++ is a legitimate operation, and locking is taken care of for
+> > > > you.  Some architectures can do a better job of it than just a loop,
+> > > > but I have hesitated to make too deep a change to architectures I don't
+> > > > understand well.
+> > > > 
+> > > > One thing I have changed in every architecture is that PG_arch_1 is now a
+> > > > per-folio bit instead of a per-page bit.  This was something that would
+> > > > have to happen eventually, and it makes sense to do it now rather than
+> > > > iterate over every page involved in a cache flush and figure out if it
+> > > > needs to happen.  
+> > > 
+> > > I think we do use PG_arch_1 on s390 for our secure page handling and
+> > > making this perf folio instead of physical page really seems wrong
+> > > and it probably breaks this code.  
+> > 
+> > Per-page flags are going away in the next few years, so you're going to
+> 
+> For each 4k physical page frame, we need to keep track whether it is
+> secure or not.
+> 
+> A bit in struct page seems the most logical choice. If that's not
+> possible anymore, how would you propose we should do?
+> 
+> > need a new design.  s390 seems to do a lot of unusual things.  I wish
+> 
+> s390 is an unusual architecture. we are working on un-weirding our
+> code, but it takes time
+> 
 
-Here is the summary with links:
-  - [v3] libbpf: remove HASHMAP_INIT static initialization helper
-    https://git.kernel.org/bpf/bpf-next/c/a3e7e6b17946
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+This issue sounds fatal for this version of this patchset?
