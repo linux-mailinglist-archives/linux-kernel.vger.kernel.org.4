@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FB674F374
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F8074F375
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjGKPau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S232323AbjGKPbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjGKPar (ORCPT
+        with ESMTP id S232262AbjGKPa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:30:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 640AC10DF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:30:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D996D1FB;
-        Tue, 11 Jul 2023 08:31:27 -0700 (PDT)
-Received: from [10.1.37.54] (C02Z41KALVDN.cambridge.arm.com [10.1.37.54])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 341713F740;
-        Tue, 11 Jul 2023 08:30:45 -0700 (PDT)
-Message-ID: <6fa76b99-24b3-9410-66c4-d765ef8f4c52@arm.com>
-Date:   Tue, 11 Jul 2023 16:30:43 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v4 18/49] mlock: Convert mlock to vma iterator
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>, linux-mm@kvack.org,
+        Tue, 11 Jul 2023 11:30:58 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6004A10D4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:30:57 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso3331424b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1689089457; x=1691681457;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AB4WL7G42oNiLPinEF1S7UK/vVdMZYxzgwOZQk/W3rA=;
+        b=QfLh8g6zkkjGje4Nkn6oUW4ZaefLRK2HEZ2eZcRtWTEHxCHx9fDBo5/zxCJVY08jWY
+         QZLL3KbhGz0XCWbDj7pidjGNtTABQVc2WFXfBcTbD27o71VNLkkjAs1n3CYXRPocZGoL
+         xz+iXsBZ9Gja9AHNKU96fBiQgDcDIZtpyQMNU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689089457; x=1691681457;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AB4WL7G42oNiLPinEF1S7UK/vVdMZYxzgwOZQk/W3rA=;
+        b=ep+gjq7uA+VDyPY+Vtr2ymMya18XVvT37JEkoko7Xk/R5KgfZBimlGS8RCUrJh5kRc
+         rD2MeeJdYhY3TwyitiyLP+k9WdLi8DCjPXRD9/3y2oC8IgUqQfn5JEs3gHZPpCgTIfEz
+         ivuuksGF7gZfhhlLKJel13vZ3f+ikITLH9WUV+7eX3Ypzs4nKKTMEtvyMObfxtOEzwE9
+         qddKuA4hnGOfD0wPJm//D9lAysurA6/0HNKldgKaxBCnlXjkgWZn/IP1+Ujbf/tE189B
+         ZbR7LvYTvmUflgPBE1rUTr1IAAP3W4LbSIwkdT6rilBmTrzBDhkeL+XVYoSwGp+HlgVa
+         rKrQ==
+X-Gm-Message-State: ABy/qLagG7g5s0m6JrS+EIYXqF7BsnA87SdKw8R6kEc066OGHdZOS4JG
+        H+FAwG/rPMrgk7fifzRFchdEqg==
+X-Google-Smtp-Source: APBJJlELFDJht4fu4ad0o7YpMjcMcQ1iiWzdkUnd3rZjW92oc9wa58jbA1COg5cHc65kt0cigMPguQ==
+X-Received: by 2002:a05:6a20:387:b0:12d:53ad:f55a with SMTP id 7-20020a056a20038700b0012d53adf55amr10824701pzt.55.1689089456870;
+        Tue, 11 Jul 2023 08:30:56 -0700 (PDT)
+Received: from google.com ([110.11.159.72])
+        by smtp.gmail.com with ESMTPSA id n19-20020aa79053000000b0067b643b814csm1903125pfo.6.2023.07.11.08.30.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 08:30:56 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 00:30:52 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        maple-tree@lists.infradead.org
-References: <20230120162650.984577-1-Liam.Howlett@oracle.com>
- <20230120162650.984577-19-Liam.Howlett@oracle.com>
- <50341ca1-d582-b33a-e3d0-acb08a65166f@arm.com>
- <20230711152734.hith252qxjbnz4bt@revolver>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230711152734.hith252qxjbnz4bt@revolver>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v2 4/5] printk: Add per-console suspended state
+Message-ID: <20230711153052.GF12154@google.com>
+References: <20230710134524.25232-1-john.ogness@linutronix.de>
+ <20230710134524.25232-5-john.ogness@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710134524.25232-5-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 16:27, Liam R. Howlett wrote:
-> * Ryan Roberts <ryan.roberts@arm.com> [230711 10:09]:
->> On 20/01/2023 16:26, Liam R. Howlett wrote:
->>> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
->>>
->>> Use the vma iterator so that the iterator can be invalidated or updated
->>> to avoid each caller doing so.
->>
->> Hi,
+On (23/07/10 15:51), John Ogness wrote:
+> Currently the global @console_suspended is used to determine if
+> consoles are in a suspended state. Its primary purpose is to allow
+> usage of the console_lock when suspended without causing console
+> printing. It is synchronized by the console_lock.
 > 
+> Rather than relying on the console_lock to determine suspended
+> state, make it an official per-console state that is set within
+> console->flags. This allows the state to be queried via SRCU.
 > 
-> Hello!
+> Remove @console_suspended. Console printing will still be avoided
+> when suspended because console_is_usable() returns false when
+> the new suspended flag is set for that console.
 > 
->>
->> I've bisected 2 mm selftest regressions back to this patch, so hoping someone can help debug and fix? The failures are reproducible on x86_64 and arm64.
-> 
-> Thanks!  That is a big help.  Where did you start your bisection?  I
-> assume 6.4?
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Yes, I'm working to get all the mm selftests running (and ideally passing!) on
-arm64. I working on v6.4 and it was broken there. I went arbitrarily back to
-v5.10 and it was working there, so bisected between them.
-
-> 
->>
->>
->> mlock-random-test:
->>
->> $ ./run_kselftest.sh -t mm:mlock-random-test
->> TAP version 13
->> 1..1
->> # selftests: mm: mlock-random-test
->> mlock() failure at |0xaaaaaaab52d0(131072)| mlock:|0xaaaaaaacc65d(26551)|
->> not ok 1 selftests: mm: mlock-random-test # exit=255
->>
->> This mallocs a buffer then loops 100 times, trying to mlock random parts of it. After this patch, the test fails after a variable number of iterations; mlock() returns ENOMEM. If I explicitly munlock at the end of each loop, it works.
->>
->>
->> mlock2-tests:
->>
->> $ ./run_kselftest.sh -t mm:mlock2-tests
->> TAP version 13
->> 1..1
->> # selftests: mm: mlock2-tests
->> munlock(): Cannot allocate memory
->> munlock(): Cannot allocate memory
->> not ok 1 selftests: mm: mlock2-tests # exit=2
->>
->> Here, a 3 page buffer is mlock2()ed, then the middle page is munlocked. Finally the whole 3 page range is munlocked, and after this patch it fails with ENOMEM. If I modify the test to split the final munlock into 2, one for the first page and one for the last, the test passes.
->>
->>
->> Immediately prior to this patch (2286a6914c77 "mm: change mprotect_fixup to vma iterator"), both tests pass.
->>
->> From a quick scan of the man page, I don't think it explicitly says that its ok to call mlock/munlock on already locked/unlocked pages, but it's certainly a change of behavior and the tests notice, so I'm guessing this wasn't intentional?
->>
->> I'm not familiar with this code so it's not obvious to me exactly what the problem is, but I'm hoping someone can help debug?
-> 
-> I think I see the issue and I'm working on a fix. I appreciate the
-> analysis and report, it really helps narrow things down.
-
-You're welcome!
-
-> 
-> Regards,
-> Liam
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
