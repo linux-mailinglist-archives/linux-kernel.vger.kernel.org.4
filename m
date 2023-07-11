@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B8674F10C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AF874F11D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjGKOEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S233265AbjGKOFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbjGKOEI (ORCPT
+        with ESMTP id S233180AbjGKOFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:04:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4428D12A;
-        Tue, 11 Jul 2023 07:04:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD98C61505;
-        Tue, 11 Jul 2023 14:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC663C433C8;
-        Tue, 11 Jul 2023 14:04:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689084246;
-        bh=hkjM3kAIgQB2MsZK32Y0LnSzvU+OKdW0pajbNogIOCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n9y6shDSvExiH8umQsf+SFCjEhlxKpJcK1FITT1X9fxWaBcy/PBj6GNyONmVduAK7
-         VrN+5V1Cp/gDD5e/zaI0L7WDA3s767ezmniJorTsn3GXlqUFZeSrma97UopLdgpudB
-         7GEQmf3i8/WAon5QrBgT3kivHV+TBb+xGvmBcNmI=
-Date:   Tue, 11 Jul 2023 16:04:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     linux-fsdevel@vger.kernel.org, kernel-team@cloudflare.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH] kernfs: attach uuid for every kernfs and report it in
- fsid
-Message-ID: <2023071159-unsigned-salvation-405d@gregkh>
-References: <20230710183338.58531-1-ivan@cloudflare.com>
- <2023071039-negate-stalemate-6987@gregkh>
- <CABWYdi39+TJd1qV3nWs_eYc7XMC0RvxG22ihfq7rzuPaNvn1cQ@mail.gmail.com>
+        Tue, 11 Jul 2023 10:05:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C6510F6;
+        Tue, 11 Jul 2023 07:05:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6D381FB;
+        Tue, 11 Jul 2023 07:05:45 -0700 (PDT)
+Received: from [10.57.30.34] (unknown [10.57.30.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5C733F740;
+        Tue, 11 Jul 2023 07:05:00 -0700 (PDT)
+Message-ID: <95506174-546c-9bf7-82af-09058550be6d@arm.com>
+Date:   Tue, 11 Jul 2023 15:04:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABWYdi39+TJd1qV3nWs_eYc7XMC0RvxG22ihfq7rzuPaNvn1cQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/4] arm_pmu: Remove unused
+ PERF_PMU_CAP_HETEROGENEOUS_CPUS capability
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, irogers@google.com
+References: <20230710122138.1450930-1-james.clark@arm.com>
+ <20230710122138.1450930-4-james.clark@arm.com>
+ <86792ab2-864a-5c27-95c1-54c4057024db@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <86792ab2-864a-5c27-95c1-54c4057024db@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 02:21:10PM -0700, Ivan Babrou wrote:
-> On Mon, Jul 10, 2023 at 12:40 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 10, 2023 at 11:33:38AM -0700, Ivan Babrou wrote:
-> > > The following two commits added the same thing for tmpfs:
-> > >
-> > > * commit 2b4db79618ad ("tmpfs: generate random sb->s_uuid")
-> > > * commit 59cda49ecf6c ("shmem: allow reporting fanotify events with file handles on tmpfs")
-> > >
-> > > Having fsid allows using fanotify, which is especially handy for cgroups,
-> > > where one might be interested in knowing when they are created or removed.
-> > >
-> > > Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
-> > > ---
-> > >  fs/kernfs/mount.c | 13 ++++++++++++-
-> > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-> > > index d49606accb07..930026842359 100644
-> > > --- a/fs/kernfs/mount.c
-> > > +++ b/fs/kernfs/mount.c
-> > > @@ -16,6 +16,8 @@
-> > >  #include <linux/namei.h>
-> > >  #include <linux/seq_file.h>
-> > >  #include <linux/exportfs.h>
-> > > +#include <linux/uuid.h>
-> > > +#include <linux/statfs.h>
-> > >
-> > >  #include "kernfs-internal.h"
-> > >
-> > > @@ -45,8 +47,15 @@ static int kernfs_sop_show_path(struct seq_file *sf, struct dentry *dentry)
-> > >       return 0;
-> > >  }
-> > >
-> > > +int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-> > > +{
-> > > +     simple_statfs(dentry, buf);
-> > > +     buf->f_fsid = uuid_to_fsid(dentry->d_sb->s_uuid.b);
-> > > +     return 0;
-> > > +}
-> > > +
-> > >  const struct super_operations kernfs_sops = {
-> > > -     .statfs         = simple_statfs,
-> > > +     .statfs         = kernfs_statfs,
-> > >       .drop_inode     = generic_delete_inode,
-> > >       .evict_inode    = kernfs_evict_inode,
-> > >
-> > > @@ -351,6 +360,8 @@ int kernfs_get_tree(struct fs_context *fc)
-> > >               }
-> > >               sb->s_flags |= SB_ACTIVE;
-> > >
-> > > +             uuid_gen(&sb->s_uuid);
-> >
-> > Since kernfs has as lot of nodes (like hundreds of thousands if not more
-> > at times, being created at boot time), did you just slow down creating
-> > them all, and increase the memory usage in a measurable way?
+
+
+On 11/07/2023 13:08, Anshuman Khandual wrote:
 > 
-> This is just for the superblock, not every inode. The memory increase
-> is one UUID per kernfs instance (there are maybe 10 of them on a basic
-> system), which is trivial. Same goes for CPU usage.
+> 
+> On 7/10/23 17:51, James Clark wrote:
+>> Since commit bd2756811766 ("perf: Rewrite core context handling") the
+>> relationship between perf_event_context and PMUs has changed so that
+>> the error scenario that PERF_PMU_CAP_HETEROGENEOUS_CPUS originally
+>> silenced no longer exists.
+>>
+>> Remove the capability and associated comment to avoid confusion that it
+>> actually influences any perf core behavior. This change should be a
+>> no-op.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  drivers/perf/arm_pmu.c | 7 ++-----
+>>  1 file changed, 2 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+>> index d8844a9461a2..297906df6628 100644
+>> --- a/drivers/perf/arm_pmu.c
+>> +++ b/drivers/perf/arm_pmu.c
+>> @@ -872,15 +872,12 @@ struct arm_pmu *armpmu_alloc(void)
+>>  		.attr_groups	= pmu->attr_groups,
+>>  		/*
+>>  		 * This is a CPU PMU potentially in a heterogeneous
+>> -		 * configuration (e.g. big.LITTLE). This is not an uncore PMU,
+>> -		 * and we have taken ctx sharing into account (e.g. with our
+>> -		 * pmu::filter callback and pmu::event_init group validation).
+>> -		 *
+>> +		 * configuration (e.g. big.LITTLE) so
+>>  		 * PERF_PMU_CAP_EXTENDED_HW_TYPE is required to open the legacy
+>>  		 * PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events on a
+>>  		 * specific PMU.
+>>  		 */
+>> -		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS |
+>> +		.capabilities	= PERF_PMU_CAP_EXTENDED_REGS |
+>>  				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
+> 
+> Small nit, the second line could be folded back into the first one.
 
-Ah, ok, my fault, thanks for clearing that up.
+.clang-format has a column limit of 80 which is why it gets folded. The
+kernel coding style guide also still says 80 is a strongly preferred
+limit so I'll probably leave it.
 
-thanks,
-
-greg k-h
+> 
+>>  	};
+>>  
