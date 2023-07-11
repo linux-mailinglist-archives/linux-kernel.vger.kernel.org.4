@@ -2,598 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A297774EA2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA6874EA2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjGKJTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S230447AbjGKJTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjGKJSN (ORCPT
+        with ESMTP id S232148AbjGKJSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:18:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262E726AB;
-        Tue, 11 Jul 2023 02:16:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EECED6141D;
-        Tue, 11 Jul 2023 09:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88AA8C433C9;
-        Tue, 11 Jul 2023 09:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689066993;
-        bh=F3EXYLgC8X/sb0UkTC/C/k7dVpQUFrXUfot4NhC7dS0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCxi3Okr1lxHupROwaQ1I17zyjICjLmDnoLBxACl8OSYoxvRJkSnyKIMph+Qrf/V+
-         9LXbxSokUa3ejLfbN32yk5kx29M/UDdkGtkx90h8c1PtslmIFWLQ+rqOUg+zSbOK8i
-         d299gTF/dd21fNUTrQ1PKJjdk4R3h4vZIXqQ09nduC691UlhbpnvzZFcIY96N9DrH5
-         ZMhtAkPB+IHsvjSSfVEs3yxNbmWB+mqRiuJIVfWAPVELyjcmhjoGSJIZl80pLQv7vI
-         11xiwotdt4dcGOvYWN0T5nTFZvyeACiE9Yrdn4tv++woQlxQ+INAYnz2D7H2n/Z8k/
-         G7qnTyWfqKZMA==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH v6 21/21] x86/efistub: Avoid legacy decompressor when doing EFI boot
-Date:   Tue, 11 Jul 2023 11:14:53 +0200
-Message-Id: <20230711091453.2543622-22-ardb@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230711091453.2543622-1-ardb@kernel.org>
-References: <20230711091453.2543622-1-ardb@kernel.org>
+        Tue, 11 Jul 2023 05:18:39 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A98270B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:16:40 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-579dfae6855so66685877b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689066999; x=1691658999;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pas4YXhE9tyV0vWkPBY+CDLqBNjLyZTNoC+4U42dUhg=;
+        b=aSj3J0kYl+ZUK4IWnBmQzG32fjD8rRq1hQO8yd5hdn0xoSO4SaIprQRSpWjAGbuT4L
+         j4HrGZeG89ENokExPTEpnaFx1AKo2T518QAOLp2gE30huepexy89ondFfiKpjRHsU9rz
+         tdst5M73OOskM8vqQmN58qghP7koMOC2FMvk7qJW4RFCq/QOyPsIucYIg3GxB0QBHI81
+         4XzgIw80HFQU7RpiVP7DI7w18VCqVaGxieOr+avEv64qf1tEq9cIN88HeadL9JMzgdor
+         q+QaTlZJDKgVtvP6JbsVsBFGh2uATMds+PwjgZ57m0tZ1tWqlmEDTlmlNpj71HBeilwD
+         fGiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689066999; x=1691658999;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pas4YXhE9tyV0vWkPBY+CDLqBNjLyZTNoC+4U42dUhg=;
+        b=RU0yh34LCfDK+ovPbeogZ+LTmQcboF8GGeqH2w682VkziLC/1IBlS9fXW/hhPvu4FD
+         0TDzp0qJDs33Z8LPhVABjdfrfzhwH/p2aTXsxopTCtg/l6JXQtk23Oxsm/YQLxclVEKn
+         dGrsAkc2d7J9ZpQbW7Ynqn8QiSrV/okbBYWICpW+iUUhBVzRo5RWgM/xtWa7da+v3myg
+         S7b6Tb2rrA0IvkeDhrasomPhUJF8gpR1ySVPyal4kmFhdtptB4NDOzdQ6Srd60mkFPQM
+         vfo8TFfqkucI7AykhuL3pwFYxMdAS6KxkYTr3oGavHnkOF4hjkqbARJtm89oNih2vgmE
+         5twA==
+X-Gm-Message-State: ABy/qLasYY/RpGsBwH/Nw+GSRWeir0WEiNjrqYC26qWboZlO6sFcScoD
+        WNpudxspEJsl0z0pc1O80+CeZHeYmIXWspu6T7/NK32k1tbtVK5O
+X-Google-Smtp-Source: APBJJlFJ4nPhwO9ZTqhum94WuBn2fW/8fJYK7aZ8jIYhnO9NC6z3uLrgIlyEcMprOo7OQRJgLy6wYE4bG/JpUEeCIyc=
+X-Received: by 2002:a0d:da43:0:b0:56c:fd03:dba with SMTP id
+ c64-20020a0dda43000000b0056cfd030dbamr13287487ywe.35.1689066999749; Tue, 11
+ Jul 2023 02:16:39 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=18507; i=ardb@kernel.org; h=from:subject; bh=F3EXYLgC8X/sb0UkTC/C/k7dVpQUFrXUfot4NhC7dS0=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIWWtbM/5h4w3AjT+JV8MKniU2rtxc0h86YkINt0VF9cwN 1kyVfJ2lLIwiHEwyIopsgjM/vtu5+mJUrXOs2Rh5rAygQxh4OIUgIm87GFkmNC5rOhpcPHhy3OT v4bl3r4Wynv11xcN65R3685vfLZobiojw6v6W+nmF+ZXBh59su7OxnUs84LTE45WiE+pjeWtKO8 1YQUA
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-16-ulf.hansson@linaro.org> <20230707175048.6yees6d3evcomyux@vacation>
+In-Reply-To: <20230707175048.6yees6d3evcomyux@vacation>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 11 Jul 2023 11:16:03 +0200
+Message-ID: <CAPDyKFoc0hr=9LEtwwwe3R6rMn0b7TB1MCZN0ArUq+h9Pud08Q@mail.gmail.com>
+Subject: Re: [PATCH 15/18] soc: ti: Mover power-domain drivers to the genpd dir
+To:     Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bare metal decompressor code was never really intended to run in a
-hosted environment such as the EFI boot services, and does a few things
-that are problematic in the context of EFI boot now that the logo
-requirements are getting tighter.
+On Fri, 7 Jul 2023 at 19:50, Nishanth Menon <nm@ti.com> wrote:
+>
+> On 16:04-20230707, Ulf Hansson wrote:
+> > Cc: Nishanth Menon <nm@ti.com>
+> > Cc: Santosh Shilimkar <ssantosh@kernel.org>
+> > Cc: Tero Kristo <kristo@kernel.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  MAINTAINERS                                   | 3 ++-
+> >  drivers/genpd/Makefile                        | 1 +
+> >  drivers/genpd/ti/Makefile                     | 3 +++
+> >  drivers/{soc => genpd}/ti/omap_prm.c          | 0
+> >  drivers/{soc => genpd}/ti/ti_sci_pm_domains.c | 0
+> >  drivers/soc/ti/Makefile                       | 2 --
+> >  6 files changed, 6 insertions(+), 3 deletions(-)
+> >  create mode 100644 drivers/genpd/ti/Makefile
+> >  rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
+> >  rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 9e580df3e5db..3cf16ffac892 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -21101,7 +21101,7 @@ F:    drivers/irqchip/irq-ti-sci-inta.c
+> >  F:   drivers/irqchip/irq-ti-sci-intr.c
+> >  F:   drivers/reset/reset-ti-sci.c
+> >  F:   drivers/soc/ti/ti_sci_inta_msi.c
+> > -F:   drivers/soc/ti/ti_sci_pm_domains.c
+> > +F:   drivers/genpd/ti/ti_sci_pm_domains.c
+> >  F:   include/dt-bindings/soc/ti,sci_pm_domain.h
+> >  F:   include/linux/soc/ti/ti_sci_inta_msi.h
+> >  F:   include/linux/soc/ti/ti_sci_protocol.h
+> > @@ -21335,6 +21335,7 @@ L:    linux-kernel@vger.kernel.org
+> >  L:   linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> >  S:   Maintained
+> >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+> > +F:   drivers/genpd/ti/omap_prm.c
+>
+> Probably the wrong place for this as omap_prm is'nt a keystone navigator
+> driver set. Maybe Tony has a suggestion?
 
-In particular, the decompressor moves its own executable image around in
-memory, and relies on demand paging to populate the identity mappings,
-and these things are difficult to support in a context where memory is
-not permitted to be mapped writable and executable at the same time or,
-at the very least, is mapped non-executable by default, and needs
-special treatment for this restriction to be lifted.
+I guess we could add it to the OMAP2+ section then?
 
-Since EFI already maps all of memory 1:1, it is unnecessary to create
-new page tables or handle page faults when decompressing the kernel.
-That means there is also no need to replace the special exception
-handlers for SEV. Generally, there is little need to do anything that
-the decompressor does beyond
+In any case, I suggest we consider that as a separate patch on top, as
+I am just obeying to the existing pattern that the get_maintainers
+script provides.
 
-- initialize SEV encryption, if needed,
-- perform the 4/5 level paging switch, if needed,
-- decompress the kernel
-- relocate the kernel
+Kind regards
+Uffe
 
-So do all of this from the EFI stub code, and avoid the bare metal
-decompressor altogether.
-
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/boot/compressed/Makefile       |   5 +
- arch/x86/boot/compressed/efi_mixed.S    |  55 -------
- arch/x86/boot/compressed/head_32.S      |  13 --
- arch/x86/boot/compressed/head_64.S      |  27 ----
- arch/x86/include/asm/efi.h              |   7 +-
- arch/x86/include/asm/sev.h              |   2 +
- drivers/firmware/efi/libstub/x86-stub.c | 166 +++++++++-----------
- 7 files changed, 84 insertions(+), 191 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 40d2ff503079e594..71fc531b95b4eede 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -74,6 +74,11 @@ LDFLAGS_vmlinux += -z noexecstack
- ifeq ($(CONFIG_LD_IS_BFD),y)
- LDFLAGS_vmlinux += $(call ld-option,--no-warn-rwx-segments)
- endif
-+ifeq ($(CONFIG_EFI_STUB),y)
-+# ensure that the static EFI stub library will be pulled in, even if it is
-+# never referenced explicitly from the startup code
-+LDFLAGS_vmlinux += -u efi_pe_entry
-+endif
- LDFLAGS_vmlinux += -T
- 
- hostprogs	:= mkpiggy
-diff --git a/arch/x86/boot/compressed/efi_mixed.S b/arch/x86/boot/compressed/efi_mixed.S
-index 8a02a151806df14c..f4e22ef774ab6b4a 100644
---- a/arch/x86/boot/compressed/efi_mixed.S
-+++ b/arch/x86/boot/compressed/efi_mixed.S
-@@ -269,10 +269,6 @@ SYM_FUNC_START_LOCAL(efi32_entry)
- 	jmp	startup_32
- SYM_FUNC_END(efi32_entry)
- 
--#define ST32_boottime		60 // offsetof(efi_system_table_32_t, boottime)
--#define BS32_handle_protocol	88 // offsetof(efi_boot_services_32_t, handle_protocol)
--#define LI32_image_base		32 // offsetof(efi_loaded_image_32_t, image_base)
--
- /*
-  * efi_status_t efi32_pe_entry(efi_handle_t image_handle,
-  *			       efi_system_table_32_t *sys_table)
-@@ -280,8 +276,6 @@ SYM_FUNC_END(efi32_entry)
- SYM_FUNC_START(efi32_pe_entry)
- 	pushl	%ebp
- 	movl	%esp, %ebp
--	pushl	%eax				// dummy push to allocate loaded_image
--
- 	pushl	%ebx				// save callee-save registers
- 	pushl	%edi
- 
-@@ -290,48 +284,8 @@ SYM_FUNC_START(efi32_pe_entry)
- 	movl	$0x80000003, %eax		// EFI_UNSUPPORTED
- 	jnz	2f
- 
--	call	1f
--1:	pop	%ebx
--
--	/* Get the loaded image protocol pointer from the image handle */
--	leal	-4(%ebp), %eax
--	pushl	%eax				// &loaded_image
--	leal	(loaded_image_proto - 1b)(%ebx), %eax
--	pushl	%eax				// pass the GUID address
--	pushl	8(%ebp)				// pass the image handle
--
--	/*
--	 * Note the alignment of the stack frame.
--	 *   sys_table
--	 *   handle             <-- 16-byte aligned on entry by ABI
--	 *   return address
--	 *   frame pointer
--	 *   loaded_image       <-- local variable
--	 *   saved %ebx		<-- 16-byte aligned here
--	 *   saved %edi
--	 *   &loaded_image
--	 *   &loaded_image_proto
--	 *   handle             <-- 16-byte aligned for call to handle_protocol
--	 */
--
--	movl	12(%ebp), %eax			// sys_table
--	movl	ST32_boottime(%eax), %eax	// sys_table->boottime
--	call	*BS32_handle_protocol(%eax)	// sys_table->boottime->handle_protocol
--	addl	$12, %esp			// restore argument space
--	testl	%eax, %eax
--	jnz	2f
--
- 	movl	8(%ebp), %ecx			// image_handle
- 	movl	12(%ebp), %edx			// sys_table
--	movl	-4(%ebp), %esi			// loaded_image
--	movl	LI32_image_base(%esi), %esi	// loaded_image->image_base
--	leal	(startup_32 - 1b)(%ebx), %ebp	// runtime address of startup_32
--	/*
--	 * We need to set the image_offset variable here since startup_32() will
--	 * use it before we get to the 64-bit efi_pe_entry() in C code.
--	 */
--	subl	%esi, %ebp			// calculate image_offset
--	movl	%ebp, (image_offset - 1b)(%ebx)	// save image_offset
- 	xorl	%esi, %esi
- 	jmp	efi32_entry			// pass %ecx, %edx, %esi
- 						// no other registers remain live
-@@ -350,15 +304,6 @@ SYM_FUNC_START_NOALIGN(efi64_stub_entry)
- SYM_FUNC_END(efi64_stub_entry)
- #endif
- 
--	.section ".rodata"
--	/* EFI loaded image protocol GUID */
--	.balign 4
--SYM_DATA_START_LOCAL(loaded_image_proto)
--	.long	0x5b1b31a1
--	.word	0x9562, 0x11d2
--	.byte	0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b
--SYM_DATA_END(loaded_image_proto)
--
- 	.data
- 	.balign	8
- SYM_DATA_START_LOCAL(efi32_boot_gdt)
-diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
-index beee858058df4403..cd9587fcd5084f22 100644
---- a/arch/x86/boot/compressed/head_32.S
-+++ b/arch/x86/boot/compressed/head_32.S
-@@ -84,19 +84,6 @@ SYM_FUNC_START(startup_32)
- 
- #ifdef CONFIG_RELOCATABLE
- 	leal	startup_32@GOTOFF(%edx), %ebx
--
--#ifdef CONFIG_EFI_STUB
--/*
-- * If we were loaded via the EFI LoadImage service, startup_32() will be at an
-- * offset to the start of the space allocated for the image. efi_pe_entry() will
-- * set up image_offset to tell us where the image actually starts, so that we
-- * can use the full available buffer.
-- *	image_offset = startup_32 - image_base
-- * Otherwise image_offset will be zero and has no effect on the calculations.
-- */
--	subl    image_offset@GOTOFF(%edx), %ebx
--#endif
--
- 	movl	BP_kernel_alignment(%esi), %eax
- 	decl	%eax
- 	addl    %eax, %ebx
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index 556ee504325ae50e..1027e28ced8f2d52 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -146,19 +146,6 @@ SYM_FUNC_START(startup_32)
- 
- #ifdef CONFIG_RELOCATABLE
- 	movl	%ebp, %ebx
--
--#ifdef CONFIG_EFI_STUB
--/*
-- * If we were loaded via the EFI LoadImage service, startup_32 will be at an
-- * offset to the start of the space allocated for the image. efi_pe_entry will
-- * set up image_offset to tell us where the image actually starts, so that we
-- * can use the full available buffer.
-- *	image_offset = startup_32 - image_base
-- * Otherwise image_offset will be zero and has no effect on the calculations.
-- */
--	subl    rva(image_offset)(%ebp), %ebx
--#endif
--
- 	movl	BP_kernel_alignment(%esi), %eax
- 	decl	%eax
- 	addl	%eax, %ebx
-@@ -335,20 +322,6 @@ SYM_CODE_START(startup_64)
- 	/* Start with the delta to where the kernel will run at. */
- #ifdef CONFIG_RELOCATABLE
- 	leaq	startup_32(%rip) /* - $startup_32 */, %rbp
--
--#ifdef CONFIG_EFI_STUB
--/*
-- * If we were loaded via the EFI LoadImage service, startup_32 will be at an
-- * offset to the start of the space allocated for the image. efi_pe_entry will
-- * set up image_offset to tell us where the image actually starts, so that we
-- * can use the full available buffer.
-- *	image_offset = startup_32 - image_base
-- * Otherwise image_offset will be zero and has no effect on the calculations.
-- */
--	movl    image_offset(%rip), %eax
--	subq	%rax, %rbp
--#endif
--
- 	movl	BP_kernel_alignment(%rsi), %eax
- 	decl	%eax
- 	addq	%rax, %rbp
-diff --git a/arch/x86/include/asm/efi.h b/arch/x86/include/asm/efi.h
-index 8b4be7cecdb8eb73..b0994ae3bc23f84d 100644
---- a/arch/x86/include/asm/efi.h
-+++ b/arch/x86/include/asm/efi.h
-@@ -90,6 +90,8 @@ static inline void efi_fpu_end(void)
- }
- 
- #ifdef CONFIG_X86_32
-+#define EFI_X86_KERNEL_ALLOC_LIMIT		(SZ_512M - 1)
-+
- #define arch_efi_call_virt_setup()					\
- ({									\
- 	efi_fpu_begin();						\
-@@ -103,8 +105,7 @@ static inline void efi_fpu_end(void)
- })
- 
- #else /* !CONFIG_X86_32 */
--
--#define EFI_LOADER_SIGNATURE	"EL64"
-+#define EFI_X86_KERNEL_ALLOC_LIMIT		EFI_ALLOC_LIMIT
- 
- extern asmlinkage u64 __efi_call(void *fp, ...);
- 
-@@ -218,6 +219,8 @@ efi_status_t efi_set_virtual_address_map(unsigned long memory_map_size,
- 
- #ifdef CONFIG_EFI_MIXED
- 
-+#define EFI_ALLOC_LIMIT		(efi_is_64bit() ? ULONG_MAX : U32_MAX)
-+
- #define ARCH_HAS_EFISTUB_WRAPPERS
- 
- static inline bool efi_is_64bit(void)
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index b97d239e18ea25fc..5b4a1ce3d36808b4 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -164,6 +164,7 @@ static __always_inline void sev_es_nmi_complete(void)
- 		__sev_es_nmi_complete();
- }
- extern int __init sev_es_efi_map_ghcbs(pgd_t *pgd);
-+extern void sev_enable(struct boot_params *bp);
- 
- static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
- {
-@@ -218,6 +219,7 @@ static inline void sev_es_ist_exit(void) { }
- static inline int sev_es_setup_ap_jump_table(struct real_mode_header *rmh) { return 0; }
- static inline void sev_es_nmi_complete(void) { }
- static inline int sev_es_efi_map_ghcbs(pgd_t *pgd) { return 0; }
-+static inline void sev_enable(struct boot_params *bp) { }
- static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate) { return 0; }
- static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs) { return 0; }
- static inline void setup_ghcb(void) { }
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-index 3681700702126615..e976288728e975f1 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -15,17 +15,14 @@
- #include <asm/setup.h>
- #include <asm/desc.h>
- #include <asm/boot.h>
-+#include <asm/kaslr.h>
- #include <asm/sev.h>
- 
- #include "efistub.h"
- #include "x86-stub.h"
- 
--/* Maximum physical address for 64-bit kernel with 4-level paging */
--#define MAXMEM_X86_64_4LEVEL (1ull << 46)
--
- const efi_system_table_t *efi_system_table;
- const efi_dxe_services_table_t *efi_dxe_table;
--u32 image_offset __section(".data");
- static efi_loaded_image_t *image = NULL;
- static efi_memory_attribute_protocol_t *memattr;
- 
-@@ -287,28 +284,6 @@ void efi_adjust_memory_range_protection(unsigned long start,
- 	}
- }
- 
--extern const char startup_32[], startup_64[];
--
--static void
--setup_memory_protection(unsigned long image_base, unsigned long image_size)
--{
--#ifdef CONFIG_64BIT
--	if (image_base != (unsigned long)startup_32)
--		efi_adjust_memory_range_protection(image_base, image_size);
--#else
--	/*
--	 * Clear protection flags on a whole range of possible
--	 * addresses used for KASLR. We don't need to do that
--	 * on x86_64, since KASLR/extraction is performed after
--	 * dedicated identity page tables are built and we only
--	 * need to remove possible protection on relocated image
--	 * itself disregarding further relocations.
--	 */
--	efi_adjust_memory_range_protection(LOAD_PHYSICAL_ADDR,
--					   KERNEL_IMAGE_SIZE - LOAD_PHYSICAL_ADDR);
--#endif
--}
--
- static void setup_unaccepted_memory(void)
- {
- 	efi_guid_t mem_acceptance_proto = OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
-@@ -334,9 +309,7 @@ static void setup_unaccepted_memory(void)
- 
- static const efi_char16_t apple[] = L"Apple";
- 
--static void setup_quirks(struct boot_params *boot_params,
--			 unsigned long image_base,
--			 unsigned long image_size)
-+static void setup_quirks(struct boot_params *boot_params)
- {
- 	efi_char16_t *fw_vendor = (efi_char16_t *)(unsigned long)
- 		efi_table_attr(efi_system_table, fw_vendor);
-@@ -345,9 +318,6 @@ static void setup_quirks(struct boot_params *boot_params,
- 		if (IS_ENABLED(CONFIG_APPLE_PROPERTIES))
- 			retrieve_apple_device_properties(boot_params);
- 	}
--
--	if (IS_ENABLED(CONFIG_EFI_DXE_MEM_ATTRIBUTES))
--		setup_memory_protection(image_base, image_size);
- }
- 
- /*
-@@ -500,7 +470,6 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
- 	}
- 
- 	image_base = efi_table_attr(image, image_base);
--	image_offset = (void *)startup_32 - image_base;
- 
- 	status = efi_allocate_pages(sizeof(struct boot_params),
- 				    (unsigned long *)&boot_params, ULONG_MAX);
-@@ -804,6 +773,61 @@ static bool have_unsupported_snp_features(void)
- 	return false;
- }
- 
-+static void efi_get_seed(void *seed, int size)
-+{
-+	efi_get_random_bytes(size, seed);
-+
-+	/*
-+	 * This only updates seed[0] when running on 32-bit, but in that case,
-+	 * seed[1] is not used anyway, as there is no virtual KASLR on 32-bit.
-+	 */
-+	*(unsigned long *)seed ^= kaslr_get_random_long("EFI");
-+}
-+
-+static void error(char *str)
-+{
-+	efi_warn("Decompression failed: %s\n", str);
-+}
-+
-+static efi_status_t efi_decompress_kernel(unsigned long *kernel_entry)
-+{
-+	unsigned long virt_addr = LOAD_PHYSICAL_ADDR;
-+	unsigned long addr, alloc_size, entry;
-+	efi_status_t status;
-+	u32 seed[2] = {};
-+
-+	/* determine the required size of the allocation */
-+	alloc_size = ALIGN(max_t(unsigned long, output_len, kernel_total_size),
-+			   MIN_KERNEL_ALIGN);
-+
-+	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && !efi_nokaslr) {
-+		u64 range = KERNEL_IMAGE_SIZE - LOAD_PHYSICAL_ADDR - kernel_total_size;
-+
-+		efi_get_seed(seed, sizeof(seed));
-+
-+		virt_addr += (range * seed[1]) >> 32;
-+		virt_addr &= ~(CONFIG_PHYSICAL_ALIGN - 1);
-+	}
-+
-+	status = efi_random_alloc(alloc_size, CONFIG_PHYSICAL_ALIGN, &addr,
-+				  seed[0], EFI_LOADER_CODE,
-+				  EFI_X86_KERNEL_ALLOC_LIMIT);
-+	if (status != EFI_SUCCESS)
-+		return status;
-+
-+	entry = decompress_kernel((void *)addr, virt_addr, error);
-+	if (entry == ULONG_MAX) {
-+		efi_free(alloc_size, addr);
-+		return EFI_LOAD_ERROR;
-+	}
-+
-+	*kernel_entry = addr + entry;
-+
-+	efi_adjust_memory_range_protection(addr, kernel_total_size);
-+
-+	return EFI_SUCCESS;
-+}
-+
- static void __noreturn enter_kernel(unsigned long kernel_addr,
- 				    struct boot_params *boot_params)
- {
-@@ -823,10 +847,9 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 			       struct boot_params *boot_params)
- {
- 	efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
--	unsigned long bzimage_addr = (unsigned long)startup_32;
--	unsigned long buffer_start, buffer_end;
- 	struct setup_header *hdr = &boot_params->hdr;
- 	const struct linux_efi_initrd *initrd = NULL;
-+	unsigned long kernel_entry;
- 	efi_status_t status;
- 
- 	efi_system_table = sys_table_arg;
-@@ -855,60 +878,6 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 		goto fail;
- 	}
- 
--	/*
--	 * If the kernel isn't already loaded at a suitable address,
--	 * relocate it.
--	 *
--	 * It must be loaded above LOAD_PHYSICAL_ADDR.
--	 *
--	 * The maximum address for 64-bit is 1 << 46 for 4-level paging. This
--	 * is defined as the macro MAXMEM, but unfortunately that is not a
--	 * compile-time constant if 5-level paging is configured, so we instead
--	 * define our own macro for use here.
--	 *
--	 * For 32-bit, the maximum address is complicated to figure out, for
--	 * now use KERNEL_IMAGE_SIZE, which will be 512MiB, the same as what
--	 * KASLR uses.
--	 *
--	 * Also relocate it if image_offset is zero, i.e. the kernel wasn't
--	 * loaded by LoadImage, but rather by a bootloader that called the
--	 * handover entry. The reason we must always relocate in this case is
--	 * to handle the case of systemd-boot booting a unified kernel image,
--	 * which is a PE executable that contains the bzImage and an initrd as
--	 * COFF sections. The initrd section is placed after the bzImage
--	 * without ensuring that there are at least init_size bytes available
--	 * for the bzImage, and thus the compressed kernel's startup code may
--	 * overwrite the initrd unless it is moved out of the way.
--	 */
--
--	buffer_start = ALIGN(bzimage_addr - image_offset,
--			     hdr->kernel_alignment);
--	buffer_end = buffer_start + hdr->init_size;
--
--	if ((buffer_start < LOAD_PHYSICAL_ADDR)				     ||
--	    (IS_ENABLED(CONFIG_X86_32) && buffer_end > KERNEL_IMAGE_SIZE)    ||
--	    (IS_ENABLED(CONFIG_X86_64) && buffer_end > MAXMEM_X86_64_4LEVEL) ||
--	    (image_offset == 0)) {
--		extern char _bss[];
--
--		status = efi_relocate_kernel(&bzimage_addr,
--					     (unsigned long)_bss - bzimage_addr,
--					     hdr->init_size,
--					     hdr->pref_address,
--					     hdr->kernel_alignment,
--					     LOAD_PHYSICAL_ADDR);
--		if (status != EFI_SUCCESS) {
--			efi_err("efi_relocate_kernel() failed!\n");
--			goto fail;
--		}
--		/*
--		 * Now that we've copied the kernel elsewhere, we no longer
--		 * have a set up block before startup_32(), so reset image_offset
--		 * to zero in case it was set earlier.
--		 */
--		image_offset = 0;
--	}
--
- #ifdef CONFIG_CMDLINE_BOOL
- 	status = efi_parse_options(CONFIG_CMDLINE);
- 	if (status != EFI_SUCCESS) {
-@@ -926,6 +895,12 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 		}
- 	}
- 
-+	status = efi_decompress_kernel(&kernel_entry);
-+	if (status != EFI_SUCCESS) {
-+		efi_err("Failed to decompress kernel\n");
-+		goto fail;
-+	}
-+
- 	/*
- 	 * At this point, an initrd may already have been loaded by the
- 	 * bootloader and passed via bootparams. We permit an initrd loaded
-@@ -965,7 +940,7 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 
- 	setup_efi_pci(boot_params);
- 
--	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
-+	setup_quirks(boot_params);
- 
- 	setup_unaccepted_memory();
- 
-@@ -975,12 +950,15 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 		goto fail;
- 	}
- 
-+	/*
-+	 * Call the SEV init code while still running with the firmware's
-+	 * GDT/IDT, so #VC exceptions will be handled by EFI.
-+	 */
-+	sev_enable(boot_params);
-+
- 	efi_5level_switch();
- 
--	if (IS_ENABLED(CONFIG_X86_64))
--		bzimage_addr += startup_64 - startup_32;
--
--	enter_kernel(bzimage_addr, boot_params);
-+	enter_kernel(kernel_entry, boot_params);
- fail:
- 	efi_err("efi_stub_entry() failed!\n");
- 
--- 
-2.39.2
-
+>
+> >  F:   drivers/soc/ti/*
+> >
+> >  TI LM49xxx FAMILY ASoC CODEC DRIVERS
+> > diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> > index e6f34d82e6a8..193892189f0d 100644
+> > --- a/drivers/genpd/Makefile
+> > +++ b/drivers/genpd/Makefile
+> > @@ -11,3 +11,4 @@ obj-y                                       += samsung/
+> >  obj-y                                        += starfive/
+> >  obj-y                                        += sunxi/
+> >  obj-y                                        += tegra/
+> > +obj-y                                        += ti/
+> > diff --git a/drivers/genpd/ti/Makefile b/drivers/genpd/ti/Makefile
+> > new file mode 100644
+> > index 000000000000..69580afbb436
+> > --- /dev/null
+> > +++ b/drivers/genpd/ti/Makefile
+> > @@ -0,0 +1,3 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +obj-$(CONFIG_ARCH_OMAP2PLUS)         += omap_prm.o
+> > +obj-$(CONFIG_TI_SCI_PM_DOMAINS)              += ti_sci_pm_domains.o
+> > diff --git a/drivers/soc/ti/omap_prm.c b/drivers/genpd/ti/omap_prm.c
+> > similarity index 100%
+> > rename from drivers/soc/ti/omap_prm.c
+> > rename to drivers/genpd/ti/omap_prm.c
+> > diff --git a/drivers/soc/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
+> > similarity index 100%
+> > rename from drivers/soc/ti/ti_sci_pm_domains.c
+> > rename to drivers/genpd/ti/ti_sci_pm_domains.c
+> > diff --git a/drivers/soc/ti/Makefile b/drivers/soc/ti/Makefile
+> > index cc3c972fad2e..cb800a745e66 100644
+> > --- a/drivers/soc/ti/Makefile
+> > +++ b/drivers/soc/ti/Makefile
+> > @@ -6,9 +6,7 @@ obj-$(CONFIG_KEYSTONE_NAVIGATOR_QMSS) += knav_qmss.o
+> >  knav_qmss-y := knav_qmss_queue.o knav_qmss_acc.o
+> >  obj-$(CONFIG_KEYSTONE_NAVIGATOR_DMA) += knav_dma.o
+> >  obj-$(CONFIG_AMX3_PM)                        += pm33xx.o
+> > -obj-$(CONFIG_ARCH_OMAP2PLUS)         += omap_prm.o
+> >  obj-$(CONFIG_WKUP_M3_IPC)            += wkup_m3_ipc.o
+> > -obj-$(CONFIG_TI_SCI_PM_DOMAINS)              += ti_sci_pm_domains.o
+> >  obj-$(CONFIG_TI_SCI_INTA_MSI_DOMAIN) += ti_sci_inta_msi.o
+> >  obj-$(CONFIG_TI_K3_RINGACC)          += k3-ringacc.o
+> >  obj-$(CONFIG_TI_K3_SOCINFO)          += k3-socinfo.o
+> > --
+> > 2.34.1
+> >
+>
+> --
+> Regards,
+> Nishanth Menon
+> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
