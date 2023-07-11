@@ -2,137 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A91B74F22C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F08974F231
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbjGKOZc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 10:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S233614AbjGKO0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbjGKOY5 (ORCPT
+        with ESMTP id S232981AbjGKO0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:24:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E208A1713;
-        Tue, 11 Jul 2023 07:24:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2461C614E2;
-        Tue, 11 Jul 2023 14:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21EC0C433C7;
-        Tue, 11 Jul 2023 14:24:05 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 10:24:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Ching-lin Yu <chinglinyu@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
-Message-ID: <20230711102403.3e65d1ec@gandalf.local.home>
-In-Reply-To: <285B9992-4DFB-4343-BD64-DAE9CCEFEE6B@vmware.com>
-References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
-        <1685610013-33478-4-git-send-email-akaher@vmware.com>
-        <20230701095417.3de5baab@rorschach.local.home>
-        <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
-        <20230703110857.2d051af5@rorschach.local.home>
-        <84CA259A-8A99-471C-B44C-08D289972F43@vmware.com>
-        <20230703155226.1ab27bc1@gandalf.local.home>
-        <20230709215447.536defa6@rorschach.local.home>
-        <285B9992-4DFB-4343-BD64-DAE9CCEFEE6B@vmware.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 11 Jul 2023 10:26:02 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8B26A9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:25:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f954d7309fso7173526e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689085475; x=1691677475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ETzJnyxb//1LYCRZgH6X5nK55znbdEdKT0t8qjhkAw=;
+        b=TpQjD365mxeGXkAjNS1Yg5OzWV5hWBmQFP1W5jq6C/AgtBmyVfUiBwjjdYXC8Eae1p
+         gzTVXLqA/LRNhkzEferJ0M3dGsZ8dYPRip9BB5MOCbevyG2N2xyIyS8V1PQ5paNd7W4S
+         MYQukgp4KFF3xls+tzfj7Gjv0b1HA9RRV5PmYg008NBqRV9o4zLoJ+RMcekCayb8I+XM
+         e1/HZ+1yH4cfLg3ulOsh1p53gr6Hm4neaIhMNFhBlZRV2NrRWRVzSouVSULYQwrSio1t
+         +7lZ7G99ooRXummOAXo3N2Yxu5iF+kBjbhyypd/bSwwiAnWmTQr1ososN+jB3VRANZJG
+         oMjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689085475; x=1691677475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ETzJnyxb//1LYCRZgH6X5nK55znbdEdKT0t8qjhkAw=;
+        b=WdkcENmcYB+gee5edChdsfCO5TqTbTnOm+HfkdqXRoTGQzmBzxnVWkkBVc0ymaTNZW
+         wFyLCM7kLJ5z3iMPdhRuRjw8P4kSB2whrfa3EZkUzH22aasgfnAbAPMnguV21chFXqLf
+         qzSnlrVp3CKDhixk6W/4wAIxrDNsEk44ySPLzfXuFjV6m6Z31jXmROsHZJOEOwjXiHqI
+         rXblX+zYKrpMtOea9TUDNpCmSR3NcgB3fYn9iovZqTr5G1YY8t98nRjs6kUULWv1yoaq
+         VBbZd4TQsHc53Ecc5WTQmqx+svwHedZapogqJvEmXyUHO7gDeDnxY1i8bOrAl+OoShWM
+         caWg==
+X-Gm-Message-State: ABy/qLaqKcs8HFJ5lPGKTZL31ZiRjFbfI7tZSkrnFyVkCHo6N32ywaGc
+        SYcfj9ma7BhgL2jemqcqNDO3kA==
+X-Google-Smtp-Source: APBJJlH5vtnfD2VWOxoAWSTv1/4Sxwt9FRzf0RXakCeJHs85TPWrAyK4Co3SRyIcN0Rf1+grwX7y8w==
+X-Received: by 2002:a05:6512:4016:b0:4f6:56ca:36fc with SMTP id br22-20020a056512401600b004f656ca36fcmr7142871lfb.6.1689085474936;
+        Tue, 11 Jul 2023 07:24:34 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id g12-20020ac2538c000000b004fb763b5171sm341888lfh.86.2023.07.11.07.24.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 07:24:34 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
+Subject: [PATCH v2 03/18] soc: amlogic: Move power-domain drivers to the genpd dir
+Date:   Tue, 11 Jul 2023 16:24:31 +0200
+Message-Id: <20230711142431.751888-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 18:53:53 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
+To simplify with maintenance let's move the amlogic power-domain drivers to
+the new genpd directory. Going forward, patches are intended to be managed
+through a separate git tree, according to MAINTAINERS.
 
-> Something was broken in your mail (I guess cc list) and couldn’t reach to lkml or
-> ignored by lkml. I just wanted to track the auto test results from linux-kselftest.
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: <linux-amlogic@lists.infradead.org>
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ MAINTAINERS                                        | 1 +
+ drivers/genpd/Makefile                             | 1 +
+ drivers/genpd/amlogic/Makefile                     | 4 ++++
+ drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
+ drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
+ drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
+ drivers/soc/amlogic/Makefile                       | 3 ---
+ 7 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/genpd/amlogic/Makefile
+ rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
 
-Below is the report from the tree I pushed. I guess I forgot to remove an
-"idx" variable, and it also caught the unused functions you mentioned.
-
--- Steve
-
-
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/rfc/eventfs
-head:   1dc48374bb8ad8aec6d7244267f9b36e0512d3bb
-commit: 1dc48374bb8ad8aec6d7244267f9b36e0512d3bb [28/28] tracefs: Add RCU and global mutex for eventfs
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230711/202307111415.tc8g7M63-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111415.tc8g7M63-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307111415.tc8g7M63-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   fs/tracefs/event_inode.c: In function 'eventfs_post_create_dir':
->> fs/tracefs/event_inode.c:236:13: warning: unused variable 'idx' [-Wunused-variable]  
-     236 |         int idx;
-         |             ^~~
-   fs/tracefs/event_inode.c: At top level:
-   fs/tracefs/event_inode.c:184:23: warning: 'eventfs_create_dir' defined but not used [-Wunused-function]
-     184 | static struct dentry *eventfs_create_dir(const char *name, umode_t mode,
-         |                       ^~~~~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:108:23: warning: 'eventfs_create_file' defined but not used [-Wunused-function]
-     108 | static struct dentry *eventfs_create_file(const char *name, umode_t mode,
-         |                       ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/idx +236 fs/tracefs/event_inode.c
-
-   225	
-   226	/**
-   227	 * eventfs_post_create_dir - post create dir routine
-   228	 * @ef: eventfs_file of recently created dir
-   229	 *
-   230	 * Files with-in eventfs dir should know dentry of parent dir
-   231	 */
-   232	static void eventfs_post_create_dir(struct eventfs_file *ef)
-   233	{
-   234		struct eventfs_file *ef_child;
-   235		struct tracefs_inode *ti;
- > 236		int idx;  
-   237	
-   238		/* srcu lock already held */
-   239		/* fill parent-child relation */
-   240		list_for_each_entry_srcu(ef_child, &ef->ei->e_top_files, list,
-   241					 srcu_read_lock_held(&eventfs_srcu)) {
-   242			ef_child->d_parent = ef->dentry;
-   243		}
-   244	
-   245		ti = get_tracefs(ef->dentry->d_inode);
-   246		ti->private = ef->ei;
-   247	}
-   248	
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 38eebcc97aa2..ab583b8c5b97 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1843,6 +1843,7 @@ F:	Documentation/devicetree/bindings/phy/amlogic*
+ F:	arch/arm/boot/dts/amlogic/
+ F:	arch/arm/mach-meson/
+ F:	arch/arm64/boot/dts/amlogic/
++F:	drivers/genpd/amlogic/
+ F:	drivers/mmc/host/meson*
+ F:	drivers/phy/amlogic/
+ F:	drivers/pinctrl/meson/
+diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+index a2d5b2095915..cdba3b9f0c75 100644
+--- a/drivers/genpd/Makefile
++++ b/drivers/genpd/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-y					+= actions/
++obj-y					+= amlogic/
+diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
+new file mode 100644
+index 000000000000..3d58abd574f9
+--- /dev/null
++++ b/drivers/genpd/amlogic/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
++obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
++obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
+similarity index 100%
+rename from drivers/soc/amlogic/meson-ee-pwrc.c
+rename to drivers/genpd/amlogic/meson-ee-pwrc.c
+diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+similarity index 100%
+rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
+rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
+similarity index 100%
+rename from drivers/soc/amlogic/meson-secure-pwrc.c
+rename to drivers/genpd/amlogic/meson-secure-pwrc.c
+diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
+index 7b8c5d323f5c..c25f835e6a26 100644
+--- a/drivers/soc/amlogic/Makefile
++++ b/drivers/soc/amlogic/Makefile
+@@ -2,7 +2,4 @@
+ obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
+ obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
+ obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
+-obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+ obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
+-obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+-obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
 
--- Steve
