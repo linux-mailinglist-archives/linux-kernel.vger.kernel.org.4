@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B5074EFA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF88874EFA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjGKM6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
+        id S232845AbjGKM7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbjGKM6a (ORCPT
+        with ESMTP id S232835AbjGKM66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:58:30 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6157170E;
-        Tue, 11 Jul 2023 05:58:01 -0700 (PDT)
-X-UUID: 8d8ed8f21fea11ee9cb5633481061a41-20230711
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rC1bu/LW0Pn7GDL1W3uRUjZN89ZOf3CmMGTbWJQ+zwM=;
-        b=r8D6Ry+yXniHki8fmqDC7mfSCc4IicaI1UuBI/EL5BYOBtPe9M1Ru9FRGLO8R9MRe/OO8bJKM8jcj6sy4vrA9S/d1lq9+VDp475pEgvGjuQdjYGMC0jg+qcZl5Cwu1czfxXUh/xtiJWu7fCfM+cDC1BC3WwgfRjmJIGpXtWWjfw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.28,REQID:d6a504c7-2d34-4359-87eb-c3a39cdae321,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.28,REQID:d6a504c7-2d34-4359-87eb-c3a39cdae321,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:176cd25,CLOUDID:f85ad00d-26a8-467f-b838-f99719a9c083,B
-        ulkID:230711205757N5WW1ISC,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD
-X-UUID: 8d8ed8f21fea11ee9cb5633481061a41-20230711
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1425672369; Tue, 11 Jul 2023 20:57:55 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 11 Jul 2023 20:57:54 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 11 Jul 2023 20:57:53 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-CC:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mingjia Zhang <mingjia.zhang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 3/3] media: mediatek: vcodec: Add driver to support 10bit
-Date:   Tue, 11 Jul 2023 20:57:49 +0800
-Message-ID: <20230711125749.15555-4-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230711125749.15555-1-yunfei.dong@mediatek.com>
-References: <20230711125749.15555-1-yunfei.dong@mediatek.com>
+        Tue, 11 Jul 2023 08:58:58 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839E6199B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:58:42 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1b00b0ab0daso4599675fac.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689080321; x=1691672321;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uU8RjcxGHaSpkrCL2fsXpurNowL5PR34VSH3xLX8MPU=;
+        b=W1FqicM/7RCFZKvgMAsxP9b+qji+BnA2i67pcCeEr1UEZcefwgCx3LnDB6khFygd1B
+         I61lWZSZO0BjGYH1e2KvfhpKl+UFiGxLO109QlksXpPvPzTwLa6I0eZI5GIpyY/G2ue0
+         p/ADGye/3BMAFkpGKCtYU2dWmp7a9sRxGLgelwDd/GzCAXZvh7ojiE0URaeiFKWrbW3O
+         uZZGtM7MW4mXy4iocVPt/vizhzg4KoxtBJWxjfZBfmmlmc+PeZJI24B96EMdIHk6Xq7N
+         HGoLYoLsOWxWDTnT5t9ZvFJ7wOVIcbJ2doRDeOttfohTyAbuErktCZ9DKDpB/UFFHRM0
+         K6ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689080321; x=1691672321;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uU8RjcxGHaSpkrCL2fsXpurNowL5PR34VSH3xLX8MPU=;
+        b=jUYNyH6pipE5uzUaik1i6cCcsRvXE1lXHYOrOUUAWZ/tpy1aO8LT8VT5KtpPb3fk/Z
+         SHvRZb4udeq3gYLQW9bWz/ygqfZzhW20Skjd3+M76IU5iJdtKVuH/5riy5ZO+P0J8rB9
+         w89VzaeD61JijoMhXRl7nI6WsIFuKUM5mJ87/A8HufmVHfnB0u942WO7+V8gZySFcYu0
+         eDNFtpzZM9ZpFwV9Sc+Mh8jGWPIgD0AimSJByRHorjBPpS/1ASS8/O3AehQwiiTMQdlR
+         IgpGkEaKggHK4VXFEgTGci1qaiqRAgz5q1E8d1qz+bV34qhnzI6Jo1XUvbiNiZs9XdHY
+         TvEw==
+X-Gm-Message-State: ABy/qLa0J7Yx30YxaCQyd2Z1DHJVZ/vnKfkJLGNn2l/usG3y4GFqVrLZ
+        UgsrFcff/Ucnxv/s+4+PcKliHZ4hqb+Yz6NY
+X-Google-Smtp-Source: APBJJlEsymi+G/LyqeqX1hXe3eIgL33jQ00cSUrq/eF6Ar5nURmqBFDPtRmBNKZO4onb4RWA0XkZ1A==
+X-Received: by 2002:a05:6870:438f:b0:1b0:c99:fd1e with SMTP id r15-20020a056870438f00b001b00c99fd1emr13904626oah.4.1689080321422;
+        Tue, 11 Jul 2023 05:58:41 -0700 (PDT)
+Received: from quaco.ghostprotocols.net ([187.19.173.165])
+        by smtp.gmail.com with ESMTPSA id du9-20020a0568703a0900b001b3d67934e9sm969126oab.26.2023.07.11.05.58.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 05:58:40 -0700 (PDT)
+From:   arnaldo.melo@gmail.com
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C479140516; Tue, 11 Jul 2023 09:58:36 -0300 (-03)
+Date:   Tue, 11 Jul 2023 09:58:36 -0300
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Fei Yang <fei.yang@intel.com>, Ian Rogers <irogers@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Radhakrishna Sripada <radhakrishna.sripada@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync drm/i915_drm.h with the
+ kernel sources
+Message-ID: <ZK1R/IyWcUKYQbQV@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,277 +80,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mingjia Zhang <mingjia.zhang@mediatek.com>
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-Adding to support capture formats V4L2_PIX_FMT_MT2110T and
-V4L2_PIX_FMT_MT2110R for 10bit playback. Need to get the size
-of each plane again when user space setting syntax to get 10bit
-information.
+- Arnaldo
 
-V4L2_PIX_FMT_MT2110T for AV1/VP9/HEVC.
-V4L2_PIX_FMT_MT2110R for H264.
+Full explanation:
 
-Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
-Co-developed-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
+
+The way these headers are used in perf are not restricted to just
+including them to compile something.
+
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
+
+E.g.:
+
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
+
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
+
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
 ---
- .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  22 ++-
- .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   5 +
- .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 140 +++++++++++++++++-
- 3 files changed, 163 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
-index 5acb7dff18f2..91ed576d6821 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
-@@ -37,7 +37,9 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_dec_ctx *ctx, int format_inde
- {
- 	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
- 	const struct mtk_video_fmt *fmt;
-+	struct mtk_q_data *q_data;
- 	int num_frame_count = 0, i;
-+	bool ret = false;
+  81b1b599dfd71c95 ("drm/i915: Allow user to set cache at BO creation")
+  98d2722a85c4ad5f ("drm/i915/huc: differentiate the 2 steps of the MTL HuC auth flow")
+  bc4be0a38b63b6d4 ("drm/i915/pmu: Prepare for multi-tile non-engine counters")
+  d1da138f245d4fb4 ("drm/i915/uapi/pxp: Add a GET_PARAM for PXP")
+
+That adds some ioctls but use the __I915_PMU_OTHER() macro, not
+supported yet in the tools/perf/trace/beauty/drm_ioctl.sh conversion
+script.
+
+This silences this perf build warning:
+
+  Warning: Kernel ABI header differences:
+    diff -u tools/include/uapi/drm/i915_drm.h include/uapi/drm/i915_drm.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>
+Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Cc: Fei Yang <fei.yang@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Radhakrishna Sripada <radhakrishna.sripada@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/uapi/drm/i915_drm.h | 95 ++++++++++++++++++++++++++++++-
+ 1 file changed, 93 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/uapi/drm/i915_drm.h b/tools/include/uapi/drm/i915_drm.h
+index dba7c5a5b25e9036..7000e5910a1d7453 100644
+--- a/tools/include/uapi/drm/i915_drm.h
++++ b/tools/include/uapi/drm/i915_drm.h
+@@ -280,7 +280,16 @@ enum drm_i915_pmu_engine_sample {
+ #define I915_PMU_ENGINE_SEMA(class, instance) \
+ 	__I915_PMU_ENGINE(class, instance, I915_SAMPLE_SEMA)
  
- 	fmt = &dec_pdata->vdec_formats[format_index];
- 	for (i = 0; i < *dec_pdata->num_formats; i++) {
-@@ -47,10 +49,26 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_dec_ctx *ctx, int format_inde
- 		num_frame_count++;
- 	}
- 
--	if (num_frame_count == 1 || fmt->fourcc == V4L2_PIX_FMT_MM21)
-+	if (num_frame_count == 1 || (!ctx->is_10bit_bitstream && fmt->fourcc == V4L2_PIX_FMT_MM21))
- 		return true;
- 
--	return false;
-+	q_data = &ctx->q_data[MTK_Q_DATA_SRC];
-+	switch (q_data->fmt->fourcc) {
-+	case V4L2_PIX_FMT_H264_SLICE:
-+		if (ctx->is_10bit_bitstream && fmt->fourcc == V4L2_PIX_FMT_MT2110R)
-+			ret = true;
-+		break;
-+	case V4L2_PIX_FMT_VP9_FRAME:
-+	case V4L2_PIX_FMT_AV1_FRAME:
-+	case V4L2_PIX_FMT_HEVC_SLICE:
-+		if (ctx->is_10bit_bitstream && fmt->fourcc == V4L2_PIX_FMT_MT2110T)
-+			ret = true;
-+		break;
-+	default:
-+		break;
-+	}
+-#define __I915_PMU_OTHER(x) (__I915_PMU_ENGINE(0xff, 0xff, 0xf) + 1 + (x))
++/*
++ * Top 4 bits of every non-engine counter are GT id.
++ */
++#define __I915_PMU_GT_SHIFT (60)
 +
-+	return ret;
- }
++#define ___I915_PMU_OTHER(gt, x) \
++	(((__u64)__I915_PMU_ENGINE(0xff, 0xff, 0xf) + 1 + (x)) | \
++	((__u64)(gt) << __I915_PMU_GT_SHIFT))
++
++#define __I915_PMU_OTHER(x) ___I915_PMU_OTHER(0, x)
  
- static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_dec_ctx *ctx,
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-index c8b4374c5e6c..cd607e90fe9c 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-@@ -31,6 +31,7 @@ enum mtk_vdec_format_types {
- 	MTK_VDEC_FORMAT_AV1_FRAME = 0x800,
- 	MTK_VDEC_FORMAT_HEVC_FRAME = 0x1000,
- 	MTK_VCODEC_INNER_RACING = 0x20000,
-+	MTK_VDEC_IS_SUPPORT_10BIT = 0x40000,
- };
+ #define I915_PMU_ACTUAL_FREQUENCY	__I915_PMU_OTHER(0)
+ #define I915_PMU_REQUESTED_FREQUENCY	__I915_PMU_OTHER(1)
+@@ -290,6 +299,12 @@ enum drm_i915_pmu_engine_sample {
  
- /*
-@@ -160,6 +161,8 @@ struct mtk_vcodec_dec_pdata {
-  * @hw_id: hardware index used to identify different hardware.
-  *
-  * @msg_queue: msg queue used to store lat buffer information.
-+ *
-+ * @is_10bit_bitstream: set to true if it's 10bit bitstream
+ #define I915_PMU_LAST /* Deprecated - do not use */ I915_PMU_RC6_RESIDENCY
+ 
++#define __I915_PMU_ACTUAL_FREQUENCY(gt)		___I915_PMU_OTHER(gt, 0)
++#define __I915_PMU_REQUESTED_FREQUENCY(gt)	___I915_PMU_OTHER(gt, 1)
++#define __I915_PMU_INTERRUPTS(gt)		___I915_PMU_OTHER(gt, 2)
++#define __I915_PMU_RC6_RESIDENCY(gt)		___I915_PMU_OTHER(gt, 3)
++#define __I915_PMU_SOFTWARE_GT_AWAKE_TIME(gt)	___I915_PMU_OTHER(gt, 4)
++
+ /* Each region is a minimum of 16k, and there are at most 255 of them.
   */
- struct mtk_vcodec_dec_ctx {
- 	enum mtk_instance_type type;
-@@ -202,6 +205,8 @@ struct mtk_vcodec_dec_ctx {
- 	int hw_id;
+ #define I915_NR_TEX_REGIONS 255	/* table size 2k - maximum due to use
+@@ -659,7 +674,8 @@ typedef struct drm_i915_irq_wait {
+  * If the IOCTL is successful, the returned parameter will be set to one of the
+  * following values:
+  *  * 0 if HuC firmware load is not complete,
+- *  * 1 if HuC firmware is authenticated and running.
++ *  * 1 if HuC firmware is loaded and fully authenticated,
++ *  * 2 if HuC firmware is loaded and authenticated for clear media only
+  */
+ #define I915_PARAM_HUC_STATUS		 42
  
- 	struct vdec_msg_queue msg_queue;
+@@ -771,6 +787,25 @@ typedef struct drm_i915_irq_wait {
+  */
+ #define I915_PARAM_OA_TIMESTAMP_FREQUENCY 57
+ 
++/*
++ * Query the status of PXP support in i915.
++ *
++ * The query can fail in the following scenarios with the listed error codes:
++ *     -ENODEV = PXP support is not available on the GPU device or in the
++ *               kernel due to missing component drivers or kernel configs.
++ *
++ * If the IOCTL is successful, the returned parameter will be set to one of
++ * the following values:
++ *     1 = PXP feature is supported and is ready for use.
++ *     2 = PXP feature is supported but should be ready soon (pending
++ *         initialization of non-i915 system dependencies).
++ *
++ * NOTE: When param is supported (positive return values), user space should
++ *       still refer to the GEM PXP context-creation UAPI header specs to be
++ *       aware of possible failure due to system state machine at the time.
++ */
++#define I915_PARAM_PXP_STATUS		 58
 +
-+	bool is_10bit_bitstream;
- };
+ /* Must be kept compact -- no holes and well documented */
  
  /**
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
-index 99a84c7e1901..cef937fdf462 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
-@@ -200,7 +200,7 @@ static const struct mtk_stateless_control mtk_stateless_controls[] = {
+@@ -2096,6 +2131,21 @@ struct drm_i915_gem_context_param {
+  *
+  * -ENODEV: feature not available
+  * -EPERM: trying to mark a recoverable or not bannable context as protected
++ * -ENXIO: A dependency such as a component driver or firmware is not yet
++ *         loaded so user space may need to attempt again. Depending on the
++ *         device, this error may be reported if protected context creation is
++ *         attempted very early after kernel start because the internal timeout
++ *         waiting for such dependencies is not guaranteed to be larger than
++ *         required (numbers differ depending on system and kernel config):
++ *            - ADL/RPL: dependencies may take up to 3 seconds from kernel start
++ *                       while context creation internal timeout is 250 milisecs
++ *            - MTL: dependencies may take up to 8 seconds from kernel start
++ *                   while context creation internal timeout is 250 milisecs
++ *         NOTE: such dependencies happen once, so a subsequent call to create a
++ *         protected context after a prior successful call will not experience
++ *         such timeouts and will not return -ENXIO (unless the driver is reloaded,
++ *         or, depending on the device, resumes from a suspended state).
++ * -EIO: The firmware did not succeed in creating the protected context.
+  */
+ #define I915_CONTEXT_PARAM_PROTECTED_CONTENT    0xd
+ /* Must be kept compact -- no holes and well documented */
+@@ -3630,9 +3680,13 @@ struct drm_i915_gem_create_ext {
+ 	 *
+ 	 * For I915_GEM_CREATE_EXT_PROTECTED_CONTENT usage see
+ 	 * struct drm_i915_gem_create_ext_protected_content.
++	 *
++	 * For I915_GEM_CREATE_EXT_SET_PAT usage see
++	 * struct drm_i915_gem_create_ext_set_pat.
+ 	 */
+ #define I915_GEM_CREATE_EXT_MEMORY_REGIONS 0
+ #define I915_GEM_CREATE_EXT_PROTECTED_CONTENT 1
++#define I915_GEM_CREATE_EXT_SET_PAT 2
+ 	__u64 extensions;
+ };
  
- #define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
+@@ -3747,6 +3801,43 @@ struct drm_i915_gem_create_ext_protected_content {
+ 	__u32 flags;
+ };
  
--static struct mtk_video_fmt mtk_video_formats[7];
-+static struct mtk_video_fmt mtk_video_formats[9];
- 
- static struct mtk_video_fmt default_out_format;
- static struct mtk_video_fmt default_cap_format;
-@@ -387,6 +387,134 @@ static int mtk_vdec_flush_decoder(struct mtk_vcodec_dec_ctx *ctx)
- 	return vdec_if_decode(ctx, NULL, NULL, &res_chg);
- }
- 
-+static int mtk_vcodec_get_pic_info(struct mtk_vcodec_dec_ctx *ctx)
-+{
-+	struct mtk_q_data *q_data;
-+	int ret = 0;
-+
-+	q_data = &ctx->q_data[MTK_Q_DATA_DST];
-+	if (q_data->fmt->num_planes == 1) {
-+		mtk_v4l2_vdec_err(ctx, "[%d]Error!! 10bit mode not support one plane", ctx->id);
-+		return -EINVAL;
-+	}
-+
-+	ctx->capture_fourcc = q_data->fmt->fourcc;
-+	ret = vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo);
-+	if (ret) {
-+		mtk_v4l2_vdec_err(ctx, "[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail", ctx->id);
-+		return ret;
-+	}
-+
-+	ctx->last_decoded_picinfo = ctx->picinfo;
-+
-+	q_data->sizeimage[0] = ctx->picinfo.fb_sz[0];
-+	q_data->bytesperline[0] = ctx->picinfo.buf_w * 5 / 4;
-+
-+	q_data->sizeimage[1] = ctx->picinfo.fb_sz[1];
-+	q_data->bytesperline[1] = ctx->picinfo.buf_w * 5 / 4;
-+
-+	q_data->coded_width = ctx->picinfo.buf_w;
-+	q_data->coded_height = ctx->picinfo.buf_h;
-+	mtk_v4l2_vdec_dbg(1, ctx, "[%d] wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
-+			  ctx->id, ctx->picinfo.buf_w, ctx->picinfo.buf_h,
-+			  ctx->picinfo.pic_w, ctx->picinfo.pic_h,
-+			  q_data->sizeimage[0], q_data->sizeimage[1]);
-+
-+	return ret;
-+}
-+
-+static int mtk_vdec_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct mtk_vcodec_dec_ctx *ctx = ctrl_to_dec_ctx(ctrl);
-+	struct v4l2_ctrl_h264_sps *h264;
-+	struct v4l2_ctrl_hevc_sps *h265;
-+	struct v4l2_ctrl_vp9_frame *frame;
-+	struct v4l2_ctrl_av1_sequence *seq;
-+	struct v4l2_ctrl *hdr_ctrl;
-+	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
-+	const struct mtk_video_fmt *fmt;
-+	int i = 0, ret = 0;
-+
-+	hdr_ctrl = ctrl;
-+	if (!hdr_ctrl || !hdr_ctrl->p_cur.p)
-+		return -EINVAL;
-+
-+	switch (hdr_ctrl->id) {
-+	case V4L2_CID_STATELESS_H264_SPS:
-+		h264 = (struct v4l2_ctrl_h264_sps *)hdr_ctrl->p_new.p;
-+		if (h264->bit_depth_chroma_minus8 == 2 && h264->bit_depth_luma_minus8 == 2) {
-+			ctx->is_10bit_bitstream = true;
-+		} else if (h264->bit_depth_chroma_minus8 != 0 &&
-+			   h264->bit_depth_luma_minus8 != 0) {
-+			mtk_v4l2_vdec_err(ctx, "H264: chroma_minus8:%d, luma_minus8:%d",
-+					  h264->bit_depth_chroma_minus8,
-+					  h264->bit_depth_luma_minus8);
-+			return -EINVAL;
-+		}
-+		break;
-+	case V4L2_CID_STATELESS_HEVC_SPS:
-+		h265 = (struct v4l2_ctrl_hevc_sps *)hdr_ctrl->p_new.p;
-+		if (h265->bit_depth_chroma_minus8 == 2 && h265->bit_depth_luma_minus8 == 2) {
-+			ctx->is_10bit_bitstream = true;
-+		} else if (h265->bit_depth_chroma_minus8 != 0 &&
-+			   h265->bit_depth_luma_minus8 != 0) {
-+			mtk_v4l2_vdec_err(ctx, "HEVC: chroma_minus8:%d, luma_minus8:%d",
-+					  h265->bit_depth_chroma_minus8,
-+					  h265->bit_depth_luma_minus8);
-+			return -EINVAL;
-+		}
-+		break;
-+	case V4L2_CID_STATELESS_VP9_FRAME:
-+		frame = (struct v4l2_ctrl_vp9_frame *)hdr_ctrl->p_new.p;
-+		if (frame->bit_depth == 10) {
-+			ctx->is_10bit_bitstream = true;
-+		} else if (frame->bit_depth != 8) {
-+			mtk_v4l2_vdec_err(ctx, "VP9: bit_depth:%d", frame->bit_depth);
-+			return -EINVAL;
-+		}
-+		break;
-+	case V4L2_CID_STATELESS_AV1_SEQUENCE:
-+		seq = (struct v4l2_ctrl_av1_sequence *)hdr_ctrl->p_new.p;
-+		if (seq->bit_depth == 10) {
-+			ctx->is_10bit_bitstream = true;
-+		} else if (seq->bit_depth != 8) {
-+			mtk_v4l2_vdec_err(ctx, "AV1: bit_depth:%d", seq->bit_depth);
-+			return -EINVAL;
-+		}
-+		break;
-+	default:
-+		mtk_v4l2_vdec_err(ctx, "Not supported ctrl id: 0x%x\n", hdr_ctrl->id);
-+		return -EINVAL;
-+	}
-+
-+	if (!ctx->is_10bit_bitstream)
-+		return ret;
-+
-+	for (i = 0; i < *dec_pdata->num_formats; i++) {
-+		fmt = &dec_pdata->vdec_formats[i];
-+		if (fmt->fourcc == V4L2_PIX_FMT_MT2110R &&
-+		    hdr_ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
-+			ctx->q_data[MTK_Q_DATA_DST].fmt = fmt;
-+			break;
-+		}
-+
-+		if (fmt->fourcc == V4L2_PIX_FMT_MT2110T &&
-+		    (hdr_ctrl->id == V4L2_CID_STATELESS_HEVC_SPS ||
-+		    hdr_ctrl->id == V4L2_CID_STATELESS_VP9_FRAME ||
-+		    hdr_ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE)) {
-+			ctx->q_data[MTK_Q_DATA_DST].fmt = fmt;
-+			break;
-+		}
-+	}
-+	ret = mtk_vcodec_get_pic_info(ctx);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops mtk_vcodec_dec_ctrl_ops = {
-+	.s_ctrl = mtk_vdec_s_ctrl,
++/**
++ * struct drm_i915_gem_create_ext_set_pat - The
++ * I915_GEM_CREATE_EXT_SET_PAT extension.
++ *
++ * If this extension is provided, the specified caching policy (PAT index) is
++ * applied to the buffer object.
++ *
++ * Below is an example on how to create an object with specific caching policy:
++ *
++ * .. code-block:: C
++ *
++ *      struct drm_i915_gem_create_ext_set_pat set_pat_ext = {
++ *              .base = { .name = I915_GEM_CREATE_EXT_SET_PAT },
++ *              .pat_index = 0,
++ *      };
++ *      struct drm_i915_gem_create_ext create_ext = {
++ *              .size = PAGE_SIZE,
++ *              .extensions = (uintptr_t)&set_pat_ext,
++ *      };
++ *
++ *      int err = ioctl(fd, DRM_IOCTL_I915_GEM_CREATE_EXT, &create_ext);
++ *      if (err) ...
++ */
++struct drm_i915_gem_create_ext_set_pat {
++	/** @base: Extension link. See struct i915_user_extension. */
++	struct i915_user_extension base;
++	/**
++	 * @pat_index: PAT index to be set
++	 * PAT index is a bit field in Page Table Entry to control caching
++	 * behaviors for GPU accesses. The definition of PAT index is
++	 * platform dependent and can be found in hardware specifications,
++	 */
++	__u32 pat_index;
++	/** @rsvd: reserved for future use */
++	__u32 rsvd;
 +};
 +
- static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
- {
- 	unsigned int i;
-@@ -399,7 +527,7 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
+ /* ID of the protected content session managed by i915 when PXP is active */
+ #define I915_PROTECTED_CONTENT_DEFAULT_SESSION 0xf
  
- 	for (i = 0; i < NUM_CTRLS; i++) {
- 		struct v4l2_ctrl_config cfg = mtk_stateless_controls[i].cfg;
--
-+		cfg.ops = &mtk_vcodec_dec_ctrl_ops;
- 		v4l2_ctrl_new_custom(&ctx->ctrl_hdl, &cfg, NULL);
- 		if (ctx->ctrl_hdl.error) {
- 			mtk_v4l2_vdec_err(ctx, "Adding control %d failed %d", i,
-@@ -466,6 +594,8 @@ static void mtk_vcodec_add_formats(unsigned int fourcc,
- 		break;
- 	case V4L2_PIX_FMT_MM21:
- 	case V4L2_PIX_FMT_MT21C:
-+	case V4L2_PIX_FMT_MT2110T:
-+	case V4L2_PIX_FMT_MT2110R:
- 		mtk_video_formats[count_formats].fourcc = fourcc;
- 		mtk_video_formats[count_formats].type = MTK_FMT_FRAME;
- 		mtk_video_formats[count_formats].num_planes = 2;
-@@ -491,6 +621,12 @@ static void mtk_vcodec_get_supported_formats(struct mtk_vcodec_dec_ctx *ctx)
- 		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT21C, ctx);
- 		cap_format_count++;
- 	}
-+	if (ctx->dev->dec_capability & MTK_VDEC_IS_SUPPORT_10BIT) {
-+		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT2110T, ctx);
-+		cap_format_count++;
-+		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT2110R, ctx);
-+		cap_format_count++;
-+	}
- 	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_MM21) {
- 		mtk_vcodec_add_formats(V4L2_PIX_FMT_MM21, ctx);
- 		cap_format_count++;
 -- 
-2.18.0
+2.37.1
 
