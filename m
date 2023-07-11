@@ -2,133 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F15B74E833
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA3374E839
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjGKHkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S230450AbjGKHkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjGKHkI (ORCPT
+        with ESMTP id S229939AbjGKHkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:40:08 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3097E1A4;
-        Tue, 11 Jul 2023 00:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=Jvs47pnLFbOZN+azKq1C5wj2WCQusgiaHr3c6gc02MA=; b=TpKJPkSbUuCRkZ5xDjO8ka1TrN
-        vG6Gfqk1XHRrSmiWuno8oVr93rlUi4n94wEe9hVDazeG9JY1DlTiz72QvjH3kh/dhh3zsUx4HcZ2U
-        Hj8IC/7NNEDJXXtIAtW6OZ37fv+T5E6v9sRoI0epkQmgZdORzqWn5QiROxqN1/0/orQxMTOQbGEpa
-        6gC82FusuIfdoR1+0Fwp+vZt8ap5DEZNyFcx5MGQUpjP1o3Z3X3NXYDWEIMQd2hWbiZohtj398blq
-        yHA//54Bl2ycuwdbP8Idz6fMVqyE9lu/2mKQwhuzPjgAinfopG5GjHsAVGHxsKDMFVXRWAmG+pGtb
-        vl0CcZOA==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qJ7yP-0007pp-CJ; Tue, 11 Jul 2023 09:39:49 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qJ7yO-000Xjb-L2; Tue, 11 Jul 2023 09:39:48 +0200
-Subject: Re: [PATCH v2] samples/bpf: Fix compilation failure for samples/bpf
- on LoongArch Fedora
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Haoran Jiang <jianghaoran@kylinos.cn>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        kernel@xen0n.name, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        loongarch@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, sdf@google.com, song@kernel.org,
-        trix@redhat.com, yangtiezhu@loongson.cn, yhs@fb.com
-References: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
- <20230710052750.259595-1-jianghaoran@kylinos.cn>
- <CAAhV-H7orsUHDZuwcTUeWYbizcWRG4k_BPy53W7PT_MQ_2SXgw@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7ecc42aa-4a0f-77f7-a2ad-236270137b6e@iogearbox.net>
-Date:   Tue, 11 Jul 2023 09:39:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 11 Jul 2023 03:40:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACD5133;
+        Tue, 11 Jul 2023 00:40:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4794861359;
+        Tue, 11 Jul 2023 07:40:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254ABC433C8;
+        Tue, 11 Jul 2023 07:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689061229;
+        bh=mir9lMosxsKMhRVUiJnRWnuPkqQkT24ItkUJNuKUGqY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bK1ndyY9I2b4mhR0o4T3l/9VjE7JG1KzF9bFos3OF2I61Wu3daHV1EJSKmkI5emmu
+         ip5mIrYXuvklerAmWZP5chAYRtu+nEdKIzLWcJOwCZNDcdGdmL8ZqFwlzHkMIn5SOj
+         3YmXqe93RMwLiHsZKV8jnl8FJDwJDD8qNNa+pcg888XbIH8G1lqKVL1Wnmt5cht1Ug
+         R7CQRhNxRdPLBTIYTyYIsIhKm+29yvNPNxjiJxxW/2NgEWYZcGsUsVOzj4llw4y8ne
+         PvIlP9abEb1p9PHhE6T6/9DJgsm8xJbZBGxdaeGqLPP+NEN9HXaPewYuXRwsL9sdxV
+         m/sNgmlraD8QA==
+Date:   Tue, 11 Jul 2023 10:40:25 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
+        sharmaajay@microsoft.com, cai.huoqing@linux.dev,
+        ssengar@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, schakrabarti@microsoft.com
+Subject: Re: [PATCH V3 net] net: mana: Configure hwc timeout from hardware
+Message-ID: <20230711074025.GK41919@unreal>
+References: <1689060957-1475-1-git-send-email-schakrabarti@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H7orsUHDZuwcTUeWYbizcWRG4k_BPy53W7PT_MQ_2SXgw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26965/Mon Jul 10 09:29:40 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1689060957-1475-1-git-send-email-schakrabarti@linux.microsoft.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/23 7:54 AM, Huacai Chen wrote:
-> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+On Tue, Jul 11, 2023 at 12:35:57AM -0700, Souradeep Chakrabarti wrote:
+> At present hwc timeout value is a fixed value.
+> This patch sets the hwc timeout from the hardware.
+> It now uses a new hardware capability
+
+This is new functionality which means that patch should be sent to net-next.
+
+> GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG to query
+> and set the value in hwc_timeout.
+
+Please try to avoid breaking your commit messages after 50 chars and use whole available
+line space.
+
+Thanks
+
 > 
-> On Mon, Jul 10, 2023 at 1:34 PM Haoran Jiang <jianghaoran@kylinos.cn> wrote:
->>
->> When building the latest samples/bpf on LoongArch Fedora
->>
->>       make M=samples/bpf
->>
->> There are compilation errors as follows:
->>
->> In file included from ./linux/samples/bpf/sockex2_kern.c:2:
->> In file included from ./include/uapi/linux/in.h:25:
->> In file included from ./include/linux/socket.h:8:
->> In file included from ./include/linux/uio.h:9:
->> In file included from ./include/linux/thread_info.h:60:
->> In file included from ./arch/loongarch/include/asm/thread_info.h:15:
->> In file included from ./arch/loongarch/include/asm/processor.h:13:
->> In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
->> ./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
->>           ^~~~~~~~~~~~~~~
->> 1 error generated.
->>
->> larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
->> and the header file location is specified at compile time.
->>
->> Test on LoongArch Fedora:
->> https://github.com/fedora-remix-loongarch/releases-info
->>
->> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
->>
->> ---
->> v2:
->> use LoongArch instead of Loongarch in the title and commit message.
->> ---
->>   samples/bpf/Makefile | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
->> index 615f24ebc49c..b301796a3862 100644
->> --- a/samples/bpf/Makefile
->> +++ b/samples/bpf/Makefile
->> @@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
->>          @echo "  CLANG-bpf " $@
->>          $(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
->>                  -I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
->> -               -I$(LIBBPF_INCLUDE) \
->> +               -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
-
-There's still one location in XDP_SAMPLE_CFLAGS, do we need the $(CLANG_SYS_INCLUDES)
-there as well?
-
->>                  -D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
->>                  -D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
->>                  -Wno-gnu-variable-sized-type-not-at-end \
->> --
->> 2.27.0
->>
->>
-
+> Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+> ---
+> V2 -> V3:
+> * Removed the stable release from cc
+> * Formatted the variable position to follow reverse xmas tree
+> * Removed the log from mana_gd_query_hwc_timeout on success scenario
+> ---
+>  .../net/ethernet/microsoft/mana/gdma_main.c   | 30 ++++++++++++++++++-
+>  .../net/ethernet/microsoft/mana/hw_channel.c  | 25 +++++++++++++++-
+>  include/net/mana/gdma.h                       | 20 ++++++++++++-
+>  include/net/mana/hw_channel.h                 |  5 ++++
+>  4 files changed, 77 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 8f3f78b68592..4537a70e30d4 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -106,6 +106,25 @@ static int mana_gd_query_max_resources(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  
+> +static int mana_gd_query_hwc_timeout(struct pci_dev *pdev, u32 *timeout_val)
+> +{
+> +	struct gdma_context *gc = pci_get_drvdata(pdev);
+> +	struct gdma_query_hwc_timeout_resp resp = {};
+> +	struct gdma_query_hwc_timeout_req req = {};
+> +	int err;
+> +
+> +	mana_gd_init_req_hdr(&req.hdr, GDMA_QUERY_HWC_TIMEOUT,
+> +			     sizeof(req), sizeof(resp));
+> +	req.timeout_ms = *timeout_val;
+> +	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
+> +	if (err || resp.hdr.status)
+> +		return err ? err : -EPROTO;
+> +
+> +	*timeout_val = resp.timeout_ms;
+> +
+> +	return 0;
+> +}
+> +
+>  static int mana_gd_detect_devices(struct pci_dev *pdev)
+>  {
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+> @@ -879,8 +898,11 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+>  	struct gdma_verify_ver_resp resp = {};
+>  	struct gdma_verify_ver_req req = {};
+> +	struct hw_channel_context *hwc;
+>  	int err;
+>  
+> +	hwc = gc->hwc.driver_data;
+> +
+>  	mana_gd_init_req_hdr(&req.hdr, GDMA_VERIFY_VF_DRIVER_VERSION,
+>  			     sizeof(req), sizeof(resp));
+>  
+> @@ -907,7 +929,13 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
+>  			err, resp.hdr.status);
+>  		return err ? err : -EPROTO;
+>  	}
+> -
+> +	if (resp.pf_cap_flags1 & GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG) {
+> +		err = mana_gd_query_hwc_timeout(pdev, &hwc->hwc_timeout);
+> +		if (err) {
+> +			dev_err(gc->dev, "Failed to set the hwc timeout %d\n", err);
+> +			return err;
+> +		}
+> +	}
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> index 2bd1d74021f7..db433501e5e6 100644
+> --- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> +++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> @@ -174,7 +174,25 @@ static void mana_hwc_init_event_handler(void *ctx, struct gdma_queue *q_self,
+>  		complete(&hwc->hwc_init_eqe_comp);
+>  		break;
+>  
+> +	case GDMA_EQE_HWC_SOC_RECONFIG_DATA:
+> +		type_data.as_uint32 = event->details[0];
+> +		type = type_data.type;
+> +		val = type_data.value;
+> +
+> +		switch (type) {
+> +		case HWC_DATA_CFG_HWC_TIMEOUT:
+> +			hwc->hwc_timeout = val;
+> +			break;
+> +
+> +		default:
+> +			dev_warn(hwc->dev, "Received unknown reconfig type %u\n", type);
+> +			break;
+> +		}
+> +
+> +		break;
+> +
+>  	default:
+> +		dev_warn(hwc->dev, "Received unknown gdma event %u\n", event->type);
+>  		/* Ignore unknown events, which should never happen. */
+>  		break;
+>  	}
+> @@ -704,6 +722,7 @@ int mana_hwc_create_channel(struct gdma_context *gc)
+>  	gd->pdid = INVALID_PDID;
+>  	gd->doorbell = INVALID_DOORBELL;
+>  
+> +	hwc->hwc_timeout = HW_CHANNEL_WAIT_RESOURCE_TIMEOUT_MS;
+>  	/* mana_hwc_init_queues() only creates the required data structures,
+>  	 * and doesn't touch the HWC device.
+>  	 */
+> @@ -770,6 +789,8 @@ void mana_hwc_destroy_channel(struct gdma_context *gc)
+>  	hwc->gdma_dev->doorbell = INVALID_DOORBELL;
+>  	hwc->gdma_dev->pdid = INVALID_PDID;
+>  
+> +	hwc->hwc_timeout = 0;
+> +
+>  	kfree(hwc);
+>  	gc->hwc.driver_data = NULL;
+>  	gc->hwc.gdma_context = NULL;
+> @@ -818,6 +839,7 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
+>  		dest_vrq = hwc->pf_dest_vrq_id;
+>  		dest_vrcq = hwc->pf_dest_vrcq_id;
+>  	}
+> +	dev_err(hwc->dev, "HWC: timeout %u ms\n", hwc->hwc_timeout);
+>  
+>  	err = mana_hwc_post_tx_wqe(txq, tx_wr, dest_vrq, dest_vrcq, false);
+>  	if (err) {
+> @@ -825,7 +847,8 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
+>  		goto out;
+>  	}
+>  
+> -	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
+> +	if (!wait_for_completion_timeout(&ctx->comp_event,
+> +					 (hwc->hwc_timeout / 1000) * HZ)) {
+>  		dev_err(hwc->dev, "HWC: Request timed out!\n");
+>  		err = -ETIMEDOUT;
+>  		goto out;
+> diff --git a/include/net/mana/gdma.h b/include/net/mana/gdma.h
+> index 96c120160f15..88b6ef7ce1a6 100644
+> --- a/include/net/mana/gdma.h
+> +++ b/include/net/mana/gdma.h
+> @@ -33,6 +33,7 @@ enum gdma_request_type {
+>  	GDMA_DESTROY_PD			= 30,
+>  	GDMA_CREATE_MR			= 31,
+>  	GDMA_DESTROY_MR			= 32,
+> +	GDMA_QUERY_HWC_TIMEOUT		= 84, /* 0x54 */
+>  };
+>  
+>  #define GDMA_RESOURCE_DOORBELL_PAGE	27
+> @@ -57,6 +58,8 @@ enum gdma_eqe_type {
+>  	GDMA_EQE_HWC_INIT_EQ_ID_DB	= 129,
+>  	GDMA_EQE_HWC_INIT_DATA		= 130,
+>  	GDMA_EQE_HWC_INIT_DONE		= 131,
+> +	GDMA_EQE_HWC_SOC_RECONFIG	= 132,
+> +	GDMA_EQE_HWC_SOC_RECONFIG_DATA	= 133,
+>  };
+>  
+>  enum {
+> @@ -531,10 +534,12 @@ enum {
+>   * so the driver is able to reliably support features like busy_poll.
+>   */
+>  #define GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX BIT(2)
+> +#define GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG BIT(3)
+>  
+>  #define GDMA_DRV_CAP_FLAGS1 \
+>  	(GDMA_DRV_CAP_FLAG_1_EQ_SHARING_MULTI_VPORT | \
+> -	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX)
+> +	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX | \
+> +	 GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG)
+>  
+>  #define GDMA_DRV_CAP_FLAGS2 0
+>  
+> @@ -664,6 +669,19 @@ struct gdma_disable_queue_req {
+>  	u32 alloc_res_id_on_creation;
+>  }; /* HW DATA */
+>  
+> +/* GDMA_QUERY_HWC_TIMEOUT */
+> +struct gdma_query_hwc_timeout_req {
+> +	struct gdma_req_hdr hdr;
+> +	u32 timeout_ms;
+> +	u32 reserved;
+> +};
+> +
+> +struct gdma_query_hwc_timeout_resp {
+> +	struct gdma_resp_hdr hdr;
+> +	u32 timeout_ms;
+> +	u32 reserved;
+> +};
+> +
+>  enum atb_page_size {
+>  	ATB_PAGE_SIZE_4K,
+>  	ATB_PAGE_SIZE_8K,
+> diff --git a/include/net/mana/hw_channel.h b/include/net/mana/hw_channel.h
+> index 6a757a6e2732..3d3b5c881bc1 100644
+> --- a/include/net/mana/hw_channel.h
+> +++ b/include/net/mana/hw_channel.h
+> @@ -23,6 +23,10 @@
+>  #define HWC_INIT_DATA_PF_DEST_RQ_ID	10
+>  #define HWC_INIT_DATA_PF_DEST_CQ_ID	11
+>  
+> +#define HWC_DATA_CFG_HWC_TIMEOUT 1
+> +
+> +#define HW_CHANNEL_WAIT_RESOURCE_TIMEOUT_MS 30000
+> +
+>  /* Structures labeled with "HW DATA" are exchanged with the hardware. All of
+>   * them are naturally aligned and hence don't need __packed.
+>   */
+> @@ -182,6 +186,7 @@ struct hw_channel_context {
+>  
+>  	u32 pf_dest_vrq_id;
+>  	u32 pf_dest_vrcq_id;
+> +	u32 hwc_timeout;
+>  
+>  	struct hwc_caller_ctx *caller_ctx;
+>  };
+> -- 
+> 2.34.1
+> 
