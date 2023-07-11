@@ -2,114 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9A174F9AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EAB74F9B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjGKVW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S231531AbjGKVXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjGKVWU (ORCPT
+        with ESMTP id S230227AbjGKVXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:22:20 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D86D173C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:22:10 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-682b1768a0bso1344370b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689110530; x=1691702530;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gA3l1yhuKOFSCNrc4pLJH2sIkbUZixeTWwlssXNtbNw=;
-        b=a51Yb+l2+T+BEYpdjBPQAGmZ4P1Os4bcoMbvwS1VflIi9CZ+pw9FXCG+hhUUui8yYr
-         rE7BGgLFALSet+fLPFVwOeuLXGOg0qW5Jl1cwQUwBcyCtk8qb1teTuP9ebjgonBl7zvV
-         +XRxxunDFNk/GMI5ry1KGp3srr+8TvTvTHLcpSHRN8Jf7gKUougtGZe8Kdel982ymZ1k
-         F/2Yw4To9rP+1CwK1ouNjPsNyGrNhZloSyj0p6w3F17Y/cCTSQzLUzzEzE5oVfdEQc3l
-         cNAN+zk08fFQBEm+MW361Nn6ydH4TGYb2R7a1EmGvxwdJ1XDnIJEAthXjpBj7yC3llc+
-         1daQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689110530; x=1691702530;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gA3l1yhuKOFSCNrc4pLJH2sIkbUZixeTWwlssXNtbNw=;
-        b=XDnquiVV7SoW9OfbetrLB01H/KCS2VlUmKs2ZNFTh9FUpgUHBuJRrCgOYpNyyO7CTl
-         KzTxe9gNzSWhKadf5eCgf0xeK+KR6TN/I7xeXyf3C9EbCPOkRf5GxX3sFHQpBRiPBOPZ
-         xembd2pXWfAAXgkVxIPqS21VGBHpTvApLo947SRCzxSn9mzko4aH4Xt9vS85kuqPZf/Z
-         Q+7UscPkJHtjs/KvIRV8lNfzO+rNApa36Gc9H3FHZ5WopcaGWmroloZaRzwcSu3tgbou
-         4v/5ZLGWRDufkAdz0zmkJcgsUxNs0iExvwvyAVC5/Rl8M/NyoE0KuzMxNDzb1ZhlFaKV
-         4ZZA==
-X-Gm-Message-State: ABy/qLaLt2usukMe26wV0JnDDN3HQ9Bwz2zxH+00VwtVdRLWAr9SSL+G
-        4aYe/lGvdOycXhgRUu0toSZf7w==
-X-Google-Smtp-Source: APBJJlFVfxfkuXNd5u2rO+Y6efYLXZMTgIkaHOTtf3/LXtk9M0ngHOLb+o3MMkbyvcpHedshSbiJOw==
-X-Received: by 2002:a05:6a21:32a3:b0:132:4913:b651 with SMTP id yt35-20020a056a2132a300b001324913b651mr4312798pzb.3.1689110530093;
-        Tue, 11 Jul 2023 14:22:10 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n18-20020a638f12000000b00548d361c137sm2015321pgd.61.2023.07.11.14.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 14:22:09 -0700 (PDT)
-Message-ID: <048cfbce-5238-2580-2d53-2ca740e72d79@kernel.dk>
-Date:   Tue, 11 Jul 2023 15:22:08 -0600
+        Tue, 11 Jul 2023 17:23:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E339111B;
+        Tue, 11 Jul 2023 14:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689110595; x=1720646595;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E8txDx+ewvXOdcJsIlylcjGRaNR3TVVS13z+5E2/IfM=;
+  b=HBiQSY0QpX1Zhukj6/Bv6GXoJ1ajhmqF02cY8BoYi8O0Ywt2PNDBEHC2
+   DdM3yQlRwjL+KwKRYvdnOexaujJWum9a6jRKKTo1pRMxG2kEH+i3uRonQ
+   Yu+B4TQcczt9HDkmPJT3Qwq1avaBC7L5dtX3MHM1OxnU6+VbaADoUaYDr
+   hvDBpxTSoeJB0obr66hDGBsdRkRETeHRA/IfiMGQx1OvsYxEyiU/wa6tN
+   KCZ1IUddmVE7rKEsuZiTwNKbdnd+aM2JHWi6y7leLAGTFGEztHjjor+67
+   ZxDBB020hZG3JHO7bDt5LpM/gj30j0+VCoK9lYl15krDaXEDzbgwVbWId
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="344339360"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="344339360"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:23:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="791358549"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="791358549"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:23:15 -0700
+Date:   Tue, 11 Jul 2023 14:23:14 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Peter Newman <peternewman@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "x86@kernel.org" <x86@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Babu Moger <babu.moger@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH v2 0/7] x86/resctrl: Add support for Sub-NUMA cluster
+ (SNC) systems
+Message-ID: <ZK3IQj6+eVAeaNY1@agluck-desk3>
+References: <20230621174006.42533-1-tony.luck@intel.com>
+ <TYAPR01MB6330B9B17686EF426D2C3F308B25A@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <SJ1PR11MB608331B7F85320DD4CD93448FC25A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <30b63f35-1839-6870-d81b-1e8bff88dc70@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 5/5] io_uring: add IORING_OP_WAITID support
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>
-References: <20230711204352.214086-1-axboe@kernel.dk>
- <20230711204352.214086-6-axboe@kernel.dk>
- <8431d207-5e52-4f8c-a12d-276836174bad@app.fastmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <8431d207-5e52-4f8c-a12d-276836174bad@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30b63f35-1839-6870-d81b-1e8bff88dc70@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/23 3:11?PM, Arnd Bergmann wrote:
-> On Tue, Jul 11, 2023, at 22:43, Jens Axboe wrote:
->> This adds support for an async version of waitid(2), in a fully async
->> version. If an event isn't immediately available, wait for a callback
->> to trigger a retry.
->>
->> The format of the sqe is as follows:
->>
->> sqe->len		The 'which', the idtype being queried/waited for.
->> sqe->fd			The 'pid' (or id) being waited for.
->> sqe->file_index		The 'options' being set.
->> sqe->addr2		A pointer to siginfo_t, if any, being filled in.
->>
->> buf_index, add3, and waitid_flags are reserved/unused for now.
->> waitid_flags will be used for options for this request type. One
->> interesting use case may be to add multi-shot support, so that the
->> request stays armed and posts a notification every time a monitored
->> process state change occurs.
->>
->> Note that this does not support rusage, on Arnd's recommendation.
->>
->> See the waitid(2) man page for details on the arguments.
->>
->> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+On Tue, Jul 11, 2023 at 01:50:02PM -0700, Reinette Chatre wrote:
+> Hi Tony,
+> > This is expected. When SNC is enabled, CAT still supports the same number of
+> > bits in the allocation cache mask. But each bit represents half as much cache.
+> > 
+> > Think of the cache as a 2-D matrix with the cache-ways (bits in the CAT mask)
+> > as the columns, and the rows are the hashed index of the physical address.
+> > When SNC is turned on the hash function for physical addresses from one
+> > of the SNC number nodes will only pick half of those rows (and the other
+> > SNC node gets the other half of the rows).
 > 
-> Does this require argument conversion for compat tasks?
-> 
-> Even without the rusage argument, I think the siginfo
-> remains incompatible with 32-bit tasks, unfortunately.
+> If a test is expected to fail in a particular scenario then I think
+> the test failure should be communicated as a "pass". If not this will 
+> reduce confidence in accuracy of tests. Even so, from the description
+> it sounds as though this test can be made more accurate to indeed pass
+> in the scenario when SNC is enabled?
 
-Hmm yes good point, if compat_siginfo and siginfo are different, then it
-does need handling for that. Would be a trivial addition, I'll make that
-change. Thanks Arnd!
+Hi Reinette,
 
--- 
-Jens Axboe
+Yes. This could be done. The resctrl tests would need to determine
+if SNC mode is enabled. But I think that is possible by comparing
+output of sysfs files. E.g. with SNC disabled the lists of cpus for a node
+and a CPU on that node will match like this:
 
+$ cat /sys/devices/system/node/node0/cpulist
+0-35,72-107
+$ cat /sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_list
+0-35,72-107
+
+but with SNC enabled, the CPUs sharing a cache will be divided across
+two or four nodes.
+
+It looks like the existing tests may print a warning. I see
+this code in:
+
+tools/testing/selftests/resctrl/resctrl_tests.c
+
+123         res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
+124         ksft_test_result(!res, "CMT: test\n");
+125         if ((get_vendor() == ARCH_INTEL) && res)
+126                 ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+
+but at first glance that warning doesn't appear to try and
+check if SNC was the actual problem.
+
+-Tony
