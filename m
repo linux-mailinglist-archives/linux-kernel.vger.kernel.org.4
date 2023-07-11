@@ -2,94 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899A074F43E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663B674F442
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjGKQBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S230236AbjGKQCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjGKQBC (ORCPT
+        with ESMTP id S230486AbjGKQBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:01:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2401BC6;
-        Tue, 11 Jul 2023 09:00:51 -0700 (PDT)
+        Tue, 11 Jul 2023 12:01:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA5B1722;
+        Tue, 11 Jul 2023 09:01:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4232761561;
-        Tue, 11 Jul 2023 16:00:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73A1C433C8;
-        Tue, 11 Jul 2023 16:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689091250;
-        bh=qJNl12vo3sFEgIC9eU4i4GFHtknelm6lEufyoqloygg=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BEAC614F8;
+        Tue, 11 Jul 2023 16:01:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F54C433C7;
+        Tue, 11 Jul 2023 16:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1689091292;
+        bh=W4jQlbMQdBvo7/FDTvEj5jeyPtiEw/LF6hLHC5rkPRw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=H5Pjqt9ztd1rsXJxiMRPURZwTa2ExxdjvmdAB+R2m6SIGj9BZXzsFh8fGEuiSTvcm
-         judzO3qp7mqlviGZdHfT9sbnjnh7490DvZQa7s5T+0mqaBlhZbmTkQYKjneddOr+zU
-         I70OFnP7HqecLR1sMTBg5IyfCTdYnn+/rbEAn2glXwwMxHVhQ+QwarY7jc03Bi7ww2
-         byWkJRLIUtz0tkaUzKuPvGqtrAhdOE7ZFL4wWDtTcgcgau59/IWCMnMGAP6m8DA2sQ
-         fnlNevf7wZVPt1tPCiqMTLRIvyGYwZut8EY+Mzks1hOkDrkQuZgqAklkfJWwGQfh+U
-         q8F+qHZDvJx3w==
-Date:   Tue, 11 Jul 2023 09:00:47 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230711090047.37d7fe06@kernel.org>
-In-Reply-To: <ZK1FbjG+VP/zxfO1@ziepe.ca>
-References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
-        <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
-        <ZKNA9Pkg2vMJjHds@ziepe.ca>
-        <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
-        <ZKxDZfVAbVHgNgIM@ziepe.ca>
-        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
-        <ZKyZBbKEpmkFkpWV@ziepe.ca>
-        <20230711042708.GA18658@lst.de>
-        <20230710215906.49514550@kernel.org>
-        <20230711050445.GA19323@lst.de>
-        <ZK1FbjG+VP/zxfO1@ziepe.ca>
-MIME-Version: 1.0
+        b=zckNfeTjVADMHyofLUUTnGXURxoqX+nnQXOrhYQsdGHTcpkU7xuK9xU1TSXohKsZV
+         Gr4B10jt8jyme7faeeuTKSh30IQgpSlLSfzECc8YC+IbUApBm71TAmZxgCP2soKfc5
+         S8VuU6DES5kr7V1aK0NlvWdhFt324C2tZXCp0gjM=
+Date:   Tue, 11 Jul 2023 09:01:31 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v5 04/38] mm: Add folio_flush_mapping()
+Message-Id: <20230711090131.20d61e87e4b6983357105e9e@linux-foundation.org>
+In-Reply-To: <ZKy/hk/tdPftCOyc@casper.infradead.org>
+References: <20230710204339.3554919-1-willy@infradead.org>
+        <20230710204339.3554919-5-willy@infradead.org>
+        <20230710161727.7a676996b64e9885cc15eaeb@linux-foundation.org>
+        <ZKy/hk/tdPftCOyc@casper.infradead.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,40 +57,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 09:05:02 -0300 Jason Gunthorpe wrote:
-> On Tue, Jul 11, 2023 at 07:04:45AM +0200, Christoph Hellwig wrote:
-> > On Mon, Jul 10, 2023 at 09:59:06PM -0700, Jakub Kicinski wrote:  
-> > > Noob question - how does RDMA integrate with the out of tree junk?
-> > > AFAIU it's possible to run the "in-tree" RDMA stack and get "GPU
-> > > direct".  
+On Tue, 11 Jul 2023 03:33:42 +0100 Matthew Wilcox <willy@infradead.org> wrote:
+
+> On Mon, Jul 10, 2023 at 04:17:27PM -0700, Andrew Morton wrote:
+> > On Mon, 10 Jul 2023 21:43:05 +0100 "Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+> > > +static inline struct address_space *folio_flush_mapping(struct folio *folio)
+> > > +{
+> > > +	if (unlikely(folio_test_swapcache(folio)))
+> > > +		return NULL;
+> > > +
+> > > +	return folio_mapping(folio);
+> > > +}
 > > 
-> > I don't care and it has absolutel no business being discussed here.
+> > The name makes it sound like it flushes something.  Wouldn't
+> > folio_flushable_mapping() be clearer?
+> 
+> Yes; I wasn't a big fan of the name, but I wasn't a fan of perpetuating
+> the page_file_mapping / page_mapping_file confusio either.  Do you want
+> me to send you a set of fixup patches, or will you run them through sed
+> -i ?  ;-)
 
-My question was genuine. If you think the code is dog shit I will 
-make no argument for merging it. I just get hives from looking at
-proprietary code so I was hoping someone could explain how the
-proprietary stacks get it done.
-
-> > FYI at leat iWarp is a totally open standard.  
-
-And I'm sure someone cares about that. I care about open source.
-
-I think people in the networking world have a deeper understanding 
-of standardization processes, and their practical implication for
-open source and hack-ability. If all usable implementations are
-proprietary the standard could as well not exist.
-
-That may be a little hard to understand for folks coming from storage
-and fabric worlds where the interesting bits of the implementation was
-pretty much always closed.
-
-> So is Infiniband, Jakub has a unique definition of "proprietary".
-
-For IB AFAIU there's only one practically usable vendor, such an
-impressive ecosystem!!
-
-> RDMA works with the AMD and Intel intree drivers using DMABUF without
-> requiring struct pages using the DRM hacky scatterlist approach.
-
-I see, thanks. We need pages primarily for refcounting. Avoiding all
-the infamous problems with memory pins. Oh well.
+I sedded.
