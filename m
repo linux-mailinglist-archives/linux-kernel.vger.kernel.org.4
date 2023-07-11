@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D7A74F882
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE79874F885
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjGKTqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 15:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S231625AbjGKTqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 15:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGKTqD (ORCPT
+        with ESMTP id S229512AbjGKTqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:46:03 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEBB19B;
-        Tue, 11 Jul 2023 12:46:02 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5774335bb2aso67664197b3.0;
-        Tue, 11 Jul 2023 12:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689104762; x=1691696762;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vbgm71YcKlV+YwM9EntZJb3Xj8SWJ9W9vOrlGUOSBzc=;
-        b=A6qtKSvB/9gZX9OW2mjIz4SJhhtmErMvXPNYWQwDrtRLwW+lNP+W7vVdrgX+FfAv5d
-         iKNIb1UC6oWO5dxM5vLnPmE5dzPjR43cOJOBKFyNWY7AlF6eLUJWp0hDqMuR9/cCZei7
-         4q+tdVDauiBjXl9N9G6IwCechUfmG6atpiJMl7kIcRQ20Azf3Dzye1gdaEAD/aY3xyYw
-         PqpRQCN4zYeCk8OrgrY2d+rfaq65uIFZY1z8Q1XnB9hqBVu2Yh+MJaYu7GiX98hY8smI
-         i6c3MdO6OR9kcCxzMyHvXZQYp0nnaj4IcQZpkBTFW4m5kCQdqqFf+Xo2oZT+H7nfi3jo
-         6SHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689104762; x=1691696762;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vbgm71YcKlV+YwM9EntZJb3Xj8SWJ9W9vOrlGUOSBzc=;
-        b=R+FNazE/2mkqTHu54iI8xj7d9JaiJEMSOiretu7fRjDX82b2tFgI3dnUQg8NM5CdbX
-         89H1mQbUU+EyFSqZAUHSsNlkYDsImSy+0I3GUSeMJpOJENws9J9UmLfePwKBVPhySxGH
-         tX+1YYg67lMuN0x6Sk8lCHtlr3YtCqsxfaj+60cVi9p92RqsKFe6jNPNK4UtAYvfhLup
-         j2QaOTwm+qYEt84ZIx4TD9CNu3MX6cywRgTur3GGaCpuF6mUEv/uc5D2pvLhF0Xq/xKL
-         J6umrP+xR4BpMjEu/HjBrSKFUtGBr2YKbXLBN23KyZ7oiuuTsUjwMLFGjwi5QJJg0vmC
-         HY1g==
-X-Gm-Message-State: ABy/qLaKvdzRRoIEJYyEc1t/12TjyS1RIJXDN+DL8bNPRNEwEg5miPKo
-        9w5lrpBq4txKwSB8wvrhORciUyLCayU=
-X-Google-Smtp-Source: APBJJlFWE1ggzUUM93UXB866EFOMNtcYY422yc1ghyjfHPxS+R2NG4Spv2ULbXsNOWRfYCDb4knbMQ==
-X-Received: by 2002:a0d:de06:0:b0:56d:de2:94d1 with SMTP id h6-20020a0dde06000000b0056d0de294d1mr16935452ywe.24.1689104761836;
-        Tue, 11 Jul 2023 12:46:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m67-20020a0dfc46000000b00579e8c7e478sm750195ywf.43.2023.07.11.12.46.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 12:46:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <36752432-52e7-22e1-a2de-332749aa15a1@roeck-us.net>
-Date:   Tue, 11 Jul 2023 12:45:59 -0700
+        Tue, 11 Jul 2023 15:46:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822F51730
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:46:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 164A3615E4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 19:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44295C433C8;
+        Tue, 11 Jul 2023 19:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689104790;
+        bh=oagomkcQa/oXl5+aZDOLNoxvsSWXn4ATh/auNAuthDQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KUPyaibc8L/ggTxuNzTCY2ikAuY9Q0sDupvAnGogZgYxtNvM9vRGxb4GrfKTWpcpF
+         B1h3lMl4eqljM9aFBuu8S2MIXfeNyfBjtoGltF7CpwbrMY4WVu6NpLZgommVJ0COgR
+         TtfHwyQC1D2dGfBRvrR4PrYi/5hxViaR3gZEa2EmV+6ivIYqR4TUGVx3Nk7tB9Og+b
+         ALtepbWoO58Refl9daZqp7toMUGkVMIQTf3skzQpw1cmrI6JeDVgKM/gYbFQBKTR5G
+         DTDL4lC7wwCZ27wR7TpZai1UBVG2JPepcQbJh6vzsw3qr8fzf0iR+hgFqaB/wq6os4
+         /0Jx0sy/RNOKw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7ED9140516; Tue, 11 Jul 2023 16:46:27 -0300 (-03)
+Date:   Tue, 11 Jul 2023 16:46:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Chenyuan Mi <cymi20@fudan.edu.cn>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] lib subcmd: Avoid segv/use-after-free when commands
+ aren't excluded
+Message-ID: <ZK2xk2qJE2M+bGCb@kernel.org>
+References: <20230707230926.841086-1-irogers@google.com>
+ <CAM9d7chqAkLuYYyOSM5n1S-Rzf5ivCCuaqz5Tc1j23a2NsWzFQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] peci: Add Intel Sapphire Rapids support
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        iwona.winiarska@intel.com, jdelvare@suse.com
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        openbmc@lists.ozlabs.org
-References: <20230711160452.818914-1-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230711160452.818914-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7chqAkLuYYyOSM5n1S-Rzf5ivCCuaqz5Tc1j23a2NsWzFQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/23 09:04, Naresh Solanki wrote:
-> Add support for detection of Intel Sapphire Rapids processor based on
-> CPU family & model.
+Em Tue, Jul 11, 2023 at 10:36:59AM -0700, Namhyung Kim escreveu:
+> On Fri, Jul 7, 2023 at 4:09 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > The array shortening may perform unnecessary array copies. Before
+> > commit 657a3efee43a ("lib subcmd: Avoid memory leak in exclude_cmds")
+> > this was benign, but afterwards this could lead to a segv.
+> >
+> > Fixes: 657a3efee43a ("lib subcmd: Avoid memory leak in exclude_cmds")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > 
-> Sapphire Rapids Xeon processors with the family set to 6 and the
-> model set to INTEL_FAM6_SAPPHIRERAPIDS_X. The data field for this entry
-> is "spr".
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks, applied to perf-tools.
+
+- Arnaldo
+
+ 
+> Thanks,
+> Namhyung
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-
-Please version your patches and provide change logs.
-
-Guenter
-
-> ---
->   drivers/peci/cpu.c | 5 +++++
->   1 file changed, 5 insertions(+)
 > 
-> diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
-> index de4a7b3e5966..3668a908d259 100644
-> --- a/drivers/peci/cpu.c
-> +++ b/drivers/peci/cpu.c
-> @@ -318,6 +318,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
->   		.model	= INTEL_FAM6_ICELAKE_X,
->   		.data	= "icx",
->   	},
-> +	{ /* Sapphire Rapids Xeon */
-> +		.family	= 6,
-> +		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
-> +		.data	= "spr",
-> +	},
->   	{ /* Icelake Xeon D */
->   		.family	= 6,
->   		.model	= INTEL_FAM6_ICELAKE_D,
-> 
-> base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
+> > ---
+> >  tools/lib/subcmd/help.c | 18 ++++++++++++------
+> >  1 file changed, 12 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/lib/subcmd/help.c b/tools/lib/subcmd/help.c
+> > index 67a8d6b740ea..adfbae27dc36 100644
+> > --- a/tools/lib/subcmd/help.c
+> > +++ b/tools/lib/subcmd/help.c
+> > @@ -68,8 +68,13 @@ void exclude_cmds(struct cmdnames *cmds, struct cmdnames *excludes)
+> >         while (ci < cmds->cnt && ei < excludes->cnt) {
+> >                 cmp = strcmp(cmds->names[ci]->name, excludes->names[ei]->name);
+> >                 if (cmp < 0) {
+> > -                       zfree(&cmds->names[cj]);
+> > -                       cmds->names[cj++] = cmds->names[ci++];
+> > +                       if (ci == cj) {
+> > +                               ci++;
+> > +                               cj++;
+> > +                       } else {
+> > +                               zfree(&cmds->names[cj]);
+> > +                               cmds->names[cj++] = cmds->names[ci++];
+> > +                       }
+> >                 } else if (cmp == 0) {
+> >                         ci++;
+> >                         ei++;
+> > @@ -77,10 +82,11 @@ void exclude_cmds(struct cmdnames *cmds, struct cmdnames *excludes)
+> >                         ei++;
+> >                 }
+> >         }
+> > -
+> > -       while (ci < cmds->cnt) {
+> > -               zfree(&cmds->names[cj]);
+> > -               cmds->names[cj++] = cmds->names[ci++];
+> > +       if (ci != cj) {
+> > +               while (ci < cmds->cnt) {
+> > +                       zfree(&cmds->names[cj]);
+> > +                       cmds->names[cj++] = cmds->names[ci++];
+> > +               }
+> >         }
+> >         for (ci = cj; ci < cmds->cnt; ci++)
+> >                 zfree(&cmds->names[ci]);
+> > --
+> > 2.41.0.390.g38632f3daf-goog
+> >
 
+-- 
+
+- Arnaldo
