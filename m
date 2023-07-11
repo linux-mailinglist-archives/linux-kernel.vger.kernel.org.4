@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBF674F255
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC8D74F257
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjGKOen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S233205AbjGKOeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbjGKOe2 (ORCPT
+        with ESMTP id S233549AbjGKOee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:34:28 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B9F1BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:09 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-98df34aa83aso799947766b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:09 -0700 (PDT)
+        Tue, 11 Jul 2023 10:34:34 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020871704
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:12 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id a640c23a62f3a-987e47d2e81so385572966b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689086048; x=1691678048;
+        d=google.com; s=20221208; t=1689086051; x=1691678051;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
         bh=j5KQ14CSTc8NpsFet5DkO7+Eg5yvGp+eL0uzYXahxFI=;
-        b=iXh0XHR0rIGogedmzgelpLOrRb0uIzpw8b9s1nFY8Nb6/qdqQKgAhgySorTb4eXpEX
-         trkwn7CjRdl9LZ3qFzgWwhfwnKIr2mEP82qOfkac24bPvfdLP0bgW5XO+eYDfwAWSeG0
-         G54d2KUpEVu/yW50J26RCv4jyu2/MU28uXVp06zOyK6gMOZJYzyNyhzUbhAyT65fSoog
-         hB9wUuJd5c3gUEzs7IVlS8Z/hPscKxNwwLMh1ilhVTBAq4wLucqv06Uk2GX4YcdLhzRx
-         HHMBxA4OWKMNLVqPEqoqRlWqd4tqwj9mhWiWw3emVbCItRbvukjzLC/Cy6ia+3qUH7K8
-         +fzg==
+        b=REFxOLn3yTkHXXbW63Pv3TKvhHmLym4lK7n4qAg1HhVqYHBz6Eygyf+ukgS+aoF7Ay
+         FGPGtEGLPHN3UAOhSKs6RZPcuuvEvi3REVbiotM0gtXOI4psD1ewYPMkTsWifRHxEE7c
+         ODSabgC3mrfJSuUFgXHqu28gWbpXZmRd0VSc++qeUL82LRuFMQBDVt39YY+Hl+YTOYS+
+         9QImRBBwUfs4WhOyiSWe4jiBSOWjIjNvkytOGISZzdlVGzE2tNXPd6Mo5mGt/BYMG89V
+         Fcpdqdueo74cUDPF7zBL3ajHYrFrGfxDwkUSszPa1TaF6xJtXn/ye+EZCfyEs3ocegWN
+         xPCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086048; x=1691678048;
+        d=1e100.net; s=20221208; t=1689086051; x=1691678051;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=j5KQ14CSTc8NpsFet5DkO7+Eg5yvGp+eL0uzYXahxFI=;
-        b=E/P52C5rJKu40ZwdODvDkVCJuWB0kQY6+5NytnYvMm6Nf5PeISpyi89cOqigWPk20F
-         9QLWbhjqBD7gc8OxOvgTQwoUHO5mp3at0PLgatXIJG4w2vZ3KXLhSUuZpZCLpQJOETlv
-         JW/PJ37WSMB8JN5E3qOx5kmrmp3sJJHQQrC72bIMAKS0w51K7S2gLt/a2RTQT5KYQDvk
-         +gJY08vdJB0IVrOqEDHBmEB6q0FJIcQZkli4i+orbVtA/eL2bKzlLpXW1xlQk+4wrUW/
-         0OZ/0ououJz0CGocYhJNJS/DmOIVYkluNi+4Wj+VqP3S7dPLlpm7O8LcCztmsBtzQzAe
-         tShQ==
-X-Gm-Message-State: ABy/qLauxQoTCYmeUMkvdFUxQeLzTYp3ImJE0M2C/7ImGFGG1rX9QICy
-        kXsSsfb/9vXxURXPKp2EHMWNTk69CDo=
-X-Google-Smtp-Source: APBJJlHozfsOe6ImlJVvRHKJJ0JhFSTsSYLEItORe7QvzMIgfatUXBXWbhDnx0jk/+iST4gofAzN6NPw06k=
+        b=DGX9adL+i7Id7Ye6aroBcJhJWIuRRvvXZ4iF+AI1XjrLO+q25Mztnwi4l8E2CHVbCv
+         IGlJZDaAgp53sk/Q6YkceQz+/HYIwRfwnfCNe4tp9w76U7/SmS5M2D1ZMKc+OJ7Z3xjx
+         zWVaFwoFlCdFjKNM2t2SAhmAzs2B4QkrEvR2JChElZEtrhbWI3UMziguy7e+DZFfkkm+
+         PikPGrS9Ff+CX3fevr+b9+RzMWVtHLNHDwckID3waFgkq0nnsrfyR1pumjeR0mrxl0cw
+         rBasAL0FICuVHFxkX6p5NGtafeBCk8fClhGQvxCJSFRC/46ClhBo2JQU/L6jB6uKtAAh
+         KVrQ==
+X-Gm-Message-State: ABy/qLaMZVfS0hB0NW8TkyTcI64IftDS2J0/zXOr77uVy6Kf1ZQv573E
+        ZOE5El3gpYfl165kfThRkrqJTRwftpA=
+X-Google-Smtp-Source: APBJJlEi0PgFIXfK3AJUMGBPN3szAfnwqAYopCk5Kg2fx0N0vfhegd6f9ZdvG0eTHAXWV2Nl1A9/xQ+VzWE=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:564d:3aaa:6b5f:4419])
- (user=glider job=sendgmr) by 2002:a17:907:75f4:b0:991:b9b5:4027 with SMTP id
- jz20-20020a17090775f400b00991b9b54027mr87513ejc.5.1689086048546; Tue, 11 Jul
- 2023 07:34:08 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:33:35 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:2c6a:b0:98e:2178:9b8f with SMTP id
+ ib10-20020a1709072c6a00b0098e21789b8fmr53698ejc.2.1689086051116; Tue, 11 Jul
+ 2023 07:34:11 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:33:36 +0200
 In-Reply-To: <20230711143337.3086664-1-glider@google.com>
 Mime-Version: 1.0
 References: <20230711143337.3086664-1-glider@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711143337.3086664-9-glider@google.com>
-Subject: [PATCH 4/5] arm64: mte: add compression support to mteswap.c
+Message-ID: <20230711143337.3086664-10-glider@google.com>
+Subject: [PATCH 5/5] arm64: mte: add compression support to mteswap.c
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com, catalin.marinas@arm.com, will@kernel.org,
         pcc@google.com, andreyknvl@gmail.com
@@ -60,9 +60,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         eugenis@google.com, yury.norov@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
