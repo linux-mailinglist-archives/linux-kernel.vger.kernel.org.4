@@ -2,147 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293C974EF3D
+	by mail.lfdr.de (Postfix) with ESMTP id E13C174EF3E
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbjGKMpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S229888AbjGKMpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbjGKMpe (ORCPT
+        with ESMTP id S231856AbjGKMpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:45:34 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2112.outbound.protection.outlook.com [40.107.117.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B156310A;
-        Tue, 11 Jul 2023 05:45:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WR7yal/H/tyik2c7L1SlB7SPFPUw1AeZNO5NR9OoUnuRj5cArK9TozQ8OzfUV/sryeaWmhbcdLlsklh562a2ycw4mfPfy2JPJ4JydEepNrXryHNOi6C4wSkjCMrBLkT9vYKVac7dmKiBlaEXplC9SQdCupyxOwYjn8NR/HRy4hAa7kediygb4nqWgxNLhrCEB4Xi/zCn/HkQweBRk/c0wr8JS1pVblCSUHXGGm77i7OQm5tbvDKZumg0Cy/FAtrxDG9PtEFYJAgVTR57XyEguyTuWi+B4A377a7JwUByiJyyTj4zMGl0pu+BCADtOUGMMcaLTZxyRsv+1ym4diTmZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rG+zOn3YiN4uVlCNl8VaAKlaD/ghnlwmfM+LLbXpkzc=;
- b=EP7Osvv7hBr6Wsd5ubB+Le+nPa1BUBbP7XRT1OsLRnfimqApsAp9/f5EDnYpAMtZPLDb5VJCxSQwrhEi2ACZz7Gh2IHUwMq93TZAF7lrj4oNjhPyZ8hkKVzE0uLePwf9d/yYSbZyqZZfTjoBJKsb5W8zZtlvvT2I0O2d+0NByOssyQSdO+uANqGMTKX4q03QQEO4alq5fPzGuIbEDkzVvcOclH4X0hDWRhBSmZy+/cclkJbTboEvlwiWR9RWkDYQciarb3WbkIa3XI9uGdKifETncWH3dnW8kBHQGSRNy5EqDv899RQu5DVN10r1byAXUInQV89xFWoSz/jWnYEARQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rG+zOn3YiN4uVlCNl8VaAKlaD/ghnlwmfM+LLbXpkzc=;
- b=WJBdUqvJe4/WiTeGZ28iI+++sQy+WqWOmpmATyToKyLUFVkYR0hRM0EkKSwi/s0kCbYOZasKJaNFZjYr4WTX0Y+23VAtKXERf6NN6m5+KmCkCKv8FIADo42B3GVuTE6H4liEItCFhEuf+lUJ3hgd6/TTrOESzdihkmnyOoY83D8hJZlUiE+SPYrjcvClnPtS5Bg3McnQ1/BySg1zNXJpnuihXqP56mTGO/s9jNDrVPFgc72GPysWjkbaTcGsN21SxFsykYdHL4RNObvDYb7OwYECuC0NcxYQN2+hZ6suCSy/u75Q119CdqU+APyKZQEwmyBi+PTmjC0QEMXfAeM5Xg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB4314.apcprd06.prod.outlook.com (2603:1096:4:158::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Tue, 11 Jul
- 2023 12:45:27 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
- 12:45:27 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] thermal/drivers/amlogic: Remove redundant msg in amlogic_thermal_probe()
-Date:   Tue, 11 Jul 2023 20:45:12 +0800
-Message-Id: <20230711124513.47771-2-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230711124513.47771-1-frank.li@vivo.com>
-References: <20230711124513.47771-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0042.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::23) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 11 Jul 2023 08:45:39 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE97610A;
+        Tue, 11 Jul 2023 05:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689079539; x=1720615539;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X5b73jKPqveoAydI+sEyVgy13u2RunmFko8n93zESTQ=;
+  b=bYNxZkmiuBvEyR4NfmD0Y7J2dN+hn0YDNqttCP9Z4J3z5JVg2L35VbPY
+   uBJ9MXBcBiYYA/2gCXIZHLooB9/KB3xoHE2GtRuearg0LPNvQ5u45WsSW
+   zI2EmSAdMzPZsxBH6g1LrCykK0Foef4hr6WBPlIpDpCcFZ1ecRM592Dnw
+   oKi0gzdKBaehlNpWU7Edb/fnBZ878hDDeSxaGmwXpayoEj3r2Zo/lVjdl
+   dyIBUwrutZ69hrtWsRecZETsthw8C8WS64eKSUoajRno96g0jC6/1m5gi
+   W02oJfe6hGvd67jHnNfzqodPKcTIg0oFJQbcILNm+ypz7zk2IEJazZqZR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349416626"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="349416626"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:45:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="845246106"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="845246106"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 11 Jul 2023 05:45:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJCkI-001qi6-29;
+        Tue, 11 Jul 2023 15:45:34 +0300
+Date:   Tue, 11 Jul 2023 15:45:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
+ in netlink_update_socket_mc()
+Message-ID: <ZK1O7lBF1vH7/7UM@smile.fi.intel.com>
+References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
+ <20230711063348.GB41919@unreal>
+ <2a2d55f167a06782eb9dfa6988ec96c2eedb7fba.camel@redhat.com>
+ <ZK002l0AojjdJptC@smile.fi.intel.com>
+ <20230711122012.GR41919@unreal>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4314:EE_
-X-MS-Office365-Filtering-Correlation-Id: faa72e04-c658-43c7-23d8-08db820cb406
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vzZqJ31kacHZad/t7ssrc6ooeIWHJ2LZ7Vl/y064VwDLJ50Xb0vKtxUkAZBaGsfJZFyI9oYo0ZuHX0Tp8al2MVCOKzqUoWKYdQEkKPE2QkCs2IdTd1Zjjpd6q8GdtkHUpbEqQLHemgfkbSrfBnmS738xwKOzmlRXT96/7A+FWm/9PjknXQP56tQCAMkhrIEzWKoXDtQdmmum56GoCI+7dc5J3RAtG521ohAEY53QCw3ddiS0vXcFaHCun38JwYmyCa7Ng9liL1pogDCZxAybQKD5kXV55wzC+YvcDWWz3TGbcjWcLT3P8h3oi2IZff8weTVvFrui5XuzFttxQJUPgqVqearlwsQmEqck2/a95qL0wI/adTCrtXqhDvo/Ns3ctAKZXIvwRCUoBwPKh6sNcQIkPRZdL6i2yEQlQm3HTrtRKTe+wKNqPH2GKy+CO+fyUe0uE0izyze6mZXCnInxK0st9c6cvbUaOi/Mz7ku1pWaH6Kr5DPPG4glKQu7r6fmuhYbVqVh31H7E0WNyULLFLzyjbtTOytzVP+2l1/y2eAHwdOX9oobgkjI40P/gTfar/Ge0PdBnlEzsVN4F9mkBL7k1kNMG7Mio3i/ITraz19g2f4S4CCgM29xSEK2WqmP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(451199021)(38350700002)(86362001)(38100700002)(36756003)(6666004)(6486002)(52116002)(110136005)(6506007)(26005)(186003)(6512007)(1076003)(2616005)(5660300002)(66556008)(2906002)(316002)(66946007)(8936002)(66476007)(8676002)(83380400001)(4326008)(478600001)(4744005)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vCZtVDOIwMivv9ZzJ5N8EsE8gWmBvLrps8yimg96MJqeVr1yTQwME/4/pw1r?=
- =?us-ascii?Q?Uhysqtp3ddCCCyIrprzSG7DpO8pySlcpvpLIOci2UICP8c5N8gv3TvJeiNa4?=
- =?us-ascii?Q?/C4Ur2fjmxT9nuAKmuj5WRJWIfEjTWnUPvCTnu+tw1gg3UeB85b78ynsMFfG?=
- =?us-ascii?Q?CV6qG6SsbWgV7Mdtn6INoD0rLC32Hlhf4UijcHgc613N3Cpuaw7SjXE3A0Jt?=
- =?us-ascii?Q?3e9NtNIUbOhsIKzSFnBhLwjkIwSm919Zjhj5FAx7OxUqUD5Q0roypAqIsI5b?=
- =?us-ascii?Q?Pv1MoALzgc0jLsQuO5z1Od5PagriW/fzGlD7GUMFhuY2bCMV7X55SWN9+QC9?=
- =?us-ascii?Q?7kkn9h/aJzSIYEZwZfxwCyYYBj7os440ODlyiuzMXL5lIh3Dbzj4TMS+e+pg?=
- =?us-ascii?Q?bXhnW1uUlFg20kUxfpcCyf3TJ2AmwyTL9rE2egJoisznAk5myo+7d8+Nxy4d?=
- =?us-ascii?Q?yP4/X+WmuAvbPEL6wtLl/UEYJUeFFhmM7VozSdNG1LVRDOzE5mnPNqkf5Rov?=
- =?us-ascii?Q?M8KM86oTT4OgdnQKvA0dSlF6JqnU0zPY5GSyQS9k0X3Bf+s136umV+dR2xHd?=
- =?us-ascii?Q?AwAUvna901um9/AetdBAlpgUj0E1cSRcCKmGTcbt45W41/lvAfKe0/45rzqY?=
- =?us-ascii?Q?oVDdbQgzBTS3BYpBBnGbSpXIwUzZzu+piJcjzgK7kNzPiKgQ5RRUWe17jzE2?=
- =?us-ascii?Q?PkiX2vC3kittuiu4oSRxkPYT0QeNeX5WqBSHmiLoyZW4Ch39KasE+kYsIYCI?=
- =?us-ascii?Q?h5SCvCD1tiBkPI5E7K4WoszjwO02RMBmBMJplXM3ganUgRqA/MuEyS44cqyD?=
- =?us-ascii?Q?BtY9bXFjyDY4cxoAxyTpHRQx3rdOPW0g8LoQUZtGMbc/gEkXwh7wvoPLtPhw?=
- =?us-ascii?Q?gnU1Ezv+BnDIs8ao5Usm+E2y3GlMHBPBa3kIEG8F3N75S2dF3LkaHs8DpA7Y?=
- =?us-ascii?Q?ROu9bNpVb4InH/Esm9ux5MNGOuq9gJ6zG1nvdNCNx3f7uYplJeFNJZ4ebpvx?=
- =?us-ascii?Q?FWWHVuhOJS96J3SYa/oPd1+e14HXeSja+wY7mYRU4Pn3h7VQ1n/OK/1IPvOD?=
- =?us-ascii?Q?eYc512osLDsgbGpIp8W0GyBBpqHf4cE4Hj+owOqZUgepcgYdSixBQTPvac0N?=
- =?us-ascii?Q?C6ly1etwbGl0Bb8gnIY0l3zk1ZU7tske0qR9zKgBKZGsjyQzvFKbOwgLBBS1?=
- =?us-ascii?Q?gki/0u6gVIZpXk5/utg1SR/8TMhli+T+NKXLI3j8ol/pchXzPCdxdwH+y2cq?=
- =?us-ascii?Q?7r66XmMTEn3lFG39+5ZSSQ0hbzC4q1zS/JVZE2syloP1f52ivQOmp5ZAbAap?=
- =?us-ascii?Q?tRdT++TrymGIOKVjlTJTv2/ugTB97kXJGauDMLGHDkUZa3kb169Sk7I2j/m2?=
- =?us-ascii?Q?kvD74C7gMjTNPF5Fr2VdcZgyZGwwx3VlRGMKm1b0JBZGH07jC30VeytCYhBW?=
- =?us-ascii?Q?Oh/sm2/PHeX1N0iaSD2xZaHHSuneeXVZ+w0kcbupTZbWjRxCWaO6vjIWXERr?=
- =?us-ascii?Q?b8ftIC0BxMTq7CAoOaICPzaMYgXzQcgdrfWW8y2DZKNkc78yarZsZNIWy29S?=
- =?us-ascii?Q?zpSflKef6tCiqKVf02qVEl4QOlx7ntER4UZ5rFuZ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: faa72e04-c658-43c7-23d8-08db820cb406
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 12:45:27.6736
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zCU2jiP4SYWdQWEiPDjXwBWVMQWIGGC4jYIyMvLxqbhjE/2+GLM67MeSRKZC2P1zMtPMvbHxZ4NNbGqNApaRvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4314
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711122012.GR41919@unreal>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The upper-layer devm_thermal_of_zone_register() function can directly
-print error information.
+On Tue, Jul 11, 2023 at 03:20:12PM +0300, Leon Romanovsky wrote:
+> On Tue, Jul 11, 2023 at 01:54:18PM +0300, Andy Shevchenko wrote:
+> > On Tue, Jul 11, 2023 at 12:21:12PM +0200, Paolo Abeni wrote:
+> > > On Tue, 2023-07-11 at 09:33 +0300, Leon Romanovsky wrote:
+> > > > On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/thermal/amlogic_thermal.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+...
 
-diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
-index 756b218880a7..134f5a8d1019 100644
---- a/drivers/thermal/amlogic_thermal.c
-+++ b/drivers/thermal/amlogic_thermal.c
-@@ -276,11 +276,8 @@ static int amlogic_thermal_probe(struct platform_device *pdev)
- 						   0,
- 						   pdata,
- 						   &amlogic_thermal_ops);
--	if (IS_ERR(pdata->tzd)) {
--		ret = PTR_ERR(pdata->tzd);
--		dev_err(dev, "Failed to register tsensor: %d\n", ret);
--		return ret;
--	}
-+	if (IS_ERR(pdata->tzd))
-+		return PTR_ERR(pdata->tzd);
- 
- 	devm_thermal_add_hwmon_sysfs(&pdev->dev, pdata->tzd);
- 
+> > > > So what is the outcome of "int - bool + bool" in the line above?
+> > 
+> > The same as with int - int [0 .. 1] + int [0 .. 1].
+> 
+> No, it is not. bool is defined as _Bool C99 type, so strictly speaking
+> you are mixing types int - _Bool + _Bool.
+
+1. The original code already does that. You still haven't reacted on that.
+2. Is what you are telling a problem?
+
 -- 
-2.39.0
+With Best Regards,
+Andy Shevchenko
+
 
