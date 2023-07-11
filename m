@@ -2,155 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B84674E2BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D1F74E2BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjGKApG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S230238AbjGKAo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjGKApF (ORCPT
+        with ESMTP id S229585AbjGKAoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:45:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371091B0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689036260;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xh89EtaamRoEiOvIq1NF8NCe+vpDYxFReDkvfE9D/uk=;
-        b=BR1zNz1ZCVZwH2AxbQQsRswWHGFuyDPDNM4kWJB2/QMt5vKMi03944gMtpbOHiONaRYNcO
-        4Vkh+INgiDQfzEn4E+GrNYQSvu5fx7H5BnOf3+XJ4YwdJ/tVRiv8vgavW95jbaFQgjv1hL
-        H6u6OOkFwlD4pC6ZA3wvZyzreeQRx5w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-CLDbuslQOtGEC9Jy_DLEQw-1; Mon, 10 Jul 2023 20:44:17 -0400
-X-MC-Unique: CLDbuslQOtGEC9Jy_DLEQw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52C6A3844FA0;
-        Tue, 11 Jul 2023 00:44:16 +0000 (UTC)
-Received: from [10.22.18.171] (unknown [10.22.18.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A7112145414E;
-        Tue, 11 Jul 2023 00:44:15 +0000 (UTC)
-Message-ID: <d3f3a7bc-b181-a408-af1d-dd401c172cbf@redhat.com>
-Date:   Mon, 10 Jul 2023 20:44:15 -0400
+        Mon, 10 Jul 2023 20:44:25 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9351BB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:44:24 -0700 (PDT)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 49C6C1003A10E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:44:24 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id J1UOqM1WINX2aJ1UOqnaYD; Tue, 11 Jul 2023 00:44:24 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=64aca5e8
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10:nop_charset_1 a=ws7JD89P4LkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=yrjupo5lleMvH5e5VWgA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3a4wn7yIJyEzyRTpMj0tDA/O5CwBwCN5PiY5o9r4c5M=; b=fwQeCquM2RJsQibs7T2qrN3Y8v
+        UuZDn3UWKIazCMR68QRcT5rzpYwPBFjvtvxO2rZ8Ql3pVhU9cvQ8PyYSmyOlR8LtlqMLO2j+8STDO
+        gjV7itpFmPeXOPA/5uP/1QLwW2qerUCq15h2lPV2ZgFNqa+mW8CwNoCprfoPv0VYYNkUhF1mrvw/T
+        GYHUe5keKgYktO+FmPros1Bvv9nUwFWYlbV5L3E0vq5G3ww3usUdFoJBgvcQvwF831obLXAZwIc3f
+        GqmeielsNleYn9CXf3/82pnKHpECtqXfrByIczLDLWI8fpIlziwj7FnmfW10reTTOYDYEE7H7JcW0
+        urf5meDQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:47350 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <re@w6rz.net>)
+        id 1qJ1UM-0023x3-1y;
+        Mon, 10 Jul 2023 18:44:22 -0600
+Subject: Re: [PATCH 6.3 000/424] 6.3.13-rc4 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+References: <20230710142227.965586663@linuxfoundation.org>
+In-Reply-To: <20230710142227.965586663@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <6a0aca3a-6f1b-4a76-668b-ddd6c6294153@w6rz.net>
+Date:   Mon, 10 Jul 2023 17:44:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Expensive memory.stat + cpu.stat reads
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-To:     Ivan Babrou <ivan@cloudflare.com>,
-        Shakeel Butt <shakeelb@google.com>
-Cc:     cgroups@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <CABWYdi0c6__rh-K7dcM_pkf9BJdTRtAU08M43KO9ME4-dsgfoQ@mail.gmail.com>
- <20230706062045.xwmwns7cm4fxd7iu@google.com>
- <CABWYdi2pBaCrdKcM37oBomc+5W8MdRp1HwPpOExBGYfZitxyWA@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CABWYdi2pBaCrdKcM37oBomc+5W8MdRp1HwPpOExBGYfZitxyWA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1qJ1UM-0023x3-1y
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:47350
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 21
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/23 19:21, Ivan Babrou wrote:
-> On Wed, Jul 5, 2023 at 11:20 PM Shakeel Butt <shakeelb@google.com> wrote:
->> On Fri, Jun 30, 2023 at 04:22:28PM -0700, Ivan Babrou wrote:
->>> Hello,
->>>
->>> We're seeing CPU load issues with cgroup stats retrieval. I made a
->>> public gist with all the details, including the repro code (which
->>> unfortunately requires heavily loaded hardware) and some flamegraphs:
->>>
->>> * https://gist.github.com/bobrik/5ba58fb75a48620a1965026ad30a0a13
->>>
->>> I'll repeat the gist of that gist here. Our repro has the following
->>> output after a warm-up run:
->>>
->>> completed:  5.17s [manual / mem-stat + cpu-stat]
->>> completed:  5.59s [manual / cpu-stat + mem-stat]
->>> completed:  0.52s [manual / mem-stat]
->>> completed:  0.04s [manual / cpu-stat]
->>>
->>> The first two lines do effectively the following:
->>>
->>> for _ in $(seq 1 1000); do cat /sys/fs/cgroup/system.slice/memory.stat
->>> /sys/fs/cgroup/system.slice/cpu.stat > /dev/null
->>>
->>> The latter two are the same thing, but via two loops:
->>>
->>> for _ in $(seq 1 1000); do cat /sys/fs/cgroup/system.slice/cpu.stat >
->>> /dev/null; done
->>> for _ in $(seq 1 1000); do cat /sys/fs/cgroup/system.slice/memory.stat
->>>> /dev/null; done
->>> As you might've noticed from the output, splitting the loop into two
->>> makes the code run 10x faster. This isn't great, because most
->>> monitoring software likes to get all stats for one service before
->>> reading the stats for the next one, which maps to the slow and
->>> expensive way of doing this.
->>>
->>> We're running Linux v6.1 (the output is from v6.1.25) with no patches
->>> that touch the cgroup or mm subsystems, so you can assume vanilla
->>> kernel.
->>>
->>>  From the flamegraph it just looks like rstat flushing takes longer. I
->>> used the following flags on an AMD EPYC 7642 system (our usual pick
->>> cpu-clock was blaming spinlock irqrestore, which was questionable):
->>>
->>> perf -e cycles -g --call-graph fp -F 999 -- /tmp/repro
->>>
->>> Naturally, there are two questions that arise:
->>>
->>> * Is this expected (I guess not, but good to be sure)?
->>> * What can we do to make this better?
->>>
->>> I am happy to try out patches or to do some tracing to help understand
->>> this better.
->> Hi Ivan,
->>
->> Thanks a lot, as always, for reporting this. This is not expected and
->> should be fixed. Is the issue easy to repro or some specific workload or
->> high load/traffic is required? Can you repro this with the latest linus
->> tree? Also do you see any difference of root's cgroup.stat where this
->> issue happens vs good state?
-> I'm afraid there's no easy way to reproduce. We see it from time to
-> time in different locations. The one that I was looking at for the
-> initial email does not reproduce it anymore:
+On 7/10/23 7:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.13 release.
+> There are 424 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Jul 2023 14:21:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.13-rc4.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-My understanding of mem-stat and cpu-stat is that they are independent 
-of each other. In theory, reading one shouldn't affect the performance 
-of reading the others. Since you are doing mem-stat and cpu-stat reading 
-repetitively in a loop, it is likely that all the data are in the cache 
-most of the time resulting in very fast processing time. If it happens 
-that the specific memory location of mem-stat and cpu-stat data are such 
-that reading one will cause the other data to be flushed out of the 
-cache and have to be re-read from memory again, you could see 
-significant performance regression.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-It is one of the possible causes, but I may be wrong.
-
-Cheers,
-Longman
-
+Tested-by: Ron Economos <re@w6rz.net>
 
