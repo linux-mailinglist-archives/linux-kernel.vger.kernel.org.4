@@ -2,169 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECF974F82B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D3574F82F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjGKSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 14:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S229782AbjGKSyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 14:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjGKSwl (ORCPT
+        with ESMTP id S230314AbjGKSyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:52:41 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59CE1BB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:52:39 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7659dc74da1so577919285a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:52:39 -0700 (PDT)
+        Tue, 11 Jul 2023 14:54:13 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2055.outbound.protection.outlook.com [40.107.244.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13704BC;
+        Tue, 11 Jul 2023 11:54:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FSEo5lv1f/BLskulr7knyySZN0mRsWpWkYOBZNaOJKrCo1f/8atiNah0n4Xd1lwl5Pf2nI/nHcB1kLZ5/ceACHJJRiNXHOQmsuSnAzrX6gf7Ji8ppikjOUZwU8+n7nhT4SeDNNcnEDWvRPX+8tQR1sIN4EbfzWWiDFzbQPNU9/Vm9xT7Pqsb9ny7tGPiDdXzQzerp53URpen1+/dGwBQHy9yJq4ONXluLTyMr7KIjhHBhDcQzlXB7Bou58Jjusv5WF7Na+VnTfJ+u2DPm4Jwh3k3uDArIZk7rqyO2c2nq9HoeQ3s/N0nfvlUw44KYO6QKAApHjU27hKY/QANrpmPiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9qPOywUylNDoD4N7IvkAXUdMQFOsCQl6ZNhHdj9+U/s=;
+ b=DlyK8eBh7lrsKgQke34DEtQwzWsyPWu3ISYb8kb8g/OYjcq7DlNeXUUihcCzkMlnRhYn280fLvZQcbIZk0XMShL+I8A5XFmKy/1yzyVfxSGcuHLnbtuT1yLbH9p4HHNkqFRkVQrUdouYPQivXZQfeImCW7yxu6PCC5e4jJlebQHukROm2dj3uCQmnAOoUtG2l8v+5fNuB3ACQ3SNSv7wq5ciKvSYFywECct/kQN51RlBd95NAc+OI6c8TVq2Dzthk8B+shYEYKJ037S567fXRawjPg8rkf14gZTP3vx3jzI88G4GaWcyi0pIRC2A/reTny2fQzF8W6v+iLgqvR6raQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sightlineapplications.com; dmarc=pass action=none
+ header.from=sightlineapplications.com; dkim=pass
+ header.d=sightlineapplications.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689101559; x=1691693559;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=csq2hP6IGrsJizVBuDWOWzciwuvySb83mfb1bAUQeAw=;
-        b=O6yj1kfBmt/f46fGl5YF3ZVJn3iClEXfkHrq1NBwzA3zeFlPKxh61DLstld0JhkzXq
-         h9GCIk46LJKP5FEMhlmgxGdR6DZHqGE8zkEPe0m8HwO3oYCvuIT+h216JZzEKzRT45VH
-         fihme1JeEVJ5o7rLj+sp0HM+VyiPgOa+4UWUCJ8nczCJMAvSl0mDXfZE65/pQiDQgR46
-         KXQ8MO1UkrrB/BNF3dM4Tr7JLFvYzyjqwWXAqiIjG0pmZzaxZyvvqaOWcuYKyh4LOvP4
-         IvsRAbNbBcQCuYjr3QJF3eqkPZPCTeLSQBqYAlk4Rf6atATMuVoe1YiRvI7PbrsyIUPo
-         WEyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689101559; x=1691693559;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=csq2hP6IGrsJizVBuDWOWzciwuvySb83mfb1bAUQeAw=;
-        b=GHlfxRJPa9MBahjBuB1aZJGm2oCw8j8TsNcm6xjHZcbJvPH3S4yzotXqBgzSmP+BLf
-         29mqTYl+rqmua+S02Q/keStLV/klsb0NzC/BVKBrFM+rrQfXT5bup6LSs3MP2SFsoB2o
-         Ksuy6wIexJJwrrIn1GP6vOXcxO+5AaewEd4+qIvGw+3G7Ve/M94ZlDYeysoLfqRmInea
-         1NtYpmkpLj3ge8ZiyJf/TXVkmNJRyiDEm6jEYbaX2SmuMFRHkJ5h6mBwRQIzLC78pQol
-         igKJBJnajHw0JFm12u3YTqj64Rb4BQ4rDfHD0eQVznZl9YJSnisRDwNk5ADUfm55ra+q
-         4X/Q==
-X-Gm-Message-State: ABy/qLYYliFXnOD/6Rfa67SeoUNK7i9AyN4xKPsoz2Pv8Yk5dcE2qsU9
-        IWNYEePaqDWkjb5XPdggw2nYuw==
-X-Google-Smtp-Source: APBJJlGz3e2wm1ItETv6Tpn24AKM42/GznMyImhnBUCl/FD/+Lt6lzms0CFX41BO0AXGLY19Tbl9Zw==
-X-Received: by 2002:a05:620a:2904:b0:75d:5640:22e7 with SMTP id m4-20020a05620a290400b0075d564022e7mr22796538qkp.55.1689101558954;
-        Tue, 11 Jul 2023 11:52:38 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id j3-20020a05620a146300b00765ab6d3e81sm1269520qkl.122.2023.07.11.11.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 11:52:38 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qJITV-000JMj-F8;
-        Tue, 11 Jul 2023 15:52:37 -0300
-Date:   Tue, 11 Jul 2023 15:52:37 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <ZK2k9YQiXTtcGhp0@ziepe.ca>
-References: <ZKxDZfVAbVHgNgIM@ziepe.ca>
- <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
- <ZKyZBbKEpmkFkpWV@ziepe.ca>
- <20230711042708.GA18658@lst.de>
- <20230710215906.49514550@kernel.org>
- <20230711050445.GA19323@lst.de>
- <ZK1FbjG+VP/zxfO1@ziepe.ca>
- <20230711090047.37d7fe06@kernel.org>
- <ZK2Gh2qGxlpZexCM@ziepe.ca>
- <20230711100636.63b0a88a@kernel.org>
+ d=sightlineapplications.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9qPOywUylNDoD4N7IvkAXUdMQFOsCQl6ZNhHdj9+U/s=;
+ b=IARat9lDEEDl12jimYFD9ZC3YGRjl5HdGGHO0HInLey2u18YhfOYhkQjsvv4zbSy66KHi9a0HrJmeCWVffHY1dPAP789FF5TNlIBpMj8LT1ZeU56Tl06uNrbAGi5SNQPUBSPGq8el6AJSKQifM8ryXhCJTXBKPQ0rC4J8dRYCvxnIJn33CT1OtwT2hZFfZBJpvFWsbzhH/yBzqfXFUDXaT8U0xkSmPhv2pRv22qpLaNR+wUpyDzCk+bHuaEUQu/ADY9iB/GL8x9HDDHfgyBIZqPr6neNDLpYwXgJ5SOxzZSHkaciOaFNlFwBI4F/hb8545B7fgLJmdf1dkUqiu5MTQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sightlineapplications.com;
+Received: from SN4PR18MB4918.namprd18.prod.outlook.com (2603:10b6:806:215::8)
+ by LV3PR18MB5687.namprd18.prod.outlook.com (2603:10b6:408:1a4::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32; Tue, 11 Jul
+ 2023 18:54:09 +0000
+Received: from SN4PR18MB4918.namprd18.prod.outlook.com
+ ([fe80::c27a:8a05:c369:eb0b]) by SN4PR18MB4918.namprd18.prod.outlook.com
+ ([fe80::c27a:8a05:c369:eb0b%6]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
+ 18:54:08 +0000
+From:   Patrick Whewell <patrick.whewell@sightlineapplications.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        William Gray <william.gray@linaro.org>,
+        Patrick Whewell <patrick.whewell@sightlineapplications.com>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: venus: Fix firmware path for sm8250
+Date:   Tue, 11 Jul 2023 11:53:30 -0700
+Message-Id: <20230711185330.10106-1-patrick.whewell@sightlineapplications.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SN7P220CA0009.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:806:123::14) To SN4PR18MB4918.namprd18.prod.outlook.com
+ (2603:10b6:806:215::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711100636.63b0a88a@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR18MB4918:EE_|LV3PR18MB5687:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9804f98-d278-4805-4b97-08db82403534
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V3nZ+nK8fIcQ3C3DdnkWmxBPwoSqxIxz3f1FjRdoJ2HxELG9/DZrMZioMf8IB6YF0Ap7V3loE4jZZbFXnZAbHm1n5FIkDwTWIzGny7vFb14V4k0aJdgvegfsV8Sd7aMm3VkJTxISyE2DyVrBKT+HLtzJ/F/OoDdnSfvA2B7zb8/SQ0Y8yuVu8kKsaMS9QTeCiuqi+Yp3QUZUb1K7dfw2BgnZfOLvauLqHsS+tFUqFHKrCp6Jt0kJaEZbgCkG6hb9swyW6IuaFpnsnK+yGtxJX+rwWzoMSTMqr1b2jXe/OlukGAKgFmLzX5sl80SHrJrWkeApx1Bch2fKyHMJjClYUH8h/hv24dWdaOAFUYTM+p2aoV39h/7azrnrW3w86CzWtTxFqnYzdjqX+RKqMJWldh4wUT+RylIS7AXMprkKKwZCddLVFZLc3O5kn9fsfoQmnu77jvNHZzJGwPYm4lCDfI7k+zNFCMn25flH0Nb/1SDqj2fz4E9udSzqzPIW0NuvsRVDzvtUCl4MeYz0cfr7UIqrsveolwuZn1qOrmlzkooZKoSYE73l02IxKzyS43EEvvc2ceMIVIazi0RmSuIP0Qz/TBqcdu6FqK3soyIKxwHYDgPaDcyNrrthaHKHs01Ypm00wrgdWyAJM5ky8j2/ZA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR18MB4918.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(136003)(396003)(376002)(39840400004)(109986019)(451199021)(38350700002)(38100700002)(36756003)(86362001)(8936002)(7416002)(5660300002)(478600001)(6506007)(1076003)(41300700001)(44832011)(8676002)(186003)(6512007)(26005)(2616005)(4744005)(2906002)(316002)(6666004)(4326008)(52116002)(66556008)(66946007)(6486002)(54906003)(83380400001)(66476007)(266003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gkgAxjnAKkziyMLGQYb/Y9OG2ldXcPSaBLlak41YsA6zSTgndUUPGa/WYb91?=
+ =?us-ascii?Q?dNXxTKVhk8XT0c1Kb/6f4Z6IqMyyzuBYQU7miotGeuLuOfLaf1laYNldZHDm?=
+ =?us-ascii?Q?owlsYM/TTTtJwiPHmbR8iFXZwS5YS6CDA0TwRg02v88uuZwLFcvwLu+BtX8S?=
+ =?us-ascii?Q?BbBNUcURTyP8Ooua5F84vEJ9fzlzT6pJj+au42dtr0gtinkecVUJ6v0JPWJc?=
+ =?us-ascii?Q?XAK+s3T9OABQjY/ZEAKHBUyhE4OlCkrKF9V2aAieZ7wojYN13hlpJxb/dL6W?=
+ =?us-ascii?Q?9rpireIuJl7YVXOWFljsirSAtLgZ2CXcZRiU+VeRGBUSLa4EokWUYTXkse9H?=
+ =?us-ascii?Q?034qElCWlkVWoKsS/NCZYZYCpLi7VfnK/LlQc+cbEsZlCYJvd3Nyq93puUPY?=
+ =?us-ascii?Q?ls0SlUsbeqonGT9DQTIk4rlsOPhEildMDKBDhD9nMv82cGz++OpMwMP5YiWq?=
+ =?us-ascii?Q?OMyN/iXDNndDV9+W3rWW9JjeFbQIOPASmS75DEgAf77oDGA1zTwoE7/iC0TF?=
+ =?us-ascii?Q?nBsi/+fRrH4nXEnPfTmfB+oZq65AOHhZLwxJvhoptJk6qp/EjJtkTUxOKQRa?=
+ =?us-ascii?Q?dgpijFgCwRx0o4knRN/T87LpqTA7QFSg4EZYDAhVgzMmrnwzBAuE9VVkLEyd?=
+ =?us-ascii?Q?K7ghQdsux2+y4XJeSeN1E5dRmujDXeLgcaN0i9okihyR68xKgEz4WULzNNaf?=
+ =?us-ascii?Q?9Dj9wobrFDo3JW7J+4BLb7wcBtWDFqibmhQq/4yRYZFE56uU03ZJQEom5nEo?=
+ =?us-ascii?Q?JAKXNFwy8izBe7L5kRYSG5j9TO0450a6+TJNPH2pLvTTh0mLz/SJ09Me92NF?=
+ =?us-ascii?Q?O5Aq13tBofIA5eflZxSczkxHX+5HTqg6ISdL/E9NJhkVqwTNenIodFeCDQMs?=
+ =?us-ascii?Q?r0SH+Jw2Wxchb8oKgP7UNmkHEV0CLLpm7IEvb3ME5eeSaCzdm4J3AOForTcj?=
+ =?us-ascii?Q?jgFKteynJoo5Xc0jr3nKToizWIhffBMsXwUm7IYr6cP67+qYEGDejyWX2zqD?=
+ =?us-ascii?Q?zr4MwiFXgXRUGethccr4zeVyNOwrvbxsJlz/VMlQmYSrAAzsHnsOefMnkqkH?=
+ =?us-ascii?Q?C8n+psJ9QQeLX0WbMAHJMZmmR7d067wqHvkspDgdjQSv6m0Tv85Ic+Cj8PMj?=
+ =?us-ascii?Q?WhaPyvyrYfgRybvIFL2/uhOpBEaUykn8voJcv5CYnkX+jPU+ddoDsTxAHwOQ?=
+ =?us-ascii?Q?ttuiDqdcilaMKKvHGosKT3ppcGcTgbi6xT6ZBDlRQ0VinhEc4dWGMb5cMYoq?=
+ =?us-ascii?Q?+06ynjd7VrnDFS/A06o1QshicvPskSiiO37L3+bjfo28zPOYwagVCbwMWQm/?=
+ =?us-ascii?Q?jvXWhnyHSIqNpjuYCXUuqIyGBapBG4vMP3l83t7TYLHQpGbQBElx0eQlinLp?=
+ =?us-ascii?Q?A3bV0xdhTRkC9sworV+cOgMZDsvalT8ftuSd82bfSSrpqntboApkWYnKxfIK?=
+ =?us-ascii?Q?T0ug7gWqBvhzmFpX+VQknOsKwXDCg7i+C0O6CPHc1qoNTEg/hcCmk+RTxDX/?=
+ =?us-ascii?Q?kxh2TLLVgyVACuExCPUJDNR+61kbTw+spKJo5S+IgDdaryJjOhedjapL/d5k?=
+ =?us-ascii?Q?k2Hg+sZYUes5AaKY1KP3XREKbUKLHk0LxhjJjJoFzYmlqSNAu5HmD/NhXWNA?=
+ =?us-ascii?Q?KpEmcAcua6DYFHaX8HsRWo/Av3RzUWTs24DlE+SiZxEN?=
+X-OriginatorOrg: sightlineapplications.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9804f98-d278-4805-4b97-08db82403534
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR18MB4918.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 18:54:08.8349
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 6f56283c-2197-4913-9761-239c8b420cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DkSO9S4S7Qg0BGO/LLFqNg6cLE6RduoP3hNVVRl4HfbRdVj7zMjNLqEQjT1LHjs5ngl3ip+2IfmKXww58N32kNH5nSCdpZo/9EYUlsvgKd0s2OP5iPf5kSwr6kGAztrfb5jY7yTi99p/+IKKtoy6gg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR18MB5687
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 10:06:36AM -0700, Jakub Kicinski wrote:
+The firmware path for the sm8250 resources is incorrect. This fixes the
+path to address the firmware correctly.
 
-> Now we're getting into our favorite argument and completely
-> sidetracking the conversation, aren't we? :) And as usual 
-> our ability to present facts is limited by various NDAs..
+Signed-off-by: Patrick Whewell <patrick.whewell@sightlineapplications.com>
+---
+ drivers/media/platform/qcom/venus/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, well, maybe I should stop taking the bait everytime you write
-"proprietary" :)
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 2ae867cb4c48..348085f8fc9c 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -814,7 +814,7 @@ static const struct venus_resources sm8250_res = {
+ 	.vmem_size = 0,
+ 	.vmem_addr = 0,
+ 	.dma_mask = 0xe0000000 - 1,
+-	.fwname = "qcom/vpu-1.0/venus.mdt",
++	.fwname = "qcom/vpu-1.0/venus.mbn",
+ };
  
-> > We also have the roce support in the switch from all major
-> > switch vendors.
-> 
-> By which you mean all major switch vendors should support basic RoCE
-> requirements. But most vendors will try to put special features into
-> their switches trying to make the full NIC + switch solution as sticky
-> as possible.
+ static const struct freq_tbl sc7280_freq_table[] = {
+-- 
+2.25.1
 
-Yep. At the high end open standards based ethernet has also notably
-"failed" as well. Every switch vendor now offers their own proprietary
-ecosystem on a whole bunch of different axis. They all present
-"ethernet" toward the host but the host often needs to work in a
-special way to really take full advantage of the proprietary fabric
-behaviors.
-
-> Last I checked every generation of HW from even a single vendor came out
-> with a new congestion control algorithm and add-ons. 
-
-Probably, but I don't really view this as an IB or roce issue.
-
-Back in the day, there was "data center ethernet" which was a
-standardization effort to try and tame some of these problems. roce
-was imagined as an important workload over DCE, but the effort was
-ethernet focused and generic. Sadly DCE and successor standard based
-congestion mangement approaches did not work, or were "standardized"
-in a way that had a big hole that needed to be filled with proprietary
-algorithms. Eventualy the interest in standardization seems to have
-waned and several of the big network operators seem to be valuing
-their unique congestion management as a proprietary element. From a
-vendor perspective this is has turned into an interop train
-wreck. Sigh.
-
-roce is just highly sensitive to loss - which is managed in ethernet
-through congestion management. This is why you see roce and congestion
-management so tightly linked, and perhaps in some deployments becomes
-the motivating reason to look at congestion management.
-
-However, TCP under congestion management is also very interesting and
-is a motivation to deploy congestion management in its own right in
-some cases.
-
-Jason
