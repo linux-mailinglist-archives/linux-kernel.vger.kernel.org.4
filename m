@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F2F74EADF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D1D74EAE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjGKJkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S231765AbjGKJkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjGKJjq (ORCPT
+        with ESMTP id S230263AbjGKJkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:39:46 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F2F173D;
-        Tue, 11 Jul 2023 02:39:31 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B93kDu005223;
-        Tue, 11 Jul 2023 09:39:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2avxJUP+4HyvxRssNsSEI120gBiBgsaffbOZA3w7hDI=;
- b=I+MFNCnfTX3N3SVS48BhWKtef6ZyVJvPsvMTLNlfp+peVLEXScfB2A1hJu+zHtJTVMMB
- JE1U1snQWwviiNfEOTL8ga3L9f86r/5a8wQiJEZAOLs3BDTYZfUQNx1CfELmaKp6ZOMM
- ymjJ7FPQuftl3d2jWdT36ppuWcDb12OmAw/H29mTjUOjRlBCDMVHyl4CkSQ1IsXC2mg9
- czieFF8ZoYxi7pnjzfSdJWOe5y6MQJNK0TjuQ2LTcnrsDv3OIOYRlpES1/ioxEk4oTmh
- 62DszA1uRX3I9lPqWGWpjnfahQkYmjRm0uq050fTMQBRTteUuX33T7xxiU00M7Eti+c2 yQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs442g23j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 09:39:25 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B9dOPL005017
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 09:39:24 GMT
-Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
- 2023 02:39:19 -0700
-Message-ID: <59ea653e-c5da-71cb-eb85-1aa3c72e2089@quicinc.com>
-Date:   Tue, 11 Jul 2023 15:09:16 +0530
+        Tue, 11 Jul 2023 05:40:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39762170F;
+        Tue, 11 Jul 2023 02:40:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC1C461447;
+        Tue, 11 Jul 2023 09:40:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477B3C433C9;
+        Tue, 11 Jul 2023 09:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689068402;
+        bh=tNg5RzXLNkj13iWCpf81KjQRIluq/j+Mh+/AaKjhV/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bGra2pZm/V7ttpDbB7qkBlkdjQedgI8dz0ghqBuEaWTNp81KbQ9QqMQBvADDFrJTm
+         rd19VmGqeEza7LHOcT2YcXgsiJSK18vn3fQjSrfNYeddqBB9zXS787bTU+s6smgYj2
+         i6UpTBwnn1JyUwwOSetFKXw3c7+kWtzCLMmgjsCdr+WAcSQWWJyXrIGxMk4kKN2mPr
+         VHesNz+Vtjc+KQZGZRxhp2x5Rb+NV1vcqYNqfQedbXrL8uKIRGvfpRcy+mUcU6Rcai
+         tReD7NUj8qIIBgjq05dLwV5a6PiCsh3IstcbYMMY9wtPg6+wiaaPBRmobvzAugfWqC
+         57on1kUGPjpPA==
+Date:   Tue, 11 Jul 2023 11:39:57 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Wen Yang <wenyang.linux@foxmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] eventfd: avoid overflow to ULLONG_MAX when ctx->count is
+ 0
+Message-ID: <20230711-legalisieren-qualvoll-c578e099c65a@brauner>
+References: <tencent_7588DFD1F365950A757310D764517A14B306@qq.com>
+ <20230710-fahrbahn-flocken-03818a6b2e91@brauner>
+ <tencent_BCEA8520DBC99F741C6666BF8167B32A2007@qq.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/6] dt-bindings: thermal: tsens: Add nvmem cells for
- calibration data
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>
-References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
- <20230710103735.1375847-2-quic_ipkumar@quicinc.com>
- <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
-From:   Praveenkumar I <quic_ipkumar@quicinc.com>
-In-Reply-To: <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cOXwsqatvLm-DqG7cHYCTI0oX7ajyobY
-X-Proofpoint-GUID: cOXwsqatvLm-DqG7cHYCTI0oX7ajyobY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110085
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <tencent_BCEA8520DBC99F741C6666BF8167B32A2007@qq.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,91 +62,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 10, 2023 at 11:02:33PM +0800, Wen Yang wrote:
+> 
+> On 2023/7/10 22:12, Christian Brauner wrote:
+> > On Sun, Jul 09, 2023 at 02:54:51PM +0800, wenyang.linux@foxmail.com wrote:
+> > > From: Wen Yang <wenyang.linux@foxmail.com>
+> > > 
+> > > For eventfd with flag EFD_SEMAPHORE, when its ctx->count is 0, calling
+> > > eventfd_ctx_do_read will cause ctx->count to overflow to ULLONG_MAX.
+> > > 
+> > > Fixes: cb289d6244a3 ("eventfd - allow atomic read and waitqueue remove")
+> > > Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+> > > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > > Cc: Jens Axboe <axboe@kernel.dk>
+> > > Cc: Christian Brauner <brauner@kernel.org>
+> > > Cc: Christoph Hellwig <hch@lst.de>
+> > > Cc: Dylan Yudaken <dylany@fb.com>
+> > > Cc: David Woodhouse <dwmw@amazon.co.uk>
+> > > Cc: Matthew Wilcox <willy@infradead.org>
+> > > Cc: linux-fsdevel@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > ---
+> > So this looks ok but I would like to see an analysis how the overflow
+> > can happen. I'm looking at the callers and it seems that once ctx->count
+> > hits 0 eventfd_read() won't call eventfd_ctx_do_read() anymore. So is
+> > there a caller that can call directly or indirectly
+> > eventfd_ctx_do_read() on a ctx->count == 0?
+> eventfd_read() ensures that ctx->count is not 0 before calling
+> eventfd_ctx_do_read() and it is correct.
+> 
+> But it is not appropriate for eventfd_ctx_remove_wait_queue() to call
+> eventfd_ctx_do_read() unconditionally,
+> 
+> as it may not only causes ctx->count to overflow, but also unnecessarily
+> calls wake_up_locked_poll().
+> 
+> 
+> I am sorry for just adding the following string in the patch:
+> Fixes: cb289d6244a3 ("eventfd - allow atomic read and waitqueue remove")
+> 
+> 
+> Looking forward to your suggestions.
+> 
+> --
+> 
+> Best wishes,
+> 
+> Wen
+> 
+> 
+> > I'm just slightly skeptical about patches that fix issues without an
+> > analysis how this can happen.
+> > 
+> > >   fs/eventfd.c | 4 +++-
+> > >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/fs/eventfd.c b/fs/eventfd.c
+> > > index 8aa36cd37351..10a101df19cd 100644
+> > > --- a/fs/eventfd.c
+> > > +++ b/fs/eventfd.c
+> > > @@ -189,7 +189,7 @@ void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64 *cnt)
+> > >   {
+> > >   	lockdep_assert_held(&ctx->wqh.lock);
+> > > -	*cnt = (ctx->flags & EFD_SEMAPHORE) ? 1 : ctx->count;
+> > > +	*cnt = ((ctx->flags & EFD_SEMAPHORE) && ctx->count) ? 1 : ctx->count;
+> > >   	ctx->count -= *cnt;
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(eventfd_ctx_do_read);
+> > > @@ -269,6 +269,8 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+> > >   		return -EFAULT;
+> > >   	if (ucnt == ULLONG_MAX)
+> > >   		return -EINVAL;
+> > > +	if ((ctx->flags & EFD_SEMAPHORE) && !ucnt)
+> > > +		return -EINVAL;
 
-On 7/11/2023 1:40 AM, Krzysztof Kozlowski wrote:
-> On 10/07/2023 12:37, Praveenkumar I wrote:
->> Add TSENS V2 calibration nvmem cells for IPQ5332
->>
->> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->> ---
->>   .../bindings/thermal/qcom-tsens.yaml          | 26 +++++++++++++++++--
->>   1 file changed, 24 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> index 27e9e16e6455..8b7863c3989e 100644
->> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> @@ -91,7 +91,7 @@ properties:
->>       maxItems: 2
->>   
->>     nvmem-cells:
->> -    oneOf:
->> +    anyOf:
->>         - minItems: 1
->>           maxItems: 2
->>           description:
->> @@ -106,9 +106,13 @@ properties:
->>           description: |
->>             Reference to nvmem cells for the calibration mode, two calibration
->>             bases and two cells per each sensor, main and backup copies, plus use_backup cell
->> +      - maxItems: 17
->> +        description: |
->> +          V2 of TSENS, reference to nvmem cells for the calibration mode, two calibration
->> +          bases and one cell per each sensor
-> I think this is already included in one of the previous entries.
-> Otherwise, are you sure that all new devices will have exactly 17 entries?
-Previous entries does not support TSENS version 2.X.X QFPROM. TSENS V2 
-QFPROM has mode, base0, base1 and s[0-15]+_offset.
-Ideally it should be like,
-- minItems: 4
-- maxItems: 19
-But dt binding check fails in oneOf / anyOf condition. So added the 
-IPQ5332 properties which is exactly 17.
->
->>   
->>     nvmem-cell-names:
->> -    oneOf:
->> +    anyOf:
->>         - minItems: 1
->>           items:
->>             - const: calib
->> @@ -205,6 +209,24 @@ properties:
->>             - const: s9_p2_backup
->>             - const: s10_p1_backup
->>             - const: s10_p2_backup
->> +      - items:
->> +          - const: mode
->> +          - const: base0
->> +          - const: base1
->> +          - const: s0_offset
->> +          - const: s3_offset
->> +          - const: s4_offset
->> +          - const: s5_offset
->> +          - const: s6_offset
->> +          - const: s7_offset
->> +          - const: s8_offset
->> +          - const: s9_offset
->> +          - const: s10_offset
->> +          - const: s11_offset
->> +          - const: s12_offset
->> +          - const: s13_offset
->> +          - const: s14_offset
->> +          - const: s15_offset
-> Don't introduce new naming style. Existing uses s[0-9]+, without offset
-> suffix. Why this should be different?
-As I mentioned above, s[0-9]+_p1 / s[0-9]+p2 is for TSENS V1. TSENS V2 
-QFPROM layout is different from the existing one.
-I would like to add mode, base0, base1 and 16 patterns 
-'^s[0-15]+_offset$'. But DT binding check is failing in oneOf/ anyOf 
-condintion.
-
---
-Thanks,
-Praveenkumar
->
->>   
->>     "#qcom,sensors":
->>       description:
-> Best regards,
-> Krzysztof
->
+Hm, why is bit necessary though? What's wrong with specifying ucnt == 0
+with EFD_SEMAPHORE? This also looks like a (very low potential) uapi
+break.
