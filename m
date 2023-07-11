@@ -2,186 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E8174F8E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DD574F8E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjGKUQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S230078AbjGKUSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGKUQY (ORCPT
+        with ESMTP id S229537AbjGKUSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:16:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9882412F;
-        Tue, 11 Jul 2023 13:16:23 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:10:88d9::7a9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C19656606F62;
-        Tue, 11 Jul 2023 21:16:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689106582;
-        bh=ovmdJowpN42/SYoQ1qPuSx2Xrj+upHUIDUOy/UIexEo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=P2wABV4/5DuKFdpMw5cXOR4VE6I17sU/p7+weZxlH9MHNQYCDBdrEu9jyQpS7ssdH
-         yPWRFWIBh/xC04Azx3hbDfsT6s12cDRwHZUSbU9r6a8XUBXF9aDhkGvTR7EvzUXhxt
-         lKrer9ywLoE8tQAeSO15tdQcyTTYdRB1BE7FOhoBHPZk1E1YXMjFmf7wYKqFfPzQB2
-         rJ0cpVD/kMZW9AZ/zdmfQVyKD7gTiOwQRrgYEIZ43kAhHIdp593uEyftSzVYWZCx9f
-         dkJUYSPdYipii3YJHBrP4nWagSe7jmQu19tjB74pOkp3kqAOCOBJ96ehnxeNXJQrkU
-         BaHA6TBWTtwCg==
-Message-ID: <c68c63924a2aed6c98818d3ad3b39e065cbd0b15.camel@collabora.com>
-Subject: Re: [PATCH 1/3] media: mediatek: vcodec: Add capture format to
- support 10bit tile mode
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        =?ISO-8859-1?Q?N=EDcolas?= "F . R . A . Prado" 
-        <nfraprado@collabora.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        Mingjia Zhang <mingjia.zhang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Tue, 11 Jul 2023 16:16:11 -0400
-In-Reply-To: <20230711125749.15555-2-yunfei.dong@mediatek.com>
-References: <20230711125749.15555-1-yunfei.dong@mediatek.com>
-         <20230711125749.15555-2-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Tue, 11 Jul 2023 16:18:35 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB910C7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:18:34 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-668704a5b5bso5443311b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689106714; x=1691698714;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AHQ6nFJYzOLsxp4Cvh6Qt2yjVHqJxutm7vOmfrcNDX8=;
+        b=gU+6fKWqEDBFi3CMOReEhuawOezpwYZAZX2TlhxmqHfIyioJXL9zMXhX0oCoh138sV
+         t7XKc9BPuCaf/e1Rz9Mp2eM3CHX6gct6PNoZcWqFRFFbvu1FVvPCYgrzovVtk1PdAh5R
+         kjulHgyJApP6XV36S5thBRxGmtEJcR6oogkDyr4puqRV7n4xThnDwZ7HwrCRc97Aj+pd
+         X3s1YxuDDTAlF4Www/ONJF9cI2KHk6wbv0upXda9R0bGOg/9vKOAReqU4K7IXySqXgdA
+         Ua+WGYcaYhvAC5bj6PsD7qLSYQZZkIbhtB6NHaBp7Bbna9au5mwq+fQ1gw2hRGdNg6c0
+         M1HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689106714; x=1691698714;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AHQ6nFJYzOLsxp4Cvh6Qt2yjVHqJxutm7vOmfrcNDX8=;
+        b=Yb9bOXFaXoUD8GFfolsfxEmG14WKjVXX7NromXG4OSdqMqcoWxGtIGAioMKgmnz6pG
+         Nr4B9eQr/lG6JQNSCeNcxw7A1Ifc3ATbKQa8/iPB67ISGiDuhk0v6O8OlOITWE4aVbzg
+         ezTSgFxy7dYBln9i1dB1gs1K6rVa5iqSmeNLCHfyFxO8br6ag2ejTHbRlPcnfuw9QcUx
+         4vIRONPGUnSy8T4AkQ6mR4MQ9nGamXmjKBlgaFFvEFwXmDXog3zwKFTdkg1I655amZc9
+         U9S/OwOu9ejJawn9syotSI70Tsz8aBS9LWcIrN3nhdAToL7iY3vY8doxn6kqTVrgrW5F
+         MrIg==
+X-Gm-Message-State: ABy/qLaIOSwhcQAYKs9kFLy8v8hDsWnOcZZsRVmsdN+I0FDFmoQMrKWl
+        n2oXO0lJaAHk2pL52D5xtkr3IA==
+X-Google-Smtp-Source: APBJJlGW/76QXHpB92BCVxf9S/cFQibKuZxpLbyG6qJ+wjnJ9KEBPHPGtuTt+nGFTDquZLIOM4dpXQ==
+X-Received: by 2002:a05:6a00:2d84:b0:677:cda3:2222 with SMTP id fb4-20020a056a002d8400b00677cda32222mr18507941pfb.14.1689106714103;
+        Tue, 11 Jul 2023 13:18:34 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id j6-20020aa783c6000000b0063a04905379sm2100623pfn.137.2023.07.11.13.18.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 13:18:33 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Evan Green <evan@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v4] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Date:   Tue, 11 Jul 2023 13:18:30 -0700
+Message-Id: <20230711201831.2695097-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 11 juillet 2023 =C3=A0 20:57 +0800, Yunfei Dong a =C3=A9crit=C2=A0=
-:
-> From: Mingjia Zhang <mingjia.zhang@mediatek.com>
->=20
-> Define one uncompressed capture format V4L2_PIX_FMT_MT2110T in order to
-> support 10bit for AV1/VP9/HEVC in mt8195.
->=20
-> Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
-> Co-developed-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  Documentation/userspace-api/media/v4l/pixfmt-reserved.rst | 8 ++++++++
->  drivers/media/v4l2-core/v4l2-common.c                     | 2 ++
->  drivers/media/v4l2-core/v4l2-ioctl.c                      | 1 +
->  include/uapi/linux/videodev2.h                            | 1 +
->  4 files changed, 12 insertions(+)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/=
-Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-> index 58f6ae25b2e7..b16a7257580c 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-> @@ -275,6 +275,14 @@ please make a proposal on the linux-media mailing li=
-st.
-> =20
->          Decoder's implementation can be found here,
->          `aspeed_codec <https://github.com/AspeedTech-BMC/aspeed_codec/>`=
-__
-> +    * .. _V4L2-PIX-FMT-MT2110T:
-> +
-> +      - ``V4L2_PIX_FMT_MT2110T``
-> +      - 'MT2110T'
-> +      - Two-planar 10-Bit tile mode YVU420 format used by Mediatek MT819=
-5, MT8188
-> +        and more. This format have similitude with ``V4L2_PIX_FMT_MM21``=
-.
-> +        It remains an opaque intermediate format and it is used for VP9,=
- AV1
-> +        and HEVC.
+In /proc/cpuinfo, most of the information we show for each processor is
+specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+compatible, and the mmu size. But the ISA string gets filtered through a
+lowest common denominator mask, so that if one CPU is missing an ISA
+extension, no CPUs will show it.
 
-Documenting uncompressed video formats as "opaque" is always last resort in
-V4L2. There is no justification here since this format is already implement=
-ed in
-software and pending in GStreamer (so its well understood format). I will t=
-ry
-and provide some better doc for you to include.
+Now that we track the ISA extensions for each hart, let's report ISA
+extension info accurately per-hart in /proc/cpuinfo. We cannot change
+the "isa:" line, as usermode may be relying on that line to show only
+the common set of extensions supported across all harts. Add a new "hart
+isa" line instead, which reports the true set of extensions for that
+hart. This matches what is returned in riscv_hwprobe() when querying a
+given hart.
 
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3444
+Signed-off-by: Evan Green <evan@rivosinc.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
->  .. raw:: latex
-> =20
->      \normalsize
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-c=
-ore/v4l2-common.c
-> index bee1535b04d3..869fc09a210b 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -262,6 +262,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 f=
-ormat)
->  		{ .format =3D V4L2_PIX_FMT_VYUY,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
- .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .bpp_div =
-=3D { 1, 1, 1, 1 }, .hdiv =3D 2, .vdiv =3D 1 },
->  		{ .format =3D V4L2_PIX_FMT_Y212,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
- .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 4, 0, 0, 0 }, .bpp_div =
-=3D { 1, 1, 1, 1 }, .hdiv =3D 2, .vdiv =3D 1 },
->  		{ .format =3D V4L2_PIX_FMT_YUV48_12, .pixel_enc =3D V4L2_PIXEL_ENC_YUV=
-, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 6, 0, 0, 0 }, .bpp_div =
-=3D { 1, 1, 1, 1 }, .hdiv =3D 1, .vdiv =3D 1 },
-> +		{ .format =3D V4L2_PIX_FMT_MT2110T, .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
- .mem_planes =3D 2, .comp_planes =3D 2, .bpp =3D { 5, 10, 0, 0 }, .bpp_div =
-=3D { 4, 4, 1, 1 }, .hdiv =3D 2, .vdiv =3D 2,
-> +		  .block_w =3D { 16, 8, 0, 0 }, .block_h =3D { 32, 16, 0, 0 }},
-> =20
->  		/* YUV planar formats */
->  		{ .format =3D V4L2_PIX_FMT_NV12,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
- .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .bpp_div =
-=3D { 1, 1, 1, 1 }, .hdiv =3D 2, .vdiv =3D 2 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
-re/v4l2-ioctl.c
-> index 01ba27f2ef87..f465c0e3d6e3 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1508,6 +1508,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
-mt)
->  		case V4L2_PIX_FMT_QC10C:	descr =3D "QCOM Compressed 10-bit Format"; br=
-eak;
->  		case V4L2_PIX_FMT_AJPG:		descr =3D "Aspeed JPEG"; break;
->  		case V4L2_PIX_FMT_AV1_FRAME:	descr =3D "AV1 Frame"; break;
-> +		case V4L2_PIX_FMT_MT2110T:	descr =3D "Mediatek 10bit Tile Mode"; break=
-;
->  		default:
->  			if (fmt->description[0])
->  				return;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
-2.h
-> index 3af6a82d0cad..8c7d71afbdc7 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -796,6 +796,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_Z16      v4l2_fourcc('Z', '1', '6', ' ') /* Depth d=
-ata 16-bit */
->  #define V4L2_PIX_FMT_MT21C    v4l2_fourcc('M', 'T', '2', '1') /* Mediate=
-k compressed block mode  */
->  #define V4L2_PIX_FMT_MM21     v4l2_fourcc('M', 'M', '2', '1') /* Mediate=
-k 8-bit block mode, two non-contiguous planes */
-> +#define V4L2_PIX_FMT_MT2110T  v4l2_fourcc('M', 'T', '2', 'T') /* Mediate=
-k 10-bit block tile mode */
->  #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel P=
-lanar Greyscale 10-bit and Depth 16-bit */
->  #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4=
--bit packed depth confidence information */
->  #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-=
-bit dithered RGB */
+---
+
+Changes in v4:
+ - Documentation: Made the underline match the text line (Conor)
+ - Documentation: hanged "in question" to "being described" (Andrew)
+
+Changes in v3:
+ - Add some documentation (Conor)
+
+Changes in v2:
+ - Added new "hart isa" line rather than altering behavior of existing
+   "isa" line (Conor, Palmer)
+
+
+I based this series on top of Conor's riscv-extensions-strings branch
+from July 3rd, since otherwise this change gets hopelessly entangled
+with that series.
+
+---
+ Documentation/riscv/uabi.rst | 10 ++++++++++
+ arch/riscv/kernel/cpu.c      | 22 ++++++++++++++++++----
+ 2 files changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
+index 8960fac42c40..afdda580e5a2 100644
+--- a/Documentation/riscv/uabi.rst
++++ b/Documentation/riscv/uabi.rst
+@@ -42,6 +42,16 @@ An example string following the order is::
+ 
+    rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
+ 
++"isa" vs "hart isa" lines in /proc/cpuinfo
++------------------------------------------
++
++The "isa" line in /proc/cpuinfo describes the lowest common denominator of
++RISC-V ISA extensions understood by the kernel and implemented on all harts. The
++"hart isa" line, in contrast, describes the set of extensions understood by the
++kernel on the particular hart being described, even if those extensions may not
++be present on all harts in the system. The "hart isa" line is consistent with
++what's returned by __riscv_hwprobe() when querying for that specific CPU.
++
+ Misaligned accesses
+ -------------------
+ 
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index 1acf3679600d..6264b7b94945 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
+ 
+ #ifdef CONFIG_PROC_FS
+ 
+-static void print_isa(struct seq_file *f)
++static void print_isa(struct seq_file *f, const unsigned long *isa_bitmap)
+ {
+-	seq_puts(f, "isa\t\t: ");
+ 
+ 	if (IS_ENABLED(CONFIG_32BIT))
+ 		seq_write(f, "rv32", 4);
+@@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
+ 		seq_write(f, "rv64", 4);
+ 
+ 	for (int i = 0; i < riscv_isa_ext_count; i++) {
+-		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
++		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id))
+ 			continue;
+ 
+ 		/* Only multi-letter extensions are split by underscores */
+@@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
+ 
+ 	seq_printf(m, "processor\t: %lu\n", cpu_id);
+ 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
+-	print_isa(m);
++
++	/*
++	 * For historical raisins, the isa: line is limited to the lowest common
++	 * denominator of extensions supported across all harts. A true list of
++	 * extensions supported on this hart is printed later in the hart_isa:
++	 * line.
++	 */
++	seq_puts(m, "isa\t\t: ");
++	print_isa(m, NULL);
+ 	print_mmu(m);
+ 
+ 	if (acpi_disabled) {
+@@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
+ 	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
+ 	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
+ 	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
++
++	/*
++	 * Print the ISA extensions specific to this hart, which may show
++	 * additional extensions not present across all harts.
++	 */
++	seq_puts(m, "hart isa\t: ");
++	print_isa(m, hart_isa[cpu_id].isa);
+ 	seq_puts(m, "\n");
+ 
+ 	return 0;
+-- 
+2.34.1
 
