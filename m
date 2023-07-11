@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CC474E5F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F24B74E5F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjGKEhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 00:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S231205AbjGKEhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 00:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjGKEg4 (ORCPT
+        with ESMTP id S230292AbjGKEhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:36:56 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18EBE49
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 21:36:31 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6682909acadso2784109b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 21:36:31 -0700 (PDT)
+        Tue, 11 Jul 2023 00:37:00 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44221BF
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 21:36:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-55b1238a024so4014135a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 21:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1689050191; x=1691642191;
+        d=bytedance.com; s=google; t=1689050195; x=1691642195;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o2fbpRc1gP3OYJFiewDVSSan5FPPeq6w2nLF2ekKLbg=;
-        b=RQesib1xN1ZmHsPS1BZxb8GFBw3bLOQP+UTjbpSvqSu+zXCUbswMRRjAQVntHnffgk
-         2E7MeVDBV3pc5dYbmgSn6MIm2amFwKOtJplCxUPOs4k2kU3oM5T7RL+2F9ANb+ranU8N
-         cTamzNqo/wgS45OeJK1zXiqykdKVk4JG6kyQnw8eJDpaUqPUIkUPzbNhzXXwt17/i6dg
-         koxv3ey5vV36NfWt0COANNWYLYE5QEZNoTZyYAyTVobEvSdbLe/RxfNmvTFEo+Olk8Dn
-         BNMc0q1bCu/CaaEV8YEzXStHiJ5nkGZrRC5Gn+FtESHQPWr5TV0cdYOfjYn8FB/MEZYv
-         N43w==
+        bh=3XAHhhESlWk2lPaujVBvLDXmvRjl2svsri3z2wXZkLk=;
+        b=M8vGYeHoV98HxtEMd30yZy8J3vsp1gg2UT4CLif35qX5VjoffNTseSfCyCPQjIFXd3
+         jMXsnIN0y93aH99CbAOqK1hQE2WTk+EnG39KFI93kZTddE/ujIniiOVaxFJ9l2l4vTyy
+         jxxAVfv4neMTtiBhVY1x1UCTGNus5SOkXaix/+VzLqJK/JlnU4Kcb8D4gfAGDEfpfMVG
+         INTIy7c3kT1rRA6/vEmVG6JIAT+juFpfwpk2RuCHm+yuEJpr/Ig5n/5eBGCmRW1nx2i7
+         F2KVD16LtUYKJ7l7HCE+eVrlVLVXKFzfR62F3qHP5TSypqeEUutFNuq7rPM8cbnX+yk3
+         c8kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689050191; x=1691642191;
+        d=1e100.net; s=20221208; t=1689050195; x=1691642195;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=o2fbpRc1gP3OYJFiewDVSSan5FPPeq6w2nLF2ekKLbg=;
-        b=iPdjWY4xTtMWHQycMINErro8z6kMDiypeAKmHA97U5MlGAcPNsMZLSAEd2gkWJ4gyK
-         Monh077Gj3/v/iwH0sQ1sSDCNBpWBTXDfgc2wTMZXzhBvjZvA6OnPi22v5dIn8jWZJmA
-         WwT9Nz5cUXXGzXcrff1dpdwAv8HilOx2cvoQ+5DcbxWlL7jkVabQ300ldo7JihsIiDnh
-         uOafiIq5zb7GjZ2N+LCrMXvzv6yhCZJiK8aKsQwIUynSUbMxYX1kxwYD3WS9yLKGfHlQ
-         i9xSwmIhWcxAlLvoBHjCdHRc3UZCdgciCoYe3ny+rdfRVtSiCF25rFXWbUueNoYX8oZn
-         6zJA==
-X-Gm-Message-State: ABy/qLY7N38wSCzL33sUpmYKoao98MJB6q0h0FVkjOx55w7I0KjZhJCJ
-        8+nhiFBHqG/j+N+3MDjMHyW5WT/6h1gDQ22GecxAZw==
-X-Google-Smtp-Source: APBJJlH4Z539tozKrapAxAT/lMBr/3gs+hikaUOY++P9Tu6dKkQgiDYYm65yDeiYW5QBvBYNqbJcOA==
-X-Received: by 2002:a05:6a21:900c:b0:130:74c8:b501 with SMTP id tq12-20020a056a21900c00b0013074c8b501mr8444984pzb.30.1689050191294;
-        Mon, 10 Jul 2023 21:36:31 -0700 (PDT)
+        bh=3XAHhhESlWk2lPaujVBvLDXmvRjl2svsri3z2wXZkLk=;
+        b=IEGKAWhVlNlWdspghGIZvPWt8H65FCY1xZMicXzy1syD5BWW34tAPdPSf+VF6o5hLk
+         nw7jkq1yuBbo7GF3NFU2cVW2sd07jqH2xiEKojdv93msd65uQMc4dktK6/4q5PRuB/QP
+         wukyxSqyA4e5fu+cjlHPidf81yursmeDTz75Trcw/55HNavsxJU6qOK+EqAKnlCVtKdM
+         AOFeMHhZdZB5wv5sHjCzNTdTJqy3emOdDLm3EUHw+G3/5VcwOPedznbxzkEh2f837Hmu
+         ZsjWJLuqjOuMkKOpPZNZdAMYV2iZdwEGUd3RR5y+yDxSn2FK2Tgal7VGP3xxkXLAAnwe
+         ho4Q==
+X-Gm-Message-State: ABy/qLZz4TRRLSHegsBUWe2ucJdxBV40agyZVrOYX6ss9I37dR6nHaed
+        1gxvlXOhFzsMwfBV23uWtQf5lg==
+X-Google-Smtp-Source: APBJJlHVXHi5H4pyAltoj/82qhz5I3Bsfho9pJLgbS3udUMYxFnBreB2K43EEK98etc5oZFkabl6Ow==
+X-Received: by 2002:a17:902:b117:b0:1b3:e90b:93e1 with SMTP id q23-20020a170902b11700b001b3e90b93e1mr13910557plr.36.1689050194747;
+        Mon, 10 Jul 2023 21:36:34 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id ij9-20020a170902ab4900b001b9de67285dsm755259plb.156.2023.07.10.21.36.28
+        by smtp.gmail.com with ESMTPSA id ij9-20020a170902ab4900b001b9de67285dsm755259plb.156.2023.07.10.21.36.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 21:36:30 -0700 (PDT)
+        Mon, 10 Jul 2023 21:36:34 -0700 (PDT)
 From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>,
         Jonathan Corbet <corbet@lwn.net>,
         linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     me@jcix.top, Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Subject: [PATCH 1/5] fuse: check attributes staleness on fuse_iget()
-Date:   Tue, 11 Jul 2023 12:34:01 +0800
-Message-Id: <20230711043405.66256-2-zhangjiachen.jaycee@bytedance.com>
+Subject: [PATCH 2/5] fuse: invalidate dentry on EEXIST creates or ENOENT deletes
+Date:   Tue, 11 Jul 2023 12:34:02 +0800
+Message-Id: <20230711043405.66256-3-zhangjiachen.jaycee@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230711043405.66256-1-zhangjiachen.jaycee@bytedance.com>
 References: <20230711043405.66256-1-zhangjiachen.jaycee@bytedance.com>
@@ -67,83 +67,75 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function fuse_direntplus_link() might call fuse_iget() to initialize a new
-fuse_inode and change its attributes. If fi->attr_version is always
-initialized with 0, even if the attributes returned by the FUSE_READDIR
-request is staled, as the new fi->attr_version is 0, fuse_change_attributes
-will still set the staled attributes to inode. This wrong behaviour may
-cause file size inconsistency even when there is no changes from
-server-side.
-
-To reproduce the issue, consider the following 2 programs (A and B) are
-running concurrently,
-
-        A                                               B
-----------------------------------      --------------------------------
-{ /fusemnt/dir/f is a file path in a fuse mount, the size of f is 0. }
-
-readdir(/fusemnt/dir) start
-//Daemon set size 0 to f direntry
-                                        fallocate(f, 1024)
-                                        stat(f) // B see size 1024
-                                        echo 2 > /proc/sys/vm/drop_caches
-readdir(/fusemnt/dir) reply to kernel
-Kernel set 0 to the I_NEW inode
-
-                                        stat(f) // B see size 0
-
-In the above case, only program B is modifying the file size, however, B
-observes file size changing between the 2 'readonly' stat() calls. To fix
-this issue, we should make sure readdirplus still follows the rule of
-attr_version staleness checking even if the fi->attr_version is lost due to
-inode eviction. So this patch increases fc->attr_version on inode eviction,
-and compares request attr_version and the fc->attr_version when a
-FUSE_READDIRPLUS request is finished.
+The EEXIST errors returned from server are strong sign that a local
+negative dentry should be invalidated. Similarly, The ENOENT errors from
+server can also be a sign of revalidate failure. This commit invalidates
+dentries on EEXIST creates and ENOENT deletes by calling
+fuse_invalidate_entry(), which improves the consistency with no
+performance degradation.
 
 Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
 ---
- fs/fuse/inode.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/fuse/dir.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 660be31aaabc..3e0b1fb1db17 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -115,6 +115,7 @@ static void fuse_free_inode(struct inode *inode)
+diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+index 5a4a7155cf1c..cfe38ee91ffd 100644
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -755,7 +755,8 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+ 	if (err == -ENOSYS) {
+ 		fc->no_create = 1;
+ 		goto mknod;
+-	}
++	} else if (err == -EEXIST)
++		fuse_invalidate_entry(entry);
+ out_dput:
+ 	dput(res);
+ 	return err;
+@@ -835,6 +836,8 @@ static int create_new_entry(struct fuse_mount *fm, struct fuse_args *args,
+ 	return 0;
  
- static void fuse_evict_inode(struct inode *inode)
- {
-+	struct fuse_conn *fc = get_fuse_conn(inode);
- 	struct fuse_inode *fi = get_fuse_inode(inode);
- 
- 	/* Will write inode on close/munmap and in all other dirtiers */
-@@ -137,6 +138,8 @@ static void fuse_evict_inode(struct inode *inode)
- 		WARN_ON(!list_empty(&fi->write_files));
- 		WARN_ON(!list_empty(&fi->queued_writes));
- 	}
-+
-+	atomic64_inc(&fc->attr_version);
+  out_put_forget_req:
++	if (err == -EEXIST)
++		fuse_invalidate_entry(entry);
+ 	kfree(forget);
+ 	return err;
  }
- 
- static int fuse_reconfigure(struct fs_context *fsc)
-@@ -409,6 +412,10 @@ struct inode *fuse_iget(struct super_block *sb, u64 nodeid,
- 	fi->nlookup++;
- 	spin_unlock(&fi->lock);
- 	fuse_change_attributes(inode, attr, attr_valid, attr_version);
-+	spin_lock(&fi->lock);
-+	if (attr_version < atomic64_read(&fc->attr_version))
-+		fuse_invalidate_attr(inode);
-+	spin_unlock(&fi->lock);
- 
- 	return inode;
+@@ -986,7 +989,7 @@ static int fuse_unlink(struct inode *dir, struct dentry *entry)
+ 	if (!err) {
+ 		fuse_dir_changed(dir);
+ 		fuse_entry_unlinked(entry);
+-	} else if (err == -EINTR)
++	} else if (err == -EINTR || err == -ENOENT)
+ 		fuse_invalidate_entry(entry);
+ 	return err;
  }
+@@ -1009,7 +1012,7 @@ static int fuse_rmdir(struct inode *dir, struct dentry *entry)
+ 	if (!err) {
+ 		fuse_dir_changed(dir);
+ 		fuse_entry_unlinked(entry);
+-	} else if (err == -EINTR)
++	} else if (err == -EINTR || err == -ENOENT)
+ 		fuse_invalidate_entry(entry);
+ 	return err;
+ }
+@@ -1050,7 +1053,7 @@ static int fuse_rename_common(struct inode *olddir, struct dentry *oldent,
+ 		/* newent will end up negative */
+ 		if (!(flags & RENAME_EXCHANGE) && d_really_is_positive(newent))
+ 			fuse_entry_unlinked(newent);
+-	} else if (err == -EINTR) {
++	} else if (err == -EINTR || err == -ENOENT) {
+ 		/* If request was interrupted, DEITY only knows if the
+ 		   rename actually took place.  If the invalidation
+ 		   fails (e.g. some process has CWD under the renamed
 -- 
 2.20.1
 
