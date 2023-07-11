@@ -2,84 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A528A74E2E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0B674E2EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjGKBAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S230393AbjGKBBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjGKBAL (ORCPT
+        with ESMTP id S229655AbjGKBBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:00:11 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F23C0;
-        Mon, 10 Jul 2023 18:00:10 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b8bbce9980so33173465ad.2;
-        Mon, 10 Jul 2023 18:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689037210; x=1691629210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iOeAkeIhbm63YH/6Gh4MSzxEDTnuHBi8ou4wGcdJFeM=;
-        b=QCUFSSTuYfpZ4zZwxQRpvBHWwVt6JX2r4IaQWToH7ZnW53vdjoDh7gN1os71joy4CM
-         WCD33PWj9Qn9jM4ckCcNXsxJ1CPVRzuOTB7VAabbKy3CGCk6p42MNquaIwRFww9tP8ax
-         dn2jG4J5piZFk/emDQSQXbHAptZU0jKpXztCYa3P0qBfDSxsP3w+lP/kWJKSqY9THOUt
-         W8pdf4e7FFt9H3itZ3WqcjwYEevNXyoCqCwspcLeDZqAH6AabUSFw1LNx6R+SpiwMhga
-         o6nfXDNIU/o3RuD4GS2JH4AYYH9Hv+uUMJeCCMvJrPVRrPtI/Rj7HSH51WjI4OxP1czG
-         ve7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689037210; x=1691629210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iOeAkeIhbm63YH/6Gh4MSzxEDTnuHBi8ou4wGcdJFeM=;
-        b=PmGZb5/bFJfwBhr1mxLGOPQbLy1xGygcxCGYXDX/g3Z/Sfvu8OqxRfaBQxNdqxlXIG
-         LphPWAA4yNIY1NgsT2We1FqTe7ruYbK+bBZI7yAN99M/DLAMI8rMTdyweOU/fOTHlihs
-         jxkX79QKQDjSTjdOxqeYp5FeTNrfYC8nJgMU8yt33LCHyRZbhIgMD3UrMiGkPK1iMqd3
-         93vCxdBpM+C6GnoFjirwNJxXqISAMfWoZv/Q3/xQ2C7MgFrfwV7SC3k7rIrp05LHRkWZ
-         SKwiDsnygGn+5VXQ8I+jm4Fj8/G29M/sF58YJwm5pMFuL/HSW946lEshIHeCz3UP3/Xk
-         JY7g==
-X-Gm-Message-State: ABy/qLbguVrPQa4+r2YpIZ5SQW6F3nIYXUGV0BebX3UuMeOFrSV8RG5K
-        Uu37sRn/mq83h5w99g/YWmk=
-X-Google-Smtp-Source: APBJJlF4tqyKaxe6FUTxBOKdQXS/veWIutnyD6e4IB24oquduS6Evm4yVFhziXaM6ohvz/uEaHf4YA==
-X-Received: by 2002:a17:902:b110:b0:1b8:9cf2:35b0 with SMTP id q16-20020a170902b11000b001b89cf235b0mr9467584plr.41.1689037209850;
-        Mon, 10 Jul 2023 18:00:09 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id bg4-20020a1709028e8400b001b53be3d942sm482388plb.232.2023.07.10.18.00.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 18:00:09 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 15:00:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
-Message-ID: <ZKypl8cr3jxiZ6bo@slm.duckdns.org>
-References: <20230627143508.1576882-1-longman@redhat.com>
- <ZKxzTrN2yiKfXndI@slm.duckdns.org>
- <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
+        Mon, 10 Jul 2023 21:01:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E53CE;
+        Mon, 10 Jul 2023 18:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689037267;
+        bh=B4DwB8zOKuSyVO8uxq9Dy+tWno5pkUGZDOX2npkrOD0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FqgRuQwsI8m5TJWRKxGQU19rmC2knnq0gj7qmZEsQwbK+Fje37fEzCqEcAyjKJDji
+         rKninmF78dATO6nX5GwjJJI6iimcmp0EXe808LB/JOt3Krcle4+1MWAhxHVth0VDeW
+         BTPBecpJkPr5av6LNy8D32qp8NtDzjr0T9ojG6JaBXfvUWELqRyM8xBxBL2N812/YI
+         SNOZKn2SMKF+Xpa7iSXee9xKHt2QMOjRGMrKDM8iM+lc0UykkWst6RZdL9RDzUgZPC
+         dkBi501Qvi4pU4KW3b89L0oILpMbL6F/jTg22kpPIoMJJwM2EFuvPyqNcIQjQ8wQSR
+         h3AwpOEL5wm7g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0Mxt43rfz4whq;
+        Tue, 11 Jul 2023 11:01:06 +1000 (AEST)
+Date:   Tue, 11 Jul 2023 11:01:05 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: Re: linux-next: manual merge of the vhost tree with the net-next
+ tree
+Message-ID: <20230711110105.467f896d@canb.auug.org.au>
+In-Reply-To: <20230623130443.6c9a481e@canb.auug.org.au>
+References: <20230623130443.6c9a481e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: multipart/signed; boundary="Sig_/vYM/I6ZyNfC9j0yYpl4QqtM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,35 +58,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/vYM/I6ZyNfC9j0yYpl4QqtM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 10, 2023 at 08:33:11PM -0400, Waiman Long wrote:
-> I would like to clarify that withdrawal of CPUs from cpuset.cpus.exclusive
-> is always allowed. It is the addition of CPUs not presents in cpuset.cpus
-> that will be rejected. The invariant is that cpuset.cpus.exclusive must
-> always be a subset of cpuset.cpus. Any change that violates this rule is not
-> allowed. Alternately I can silently dropped the offending CPUs without
-> returning an error, but that may surprise users.
+Hi all,
 
-Right, that'd be confusing.
+On Fri, 23 Jun 2023 13:04:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the vhost tree got a conflict in:
+>=20
+>   drivers/net/virtio_net.c
+>=20
+> between commit:
+>=20
+>   80f50f918c6e ("virtio_net: separate the logic of freeing the rest merge=
+able buf")
+>=20
+> from the net-next tree and commit:
+>=20
+>   21081476b808 ("virtio_net: support dma premapped")
 
-> BTW, withdrawal of CPUs from cpuset.cpus will also withdraw them from
-> cpuset.cpus.exclusive, if present. This allows the partition code to use
-> cpuset.cpus.exclusive directly to determine the allowable exclusive CPUs
-> without doing an intersection with cpuset.cpus each time it is used.
+This is now commit
 
-This is kinda confusing too, I think. Changing cpuset.cpus in an ancestor
-doesn't affect the contents of the descendants' cpuset.cpus files but would
-directly modify the contents of their cpuset.cpus.exclusive files.
+  c8dc5b9adff9 ("virtio_net: support dma premapped")
 
-There's some inherent friction because cpuset.cpus separates configuration
-(cpuset.cpus) and the current state (cpuset.cpus.effective) while
-cpuset.cpus.exclusive is trying to do both in the same interface file. When
-the two behavior modes collide, it becomes rather confusing. Do you think
-it'd make sense to make cpus.exclusive follow the same pattern as
-cpuset.cpus?
+> from the vhost tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc drivers/net/virtio_net.c
+> index 0db14f6b87d3,d67b36fdba0d..000000000000
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@@ -1128,28 -1136,6 +1233,28 @@@ err
+>   	return NULL;
+>   }
+>  =20
+>  +static void mergeable_buf_free(struct receive_queue *rq, int num_buf,
+>  +			       struct net_device *dev,
+>  +			       struct virtnet_rq_stats *stats)
+>  +{
+>  +	struct page *page;
+>  +	void *buf;
+>  +	int len;
+>  +
+>  +	while (num_buf-- > 1) {
+> - 		buf =3D virtqueue_get_buf(rq->vq, &len);
+> ++		buf =3D virtnet_rq_get_buf(rq, &len, NULL);
+>  +		if (unlikely(!buf)) {
+>  +			pr_debug("%s: rx error: %d buffers missing\n",
+>  +				 dev->name, num_buf);
+>  +			dev->stats.rx_length_errors++;
+>  +			break;
+>  +		}
+>  +		stats->bytes +=3D len;
+>  +		page =3D virt_to_head_page(buf);
+>  +		put_page(page);
+>  +	}
+>  +}
+>  +
+>   /* Why not use xdp_build_skb_from_frame() ?
+>    * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
+>    * virtio-net there are 2 points that do not match its requirements:
 
-Thanks.
+This is now a conflict between the vhost tree and Linus' tree.
 
--- 
-tejun
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vYM/I6ZyNfC9j0yYpl4QqtM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsqdEACgkQAVBC80lX
+0GyZPwf/cFvPmsfrNh9BzsRVjwY6977gPEoHeWXeTWzEamrXxH9+UOS3MTsf1NN5
+uBJb1Rm0aRlrsfShLxBK4T5R72fjuRIGlr1W5xesLn69O4uRnMcPpCB4FfZRFU8A
+5rywlnAQVJjt/AgQkjOKhaxzC52h9msxHAvNNwqtYRp6o3ysLumE2WcPoIX8AtCZ
+I50pnZ94DJIwS+APgaNL7q/yNZl7UezYcXbhmHQqg02Tgp4sYfoE0lkFo6jGXkjW
+u9whwIXx+uctvAUzQUFpxijZmUrD9U19X9h245jZJRu+T/oh7jJDDPEVyoZd8ihE
+R5SgjBc7rFEFuIJHnlLVcOkovYZFaA==
+=uY7L
+-----END PGP SIGNATURE-----
+
+--Sig_/vYM/I6ZyNfC9j0yYpl4QqtM--
