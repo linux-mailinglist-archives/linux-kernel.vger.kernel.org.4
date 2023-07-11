@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1094D74E7A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEA474E7A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjGKHBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S230006AbjGKHFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjGKHBh (ORCPT
+        with ESMTP id S229558AbjGKHFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:01:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365B418D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689058849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v7BjYj/I+4PNhxODpnsSg7iMK5tRoeIrCo2+55CRjhI=;
-        b=QfM+MhGzmGz0nCCS/aUvnmx8bx1rSwjhYwUJFPev1pl6HkML0jr0T6nfm54s9lmNhj0hLj
-        FPLo9PIKFm1or9zeAlQAlpNZcRyWKoejNOA53lnF6bedhXIK2QpDe/MlXNaqN8fnX5YvMN
-        a8TGTUChomkb+0OqJlbzKL7vbQbdmRw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-PfcYMSaXMaKpVE0zvE3fRA-1; Tue, 11 Jul 2023 03:00:45 -0400
-X-MC-Unique: PfcYMSaXMaKpVE0zvE3fRA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F6FA856506;
-        Tue, 11 Jul 2023 07:00:44 +0000 (UTC)
-Received: from localhost (ovpn-12-93.pek2.redhat.com [10.72.12.93])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B333A492B01;
-        Tue, 11 Jul 2023 07:00:05 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 14:59:35 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        Wen Xiong <wenxiong@linux.ibm.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 2/2] nvme-pci: use blk_mq_max_nr_hw_queues() to calculate
- io queues
-Message-ID: <ZKz912KyFQ7q9qwL@MiWiFi-R3L-srv>
-References: <20230708020259.1343736-1-ming.lei@redhat.com>
- <20230708020259.1343736-3-ming.lei@redhat.com>
- <20230710064109.GB24519@lst.de>
- <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
- <ZKzOFkokjTVwd4Ry@MiWiFi-R3L-srv>
- <ZKzSHDPR7Jfoz/G8@ovpn-8-26.pek2.redhat.com>
+        Tue, 11 Jul 2023 03:05:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43069B1;
+        Tue, 11 Jul 2023 00:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QxgzYpZE009pZG+5bv71DNHRjYXXCX5nQ2jB455OlTc=; b=KkS4HDn/L3XGdv1EwoWxDUk2Fw
+        iP1cBEG34Vl0vbZT04PUSF2oYwW8RPTmQoZ+LAHJdVXESzN1Dt516DZQdomIzwMsqVnIJ6igVM6O3
+        QrHNKmSa0DADCaFDaVTVbPaQEv5A1z5wlRXMa9eJcjALdnbV9RKDTA/vQNeBpXAQ08YvlUephkT9+
+        LYRbFge7PZ79YyJPo8DpOdU2aUbDOzYDD+wm92n6C3d0QXD+JQbbwj4ZAW6BR2XNArWrDWwJN7H/r
+        N8ajlWiAjutymdTnzdAmN8vx3ES1pkJ3fkmkSoE3JXFDnLyWbnpBNvYWwi+dokRJ2q0vHdk/215Lr
+        KArSiCNw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qJ7QU-00FUQg-QA; Tue, 11 Jul 2023 07:04:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B339F30014A;
+        Tue, 11 Jul 2023 09:04:45 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 89CD1240EBDA9; Tue, 11 Jul 2023 09:04:45 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 09:04:45 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] x86/kprobes: Prohibit probing on compiler
+ generated CFI checking code
+Message-ID: <20230711070445.GB3062772@hirez.programming.kicks-ass.net>
+References: <168899125356.80889.17967397360941194229.stgit@devnote2>
+ <168899127520.80889.15418363018799407058.stgit@devnote2>
+ <20230710161643.GB3040258@hirez.programming.kicks-ass.net>
+ <20230711085837.fac80c964ea7667cb75bd6e5@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZKzSHDPR7Jfoz/G8@ovpn-8-26.pek2.redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230711085837.fac80c964ea7667cb75bd6e5@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,64 +64,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/23 at 11:53am, Ming Lei wrote:
-> Hi Baoquan,
-> 
-> On Tue, Jul 11, 2023 at 11:35:50AM +0800, Baoquan He wrote:
-> > On 07/10/23 at 05:14pm, Ming Lei wrote:
-> > > On Mon, Jul 10, 2023 at 08:41:09AM +0200, Christoph Hellwig wrote:
-> > > > On Sat, Jul 08, 2023 at 10:02:59AM +0800, Ming Lei wrote:
-> > > > > Take blk-mq's knowledge into account for calculating io queues.
-> > > > > 
-> > > > > Fix wrong queue mapping in case of kdump kernel.
-> > > > > 
-> > > > > On arm and ppc64, 'maxcpus=1' is passed to kdump command line, see
-> > > > > `Documentation/admin-guide/kdump/kdump.rst`, so num_possible_cpus()
-> > > > > still returns all CPUs.
-> > > > 
-> > > > That's simply broken.  Please fix the arch code to make sure
-> > > > it does not return a bogus num_possible_cpus value for these
-> > > 
-> > > That is documented in Documentation/admin-guide/kdump/kdump.rst.
-> > > 
-> > > On arm and ppc64, 'maxcpus=1' is passed for kdump kernel, and "maxcpu=1"
-> > > simply keep one of CPU cores as online, and others as offline.
-> > 
-> > I don't know maxcpus on arm and ppc64 well. But maxcpus=1 or nr_cpus=1
-> > are suggested parameter. Because usually nr_cpus=1 is enough to make
-> > kdump kernel work well to capture vmcore. However, user is allowed to
-> > specify nr_cpus=n (n>1) if they think multiple cpus are needed in kdump
-> > kernel. Your hard coding of cpu number in kdump kernel may be not so
-> > reasonable.
-> 
-> As I mentioned, for arm/ppc64, passing 'maxcpus=1' actually follows
-> Documentation/admin-guide/kdump/kdump.rst.
-> 
-> 'nr_cpus=N' just works fine, so not related with this topic.
-> 
-> After 'maxcpus=1' is passed, kernel only brings up one of cpu cores as
-> online during booting, and others still can be put into online by
-> userspace. Now this way causes IO timeout on some storage device which
-> uses managed irq and supports multiple io queues.
-> 
-> Here the focus is if passing 'maxcpus=1' is valid for kdump
-> kernel, that is we want to hear from our arch/kdump guys.
+On Tue, Jul 11, 2023 at 08:58:37AM +0900, Masami Hiramatsu wrote:
 
-Yes, 'maxcpus=1' is valid and suggested on ppc64 for kdump kernel
-if needed, because there's no 'nr_cpus=' support on ppc64 yet.
+> Oh, is FineIBT different from kCFI? I thought those are same. But anyway
+> for kCFI=y && FineIBT=n case, I think this code still needed.
 
-> 
-> If yes, something needs to be fixed, such as, what this patchset is
-> doing.
-> 
-> > 
-> > Please cc kexec mailing list when posting so that people can view the
-> > whole thread of discussion.
-> 
-> Already Cc kexe & arm/powerpc & irq list.
-> 
-> 
-> Thanks,
-> Ming
-> 
+Yeah, FineIBT relies on kCFI and IBT (and selects CALL_PADDING) and
+dynamically re-writes the kCFI infrastructure.
+
+All the gory details are in arch/x86/kernel/alternative.c, search for
+CONFIG_FINEIBT, I've tried to write a big comment, but please let me
+know if something isn't clear and I'll write some actual words :-).
+
+But basically kCFI is a pure software solution and does the check before
+the indirect control transfer (it has to). While FineIBT relies on the
+IBT hardware in order to do the check after.
+
+As such, FineIBT can do the CFI check without memory loads, which is
+good for performance. Another useful property of FineIBT is that it is a
+speculation barrier.
 
