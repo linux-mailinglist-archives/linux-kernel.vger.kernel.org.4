@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463BB74F49F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CD974F4A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjGKQOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S231312AbjGKQPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKQOw (ORCPT
+        with ESMTP id S231189AbjGKQPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:14:52 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626B9E60
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:14:51 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3a36b309524so5100186b6e.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:14:51 -0700 (PDT)
+        Tue, 11 Jul 2023 12:15:04 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4949410C7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:15:03 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5734d919156so53139517b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:15:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689092090; x=1691684090;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vq9YViWYg4uFChvJGSLE3j7fYiOn1S8zzbS7MgZUOXM=;
-        b=JnU40aqXrl+cQXJk+/mWGhypL/UL4FW42fibfXNLp4FDHbP6XSKttylnrv712ddyCS
-         QQiAkK4VyodEzrwPiYTOu3AnXnDvRdzb3zq1Eb9j/1HiZN1ZbrRv0XaTUkXjQRh/C60X
-         aRnapaN/LqPA5iZkV1sZtWXCNBY011f1uE2TI=
+        d=google.com; s=20221208; t=1689092102; x=1691684102;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=srPbiHu7W6kwoYdYL0mD3A931iU7Il78HDCrkGjWI18=;
+        b=6GfxYY+/kNebainzUExcm0kQOXE8VIdIJTrFYR88700u3EMMAkDsbxBLzYT9Bo0Dbn
+         X4WP8RKAKpiRw38HH1IOD/Ll3c5Mr2BWvHVFgcWeOdni6SH5iNaJXixzQ6xeyWbmE6Ja
+         ZRugymzdXfIlfEUuZWO5wYF6iiixvGnAHNCg4K0b6Q9PBi0zp/VrhYEbH06FtOjVzOX+
+         6d5/+WoGA3vU8omo9fueeHecveYzIQkopQ0b8jSbNK9of4g9wYbl7HuAih2KCXstCAyc
+         YoYsnumvUOSKzTJafNIfgDKaCUAha6iaZhM9ZGYH4meQGAw16z+PyYFzBgq8B7o68DGq
+         J0PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689092090; x=1691684090;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vq9YViWYg4uFChvJGSLE3j7fYiOn1S8zzbS7MgZUOXM=;
-        b=JZqKHmT2NzEEMPhwGVmJUyZQPf6iVwmAGAWO2rdJLA4pVIi1cM9DTsOFLzrngOW6/i
-         laLm1zYcgoyEUssir7Yy97/Wpg3WbZxY9+LkrMzhlg6tIK4uQovXVPCVJF0shc1osIxb
-         cte+zCWZnF9p2dB+MRxRhR6Q+WMklVQI9BSdGgvdJBD7KuJjHuXAOt7rn25Bd/Tin88G
-         wxQjaS/x70Bs+NuMcfpXtqCGOqKtmfqbS5o8SYGmbRuTQjyTBS7YcSR52Mf+/xlxzqlE
-         gTXAHf3x7+e/Tx6lKIdOhkSnLflY9IVbAm7/TRfBQgmX11UHOEwhvjNGCFZOm8iExSAV
-         SJ/g==
-X-Gm-Message-State: ABy/qLZQOKcbT0rUvlWqVidQU2QHrCvDse+1MJHcFIm1fbtUNu749TJ4
-        RcQYi1HofL3UlFN9IElIvriFpg==
-X-Google-Smtp-Source: APBJJlHccKfb9VbDm1W28Cl55SHynKCuE6YH+AftvD/+oHJ7aeij8ZFnaHC/iLkVZXwDULUqM4kjfQ==
-X-Received: by 2002:a05:6358:290b:b0:134:e4c4:ebff with SMTP id y11-20020a056358290b00b00134e4c4ebffmr16820772rwb.11.1689092090568;
-        Tue, 11 Jul 2023 09:14:50 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id c10-20020a63724a000000b0055386b1415dsm1802755pgn.51.2023.07.11.09.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 09:14:49 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 09:14:49 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Matteo Rizzo <matteorizzo@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm/slub: remove redundant kasan_reset_tag() from
- freelist_ptr calculations
-Message-ID: <202307110914.8D460C7@keescook>
-References: <20230711134623.12695-3-vbabka@suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711134623.12695-3-vbabka@suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1689092102; x=1691684102;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=srPbiHu7W6kwoYdYL0mD3A931iU7Il78HDCrkGjWI18=;
+        b=Bgrc4+zLRw11blhsH1RG4I+C5TxZsg/aTqYfNjXUL9u12rYc8LRePJ1we5JjDRssJZ
+         YLwgCvPWTqjDS0KPCMlCkEstUJPY0IrUwiLbRC4WLK6LDQRwGr4WlUHjddlPfKEOBI6p
+         lGeTZ68SD1NJ5FjbKrLVkpxUv5UKe/urLmJltQ4+dP2QV6u0dHhg6XqGu3n8KuSSvkMi
+         ZRcG+RtGdY8mhbO3+JD26dEWI+Kc7yaJ2aZDG+FLqDM3wLt6imWYssMmPLlkWZK899QS
+         xc8K79QviiYDRzIHN35tCQa++nRO+g+TLb9dFO4ik3b9hIwgmgzNwQmSk76Dxz087r0p
+         SnIA==
+X-Gm-Message-State: ABy/qLYhyE8n69JUoS0S/bg7i46ccSZDJWVseBZh5mMrQI0meiuTGt+X
+        722Ucm+XBPhzXu2+QIeklsD7Qhw4+i0=
+X-Google-Smtp-Source: APBJJlFDVl9hAuTBxssdwIqHHMl2Olc1sB8n2KGDINQU8/fv4APjnsjPNp19mUGXHW8A1zY9dOMASSOsb5o=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:b663:0:b0:570:7d9b:9b16 with SMTP id
+ h35-20020a81b663000000b005707d9b9b16mr114199ywk.2.1689092102486; Tue, 11 Jul
+ 2023 09:15:02 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 09:15:00 -0700
+In-Reply-To: <20230710133427.fb599ef486c7b764d9ca2cc3@linux-foundation.org>
+Mime-Version: 1.0
+References: <CAC_GQSr3xzZaeZt85k_RCBd5kfiOve8qXo7a81Cq53LuVQ5r=Q@mail.gmail.com>
+ <20230710133427.fb599ef486c7b764d9ca2cc3@linux-foundation.org>
+Message-ID: <ZK2ABPwCke32Kh0q@google.com>
+Subject: Re: [BUG]: bad usercopy in kvm_stats_read in mm/usercopy.c
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Zheng Zhang <zheng.zhang@email.ucr.edu>, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:46:24PM +0200, Vlastimil Babka wrote:
-> Commit d36a63a943e3 ("kasan, slub: fix more conflicts with
-> CONFIG_SLAB_FREELIST_HARDENED") has introduced kasan_reset_tags() to
-> freelist_ptr() encoding/decoding when CONFIG_SLAB_FREELIST_HARDENED is
-> enabled to resolve issues when passing tagged or untagged pointers
-> inconsistently would lead to incorrect calculations.
+On Mon, Jul 10, 2023, Andrew Morton wrote:
+> On Sun, 9 Jul 2023 14:32:09 -0700 Zheng Zhang <zheng.zhang@email.ucr.edu> wrote:
 > 
-> Later, commit aa1ef4d7b3f6 ("kasan, mm: reset tags when accessing
-> metadata") made sure all pointers have tags reset regardless of
-> CONFIG_SLAB_FREELIST_HARDENED, because there was no other way to access
-> the freepointer metadata safely with hw tag-based KASAN.
+> > Kees, Andrew, and  to whom it may concern:
+> > 
+> > Hello! We have found a bug in the Linux kernel version 6.2.0 by syzkaller
+> > with our own templates. It also produces a POC.
+> > Attached is the report, log, and reproducers generated by syzkaller
+> > Please let me know if there is any additional information that I can
+> > provide to help debug this issue.
+> > Thanks!
 > 
-> Therefore the kasan_reset_tag() usage in freelist_ptr_encode()/decode()
-> is now redundant, as all callers use kasan_reset_tag() unconditionally
-> when constructing ptr_addr. Remove the redundant calls and simplify the
-> code and remove obsolete comments.
+> Let's cc the kvm mailing list.
 > 
-> Also in freelist_ptr_encode() introduce an 'encoded' variable to make
-> the lines shorter and make it similar to the _decode() one.
-> 
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> Original email is at
+> https://lkml.kernel.org/r/CAC_GQSr3xzZaeZt85k_RCBd5kfiOve8qXo7a81Cq53LuVQ5r=Q@mail.gmail.com
 
-Thanks, this is much more readable!
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Yeaaaah.  We failed kernel programming 101.  KVM installs file descriptors to
+let userspace read VM and vCPU stats, but doesn't grab a reference to the VM to
+ensure the VM and its vCPUs are kept alive until the stats fds are closed.  I'll
+send a patch.
