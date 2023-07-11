@@ -2,174 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851D474FAE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8099474FAE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjGKWXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
+        id S230175AbjGKWXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGKWXQ (ORCPT
+        with ESMTP id S229512AbjGKWXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:23:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1295310F1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689114149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PQ2+rDjcjMB3Qu7cGr9+SsEPr1twMRHj94h2nff+OLA=;
-        b=NwwZaIFPu5qZmBi61QjgxGHB3REhXoDY/YfW53yK2Nz0WDDRVemqOAdqFMWThpGSlPzH92
-        3yCBv4SIvdSa3f4Z8M8lIBkDo43itsWEK/rEs8gstnhkEdwpEfoqpP3R32oudcVrlfAArl
-        +obU3787Xj2aSvpwMr6c4k1HZYU1ScU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-222-h2BfI1zsPrWm3d_MtO_K-w-1; Tue, 11 Jul 2023 18:22:24 -0400
-X-MC-Unique: h2BfI1zsPrWm3d_MtO_K-w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 32F173C100A1;
-        Tue, 11 Jul 2023 22:22:24 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.17.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7508B200AD6E;
-        Tue, 11 Jul 2023 22:22:23 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 18:22:21 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 2/2] Sched/fair: Block nohz tick_stop when cfs
- bandwidth in use
-Message-ID: <20230711222221.GD150804@lorien.usersys.redhat.com>
-References: <20230707195748.2918490-1-pauld@redhat.com>
- <20230707195748.2918490-3-pauld@redhat.com>
- <xm26lefnfhkd.fsf@google.com>
- <20230711131024.GA150804@lorien.usersys.redhat.com>
- <20230711141210.GC150804@lorien.usersys.redhat.com>
- <xm26cz0yf6gf.fsf@google.com>
+        Tue, 11 Jul 2023 18:23:11 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A910FA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:23:05 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5700b15c12fso71725357b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689114185; x=1691706185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d/GtFb0EqNYu9Ozo0dSp+bce5y10je/SnpQEJxWby1c=;
+        b=PA+wbm1/vKXTWoURcR4YLVKRbPS4NYL89xg1LcdSjSXGTOIbJsyPT0jnF5DAtptEjs
+         HlUQ2PCyfmiLOAeXyc7/PGo7uTaOQr3Gi85X78rf0hchLpcHH/eOk9MMv2S9adwTtieu
+         xf9fy1r+AYNS/LmNYZyoamQOHp8cItfQ7nmo+F0PLRPPSJBBB3tas3aXYlVwiHLqhAVy
+         0VT+CRUdGLwJtXbZQ6QCpP0VZtTB6fsru0GYFIAhwXUjYYxOk0GwXVqEdDVmGyjB5cXl
+         g4TADxuLnA4kC+wve/uLFqvdGulI74qIhETkD4T2SBS30WfwyF7QRx23+/i+ySAFYi9v
+         dfXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689114185; x=1691706185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d/GtFb0EqNYu9Ozo0dSp+bce5y10je/SnpQEJxWby1c=;
+        b=HZhpzHDtJFLdcVhUy+MelINp+Oj7ZfB9yxP40OmJiNsbP8adDinVZTB/nTpfDfRy//
+         lRY0bMiaNNMkbe4/0okttRMKNHx+oSmQKy1Q8pl56pN2RVfM7qZ49VP+L8DBOJQje1oZ
+         L93jsoIlS+hBx1JZYAJ6QifMTL1sTvM6OrjD2oDOeeM0jDRiN+xMnffKPqWM/VYy73z8
+         rnZm9tlurU8/wiNnnx4Mk8MRGpY/gRMAEHB0Em57Fabtbv/6/VWTzVSgBABI7qEGiW1S
+         xUkTmgvxtU2wwXKUg1AToZwD51S9Sb4FJwRdKr2tdR//Cd/tvkzshHCbhNwWsF0p9IaH
+         pSOQ==
+X-Gm-Message-State: ABy/qLYFtEKSo3/ljxTlVJGWFdh9c174+B5AnexPftH5g/FOrffzEmWY
+        CfgzAMysQgzW9mPRR2Nc0KxmvhTyyVCbXbg+SD0SEg==
+X-Google-Smtp-Source: APBJJlHSGSxkeoM3MDBUA7qbKDAppZt0q6fwagWhE8zrPKtjQWQ5EfKY2no5Q3+nwz29jpL/GgjTtCayWVPy55OSBkw=
+X-Received: by 2002:a81:6ad6:0:b0:56d:297e:7c8c with SMTP id
+ f205-20020a816ad6000000b0056d297e7c8cmr15936031ywc.8.1689114184945; Tue, 11
+ Jul 2023 15:23:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xm26cz0yf6gf.fsf@google.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+References: <20230707201904.953262-1-jiaqiyan@google.com> <20230707201904.953262-3-jiaqiyan@google.com>
+ <6682284d-7ad3-9b59-687d-899f4d08d911@huawei.com> <CACw3F50k9WJr7WgHS-dRxJRfuXPbq2adUBLeFcKRjmm2D6qf-g@mail.gmail.com>
+ <CACw3F52Pj+SeB+dD2Cjkr-bX-OZkmCpL1s6SO1aHDvaD37YZBg@mail.gmail.com> <20230711180159.GA3887@monkey>
+In-Reply-To: <20230711180159.GA3887@monkey>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Tue, 11 Jul 2023 15:22:52 -0700
+Message-ID: <CACw3F53s6pX50TV3Lq79=THsxff0T1eS2wUdLZSp1JL8gFHQyg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
+ is raw HWPOISON
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        naoya.horiguchi@nec.com, songmuchun@bytedance.com,
+        shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:07:12PM -0700 Benjamin Segall wrote:
-> Phil Auld <pauld@redhat.com> writes:
-> 
-> > On Tue, Jul 11, 2023 at 09:10:24AM -0400 Phil Auld wrote:
-> >> On Mon, Jul 10, 2023 at 04:54:58PM -0700 Benjamin Segall wrote:
-> >> > Phil Auld <pauld@redhat.com> writes:
-> >> > 
-> >> > > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> >> > > can easily run well past their quotas before a remote tick does
-> >> > > accounting.  This leads to long, multi-period stalls before such
-> >> > > tasks can run again. Currently, when presented with these conflicting
-> >> > > requirements the scheduler is favoring nohz_full and letting the tick
-> >> > > be stopped. However, nohz tick stopping is already best-effort, there
-> >> > > are a number of conditions that can prevent it, whereas cfs runtime
-> >> > > bandwidth is expected to be enforced.
-> >> > >
-> >> > > Make the scheduler favor bandwidth over stopping the tick by setting
-> >> > > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> >> > > runtime limit enabled. We use cfs_b->hierarchical_quota to
-> >> > > determine if the task requires the tick.
-> >> > >
-> >> > > Add check in pick_next_task_fair() as well since that is where
-> >> > > we have a handle on the task that is actually going to be running.
-> >> > >
-> >> > > Add check in sched_can_stop_tick() to cover some edge cases such 
-> >> > > as nr_running going from 2->1 and the 1 remains the running task.
-> >> > >
-> >> > > Add sched_feat HZ_BW (off by default) to control the tick_stop
-> >> > > behavior.
-> >> > >
-> >> > > Signed-off-by: Phil Auld <pauld@redhat.com>
-> >> > > Cc: Ingo Molnar <mingo@redhat.com>
-> >> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> >> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> >> > > Cc: Juri Lelli <juri.lelli@redhat.com>
-> >> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> >> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> >> > > Cc: Ben Segall <bsegall@google.com>
-> >> > > Cc: Frederic Weisbecker <frederic@kernel.org>
-> >> > > ---
-> >> > >  kernel/sched/core.c     | 12 ++++++++++
-> >> > >  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
-> >> > >  kernel/sched/features.h |  2 ++
-> >> > >  kernel/sched/sched.h    |  1 +
-> >> > >  4 files changed, 64 insertions(+)
-> >> > >
-> >> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> > > index 1b214e10c25d..4b8534abdf4f 100644
-> >> > > --- a/kernel/sched/core.c
-> >> > > +++ b/kernel/sched/core.c
-> >> > > @@ -1229,6 +1229,18 @@ bool sched_can_stop_tick(struct rq *rq)
-> >> > >  	if (rq->nr_running > 1)
-> >> > >  		return false;
-> >> > >  
-> >> > > +	/*
-> >> > > +	 * If there is one task and it has CFS runtime bandwidth constraints
-> >> > > +	 * and it's on the cpu now we don't want to stop the tick.
-> >> > > +	 * This check prevents clearing the bit if a newly enqueued task here is
-> >> > > +	 * dequeued by migrating while the constrained task continues to run.
-> >> > > +	 * E.g. going from 2->1 without going through pick_next_task().
-> >> > > +	 */
-> >> > > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && task_on_rq_queued(rq->curr)) {
-> >> > > +		if (cfs_task_bw_constrained(rq->curr))
-> >> > > +			return false;
-> >> > > +	}
-> >> > > +
-> >> > 
-> >> > I think we still need the fair_sched_class check with the bit being on
-> >> > cfs_rq/tg rather than task.
-> >> > 
-> >> 
-> >> Is there a way a non-fair_sched_class task will be in a cfs_rq with
-> >> cfs_rq->runtime_enabled and/or cfs_b->hierarchical_quota set to non
-> >> RUNTIME_INF?  I suppose if they are stale and it's had its class changed?
-> >> 
-> >> That makes the condition pretty ugly but I can add that back if needed.
-> >> 
+On Tue, Jul 11, 2023 at 11:02=E2=80=AFAM Mike Kravetz <mike.kravetz@oracle.=
+com> wrote:
+>
+> On 07/11/23 10:05, Jiaqi Yan wrote:
+> > On Mon, Jul 10, 2023 at 8:16=E2=80=AFAM Jiaqi Yan <jiaqiyan@google.com>=
+ wrote:
+> > > On Fri, Jul 7, 2023 at 7:57=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.c=
+om> wrote:
+> > > > On 2023/7/8 4:19, Jiaqi Yan wrote:
+> > > >
+> > > > > +             if (subpage =3D=3D p->page) {
+> > > > > +                     ret =3D true;
+> > > > > +                     break;
+> > > > > +             }
+> > > > > +     }
+> > > > > +
+> > > > > +     return ret;
+> > > > >  }
+> > > >
+> > > > It seems there's a race between __is_raw_hwp_subpage and unpoison_m=
+emory:
+> > > >   unpoison_memory               __is_raw_hwp_subpage
+> > > >                                   if (!folio_test_hwpoison(folio)) =
+-- hwpoison is set
+> > > >     folio_free_raw_hwp            llist_for_each_entry_safe raw_hwp=
+_list
+> > > >       llist_del_all                 ..
+> > > >     folio_test_clear_hwpoison
+> > > >
+> > >
+> > > Thanks Miaohe for raising this concern.
+> > >
+> > > > But __is_raw_hwp_subpage is used in hugetlbfs, unpoison_memory coul=
+dn't reach here because there's a
+> > > > folio_mapping =3D=3D NULL check before folio_free_raw_hwp.
+> > >
+> > > I agree. But in near future I do want to make __is_raw_hwp_subpage
+> > > work for shared-mapping hugetlb, so it would be nice to work with
+> > > unpoison_memory. It doesn't seem to me that holding mf_mutex in
+> > > __is_raw_hwp_subpage is nice or even absolutely correct. Let me think
+> > > if I can come up with something in v4.
 > >
-> > Sigh, yeah. I took that out when I had the bit in the task. I'll put it
-> > back in...
+> > At my 2nd thought, if __is_raw_hwp_subpage simply takes mf_mutex
+> > before llist_for_each_entry, it will introduce a deadlock:
 > >
-> 
-> Yeah, cfs_rq (and rt_rq) are set unconditionally, and a cgroup can have
-> a mix of fair and RT tasks (whether or not that's a good idea from a
-> sysadmin perspective).
-> 
+> > unpoison_memory                       __is_raw_hwp_subpage
+> >   held mf_mutex                         held hugetlb_lock
+> >   get_hwpoison_hugetlb_folio            attempts mf_mutex
+> >     attempts hugetlb lock
+> >
+> > Not for this patch series, but for future, is it a good idea to make
+> > mf_mutex available to hugetlb code? Then enforce the order of locking
+> > to be mf_mutex first, hugetlb_lock second? I believe this is the
+> > current locking pattern / order for try_memory_failure_hugetlb.
+>
+> I think only holding mf_mutex in __is_raw_hwp_subpage would be sufficient
+> to prevent races with unpoison_memory.  memory failure code needs to take
+> both mf_mutex and hugetlb_lock.  The hugetlb lock is to prevent hugetlb
+> page state changes.  IIUC, __is_raw_hwp_subpage is only taking hugetlb_lo=
+ck
+> to prevent races with memory failure code.
 
-Thanks. I think I'll try the condition as a single-use static inline function.
-The generated code seems the same but it is a bit nicer to read.
+Thanks Mike, I think mf_mutex is a simple and correct solution. I will
+drop hugetlb_lock from __is_raw_hwp_subpage in v4.
 
-
-Cheers,
-Phil
-
-
--- 
-
+>
+> Of course, I could be missing something as there are subtle issues with
+> locking in the memory failure code.
+> --
+> Mike Kravetz
