@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B0174E798
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1094D74E7A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGKG7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
+        id S230073AbjGKHBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjGKG7L (ORCPT
+        with ESMTP id S229659AbjGKHBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:59:11 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5872D1A8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:59:08 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R0Wtx0Pj4zBJJhp
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:59:05 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689058744; x=1691650745; bh=BBjOtnxHpYtfKCDDqbXWnN085Od
-        kLpLKgYToQFgh/Vo=; b=LjF4tE/ugu45A4gqlYRZ8FW2PVrT0eKQHBSLZSWOVnL
-        r6ZH7le8VGBJ0OE6+//8Wt4Q+FDr4YsXBdJWCFdwdHvXIWaFI2GqvDWCvqW8fedx
-        vmcZK9MzqePLeh3mfHMbWbMifJHRdY2k/1ISytqlg1TcccFHGKNQWyzXddkuOafc
-        uZbVZ9h0kJTEXAfhVQiyltAwY2QfI0lKJeH6Jp9iMhaCyzSecZmEkfQCnFK1hWMs
-        3hsFhxSobZbQhy5prTOP+se78wP62XOdxZB8KeqFw+aWdBYj4QY5GM5kSh/nv1tu
-        ARhKGucfBW+U9TPgBi0+nHRLegHyRPUHY28q6XAiY/Q==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Tne0YiKvCf7y for <linux-kernel@vger.kernel.org>;
-        Tue, 11 Jul 2023 14:59:04 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R0Wtw5BsQzBHXkY;
-        Tue, 11 Jul 2023 14:59:04 +0800 (CST)
+        Tue, 11 Jul 2023 03:01:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365B418D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689058849;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v7BjYj/I+4PNhxODpnsSg7iMK5tRoeIrCo2+55CRjhI=;
+        b=QfM+MhGzmGz0nCCS/aUvnmx8bx1rSwjhYwUJFPev1pl6HkML0jr0T6nfm54s9lmNhj0hLj
+        FPLo9PIKFm1or9zeAlQAlpNZcRyWKoejNOA53lnF6bedhXIK2QpDe/MlXNaqN8fnX5YvMN
+        a8TGTUChomkb+0OqJlbzKL7vbQbdmRw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-26-PfcYMSaXMaKpVE0zvE3fRA-1; Tue, 11 Jul 2023 03:00:45 -0400
+X-MC-Unique: PfcYMSaXMaKpVE0zvE3fRA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F6FA856506;
+        Tue, 11 Jul 2023 07:00:44 +0000 (UTC)
+Received: from localhost (ovpn-12-93.pek2.redhat.com [10.72.12.93])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B333A492B01;
+        Tue, 11 Jul 2023 07:00:05 +0000 (UTC)
+Date:   Tue, 11 Jul 2023 14:59:35 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        Wen Xiong <wenxiong@linux.ibm.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 2/2] nvme-pci: use blk_mq_max_nr_hw_queues() to calculate
+ io queues
+Message-ID: <ZKz912KyFQ7q9qwL@MiWiFi-R3L-srv>
+References: <20230708020259.1343736-1-ming.lei@redhat.com>
+ <20230708020259.1343736-3-ming.lei@redhat.com>
+ <20230710064109.GB24519@lst.de>
+ <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+ <ZKzOFkokjTVwd4Ry@MiWiFi-R3L-srv>
+ <ZKzSHDPR7Jfoz/G8@ovpn-8-26.pek2.redhat.com>
 MIME-Version: 1.0
-Date:   Tue, 11 Jul 2023 14:59:04 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau: Move assignment outside if condition
-In-Reply-To: <20230711065751.80206-1-xujianghui@cdjrlc.com>
-References: <20230711065751.80206-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <5e8eabb592aaf355e6a29aea1f71a551@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKzSHDPR7Jfoz/G8@ovpn-8-26.pek2.redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following checkpatch errors:
+On 07/11/23 at 11:53am, Ming Lei wrote:
+> Hi Baoquan,
+> 
+> On Tue, Jul 11, 2023 at 11:35:50AM +0800, Baoquan He wrote:
+> > On 07/10/23 at 05:14pm, Ming Lei wrote:
+> > > On Mon, Jul 10, 2023 at 08:41:09AM +0200, Christoph Hellwig wrote:
+> > > > On Sat, Jul 08, 2023 at 10:02:59AM +0800, Ming Lei wrote:
+> > > > > Take blk-mq's knowledge into account for calculating io queues.
+> > > > > 
+> > > > > Fix wrong queue mapping in case of kdump kernel.
+> > > > > 
+> > > > > On arm and ppc64, 'maxcpus=1' is passed to kdump command line, see
+> > > > > `Documentation/admin-guide/kdump/kdump.rst`, so num_possible_cpus()
+> > > > > still returns all CPUs.
+> > > > 
+> > > > That's simply broken.  Please fix the arch code to make sure
+> > > > it does not return a bogus num_possible_cpus value for these
+> > > 
+> > > That is documented in Documentation/admin-guide/kdump/kdump.rst.
+> > > 
+> > > On arm and ppc64, 'maxcpus=1' is passed for kdump kernel, and "maxcpu=1"
+> > > simply keep one of CPU cores as online, and others as offline.
+> > 
+> > I don't know maxcpus on arm and ppc64 well. But maxcpus=1 or nr_cpus=1
+> > are suggested parameter. Because usually nr_cpus=1 is enough to make
+> > kdump kernel work well to capture vmcore. However, user is allowed to
+> > specify nr_cpus=n (n>1) if they think multiple cpus are needed in kdump
+> > kernel. Your hard coding of cpu number in kdump kernel may be not so
+> > reasonable.
+> 
+> As I mentioned, for arm/ppc64, passing 'maxcpus=1' actually follows
+> Documentation/admin-guide/kdump/kdump.rst.
+> 
+> 'nr_cpus=N' just works fine, so not related with this topic.
+> 
+> After 'maxcpus=1' is passed, kernel only brings up one of cpu cores as
+> online during booting, and others still can be put into online by
+> userspace. Now this way causes IO timeout on some storage device which
+> uses managed irq and supports multiple io queues.
+> 
+> Here the focus is if passing 'maxcpus=1' is valid for kdump
+> kernel, that is we want to hear from our arch/kdump guys.
 
-ERROR: do not use assignment in if condition
+Yes, 'maxcpus=1' is valid and suggested on ppc64 for kdump kernel
+if needed, because there's no 'nr_cpus=' support on ppc64 yet.
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/nouveau/nouveau_usif.c | 12 ++++++++----
-  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> If yes, something needs to be fixed, such as, what this patchset is
+> doing.
+> 
+> > 
+> > Please cc kexec mailing list when posting so that people can view the
+> > whole thread of discussion.
+> 
+> Already Cc kexe & arm/powerpc & irq list.
+> 
+> 
+> Thanks,
+> Ming
+> 
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_usif.c 
-b/drivers/gpu/drm/nouveau/nouveau_usif.c
-index 002d1479ba89..d0b555630a6f 100644
---- a/drivers/gpu/drm/nouveau/nouveau_usif.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_usif.c
-@@ -57,7 +57,8 @@ usif_object_new(struct drm_file *f, void *data, u32 
-size, void *argv, u32 argc,
-      struct usif_object *object;
-      int ret = -ENOSYS;
-
--    if ((ret = nvif_unpack(ret, &data, &size, args->v0, 0, 0, true)))
-+    ret = nvif_unpack(ret, &data, &size, args->v0, 0, 0, true);
-+    if (ret)
-          return ret;
-
-      switch (args->v0.oclass) {
-@@ -70,7 +71,8 @@ usif_object_new(struct drm_file *f, void *data, u32 
-size, void *argv, u32 argc,
-              struct nv_device_v0 v0;
-          } *args = data;
-
--        if ((ret = nvif_unpack(ret, &data, &size, args->v0, 0, 0, 
-false)))
-+        ret = nvif_unpack(ret, &data, &size, args->v0, 0, 0, false);
-+        if (ret)
-              return ret;
-
-          args->v0.priv = false;
-@@ -82,7 +84,8 @@ usif_object_new(struct drm_file *f, void *data, u32 
-size, void *argv, u32 argc,
-          break;
-      }
-
--    if (!(object = kmalloc(sizeof(*object), GFP_KERNEL)))
-+    object = kmalloc(sizeof(*object), GFP_KERNEL);
-+    if (!object)
-          return -ENOMEM;
-      list_add(&object->head, &cli->objects);
-
-@@ -121,7 +124,8 @@ usif_ioctl(struct drm_file *filp, void __user *user, 
-u32 argc)
-      if (ret = -EFAULT, copy_from_user(argv, user, size))
-          goto done;
-
--    if (!(ret = nvif_unpack(-ENOSYS, &data, &size, argv->v0, 0, 0, 
-true))) {
-+    ret = nvif_unpack(-ENOSYS, &data, &size, argv->v0, 0, 0, true);
-+    if (!ret) {
-          /* block access to objects not created via this interface */
-          owner = argv->v0.owner;
-          if (argv->v0.object == 0ULL &&
