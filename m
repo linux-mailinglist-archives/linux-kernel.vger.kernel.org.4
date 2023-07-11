@@ -2,94 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F2874F0BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9304F74F0BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjGKNxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
+        id S232187AbjGKNyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKNxg (ORCPT
+        with ESMTP id S229637AbjGKNx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:53:36 -0400
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9290CE6A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:53:35 -0700 (PDT)
-Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-565cd3f645bso3500869eaf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:53:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689083615; x=1691675615;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCTVwmB5J6a5dx6XYxqF53hqOsGWkSYIyrPo76Icn50=;
-        b=F9oDif8MdPruIeusfWUXdsE6FRq+1bdc4cBFON5fy6cafoFOVeNwSOwNvNFesS3r12
-         kJAmxYZaNtjvHI7oLSY2he1S8wbPggrZxFlXCx8ybq3tOkrzt6RrzI5rE4HHAJdsYUZa
-         zg3ZUq6sgCUIMjQqJkjx4oVEWb8R0y5/EG0VbdKyYTLZn3dP9uOcQNsXJE8JtBnRAxtT
-         XV/xUaGpkZ5n21VQ3qe8P5FvmXtDTarTNYs328aLct8php85R/FZ1wg8wCK5kAPH/9IH
-         IsXmDDKIagbd3XTSmmueGEVn3MKHlrnd50E2tO8MAWrKOhQPYOfs7vblEKaWHucztYcg
-         l8CQ==
-X-Gm-Message-State: ABy/qLZyRFwAaZHwXXKpqc4z812Ze+RXAnOuIzSFFw0S1dIUTTNGBYsg
-        TJiKObwdTy4drjqXI1WmG+AyRywZZJyQqJSwa7scre/mSpk6
-X-Google-Smtp-Source: APBJJlECruf66V+JyRtf/KQM/NOn3dy9C/Lb8k9+y2hASr80eBt7evZQjebFhxPNCMT+nnvVQAppHWH3WgcG/RDwIiq/YDiQySGh
+        Tue, 11 Jul 2023 09:53:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBDA94;
+        Tue, 11 Jul 2023 06:53:56 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BDgFZU032373;
+        Tue, 11 Jul 2023 13:53:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=IppzMroP1qhzHzibMwQb7urLmDbLU3ctwMXcQ4ZJrxY=;
+ b=hVv3xa0L2Z0DAiiNAXHtPGte3FKPDbrhjgmZVj/w9lduB42HHx/47VuDpEOhdGXyjQeW
+ fIjYwzbJLpI07Ld4ZpEgRAY48VQKJgNVMTTobaA3XU8UVWgdo/fTNs/5s/qtytZwbwOS
+ XU9i52j9F7danZCXFxN6As9eazjUD71QGVVbC5WgRPt9Op9gguLtl64g7AgqSOCpnwlV
+ g0NOKawfYMP9MpG/BisfPOeIEvidJ5iVi8Asy6rjjpb7MmhsKCRx3O0GdyOI5gtjYdQJ
+ RBlT9ny33hewlRjL6Egbn6dcT8iGAncemxQXE3GBbVSSVa4rVWtjm5hwFdKuxwK/Qkc/ pA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs86u0jc5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 13:53:52 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6v6PN011434;
+        Tue, 11 Jul 2023 13:53:49 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rpye51bpf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 13:53:48 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BDrj4M43123186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jul 2023 13:53:45 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F15C42004F;
+        Tue, 11 Jul 2023 13:53:44 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB76820040;
+        Tue, 11 Jul 2023 13:53:44 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jul 2023 13:53:44 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, jolsa@kernel.org, rostedt@goodmis.org
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH v2] perf/build: fix broken dependency check for libtracefs
+Date:   Tue, 11 Jul 2023 15:53:38 +0200
+Message-Id: <20230711135338.397473-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ORUko_NciuHZ5uRhcEMvXe0bGJxJMMr7
+X-Proofpoint-ORIG-GUID: ORUko_NciuHZ5uRhcEMvXe0bGJxJMMr7
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Received: by 2002:aca:db54:0:b0:3a2:214d:3da9 with SMTP id
- s81-20020acadb54000000b003a2214d3da9mr1601278oig.10.1689083614942; Tue, 11
- Jul 2023 06:53:34 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 06:53:34 -0700
-In-Reply-To: <000000000000de1eec059692c021@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dd5c040600366c6f@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Write in j1939_sock_pending_del
-From:   syzbot <syzbot+07bb74aeafc88ba7d5b4@syzkaller.appspotmail.com>
-To:     bst@pengutronix.de, dania@coconnect-ltd.com, davem@davemloft.net,
-        dev.kurt@vandijck-laurijssen.be, ecathinds@gmail.com,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        lkp@intel.com, maxime.jayat@mobile-devices.fr, mkl@pengutronix.de,
-        netdev@vger.kernel.org, nogikh@google.com, o.rempel@pengutronix.de,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_08,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501 suspectscore=0
+ mlxscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=885 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307110123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-can: j1939: socket: rework socket locking for
+Perf build auto-detects features and packages already installed
+for its build. This is done in directory tools/build/feature. This
+directory contains small sample programs. When they successfully
+compile the necessary prereqs in form of libraries and header
+files are present.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Such a check is also done for libtracefs. And this check fails:
 
-#syz fix: exact-commit-title
+Output before:
+ # rm -f test-libtracefs.bin; make test-libtracefs.bin
+ gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
+	 > test-libtracefs.make.output 2>&1 -ltracefs
+ make: *** [Makefile:211: test-libtracefs.bin] Error 1
+ # cat test-libtracefs.make.output
+ In file included from test-libtracefs.c:2:
+ /usr/include/tracefs/tracefs.h:11:10: fatal error: \
+	 event-parse.h: No such file or directory
+   11 | #include <event-parse.h>
+      |          ^~~~~~~~~~~~~~~
+ compilation terminated.
+ #
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+The root cause of this compile error is
+commit 880885d9c22e ("libtracefs: Remove "traceevent/" from referencing libtraceevent headers")
+in the libtracefs project hosted here:
+ https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=07bb74aeafc88ba7d5b4
+That mentioned patch removes the traceevent/ directory name from
+the include statement, causing the file not to be included even
+when the libtraceevent-devel package is installed. This package contains
+the file referred to in tracefs/tracefs.h:
+ # rpm -ql libtraceevent-devel
+ /usr/include/traceevent
+ /usr/include/traceevent/event-parse.h  <----- here
+ /usr/include/traceevent/event-utils.h
+ /usr/include/traceevent/kbuffer.h
+ /usr/include/traceevent/trace-seq.h
+ /usr/lib64/libtraceevent.so
+ /usr/lib64/pkgconfig/libtraceevent.pc
+ #
 
+With this patch the compile succeeds.
+
+Output after:
+ # rm -f test-libtracefs.bin; make test-libtracefs.bin
+ gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
+	 > test-libtracefs.make.output 2>&1 -I/usr/include/traceevent -ltracefs
+ #
+
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+Cc: jolsa@kernel.org
+Cc: rostedt@goodmis.org
 ---
-[1] I expect the commit to be present in:
+ tools/build/feature/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 0f0aa9b7d7b5..2cd6dbbee088 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -208,7 +208,7 @@ $(OUTPUT)test-libtraceevent.bin:
+ 	$(BUILD) -ltraceevent
+ 
+ $(OUTPUT)test-libtracefs.bin:
+-	$(BUILD) -ltracefs
++	 $(BUILD) $(shell $(PKG_CONFIG) --cflags libtraceevent 2>/dev/null) -ltracefs
+ 
+ $(OUTPUT)test-libcrypto.bin:
+ 	$(BUILD) -lcrypto
+-- 
+2.41.0
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 9 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
