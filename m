@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7572C74EB2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E5974EB32
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjGKJyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S229990AbjGKJzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjGKJyp (ORCPT
+        with ESMTP id S229468AbjGKJzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:54:45 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF7DA1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:54:43 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991fe70f21bso693323566b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689069282; x=1691661282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TmE4v52q1Ad8B5XbVBXzvr3xxDgynpotAOjnuTuCObk=;
-        b=tA955queu1D9GTW3c+allmX+oZ+L+E+pwDxlbjo7kOEKyX57j53zqmMgskx6y8Wsc/
-         eS4O/hvW2Hf7Cwzug7V5j1MgO1RLtCa55aZHvg5gcFsCeMH01VHmf2E4dkrkJSiCxhsP
-         MRz9geTVL0jD+4Me96lelD2sQ8M64NPqjL1zX9vM/+msTSIyoHGrFX3SYlfB1u/0QAVu
-         vlFTD0LpsOuRqxFs87hDT4GMpiJHVT3mFUreI3RaVae5Hn9H7SpcU9WpAi+WMB/U+Ogd
-         WWlW7vLnnHg6kXWoEh62O8X7BcggkHW9Jpp7XfrdKbbXWhBQ4MjUFEuro6gsZYJc87RI
-         1Btg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689069282; x=1691661282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TmE4v52q1Ad8B5XbVBXzvr3xxDgynpotAOjnuTuCObk=;
-        b=D7KGDXfYcpTrTF6zbuZGhY4ss62PAfklTuzzGXjLUatpSpkDR3reANokWfj48Hp/PK
-         xzRwz8msyTcV1lmBzvVMDVuHhRoRXgNkw/2z5SFoCCGkDI7A3pDlvC8pGmdtwx7Uhdu4
-         +xrR9hxP5M6Zy1Q3q+75eW3IhqVIsJGP2bEof3uRQ09mTaIrZKKAKb7PUxVr5pibu6rD
-         +FHnibsvWr6rvjQf+nE9jHK7jQVZuPKq9RtGBydrg/FODMICwE7mT6Ovmb097mvqfhFJ
-         OEncX+smfYl8orRSpEFr86thQxxylqmI80TUKBeFCJqm9eMPHUYSsI6OhS8oAyhMxFz2
-         SNMQ==
-X-Gm-Message-State: ABy/qLbKrICVhZseVkE7vpteIlD5Sp9aVurCmhmuj8U3341R7OKNEL6w
-        0feuFrGcah/Y8KD/BUill4Lmdw==
-X-Google-Smtp-Source: APBJJlExFhFXNm2eIyUDkRqdil/jnDmLUCHQeTiyjjUKMfJHW1Sp3RxBNmLgFFJOg5gZFfRAogTakQ==
-X-Received: by 2002:a17:906:15:b0:993:f611:7c95 with SMTP id 21-20020a170906001500b00993f6117c95mr10263757eja.39.1689069282221;
-        Tue, 11 Jul 2023 02:54:42 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id j8-20020a170906830800b009927d4d7a6bsm941783ejx.53.2023.07.11.02.54.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 02:54:41 -0700 (PDT)
-Message-ID: <5f16f5c0-c63e-9e16-b55d-ac90977bc863@linaro.org>
-Date:   Tue, 11 Jul 2023 11:54:39 +0200
+        Tue, 11 Jul 2023 05:55:11 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA87A1;
+        Tue, 11 Jul 2023 02:55:09 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B7mZns018506;
+        Tue, 11 Jul 2023 11:54:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=DdmwbcwKjdUOujh3dcjygwnoj2wjLr34qkQHdcWvyA8=;
+ b=uFTS/by5O6AZ4wmuDrELGNEuEVirQHvqHkLLuMrvZUq/e2+GgD2Ququ4MouK7c20mS3D
+ IadAR81PQdYWPswoOCpEzesJfJIW9ua1qJb4rIfCJGv1sm9A9A25qveIAPujxTVwImr8
+ 5del0PYNYVIF8CadxOBuILKB0JNJxI3+IsVQX8GyUm+65Hex/1drJn8irGrCqYmz7TSv
+ YzDmqrSniEeKlj09EJI3Hm58wPkElus7JrFS4iggJg/lMjbzQpvJ0ousq+jxlk3Do9Of
+ eL8IOZeSb7xNNVoR32hpT2jjT423enamy0MV3fQxL6v1tEvDcDf4J+PT5F2i1OLYmFGe vw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rs311s1gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 11:54:49 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B6896100057;
+        Tue, 11 Jul 2023 11:54:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AB76E21515D;
+        Tue, 11 Jul 2023 11:54:48 +0200 (CEST)
+Received: from [10.201.21.122] (10.201.21.122) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 11 Jul
+ 2023 11:54:48 +0200
+Message-ID: <eb735953-bfa3-4dd7-6ab0-184de050c7de@foss.st.com>
+Date:   Tue, 11 Jul 2023 11:54:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 3/6] dt-bindings: clock: Add ipq9574 NSSCC clock and reset
- definitions
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] ARM: dts: stm32: re-add CAN support on stm32f746
 Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        richardcochran@gmail.com, arnd@arndb.de, geert+renesas@glider.be,
-        neil.armstrong@linaro.org, nfraprado@collabora.com,
-        rafal@milecki.pl, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org
-Cc:     quic_saahtoma@quicinc.com
-References: <20230711093529.18355-1-quic_devipriy@quicinc.com>
- <20230711093529.18355-4-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230711093529.18355-4-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230704173317.590190-1-dario.binacchi@amarulasolutions.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230704173317.590190-1-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+X-Originating-IP: [10.201.21.122]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,49 +77,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 11:35, Devi Priya wrote:
-> Add NSSCC clock and reset definitions for ipq9574.
+Hi Dario
+
+On 7/4/23 19:33, Dario Binacchi wrote:
+> The revert commit 36a6418bb1259 ("Revert "ARM: dts: stm32: add CAN support
+> on stm32f746"") prevented parsing errors due to the lack of CAN3 binding.
 > 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> Now that the binding definition for CAN3 is available in the mainline
+> thanks to commit 8f3ef556f8e1a ("dt-bindings: mfd: stm32f7: Add binding
+> definition for CAN3"), we can re-add the CAN support and make the driver
+> usable again.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
->  .../bindings/clock/qcom,ipq9574-nsscc.yaml    |  76 +++++++++
->  .../dt-bindings/clock/qcom,ipq9574-nsscc.h    | 152 ++++++++++++++++++
->  .../dt-bindings/reset/qcom,ipq9574-nsscc.h    | 134 +++++++++++++++
->  3 files changed, 362 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,ipq9574-nsscc.h
->  create mode 100644 include/dt-bindings/reset/qcom,ipq9574-nsscc.h
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-> new file mode 100644
-> index 000000000000..1e8754760785
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,ipq9574-nsscc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +  - Anusha Rao <quic_anusha@quicinc.com>
-> +
-> +description: |
-> +  Qualcomm networking sub system clock control module provides the clocks,
-> +  resets and power domains on IPQ9574
-> +
-> +  See also::
-> +    include/dt-bindings/clock/qcom,ipq9574-nsscc.h
-> +    include/dt-bindings/reset/qcom,ipq9574-nsscc.h
-> +
 
-Reference gcc.yaml and drop all duplicated properties.
+...
+
+> +		};
+> +
+> +		can2: can@40006800 {
+> +			compatible = "st,stm32f4-bxcan";
+> +			reg = <0x40006800 0x200>;
+> +			iterrupts = <63>, <64>, <65>, <66>;
+
+I modified this (bad) line and applied the patch on stm32-next.
+
+br
+Alex
 
 
-Best regards,
-Krzysztof
+> +			interrupt-names = "tx", "rx0", "rx1", "sce";
+> +			resets = <&rcc STM32F7_APB1_RESET(CAN2)>;
+> +			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN2)>;
+> +			st,can-secondary;
+> +			st,gcan = <&gcan1>;
+> +			status = "disabled";
+> +		};
+> +
+>   		cec: cec@40006c00 {
+>   			compatible = "st,stm32-cec";
+>   			reg = <0x40006C00 0x400>;
 
