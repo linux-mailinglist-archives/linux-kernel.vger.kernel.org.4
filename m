@@ -2,152 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB8274EF35
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FBE74EF38
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjGKMnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S231625AbjGKMow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjGKMnK (ORCPT
+        with ESMTP id S229637AbjGKMov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:43:10 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863421708
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:42:39 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6682909acadso3038354b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1689079359; x=1691671359;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WF8p9HwwgSPuKR34SMZuqSQ7aAssq/odh5sAxqcKAUo=;
-        b=PfObz486Wz+B8XCRMJmNpdOHd0bdAenCGoIFIrS0nn6pqgOGHIHHLLi/E7y4xelPQs
-         oV1L5cDtGQ4gFHo4+itEHIwzUsNI9UXysv8UU/Pza3CLcUbZHUcxkt1As11YdvxnX8RF
-         H17ZVvTu4nrEDSvdfN39NUxyIGNfeoTwnjdkSADFNYnqT8BI11t6wbWjHwH7o/9kadrH
-         e5S5yw3IMsz3lksjyY+6iOF1Q4m7p0LVb07p4UTqbAdR2d9VI1K3CWAVsuHGT4SgzzBo
-         xLZVs2ZfUmoYmSJPyCtnkjpSavzGDmGYFi8eCIFGc6qahboTah/quQSujY0SX5PCPa3e
-         hfRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689079359; x=1691671359;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WF8p9HwwgSPuKR34SMZuqSQ7aAssq/odh5sAxqcKAUo=;
-        b=TGUaZglEehaefF6CRYm4zlO5yvzIZuDc4z5AdhhBA/ltl9hi6j6DaoqgVPp2KpGgDU
-         Hyi9I+xpAj9QcmfswpadhNfDDFOkW+ou8QQjKaTSYbs/jSZNxyfZ1/ZbjDZQ2LLe2HtN
-         QTAUnxGaTFYMyQoC69Exi9QBTlchziWb08oGx/sCYByajdEcA3pn5PL5JISYBbRGment
-         qfrHUjVx8fi7thugjHt5720a/4QPk4k0kNZojZqC1/SLp2A0ptcB6REMCO2ua25qJfVb
-         ePKHFtdzw/yG2Ax8olJzLt18uGYNVdapYR9A5IJkLFVfevzRwLwP68JoZSEb6AvWYlL6
-         +vKg==
-X-Gm-Message-State: ABy/qLYZgwWzxA4USgFZUx1zCQCNec5sOxmGhs1SZCuxfNFy4lVOiLRT
-        6ye+uTyyoOFQdg46ceQJ+PumEg==
-X-Google-Smtp-Source: APBJJlF8Ng7++YijKQqg29ZCVWXJRwBhX6TmRTz/uJVTeJyWO9yu17EmSQrDts1Z+LLhsS5GxNFl2g==
-X-Received: by 2002:a05:6a20:1456:b0:12d:d17d:c811 with SMTP id a22-20020a056a20145600b0012dd17dc811mr13827670pzi.21.1689079358984;
-        Tue, 11 Jul 2023 05:42:38 -0700 (PDT)
-Received: from C02DV8HUMD6R.bytedance.net ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id d27-20020a63735b000000b0055c0508780asm1512222pgn.73.2023.07.11.05.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 05:42:38 -0700 (PDT)
-From:   Abel Wu <wuyun.abel@bytedance.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Ahern <dsahern@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Breno Leitao <leitao@debian.org>,
-        David Howells <dhowells@redhat.com>,
-        Jason Xing <kernelxing@tencent.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        linux-kernel@vger.kernel.org (open list),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        cgroups@vger.kernel.org (open list:CONTROL GROUP - MEMORY RESOURCE
-        CONTROLLER (MEMCG)),
-        linux-mm@kvack.org (open list:CONTROL GROUP - MEMORY RESOURCE
-        CONTROLLER (MEMCG))
-Subject: [PATCH RESEND net-next 2/2] net-memcg: Remove redundant tcpmem_pressure
-Date:   Tue, 11 Jul 2023 20:41:44 +0800
-Message-Id: <20230711124157.97169-2-wuyun.abel@bytedance.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230711124157.97169-1-wuyun.abel@bytedance.com>
-References: <20230711124157.97169-1-wuyun.abel@bytedance.com>
+        Tue, 11 Jul 2023 08:44:51 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E28135;
+        Tue, 11 Jul 2023 05:44:46 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BAsA9c018387;
+        Tue, 11 Jul 2023 14:44:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=KAQ5mo9Y9ZW1sEmuX5Y0KnUO9RyWdVSJDo4cz7iaBa8=;
+ b=vvBfCkcn60PsfTF26q+SqjWgHs5zrl7Fy2PR6OhmmyjlGIO8jWB7sGBwVy4aaizYI+8y
+ lmsqdDtNhc/g0A5Ex9cHVH8FugSYIHpGQ5ZLD2ZKyLT44syd/qTcvLFvH610UgFdbmyK
+ 1AE/v21SCa4BABpJpET45QpfP+XvBLugFoafh6lMNhPbWoie6E3CltxG9jLQON7LCvA/
+ SmNsgEsYwYll5slPkWhlqW5zm4c81sg1MTPj00KG70Zcdy3P7l8OxMp6WMzcWPLkB73n
+ vVHxceVtVqcQv/r96Rr5wtCkT2EAlJ8sZMQD1hlpcz1vMaIEN5S5bSjuNQhtmxUukne9 zg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rs311t8a9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 14:44:41 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BA798100053;
+        Tue, 11 Jul 2023 14:44:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3CE832248C6;
+        Tue, 11 Jul 2023 14:44:40 +0200 (CEST)
+Received: from [10.129.166.114] (10.129.166.114) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 11 Jul
+ 2023 14:44:40 +0200
+Message-ID: <a17d8f1b-31bb-bc49-6fa3-42c55509f7b9@foss.st.com>
+Date:   Tue, 11 Jul 2023 14:44:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] media: i2c: st_mipid02: cascade s_stream call to the
+ source subdev
+To:     Alain Volmat <alain.volmat@foss.st.com>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230711123211.794838-1-alain.volmat@foss.st.com>
+ <20230711123211.794838-2-alain.volmat@foss.st.com>
+Content-Language: en-US
+From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+In-Reply-To: <20230711123211.794838-2-alain.volmat@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.129.166.114]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As {socket,tcpmem}_pressure are only used in default/legacy mode
-respectively, use socket_pressure instead of tcpmem_pressure in all
-kinds of cgroup hierarchies.
+Hi Alain,
 
-Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
----
- include/linux/memcontrol.h | 3 +--
- mm/memcontrol.c            | 4 ++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Thank you for your patch. LGTM.
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 5860c7f316b9..341d397186ff 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -288,7 +288,6 @@ struct mem_cgroup {
- 
- 	/* Legacy tcp memory accounting */
- 	bool			tcpmem_active;
--	int			tcpmem_pressure;
- 
- #ifdef CONFIG_MEMCG_KMEM
- 	int kmemcg_id;
-@@ -1728,7 +1727,7 @@ void mem_cgroup_sk_free(struct sock *sk);
- static inline bool mem_cgroup_under_socket_pressure(struct mem_cgroup *memcg)
- {
- 	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
--		return !!memcg->tcpmem_pressure;
-+		return !!memcg->socket_pressure;
- 	do {
- 		if (time_before(jiffies, READ_ONCE(memcg->socket_pressure)))
- 			return true;
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index e8ca4bdcb03c..e9e26dbd65b5 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -7292,10 +7292,10 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
- 		struct page_counter *fail;
- 
- 		if (page_counter_try_charge(&memcg->tcpmem, nr_pages, &fail)) {
--			memcg->tcpmem_pressure = 0;
-+			memcg->socket_pressure = 0;
- 			return true;
- 		}
--		memcg->tcpmem_pressure = 1;
-+		memcg->socket_pressure = 1;
- 		if (gfp_mask & __GFP_NOFAIL) {
- 			page_counter_charge(&memcg->tcpmem, nr_pages);
- 			return true;
+Reviewed-By: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+
+On 7/11/23 14:32, Alain Volmat wrote:
+> Cascade the s_stream call to the source subdev whenever the bridge
+> streaming is enable / disabled.
+> 
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
+>  drivers/media/i2c/st-mipid02.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
+> index 906553a28676..703d2f06f552 100644
+> --- a/drivers/media/i2c/st-mipid02.c
+> +++ b/drivers/media/i2c/st-mipid02.c
+> @@ -547,6 +547,13 @@ static int mipid02_stream_disable(struct mipid02_dev *bridge)
+>  	struct i2c_client *client = bridge->i2c_client;
+>  	int ret;
+>  
+> +	if (!bridge->s_subdev)
+> +		goto error;
+> +
+> +	ret = v4l2_subdev_call(bridge->s_subdev, video, s_stream, 0);
+> +	if (ret)
+> +		goto error;
+> +
+>  	/* Disable all lanes */
+>  	ret = mipid02_write_reg(bridge, MIPID02_CLK_LANE_REG1, 0);
+>  	if (ret)
+> @@ -633,6 +640,10 @@ static int mipid02_stream_enable(struct mipid02_dev *bridge)
+>  	if (ret)
+>  		goto error;
+>  
+> +	ret = v4l2_subdev_call(bridge->s_subdev, video, s_stream, 1);
+> +	if (ret)
+> +		goto error;
+> +
+>  	return 0;
+>  
+>  error:
+
 -- 
-2.37.3
+Regards,
 
+Benjamin
