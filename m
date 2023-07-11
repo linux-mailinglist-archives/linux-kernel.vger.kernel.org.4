@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DAB74E761
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7679274E763
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjGKGc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S231319AbjGKGd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjGKGc5 (ORCPT
+        with ESMTP id S230233AbjGKGdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:32:57 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9E8B8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:32:56 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-783f17f0a00so1649880241.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689057175; x=1691649175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OoV7wHi0BKt48VDU7rudRkLkDSl0F6bArKQxs2XKWH8=;
-        b=t6X/P1fRgTle6kOoOp6BFmV2Tp4ee4Navqh9Fi4PptgcwbjmwqvhH3XKL7/XH1JxWW
-         krc6U5rFqYashM2zrHOOY6ogMLeV/wBdP1xgXFR4mJHp/nSWSJG5Y/EKDFZ+eg0Ieqfk
-         9mlqoZUxOMgl/bie9Kir9E016+4OYIaHAbiOKiVhuVP+79y8jxdFSdPQW/2HAebuT303
-         RZbyOfF9H8xyVUUdCmlq8dU8TC1FUF4CN0G/YpClxoEz3cGFzN4lo1f9rLT4mPLzb7ek
-         OGKo46Lg713VIqF0x+OzwYM1o6TRSMsRo/vKuQc4jF1EbD8to7bA6eLcr4Cpz5kyCMtu
-         jSEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689057175; x=1691649175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OoV7wHi0BKt48VDU7rudRkLkDSl0F6bArKQxs2XKWH8=;
-        b=G/JXPttXHYMDQcpfH4pzFhAaAAGzS3G1IF1E7rYK02vSYKW2IvtO2QbBgnk9L3BBXA
-         0RQk6bRNKmRwtX+/Xo1OrJ94VnrCQ4WnTD9CUek2gPIyRQQFrRBcki96lpnL91y1goso
-         G+JwmI22zYCdu8ct9xWt+uohRI8dQ5fXgdZFnEmkLN2Voew7sUxRlZEGeKRaQBdkAzTv
-         TDc2unw09HWN1LWBysAX1OJS5uOA+qpQCka3g6DpO6fviPMx7rOH+T1oDlZWrsCYUPb7
-         dFWdUxovAyn8g47q7Q1W4dvVmlu3wzh5HksUq+F+A6cIHYwFuojreh//lq5fwYZxwwxq
-         0kMw==
-X-Gm-Message-State: ABy/qLaWpzmldCtd5DHelKIpLQT5CXSR0rqIG6YLWFJ48vqsQWdV1FJU
-        3vyJpN+VWerFHOCUpZFkRLrGi9Usw8za5t+YT9woSQ==
-X-Google-Smtp-Source: APBJJlEqsJAqUnLJm2yvVaj5bm+mRbslSMN2Dmhfo0eGS5oS8hTszDthHaChlPLhBHw6B/4JE61l+mkeCA1SizfzCZg=
-X-Received: by 2002:a1f:6041:0:b0:471:b14a:fc48 with SMTP id
- u62-20020a1f6041000000b00471b14afc48mr7107050vkb.13.1689057174951; Mon, 10
- Jul 2023 23:32:54 -0700 (PDT)
+        Tue, 11 Jul 2023 02:33:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B0012F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:33:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7826132E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:33:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABDCC433C7;
+        Tue, 11 Jul 2023 06:33:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689057233;
+        bh=acU76Y6k1QN2XPJ4c01Abf7FhYW/VoN5gp3/z0pL7I4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BVKsrX0gYKSG/0sv5oXX9VH941YTcpvKPUXuxW/wrnzQXs4L0JtwHeS4ZPStVcq6b
+         zkjHWxf7uvzsp0FOys/nLc1hH3LANzfo9LktDNJM3QmRYPhU/hA1IyB8QLaPZJW1Zm
+         8eEqqTBn5MiZqZ1LnWGQUftZo3FfmXXyBMar1OxcVP71I0ZJqa4+q1ZUIX7QnUG4kB
+         o5DdIwZsd8xk66vtoqyQy/zn1aIN6W+yOLfD2lLAZ8zkmNx+gjpaAaJFlL5nY9KIgd
+         DQjPeFTxkA86B2nZebXGOe2woTcKoOuoNxF7M21zOZrZQ5KLe9mGPK3G1faImw9SWp
+         Bf/F4smByyWaA==
+Date:   Tue, 11 Jul 2023 09:33:48 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
+ in netlink_update_socket_mc()
+Message-ID: <20230711063348.GB41919@unreal>
+References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230710142227.965586663@linuxfoundation.org>
-In-Reply-To: <20230710142227.965586663@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Jul 2023 12:02:43 +0530
-Message-ID: <CA+G9fYtokiZUYJr9RZth_iEfhrJhYv5=53G7Gxds8jWhxRfEyQ@mail.gmail.com>
-Subject: Re: [PATCH 6.3 000/424] 6.3.13-rc4 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,172 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 at 19:53, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.3.13 release.
-> There are 424 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 12 Jul 2023 14:21:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.3.13-rc4.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.3.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
+> The bit operations take boolean parameter and return also boolean
+> (in test_bit()-like cases). Don't threat booleans as integers when
+> it's not needed.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  net/netlink/af_netlink.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> index 383631873748..d81e7a43944c 100644
+> --- a/net/netlink/af_netlink.c
+> +++ b/net/netlink/af_netlink.c
+> @@ -1623,9 +1623,10 @@ EXPORT_SYMBOL(netlink_set_err);
+>  /* must be called with netlink table grabbed */
+>  static void netlink_update_socket_mc(struct netlink_sock *nlk,
+>  				     unsigned int group,
+> -				     int is_new)
+> +				     bool new)
+>  {
+> -	int old, new = !!is_new, subscriptions;
+> +	int subscriptions;
+> +	bool old;
+>  
+>  	old = test_bit(group - 1, nlk->groups);
+>  	subscriptions = nlk->subscriptions - old + new;
 
+So what is the outcome of "int - bool + bool" in the line above?
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.3.13-rc4
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.3.y
-* git commit: 4882b85b0b1dc42e2ee6554fdb1eb956bd2c6015
-* git describe: v6.3.11-439-g4882b85b0b1d
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.1=
-1-439-g4882b85b0b1d
-
-## Test Regressions (compared to v6.3.11)
-
-## Metric Regressions (compared to v6.3.11)
-
-## Test Fixes (compared to v6.3.11)
-
-## Metric Fixes (compared to v6.3.11)
-
-## Test result summary
-total: 170788, pass: 146856, fail: 1976, skip: 21790, xfail: 166
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 144 passed, 1 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 40 passed, 1 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 4 total, 4 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-mincore
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> @@ -2152,7 +2153,7 @@ void __netlink_clear_multicast_users(struct sock *ksk, unsigned int group)
+>  	struct netlink_table *tbl = &nl_table[ksk->sk_protocol];
+>  
+>  	sk_for_each_bound(sk, &tbl->mc_list)
+> -		netlink_update_socket_mc(nlk_sk(sk), group, 0);
+> +		netlink_update_socket_mc(nlk_sk(sk), group, false);
+>  }
+>  
+>  struct nlmsghdr *
+> -- 
+> 2.40.0.1.gaa8946217a0b
+> 
+> 
