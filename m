@@ -2,103 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FBC74EC45
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3E074EC47
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjGKLHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S231573AbjGKLHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjGKLHU (ORCPT
+        with ESMTP id S231515AbjGKLH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:07:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B7E9B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:07:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 882342221F;
-        Tue, 11 Jul 2023 11:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689073638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y4gWIaFptjaLY0gO4SYc7/oxN1BeIn2RxSIV3l1pbVI=;
-        b=cQQ19ZWD+YHfE1cYUbh+IxopPTDFVhV2vnrzifZbWdZt8+yBaSsyAJaYuuBvuZ1WYTaovp
-        XKiASvwBg/VIykrenMYP/mqnAA7NZ2ot7tSFiOuxUbdqgK3ksGDx9YgbXJ5TnWIF0FHIVi
-        t3Br1c8D8D4jAn7PfT1+iySi+dMCHN0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B8AC1390F;
-        Tue, 11 Jul 2023 11:07:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xts8F+Y3rWTqEAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 11 Jul 2023 11:07:18 +0000
-Date:   Tue, 11 Jul 2023 13:07:17 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Arjan Van De Ven <arjan@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <jweiner@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC 1/2] mm: add framework for PCP high auto-tuning
-Message-ID: <ZK035Tl7lrCPk09r@dhcp22.suse.cz>
-References: <20230710065325.290366-1-ying.huang@intel.com>
- <20230710065325.290366-2-ying.huang@intel.com>
+        Tue, 11 Jul 2023 07:07:28 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B7CC0;
+        Tue, 11 Jul 2023 04:07:26 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D008120008;
+        Tue, 11 Jul 2023 11:07:22 +0000 (UTC)
+Message-ID: <95c4e875-02f1-6239-bb62-41b709d21541@ghiti.fr>
+Date:   Tue, 11 Jul 2023 13:07:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230710065325.290366-2-ying.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V2] riscv: kexec: Fixup synchronization problem between
+ init_mm and active_mm
+To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.com,
+        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
+        bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230710054029.2026124-1-guoren@kernel.org>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230710054029.2026124-1-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 10-07-23 14:53:24, Huang Ying wrote:
-> The page allocation performance requirements of different workloads
-> are usually different.  So, we often need to tune PCP (per-CPU
-> pageset) high to optimize the workload page allocation performance.
-> Now, we have a system wide sysctl knob (percpu_pagelist_high_fraction)
-> to tune PCP high by hand.  But, it's hard to find out the best value
-> by hand.  And one global configuration may not work best for the
-> different workloads that run on the same system.  One solution to
-> these issues is to tune PCP high of each CPU automatically.
-> 
-> This patch adds the framework for PCP high auto-tuning.  With it,
-> pcp->high will be changed automatically by tuning algorithm at
-> runtime.  Its default value (pcp->high_def) is the original PCP high
-> value calculated based on low watermark pages or
-> percpu_pagelist_high_fraction sysctl knob.  To avoid putting too many
-> pages in PCP, the original limit of percpu_pagelist_high_fraction
-> sysctl knob, MIN_PERCPU_PAGELIST_HIGH_FRACTION, is used to calculate
-> the max PCP high value (pcp->high_max).
+Hi Guo,
 
-It would have been very helpful to describe the basic entry points to
-the auto-tuning. AFAICS the central place of the tuning is tune_pcp_high
-which is called from the freeing path. Why?  Is this really a good place
-considering this is a hot path? What about the allocation path? Isn't
-that a good spot to watch for the allocation demand? 
 
-Also this framework seems to be enabled by default. Is this really
-desirable? What about workloads tuning the pcp batch size manually?
-Shouldn't they override any auto-tuning?
+On 10/07/2023 07:40, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The machine_kexec() uses set_memory_x to modify the direct mapping
+> attributes from RW to RWX. But set_memory_x only changes the init_mm's
+> attributes, not current->active_mm, so when kexec jumps into
+> control_buffer, the instruction page fault happens, and there is no
+> minor_pagefault for it, then panic.
 
--- 
-Michal Hocko
-SUSE Labs
+
+I think it needs more details like this:
+
+"The current implementation of set_memory_x does not split hugepages in 
+the linear mapping and then when a PGD mapping is used, the whole PGD is 
+marked as executable. But changing the permissions at the PGD level must 
+be propagated to all the page tables."
+
+
+>
+> The bug is found on an MMU_sv39 machine, and the direct mapping used a
+> 1GB PUD, the pgd entries. Here is the bug output:
+>
+>   kexec_core: Starting new kernel
+>   Will call new kernel at 00300000 from hart id 0
+>   FDT image at 747c7000
+>   Bye...
+>   Unable to handle kernel paging request at virtual address ffffffda23b0d000
+>   Oops [#1]
+>   Modules linked in:
+>   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+>   Hardware name: Sophgo Mango (DT)
+>   epc : 0xffffffda23b0d000
+>    ra : machine_kexec+0xa6/0xb0
+>   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+>    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+>    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+>    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+>    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+>    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+>    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+>    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+>    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+>    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+>    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+>   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
+>
+> The solution is to fix machine_kexec() to remap control code page outside
+> the linear mapping.
+
+
+"Given the current flaw in the set_memory_x implementation, the simplest 
+solution is to ..."
+
+
+>
+> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Alexandre Ghiti <alex@ghiti.fr>
+> ---
+> Changelog:
+> V2:
+>   - Use vm_map_ram instead of modifying set_memory_x
+>   - Correct Fixes tag
+> ---
+>   arch/riscv/include/asm/kexec.h    |  1 +
+>   arch/riscv/kernel/machine_kexec.c | 14 ++++++++++----
+>   2 files changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
+> index 2b56769cb530..17456e91476e 100644
+> --- a/arch/riscv/include/asm/kexec.h
+> +++ b/arch/riscv/include/asm/kexec.h
+> @@ -41,6 +41,7 @@ crash_setup_regs(struct pt_regs *newregs,
+>   struct kimage_arch {
+>   	void *fdt; /* For CONFIG_KEXEC_FILE */
+>   	unsigned long fdt_addr;
+> +	void *control_code_buffer;
+>   };
+>   
+>   extern const unsigned char riscv_kexec_relocate[];
+> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+> index 2d139b724bc8..eeb209775107 100644
+> --- a/arch/riscv/kernel/machine_kexec.c
+> +++ b/arch/riscv/kernel/machine_kexec.c
+> @@ -86,7 +86,14 @@ machine_kexec_prepare(struct kimage *image)
+>   
+>   	/* Copy the assembler code for relocation to the control page */
+>   	if (image->type != KEXEC_TYPE_CRASH) {
+> -		control_code_buffer = page_address(image->control_code_page);
+> +		control_code_buffer = vm_map_ram(&image->control_code_page,
+> +						 KEXEC_CONTROL_PAGE_SIZE/PAGE_SIZE,
+> +						 NUMA_NO_NODE);
+> +		if (control_code_buffer == NULL) {
+> +			pr_err("Failed to vm_map control page\n");
+> +			return -ENOMEM;
+> +		}
+> +
+>   		control_code_buffer_sz = page_size(image->control_code_page);
+>   
+>   		if (unlikely(riscv_kexec_relocate_size > control_code_buffer_sz)) {
+> @@ -97,8 +104,7 @@ machine_kexec_prepare(struct kimage *image)
+>   		memcpy(control_code_buffer, riscv_kexec_relocate,
+>   			riscv_kexec_relocate_size);
+>   
+> -		/* Mark the control page executable */
+> -		set_memory_x((unsigned long) control_code_buffer, 1);
+> +		internal->control_code_buffer = control_code_buffer;
+
+
+Where is this mapping marked as executable? I see that vm_map_ram() maps 
+the pages as PAGE_KERNEL, which does not set PAGE_EXEC.
+
+
+>   	}
+>   
+>   	return 0;
+> @@ -211,7 +217,7 @@ machine_kexec(struct kimage *image)
+>   	unsigned long this_cpu_id = __smp_processor_id();
+>   	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+>   	unsigned long fdt_addr = internal->fdt_addr;
+> -	void *control_code_buffer = page_address(image->control_code_page);
+> +	void *control_code_buffer = internal->control_code_buffer;
+>   	riscv_kexec_method kexec_method = NULL;
+>   
+>   #ifdef CONFIG_SMP
+
+
+Otherwise, you can add:
+
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Thanks,
+
+Alex
+
