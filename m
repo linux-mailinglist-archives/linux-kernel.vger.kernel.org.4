@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E594074E9C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFA674E9B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjGKJDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
+        id S231814AbjGKJCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjGKJDL (ORCPT
+        with ESMTP id S231817AbjGKJCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:03:11 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6194C93;
-        Tue, 11 Jul 2023 02:03:10 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 476B661E5FE03;
-        Tue, 11 Jul 2023 11:01:25 +0200 (CEST)
-Message-ID: <237f5cac-5696-93ea-1ab4-f5da4ea790a9@molgen.mpg.de>
-Date:   Tue, 11 Jul 2023 11:01:24 +0200
+        Tue, 11 Jul 2023 05:02:09 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36171724
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:01:58 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbd33a57ddso55925445e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689066117; x=1691658117;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3hvH8IFA66UBhNAUcAjxTeC2EGoXW4NGa//k1MlXqT0=;
+        b=SOqfnFBVQJFtudwrqaybdzD8Mh3tVRj8j4I33Ik48exr9ztGtl7Ql8Vf3L1JBN8Xlo
+         N1SsrphZPDaJOE8g5GotGZ2hXkvb1aPqkqjXgHiQJinX8PdPsMXEdpgZh5yUtG7Sm04L
+         TljJr/dZ1Th9AtCh60FMdN539bAnlZwyedkMsAvsEQkczEkan0Wu2uV6DOUCIEzszRNn
+         ZaIYE8eK9xWFCtJX0bnZlFdiPYcWAui92FOULCwgvzWnbpHqvw2WTxIg3g4c9L7S678y
+         G04QpVcMgfSF+FxhtzJTYdCTu+HlukxVOFudwm9ILyZKzZe7DZBqzMOGtTySJCYqEuJ7
+         s5JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689066117; x=1691658117;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3hvH8IFA66UBhNAUcAjxTeC2EGoXW4NGa//k1MlXqT0=;
+        b=CZbcic3CuQKfiK3TFwUqYU732wag9SgzNohio2KtBppkUdywjiBd0VmNP+kGiSimZ9
+         WwHhCISMHV8nesv6ySf/9UQ06u5GDQGsuExjSAcj7BE2KbtO0RJMUnHUbMVLon2NAiBf
+         QXBBV2ZCQNlWxQ3461f01bRDKgLLx292/f8++1qQzRrDLDtyuXS9voLkwmUCEg9sH1Ll
+         y7H/FYPMffNHc5ur98JoV/UMqijIff22N07itLg+T9JsYw2siiC+0F7saKDPTtLJPAr/
+         YdX4Y56SaF3KapGTF9PYl4wfMpHVyHpSS4boyXj88b0h0rYsNIAwb3XjLSC1AH+lmsy0
+         Ba9Q==
+X-Gm-Message-State: ABy/qLZ+pIG6bRrfT+tSFkVNosjzxsyKuh+/rrai0/F6j4UVGIuQLnRK
+        QWiFQtnrc42hzkXTfLF9jENxoQ==
+X-Google-Smtp-Source: APBJJlFQTm6HbSpXbJ386CGPmzFm581e/edg7ZOLI8tH/qSSi3hWytLKK1DBX8XjruF1n4yopcIUDQ==
+X-Received: by 2002:a05:600c:28c:b0:3fb:dff2:9f14 with SMTP id 12-20020a05600c028c00b003fbdff29f14mr13932119wmk.4.1689066117394;
+        Tue, 11 Jul 2023 02:01:57 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id 18-20020a05600c025200b003fbca942499sm12323236wmj.14.2023.07.11.02.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 02:01:56 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 10:01:55 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        kgdb-bugreport@lists.sourceforge.net
+Subject: Re: [PATCH printk v2 1/5] kdb: do not assume write() callback
+ available
+Message-ID: <20230711090155.GB26224@aspen.lan>
+References: <20230710134524.25232-1-john.ogness@linutronix.de>
+ <20230710134524.25232-2-john.ogness@linutronix.de>
+ <20230711082339.GA26224@aspen.lan>
+ <87lefmq0yk.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [Intel-wired-lan] [PATCH net-next v2 00/10] Remove unnecessary
- (void*) conversions
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Su Hui <suhui@nfschina.com>
-Cc:     andrew@lunn.ch, irusskikh@marvell.com,
-        kernel-janitors@vger.kernel.org, jesse.brandeburg@intel.com,
-        edumazet@google.com, iyappan@os.amperecomputing.com,
-        anthony.l.nguyen@intel.com, quan@os.amperecomputing.com,
-        qiang.zhao@nxp.com, linux@armlinux.org.uk, xeb@mail.ru,
-        intel-wired-lan@lists.osuosl.org, kuba@kernel.org,
-        pabeni@redhat.com, yisen.zhuang@huawei.com, wg@grandegger.com,
-        steve.glendinning@shawell.net, keyur@os.amperecomputing.com,
-        linux-can@vger.kernel.org, mkl@pengutronix.de,
-        salil.mehta@huawei.com, GR-Linux-NIC-Dev@marvell.com,
-        uttenthaler@ems-wuensche.com, rmody@marvell.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, yunchuan@nfschina.com,
-        linuxppc-dev@lists.ozlabs.org, skalluru@marvell.com,
-        hkallweit1@gmail.com
-References: <20230710063828.172593-1-suhui@nfschina.com>
- <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
-In-Reply-To: <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lefmq0yk.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc: Remove mostrows@earthlink.net (550 5.5.1 Recipient rejected - 
-ELNK001_403 -)]
+On Tue, Jul 11, 2023 at 11:04:11AM +0206, John Ogness wrote:
+> On 2023-07-11, Daniel Thompson <daniel.thompson@linaro.org> wrote:
+> > For v1 I shared an ack rather than queuing the patch. Although reading
+> > the thread back it is possible that was based on a misunderstanding
+> > (https://lore.kernel.org/lkml/20230309113020.GA78621@aspen.lan/ ).
+> >
+> > Anyhow, it looks like you have designed the new series to be picked
+> > individually?
+>
+> I understood that Petr will carry the patch. Yes, this series only
+> includes the non-atomic/non-threaded cleanups so that it will be easier
+> for Petr to send the full series off to linux-next.
 
-Am 11.07.23 um 10:53 schrieb Paul Menzel:
-> Dear Su,
-> 
-> 
-> Thank you for your patch.
-> 
-> Am 10.07.23 um 08:38 schrieb Su Hui:
->> From: wuych <yunchuan@nfschina.com>
-> 
-> Can you please write the full name correctly? Maybe Yun Chuan?
-> 
->      git config --global user.name "Yun Chuan"
->      git commit --amend --author="Yun Chuan <yunchuan@nfschina.com>"
-> 
-> I only got the cover letter by the way.
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
->> Changes in v2:
->>     move declarations to be reverse xmas tree.
->>     compile it in net and net-next branch.
->>     remove some error patches in v1.
->>
->> PATCH v1 link:
->> https://lore.kernel.org/all/20230628024121.1439149-1-yunchuan@nfschina.com/
->>
->> wuych (10):
->>    net: wan: Remove unnecessary (void*) conversions
->>    net: atlantic: Remove unnecessary (void*) conversions
->>    net: ppp: Remove unnecessary (void*) conversions
->>    net: hns3: remove unnecessary (void*) conversions
->>    net: hns: Remove unnecessary (void*) conversions
->>    ice: remove unnecessary (void*) conversions
->>    ethernet: smsc: remove unnecessary (void*) conversions
->>    net: mdio: Remove unnecessary (void*) conversions
->>    can: ems_pci: Remove unnecessary (void*) conversions
->>    net: bna: Remove unnecessary (void*) conversions
->>
->>   drivers/net/can/sja1000/ems_pci.c             |  6 +++---
->>   .../aquantia/atlantic/hw_atl2/hw_atl2.c       | 12 ++++++------
->>   .../atlantic/hw_atl2/hw_atl2_utils_fw.c       |  2 +-
->>   drivers/net/ethernet/brocade/bna/bnad.c       | 19 +++++++++----------
->>   .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  2 +-
->>   drivers/net/ethernet/hisilicon/hns_mdio.c     | 10 +++++-----
->>   drivers/net/ethernet/intel/ice/ice_main.c     |  4 ++--
->>   drivers/net/ethernet/smsc/smsc911x.c          |  4 ++--
->>   drivers/net/ethernet/smsc/smsc9420.c          |  4 ++--
->>   drivers/net/mdio/mdio-xgene.c                 |  4 ++--
->>   drivers/net/ppp/pppoe.c                       |  4 ++--
->>   drivers/net/ppp/pptp.c                        |  4 ++--
->>   drivers/net/wan/fsl_ucc_hdlc.c                |  6 +++---
->>   13 files changed, 40 insertions(+), 41 deletions(-)
+No worries, that's fine for me and from my point-of-view its still:
+Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+
+> For this patch there is nothing left to do. I should have removed the
+> kdb people/lists from the mailing. Sorry about that.
+
+To be honest I'd rather be in the loop than out (and with that title my
+mail filters would jump in it anyway).
+
+
+Daniel.
