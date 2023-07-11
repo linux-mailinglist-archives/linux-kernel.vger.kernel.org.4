@@ -2,90 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8FC74F2A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F1E74F2B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbjGKOuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S232839AbjGKOve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbjGKOuU (ORCPT
+        with ESMTP id S232262AbjGKOvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:50:20 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F81910EB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=LuincKCh71Ix7zuJVb18mEfg43fpXyye4wMaOH+zIZE=; b=jURIujookBu6Fi2EowTX/CJCwY
-        YJoMSIHyawJl3wBKSRSQAjDxgKQdHJupH+uMjPYirKhLbC65gm+0uiHrTEWHBqty1evga/u7V0kiB
-        Gme0bujXeKWGmfKgN7g0vMH52ajuRoG2S9HaVpULhlKvGRPcNWtHdzoa2z6aAUONbhD+ddLFRFRqZ
-        gFO65VoTbJBwLRbpphLLKQqHGc48Na89qGx+kqGwHVpAgDXS0Km4oK1cS5QwE7ynyW1TUFmr86THe
-        yxUj5dKwPg+Lvc6hSlm2IAa65qaqRXJQqL1QbrqssuTUr0zAOfO7ASp2pX/W7r74HIuPzWT52JaBe
-        t/9LonKw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJEgw-00FBci-3B;
-        Tue, 11 Jul 2023 14:50:15 +0000
-Message-ID: <23267466-dc1e-5f39-ce6c-45f0f61f281c@infradead.org>
-Date:   Tue, 11 Jul 2023 07:50:14 -0700
+        Tue, 11 Jul 2023 10:51:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966E81BB;
+        Tue, 11 Jul 2023 07:51:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B3E161515;
+        Tue, 11 Jul 2023 14:51:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1590DC433C8;
+        Tue, 11 Jul 2023 14:51:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689087090;
+        bh=LDPCX11v0c+dpXVZwPUW42yYc1K3TuG9tgPfht12BYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FYvB+2U2HPdqCadDwP3nP7YDwijECzeIGkL+aN6kAuknOwKCofyfz3p3NuMnl6tFd
+         2DV6Ijp6r4WF9J5iWOpBY++sjj3Wcz7+RD6ZuCCaTeD133A2Q6LTUuIcC0bgqh1AkV
+         euZTmpCYNZN2AKcGl+iLQe/UqOdcDFQmwjWJa17oab1qO4VDuV7Jhj3M2aBcVnAKnB
+         MBE9lnU4TGBGa1i4ljWAkSBPU+xakc0ni9Rv0J5/EhZ2zviHu9qh9LLeSFV3ISs8nG
+         FPq3CNPbR1Ci2wjS7bsxkHCvY9Ny/32HR7c4644KKT7CD9t9NLOBnbSCYZPQJ1xzVM
+         KcHtuqK3uypwA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 78D5B40516; Tue, 11 Jul 2023 11:51:27 -0300 (-03)
+Date:   Tue, 11 Jul 2023 11:51:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Sandipan Das <sandipan.das@amd.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, adrian.hunter@intel.com, ayush.jain3@amd.com,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v2] perf vendor events amd: Fix large metrics
+Message-ID: <ZK1sb4tPizTzWq7q@kernel.org>
+References: <20230706063440.54189-1-sandipan.das@amd.com>
+ <CAP-5=fVdVSL4H1qWLZMiU3H2-bOJ0RkFOfq4Jxz1qw0-8EoYFw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] workqueue: Fix cpu_intensive_thresh_us name in help text
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <5fc042e1d3c5d63b9367a1e1587dcf6b548087ff.1689071768.git.geert+renesas@glider.be>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <5fc042e1d3c5d63b9367a1e1587dcf6b548087ff.1689071768.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fVdVSL4H1qWLZMiU3H2-bOJ0RkFOfq4Jxz1qw0-8EoYFw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/11/23 03:38, Geert Uytterhoeven wrote:
-> There exists no parameter called "cpu_intensive_threshold_us".
-> The actual parameter name is "cpu_intensive_thresh_us".
+Em Thu, Jul 06, 2023 at 06:49:29AM -0700, Ian Rogers escreveu:
+> On Wed, Jul 5, 2023 at 11:34 PM Sandipan Das <sandipan.das@amd.com> wrote:
+> >
+> > There are cases where a metric requires more events than the number of
+> > available counters. E.g. AMD Zen, Zen 2 and Zen 3 processors have four
+> > data fabric counters but the "nps1_die_to_dram" metric has eight events.
+> > By default, the constituent events are placed in a group and since the
+> > events cannot be scheduled at the same time, the metric is not computed.
+> > The "all metrics" test also fails because of this.
+> >
+> > Use the NO_GROUP_EVENTS constraint for such metrics which anyway expect
+> > the user to run perf with "--metric-no-group".
+> >
+> > E.g.
+> >
+> >   $ sudo perf test -v 101
+> >
+> > Before:
+> >
+> >   101: perf all metrics test                                           :
+> >   --- start ---
+> >   test child forked, pid 37131
+> >   Testing branch_misprediction_ratio
+> >   Testing all_remote_links_outbound
+> >   Testing nps1_die_to_dram
+> >   Metric 'nps1_die_to_dram' not printed in:
+> >   Error:
+> >   Invalid event (dram_channel_data_controller_4) in per-thread mode, enable system wide with '-a'.
+> >   Testing macro_ops_dispatched
+> >   Testing all_l2_cache_accesses
+> >   Testing all_l2_cache_hits
+> >   Testing all_l2_cache_misses
+> >   Testing ic_fetch_miss_ratio
+> >   Testing l2_cache_accesses_from_l2_hwpf
+> >   Testing l2_cache_misses_from_l2_hwpf
+> >   Testing op_cache_fetch_miss_ratio
+> >   Testing l3_read_miss_latency
+> >   Testing l1_itlb_misses
+> >   test child finished with -1
+> >   ---- end ----
+> >   perf all metrics test: FAILED!
+> >
+> > After:
+> >
+> >   101: perf all metrics test                                           :
+> >   --- start ---
+> >   test child forked, pid 43766
+> >   Testing branch_misprediction_ratio
+> >   Testing all_remote_links_outbound
+> >   Testing nps1_die_to_dram
+> >   Testing macro_ops_dispatched
+> >   Testing all_l2_cache_accesses
+> >   Testing all_l2_cache_hits
+> >   Testing all_l2_cache_misses
+> >   Testing ic_fetch_miss_ratio
+> >   Testing l2_cache_accesses_from_l2_hwpf
+> >   Testing l2_cache_misses_from_l2_hwpf
+> >   Testing op_cache_fetch_miss_ratio
+> >   Testing l3_read_miss_latency
+> >   Testing l1_itlb_misses
+> >   test child finished with 0
+> >   ---- end ----
+> >   perf all metrics test: Ok
+> >
+> > Reported-by: Ayush Jain <ayush.jain3@amd.com>
+> > Suggested-by: Ian Rogers <irogers@google.com>
+> > Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 > 
-> Fixes: 6363845005202148 ("workqueue: Report work funcs that trigger automatic CPU_INTENSIVE mechanism")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Ian Rogers <irogers@google.com>
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks, applied.
 
-Thanks.
+- Arnaldo
 
-> ---
->  lib/Kconfig.debug | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+> Will there be a PMU driver fix so that the perf_event_open fails for
+> the group? That way the weak group would work.
 > 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index c8371502b4b2e678..5da00849edebafdd 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1200,7 +1200,7 @@ config WQ_CPU_INTENSIVE_REPORT
->  	help
->  	  Say Y here to enable reporting of concurrency-managed per-cpu work
->  	  items that hog CPUs for longer than
-> -	  workqueue.cpu_intensive_threshold_us. Workqueue automatically
-> +	  workqueue.cpu_intensive_thresh_us. Workqueue automatically
->  	  detects and excludes them from concurrency management to prevent
->  	  them from stalling other per-cpu work items. Occassional
->  	  triggering may not necessarily indicate a problem. Repeated
+> Thanks,
+> Ian
+> 
+> > ---
+> >
+> > Previous versions can be found at:
+> > v1: https://lore.kernel.org/all/20230614090710.680330-1-sandipan.das@amd.com/
+> >
+> > Changes in v2:
+> > - As suggested by Ian, use the NO_GROUP_EVENTS constraint instead of
+> >   retrying the test scenario with --metric-no-group.
+> > - Change the commit message accordingly.
+> >
+> >  tools/perf/pmu-events/arch/x86/amdzen1/recommended.json | 3 ++-
+> >  tools/perf/pmu-events/arch/x86/amdzen2/recommended.json | 3 ++-
+> >  tools/perf/pmu-events/arch/x86/amdzen3/recommended.json | 3 ++-
+> >  3 files changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json b/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json
+> > index bf5083c1c260..4d28177325a0 100644
+> > --- a/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json
+> > +++ b/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json
+> > @@ -169,8 +169,9 @@
+> >    },
+> >    {
+> >      "MetricName": "nps1_die_to_dram",
+> > -    "BriefDescription": "Approximate: Combined DRAM B/bytes of all channels on a NPS1 node (die) (may need --metric-no-group)",
+> > +    "BriefDescription": "Approximate: Combined DRAM B/bytes of all channels on a NPS1 node (die)",
+> >      "MetricExpr": "dram_channel_data_controller_0 + dram_channel_data_controller_1 + dram_channel_data_controller_2 + dram_channel_data_controller_3 + dram_channel_data_controller_4 + dram_channel_data_controller_5 + dram_channel_data_controller_6 + dram_channel_data_controller_7",
+> > +    "MetricConstraint": "NO_GROUP_EVENTS",
+> >      "MetricGroup": "data_fabric",
+> >      "PerPkg": "1",
+> >      "ScaleUnit": "6.1e-5MiB"
+> > diff --git a/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json b/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json
+> > index a71694a043ba..60e19456d4c8 100644
+> > --- a/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json
+> > +++ b/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json
+> > @@ -169,8 +169,9 @@
+> >    },
+> >    {
+> >      "MetricName": "nps1_die_to_dram",
+> > -    "BriefDescription": "Approximate: Combined DRAM B/bytes of all channels on a NPS1 node (die) (may need --metric-no-group)",
+> > +    "BriefDescription": "Approximate: Combined DRAM B/bytes of all channels on a NPS1 node (die)",
+> >      "MetricExpr": "dram_channel_data_controller_0 + dram_channel_data_controller_1 + dram_channel_data_controller_2 + dram_channel_data_controller_3 + dram_channel_data_controller_4 + dram_channel_data_controller_5 + dram_channel_data_controller_6 + dram_channel_data_controller_7",
+> > +    "MetricConstraint": "NO_GROUP_EVENTS",
+> >      "MetricGroup": "data_fabric",
+> >      "PerPkg": "1",
+> >      "ScaleUnit": "6.1e-5MiB"
+> > diff --git a/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json b/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json
+> > index 988cf68ae825..3e9e1781812e 100644
+> > --- a/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json
+> > +++ b/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json
+> > @@ -205,10 +205,11 @@
+> >    },
+> >    {
+> >      "MetricName": "nps1_die_to_dram",
+> > -    "BriefDescription": "Approximate: Combined DRAM B/bytes of all channels on a NPS1 node (die) (may need --metric-no-group)",
+> > +    "BriefDescription": "Approximate: Combined DRAM B/bytes of all channels on a NPS1 node (die)",
+> >      "MetricExpr": "dram_channel_data_controller_0 + dram_channel_data_controller_1 + dram_channel_data_controller_2 + dram_channel_data_controller_3 + dram_channel_data_controller_4 + dram_channel_data_controller_5 + dram_channel_data_controller_6 + dram_channel_data_controller_7",
+> >      "MetricGroup": "data_fabric",
+> >      "PerPkg": "1",
+> > +    "MetricConstraint": "NO_GROUP_EVENTS",
+> >      "ScaleUnit": "6.1e-5MiB"
+> >    }
+> >  ]
+> > --
+> > 2.34.1
+> >
 
 -- 
-~Randy
+
+- Arnaldo
