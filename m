@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB3D74F79E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E19974F7A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjGKR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 13:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S231706AbjGKR5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbjGKR5e (ORCPT
+        with ESMTP id S229843AbjGKR5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:57:34 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2DF10EF;
-        Tue, 11 Jul 2023 10:57:31 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbf7fbe722so68332425e9.3;
-        Tue, 11 Jul 2023 10:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689098250; x=1691690250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GIFkoFyB9SW01SkRjiPF7cZKlQPCkHMlbvXQ3wgbocE=;
-        b=PwU/eI3gWiMbv8rCV0Uqye+GFPG76AhQmwZ2FnpaQwJ9y7M4sV6dtyY3iqO4/x+lwu
-         ypWOQfiykvDHKN0jp9jwIoKnGcpvU+u03UdwFNoX1pyFBHTSKCg7RVmmpQz8OOe2Grdb
-         fjIpGPyF199rb/ohsmNUCNFbcUlVv61jzvHMSZHsGGqNCqn9BZfH8Bh5NOmaI3hbzdzl
-         6Phl2rkqt1NxmpHW4FoEt0Q+1O9jrYeR3jDS+S6wpoAr+oicD12M53elgOux1EMVOOnq
-         pWkxTr+/z8WB16hnrNjDu/o2FPu6cC++NZLpoQdKcmzih8yHr/iqaW0xkcEg4TvGEJ2o
-         Jeqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689098250; x=1691690250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GIFkoFyB9SW01SkRjiPF7cZKlQPCkHMlbvXQ3wgbocE=;
-        b=SkiQiOWOkvTkRmThybQpqlqNo7eza+hfglF3z/WfxhwxF7IbwdJ+7DVkLrj8HLxUt6
-         NyXsn+2rw2A6S5nzv16/LskxD1VEVHGFSDmUPQkHHC+aP+zlmIp7MS3LrRWkdk3p6duq
-         QU8uaV7K+Qp61yKcFnRjInpKtFw2G5LvPrUJXa1EZQt5YNN25AxWelQBphzETvodhUV8
-         FgQopCkd921YaoVH/5CmrPDsLTVa4/5aISzzZLWN2foLDBCTQNfqlh/ZJcQiArMTXKzM
-         f5ODnhIevBFEuGGF/47ncqIRZ21YGt1wgKTkzZFJ+dbQOCLhjYB5Sr5Yk/xtS6WvIZCF
-         +JOQ==
-X-Gm-Message-State: ABy/qLbXOQ/+X6AStsCgMFbo1VzCZ9H3ZajgI7/1/mmZNKYydRxWfnZf
-        humQ03oc1N1FeGoa5JSIawI=
-X-Google-Smtp-Source: APBJJlHAMpKa+EZaUNoo4wd5oPaMTWpVHMeokblQ7Fn42upmiGHcDty8+Z2Gl9UlIys9DMRnWeJPoQ==
-X-Received: by 2002:a1c:7714:0:b0:3fa:aeac:e96c with SMTP id t20-20020a1c7714000000b003faaeace96cmr14348052wmi.9.1689098250022;
-        Tue, 11 Jul 2023 10:57:30 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id o5-20020a1c7505000000b003fbd9e390e1sm13591421wmc.47.2023.07.11.10.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 10:57:29 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Yangtao Li <frank.li@vivo.com>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/21] thermal/drivers/sun8i: convert to use
- devm_request*_irq_probe()
-Date:   Tue, 11 Jul 2023 19:57:26 +0200
-Message-ID: <2687714.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230710095926.15614-2-frank.li@vivo.com>
-References: <20230710095926.15614-1-frank.li@vivo.com>
- <20230710095926.15614-2-frank.li@vivo.com>
+        Tue, 11 Jul 2023 13:57:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1473A170A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:57:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98DD4615AB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 17:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4920C433C8;
+        Tue, 11 Jul 2023 17:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689098264;
+        bh=zXrDCJKFB8vVgSszrJcLCbm92nu+l5wGbuT30UhMTg4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cYCZdiKV0Z6gq96y9jRLhGD1Qk1WV7w8KD+8x73yWOf/wsLNRk3FTLMgT/oFdDuIb
+         F15DWWUh2lBghW1DPM78x0xZAAhBQiRavfiUo8Ntkw8f8aWFGflU8VUjpYnEsQlpMN
+         oD3Bw5AvNGqfjUGEuybCBHTTlE+67XUUE1V/vXb+G3Sf0qf56ycF5q55UL1lZWJtb8
+         8y1jCk+jM8SzyO1bpAWNc/CGxUolr0PJGhrBt+Y1sI3Q5l039VDI4NevXSAqrzPjHc
+         bY+F6xxPrdUZ6QCR+B7rtt9Bi5A/CYD+TNhVfb9oyfDRTD0PTtIc/m/pwihDGxN4rm
+         vkaJbzAf3JzeQ==
+Date:   Tue, 11 Jul 2023 18:57:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        regressions@leemhuis.info, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 12/32] mm/vmalloc: vmalloc_to_page() use
+ pte_offset_kernel()
+Message-ID: <591b5253-47f0-440c-84b6-7786ff59667d@sirena.org.uk>
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+ <696386a-84f8-b33c-82e5-f865ed6eb39@google.com>
+ <42279f1f-7b82-40dc-8546-86171018729c@sirena.org.uk>
+ <901ae88d-ad0c-4e9d-b199-f1566cc62a00@lucifer.local>
+ <c2358f37-ebaa-44d1-b443-ff91bdedc00b@sirena.org.uk>
+ <977ddee4-35f0-fcd1-2fd-1c3057e7ea2a@google.com>
+ <fbb2b76c-bc5c-4d75-b8cd-37479de688d4@sirena.org.uk>
+ <b479b946-f052-eb75-295d-6fa7c2d8ce8e@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FgXD3/YC1RpaGmET"
+Content-Disposition: inline
+In-Reply-To: <b479b946-f052-eb75-295d-6fa7c2d8ce8e@google.com>
+X-Cookie: marriage, n.:
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,85 +97,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 10. julij 2023 ob 11:59:06 CEST je Yangtao Li napisal(a):
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
->=20
-> And tglx point out that:
->=20
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
->=20
->      519 messages total (there are probably more)
->=20
->      352 unique messages
->=20
->      323 unique messages after lower casing
->=20
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
->=20
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
->=20
->      The most useful one of all is: "could request wakeup irq: %d"
->=20
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
->=20
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
->=20
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
->=20
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
->=20
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+--FgXD3/YC1RpaGmET
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Jernej
-
->  drivers/thermal/sun8i_thermal.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On Tue, Jul 11, 2023 at 09:13:18AM -0700, Hugh Dickins wrote:
+> On Tue, 11 Jul 2023, Mark Brown wrote:
+> > On Mon, Jul 10, 2023 at 09:34:42PM -0700, Hugh Dickins wrote:
+> >=20
+> > > I suppose I should ask you to try reverting this 0d1c81edc61e alone
+> > > from 6.5-rc1: the consistency of your bisection implies that it will
+> > > "fix" the issues, and it is a commit which we could drop.  It makes
+> > > me a little nervous, applying userspace-pagetable validation to kernel
+> > > pagetables, so I don't want to drop it; and it would really be cargo-
+> > > culting to drop it without understanding.  But we could drop it.
+> >=20
+> > I did look at that, it doesn't revert cleanly by itself. ...
 >=20
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_ther=
-mal.c
-> index 195f3c5d0b38..a952804ff993 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -512,9 +512,9 @@ static int sun8i_ths_probe(struct platform_device *pd=
-ev)
->  	 * registered yet, we deffer the registration of the interrupt to
->  	 * the end.
->  	 */
-> -	ret =3D devm_request_threaded_irq(dev, irq, NULL,
-> -					sun8i_irq_thread,
-> -					IRQF_ONESHOT, "ths", tmdev);
-> +	ret =3D devm_request_threaded_irq_probe(dev, irq, NULL,
-> +					      sun8i_irq_thread,
-> +					      IRQF_ONESHOT, "ths", tmdev, NULL);
->  	if (ret)
->  		return ret;
-> =20
->=20
+> Right, that ptep_get() wrapper on the next line came in on top.
+> The patch to revert just 0d1c81edc61e is this:
 
+Still investigating but I'm pretty convinced this is nothing to do with
+your commit/series and is just common or garden memory corruption that
+just happens to get tickled by your changes.  Sorry for the noise.
 
+--FgXD3/YC1RpaGmET
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmStmAwACgkQJNaLcl1U
+h9BVSQf+KnL1hqqyERin3gYRRghB0Kz2nNsNK2qNHnl40av8BTvNeGpjPtp5ZV9G
+Z5kjhS0QSEvpCd6Y048HnE4qy1wx7B7sF74cvUJttSVUs9BAoWMqXHFF0zlVnRjr
+xI/KPWc+ZyqBppF7zKZaFdXv/PDgVCVkbAFcmMH5ZEgi2hmrQRnG91SN0r9xvX94
+oyg9EtrLhbdEQ3f1FqCU7XpFjJ4fI3qBQF4CHnuGzNo7q/2fJpdDDFw3T3xclcQJ
+eSeY4Kzlijv1OaSMq/To4Ky85/OhmROM96el2vPC5/B+TmhWy5McNhMFfFZBInXW
+tBICpj9RAybRnJsJ0agR/53kkvi2GA==
+=Dh39
+-----END PGP SIGNATURE-----
+
+--FgXD3/YC1RpaGmET--
