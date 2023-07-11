@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B7674EBF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DDB74EBF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjGKKtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S230253AbjGKKtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjGKKs6 (ORCPT
+        with ESMTP id S229903AbjGKKtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:48:58 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6344E7A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:48:56 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so8528624e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:48:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689072535; x=1691664535;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k3hVozTzTK3YpKr6keu2WXQ1FFPISWGGNo2UDTZRi9Q=;
-        b=nU/C676GyY21hAj+KRX6jRPDoXxBLxRpQ5tiHgw/ZMtBl1OUkqwjasHhY6RDZsyNVU
-         4GGS4GTyrQTnU41lUp8zeu51RqkNmwwfawQanRriSSMpKrj1OBR1wz242jRO4aitsGxm
-         //q83alAYwGQk7ekHZ9mvV7cYdsgwz7yUDg6jFW3ipXf/PZvu6CmDDbDWFiPM87pd0aH
-         7vaQgg6rdWHH/klRgqVJX/bDS8XioTllvSejePpOsUADiYqtqkiD/wibaFzHSOYExBhM
-         R5UOyVWk5IMkCml0yhWUgy5Uwro76it/Ax9LXJ8Ha40dqTjJYHwKRUckQmGb25/kn/xJ
-         5uxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689072535; x=1691664535;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3hVozTzTK3YpKr6keu2WXQ1FFPISWGGNo2UDTZRi9Q=;
-        b=T/4jmALta2TpWMd3BjOx5kssF5OoW6o5CxdYocGs0hMqKhw6/y1WKc+zN53RqWA4AZ
-         gNeHJ16YhqfinQKmWvgDvcULUp6+2RLDeEkth3DocFgEKD+UzcZr+KR6GV+DyUL4H/aQ
-         35vNVKixtjHF5KyI0o7+gp5oLWuUTjw3YykAXZfSdcMXLGvN7xCmi1ooMnopv7Zh98EP
-         Jismf4d3AC702NnGOzL5ezQQRzuKk04hQptga06s49hNyFmezcf2pkrEv9fVr1S3n/Bb
-         LNlSHA9aK6DpQ1bABh9yj6KfX7Tp5hncamPKoLzAnWd/bITf4qOmm6z9wBmKEhlQXQbb
-         8BlA==
-X-Gm-Message-State: ABy/qLZIKJXM9aMYb5z3HJXnA3Y5MzUd6uKysBfMqq4WbhGqkLDxwj0J
-        V8whp0Zio492DM6r6FzM3opaSg==
-X-Google-Smtp-Source: APBJJlHyMlnWO4airaDPNcfvE8dSS4VL8N9jsft2L9pAPDgY0hTH+0GFSvSQwhNkgEST/eS/lAkWyA==
-X-Received: by 2002:a05:6512:3da1:b0:4f8:7781:9870 with SMTP id k33-20020a0565123da100b004f877819870mr14270790lfv.60.1689072534973;
-        Tue, 11 Jul 2023 03:48:54 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id u12-20020a056512040c00b004fb57f28773sm264107lfk.285.2023.07.11.03.48.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 03:48:54 -0700 (PDT)
-Message-ID: <f234891f-c508-20de-6d6b-c7b37f6adb2b@linaro.org>
-Date:   Tue, 11 Jul 2023 13:48:53 +0300
+        Tue, 11 Jul 2023 06:49:40 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147B2E74;
+        Tue, 11 Jul 2023 03:49:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id AA47632004E7;
+        Tue, 11 Jul 2023 06:49:34 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 11 Jul 2023 06:49:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1689072574; x=1689158974; bh=Tbdbrnoaq3VxVhi4rC7fx0v2ZGZtfQdGNuw
+        gKYtKHTo=; b=agWsRevIiibR93q6r0c+IXVCCE2GFofcH8b+LFKIvEJQxDIGohI
+        ew79TpR46j3c1OaRo8L/nqv71uDu5s3MFVsqZvA6H1Oe8Ynk5AeDI2UBY2uWnOaV
+        5hQYFrDy0T2dBFZST8gP6VfnbMYR5LKR2z+vGSzpXI9BrAj9mWxYb9xvgoMSgOu4
+        Iz75YSmERt/9hD1i+V5xlc8bjOsocfiEgGngbuzRd8z3AeZmeERRizOXDX0n0b7j
+        ltHhVHfJtD83tePEry05rtSNZmdvlXibz05H/EFpl9JaKbo7zjFKeqftPSJkQZ0Z
+        CNqHrw2vcA4q/wrzfls4hg8S8kKd+SpPFuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1689072574; x=1689158974; bh=Tbdbrnoaq3VxVhi4rC7fx0v2ZGZtfQdGNuw
+        gKYtKHTo=; b=cxXF9LJlXkyaVZi+mtMmAwydoPuWxySPAfvvx/eZvo590ry9SKl
+        QSSTWkbiz8/Prtt7LuhOb+RgQfLbh1tAY/Yy1tqwEWE88VXijF+k+UiuCJYEo81f
+        wZ2HPU2TH0KPDuWJK01mthZhclaSrvRDzO2EQgwA0/zIrF/L7thoC+flOQXf8Rlu
+        WUCkAoaUDJ5/BpejIQ2J/NiFa3xY94ycHoVJhywh60WKWQV/7Cwn9DnGQOaee7Cy
+        0Nze6il6gpBPfe8PCrENA37GmWbZx1VgdKSiz6cbxrYoYuz8AQTD4maCbErEMeYO
+        XHdXd+P9AEJQJPaNE6rO9T8jl6O+pEFwlmQ==
+X-ME-Sender: <xms:vjOtZO34J2QyYumRzTTFRqT6U42OMSlE6rsbXiqaNzhsSDP3KuBBww>
+    <xme:vjOtZBEHHNdibQKf09VMI9kFJvmRjFMNvr2DO1Es5DV_O_jQMaKbqeft7wxUW_cri
+    CKGxZBIM7Tu3xWmgg>
+X-ME-Received: <xmr:vjOtZG6gVP7qxCerByNGuOiqtjpfp6nZ3b6x9BTN_6cbiWX1DRNZBi5KbXZhE1leJH3yMtA3fAKCBMY5U8btEplctviiAwWj5E_WHA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdefvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehlihgt
+    vgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnhephe
+    duuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvgesrh
+    ihhhhlrdhioh
+X-ME-Proxy: <xmx:vjOtZP2OduDpFtI4G3B3gQSzAIgQKgtem8Kz57y7A7HyFIcZlDdw4A>
+    <xmx:vjOtZBH0cYrrhew50MnUN0dMcj_FeCpsg6_dYX_3mgt3C0DvqjxtHw>
+    <xmx:vjOtZI_NXpIAxa6ErEeoz2S87RHq5Vc2SIO8vDF1jWPSl2WNRLlNQQ>
+    <xmx:vjOtZAe-RDjrs1tERWO_0JCD3mZA4lEssxaAZz1_uyBI1Ax4Iv2lAg>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Jul 2023 06:49:31 -0400 (EDT)
+Message-ID: <9c46542e-e756-839a-0bbb-9348cb00658a@ryhl.io>
+Date:   Tue, 11 Jul 2023 12:49:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 6/6] arm64: defconfig: Build NSS Clock Controller driver
- for IPQ9574
-Content-Language: en-GB
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        richardcochran@gmail.com, arnd@arndb.de, geert+renesas@glider.be,
-        neil.armstrong@linaro.org, nfraprado@collabora.com,
-        rafal@milecki.pl, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org
-Cc:     quic_saahtoma@quicinc.com
-References: <20230711093529.18355-1-quic_devipriy@quicinc.com>
- <20230711093529.18355-7-quic_devipriy@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230711093529.18355-7-quic_devipriy@quicinc.com>
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/9] workqueue: introduce `__INIT_WORK_WITH_KEY`
+Content-Language: en-US-large
+To:     rust-for-linux@vger.kernel.org
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Alice Ryhl <aliceryhl@google.com>, Tejun Heo <tj@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>
+References: <20230711093303.1433770-1-aliceryhl@google.com>
+ <20230711093303.1433770-4-aliceryhl@google.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230711093303.1433770-4-aliceryhl@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 12:35, Devi Priya wrote:
-> Build Qualcomm IPQ9574 NSSCC driver.
+On 7/11/23 11:32, Alice Ryhl wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
 > 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> A Rust helper (introduced in a later patch) needs to call
+> `__INIT_WORK` with a passed key, rather than define one in place.
+> 
+> In order to do that, this moves the initialization code from
+> the `__INIT_WORK` macro into a new `__INIT_WORK_WITH_KEY` macro
+> which takes the key as an extra parameter.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 > ---
->   arch/arm64/configs/defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 9ce0f1554f4d..d10083da2401 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1180,6 +1180,7 @@ CONFIG_IPQ_GCC_5332=y
->   CONFIG_IPQ_GCC_6018=y
->   CONFIG_IPQ_GCC_8074=y
->   CONFIG_IPQ_GCC_9574=y
-> +CONFIG_IPQ_NSSCC_9574=y
 
-Can it work if it is built as a module? This defconfig is used on all 
-variety of platforms, including even non-Qualcomm ones. We are trying to 
-limit the built-in drivers list to the crucial-only ones.
+Oops, I messed up the subject of this one. It was supposed to say
+[PATCH v3 3/9].
 
->   CONFIG_MSM_GCC_8916=y
->   CONFIG_MSM_GCC_8994=y
->   CONFIG_MSM_MMCC_8994=m
-
--- 
-With best wishes
-Dmitry
-
+Sorry about that.
