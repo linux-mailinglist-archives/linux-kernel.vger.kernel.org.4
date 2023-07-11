@@ -2,266 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D8074F879
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EC174F880
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjGKTk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 15:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S231497AbjGKTnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 15:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjGKTk5 (ORCPT
+        with ESMTP id S229512AbjGKTm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:40:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180451710;
-        Tue, 11 Jul 2023 12:40:56 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 812636606FD7;
-        Tue, 11 Jul 2023 20:40:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689104454;
-        bh=v1SrwcVineFJl1jsLjtHyPVeTd+WyeeTBI4V/EuWgSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EETAZLps9m8Qjw7clHz+zyP1vW4OI8A5JpysQ2+ZXjldy/E5QE5/EzwrmW43GGbp3
-         MzNCcvvKWFLCgU8deArVWqFrMX+AGd4gvtFUl1cvxbeu0okrMlUJ+MoYJnLZDqpctk
-         pGKPZ1BDdLfaO2BuXeWDsOQsVMCO03fTQJv/qSyztYizVTQ/m0lKAYVSiTQodKPQaX
-         jgKVa6q6nSFPRs0xYKBMTkRVeJlZPjJF/EHLY64lXk4WMt02bni5MeFYWFBbYW3CFu
-         3o3/Qhk3X/3HDoZkYKNMRez7j8n+DGufEECu83K8CjOGy7acsNsMoyMkKGOhaid+xC
-         kBo3avwPSCVew==
-Date:   Tue, 11 Jul 2023 15:40:48 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nathan Hebert <nhebert@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        Mingjia Zhang <mingjia.zhang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH 0/3] media: mediatek: vcodec: Add driver to support 10bit
-Message-ID: <807a44d6-232a-400a-bfe6-441f46f4223b@notapiano>
-References: <20230711125749.15555-1-yunfei.dong@mediatek.com>
- <af101e6831affc2e7152455ded1d779d38f1cb35.camel@collabora.com>
+        Tue, 11 Jul 2023 15:42:59 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CE19B;
+        Tue, 11 Jul 2023 12:42:56 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-47e4521e5baso2333340e0c.1;
+        Tue, 11 Jul 2023 12:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689104575; x=1691696575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dqxaqXmw1tu3QWdtuOVOPVnF0rhjoVkY2FJ4msGP/FE=;
+        b=WCXxjiX35VIFpR0nhf5xN1cKqwvEe0aVJDmIXwy5y293z47OG3Hx8HJlUrAFw/hjFN
+         pOr8FVTMdX0qwE6i7UKoJ1bVn+fqYysno/V/wnLgh3aFLVP7TKFvo/5IyX+FG3nEX16+
+         OBFdpHvbfxXtTQjgmUngDLNjEL3u4KZnbVOntpXvaVf3OpH19Zex/xseSnpZAwbay+yL
+         thSo1fZ6zUGGJ4TDftaPNHW5df4OCCTf/o+J5S5lRPYdBfJeRceJdqr0mU4KAD4eO7rr
+         GmwZbjcRsrAqUpmh5C2uVP4CA74PUA/Silw7HAREHHV7vWJTbneD0/BHcOgkaYlVISEv
+         STvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689104575; x=1691696575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dqxaqXmw1tu3QWdtuOVOPVnF0rhjoVkY2FJ4msGP/FE=;
+        b=U6pxITtXDdxn+yXvK3d09+hhk2qRqEnkGs7apWYfFHNhCrkBdqACk+jMEr3FQa/1a6
+         leSMFcrPT/5lr2IQXaAO7ppto69wi6c3pfn6lvZc04R8grfxHWlWdInZttKernkiCw/h
+         IsysD3ZxIw5iquwHfVeerUJRUhGcvykJgX5ZpYFC4PfqKlV2xavCCx1trqQjQT/ZyLDX
+         McRrolmkHbechzDIHnlAsU69k2hejGGn4+56vgt+2fzNW6iHOxfP/nz83RGOx+Y/3E5m
+         4UVj7b9ZKUAMOyppd6AuTDAMLFj8GObAheoLOk1Czg9pT5rSt05ySKjekwKobOUzZl1J
+         npmQ==
+X-Gm-Message-State: ABy/qLaQLiisTAb2t/uBgGjK+2b8PVTy5KD7LqbWBW9nKsYvJLovFayF
+        5S83nNnhskKSaWq38wY2t8PjeO9QKFyp56SmmQo=
+X-Google-Smtp-Source: APBJJlFESZwse+XBzfdEG7gPgKtm+dr9PqBvDRHkx0QyDpPtucriutBokoi6nHj9mpK7MC+ZT1zx1fvPJQ5h6dotD6o=
+X-Received: by 2002:a1f:5842:0:b0:476:3544:773 with SMTP id
+ m63-20020a1f5842000000b0047635440773mr8354569vkb.11.1689104575315; Tue, 11
+ Jul 2023 12:42:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <af101e6831affc2e7152455ded1d779d38f1cb35.camel@collabora.com>
+References: <20230711125241.1587820-1-usama.anjum@collabora.com> <20230711125241.1587820-3-usama.anjum@collabora.com>
+In-Reply-To: <20230711125241.1587820-3-usama.anjum@collabora.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Tue, 11 Jul 2023 12:42:44 -0700
+Message-ID: <CANaxB-zvYpKw-aeF8nd_spARdkV29H7ZJDDhusnmqOPZX1xXtw@mail.gmail.com>
+Subject: Re: [PATCH v24 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:15:33PM -0400, Nicolas Dufresne wrote:
-[..]
-> > Reference series:
-> > [1]: this series depends on v6 which is send by Yunfei Dong.
-> >      message-id: 20230704131349.8354-1-yunfei.dong@mediatek.com
-> 
-> Its seems like 6.5.0-rc1 with the depedency and this patchset does not boot on
-> MT8195 Chromebooks. Which paltform has this been validated on ?
+On Tue, Jul 11, 2023 at 5:53=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 
-Are you sure this was caused by these patches?
+<snip>
 
-I've recently noticed two issues that cause MT8195 Tomato to softlock the CPU
-similar to your trace below.
+> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+> +                                int depth, struct mm_walk *walk)
+> +{
+> +       unsigned long n_pages =3D (end - addr)/PAGE_SIZE;
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       int ret =3D 0;
+> +
+> +       if (!vma)
+> +               return 0;
+> +
+> +       if (IS_PM_SCAN_GET(p->flags)) {
+> +               if (n_pages > p->max_pages - p->found_pages)
+> +                       n_pages =3D p->max_pages - p->found_pages;
+> +
+> +               ret =3D pagemap_scan_output(PM_SCAN_FLAGS(false, false, f=
+alse,
+> +                                         false, false), p, addr, n_pages=
+);
 
-One of them is caused by having CONFIG_ARM_DSU_PMU=m. Note that it is present in
-the arm64 defconfig. To workaround, the config needs to be disabled.
+Why do we report holes unconditionally?
 
-The other is caused by commit 46600ab142f8 ("regulator: Set
-PROBE_PREFER_ASYNCHRONOUS for drivers between 5.10 and 5.15"). The whole machine
-gets really slow, including the serial. This issue only happens sometimes. To
-workaround that commit can be reverted.
-
-I intend to look into those issues and provide proper fixes in the following
-days.
+> +       }
+> +
+> +       if (IS_PM_SCAN_WP(p->flags) &&
+> +           uffd_wp_range(vma, addr, end - addr, true) < 0)
+> +               ret =3D -EINVAL;
+> +
+> +       return ret;
+> +}
 
 Thanks,
-Nícolas
-
-> 
-> 
-> For the record:
-> 
-> 
-> [   13.286252] platform 1c015000.dp-intf: deferred probe pending
-> [   13.292007] platform 1c113000.dp-intf: deferred probe pending
-> [   28.523484] rcu: INFO: rcu_preempt self-detected stall on CPU
-> [   28.529231] rcu: 	5-....: (5250 ticks this GP)
-> idle=51c4/1/0x4000000000000000 softirq=1434/1447 fqs=2471
-> [   28.538706] rcu: 	(t=5254 jiffies g=-119 q=13320 ncpus=8)
-> [   28.544095] Task dump for CPU 0:
-> [   28.547313] task:cpuhp/0         state:R  running task     stack:0     pid:17
-> ppid:2      flags:0x0000000a
-> [   28.557221] Call trace:
-> [   28.559658]  __switch_to+0xe4/0x15c
-> [   28.563147]  0xffff776000196740
-> [   28.566282] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
-> [   28.572453] Hardware name: Acer Tomato (rev3 - 4) board (DT)
-> [   28.578101] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   28.585053] pc : smp_call_function_single+0x1a4/0x1bc
-> [   28.590098] lr : smp_call_function_single+0x178/0x1bc
-> [   28.595140] sp : ffff80008008b9c0
-> [   28.598444] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff77600515c858
-> [   28.605572] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000000000000
-> [   28.612699] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff80008008bbb0
-> [   28.619825] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000000000000
-> [   28.626952] x17: ffffa66484655000 x16: ffff800080028000 x15: 000000079c8b8c8b
-> [   28.634078] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000000000000
-> [   28.641204] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000000000000
-> [   28.648331] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0fcb8de2af4
-> [   28.655458] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff80008008ba08
-> [   28.662585] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000000000000
-> [   28.669711] Call trace:
-> [   28.672148]  smp_call_function_single+0x1a4/0x1bc
-> [   28.676843]  perf_cgroup_attach+0x74/0xd8
-> [   28.680847]  cgroup_migrate_execute+0x374/0x444
-> [   28.685368]  cgroup_migrate+0x74/0x8c
-> [   28.689021]  cgroup_attach_task+0x114/0x120
-> [   28.693195]  __cgroup_procs_write+0x108/0x230
-> [   28.697543]  cgroup_procs_write+0x1c/0x34
-> [   28.701543]  cgroup_file_write+0xa0/0x1a4
-> [   28.705545]  kernfs_fop_write_iter+0x118/0x1a8
-> [   28.709983]  vfs_write+0x2d0/0x39c
-> [   28.713376]  ksys_write+0x68/0xf4
-> [   28.716682]  __arm64_sys_write+0x1c/0x28
-> [   28.720594]  invoke_syscall+0x48/0x114
-> [   28.724337]  el0_svc_common.constprop.0+0x44/0xe4
-> [   28.729034]  do_el0_svc+0x38/0xa4
-> [   28.732341]  el0_svc+0x2c/0x84
-> [   28.735386]  el0t_64_sync_handler+0xc0/0xc4
-> [   28.739561]  el0t_64_sync+0x190/0x194
-> [   33.759553] vproc2: disabling
-> [   33.762551] vproc1: disabling
-> [   33.765548] vaud18: disabling
-> [   33.768760] va09: disabling
-> [   33.771599] vsram_md: disabling
-> [   91.755483] rcu: INFO: rcu_preempt self-detected stall on CPU
-> [   91.761220] rcu: 	5-....: (21005 ticks this GP)
-> idle=51c4/1/0x4000000000000000 softirq=1434/1447 fqs=8569
-> [   91.770778] rcu: 	(t=21062 jiffies g=-119 q=13628 ncpus=8)
-> [   91.776253] Task dump for CPU 0:
-> [   91.779471] task:cpuhp/0         state:R  running task     stack:0     pid:17
-> ppid:2      flags:0x0000000a
-> [   91.789376] Call trace:
-> [   91.791812]  __switch_to+0xe4/0x15c
-> [   91.795294]  0xffff776000196740
-> [   91.798426] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
-> [   91.804597] Hardware name: Acer Tomato (rev3 - 4) board (DT)
-> [   91.810244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   91.817195] pc : smp_call_function_single+0x1a4/0x1bc
-> [   91.822237] lr : smp_call_function_single+0x178/0x1bc
-> [   91.827278] sp : ffff80008008b9c0
-> [   91.830582] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff77600515c858
-> [   91.837709] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000000000000
-> [   91.844835] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff80008008bbb0
-> [   91.851962] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000000000000
-> [   91.859089] x17: ffffa66484655000 x16: ffff800080028000 x15: 000000079c8b8c8b
-> [   91.866215] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000000000000
-> [   91.873342] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000000000000
-> [   91.880468] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0fcb8de2af4
-> [   91.887595] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff80008008ba08
-> [   91.894721] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000000000000
-> [   91.901848] Call trace:
-> [   91.904284]  smp_call_function_single+0x1a4/0x1bc
-> [   91.908979]  perf_cgroup_attach+0x74/0xd8
-> [   91.912981]  cgroup_migrate_execute+0x374/0x444
-> [   91.917502]  cgroup_migrate+0x74/0x8c
-> [   91.921155]  cgroup_attach_task+0x114/0x120
-> [   91.925329]  __cgroup_procs_write+0x108/0x230
-> [   91.929677]  cgroup_procs_write+0x1c/0x34
-> [   91.933677]  cgroup_file_write+0xa0/0x1a4
-> [   91.937679]  kernfs_fop_write_iter+0x118/0x1a8
-> [   91.942117]  vfs_write+0x2d0/0x39c
-> [   91.945509]  ksys_write+0x68/0xf4
-> [   91.948814]  __arm64_sys_write+0x1c/0x28
-> [   91.952726]  invoke_syscall+0x48/0x114
-> [   91.956467]  el0_svc_common.constprop.0+0x44/0xe4
-> [   91.961164]  do_el0_svc+0x38/0xa4
-> [   91.964472]  el0_svc+0x2c/0x84
-> [   91.967517]  el0t_64_sync_handler+0xc0/0xc4
-> [   91.971691]  el0t_64_sync+0x190/0x194
-> [  154.987483] rcu: INFO: rcu_preempt self-detected stall on CPU
-> [  154.993218] rcu: 	5-....: (36760 ticks this GP)
-> idle=51c4/1/0x4000000000000000 softirq=1434/1447 fqs=14547
-> [  155.002862] rcu: 	(t=36870 jiffies g=-119 q=13628 ncpus=8)
-> [  155.008337] Task dump for CPU 0:
-> [  155.011554] task:cpuhp/0         state:R  running task     stack:0     pid:17
-> ppid:2      flags:0x0000000a
-> [  155.021458] Call trace:
-> [  155.023894]  __switch_to+0xe4/0x15c
-> [  155.027376]  0xffff776000196740
-> [  155.030507] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
-> [  155.036676] Hardware name: Acer Tomato (rev3 - 4) board (DT)
-> [  155.042323] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [  155.049274] pc : smp_call_function_single+0x1a4/0x1bc
-> [  155.054316] lr : smp_call_function_single+0x178/0x1bc
-> [  155.059358] sp : ffff80008008b9c0
-> [  155.062662] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff77600515c858
-> [  155.069788] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000000000000
-> [  155.076914] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff80008008bbb0
-> [  155.084041] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000000000000
-> [  155.091168] x17: ffffa66484655000 x16: ffff800080028000 x15: 000000079c8b8c8b
-> [  155.098294] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000000000000
-> [  155.105421] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000000000000
-> [  155.112548] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0fcb8de2af4
-> [  155.119675] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff80008008ba08
-> [  155.126801] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000000000000
-> [  155.133928] Call trace:
-> [  155.136363]  smp_call_function_single+0x1a4/0x1bc
-> [  155.141059]  perf_cgroup_attach+0x74/0xd8
-> [  155.145060]  cgroup_migrate_execute+0x374/0x444
-> [  155.149581]  cgroup_migrate+0x74/0x8c
-> [  155.153234]  cgroup_attach_task+0x114/0x120
-> [  155.157408]  __cgroup_procs_write+0x108/0x230
-> [  155.161755]  cgroup_procs_write+0x1c/0x34
-> [  155.165756]  cgroup_file_write+0xa0/0x1a4
-> [  155.169757]  kernfs_fop_write_iter+0x118/0x1a8
-> [  155.174195]  vfs_write+0x2d0/0x39c
-> [  155.177587]  ksys_write+0x68/0xf4
-> [  155.180893]  __arm64_sys_write+0x1c/0x28
-> [  155.184805]  invoke_syscall+0x48/0x114
-> [  155.188547]  el0_svc_common.constprop.0+0x44/0xe4
-> [  155.193243]  do_el0_svc+0x38/0xa4
-> [  155.196551]  el0_svc+0x2c/0x84
-> [  155.199595]  el0t_64_sync_handler+0xc0/0xc4
-> [  155.203769]  el0t_64_sync+0x190/0x194
-> 
-> 
-> > 
-> > Mingjia Zhang (3):
-> >   media: mediatek: vcodec: Add capture format to support 10bit tile mode
-> >   media: mediatek: vcodec: Add capture format to support 10bit raster
-> >     mode
-> >   media: mediatek: vcodec: Add driver to support 10bit
-> > 
-> >  .../media/v4l/pixfmt-reserved.rst             |  15 ++
-> >  .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  22 ++-
-> >  .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   5 +
-> >  .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 140 +++++++++++++++++-
-> >  drivers/media/v4l2-core/v4l2-common.c         |   4 +
-> >  drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
-> >  include/uapi/linux/videodev2.h                |   2 +
-> >  7 files changed, 186 insertions(+), 4 deletions(-)
-> > 
-> 
+Andrei
