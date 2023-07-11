@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0A674F21E
+	by mail.lfdr.de (Postfix) with ESMTP id 8303A74F21F
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233745AbjGKOYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S233775AbjGKOYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbjGKOXP (ORCPT
+        with ESMTP id S233924AbjGKOXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:23:15 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AB21735
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:43 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f954d7309fso7170303e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:43 -0700 (PDT)
+        Tue, 11 Jul 2023 10:23:20 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982131BDA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:51 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb9fd28025so8646779e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689085351; x=1691677351;
+        d=linaro.org; s=google; t=1689085360; x=1691677360;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yw4DGVBDDBg6SI5/SRWJ+maUbLcJsf6ZmIK2Iyv5wTM=;
-        b=ZI9AZbQ84tq8plr5L4sNiYUXlokNI8GUuMEE4Dzle71FWUjExoFyFMLZqZGQmVYTLO
-         CbcJDs9jmvi+tQwPF0F3fi9ko4Qdd/UnkABnpGufcnjnTsYW2a2k9jWUoM3zuZqY2JHI
-         XZNLZUhKfvOzSSVH8Tz23kYGgt/OXQP6EBsUc8wR5d1BZ5pO5qELIXc9LxxQX5KMwHeZ
-         1RIK3rODYo8cwqNsfyInT19Fzew4rJQ3P6CbFGl/lKHxafYPWx3iVTeZJ00TsEjIVQeY
-         pAEK8l30D31p/+kR8eQpIii8CajV4OtEuuTOt1/dQUBvgcY3EA/HehLPdK/Way7aVphb
-         kLWA==
+        bh=I8/R65mfXAHzbxX/Yt/oiagP1RewF0H/jSZoqHRKyvw=;
+        b=dCOHcZgRV7aQaBQJZEZkD8dFT9zvxOL0hkhcvBNSBUON9Vq4i7QBWmjlgIK0rUhj5G
+         X8bilbLBLi4EO2GlwctmtGL0ZCFgHrPHSaGK5pf5J5yip06zF6HeHRI57NNcaOYcOh66
+         ZquLBr6OKIgvq5KwVU/MeHe1sfkNZ+qprXu0K3+H5E0/8ghjptf9HJb3ZHEuxzdE9Ypo
+         wgQnTFka3NbUsTQOR7Q4yOkpIbswbJRDqOWDQQV7yvsB5kG/P2BLIRxF9WSzupo9q9OK
+         yAl0MFVP+1ity570RkO9aeo3VDFQnA2p4hEkl0EA1DJNAVSX/NSZFHFM1jDEYHgbl1rm
+         Wr9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689085351; x=1691677351;
+        d=1e100.net; s=20221208; t=1689085360; x=1691677360;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Yw4DGVBDDBg6SI5/SRWJ+maUbLcJsf6ZmIK2Iyv5wTM=;
-        b=BKb36LaE4uy5nDDjEkg3SKb/BltAOrRfKNTu5pgmvz+R/qP2VITc2YJVr5auWjLP/u
-         UxmyoDDrbQxsJJl8hRoHiivt/VPrIaH3u14BexZHwjzPzxpJFNI336cTaNGY8ZnxpGbR
-         a4Lpoyx6jl7Fg3sss/NKDg7i9DqTTaC7gxvUqkeMwpA0AESx95lrcfPX0mQqlvpyRH91
-         kXUfspbEGEOx8RPrElBSGWW90wDlDq/s8WGytb2XZEEX8gxGCz9YO1bFsYd8kfAB+0Et
-         GlitajNa1IzWXas7+9/8V05OCy4j4hWqCluz5t8lVzDyL5thuSyKR3xXT7l+2suVCjU4
-         3+cg==
-X-Gm-Message-State: ABy/qLZV1ZNXh3BX3Ui2zsjyxJt5RkDLaRwuSZiM3+AiBZCIsNcPRslh
-        WrSaPKbQ58Ur8M3uY1g5W7nRDeNXNL0OFSLQERs=
-X-Google-Smtp-Source: APBJJlH4J11J970wSN9S0sKheHb05BTteL7vkxcGg2YmvkmjV9l5Uge24eM7h7Q1GSizY9hZgpG9Qw==
-X-Received: by 2002:a05:6512:10c3:b0:4f8:6253:540 with SMTP id k3-20020a05651210c300b004f862530540mr6550119lfg.19.1689085351135;
-        Tue, 11 Jul 2023 07:22:31 -0700 (PDT)
+        bh=I8/R65mfXAHzbxX/Yt/oiagP1RewF0H/jSZoqHRKyvw=;
+        b=HjI2QPfiz8ma9CJyLBSeqDR2qUbtkF4jxuSxfvUSwHd73bhPFlBrqy+zfx8zicHbrk
+         Hnk9lmEPSdSJHhIVTynRR24IJPYXYfObqwYvJOnKR0sjoSVHlCCyRxmC8K9sg4/DSnKd
+         x12k94/0eARFSdpA2l12YIiS4WcOSijfsbQ1GayoCYYoItK5vG2/QpwHfduBm8YqRXmf
+         /Hmi0dsTtzFLvpJSbwboZjBBmEHXmSIWEoPylWSKT1Fc/FC4vSJIkY9FJKKFYiLwcHnn
+         fTnodNV/bd1nd1CRDg1UnrXNIBMn7/ozEuuHiTP44uSjcxnNcom5vi8FALTp7nMDeH0c
+         TZ6w==
+X-Gm-Message-State: ABy/qLa4jpyCOGpKxba5GdJGZjZOBwqfu29Lgy1csB2Y3U2hMlnBjSyY
+        eY8p4uhtS+PikOrC2Odt6wy9rg==
+X-Google-Smtp-Source: APBJJlE/tivtaqrrtnHL9NcH9jALxO9JvYPsHziSzSo82znvSr4dpsGom1ZqDwK6Qbzn+voN8gwwvw==
+X-Received: by 2002:a05:6512:2017:b0:4fb:89e2:fc27 with SMTP id a23-20020a056512201700b004fb89e2fc27mr12392141lfb.54.1689085359868;
+        Tue, 11 Jul 2023 07:22:39 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id u12-20020a056512094c00b004fba5fc7ed8sm334009lft.278.2023.07.11.07.22.30
+        by smtp.gmail.com with ESMTPSA id eo29-20020a056512481d00b004f85885cff1sm337106lfb.134.2023.07.11.07.22.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 07:22:30 -0700 (PDT)
+        Tue, 11 Jul 2023 07:22:39 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michal Simek <michal.simek@amd.com>
-Subject: [PATCH v2 16/18] soc: xilinx: Move power-domain driver to the genpd dir
-Date:   Tue, 11 Jul 2023 16:22:28 +0200
-Message-Id: <20230711142228.751817-1-ulf.hansson@linaro.org>
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2 17/18] ARM: ux500: Convert power-domain code into a regular platform driver
+Date:   Tue, 11 Jul 2023 16:22:37 +0200
+Message-Id: <20230711142237.751837-1-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,51 +70,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To simplify with maintenance let's move the xilinx power-domain driver to
-the new genpd directory. Going forward, patches are intended to be managed
-through a separate git tree, according to MAINTAINERS.
+To make the code more standalone and moveable, let's convert it into a
+platform driver.
 
-Cc: Michal Simek <michal.simek@amd.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/genpd/Makefile                                          | 1 +
- drivers/genpd/xilinx/Makefile                                   | 2 ++
- .../zynqmp_pm_domains.c => genpd/xilinx/zynqmp-pm-domains.c}    | 0
- drivers/soc/xilinx/Makefile                                     | 1 -
- 4 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 drivers/genpd/xilinx/Makefile
- rename drivers/{soc/xilinx/zynqmp_pm_domains.c => genpd/xilinx/zynqmp-pm-domains.c} (100%)
+ arch/arm/mach-ux500/cpu-db8500.c |  5 -----
+ arch/arm/mach-ux500/pm_domains.c | 25 ++++++++++++++++++++-----
+ arch/arm/mach-ux500/pm_domains.h | 17 -----------------
+ 3 files changed, 20 insertions(+), 27 deletions(-)
+ delete mode 100644 arch/arm/mach-ux500/pm_domains.h
 
-diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index 193892189f0d..efd955f586e9 100644
---- a/drivers/genpd/Makefile
-+++ b/drivers/genpd/Makefile
-@@ -12,3 +12,4 @@ obj-y					+= starfive/
- obj-y					+= sunxi/
- obj-y					+= tegra/
- obj-y					+= ti/
-+obj-y					+= xilinx/
-diff --git a/drivers/genpd/xilinx/Makefile b/drivers/genpd/xilinx/Makefile
-new file mode 100644
-index 000000000000..a706ab699cfa
---- /dev/null
-+++ b/drivers/genpd/xilinx/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_ZYNQMP_PM_DOMAINS)		+= zynqmp-pm-domains.o
-diff --git a/drivers/soc/xilinx/zynqmp_pm_domains.c b/drivers/genpd/xilinx/zynqmp-pm-domains.c
-similarity index 100%
-rename from drivers/soc/xilinx/zynqmp_pm_domains.c
-rename to drivers/genpd/xilinx/zynqmp-pm-domains.c
-diff --git a/drivers/soc/xilinx/Makefile b/drivers/soc/xilinx/Makefile
-index 41e585bc9c67..33d94395fd87 100644
---- a/drivers/soc/xilinx/Makefile
-+++ b/drivers/soc/xilinx/Makefile
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_ZYNQMP_POWER)	+= zynqmp_power.o
--obj-$(CONFIG_ZYNQMP_PM_DOMAINS) += zynqmp_pm_domains.o
- obj-$(CONFIG_XLNX_EVENT_MANAGER)	+= xlnx_event_manager.o
+diff --git a/arch/arm/mach-ux500/cpu-db8500.c b/arch/arm/mach-ux500/cpu-db8500.c
+index 7cc0dd8ed991..b1a70f203372 100644
+--- a/arch/arm/mach-ux500/cpu-db8500.c
++++ b/arch/arm/mach-ux500/cpu-db8500.c
+@@ -26,8 +26,6 @@
+ #include <asm/mach/map.h>
+ #include <asm/mach/arch.h>
+ 
+-#include "pm_domains.h"
+-
+ static int __init ux500_l2x0_unlock(void)
+ {
+ 	int i;
+@@ -115,9 +113,6 @@ static const struct of_device_id u8500_local_bus_nodes[] = {
+ 
+ static void __init u8500_init_machine(void)
+ {
+-	/* Initialize ux500 power domains */
+-	ux500_pm_domains_init();
+-
+ 	of_platform_populate(NULL, u8500_local_bus_nodes,
+ 			     NULL, NULL);
+ }
+diff --git a/arch/arm/mach-ux500/pm_domains.c b/arch/arm/mach-ux500/pm_domains.c
+index 427b9ac4af6c..3d4f111ed156 100644
+--- a/arch/arm/mach-ux500/pm_domains.c
++++ b/arch/arm/mach-ux500/pm_domains.c
+@@ -6,6 +6,9 @@
+  *
+  * Implements PM domains using the generic PM domain for ux500.
+  */
++#include <linux/device.h>
++#include <linux/kernel.h>
++#include <linux/platform_device.h>
+ #include <linux/printk.h>
+ #include <linux/slab.h>
+ #include <linux/err.h>
+@@ -13,7 +16,6 @@
+ #include <linux/pm_domain.h>
+ 
+ #include <dt-bindings/arm/ux500_pm_domains.h>
+-#include "pm_domains.h"
+ 
+ static int pd_power_off(struct generic_pm_domain *domain)
+ {
+@@ -49,18 +51,17 @@ static struct generic_pm_domain *ux500_pm_domains[NR_DOMAINS] = {
+ 	[DOMAIN_VAPE] = &ux500_pm_domain_vape,
+ };
+ 
+-static const struct of_device_id ux500_pm_domain_matches[] __initconst = {
++static const struct of_device_id ux500_pm_domain_matches[] = {
+ 	{ .compatible = "stericsson,ux500-pm-domains", },
+ 	{ },
+ };
+ 
+-int __init ux500_pm_domains_init(void)
++static int ux500_pm_domains_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np;
++	struct device_node *np = pdev->dev.of_node;
+ 	struct genpd_onecell_data *genpd_data;
+ 	int i;
+ 
+-	np = of_find_matching_node(NULL, ux500_pm_domain_matches);
+ 	if (!np)
+ 		return -ENODEV;
+ 
+@@ -77,3 +78,17 @@ int __init ux500_pm_domains_init(void)
+ 	of_genpd_add_provider_onecell(np, genpd_data);
+ 	return 0;
+ }
++
++static struct platform_driver ux500_pm_domains_driver = {
++	.probe  = ux500_pm_domains_probe,
++	.driver = {
++		.name = "ux500_pm_domains",
++		.of_match_table = ux500_pm_domain_matches,
++	},
++};
++
++static int __init ux500_pm_domains_init(void)
++{
++	return platform_driver_register(&ux500_pm_domains_driver);
++}
++arch_initcall(ux500_pm_domains_init);
+diff --git a/arch/arm/mach-ux500/pm_domains.h b/arch/arm/mach-ux500/pm_domains.h
+deleted file mode 100644
+index 33c55f2c6b3c..000000000000
+--- a/arch/arm/mach-ux500/pm_domains.h
++++ /dev/null
+@@ -1,17 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2014 Linaro Ltd.
+- *
+- * Author: Ulf Hansson <ulf.hansson@linaro.org>
+- */
+-
+-#ifndef __MACH_UX500_PM_DOMAINS_H
+-#define __MACH_UX500_PM_DOMAINS_H
+-
+-#ifdef CONFIG_PM_GENERIC_DOMAINS
+-extern int __init ux500_pm_domains_init(void);
+-#else
+-static inline int ux500_pm_domains_init(void) { return 0; }
+-#endif
+-
+-#endif
 -- 
 2.34.1
 
