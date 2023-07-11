@@ -2,138 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9E874E951
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DEF74E954
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjGKIpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
+        id S231308AbjGKIps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbjGKIp1 (ORCPT
+        with ESMTP id S231208AbjGKIpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:45:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E55AD;
-        Tue, 11 Jul 2023 01:45:26 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 17CEF660700A;
-        Tue, 11 Jul 2023 09:45:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689065125;
-        bh=6DEYd15MttBbh1X726uK3mCyLE6btpkMXJHDkuDOM7M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MIZttZTRS6brVyCd9tt/IvWW6aPhi0+7UrniYZMZsY55P7kbljqpNvkRHTg4wUSCW
-         Wu5Oq+W3+iO6MBxTU8BXYgWVU2oQRnJFNoF/3id56f/GIQQ4KrzaIAXYqZb30fyLKu
-         XMpgQMh7XPg9/Haomgxmt+w2l6keWpk+QFkLjM7hcoekl/cJSwQlBayaqxnxrXYvlb
-         CKWyGWs6deR+HmvFI3GGVBTBlLivkK3Sdspsj7xWnlm5v4JDSqE9HSn6lkDozhXjCN
-         vxtsLzWW6GmuWSxj3skq8nkvs459gOx+5gFZQaCMvm8MLlXgkotadisQmwgZKj7BfH
-         kn+RvIZpcENiQ==
-Message-ID: <ab8c87c2-6a25-1639-911a-4bc8240514a3@collabora.com>
-Date:   Tue, 11 Jul 2023 10:45:23 +0200
+        Tue, 11 Jul 2023 04:45:46 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768D1A3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:45:42 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-26304be177fso2641247a91.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689065141; x=1691657141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6rAyfFYEC54lt2EK8plIE5lUAw75Zdb2J3/mCKsVdFc=;
+        b=osMyAeVS9EE7oQ72ept+nuFwXTGDZis3UCeZJLu4UFhMCl5FqF0UqU8ZGadQdmgYd1
+         WBYIfLYja43fjc+Sou3CD8s0QT0hu2AVFWVCc64mXvK4AkQAFf/i41Z+SVsD5vgzGo8W
+         JcywYnI+Uw26sosc1BCOQaQ5ZIK4L0LJDRyQ0aDtVpAd38m4x0MPxUB80sPshH9bD1AI
+         nNsR0M1I5hFQdbxga5MBJU14uaDwnpzQZY4sZUDsi8C2e3ubUuBXnrdwOXvxNqW09C2h
+         GPTEsjcspu1XSf+PutOWGbjULtlBTs6GVod+d3N0SmM/kTwfm+3OFHNnf8U9u/dHy0/Q
+         hrHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689065141; x=1691657141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6rAyfFYEC54lt2EK8plIE5lUAw75Zdb2J3/mCKsVdFc=;
+        b=VQ6riWuIrvQmdZDfM/XNyqPbmV34iei8nudjMthS+7Oo70vxT5l3N71KgNN0MAQkuP
+         u16juwACl8rG5JvAMULt36p/yzrcHK5Mtur0SOHayWpTWX5y2lNW6JB07vefXg3J+uLC
+         yNgiW2qbo/Ck2i86yrjP9LR+4CVOftUDsSczO2qBliukoqoFaQCmlbR7imuM7H5Itu0W
+         T2sNPu9k8HalvQY5m4SzLDwzgIH33e2HwYioEKeGNIe7AmyeGZ394ClwHTg0jl0Wg8xN
+         15aqY4OyCGv2AW2OlnRsKZ0+LYNCVGyrNiNCOttyBCZ1gvYfc9LN7Lmien+0GxMshbGj
+         G+yQ==
+X-Gm-Message-State: ABy/qLaXFtxkwUHfZsNpvFzSUDwTFir6wUkhVeQ8rFtpD0kwzn5N+AvB
+        pzNnfAZdWkwx++Vtv3AXNFjLNySDVAxpMu8Pf+Qoxw==
+X-Google-Smtp-Source: APBJJlEEpeiJ/C75pcZKME2sORsUVGMbgtRVsaSJNvTBpYj9gubvUdJuoy+wl7zoQ6u18+207M8ubOvzyKvqaQDqYR8=
+X-Received: by 2002:a17:90a:fb93:b0:262:f06a:13e0 with SMTP id
+ cp19-20020a17090afb9300b00262f06a13e0mr11892966pjb.5.1689065140955; Tue, 11
+ Jul 2023 01:45:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/4] arm64: dts: Add MediaTek MT8188 dts and evaluation
- board and Makefile
-Content-Language: en-US
-To:     Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230711023929.14381-1-jason-ch.chen@mediatek.com>
- <20230711023929.14381-5-jason-ch.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230711023929.14381-5-jason-ch.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230704050744.1196293-1-yangcong5@huaqin.corp-partner.google.com>
+ <CAD=FV=WNLcw2JbMf7tfob2KgjB8eXTC0p1J4OYnQL4k3Mz3mgA@mail.gmail.com>
+ <CAHwB_NJbtvXNCFj5=NMBXWCt1S1_WrgGij2Kqdr1omno66kVUw@mail.gmail.com> <CAD=FV=W5adfzPkP6dJGwfGO+mcbTdg8v9A0Sd4-FozF+W7nSrA@mail.gmail.com>
+In-Reply-To: <CAD=FV=W5adfzPkP6dJGwfGO+mcbTdg8v9A0Sd4-FozF+W7nSrA@mail.gmail.com>
+From:   cong yang <yangcong5@huaqin.corp-partner.google.com>
+Date:   Tue, 11 Jul 2023 16:45:29 +0800
+Message-ID: <CAHwB_NLQcL7sDPAp10njng+r=UjmesHyWK6DHxJLYOatemYWLQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: Add avdd/avee delay for Starry-himax83102-j02
+ and Starry-ili9882t panel
+To:     Doug Anderson <dianders@google.com>
+Cc:     sam@ravnborg.org, neil.armstrong@linaro.org, daniel@ffwll.ch,
+        airlied@gmail.com, hsinyi@google.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/07/23 04:39, Jason-ch Chen ha scritto:
-> From: jason-ch chen <Jason-ch.Chen@mediatek.com>
-> 
-> MT8188 is a SoC based on 64bit ARMv8 architecture. It contains 6 CA55
-> and 2 CA78 cores. MT8188 share many HW IP with MT65xx series.
-> 
-> We add basic chip support for MediaTek MT8188 on evaluation board.
-> 
-> Signed-off-by: jason-ch chen <Jason-ch.Chen@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->   arch/arm64/boot/dts/mediatek/mt8188-evb.dts | 401 +++++++++
->   arch/arm64/boot/dts/mediatek/mt8188.dtsi    | 951 ++++++++++++++++++++
->   3 files changed, 1353 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8188-evb.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index c99c3372a4b5..9bd2324259a3 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -44,6 +44,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8186-evb.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8188-evb.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-asurada-hayato-r1.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-asurada-spherion-r0.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8188-evb.dts b/arch/arm64/boot/dts/mediatek/mt8188-evb.dts
-> new file mode 100644
-> index 000000000000..6c1e829f7df6
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8188-evb.dts
-> @@ -0,0 +1,401 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Copyright (C) 2023 MediaTek Inc.
-> + */
-> +/dts-v1/;
-> +#include "mt8188.dtsi"
-> +#include "mt6359.dtsi"
-> +
-> +/ {
+Hi,
 
-..snip..
+On Fri, Jul 7, 2023 at 11:15=E2=80=AFPM Doug Anderson <dianders@google.com>=
+ wrote:
+>
+> Hi,
+>
+> On Thu, Jul 6, 2023 at 6:20=E2=80=AFPM cong yang
+> <yangcong5@huaqin.corp-partner.google.com> wrote:
+> >
+> > Hi,
+> >
+> > On Fri, Jul 7, 2023 at 3:32=E2=80=AFAM Doug Anderson <dianders@google.c=
+om> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Mon, Jul 3, 2023 at 10:07=E2=80=AFPM Cong Yang
+> > > <yangcong5@huaqin.corp-partner.google.com> wrote:
+> > > >
+> > > > From power on/off sequence for panel data sheet[1], T2 timing VSP t=
+o VSN
+> > > > needs 1ms delay when power on, and VSN to VSP also needs 1ms delay =
+when
+> > > > power off. Some pmic may not be able to adjust the delay internally=
+, so
+> > > > let's add a delay between avdd/avee regulator gpio to meet the timi=
+ng of
+> > > > panel.
+> > >
+> > > Unless I'm mistaken, all of this is best handled via regulator
+> > > constraints in the device tree. See the file:
+> > >
+> > > Documentation/devicetree/bindings/regulator/regulator.yaml
+> > >
+> > > Specifically, any delays related to actually ramping up / down the
+> > > regulator can be specified in the device tree. Nominally, you could
+> > > argue that the 1 ms delay actually _does_ belong in the driver, but
+> > > IMO the 1 ms number there is really just there because someone though=
+t
+> > > it was weird to specify a delay of 0 ms. Given that you already need
+> > > remp delays in the device tree, it feels OK to me to just include the
+> > > 1 ms there.
+> >
+> > The regulator device tree has only the power on attribute
+> > "regulator-enable-ramp-delay",
+> > not has power off attribute. The regulator delay looks more like the
+> > HW voltage requirement
+> > of the power ic itself, and I just want to meet the panel spec
+> > requirement. I add regulator-enable-ramp-delay
+> > in dts he can also meet my requirement, but I have no way to control
+> > the power off delays.
+>
+> Hmmm, I guess the fact that the delay needed can be different for
+> different boards / PMICs still makes me think that the delay doesn't
+> belong in the panel driver. Different boards using the same panel
+> would need different delays, right?
+>
+> So, thinking more...
+>
+> You're saying that you _can_ specify the enable delay in the device
+> tree, but not the disable one, right? However, the timing diagram you
+> provided doesn't seem to show the "disable" part. Since that's the
+> part we're talking about now, could you provide a more complete timing
+> diagram? Can you also talk to the panel vendor and confirm that the "1
+> ms" actually matters or if they just put that there to ensure
+> ordering? In other words, is it simply important that VDD1 gets to
+> ~90% before you turn on VSP, or do they truly need a full 1 ms delay?
+>
+> Can you provide any more details about the power IC you're using? Is
+> it just a discrete PMIC with a GPIO enable, or is it something
+> fancier? Correct me if I'm confused (entirely possible!), but I think
+> some PMICs have a feature where they can turn on "active discharge" so
+> that they ramp down more quickly when they're disabled. Any chance
+> your PMIC has this?
+>
+> In general the fact that nobody has added
+> "regulator-disable-ramp-delay" to the regulator framework already
+> means that the problem you're facing isn't really a common problem.
+> There are lots of devices out there that have more than one regulator
+> but I don't see examples where drivers need to delay between turning
+> all their regulators off. Are you positive that this is something that
+> you really need to worry about?
+>
+> The above is a bit rambling (sorry!), but I guess the summary is:
+>
+> 1. Please confirm that the panel driver truly needs 1 ms between
+> regulators enabled.
+>
+> 2. Please provide the power sequence diagram for disable. If there's a
+> 1 ms delay between regulators being disabled then please confirm.
+>
+> 3. If the 1 ms delay isn't truly needed then we can just drop this patch,=
+ right?
 
-> +
-> +&u3phy0 {
-> +	status="okay";
+https://github.com/ILITEK-LoganLin/Document/tree/main/ILITEK_Power_Sequence
 
-You missed the spaces around '=' here.
+Ask the vendor to evaluate this 1ms delay again, they think that
+current ramp time
+does not need 1ms delay, so drop this patch.
 
-	status = "okay";
-
-> +};
-> +
-> +&u3phy1 {
-> +	status="okay";
-> +};
-> +
-> +&u3phy2 {
-> +	status="okay";
-> +};
-> +
-
-After fixing that,
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+>
+> 4. IMO if the panel itself truly requires 1 ms between regulators
+> being enabled and/or disabled, it would be OK to put the 1 ms delay in
+> the driver but it feels wrong to be accounting for ramp time in the
+> driver. This should be specified in the device tree.
+>
+> 5. If we really need to account for the ramp down time, it would at
+> least be good to submit a regulator framework patch proposing a way to
+> specify this. We'd have to figure out how to make this work since I'd
+> imagine that most regulator consumers don't care that much about ramp
+> down time. Mark would be the real person to get advice from, but
+> perhaps an API call like "regulator_wait_discharged(percent)" that a
+> client could call?
+>
+>
+> -Doug
