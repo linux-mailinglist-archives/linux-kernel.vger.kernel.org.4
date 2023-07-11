@@ -2,204 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDB474E91B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721E474E91C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjGKI3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S231726AbjGKI3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjGKI26 (ORCPT
+        with ESMTP id S231715AbjGKI3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:28:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80336E77;
-        Tue, 11 Jul 2023 01:28:27 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2532E660700A;
-        Tue, 11 Jul 2023 09:28:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689064098;
-        bh=spdNLway67POM3vmFaXNGhDhQmXxhVIedWvVLp0PkEI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XSCTbFXk9e6Ms6w3dUD0gTaJbCLMJPnp6Us3KW28VZQ9hoaNYRdeO51FSibZH/fzR
-         JKiOts4MP0vpXd7Sm62WRMiy18wm8cew197TIrGkrMstBRkn8EotGVMfdYCXfIPJSe
-         daxKC2B2n9x1az4GZ5GnR8rcX8dTYTsyY730jAhseXuJoFP2RlZZLPbPOwRRmcg2DA
-         AuU+HmpPB29i7vONs5CAXPnuO8/39XXDXiNgdv1iHqfSMOywBsFHXC35USEsn3iVGM
-         sm/VWNEaupu1VVdE1Na6ph1PWVqdQwL0sL6NNEZHb+h9luZhHTnlJNLnVZ7IUaGKbA
-         HdIZq6knmkqdQ==
-Message-ID: <83c4b75a-06d7-9fca-ffa0-f2e6a6ae7aed@collabora.com>
-Date:   Tue, 11 Jul 2023 10:28:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 04/15] spi: Replace open coded
- spi_controller_xfer_timeout()
+        Tue, 11 Jul 2023 04:29:13 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2074.outbound.protection.outlook.com [40.107.244.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09A41735;
+        Tue, 11 Jul 2023 01:28:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y5V/BM0V9bUS0Z5SSafu4GOkCKYtJ8g7GW0K4YBvC65qIyRkD29QT0R8w23wT6dqNSm40XEOURLrmJ2SnZ6FKVRQx1RpRwkgXAHMhV4ySyj/fqClirgAB1/YnRGNt10cssG7H5AREqqm37mTjMDxYaC9nLPLF6nLPh4YK1UlnjpKaAjlLl7ImtqLVmBfA8tvmhX06RUWz+mun11h30rbI0yzMr+dkJp3x1cFXSfbuXLd0a7UFOe+iBv2Fdli2jcjZiiuszHKnrqu9IMVe4A8QvKrnzVU/Rhwc5hV/Krxh9LO8ksWIv1A9rS25zqQC0eQUyQRvJk02Onl8+uFV7kt1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cxn205Ui8Qd936tPx9RoZ0Q9tabLiTZoeGJ0dgDK9CA=;
+ b=msVkmtHxasJ0Hq3GVO9VUseJn161IXHBvZ9o9acte3Zfq9W8tef7S+Y8MaUmFYted7VGDPJ7U49Di3QHw3EhIa9LO7ts9MQfEVRLH2u0nBVbhPuIAbutJpWHYxYlNjjB7PbQXWEfstKmgdD7Sqxh93WKNTj3cNtNbLjLmhGffW4yO5yDZFOnGqspBWhdVP40qgbxJo5O3PZcp+xyZ3C5ogYNgdnAR32yXndH97E8tENwIKb7TEREvBcwIiZTm+He3h/2MIiTCBM1ElEzXuGe/BZLcfy0SsUutpdbr3H2RtEf209BJB8WXZmjg3TsZsRJogzh23OyD0y2ELnxalQ05w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cxn205Ui8Qd936tPx9RoZ0Q9tabLiTZoeGJ0dgDK9CA=;
+ b=3mhzHeBaBFeZarJ0dTArl6c3W1n9ia8C/gbxuizTcquVqb4xAfwIv+Cn0opboQ/AA5qlFik/L9yENXays2kuA33m8HtRplzwW2JOHrAGK4o41hB7jXtTGT0lpXwtpyXVHvHCxlq+5sDHgoJTf+8E+NKsiCvm+o4RYgUiKL2BvW8=
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15)
+ by DM6PR12MB4483.namprd12.prod.outlook.com (2603:10b6:5:2a2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Tue, 11 Jul
+ 2023 08:28:31 +0000
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::69e5:18e:4b1b:28e]) by MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::69e5:18e:4b1b:28e%6]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
+ 08:28:31 +0000
+From:   "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
+To:     James Clark <james.clark@arm.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>
+CC:     "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>
+Subject: RE: [PATCH] perf build: Fix library not found error when using CSLIBS
+Thread-Topic: [PATCH] perf build: Fix library not found error when using
+ CSLIBS
+Thread-Index: AQHZsOoktUGQo2erzUOr31GfubLHo6+0P/bA
+Date:   Tue, 11 Jul 2023 08:28:31 +0000
+Message-ID: <MN0PR12MB5953B9D303746370D9E3AB98B731A@MN0PR12MB5953.namprd12.prod.outlook.com>
+References: <20230707154546.456720-1-james.clark@arm.com>
+In-Reply-To: <20230707154546.456720-1-james.clark@arm.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB5953:EE_|DM6PR12MB4483:EE_
+x-ms-office365-filtering-correlation-id: b76b1113-19a7-421d-1955-08db81e8cf6a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TipFZkXxNgBI5nDVT8B6e/XK2Shbm8xx/BECQ7O5zvJ9MVD/YgucD/w4SLmflKSZABzyXkjxVTfCaz2WWeGKIn62Vh+M1eCTqBvZSzor4d4UY/cilIXWt84p3Fxcl2IxeBEhhtkjVxndVmuWeRMGjcFOhv0fC+tdFVoKX0NnTfXaWVuGgIGZgw/HF1xgaC+/ldCElyYU2pEAa5McYUoXBr7tNrpjeYeFsmVB34NqCd0zlrfAzFUzgbSvxxrRzAFrVCOc3bj+BMMK/BIRpyisoELHNSpafhVjsdFpo6xzMjaGPRJbOoVZPcbMu131sxo+4szGhtQrr8HeRBEGb+dOq/qgJxHGnrS35rUDt0hq33fGZ63e65ghMkJNh6NHCHlYAMGQkgMG+TXdv1CuijaHfk1T+0Ee0fr9irlAdv0Qi/8c2S90Wrrf2OD1FO0CU29/t0GV+8nk+PF+kDYtBSHQUMGp/6fG8mvSM7z/YsBG2DKLar1LMDfFNAGExpM9PJKK7fe9ebP790IheFBs+1TWV5cDd8guUkthgZ69kZKQAYCS3xMbrVnfye2T0oT1OFqx5FcuuOlczetUVLZLCc01d8D/elBKv9MFTBQ+MEFhuYdWA/sdUCHMbxtEc1OsBvSH6PFXx0vpQsaSpro6lpJUzw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(451199021)(7416002)(5660300002)(52536014)(316002)(64756008)(41300700001)(8936002)(76116006)(66446008)(66946007)(2906002)(66476007)(66556008)(4326008)(8676002)(71200400001)(7696005)(966005)(54906003)(6506007)(53546011)(9686003)(186003)(83380400001)(38100700002)(110136005)(478600001)(122000001)(38070700005)(33656002)(55016003)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?DTY9ZmHDbULf8341b2YVjkZprw737H7hatt7Nna2qhRYXi0DsMZU+bHUyA?=
+ =?iso-8859-1?Q?QItWTIcYkXwPZ86aQNjFPCrLg7WQtVvXq8qWUSQVvYukx4rpiA6QBNh8x6?=
+ =?iso-8859-1?Q?7VutgHrptoMtNctxYMgN7kgDNmS/h/V7Kz5y7tuOe9iE6sKnXGtLFApLEH?=
+ =?iso-8859-1?Q?IAiL9y4KqNKhQO1ClsgaaABMpvnNfPMK1s1J7Gye1lr8FYD3dMj0IS3+XI?=
+ =?iso-8859-1?Q?1xcHlxoeamBxQ9tpqR4npzuntiZkZRAo06Ecp/wCJHx6VJKz9rZ8bOqJT8?=
+ =?iso-8859-1?Q?BOn42J29Xsqm9M9rgDG49X5KYzDBMwysv+bNRogUQzeTTaVj+tqsoo/TkF?=
+ =?iso-8859-1?Q?NArcmpPNHS3e4qKKtRbZ5qqokv8vLhEgZrNtL2UuXhQk9N5175eyELpgLb?=
+ =?iso-8859-1?Q?6Wz4QApcRlRx2B6bcPjlRJJpdZQL08N92G3Om0Yu1axgYHl/vZI7WA/3zQ?=
+ =?iso-8859-1?Q?N2Qm0lUVBgEk38HN+mFviT7s9T1xMn+6B1TYFA9My4jqXMPGNVVuPumhPd?=
+ =?iso-8859-1?Q?Ef046A5tRm+yoqB5SzKXMxehV+jAxU98uNjdrV/zdqzCvmmNVJjywdu/ce?=
+ =?iso-8859-1?Q?YXD+NldxOcs6fSPKc6m7tRTg5y50dI2bt25NL/6mTy3e96Nn0fI3fVu8//?=
+ =?iso-8859-1?Q?MGYxTt+yW5zFDTwrkJ2Ab8cGX+e8nnaqHEngkxuNSaD0RXgigpJptmkMbC?=
+ =?iso-8859-1?Q?Dsjbstj4LX1HETLcmBliair1slPbs6GD1KsUZLb3lagC1xdhM1wfEn5YhV?=
+ =?iso-8859-1?Q?rP6KwnUlMbGYR0vvGEHQoc0xL4cNY+SjS+TWuo/k65Vg30PgFgN9ltDLkj?=
+ =?iso-8859-1?Q?EpYEW9TihMWnwqrlzzgoGKw15Hmk2AKjZcCRcbiTtXq7LLOmUonDcOIIL+?=
+ =?iso-8859-1?Q?PlujMIgEqkW54UGCj65tfUKCg26bTphZterCeczpOdu0JHayTW2oXlj/ES?=
+ =?iso-8859-1?Q?OQ17ZGvFXnP8NpGttEtZVhF6hoEa6R0j5taIt5HeAhtkdfvrUT9RIZRWv3?=
+ =?iso-8859-1?Q?ukCLK2/UNSdyUXQYGf3XNjy2bf0ilbDuoxKetJBMbMfLZ59yjKjPFeoEVQ?=
+ =?iso-8859-1?Q?taIAv75iy8BzHpOPosvSFwHdSylXXJQoOVQXzvCeyxv4cYgy1KwPW862oQ?=
+ =?iso-8859-1?Q?6VuJSu1L2Yu0G5xGpeFvLihbsIcKVYaEGOtFGBioVClld0pQxJgFfCobvI?=
+ =?iso-8859-1?Q?DBUkdq2BzZLo7rKNW3+0RP354H8RDzTdxDcKXNlPZ78KmxvpSz0BMRhO97?=
+ =?iso-8859-1?Q?gk1xWbiQJq7GBQ5QwdGbYCSdrN1avXPTTawJ3YCiyUmOxtEXNzpFTHMXIC?=
+ =?iso-8859-1?Q?YRt96EpnSqZGfb0TxyvlyP1lJOnp/TuKqXXCEmA/udgqr/Rjh/rNuBWgZT?=
+ =?iso-8859-1?Q?8kEywh3KS8IJ66qgP3T9GjrBx4CtZGRAanc2XYe6fuwXLPajxUmntxKzI+?=
+ =?iso-8859-1?Q?cJ2F7IOsJk9MOo3NjvjKyyUgAUGaqyFmotf94CNQh/MygfGaKQkeh5GBcX?=
+ =?iso-8859-1?Q?Jf6pE1k2mANht935BsemZfp3B+uVPVStDDj8hetsUtY0YRf0sm3ElvpKpM?=
+ =?iso-8859-1?Q?7tTuoFC8sjbgJWUn+6h+mUztDR3s0dLRqkGOxTsYBKFaEnbDZELO56KzR8?=
+ =?iso-8859-1?Q?l0fAK+zky1JQTU1rtMEgehjJqSPb/hphlG/ognf+c9Bwc0dSCRK1Z/61GD?=
+ =?iso-8859-1?Q?cqmEZo4CpC5l4Q1MhK0=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5953.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b76b1113-19a7-421d-1955-08db81e8cf6a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2023 08:28:31.5158
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DXVqHFjhBJmJLqvC/fnaifEMWs7X+DAA9PE4oUCsEcXSvq4MR8URcBfsbheat3pq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4483
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/07/23 17:49, Andy Shevchenko ha scritto:
-> Since the new spi_controller_xfer_timeout() helper appeared,
-> we may replace open coded variant in spi_transfer_wait().
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> -----Original Message-----
+> From: James Clark <james.clark@arm.com>
+> Sent: Friday, July 7, 2023 9:16 PM
+> To: linux-perf-users@vger.kernel.org; Pandey, Radhey Shyam
+> <radhey.shyam.pandey@amd.com>
+> Cc: coresight@lists.linaro.org; James Clark <james.clark@arm.com>; Peter
+> Zijlstra <peterz@infradead.org>; Ingo Molnar <mingo@redhat.com>;
+> Arnaldo Carvalho de Melo <acme@kernel.org>; Mark Rutland
+> <mark.rutland@arm.com>; Alexander Shishkin
+> <alexander.shishkin@linux.intel.com>; Jiri Olsa <jolsa@kernel.org>;
+> Namhyung Kim <namhyung@kernel.org>; Ian Rogers <irogers@google.com>;
+> Adrian Hunter <adrian.hunter@intel.com>; Uwe Kleine-K=F6nig <uwe@kleine-
+> koenig.org>; linux-kernel@vger.kernel.org
+> Subject: [PATCH] perf build: Fix library not found error when using CSLIB=
+S
+>=20
+> -L only specifies the search path for libraries directly provided in the =
+link line
+> with -l. Because -lopencsd isn't specified, it's only linked because it's=
+ a
+> dependency of -lopencsd_c_api. Dependencies like this are resolved using
+> the default system search paths or -rpath-link=3D... rather than -L. This=
+ means
+> that compilation only works if OpenCSD is installed to the system rather =
+than
+> provided with the CSLIBS (-L) option.
+>=20
+> This could be fixed by adding -Wl,-rpath-link=3D$(CSLIBS) but that is les=
+s
+> conventional than just adding -lopencsd to the link line so that it uses =
+-L. -
+> lopencsd seems to have been removed in commit ed17b1914978 ("perf
+> tools: Drop requirement for libstdc++.so for libopencsd check") because i=
+t
+> was thought that there was a chance compilation would work even if it did=
+n't
+> exist, but I think that only applies to libstdc++ so there is no harm to =
+add it
+> back. libopencsd.so and libopencsd_c_api.so would always exist together.
+>=20
+> Testing
+> =3D=3D=3D=3D=3D=3D=3D
+>=20
+> The following scenarios now all work:
+>=20
+>  * Cross build with OpenCSD installed
+>  * Cross build using CSLIBS=3D...
+>  * Native build with OpenCSD installed
+>  * Native build using CSLIBS=3D...
+>  * Static cross build with OpenCSD installed
+>  * Static cross build with CSLIBS=3D...
+>=20
+> Reported-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> Closes: https://lore.kernel.org/linux-arm-kernel/56905d7a-a91e-883a-b707-
+> 9d5f686ba5f1@arm.com/
+> Link: https://lore.kernel.org/all/36cc4dc6-bf4b-1093-1c0a-
+> 876e368af183@kleine-koenig.org/
+> Fixes: ed17b1914978 ("perf tools: Drop requirement for libstdc++.so for
+> libopencsd check")
+> Signed-off-by: James Clark <james.clark@arm.com>
 > ---
->   drivers/spi/spi.c       | 25 ++-----------------------
->   include/linux/spi/spi.h |  6 +++++-
->   2 files changed, 7 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 125dea8fae00..c99ee4164f11 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -1342,8 +1342,7 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
->   {
->   	struct spi_statistics __percpu *statm = ctlr->pcpu_statistics;
->   	struct spi_statistics __percpu *stats = msg->spi->pcpu_statistics;
-> -	u32 speed_hz = xfer->speed_hz;
-> -	unsigned long long ms;
-> +	unsigned long ms;
->   
->   	if (spi_controller_is_slave(ctlr)) {
->   		if (wait_for_completion_interruptible(&ctlr->xfer_completion)) {
-> @@ -1351,29 +1350,9 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
->   			return -EINTR;
->   		}
->   	} else {
-> -		if (!speed_hz)
-> -			speed_hz = 100000;
-> -
-> -		/*
-> -		 * For each byte we wait for 8 cycles of the SPI clock.
-> -		 * Since speed is defined in Hz and we want milliseconds,
-> -		 * use respective multiplier, but before the division,
-> -		 * otherwise we may get 0 for short transfers.
-> -		 */
-> -		ms = 8LL * MSEC_PER_SEC * xfer->len;
-> -		do_div(ms, speed_hz);
-> -
-> -		/*
-> -		 * Increase it twice and add 200 ms tolerance, use
-> -		 * predefined maximum in case of overflow.
-> -		 */
-> -		ms += ms + 200;
-> -		if (ms > UINT_MAX)
-> -			ms = UINT_MAX;
-> -
-> +		ms = spi_controller_xfer_timeout(ctlr, xfer);
+>  tools/perf/Makefile.config | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config inde=
+x
+> 0609c19caabd..c5db0de49868 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -155,9 +155,9 @@ FEATURE_CHECK_LDFLAGS-libcrypto =3D -lcrypto  ifdef
+> CSINCLUDES
+>    LIBOPENCSD_CFLAGS :=3D -I$(CSINCLUDES)
+>  endif
+> -OPENCSDLIBS :=3D -lopencsd_c_api
+> +OPENCSDLIBS :=3D -lopencsd_c_api -lopencsd
+>  ifeq ($(findstring -static,${LDFLAGS}),-static)
+> -  OPENCSDLIBS +=3D -lopencsd -lstdc++
+> +  OPENCSDLIBS +=3D -lstdc++
+>  endif
+>  ifdef CSLIBS
+>    LIBOPENCSD_LDFLAGS :=3D -L$(CSLIBS)
+> --
+> 2.34.1
 
-I agree on using helpers, but the logic is slightly changing here: yes it is
-unlikely (and also probably useless) to get ms == UINT_MAX, but the helper is
-limiting the maximum timeout value to 500mS, which may not work for some slow
-controllers/devices.
+Tested-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cross compiled for aarch64 on x86_64.
 
-This should get validated on more than a few platforms, and I'm not sure that
-this kind of validation would be "fast" to get... so, probably the best thing
-to do here is to add a warning in case the timeout exceeds 500mS, print the
-actual value, keep it like this for a kernel version or two and check reports:
-that would allow to understand what a safe maximum timeout value could be.
+make ARCH=3Darm64 NO_LIBELF=3D1 NO_JVMTI=3D1 VF=3D1 CORESIGHT=3D1 -C  tools=
+/perf
 
-Aside from that, I wouldn't drop those nice comments explaining how/why the
-timeout is calculated: I know how, but not everyone knows in advance.
+file <snip>/linux-xlnx/tools/perf/perf
+perf: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV),=20
+dynamically linked, interpreter /lib/ld-linux-aarch64.so.1,=20
+BuildID[sha1]=3Def7c524338577b14e7c0f914d882dec4d26e93a2,=20
+for GNU/Linux 3.14.0, with debug_info, not stripped
 
-Regards,
-Angelo
-
->   		ms = wait_for_completion_timeout(&ctlr->xfer_completion,
->   						 msecs_to_jiffies(ms));
-> -
->   		if (ms == 0) {
->   			SPI_STATISTICS_INCREMENT_FIELD(statm, timedout);
->   			SPI_STATISTICS_INCREMENT_FIELD(stats, timedout);
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 32c94eae8926..0ce1cb18a076 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -1270,12 +1270,16 @@ static inline bool spi_is_bpw_supported(struct spi_device *spi, u32 bpw)
->    * that it would take on a single data line and take twice this amount of time
->    * with a minimum of 500ms to avoid false positives on loaded systems.
->    *
-> + * Assume speed to be 100 kHz if it's not defined at the time of invocation.
-> + *
->    * Returns: Transfer timeout value in milliseconds.
->    */
->   static inline unsigned int spi_controller_xfer_timeout(struct spi_controller *ctlr,
->   						       struct spi_transfer *xfer)
->   {
-> -	return max(xfer->len * 8 * 2 / (xfer->speed_hz / 1000), 500U);
-> +	u32 speed_hz = xfer->speed_hz ?: 100000;
-> +
-> +	return max(xfer->len * 8 * 2 / (speed_hz / 1000), 500U);
->   }
->   
->   /*---------------------------------------------------------------------------*/
+Thanks,
+Radhey
 
