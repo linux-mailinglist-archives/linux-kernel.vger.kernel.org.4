@@ -2,176 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65F574F72D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D3674F733
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbjGKRYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 13:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S231359AbjGKRZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbjGKRXs (ORCPT
+        with ESMTP id S232932AbjGKRYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:23:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319C5A6;
-        Tue, 11 Jul 2023 10:23:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE24D61596;
-        Tue, 11 Jul 2023 17:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D7BC433C8;
-        Tue, 11 Jul 2023 17:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689096226;
-        bh=zRaRZODsK04vezweUZ+H0PPfgi1k3wqQi7324zxQ/28=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PZNeD789rxo/FRL8fguXIaEhIdcb3NoIGN+R9irixNbC8LsCXOFUznWzq9WmhX658
-         ctLKt4COOixyfu+iv7gv3l9QC8KiJ43LdgPgDcE1w2J7wMHlQWTmN6JkCU9QtffkJi
-         ofqDiuh+IIRXiX99OJNPoCjVQaYVaBtzcSdXCqRv0PuGoSZCDfIZHVpkMCK9Y2t1GI
-         vvkbRprIdu8vTrPKKD7IRTCrO4yEdFk+gpmFbTGc26mgSAZvKXM3tPq/RUsz8NXAKQ
-         Vua2j8OnCVr7Lflg091O7i0d7MqnHEfpV0YZTlcSdv52fPNSg3ivTTA+lEvAAClYgQ
-         Rul1HsweoxsXQ==
-Date:   Tue, 11 Jul 2023 19:23:24 +0200
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, Palmer Dabbelt <palmer@sifive.com>,
-        James.Bottomley@hansenpartnership.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
-        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
-        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
-        dhowells@redhat.com, fenghua.yu@intel.com, fweimer@redhat.com,
-        geert@linux-m68k.org, glebfm@altlinux.org, gor@linux.ibm.com,
-        hare@suse.com, hpa@zytor.com, ink@jurassic.park.msu.ru,
-        jhogan@kernel.org, kim.phillips@arm.com, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        luto@kernel.org, mattst88@gmail.com, mingo@redhat.com,
-        monstr@monstr.eu, mpe@ellerman.id.au, paulus@samba.org,
-        peterz@infradead.org, ralf@linux-mips.org,
-        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
-        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
-        x86@kernel.org, ysato@users.sourceforge.jp
-Subject: Re: [PATCH v4 4/5] tools headers UAPI: Sync files changed by new
- fchmodat2 syscall
-Message-ID: <ZK2QDCrlB/3dyiDy@example.org>
-References: <cover.1689074739.git.legion@kernel.org>
- <cover.1689092120.git.legion@kernel.org>
- <22294b3b68050a70eaaa962eff46b8672bc2f7e8.1689092120.git.legion@kernel.org>
- <CAM9d7chAqGwy0WmR67TucFjRq+Aa7zQnayvwMCqd5-meVHkP5g@mail.gmail.com>
+        Tue, 11 Jul 2023 13:24:46 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC651730
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:24:24 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7948540a736so2018970241.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689096263; x=1691688263;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vxEt0Z2eexi8Ljxbl6AxsjACGcp0PhbeI1Zbkig5Ea8=;
+        b=2MNo9qcQE70ijvOMfhfeCr5b57NMCaHmxyfLaple5c0ON72I6Fl6KkCpEF2ZUAP6Ja
+         V0z2dG+x+IsgZmudM/8wwO3HeFqajJZZHGPKbEt6SALfCu+Pjnxdii+e3bsqiFj2E3my
+         Y/ErVdBmKyVEkX5L9MQap9ZPz0HWB43sGOmSZ/vOEk0haEGCaJ4BXm0i68AOESbjIK//
+         yHeVhjhPwmEJgs7OzM7NHltcgWysktGwYwz4yjqmTJOBKT8q9CDeeMZvsmkc/oZsH0tp
+         3B2iJT8PUjxWK3Udzzlf3cKSa9yNqS4nY+xFqcPU5ISJors0n4DWQZ0X9dxbx9KCcKzN
+         SXWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689096263; x=1691688263;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vxEt0Z2eexi8Ljxbl6AxsjACGcp0PhbeI1Zbkig5Ea8=;
+        b=TnK79iiiH6QeHX+sWxBuy6pyJQ35TESEcMnSDNcqAmQDZ7wAZt3tblQFg1blF0pd6M
+         wg2vzrGednZabPQPaFsxKJP8c7JtXZOM0/N2a598c2B5EfL0oPMveMazE5B6X4x4Tp2O
+         lTNXb8TLi3jLM1FBlZZq0rcEE8Dxg6DLnEBc2bRn65tVmEZ/k18E4QrYsJH6jjJq6/FD
+         73wdclc2huaXAQ/vI7yk5KEfjqbHU2gldyuhoBRr5Sn11cQr+ShycUV5ktaG0v8gJxjn
+         1qnYCH0O54qnvBPNdEf9s8SoOdj+7mQ67YlH3g8nERe+8ol+YsAzpfCIlIPaVFry8KTN
+         pMPg==
+X-Gm-Message-State: ABy/qLYrBe8FizNkvT4gv38vA4aNsD8hh+i7022g6H2KxSIeFnRS2Jgr
+        Ki+8PFALsfcCGJer+f8biwjOJ/CAvCUgLKXZz9WdCg==
+X-Google-Smtp-Source: APBJJlEbNbeKglx24tA12e4BmXAPi9rr0ZNOak9iV8KnYQWaC46zN/l1EJsSvydC+DrZ4BU4kBJ0Te5mDCNhUBfgEcw=
+X-Received: by 2002:a67:fd59:0:b0:440:cfc5:f91a with SMTP id
+ g25-20020a67fd59000000b00440cfc5f91amr8676055vsr.29.1689096263370; Tue, 11
+ Jul 2023 10:24:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7chAqGwy0WmR67TucFjRq+Aa7zQnayvwMCqd5-meVHkP5g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230619110705.106ec599@kernel.org> <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org> <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <ZKNA9Pkg2vMJjHds@ziepe.ca> <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+ <ZKxDZfVAbVHgNgIM@ziepe.ca> <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+ <ZKyZBbKEpmkFkpWV@ziepe.ca> <CAHS8izOTiSO5PkM+x-CASjwew=U2j=JRNpbz_6NC6AsDTQ17Ug@mail.gmail.com>
+ <ZK1U/Vo0NvhNm9pq@ziepe.ca>
+In-Reply-To: <ZK1U/Vo0NvhNm9pq@ziepe.ca>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 11 Jul 2023 10:24:11 -0700
+Message-ID: <CAHS8izOnw8KEu_Sm7Vf3UfqD88XheTBDHkoTmBx7r=i9g0pJRw@mail.gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Bjorn Helgaas <bhelgaas@google.com>, logang@deltatee.com
+Cc:     Christoph Hellwig <hch@lst.de>, John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 10:19:35AM -0700, Namhyung Kim wrote:
-> Hello,
-> 
-> On Tue, Jul 11, 2023 at 9:18 AM Alexey Gladkov <legion@kernel.org> wrote:
+On Tue, Jul 11, 2023 at 6:11=E2=80=AFAM Jason Gunthorpe <jgg@ziepe.ca> wrot=
+e:
+>
+> On Mon, Jul 10, 2023 at 05:45:05PM -0700, Mina Almasry wrote:
+>
+> > > At least from my position I want to see MEMORY_DEVICE_PCI_P2PDMA used
+> > > to represent P2P memory.
 > >
-> > From: Palmer Dabbelt <palmer@sifive.com>
-> >
-> > That add support for this new syscall in tools such as 'perf trace'.
-> >
-> > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > ---
-> >  tools/include/uapi/asm-generic/unistd.h             | 5 ++++-
-> >  tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 2 ++
-> >  tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 2 ++
-> >  tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 2 ++
-> >  tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 2 ++
-> >  5 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> It'd be nice if you route this patch separately through the
-> perf tools tree.  We can add this after the kernel change
-> is accepted.
+> > Would using p2pdma API instead of dmabuf be an acceptable direction?
+>
+> "p2pdma API" is really just using MEMORY_DEVICE_PCI_P2PDMA and
+> teaching the pagepool how to work with ZONE_DEVICE pages.
+>
 
-Sure. No problem.
+Yes, that's what I have in mind. Roughly something along the lines
+where the device memory provider (GPU or what not) does something like
+a pci_p2pdma_add_resource(), and the NIC client driver allocates the
+pages from the resource, and if is_pci_p2pdma_page() use
+pci_p2pdma_map_sg() instead of dma_map_sg() and whatnot.
 
-> >
-> > diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
-> > index dd7d8e10f16d..76b5922b0d39 100644
-> > --- a/tools/include/uapi/asm-generic/unistd.h
-> > +++ b/tools/include/uapi/asm-generic/unistd.h
-> > @@ -817,8 +817,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
-> >  #define __NR_set_mempolicy_home_node 450
-> >  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-> >
-> > +#define __NR_fchmodat2 452
-> > +__SYSCALL(__NR_fchmodat2, sys_fchmodat2)
-> > +
-> >  #undef __NR_syscalls
-> > -#define __NR_syscalls 451
-> > +#define __NR_syscalls 453
-> >
-> >  /*
-> >   * 32 bit systems traditionally used different
-> > diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-> > index 3f1886ad9d80..434728af4eaa 100644
-> > --- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-> > +++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-> > @@ -365,3 +365,5 @@
-> >  448    n64     process_mrelease                sys_process_mrelease
-> >  449    n64     futex_waitv                     sys_futex_waitv
-> >  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> > +# 451 reserved for cachestat
-> > +452    n64     fchmodat2                       sys_fchmodat2
-> > diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-> > index a0be127475b1..6b70b6705bd7 100644
-> > --- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-> > +++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-> > @@ -537,3 +537,5 @@
-> >  448    common  process_mrelease                sys_process_mrelease
-> >  449    common  futex_waitv                     sys_futex_waitv
-> >  450    nospu   set_mempolicy_home_node         sys_set_mempolicy_home_node
-> > +# 451 reserved for cachestat
-> > +452    common  fchmodat2                       sys_fchmodat2
-> > diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-> > index b68f47541169..0ed90c9535b0 100644
-> > --- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-> > +++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-> > @@ -453,3 +453,5 @@
-> >  448  common    process_mrelease        sys_process_mrelease            sys_process_mrelease
-> >  449  common    futex_waitv             sys_futex_waitv                 sys_futex_waitv
-> >  450  common    set_mempolicy_home_node sys_set_mempolicy_home_node     sys_set_mempolicy_home_node
-> > +# 451 reserved for cachestat
-> > +452  common    fchmodat2               sys_fchmodat2                   sys_fchmodat2
-> > diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-> > index c84d12608cd2..a008724a1f48 100644
-> > --- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-> > +++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-> > @@ -372,6 +372,8 @@
-> >  448    common  process_mrelease        sys_process_mrelease
-> >  449    common  futex_waitv             sys_futex_waitv
-> >  450    common  set_mempolicy_home_node sys_set_mempolicy_home_node
-> > +# 451 reserved for cachestat
-> > +452    common  fchmodat2               sys_fchmodat2
-> >
-> >  #
-> >  # Due to a historical design error, certain syscalls are numbered differently
-> > --
-> > 2.33.8
-> >
-> 
+> I suspect this will clash badly with Matthew's work here:
+>
+> https://lore.kernel.org/all/20230111042214.907030-1-willy@infradead.org/
+>
+> As from a mm side we haven't ever considered that ZONE_DEVICE and
+> "netmem" can be composed together. The entire point of netmem like
+> stuff is that the allocator hands over the majority of struct page to
+> the allocatee, and ZONE_DEVICE can't work like that.
+>
+> However, assuming that can be solved in some agreeable way then it
+> would be OK to go down this path.
+>
 
--- 
-Rgrds, legion
+I think there is potential to solve this in an agreeable way. We may
+be able to get netmem ZONE_DEVICE pages using the memdesc idea you
+proposed, or something like the xarray meta data you mention below. If
+not that, I think Jakub already said that he is considering coming up
+with a 'page pool like' API that drivers can use, with an
+implementation that is compatible with ZONE_DEVICE pages.
 
+> But, I feel like this is just overall too hard a direction from the mm
+> perspective.
+>
+> I don't know anything about page pool, but the main sticking point is
+> its reliance on struct page. If it can find another way to locate its
+> meta data (eg an xarray), at least for some cases, it would make
+> things alot easier.
+>
+
+
+
+--=20
+Thanks,
+Mina
