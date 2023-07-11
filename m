@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC8174F06F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1243774F076
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjGKNlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S232597AbjGKNly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjGKNlM (ORCPT
+        with ESMTP id S231964AbjGKNlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:41:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA49FE6F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:41:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBB8614FC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:41:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF89C433C9;
-        Tue, 11 Jul 2023 13:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689082867;
-        bh=Bt9oDG1nWUVU70SGgtLyjWqFDPmkWPg2aId2ZSi4znQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PE+keElRYQA9uP4QPujGWqf6/drIHtnka+nWIrfzFQZSxcLxyUGA8r4vMoLQWZ6XY
-         QUVO+309XQJneVLOF5laAXy+wOq5RZ19Rcpo5oHDGfvQNEO/KEWziwrX8syzLW8m/e
-         scwFHJGDtj6PjpNde7fNpKRyCcUiXtPczYQc+LCZDCLyEXxuARGZ87qvXSXn4kYDHQ
-         jKsarGPmWAXdHxtCi2ZCeB8QC+HHNSK6P3S4z3jUi04e/EwITLrVh6Vf2KpGqQQ9bM
-         NBISZIxosDcvlSKlehT9ugsQROjnjEhlhOgvWUp9rnQh1Ee7WtutYXYi2Ok0wF6u45
-         LlqRTthplaRRg==
-From:   Greg Ungerer <gerg@kernel.org>
-To:     linux-arm@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     viro@zeniv.linux.org.uk, ebiederm@xmission.com,
-        keescook@chromium.org, brauner@kernel.org,
-        Greg Ungerer <gerg@kernel.org>
-Subject: [PATCH] fs: binfmt_elf_efpic: fix personality for fdpic ELF
-Date:   Tue, 11 Jul 2023 23:39:55 +1000
-Message-Id: <20230711133955.483393-1-gerg@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jul 2023 09:41:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637A2E74
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689082864;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hvnb7JiwKvSnMAgyEjcswiUDuBLsnC0rp2JWm3dcW0o=;
+        b=bWL35WPz81GAY9D7D8s1Cuyv63QW7IWS/P4QCAh1YpH7GuoSEZyYLujZ/+DdWmyxDPQkbL
+        PmgpmO5y93238y1JHoQepULNB+ZWczi2A3JfoxrA+g1nB3eQlCcWQUk88G6bRAqOMhUrMg
+        U6JTCvj07lx+HxQ3kYyc6bMfla8Vepc=
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
+ [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-539-7abNTeUOPuGma0Fm1367sg-1; Tue, 11 Jul 2023 09:41:03 -0400
+X-MC-Unique: 7abNTeUOPuGma0Fm1367sg-1
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-c5cea5773e8so6815861276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:41:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689082862; x=1691674862;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hvnb7JiwKvSnMAgyEjcswiUDuBLsnC0rp2JWm3dcW0o=;
+        b=h0Ifrs5WKJItinUEBuGOL/aIRVyvlnEU8CunrLmh2rG5SW3/n+VKYfQedF2MKlZk2x
+         vjTQ+zM1wvo34unFLKXrffm7hVAYlKdf5VScV+qE3QRBnw5ImGwpIGM+IgeAS1afiRTV
+         eKsEjs+FjhLp77bZL6RAlHdPmrna6ipxGEfOU5iFYVlLe/6InKoW7FSsvser+VfZwng/
+         /iBF0zZliYOJvrG/2lxWp67BgP6BtRdCDAE/6RPNdDTBEJoOv204HZ7tBkf2LzqpTvrB
+         sj3A5/BkBSZ8Ov8mxHnhsZjpX9ZPO0Rb3Loj7Yl0z27uruFPCjJugcpGafd3mhxeCOhJ
+         fTwg==
+X-Gm-Message-State: ABy/qLbIXc60ciUP2EvYAb3iU0u3WjHR9Kbj/Rn637jDZzi6vqjQf6HT
+        kfgRaJrDcn/5KEhVIULdLnkNu+AyZX/OTHZnD23hOKXSDru3KsrGxQX5qXs3No9vswwUqo8IBtT
+        zViKMvCp+5m+nuclzwkIEojO2bt2h7jNWLSZIZcKf
+X-Received: by 2002:a25:23d1:0:b0:c69:cf1f:ec0a with SMTP id j200-20020a2523d1000000b00c69cf1fec0amr13124359ybj.15.1689082862667;
+        Tue, 11 Jul 2023 06:41:02 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlE4ZLOqIjO/yyFhHoIBVoAPEbGrTyKrYmJlC4AJrQfREkKw9AcsD5OXndLzLtud1cBfWt6TWIx1ymEODA6SenA=
+X-Received: by 2002:a25:23d1:0:b0:c69:cf1f:ec0a with SMTP id
+ j200-20020a2523d1000000b00c69cf1fec0amr13124347ybj.15.1689082862425; Tue, 11
+ Jul 2023 06:41:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
+ <2023062156-trespass-pandemic-7f4f@gregkh> <qbvmv3eexohswyagmllfh3xsxoftwa3wbmsdafmwak2bxlnlft@jz74dijlfxlz>
+ <31ce32e018a9fa410e9e1f3e5900621b16a56091.camel@hadess.net>
+ <CAO-hwJLFSUJaGK5DAOz30+YyC1hGgHnbeJbc5iQ47jxBcbRSCg@mail.gmail.com> <cfa28818-9eaf-0dc9-cb4a-1b3de318e627@leemhuis.info>
+In-Reply-To: <cfa28818-9eaf-0dc9-cb4a-1b3de318e627@leemhuis.info>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 11 Jul 2023 15:40:51 +0200
+Message-ID: <CAO-hwJLc0wzv2a3JARkPDW+ZgbnvwggfRHcAJmWsKy_FMA13=g@mail.gmail.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: rework one more time the retries attempts
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The elf-fdpic loader hard sets the process personality to either
-PER_LINUX_FDPIC for true elf-fdpic binaries or to PER_LINUX for
-normal ELF binaries (in this case they would be constant displacement
-compiled with -pie for example). The problem with that is that it
-will lose any other bits that may be in the ELF header personality
-(such as the "bug emulation" bits).
+On Tue, Jul 11, 2023 at 3:10=E2=80=AFPM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> On 26.06.23 16:02, Benjamin Tissoires wrote:
+> > On Sun, Jun 25, 2023 at 10:30=E2=80=AFAM Bastien Nocera <hadess@hadess.=
+net> wrote:
+> >> On Fri, 2023-06-23 at 10:37 +0200, Benjamin Tissoires wrote:
+> >>> On Jun 21 2023, Greg KH wrote:
+> >>>> On Wed, Jun 21, 2023 at 11:42:30AM +0200, Benjamin Tissoires wrote:
+> >>>>> Make the code looks less like Pascal.
+> >>>>>
+> >>>>> Extract the internal code inside a helper function, fix the
+> >>>>> initialization of the parameters used in the helper function
+> >>>>> (`hidpp->answer_available` was not reset and `*response` wasn't
+> >>>>> too),
+> >>>>> and use a `do {...} while();` loop.
+> >>>>>
+> >>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when
+> >>>>> device is busy")
+> >>>>> Cc: stable@vger.kernel.org
+> >>>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >>>>> ---
+> >>>>> as requested by
+> >>>>> https://lore.kernel.org/all/CAHk-=3DwiMbF38KCNhPFiargenpSBoecSXTLQA=
+CKS2UMyo_Vu2ww@mail.gmail.com/
+> >>>>> This is a rewrite of that particular piece of code.
+> >>>>> ---
+> >>>>>  drivers/hid/hid-logitech-hidpp.c | 102 +++++++++++++++++++++++--
+> >>>>> --------------
+> >>>>>  1 file changed, 61 insertions(+), 41 deletions(-)
+> > [...]
+> >
+> > Some people on the Bz were able to reproduce with multiple reboots.
+> > But it's not as urgent as previously, and we were close to the 6.4
+> > final when I sent it. I'll make sure this goes into 6.5 and gets
+> > proper stable backports FWIW.
+>
+> Did that happen? Doesn't look like it from here, but maybe I'm missing
+> something. Where there maybe other changes to resolve the remaining
+> problems some users encounter sporadically since the urgent fixes went in=
+?
 
-On the ARM architecture the ADDR_LIMIT_32BIT flag is used to signify
-a normal 32bit binary - as opposed to a legacy 26bit address binary.
-This matters since start_thread() will set the ARM CPSR register as
-required based on this flag. If the elf-fdpic loader loses this bit
-the process will be mis-configured and crash out pretty quickly.
+No, there were no other changes that could have solved this. I guess
+the randomness of the problem makes it way harder to detect and to
+reproduce.
 
-Modify elf-fdpic loaders personality setting for ELF binaries so that
-it preserves the upper three bytes by using the SET_PERSONALITY macro
-to set it. This macro in the generic case sets PER_LINUX but and
-preserves the upper bytes. Architectures can override this for their
-specific use case, and ARM does exactly this.
+I'll send a v2 of that patch with the reviews today or tomorrow and we
+can probably get it through the current 6.5 cycle.
 
-Signed-off-by: Greg Ungerer <gerg@kernel.org>
----
+Cheers,
+Benjamin
 
-Is anyone out there using elf-fdpic on ARM?
-This seems to break it rather badly due to the loss of that ADDR_LIMIT_32BIT
-bit from the process personality.
-
- fs/binfmt_elf_fdpic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-index a05eafcacfb2..f29ae1d96fd7 100644
---- a/fs/binfmt_elf_fdpic.c
-+++ b/fs/binfmt_elf_fdpic.c
-@@ -348,7 +348,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
- 	if (elf_check_fdpic(&exec_params.hdr))
- 		set_personality(PER_LINUX_FDPIC);
- 	else
--		set_personality(PER_LINUX);
-+		SET_PERSONALITY(exec_params.hdr);
- 	if (elf_read_implies_exec(&exec_params.hdr, executable_stack))
- 		current->personality |= READ_IMPLIES_EXEC;
- 
--- 
-2.25.1
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+>
 
