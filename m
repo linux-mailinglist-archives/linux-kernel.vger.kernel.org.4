@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2962074F225
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C250274F210
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjGKOY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S233655AbjGKOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233583AbjGKOWj (ORCPT
+        with ESMTP id S232159AbjGKOWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:22:39 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3533E268C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:18 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6ff1a637bso91738341fa.3
+        Tue, 11 Jul 2023 10:22:41 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9222691
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:19 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b702319893so91953961fa.3
         for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689085323; x=1691677323;
+        d=linaro.org; s=google; t=1689085324; x=1691677324;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ik/qOyICB+hOJlY4lmFAhBvArnDlT8QyNux/Uwz9Gbo=;
-        b=r0v+ygSfzimP/KLRdLbKaY6CMkxtZVxhReFrhft0vSI/Nvuk2cRuxud72IbafdNu9B
-         81poxleuZvfFmfxzykbgjux9VjTCzmAyTQRaMRk4myVDAwhmc4jP0CWqOcuV/VJLIEAo
-         9W4cjEDrBm8tVFhnrvtPEG7Pak7wHsk3pDmpv1OJZ6nrb8t0TswD513rzYIH9k880cYi
-         YC69AkBvuuM82vnExcT62/Jjb8SFDGySH3O3JMUuLCDCvD2OaOS1n+74xbgwhSZ7+vAC
-         l78egxP9CK+Fzo16vvQ7J8esIz7wARIaI+goy3PH5xywbvcKFGm3WAF98BFBZZ86/W+8
-         zOmg==
+        bh=fgmqG4jujLqQxwJIJ5hn90DGaowksqxT71+ZFrlpWAo=;
+        b=P+XhG1RoWkWCxoS/7h6wBFCjdnfi47tfCVIzhcVEL+s2Wkg2e39YOL6s9PfhplMbYP
+         EG82NB933L18GZCmT73/u+8O+rJknSLCjJ2UHD0ZIMnYgY0yRzt+WpS5goY1vHMsEJCX
+         LiWipyvBpnEvRm1HeV1gmN9CO/SHEF5uysxR4qUPpU7PytyEXjXopbml5+KNoW4CjOVG
+         gd7DgbJ26HEtyi4tIIwZlgbMnmcVL/zWoOLshUgBjHzXj0Yg4BuXVyQyroAL28+5xzWI
+         HI0BGpV0HSKRJkFvZg1byOqwvimpaCNTYp/3G3HjsdR8m1HkBwIn5DLwxzB7SVOM0rn0
+         M3hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689085323; x=1691677323;
+        d=1e100.net; s=20221208; t=1689085324; x=1691677324;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ik/qOyICB+hOJlY4lmFAhBvArnDlT8QyNux/Uwz9Gbo=;
-        b=GpVtwHlGIqQXXsZ0qe0LvZQHLD7Ulyz5Co4uKiKRqDXgTtjQOieCZYxkcVcriYja5O
-         45RtPCRZ3F+3H8DM3hMnGwYj3j+CJajO5crQihISF0jK1I8KzORXS9+/4T0p7MT2DZZN
-         v19lmcLNH7SwNyHlH7O4fRgYDRGiyg1rw5RuQ9vhgJm/lN9+WDHfxGZFiqchFw+dEBTV
-         vEDKWCcjnxub0VVU9K8jAyE8r+3TW0iv0WUQsC4olyiE4rUiHSYsWb2DUjoW1qg5liTf
-         YIdHxCi5kCBFSFqwVNiuzAqNbWO7K6PbMzM6/Ak41Dxm7ZpM5gdBBEmZm+ryRF++Lk+g
-         Rvpw==
-X-Gm-Message-State: ABy/qLa1ugAD12EwSRc9pj+N8q1bn/TKN6lJpfyevBaGSqsNqJioRpUs
-        Y5dRK8Sfz0PGhktb+3Q2pKgfTw==
-X-Google-Smtp-Source: APBJJlEBalRUj+ijS5CyMwGZ73deoQ4XRunAyY0wJowOTqWQavAPcjIpA36nSTndCOGOxWS/74NRxw==
-X-Received: by 2002:a2e:8611:0:b0:2b6:daa3:f0af with SMTP id a17-20020a2e8611000000b002b6daa3f0afmr14149206lji.25.1689085323017;
+        bh=fgmqG4jujLqQxwJIJ5hn90DGaowksqxT71+ZFrlpWAo=;
+        b=jOXNgJvE2IG7iqrW6DVeSwhzQDByT6X5PWVMtddXrsaRVokU/5wNNtrN9aV9mv/Bxq
+         rLAFpyRqRoDODm9Cv75RgupW1lgWrUO7Rk8KGcN+V77R3MvLwoOPGVnupmT9gII85BF/
+         aaBlFHE2wDtykoR9xOgrHzkaMo6kDxjERbgbghb9unlZRMcU34JxLI/mzBhs6kiVMm/v
+         cqV1Q+MB1Ih2SN6DS0Pq9tuJMMdzvlV5LOy2QhTD1GyFTZp4dXoL6AxR9C0ScX0CBm9y
+         Y57N81j0KmiLnEnofy0HKIxy5rMDDvQ3fD0GURXHlhfrBq0UfHpurpealft4gunL/57F
+         uFvQ==
+X-Gm-Message-State: ABy/qLYVi/kD2vPeoph1WCwHLM8a/hN93ydAxsFtcBtMTkOrirHmtRwC
+        KIWPVFGxAC3gN1DIr4lmtQN/ug==
+X-Google-Smtp-Source: APBJJlHpfuT3UxsY6ALFZB4Z/BEceDANtxuKi9GxtHxD67I2xBdVnCt8nJfM6i+UTVnNQAOf+0OKOA==
+X-Received: by 2002:a2e:a0c8:0:b0:2b7:764:3caf with SMTP id f8-20020a2ea0c8000000b002b707643cafmr12539420ljm.10.1689085323898;
         Tue, 11 Jul 2023 07:22:03 -0700 (PDT)
 Received: from eriador.lan (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id v9-20020a2e87c9000000b002b6b4424a28sm487934ljj.13.2023.07.11.07.22.02
+        by smtp.gmail.com with ESMTPSA id v9-20020a2e87c9000000b002b6b4424a28sm487934ljj.13.2023.07.11.07.22.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 07:22:02 -0700 (PDT)
+        Tue, 11 Jul 2023 07:22:03 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     quic_abhinavk@quicinc.com, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+To:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/msm/dsi: Enable BURST_MODE for command mode for DSI 6G v1.3+
-Date:   Tue, 11 Jul 2023 17:21:52 +0300
-Message-Id: <168908465039.1869384.13751958187068298061.b4-ty@linaro.org>
+Subject: Re: [PATCH v5 0/2] retrieve DSI DSC through priv-dsi[0]
+Date:   Tue, 11 Jul 2023 17:21:53 +0300
+Message-Id: <168908465045.1869384.116123598004032569.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230608-b4-add-burst-mode-v2-1-2ff468457d46@quicinc.com>
-References: <20230608-b4-add-burst-mode-v2-1-2ff468457d46@quicinc.com>
+In-Reply-To: <1687454686-10340-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1687454686-10340-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -79,22 +80,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 27 Jun 2023 13:31:45 -0700, Jessica Zhang wrote:
-> During a frame transfer in command mode, there could be frequent
-> LP11 <-> HS transitions when multiple DCS commands are sent mid-frame or
-> if the DSI controller is running on slow clock and is throttled. To
-> minimize frame latency due to these transitions, it is recommended to
-> send the frame in a single burst.
+On Thu, 22 Jun 2023 10:24:44 -0700, Kuogee Hsieh wrote:
+> moving retrieving struct drm_dsc_cofnig from setup_display to
+> atomic_enable() and delete struct drm_dsc_config from
+> struct msm_display_info.
 > 
-> This feature is supported for DSI 6G 1.3 and above, thus enable burst
-> mode if supported.
+> Kuogee Hsieh (2):
+>   drm/msm/dpu: retrieve DSI DSC struct through priv->dsi[0]
+>   drm/msm/dpu: remove struct drm_dsc_config from struct msm_display_info
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] drm/msm/dsi: Enable BURST_MODE for command mode for DSI 6G v1.3+
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/4ac447e89e71
+[1/2] drm/msm/dpu: retrieve DSI DSC struct through priv->dsi[0]
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/5430ec2d2992
+[2/2] drm/msm/dpu: remove struct drm_dsc_config from struct msm_display_info
+      https://gitlab.freedesktop.org/lumag/msm/-/commit/86841ba67bf0
 
 Best regards,
 -- 
