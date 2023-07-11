@@ -2,46 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DC374EAEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CE674EAF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjGKJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S230306AbjGKJmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjGKJl6 (ORCPT
+        with ESMTP id S229990AbjGKJmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:41:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EEAA91
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:41:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7941F2B;
-        Tue, 11 Jul 2023 02:42:39 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 083593F67D;
-        Tue, 11 Jul 2023 02:41:55 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 10:41:53 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH] KVM: arm64: Handle kvm_arm_init failure correctly in
- finalize_pkvm
-Message-ID: <20230711094153.36b746snfds3cbr7@bogus>
-References: <20230704193243.3300506-1-sudeep.holla@arm.com>
- <86fs5ux2sh.wl-maz@kernel.org>
+        Tue, 11 Jul 2023 05:42:00 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3E691;
+        Tue, 11 Jul 2023 02:41:59 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C38D20008;
+        Tue, 11 Jul 2023 09:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689068517;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1mQpjvbXTqSZMh2oqXJLwIPvBh65UpQSNz+TWmuX7pg=;
+        b=J0IPQRNMF4rW2vhHO+MYH6DbHjXzguu5d4CblnTphTAbz9ZHmZ8RKYVpLXShsypPVO7j6N
+        LYIc1MsuzN/0rKV95AwKrjMPziCl43osWurZYVBCqlwo2TdBB8aEX5PQTCS5AGn50ZwmVL
+        NTk/4ViLGUGU5qLaKuzX8Ib9PeofopHsvXevdHx5GDuHYF0bvSswTu9giUyFQtqS/YpbaK
+        FvIou48O/Tbv0p4Kuv01/RRyikSfEnqANaZHaheeak+lCFg1RslpA9s4A6rqxdFdALqKXN
+        FgIQbgkJJ+fVrlUVqyoL8iUiKDvvHr+9Xgt6QwIxvaipNaeSZgstvccv138LAg==
+Date:   Tue, 11 Jul 2023 11:41:55 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     "Chunfeng Yun (=?UTF-8?B?5LqR5pil5bOw?=)" <Chunfeng.Yun@mediatek.com>
+Cc:     "yhao016@ucr.edu" <yhao016@ucr.edu>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: mtu3: Fix possible use-before-initialization bug
+Message-ID: <20230711114155.4a000704@bootlin.com>
+In-Reply-To: <29a71cbb61148d2085cc08da681526c4e20d31b9.camel@mediatek.com>
+References: <CA+UBctDxfb6+70+hzuXJ-gwb65E0uoNzXYEhpJT92sXr2CE7OA@mail.gmail.com>
+        <20230705080625.02b2bac5@bootlin.com>
+        <CA+UBctBqtSvyBWf9ZwKbecTrh9_6sCDm_TyU-ncb+6h5y19K5g@mail.gmail.com>
+        <20230710082558.2f82d607@bootlin.com>
+        <29a71cbb61148d2085cc08da681526c4e20d31b9.camel@mediatek.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86fs5ux2sh.wl-maz@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: herve.codina@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,119 +64,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 09:36:46AM +0100, Marc Zyngier wrote:
-> On Tue, 04 Jul 2023 20:32:43 +0100,
-> Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > 
-> > Currently there is no synchronisation between finalize_pkvm() and
-> > kvm_arm_init() initcalls. The finalize_pkvm() proceeds happily even if
-> > kvm_arm_init() fails resulting in the following warning on all the CPUs
-> > and eventually a HYP panic:
-> > 
-> >   | kvm [1]: IPA Size Limit: 48 bits
-> >   | kvm [1]: Failed to init hyp memory protection
-> >   | kvm [1]: error initializing Hyp mode: -22
-> >   |
-> >   | <snip>
-> >   |
-> >   | WARNING: CPU: 0 PID: 0 at arch/arm64/kvm/pkvm.c:226 _kvm_host_prot_finalize+0x30/0x50
-> >   | Modules linked in:
-> >   | CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0 #237
-> >   | Hardware name: FVP Base RevC (DT)
-> >   | pstate: 634020c5 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
-> >   | pc : _kvm_host_prot_finalize+0x30/0x50
-> >   | lr : __flush_smp_call_function_queue+0xd8/0x230
-> >   |
-> >   | Call trace:
-> >   |  _kvm_host_prot_finalize+0x3c/0x50
-> >   |  on_each_cpu_cond_mask+0x3c/0x6c
-> >   |  pkvm_drop_host_privileges+0x4c/0x78
-> >   |  finalize_pkvm+0x3c/0x5c
-> >   |  do_one_initcall+0xcc/0x240
-> >   |  do_initcall_level+0x8c/0xac
-> >   |  do_initcalls+0x54/0x94
-> >   |  do_basic_setup+0x1c/0x28
-> >   |  kernel_init_freeable+0x100/0x16c
-> >   |  kernel_init+0x20/0x1a0
-> >   |  ret_from_fork+0x10/0x20
-> >   | Failed to finalize Hyp protection: -22
-> >   |     dtb=fvp-base-revc.dtb
-> >   | kvm [95]: nVHE hyp BUG at: arch/arm64/kvm/hyp/nvhe/mem_protect.c:540!
-> >   | kvm [95]: nVHE call trace:
-> >   | kvm [95]:  [<ffff800081052984>] __kvm_nvhe_hyp_panic+0xac/0xf8
-> >   | kvm [95]:  [<ffff800081059644>] __kvm_nvhe_handle_host_mem_abort+0x1a0/0x2ac
-> >   | kvm [95]:  [<ffff80008105511c>] __kvm_nvhe_handle_trap+0x4c/0x160
-> >   | kvm [95]:  [<ffff8000810540fc>] __kvm_nvhe___skip_pauth_save+0x4/0x4
-> >   | kvm [95]: ---[ end nVHE call trace ]---
-> >   | kvm [95]: Hyp Offset: 0xfffe8db00ffa0000
-> >   | Kernel panic - not syncing: HYP panic:
-> >   | PS:a34023c9 PC:0000f250710b973c ESR:00000000f2000800
-> >   | FAR:ffff000800cb00d0 HPFAR:000000000880cb00 PAR:0000000000000000
-> >   | VCPU:0000000000000000
-> >   | CPU: 3 PID: 95 Comm: kworker/u16:2 Tainted: G        W          6.4.0 #237
-> >   | Hardware name: FVP Base RevC (DT)
-> >   | Workqueue: rpciod rpc_async_schedule
-> >   | Call trace:
-> >   |  dump_backtrace+0xec/0x108
-> >   |  show_stack+0x18/0x2c
-> >   |  dump_stack_lvl+0x50/0x68
-> >   |  dump_stack+0x18/0x24
-> >   |  panic+0x138/0x33c
-> >   |  nvhe_hyp_panic_handler+0x100/0x184
-> >   |  new_slab+0x23c/0x54c
-> >   |  ___slab_alloc+0x3e4/0x770
-> >   |  kmem_cache_alloc_node+0x1f0/0x278
-> >   |  __alloc_skb+0xdc/0x294
-> >   |  tcp_stream_alloc_skb+0x2c/0xf0
-> >   |  tcp_sendmsg_locked+0x3d0/0xda4
-> >   |  tcp_sendmsg+0x38/0x5c
-> >   |  inet_sendmsg+0x44/0x60
-> >   |  sock_sendmsg+0x1c/0x34
-> >   |  xprt_sock_sendmsg+0xdc/0x274
-> >   |  xs_tcp_send_request+0x1ac/0x28c
-> >   |  xprt_transmit+0xcc/0x300
-> >   |  call_transmit+0x78/0x90
-> >   |  __rpc_execute+0x114/0x3d8
-> >   |  rpc_async_schedule+0x28/0x48
-> >   |  process_one_work+0x1d8/0x314
-> >   |  worker_thread+0x248/0x474
-> >   |  kthread+0xfc/0x184
-> >   |  ret_from_fork+0x10/0x20
-> >   | SMP: stopping secondary CPUs
-> >   | Kernel Offset: 0x57c5cb460000 from 0xffff800080000000
-> >   | PHYS_OFFSET: 0x80000000
-> >   | CPU features: 0x00000000,1035b7a3,ccfe773f
-> >   | Memory Limit: none
-> >   | ---[ end Kernel panic - not syncing: HYP panic:
-> >   | PS:a34023c9 PC:0000f250710b973c ESR:00000000f2000800
-> >   | FAR:ffff000800cb00d0 HPFAR:000000000880cb00 PAR:0000000000000000
-> >   | VCPU:0000000000000000 ]---
-> > 
-> > Fix it by checking for the successfull initialisation of kvm_arm_init()
-> > in finalize_pkvm() before proceeding any futher.
-> > 
-> > Fixes: 87727ba2bb05 ("KVM: arm64: Ensure CPU PMU probes before pKVM host de-privilege")
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Oliver Upton <oliver.upton@linux.dev>
-> > Cc: James Morse <james.morse@arm.com>
-> > Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> > Cc: Zenghui Yu <yuzenghui@huawei.com>
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> 
-> I really dislike the additional helper, but now that the capabilities
-> are patched, I can't see another way to achieve this so:
->
+Hi Chunfeng,
 
-Yes, I too don't like it and was almost tempted to post it as RFC, but then
-I didn't want it to get ignored ;) as it a bug I hit on my setup with
-mismatched FF-A version.
+On Tue, 11 Jul 2023 08:48:35 +0000
+Chunfeng Yun (云春峰) <Chunfeng.Yun@mediatek.com> wrote:
 
-> Acked-by: Marc Zyngier <maz@kernel.org>
->
+> On Mon, 2023-07-10 at 08:25 +0200, Herve Codina wrote:
+> >  	 
+> > External email : Please do not click links or open attachments until
+> > you have verified the sender or the content.
+> >  Hi Yu,
+> > 
+> > On Sun, 9 Jul 2023 17:48:15 -0700
+> > Yu Hao <yhao016@ucr.edu> wrote:
+> >   
+> > > Hi Hervé,
+> > > 
+> > > Thanks for the comments. How about this patch?
+> > > ---
+> > >  drivers/usb/mtu3/mtu3_gadget_ep0.c | 11 ++++++++---
+> > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > > b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > > index e4fd1bb14a55..af2884943c2a 100644
+> > > --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > > +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > > @@ -600,7 +600,7 @@ static void ep0_tx_state(struct mtu3 *mtu)
+> > >         mtu3_readl(mtu->mac_base, U3D_EP0CSR));
+> > >  }
+> > > 
+> > > -static void ep0_read_setup(struct mtu3 *mtu, struct  
+> > usb_ctrlrequest *setup)  
+> > > +static int ep0_read_setup(struct mtu3 *mtu, struct usb_ctrlrequest  
+> > *setup)  
+> > >  {
+> > >     struct mtu3_request *mreq;
+> > >     u32 count;
+> > > @@ -608,6 +608,8 @@ static void ep0_read_setup(struct mtu3 *mtu,
+> > > struct usb_ctrlrequest *setup)
+> > > 
+> > >     csr = mtu3_readl(mtu->mac_base, U3D_EP0CSR) & EP0_W1C_BITS;
+> > >     count = mtu3_readl(mtu->mac_base, U3D_RXCOUNT0);
+> > > +   if (count == 0)
+> > > +       return -EINVAL;  
+> > 
+> > 'count' should be tested against sizeof(*setup). Indeed, we need to
+> > have a
+> > setup data packet in the fifo.
+> > 
+> > What do you think about:
+> > if (count < sizef(*setup))
+> > return -EINVAL;  
+> before call this function, already check the data length in fifo, it
+> should be 8 bytes.
+> see mtu3_ep0_isr(), about line 761.
 
-Thanks!
+Indeed, I missed that point.
+Thanks for pointing it.
 
--- 
 Regards,
-Sudeep
+Hervé
+
+> 
+> I think no need this patch
+> 
+> Thanks a lot
+> 
+> >   
+> > > 
+> > >     ep0_read_fifo(mtu->ep0, (u8 *)setup, count);
+> > > 
+> > > @@ -642,7 +644,8 @@ __acquires(mtu->lock)
+> > >     struct mtu3_request *mreq;
+> > >     int handled = 0;
+> > > 
+> > > -   ep0_read_setup(mtu, &setup);
+> > > +   if (ep0_read_setup(mtu, &setup))
+> > > +       return -EINVAL;  
+> > 
+> > Forward the error code to the caller ?
+> > 
+> > ret = ep0_read_setup(mtu, &setup)
+> > if (ret < 0)
+> > return ret;
+> > 
+> >   
+> > >     trace_mtu3_handle_setup(&setup);
+> > > 
+> > >     if ((setup.bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD)
+> > > @@ -764,7 +767,9 @@ irqreturn_t mtu3_ep0_isr(struct mtu3 *mtu)
+> > >             break;
+> > >         }
+> > > 
+> > > -       ep0_handle_setup(mtu);
+> > > +       if (ep0_handle_setup(mtu))
+> > > +           break;
+> > > +  
+> > 
+> > Ok
+> >   
+> > >         ret = IRQ_HANDLED;
+> > >         break;
+> > >     default:  
+> > 
+> > Be careful, your patch is wrongly indented.
+> > tabs replaced by 4 spaces. You need to keep tabs.
+> > 
+> > Regards,
+> > Hervé Codina
+> >   
+
