@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F8B74F0A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101F074F032
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233066AbjGKNtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S232082AbjGKNcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjGKNtq (ORCPT
+        with ESMTP id S229929AbjGKNce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:49:46 -0400
-Received: from vps082603.grandeslagos.com.ar (ns1.grandeslagos.com.ar [131.196.180.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6579594
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:49:44 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by vps082603.grandeslagos.com.ar (Postfix) with ESMTP id 2A5A0221B6;
-        Tue, 11 Jul 2023 10:32:41 -0300 (-03)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        grandeslagos.com.ar; h=reply-to:date:date:from:from:subject
-        :subject:content-description:content-transfer-encoding
-        :mime-version:content-type:content-type; s=default; t=
-        1689082358; x=1690896759; bh=E5F5liCt13b32Oc+Ob2vRs5jFVPItTSBzSL
-        SWgOGj2M=; b=zHshuEtDObEZTQk7WM408Bd8xgxhJBTPCDmMwp/xQhAnF8XHscQ
-        +b9i0rcrwi/lS3Rn9bw17FxFkS98Q9SOPTa3D224blge52bFpxtI6ELng62Sh2Pt
-        oq5bf3ggHJhPSvpFuy9J1fxlfwLofU9ccWlHW7+s2B7iMzhw+9T+fqZ9sqWzdRS+
-        dryOYJyDUs9pPOJKTGl2ec/1unkPIESeK56UgQr+8V5BDZ5sWpJEl1pZfOa65zMI
-        wOoSFSV5lhsy0fcPJpEPNSCpbnD9AOZ8w+GJlccf4nz2cLJcxs8Syct33uSmLnpj
-        TMHSuW7Dw/NO9HEkRWZLZzHCJX/+AJ5772A==
-X-Virus-Scanned: Debian amavisd-new at vps082603.grandeslagos.com.ar
-Received: from vps082603.grandeslagos.com.ar ([127.0.0.1])
-        by localhost (mail.grandeslagos.com.ar [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 75XAo4JxSkN1; Tue, 11 Jul 2023 10:32:38 -0300 (-03)
-Received: from [192.168.8.101] (unknown [41.85.163.141])
-        (Authenticated sender: gustavo@grandeslagos.com.ar)
-        by vps082603.grandeslagos.com.ar (Postfix) with ESMTPSA id 30E30221EA;
-        Tue, 11 Jul 2023 10:32:28 -0300 (-03)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
+        Tue, 11 Jul 2023 09:32:34 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD5CE6C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1689082352;
+        bh=VC99mbHi4AmfAoiUCA8Y/mu2KyCyRbtpGMBesSFehV8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HoA7CsT1lVhUWuNRJBPiVYZjP/ouAsdDBcUtop5f1RKE5K4tafMAuur15O36Otun2
+         E9CFIKJb28YZ7uVgrv52WBxecSGMitHbwSjY6KezRmR2UQVaay196vVxLkbl+yB/24
+         awaWu4iDHTjrSONzXNhcXgHbwImPVmYpBZFvUf0Y=
+Received: from [192.168.124.11] (unknown [113.140.11.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 0C35566455;
+        Tue, 11 Jul 2023 09:32:30 -0400 (EDT)
+Message-ID: <d8e2e93e6cf07846621b15104ce89b430ee8426f.camel@xry111.site>
+Subject: Re: [PATCH v2] LOONGARCH: Make CONFIG_CMDLINE work with
+ CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Dong Zhihong <donmor3000@hotmail.com>, chenhuacai@kernel.org,
+        kernel@xen0n.name
+Cc:     ardb@kernel.org, tangyouling@loongson.cn, zhoubinbin@loongson.cn,
+        yangtiezhu@loongson.cn, tglx@linutronix.de,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Tue, 11 Jul 2023 21:32:29 +0800
+In-Reply-To: <MEYP282MB2597022C264B501FE1B9C40AD931A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
+References: <MEYP282MB2597022C264B501FE1B9C40AD931A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Representative 
-To:     Recipients <gustavo@grandeslagos.com.ar>
-From:   Global Trader Company <gustavo@grandeslagos.com.ar>
-Date:   Tue, 11 Jul 2023 14:32:18 +0100
-Reply-To: potterroger11@gmail.com
-Message-Id: <20230711133241.2A5A0221B6@vps082603.grandeslagos.com.ar>
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,FROM_MISSP_SPF_FAIL,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_FAIL,SPF_HELO_NONE,
-        TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [131.196.180.11 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [41.85.163.141 listed in zen.spamhaus.org]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: grandeslagos.com.ar]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [131.196.180.11 listed in wl.mailspike.net]
-        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=gustavo%40grandeslagos.com.ar;ip=131.196.180.11;r=lindbergh.monkeyblade.net]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [potterroger11[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 FROM_MISSP_SPF_FAIL No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
-        *       failed
-        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
-X-Spam-Level: ******
+User-Agent: Evolution 3.48.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My name is , Mrs Rita Potter Rogers we need a Company Representative in you=
-r city location, you can work online or at home and get good payment, conta=
-ct us if interested on this Email: potterroger11@gmail.com
+Use "LoongArch" instead of "LOONGARCH".  "LOONGARCH" should only show up
+in macro names, enum value names, etc.
+
+On Tue, 2023-07-11 at 21:27 +0800, Dong Zhihong wrote:
+> This patch tends to make CONFIG_CMDLINE work with CONFIG_CMDLINE_EXTEND
+
+As Markus already told you, submitting-patches.rst says:
+
+"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour."
+
+i. e. "Make CONFIG_CMDLINE work with ...".
+
+> and CONFIG_CMDLINE_BOOTLOADER. The touched function is bootcmdline_init()=
+`.
+> There's already code handling CONFIG_CMDLINE_FORCE, which replaces
+> `boot_command_line` with CONFIG_CMDLINE and immediately`goto out`. It'd b=
+e
+> similar way to handle CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER=
+,
+> so I added some code after OF_FLATTREE part to handle them.
+>=20
+> Signed-off-by: Dong Zhihong <donmor3000@hotmail.com>
+> ---
+>=20
+> v2 -> v1:Reworded the commit message so it's more imperative (Markus);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Added `goto out` to FDT p=
+art (Huacai)
+>=20
+> =C2=A0arch/loongarch/kernel/setup.c | 17 +++++++++++++++++
+> =C2=A01 file changed, 17 insertions(+)
+>=20
+> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.=
+c
+> index 78a00359bde3..3cafda1a409e 100644
+> --- a/arch/loongarch/kernel/setup.c
+> +++ b/arch/loongarch/kernel/setup.c
+> @@ -332,7 +332,24 @@ static void __init bootcmdline_init(char **cmdline_p=
+)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0str=
+lcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0strlcat(boot_command_line, init_command_line, COMMA=
+ND_LINE_SIZE);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0goto out;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> +#endif
+> +
+> +#ifdef CONFIG_CMDLINE
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * If CONFIG_CMDLINE_BOOTLOADE=
+R is enabled then we use thei built-in
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * command line if no command =
+line given, or we append given command
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * line to the built-in one if=
+ CONFIG_CMDLINE_EXTEND is enabled.
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ENABLED(CONFIG_CMDLINE_=
+EXTEND)) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_S=
+IZE);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0strlcat(boot_command_line, init_command_line, COMMAND_LIN=
+E_SIZE);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> +
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ENABLED(CONFIG_CMDLINE_=
+BOOTLOADER) && !boot_command_line[0])
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_S=
+IZE);
+> =C2=A0#endif
+> =C2=A0
+> =C2=A0out:
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
