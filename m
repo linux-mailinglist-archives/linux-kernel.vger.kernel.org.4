@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5748274F405
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1A174F40C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjGKPr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S232941AbjGKPsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGKPrY (ORCPT
+        with ESMTP id S231213AbjGKPsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:47:24 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D146CF0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:47:22 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so60400745e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:47:22 -0700 (PDT)
+        Tue, 11 Jul 2023 11:48:37 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80816FB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:48:36 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666ecf9a081so5150019b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689090441; x=1691682441;
+        d=chromium.org; s=google; t=1689090516; x=1691682516;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H4EaPljyU0HSPbHu61XlLmSr07kl10hJYMoKYo6/bmM=;
-        b=XWRsF2YVPc1QlYZwZyN3y7o1RaQWpfyxNK8iPw2+XAvkWY7Z/nW2VdqZTHvubNBPNT
-         KQR/nYxq8lzt8WrBIJhEy+rcLo8oEI6R5dCKNSljsu1GnTUkmO53brVKvo5fNoTpiZ8j
-         i0UjO1rGlyHLfNPDtmnLP/uRSKOvsIGLo1XdoyHZHRt5GzetvZ8j+3evP5BAN9YkceCn
-         cwo9EmG45mDFWD+mjFO1YOgRFuu57MFGjct0xaMSIJlVfmMirlF6N1b4N3TyCJeME9cF
-         TlwvWRPRO+dftUUORHs9pZP0lih3oEGFXfD5S/PlQXXXN73SOElLeoH247PnQCQjKGTv
-         frzQ==
+        bh=gMRM+V8aFzozPK+1eStZnFAVQQXz06JbYH2PUPwSbRc=;
+        b=KyZIEX2efN9dTSaXYjPypC19rP5SGSxCiwirikn2xdKQ9obqcwBQtmxC9XWu5v+2Sh
+         8t1iCuWeL9CE6V4nenudNsyCktdqubs6qUoegGOs+nN0+Dj8/anyyDkWa/2hDOFqOgRt
+         cuMdyVgDds2JHO6nVXNOUZDb+NSXB0uijCqzg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689090441; x=1691682441;
+        d=1e100.net; s=20221208; t=1689090516; x=1691682516;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H4EaPljyU0HSPbHu61XlLmSr07kl10hJYMoKYo6/bmM=;
-        b=HwJja/jySeoCJKMktAWmn9UNH+kefgzjlV6tfsva3OGKnjQKdsHvvcmSB0MvxpFDl0
-         b9JLJkzQlpKFwGgD5qijqvcmC4/eYeMjJ45QM07KI7MwVDpWIfrIHV69Oa/I/YUe+AiY
-         IqLr5CQkVQqkFKd5jdCiDKFhSRxVaSJ1lf+M6EAPHcXuHyFNbLobfY2mYnBwsVEMkY/C
-         1hmPlpq8iWu3jD3w67kda/mx8fKX2Y4Mw7pOH5AIVM2+SUdhhfsqGbNOF+4Ptw+C8oxF
-         LIgsEKPyNoXr7w8eP+SnEe2xPPtJ66UpEzH1UTwal6fFSlJe2IDZKtHJ9aSjj0w8sfWn
-         LXTQ==
-X-Gm-Message-State: ABy/qLYikuXztwxdadLMi8B7quCewNE8Kqa13GQ5v4RU0f349xcwxqUX
-        DLYG8+lra2yXes+AorCG+HDJvQ==
-X-Google-Smtp-Source: APBJJlF9uq2sMMAnt7oJuhvGOiwBfgQ0ZGxq/t3cqkwUsht0sMUdFcJ25CdjcEjQEfncTKdT500SrQ==
-X-Received: by 2002:a7b:c5d0:0:b0:3fb:b008:1ff6 with SMTP id n16-20020a7bc5d0000000b003fbb0081ff6mr13614981wmk.0.1689090441001;
-        Tue, 11 Jul 2023 08:47:21 -0700 (PDT)
-Received: from airbuntu ([104.132.45.107])
-        by smtp.gmail.com with ESMTPSA id t22-20020a7bc3d6000000b003fc02218d6csm11108557wmj.25.2023.07.11.08.47.19
+        bh=gMRM+V8aFzozPK+1eStZnFAVQQXz06JbYH2PUPwSbRc=;
+        b=ZjKrbdoJfTsGKb/ezl/T3ty1CMizHuPpeE4uY7+MTKzxOcL+kG0hXW9+vzKkTwE0dz
+         56ADeEX4nQCOOZFdP2sEketkgXeY3N87jZOVhjMZb7SYarB1Qe6NV8kC8I+8CINiVx59
+         Y1Odl80lsVPmFT+YNhJkI5WSV196w/Mmkda3Y86vqShrPe/M9X5gqq3gIFgHy5es81KU
+         1v3k0NgzfCFegyme8aLnC4v9Dd8UfSyg6mzVWG5duamoZ2cbL10fcASH+c4e6lEruB4T
+         2ml5gae79OemJSb9ipAM+ffVN5cr2QN80a+DfkFAvhPBHYJT6ebs3rnj7udGCkecoshh
+         s05w==
+X-Gm-Message-State: ABy/qLb4LnyeHUTL+zGJyN29kgXO0dqpvntbnSIdIPbPJNCiItnKCorT
+        mvmSnrk0H3jgeeYs3Ns11BWwIA==
+X-Google-Smtp-Source: APBJJlFW+i8logIK1uoMz5/q5X4xKTTQaFRkN6PBPOYxC0yirJfLOQLBYPK/dD4D0oz3RT8WnLvPPg==
+X-Received: by 2002:a17:902:f94e:b0:1b0:6038:2982 with SMTP id kx14-20020a170902f94e00b001b060382982mr14614382plb.41.1689090516040;
+        Tue, 11 Jul 2023 08:48:36 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id o13-20020a170902c50d00b001b03b7f8adfsm2087574plx.246.2023.07.11.08.48.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 08:47:20 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:47:18 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/fair: remove util_est boosting
-Message-ID: <20230711154718.gudn32sru5opwvlw@airbuntu>
-References: <20230706135144.324311-1-vincent.guittot@linaro.org>
+        Tue, 11 Jul 2023 08:48:35 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 08:48:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>,
+        Tom Gall <tom.gall@linaro.org>, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v4] checkpatch: check for missing Fixes tags
+Message-ID: <202307110848.E0389C3004@keescook>
+References: <f3ac6084-8def-4b57-9e6e-0497555e2784@moroto.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230706135144.324311-1-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f3ac6084-8def-4b57-9e6e-0497555e2784@moroto.mountain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/23 15:51, Vincent Guittot wrote:
-> There is no need to use runnable_avg when estimating util_est and that
-> even generates wrong behavior because one includes blocked tasks whereas
-> the other one doesn't. This can lead to accounting twice the waking task p,
-> once with the blocked runnable_avg and another one when adding its
-> util_est.
+On Tue, Jul 11, 2023 at 04:48:14PM +0300, Dan Carpenter wrote:
+> This check looks for common words that probably indicate a patch
+> is a fix.  For now the regex is:
 > 
-> cpu's runnable_avg is already used when computing util_avg which is then
-> compared with util_est.
+> 	(?:(?:BUG: K.|UB)SAN: |Call Trace:|stable\@|syzkaller)/)
 > 
-> In some situation, feec will not select prev_cpu but another one on the
-> same performance domain because of higher max_util
+> Why are stable patches encouraged to have a fixes tag?  Some people mark
+> their stable patches as "# 5.10" etc.  This is useful but a Fixes tag is
+> still a good idea.  For example, the Fixes tag helps in review.  It
+> helps people to not cherry-pick buggy patches without also
+> cherry-picking the fix.
 > 
-> Fixes: 7d0583cf9ec7 ("sched/fair, cpufreq: Introduce 'runnable boosting'")
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
-
-Can we verify the numbers that introduced this magic boost are still valid
-please?
-
-Otherwise LGTM.
-
-
-Thanks!
-
---
-
-Qais Yousef
-
->  kernel/sched/fair.c | 3 ---
->  1 file changed, 3 deletions(-)
+> Also if a bug affects the 5.7 kernel some people will round it up to
+> 5.10+ because 5.7 is not supported on kernel.org.  It's possible the Bad
+> Binder bug was caused by this sort of gap where companies outside of
+> kernel.org are supporting different kernels from kernel.org.
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index a80a73909dc2..77c9f5816c31 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7289,9 +7289,6 @@ cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
->  
->  		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
->  
-> -		if (boost)
-> -			util_est = max(util_est, runnable);
-> -
->  		/*
->  		 * During wake-up @p isn't enqueued yet and doesn't contribute
->  		 * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
-> -- 
-> 2.34.1
+> Should it be counted as a Fix when a patch just silences harmless
+> WARN_ON() stack trace.  Yes.  Definitely.
 > 
+> Is silencing compiler warnings a fix?  It seems unfair to the original
+> authors, but we use -Werror now, and warnings break the build so let's
+> just add Fixes tags.  I tell people that silencing static checker
+> warnings is not a fix but the rules on this vary by subsystem.
+> 
+> Is fixing a minor LTP issue (Linux Test Project) a fix?  Probably?  It's
+> hard to know what to do if the LTP test has technically always been
+> broken.
+> 
+> One clear false positive from this check is when someone updated their
+> debug output and included before and after Call Traces.  Or when crashes
+> are introduced deliberately for testing.  In those cases, you should
+> just ignore checkpatch.
+> 
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
