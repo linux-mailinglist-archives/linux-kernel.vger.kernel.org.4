@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D578374F71F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC8674F73D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjGKRXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 13:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S230305AbjGKR2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjGKRWy (ORCPT
+        with ESMTP id S229591AbjGKR23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:22:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2D81994;
-        Tue, 11 Jul 2023 10:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689096149; x=1720632149;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CpW8kvvc/ZnO1puaWFpehGXVctv82waY7wFcuPwcuzU=;
-  b=XtVnyhXu8Nu7yV4wY2n/VpnK6jzCxC10gg4pV/fSwWz/d9Tf8C1K5vWL
-   rmKm1+ga3Q8pSAovZlHxZ/TclBcs3ajJwW6NJOjcZ4d8cwn51c1GI+rka
-   rtjeMkXnGFTQVrWe/EI4fwSzoMXz4hj05bRm94i9TpWWyv8IwFCc4Oc+4
-   01DP8Xx5ABAnrqmB/1GTO6lftTFcG+tXgiK2PuaMlZuCt5D/G31N8lJX5
-   SMzM2GxFGP7VxSYLFgtpy/zIntlDIBEbh6H+/NPDj/ulFz95I9WtVLZPS
-   eBqzzf7ErzUlKa/YicEstQLRtCRcWfxpenhvLiqGtKEkIQ2NJhRB1xd7M
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="451046126"
-X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="451046126"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 10:21:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="895249329"
-X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="895249329"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 10:21:23 -0700
-Date:   Tue, 11 Jul 2023 10:26:20 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>, iommu@lists.linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 2/9] iommu: Add device parameter to iopf handler
-Message-ID: <20230711102620.37b06884@jacob-builder>
-In-Reply-To: <20230711010642.19707-3-baolu.lu@linux.intel.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
-        <20230711010642.19707-3-baolu.lu@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 11 Jul 2023 13:28:29 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6132A1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:28:27 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so73807305e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689096506; x=1691688506;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tAbWd4eVejrEzVS+228fp0WdS6VB4PRr8i82+ghCjls=;
+        b=tRiK8qbG1SzAXug+sVyY836Om/o50+MrsYCxB9zSIK1ZlhRVpBkrfSmdkSzitrivDZ
+         31NZ/cnzFneyiSKGgTVNUqx1DLvVS4SX9U1XwBI5VC/yWLuij+X4qcUgULL0OCwwKkAi
+         A+MT8hBxHsFbrgqWaVsFsQhZpkLvKMlpDROq1wM74+pWcKe9xIJUgTB3ePaXNwXKcyes
+         phzWGb9OzvKacBvz2K3hDzW2Wp/10JRCQRJijjdWc7Gz/WarMMn8rR04TXQyCnr1DUhy
+         zXnKW9aQL5AI+2IWTERgUDHnnKKxjj29/J5xS8M87svKya+Xz5vzdDYHUib1PlYWswr2
+         HAnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689096506; x=1691688506;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tAbWd4eVejrEzVS+228fp0WdS6VB4PRr8i82+ghCjls=;
+        b=UK46S5Vi6TlM7vkfUKhAew23BPNFF9qQWFWJpwVv1MVd+bLlaVznr56qGzasZNxYmX
+         qEcMYpnm5Cg/sJl36NP1KFyri+OPAsU/v+CZ6nTvUlR9JHHkBVJ9SZ+3em5z15Bl3xDQ
+         w/wjl58v8SMZpfZQsMwQJUlUnEuOlrI71S0Rfru2UY0b7HYs/28fKEpZCom/PSTKXPpN
+         hGYvl049kd3DAs3P8sv87es2id6IzNmMhsrqQWOngQk0njKpNl+iwIuq/0HaA0ePT+Kf
+         SJWYlFPpqzsGax8C5ZT5RyNVGNgCEm8vCXYxSHvWqxg/mvDaj60yuaMa+ztmdrTfRjuG
+         sEnw==
+X-Gm-Message-State: ABy/qLbAogbLdyreIxkwqkHAvj9zYsV48mXUSu7h9OptrbKHRhDlMvOx
+        /qPHprG1r7pjPaxVXzkkcFyv6A==
+X-Google-Smtp-Source: APBJJlG/12CTlRB68oSs36vSi4vauByL6WVCnuQ6QECH7YERJbx8As3CNX5CubZMqGqZTZyXdP4bLg==
+X-Received: by 2002:a05:600c:2299:b0:3fb:b005:99d6 with SMTP id 25-20020a05600c229900b003fbb00599d6mr19528603wmf.2.1689096506356;
+        Tue, 11 Jul 2023 10:28:26 -0700 (PDT)
+Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
+        by smtp.gmail.com with ESMTPSA id f10-20020adff98a000000b003159d2dabbasm2762802wrr.94.2023.07.11.10.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 10:28:25 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 19:28:23 +0200
+From:   Samuel Ortiz <sameo@rivosinc.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux@rivosinc.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-kernel@vger.kernel.org,
+        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
+        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Evan Green <evan@rivosinc.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] dt-bindings: riscv: Document the 1.0 scalar
+ cryptography extensions
+Message-ID: <ZK2RN7EKqmW87tyQ@vermeer>
+References: <20230709115549.2666557-1-sameo@rivosinc.com>
+ <20230709115549.2666557-3-sameo@rivosinc.com>
+ <20230710151624.GA1987602-robh@kernel.org>
+ <20230710-education-evolution-f12520405842@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710-education-evolution-f12520405842@spud>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi BaoLu,
-
-On Tue, 11 Jul 2023 09:06:35 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-wrote:
-
-> Add the device parameter to the iopf handler so that it can know which
-> device this fault was generated.
+On Mon, Jul 10, 2023 at 04:42:42PM +0100, Conor Dooley wrote:
+> On Mon, Jul 10, 2023 at 09:16:24AM -0600, Rob Herring wrote:
+> > On Sun, Jul 09, 2023 at 01:55:44PM +0200, Samuel Ortiz wrote:
+> > > The RISC-V cryptography extensions define a set of instructions, CSR
+> > > definitions, architectural interfaces and also extension shorthands for
+> > > running scalar and vector based cryptography operations on RISC-V
+> > > systems.
+> > > 
+> > > This documents all the dt-bindings for the scalar cryptography
+> > > extensions, including the Zk, Zkn and Zks shorthands.
+> > > 
+> > > Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+> > > ---
+> > >  .../devicetree/bindings/riscv/extensions.yaml | 82 +++++++++++++++++++
+> > >  1 file changed, 82 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > index cc1f546fdbdc..361756978da1 100644
+> > > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > @@ -190,6 +190,24 @@ properties:
+> > >              instructions as ratified at commit 6d33919 ("Merge pull request #158
+> > >              from hirooih/clmul-fix-loop-end-condition") of riscv-bitmanip.
+> > >  
+> > > +        - const: zbkb
+> > > +          description: |
+> > 
+> > Don't need '|' if no formatting to preserve.
 > 
-> This is necessary for use cases such as delivering IO page faults to user
-> space. The IOMMUFD layer needs to be able to lookup the device id of a
-> fault and route it together with the fault message to the user space.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  include/linux/iommu.h      | 1 +
->  drivers/iommu/iommu-sva.h  | 4 ++--
->  drivers/iommu/io-pgfault.c | 2 +-
->  drivers/iommu/iommu-sva.c  | 2 +-
->  4 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 0eb0fb852020..a00fb43b5e73 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -249,6 +249,7 @@ struct iommu_domain {
->  	struct iommu_domain_geometry geometry;
->  	struct iommu_dma_cookie *iova_cookie;
->  	enum iommu_page_response_code (*iopf_handler)(struct iommu_fault
-> *fault,
-> +						      struct device *dev,
->  						      void *data);
->  	void *fault_data;
->  	union {
-> diff --git a/drivers/iommu/iommu-sva.h b/drivers/iommu/iommu-sva.h
-> index 54946b5a7caf..c848661c4e20 100644
-> --- a/drivers/iommu/iommu-sva.h
-> +++ b/drivers/iommu/iommu-sva.h
-> @@ -23,7 +23,7 @@ struct iopf_queue *iopf_queue_alloc(const char *name);
->  void iopf_queue_free(struct iopf_queue *queue);
->  int iopf_queue_discard_partial(struct iopf_queue *queue);
->  enum iommu_page_response_code
-> -iommu_sva_handle_iopf(struct iommu_fault *fault, void *data);
-> +iommu_sva_handle_iopf(struct iommu_fault *fault, struct device *dev,
-> void *data); 
->  #else /* CONFIG_IOMMU_SVA */
->  static inline int iommu_queue_iopf(struct iommu_fault *fault, void
-> *cookie) @@ -63,7 +63,7 @@ static inline int
-> iopf_queue_discard_partial(struct iopf_queue *queue) }
->  
->  static inline enum iommu_page_response_code
-> -iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
-> +iommu_sva_handle_iopf(struct iommu_fault *fault, struct device *dev,
-> void *data) {
->  	return IOMMU_PAGE_RESP_INVALID;
->  }
-> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-> index e5b8b9110c13..fa604e1b5c5c 100644
-> --- a/drivers/iommu/io-pgfault.c
-> +++ b/drivers/iommu/io-pgfault.c
-> @@ -88,7 +88,7 @@ static void iopf_handler(struct work_struct *work)
->  		 * faults in the group if there is an error.
->  		 */
->  		if (status == IOMMU_PAGE_RESP_SUCCESS)
-> -			status = domain->iopf_handler(&iopf->fault,
-> +			status = domain->iopf_handler(&iopf->fault,
-> group->dev, domain->fault_data);
->  
->  		if (!(iopf->fault.prm.flags &
-> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
-> index 3ebd4b6586b3..14766a2b61af 100644
-> --- a/drivers/iommu/iommu-sva.c
-> +++ b/drivers/iommu/iommu-sva.c
-> @@ -157,7 +157,7 @@ EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
->   * I/O page fault handler for SVA
->   */
->  enum iommu_page_response_code
-> -iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
-> +iommu_sva_handle_iopf(struct iommu_fault *fault, struct device *dev,
-dev has no use for sva handler, right? mark them __always_unused?
+> The existing binding only adds the `|` where the commit message contains
+> a #, please drop the `|`s if you end up re-submitting. Otherwise,
 
-> void *data) {
->  	vm_fault_t ret;
->  	struct vm_area_struct *vma;
+I think the `|` is needed because the messages contains a `:`? This is
+the case as the messages in this patch have a "Zvk:..." string.
+Removing the `|` makes dt_binding_check fail because of that.
+
+Cheers,
+Samuel.
 
 
-Thanks,
-
-Jacob
