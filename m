@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D1574F403
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC0074F3FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjGKPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbjGKPqZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232856AbjGKPqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 11 Jul 2023 11:46:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08EE170A;
-        Tue, 11 Jul 2023 08:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1689090368; x=1689695168; i=deller@gmx.de;
- bh=10xMRkjlDtxZS9LQyRHHnsW87xAMUprLN04Jvmm+ctI=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=conMbIE+nxzY1Ihl5gk4rASMagP3eSIKPLkMUeO6/ZvgOZzo7Ab1Bg8ex+Ls7LSn/jXxLDn
- 8V5X0NbouhxtvH7SQrMG7cXZtcwFYfHLNbtItK46cGi8gZdJtwoN5YGGqJb9Q5kI698pnisuO
- 37OawNy05VPw42nAUnYZPhtF5w6+vRQcTIk2AanIXP0SfOsmuDvvVDoDTDeLciyUB8dPQwhY4
- NNb/oigsZ1YiQaHzRRBVtVe/42Q/08JYqaS58QOf7Uoh5wnvzMHJsmnJKxoA3yolfQuk4UXh1
- aMu9avW7Y1+roZIGDxXa1qNCSf4E/VJbhmeSPYmqLHRPFG610nLw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.149.147]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N7zFZ-1pxXrX15Wd-015041; Tue, 11
- Jul 2023 17:46:08 +0200
-Message-ID: <4de35c35-c00d-d21a-bcd1-dc878137eb94@gmx.de>
-Date:   Tue, 11 Jul 2023 17:46:07 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232519AbjGKPqX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jul 2023 11:46:23 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6466ED;
+        Tue, 11 Jul 2023 08:46:16 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31434226a2eso6754713f8f.1;
+        Tue, 11 Jul 2023 08:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689090375; x=1691682375;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TSHzWr4gaLs4jyK9BMNn2YEQIAnAbtQY/+dliKHHYxs=;
+        b=UYS+7tIh6u+ojy0oVfob+Sev7z0uPPCQbErkQpQk1O+aw22pl77XLL8DNQLpZ5C5VX
+         dCLihQlJnJ2hS7roLef3cvntWUiIFWKvkGFPW37HzuzQzBMUXcgPXlBvk7JQt0jeFzRk
+         GSF2ADgVJthd+Qi0UAOuuE2Gao+crsO42QZZBLl7v9vw5LYSUPEBMOa5vu5nXPXmLWqT
+         nBEeunutG3xUBZx4X438J7tJP5tIhQ6J8b0ofwTJtF1nRUrQC9oKcUX5KUGBp6ll3BQG
+         iP/pNUCvbqlB0OZVZCzt4a1wNWzPP7ox5rY6xj4Cu3w/cp7ojsfkbSK9AihF3dHbANXY
+         V5bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689090375; x=1691682375;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TSHzWr4gaLs4jyK9BMNn2YEQIAnAbtQY/+dliKHHYxs=;
+        b=ax0n6vajVtonQpVQwMj2dUkMapAqiEMKm3uZbtPZ2KWKAZzf6Slhli7+WAeImyRhVh
+         GSymB38GTilSYA0StbdnJDMVMTKMH7UYJUWQLpdVkjZxyqjAW8jAJQ0GhI84oH4eaRVm
+         P/vUegjaAV0z14+j6hwjZpkIz31k1iq69gqrzfQuldB5mzueVrg+LGFpuj2FzIgim3MC
+         V93W6ddMJzDWHjgECO1cd2gbMf6Qww6RXAsFI0RMIowKftEadzdeCeTPMW6GYYiyF8Eb
+         XF0fmVzBXHaSwJOIdrWQgOzJ9fpglQzxlzla1vW7UCGp7zcwBpGYQjXpTmHUjBbd6PXR
+         tMUg==
+X-Gm-Message-State: ABy/qLZKe/M+9J+EswLKVw9Xm07ktCOQHtlkLsHreSRbj33IIad6PkX/
+        sJeVBN8zWsi0LJT3j1Fe8QaRNmjFlwY=
+X-Google-Smtp-Source: APBJJlHYOoGUWXHQEGRrv1wSYYMjVMio85ATQTXMSE8aJyyC4C8fPFL3liKN90fsUX65qG2C6jlrNQ==
+X-Received: by 2002:adf:e290:0:b0:30f:c012:b529 with SMTP id v16-20020adfe290000000b0030fc012b529mr21025161wri.56.1689090374932;
+        Tue, 11 Jul 2023 08:46:14 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id g12-20020a5d46cc000000b0031455482d1fsm2568456wrs.47.2023.07.11.08.46.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 08:46:14 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 17:46:12 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] ASoC: tegra: tegra20_ac97: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZK15ROig1u7kaXfO@orome>
+References: <20230711034846.69437-1-frank.li@vivo.com>
+ <20230711034846.69437-5-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] of: Preserve "of-display" device name for compatibility
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Michal Suchanek <msuchanek@suse.de>
-Cc:     devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Cyril Brulebois <cyril@debamax.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230710174007.2291013-1-robh@kernel.org>
- <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:OekAkpBqUCxuG1+JyXZyC7/2fpPfrldaJSFdZme0KAcMxvUfeoN
- veCEfU7iFi+a33ulHh5TfAyA1lGOR+hPuATf/vCJiEjRac5ET/QcWuzxRrXC/JbS9tIaNNa
- 8WwNTT3gM669xDj/3PmH4YPkl4FGnnA9IPPBTBzjkuxWQZn0X5XPAeF9kgFzwGk3/c7n9ww
- dKADfwpo0wxkxshZ5IxAw==
-UI-OutboundReport: notjunk:1;M01:P0:ZN1cWxUa0fI=;fgbb/uD6p39KTmTtmPiJHwFZeeg
- a6ylHQ320VvmzbF5ViY2jAzht3LKGyiN5mBiVzbuoperXxo1A5RCyZ9AbMr1TENEFsUeyhkQG
- VJkdW2TdDh8pMKSCGItqXSk862RgTlb2O+NgbKaIXDrS0CysuppJIC7dCOygf82xW3oDU8M4B
- VeUNgqtLzVn00ABC1r0t2RCukrSqeHlZwmu8T0t2uoiuZZP5OFLE9ii2aAo4pa79/KiIVq4UZ
- AA1iFKyAD9OMi6p3Yv8D5qdw/NGG6m9M6QKbXpQ9qXMTma4zxLoM1lS0gRXlnKGlZOkc9F7dp
- FLLe+rH72FXy+aFqsESouj5ZBiQAwxr9Ypks8sObOYHhC5Gre1Ng5iX3KKLCZ3N1vTjHmtT3C
- u9efBJOAZIqyxe6gWMD9ZuMqVx2Jmq8NUe85tggFvLqD/cPo1sDjAs9ucqpNh9tB7OJmZ+37M
- p6z/ndoguoWpdHGzq8HOhogzQOy/z85R/vIm0cqYcEZD6CAzQU35KXgNTI402sq9pofZHFM/Q
- KnEU+XZUiHQOCFMh0aO+Kq3uiomuEF+CfWnouQdZCj5Jo6mDnSHY6V93UpHakHj89PgP6sf+b
- OS8ytbbXKGXV6cRSJ1nEGlASaoVhn17+CdaAW6hXAT4L1AOXTjFkjsXrAhemqqRkZ7nxBtzNH
- oJt7XHN3XQLfFnnDUY8cBqT2jGz2xS1kkp+h2UZJiKEGnXEFboacK6wmu4KSZDgQlIea81XGy
- pF5jWciGmh5kiw8XiUsLJvytLcvrIfdmhyf+jaFsOzjjTXC8be8BfAo4xcI0LvC51oJgwNo/q
- R23YoKr1vm3x3QwssM5zuYL+XeshlwHTBmkGWRdYrcT+QSqFWPawgI6cgcuApesYBAzI61klm
- g6jGs/FULM7IqHKwHw9lRNzo+Ntvv+JDsWX17ZWFbS/FCIWJBfrcyVIc1Xs8pYG4WidLz8OaM
- +nOMIKFX5QL15qy+J/1PrsmggL4=
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yrPPLIbhK53dQkQ8"
+Content-Disposition: inline
+In-Reply-To: <20230711034846.69437-5-frank.li@vivo.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/23 08:00, Thomas Zimmermann wrote:
->
->
-> Am 10.07.23 um 19:40 schrieb Rob Herring:
->> Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique=
-"),
->> as spotted by Fr=C3=A9d=C3=A9ric Bonnard, the historical "of-display" d=
-evice is
->> gone: the updated logic creates "of-display.0" instead, then as many
->> "of-display.N" as required.
->>
->> This means that offb no longer finds the expected device, which prevent=
-s
->> the Debian Installer from setting up its interface, at least on ppc64el=
-.
->>
->> Fix this by keeping "of-display" for the first device and "of-display.N=
-"
->> for subsequent devices.
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217328
->> Link: https://bugs.debian.org/1033058
->> Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
->> Cc: stable@vger.kernel.org
->> Cc: Cyril Brulebois <cyril@debamax.com>
->> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: Helge Deller <deller@gmx.de>
->> Signed-off-by: Rob Herring <robh@kernel.org>
->
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-Acked-by: Helge Deller <deller@gmx.de>
+--yrPPLIbhK53dQkQ8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Who will pick up that patch?
-Shall I take it via fbdev git tree?
+On Tue, Jul 11, 2023 at 11:48:45AM +0800, Yangtao Li wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>=20
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  sound/soc/tegra/tegra20_ac97.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Helge
+Acked-by: Thierry Reding <treding@nvidia.com>
 
->
->> ---
->> =C2=A0 drivers/of/platform.c | 2 +-
->> =C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
->> index 051e29b7ad2b..0c3475e7d2ff 100644
->> --- a/drivers/of/platform.c
->> +++ b/drivers/of/platform.c
->> @@ -552,7 +552,7 @@ static int __init of_platform_default_populate_init=
-(void)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (!of_get_property(node, "linux,opened", NULL) ||
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !of_get_property(node, "linux,boot-displ=
-ay", NULL))
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 continue;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev=
- =3D of_platform_device_create(node, "of-display.0", NULL);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev=
- =3D of_platform_device_create(node, "of-display", NULL);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 of_node_put(node);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (WARN_ON(!dev))
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
->
+--yrPPLIbhK53dQkQ8
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSteUQACgkQ3SOs138+
+s6GNFRAAoGU/u5P+4DbrdieXiUfZLIqdhM4uAmLJHkY7i7xuluvvsk35OBeA4Fj1
+I4mpibVDYTja7Wx6j4C8BGr5B8kk1V0dOu4wk6gQaN4zjGb2tN8bkA7v8R/6saP+
+OD3H/0t7ZZrtm/XDBD9R2Pv5gdbptYfwA/j5NpWwGSSc7iQ2gyInzbk0UKIrW4ci
+6GEKBL3qYk2dhgyD3QgSnBQecfMbkzbGzcqyT+7P8axhjclJstTZs2dlozBIC2tf
+L/Yd8n+S/3GfIH7oI0qgGbaPuoWqEmXgAL6dvddR8021kcQQJvnAl//w0EudtLXh
+Ae/auR0eLEt9YklWLXWgEIoBmGvcdqvnE29vW885RS331+th29aK39oOfRptroBJ
+FZ8MuXyUwDO0GQNkFIm6WyNuXmqxf9yzRfauGDDuPAlpPHe8plW2Zr+iTBMbjPp0
+Y72o6OCRKLyBlECkT3xYxzOwDj5qcxGgChPxKTPgyYOZ3Etz6CWys3YO+Mn+0q3s
+ilFNpaHpER/TkiWHaf1f1Afoszbic/DV/wBZf6zOZD8Ggfs6Q6QhaTJfGvUqBNVI
+AqW5hC2Ya06qUrUpB5G+NR2/F+QX8VS0ub428mai6SUemlmYat8PvDlUMpWbj06p
+JN7dyctd89Gxw+iiQgF9euFNixjCIha5XTgdXGny+Zp+802AJGQ=
+=zwSX
+-----END PGP SIGNATURE-----
+
+--yrPPLIbhK53dQkQ8--
