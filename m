@@ -2,361 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCFA74FBCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A58A74FBD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjGKXWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 19:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S230133AbjGKXZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 19:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjGKXW0 (ORCPT
+        with ESMTP id S229610AbjGKXZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 19:22:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7496B10CF;
-        Tue, 11 Jul 2023 16:22:21 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BMdaqe002776;
-        Tue, 11 Jul 2023 23:22:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=f1BUqZ3xIVMTMJEEHdT4a6sIUyD+vVkXUJlyDl7GIE8=;
- b=Ru/q0vQ4Y0bVjeHJY99QZ8wntB35cX/mEotjSgTqtcO9+6AawmGydyXUr3+Zprj/2ycK
- pjuweEOnFAMm/NTgzyPBCNnsu40++tBIdtX/ArlLxp9ZR9GoRrYGiqXW57hENeImYWvL
- dhGDGBxxIk9n0CD93Zxf91O47XZfH2IM0PcBBhpqeHufkqRabU+2l5ZM5f0ZkboqICVc
- lK7RGfTPQQYGW0SjwYTfxkEkudrUO1WSO1bhr4R3g6gCdVWqUaqBgnUs2A4476IiHEBw
- edGXcawOKUZyEGrJc0gm2UiJ3oNoWrFxMJBb+yf283zMYzH5OgqQa0+t3QJ3p9Vs1wJ6 wQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rse45g940-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 23:22:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BNMDon024505
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 23:22:13 GMT
-Received: from [10.110.62.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
- 2023 16:22:13 -0700
-Message-ID: <761d77bf-7ce0-d182-41d2-ab4a7691fef5@quicinc.com>
-Date:   Tue, 11 Jul 2023 16:22:12 -0700
+        Tue, 11 Jul 2023 19:25:28 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BA1E7A;
+        Tue, 11 Jul 2023 16:25:27 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-66f3fc56ef4so100402b3a.0;
+        Tue, 11 Jul 2023 16:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689117927; x=1691709927;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hdleDO2lGPE6ba8t/zdX0KO9d2+dLQJATvHIoa7Lxd4=;
+        b=rwLJgd8R/3kKp0BUqh3W2oAr9amN+1A9VTuiPjK+xPcWQoYF2Jw1HMlkQxfPJEynd3
+         sl2cl16QanqVVxWflxMxEFupw45KsuT9Ylk7w27qU9j8UUvnpqikwcy1xmmxGuJZ1jS0
+         1FAaZQdAegU9ckvqHj8LNFjk2md37xhBC7I6Y4+8CZlSpad3PLuqolVeBHfQ+1+x5lNv
+         J1M4jhIctGYb1rr0STCqvAg9hBbG3hZe+dDcOokV+TcnNHCjpbDoTl7AbhHo4ThtZ/Jw
+         digQYlyILNcLfqTlaOlSe0lSoQIDidWvYWpCpJe96y11yt9G/QzK6VYUm+ER9JeEHl1p
+         JFVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689117927; x=1691709927;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hdleDO2lGPE6ba8t/zdX0KO9d2+dLQJATvHIoa7Lxd4=;
+        b=A9H9jXmJbHOxMp9mCjo/slXz18pU9r8cKye6tdYeLuOQXNvPmgpFISq1zADs2ZwvR2
+         9ddFPYrd2I67X91Cv9mwbQMMbPs9jRwD34llqZHhe96hTg3dTcA5AotByCshZeUftozD
+         e6PenHsNJz8+Olc0ibHAv07YcFjHzs1S5hU9GkyL192q8Pdb4dzBEPawyR5DRXi+a6nJ
+         xc/OxdZrZQVlfykc1aDdX4b7uxhBfOFqq5I1D3NMBLNuR8SVkuRhp3gC37SRX2mX7PhD
+         +gua64zjGyDosbM9SXJBHjHUSyjzu4TrHc/RFcx3uC13wcSq2GcUw7lqtNXKpFaOOb0B
+         Ur8g==
+X-Gm-Message-State: ABy/qLYulJBwr8QTlVbjlP1arCMkZDoru7G6D98bC7sQvuNxdwGF87h9
+        AQBg0IPjaNfWKa++brDSUX8=
+X-Google-Smtp-Source: APBJJlGpQXjSLE0Jyq+lKWjQYjZqbz505VPDnZm5nDbz0n7hDJ3Jqg0y7OjpZYQiPGhUH38E5bk9Tg==
+X-Received: by 2002:a17:902:f546:b0:1b9:c61c:4c01 with SMTP id h6-20020a170902f54600b001b9c61c4c01mr336209plf.9.1689117926782;
+        Tue, 11 Jul 2023 16:25:26 -0700 (PDT)
+Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:f81])
+        by smtp.gmail.com with ESMTPSA id t7-20020a1709028c8700b001b51b3e84cesm2486527plo.166.2023.07.11.16.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 16:25:26 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:25:22 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     menglong8.dong@gmail.com
+Cc:     yhs@meta.com, daniel@iogearbox.net, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, dsahern@kernel.org,
+        jolsa@kernel.org, x86@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH RESEND bpf-next v8 3/3] selftests/bpf: add testcase for
+ TRACING with 6+ arguments
+Message-ID: <20230711232522.54dbqdxkfbjvbvgi@macbook-pro-8.dhcp.thefacebook.com>
+References: <20230710104834.947884-1-imagedong@tencent.com>
+ <20230710104834.947884-4-imagedong@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rogerq@kernel.org" <rogerq@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
- <20230711174320.24058-4-quic_eserrao@quicinc.com>
- <20230711220748.vmnvwwcu5nhrvyvi@synopsys.com>
- <af332749-fdd7-e744-16f1-21f972161589@quicinc.com>
-In-Reply-To: <af332749-fdd7-e744-16f1-21f972161589@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Jp47U_7MfDHxaJ9yM6BMJ3agxxrnEl_B
-X-Proofpoint-ORIG-GUID: Jp47U_7MfDHxaJ9yM6BMJ3agxxrnEl_B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110213
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710104834.947884-4-imagedong@tencent.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/11/2023 3:51 PM, Elson Serrao wrote:
+On Mon, Jul 10, 2023 at 06:48:34PM +0800, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
+> Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
+> with 7/11 arguments. As this feature is not supported by arm64 yet, we
+> disable these testcases for arm64 in DENYLIST.aarch64. We can combine
+> them with fentry_test.c/fexit_test.c when arm64 is supported too.
 > 
-> On 7/11/2023 3:07 PM, Thinh Nguyen wrote:
->> On Tue, Jul 11, 2023, Elson Roy Serrao wrote:
->>> The current implementation blocks the runtime pm operations when cable
->>> is connected. This would block platforms from entering system wide 
->>> suspend
->>> during bus suspend scenario. Modify the runtime pm ops to handle bus
->>> suspend case for such platforms where the controller low power mode
->>> entry/exit is handled by the glue driver. This enablement is controlled
->>> through a dt property and platforms capable of detecting bus resume can
->>> benefit from this feature. Also modify the remote wakeup operations to
->>> trigger runtime resume before sending wakeup signal.
->>>
->>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>> ---
->>>   drivers/usb/dwc3/core.c   | 26 ++++++++++++++++++++++---
->>>   drivers/usb/dwc3/core.h   |  3 +++
->>>   drivers/usb/dwc3/gadget.c | 40 ++++++++++++++++++++++++++++++++-------
->>>   3 files changed, 59 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>> index f6689b731718..898c0f68e190 100644
->>> --- a/drivers/usb/dwc3/core.c
->>> +++ b/drivers/usb/dwc3/core.c
->>> @@ -1534,6 +1534,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>       dwc->dis_split_quirk = device_property_read_bool(dev,
->>>                   "snps,dis-split-quirk");
->>> +    dwc->allow_rtsusp_on_u3 = device_property_read_bool(dev,
->>> +                "snps,allow-rtsusp-on-u3");
->>> +
->>>       dwc->lpm_nyet_threshold = lpm_nyet_threshold;
->>>       dwc->tx_de_emphasis = tx_de_emphasis;
->>> @@ -1984,11 +1987,21 @@ static int dwc3_suspend_common(struct dwc3 
->>> *dwc, pm_message_t msg)
->>>   {
->>>       unsigned long    flags;
->>>       u32 reg;
->>> +    int link_state;
->>>       switch (dwc->current_dr_role) {
->>>       case DWC3_GCTL_PRTCAP_DEVICE:
->>>           if (pm_runtime_suspended(dwc->dev))
->>>               break;
->>> +
->>> +        if (dwc->connected) {
->>> +            link_state = dwc3_gadget_get_link_state(dwc);
->>> +            /* bus suspend case */
->>> +            if (dwc->allow_rtsusp_on_u3 &&
->>> +                link_state == DWC3_LINK_STATE_U3)
->>> +                break;
->>> +            return -EBUSY;
->>> +        }
->>>           dwc3_gadget_suspend(dwc);
->>>           synchronize_irq(dwc->irq_gadget);
->>>           dwc3_core_exit(dwc);
->>> @@ -2045,6 +2058,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, 
->>> pm_message_t msg)
->>>       switch (dwc->current_dr_role) {
->>>       case DWC3_GCTL_PRTCAP_DEVICE:
->>> +        /* bus resume case */
->>> +        if (dwc->connected)
->>> +            break;
->>>           ret = dwc3_core_init_for_resume(dwc);
->>>           if (ret)
->>>               return ret;
->>> @@ -2123,9 +2139,6 @@ static int dwc3_runtime_suspend(struct device 
->>> *dev)
->>>       struct dwc3     *dwc = dev_get_drvdata(dev);
->>>       int        ret;
->>> -    if (dwc3_runtime_checks(dwc))
->>> -        return -EBUSY;
->>> -
->>>       ret = dwc3_suspend_common(dwc, PMSG_AUTO_SUSPEND);
->>>       if (ret)
->>>           return ret;
->>> @@ -2160,9 +2173,15 @@ static int dwc3_runtime_resume(struct device 
->>> *dev)
->>>   static int dwc3_runtime_idle(struct device *dev)
->>>   {
->>>       struct dwc3     *dwc = dev_get_drvdata(dev);
->>> +    int        link_state;
->>>       switch (dwc->current_dr_role) {
->>>       case DWC3_GCTL_PRTCAP_DEVICE:
->>> +        link_state = dwc3_gadget_get_link_state(dwc);
->>> +        /* for bus suspend case return success */
->>> +        if (dwc->allow_rtsusp_on_u3 && dwc->connected &&
->>> +            link_state == DWC3_LINK_STATE_U3)
->>> +            goto autosuspend;
->>>           if (dwc3_runtime_checks(dwc))
->>>               return -EBUSY;
->>>           break;
->>> @@ -2172,6 +2191,7 @@ static int dwc3_runtime_idle(struct device *dev)
->>>           break;
->>>       }
->>> +autosuspend:
->>>       pm_runtime_mark_last_busy(dev);
->>>       pm_runtime_autosuspend(dev);
->>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->>> index 8b1295e4dcdd..33b2ccbbd963 100644
->>> --- a/drivers/usb/dwc3/core.h
->>> +++ b/drivers/usb/dwc3/core.h
->>> @@ -1127,6 +1127,8 @@ struct dwc3_scratchpad_array {
->>>    * @num_ep_resized: carries the current number endpoints which have 
->>> had its tx
->>>    *            fifo resized.
->>>    * @debug_root: root debugfs directory for this device to put its 
->>> files in.
->>> + * @allow_rtsusp_on_u3: true if dwc3 runtime suspend is allowed 
->>> during bus
->>> + *            suspend scenario.
->>>    */
->>>   struct dwc3 {
->>>       struct work_struct    drd_work;
->>> @@ -1343,6 +1345,7 @@ struct dwc3 {
->>>       int            last_fifo_depth;
->>>       int            num_ep_resized;
->>>       struct dentry        *debug_root;
->>> +    bool            allow_rtsusp_on_u3;
->>>   };
->>>   #define INCRX_BURST_MODE 0
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index 5fd067151fbf..0797cffa2d48 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -2401,15 +2401,21 @@ static int dwc3_gadget_wakeup(struct 
->>> usb_gadget *g)
->>>           return -EINVAL;
->>>       }
->>> -    spin_lock_irqsave(&dwc->lock, flags);
->>>       if (!dwc->gadget->wakeup_armed) {
->>>           dev_err(dwc->dev, "not armed for remote wakeup\n");
->>> -        spin_unlock_irqrestore(&dwc->lock, flags);
->>>           return -EINVAL;
->>>       }
->>> -    ret = __dwc3_gadget_wakeup(dwc, true);
->>> +    ret = pm_runtime_resume_and_get(dwc->dev);
->>> +    if (ret < 0) {
->>> +        pm_runtime_set_suspended(dwc->dev);
->>> +        return ret;
->>> +    }
->>> +
->>> +    spin_lock_irqsave(&dwc->lock, flags);
->>> +    ret = __dwc3_gadget_wakeup(dwc, true);
->>>       spin_unlock_irqrestore(&dwc->lock, flags);
->>> +    pm_runtime_put_noidle(dwc->dev);
->>>       return ret;
->>>   }
->>> @@ -2428,6 +2434,12 @@ static int dwc3_gadget_func_wakeup(struct 
->>> usb_gadget *g, int intf_id)
->>>           return -EINVAL;
->>>       }
->>> +    ret = pm_runtime_resume_and_get(dwc->dev);
->>> +    if (ret < 0) {
->>> +        pm_runtime_set_suspended(dwc->dev);
->>> +        return ret;
->>> +    }
->>> +
->>>       spin_lock_irqsave(&dwc->lock, flags);
->>>       /*
->>>        * If the link is in U3, signal for remote wakeup and wait for the
->>> @@ -2438,6 +2450,7 @@ static int dwc3_gadget_func_wakeup(struct 
->>> usb_gadget *g, int intf_id)
->>>           ret = __dwc3_gadget_wakeup(dwc, false);
->>>           if (ret) {
->>>               spin_unlock_irqrestore(&dwc->lock, flags);
->>> +            pm_runtime_put_noidle(dwc->dev);
->>>               return -EINVAL;
->>>           }
->>>           dwc3_resume_gadget(dwc);
->>> @@ -2452,6 +2465,7 @@ static int dwc3_gadget_func_wakeup(struct 
->>> usb_gadget *g, int intf_id)
->>>           dev_err(dwc->dev, "function remote wakeup failed, 
->>> ret:%d\n", ret);
->>>       spin_unlock_irqrestore(&dwc->lock, flags);
->>> +    pm_runtime_put_noidle(dwc->dev);
->>>       return ret;
->>>   }
->>> @@ -2732,21 +2746,23 @@ static int dwc3_gadget_pullup(struct 
->>> usb_gadget *g, int is_on)
->>>       /*
->>>        * Avoid issuing a runtime resume if the device is already in the
->>>        * suspended state during gadget disconnect.  DWC3 gadget was 
->>> already
->>> -     * halted/stopped during runtime suspend.
->>> +     * halted/stopped during runtime suspend except for bus suspend 
->>> case
->>> +     * where we would have skipped the controller halt.
->>>        */
->>>       if (!is_on) {
->>>           pm_runtime_barrier(dwc->dev);
->>> -        if (pm_runtime_suspended(dwc->dev))
->>> +        if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
->>>               return 0;
->>>       }
->>>       /*
->>>        * Check the return value for successful resume, or error.  For a
->>>        * successful resume, the DWC3 runtime PM resume routine will 
->>> handle
->>> -     * the run stop sequence, so avoid duplicate operations here.
->>> +     * the run stop sequence except for bus resume case, so avoid
->>> +     * duplicate operations here.
->>>        */
->>>       ret = pm_runtime_get_sync(dwc->dev);
->>> -    if (!ret || ret < 0) {
->>> +    if ((!ret && !dwc->connected) || ret < 0) {
->>>           pm_runtime_put(dwc->dev);
->>>           if (ret < 0)
->>>               pm_runtime_set_suspended(dwc->dev);
->>> @@ -4331,6 +4347,8 @@ static void 
->>> dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
->>>       }
->>>       dwc->link_state = next;
->>> +    pm_runtime_mark_last_busy(dwc->dev);
->>> +    pm_request_autosuspend(dwc->dev);
->>>   }
->>>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
->>> @@ -4718,7 +4736,15 @@ void dwc3_gadget_process_pending_events(struct 
->>> dwc3 *dwc)
->>>   {
->>>       if (dwc->pending_events) {
->>>           dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
->>> +        pm_runtime_put(dwc->dev);
->>>           dwc->pending_events = false;
->>>           enable_irq(dwc->irq_gadget);
->>> +        /*
->>> +         * We have only stored the pending events as part
->>> +         * of dwc3_interrupt() above, but those events are
->>> +         * not yet handled. So explicitly invoke the
->>> +         * interrupt handler for handling those events.
->>> +         */
->>> +        dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
->>
->> Why do we have to do this? If there are events, the threaded interrupt
->> should be woken up.
->>
+> Correspondingly, add bpf_testmod_fentry_test7() and
+> bpf_testmod_fentry_test11() to bpf_testmod.c
 > 
-> dwc3_thread_interrupt will be woken up only if dwc3_interrupt() handler 
-> is invoked by the interrupt framework when the return value of 
-> IRQ_WAKE_THREAD is handled. But while processing the pending events the 
-> interrupt framework is not involved. We explicitly invoke the 
-> dwc3_interrupt() above within the dwc3 driver. So the 
-> dwc3_thread_interrupt() has to be explicitly invoked as well for 
-> processing those pending events.
+> Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
+> MODIFY_RETURN with 7 arguments.
 > 
+> Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
+> bpf_testmod.c to test the struct in the arguments.
+> 
+> And the testcases passed on x86_64:
+> 
+> ./test_progs -t fexit
+> Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> ./test_progs -t fentry
+> Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> ./test_progs -t modify_return
+> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> ./test_progs -t tracing_struct
+> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> ---
+> v8:
+> - split the testcases, and add fentry_many_args/fexit_many_args to
+>   DENYLIST.aarch64
+> v6:
+> - add testcases to tracing_struct.c instead of fentry_test.c and
+>   fexit_test.c
+> v5:
+> - add testcases for MODIFY_RETURN
+> v4:
+> - use different type for args in bpf_testmod_fentry_test{7,12}
+> - add testcase for grabage values in ctx
+> v3:
+> - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+>   bpf_testmod_fentry_test{7,12} meanwhile
+> - get return value by bpf_get_func_ret() in
+>   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
+>   in this version
+> ---
+>  net/bpf/test_run.c                            | 23 ++++++--
+>  tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
+>  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
+>  .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
+>  .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
+>  .../selftests/bpf/prog_tests/modify_return.c  | 20 ++++++-
+>  .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
+>  .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
+>  .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
+>  .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
+>  .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
+>  11 files changed, 358 insertions(+), 14 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
+> 
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 63b11f7a5392..1c59fa60077b 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -565,6 +565,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int *b)
+>  	return a + *b;
+>  }
+>  
+> +__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
+> +					void *e, char f, int g)
+> +{
+> +	*b += 1;
+> +	return a + *b + c + d + (long)e + f + g;
+> +}
+> +
+>  int noinline bpf_fentry_shadow_test(int a)
+>  {
+>  	return a + 1;
+> @@ -600,9 +607,13 @@ __diag_pop();
+>  
+>  BTF_SET8_START(bpf_test_modify_return_ids)
+>  BTF_ID_FLAGS(func, bpf_modify_return_test)
+> +BTF_ID_FLAGS(func, bpf_modify_return_test2)
+>  BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
+>  BTF_SET8_END(bpf_test_modify_return_ids)
+>  
+> +BTF_ID_LIST(bpf_modify_return_test_id)
+> +BTF_ID(func, bpf_modify_return_test)
+> +
+>  static const struct btf_kfunc_id_set bpf_test_modify_return_set = {
+>  	.owner = THIS_MODULE,
+>  	.set   = &bpf_test_modify_return_ids,
+> @@ -665,9 +676,15 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+>  			goto out;
+>  		break;
+>  	case BPF_MODIFY_RETURN:
+> -		ret = bpf_modify_return_test(1, &b);
+> -		if (b != 2)
+> -			side_effect = 1;
+> +		if (prog->aux->attach_btf_id == *bpf_modify_return_test_id) {
+> +			ret = bpf_modify_return_test(1, &b);
+> +			if (b != 2)
+> +				side_effect = 1;
+> +		} else {
+> +			ret = bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
+> +			if (b != 2)
+> +				side_effect = 1;
 
-Perhaps we can make it more optimal by checking the return value like below?
+Patches 1 and 2 look good, but I don't like where this check will lead us:
+attach_btf_id == *bpf_modify_return_test_id...
 
-void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
-{
-         irqreturn_t ret;
+When Jiri did a conversion of all test func into bpf_testmod.ko I forgot
+why we couldn't move fmod_ret tests as well.
+Whatever it was the extra attach_btf_id check will make it worse.
 
-         if (dwc->pending_events) {
-                 ret = dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
-                 pm_runtime_put(dwc->dev);
-                 dwc->pending_events = false;
-                 enable_irq(dwc->irq_gadget);
-                 /*
-                  * We have only stored the pending events as part
-                  * of dwc3_interrupt() above, but those events are
-                  * not yet handled. So explicitly invoke the
-                  * interrupt handler for handling those events.
-                  */
-                 if (ret == IRQ_WAKE_THREAD)
-                         dwc3_thread_interrupt(dwc->irq_gadget, 
-dwc->ev_buf);
-         }
-}
-
-
+For now please think of a way to test fmod_ret when bpf_prog_test_run_tracing()
+does something unconditional like:
+	ret = bpf_modify_return_test(1, &b);
+	if (b != 2)
+		side_effect++;
+	ret = bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
+	if (b != 2)
+		side_effect++;
