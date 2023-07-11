@@ -2,217 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D07274E383
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF3974E390
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjGKBiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S230491AbjGKBjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjGKBiC (ORCPT
+        with ESMTP id S230194AbjGKBjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:38:02 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E15BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:38:00 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 628E1881DE0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:38:00 +0000 (UTC)
-Received: from pdx1-sub0-mail-a234.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E48C7881ACA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:37:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1689039479; a=rsa-sha256;
-        cv=none;
-        b=jnTyM6/ONl42zgR7CN7mpMvMC+kB7yaNiLiQ76RxAnkX0b4kX4eKRfTIB+oP8EYZ0tvvty
-        QZvQ6YmiG+cPOBvXxVq8lnESRwVneyGXMVg2yOqDMavBlfhfAYR6dUzcXvbxf9ss9/fJ3p
-        Shha+nS5BuRMdQbc99t1ldkaSsmhH7gZOzz6gmB/OEbk7kuQ5/KySO+mZGLZT77kgf7SeF
-        NAuNsCKJrkR085aW8DLzJZ0PMzWdPonn436w/h9z2JxuLfwDjVqrSc2ZegIA4A2ocVxLoF
-        3Si6IXv6H4ffdIMmZdfajztT5slbaUQbkxBLtvDk3QJ0Q88se/LRG77TDbbgmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1689039479;
+        Mon, 10 Jul 2023 21:39:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34B7E3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689039496;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=5PpiEQMklI816ebRSrfaSOe/p+XsnMxbP2nT9Lvxh7E=;
-        b=to4hU8cJzlO8PDPWiTowg/cG0e1zYc+tbmBWaD8SHJ/3or4C+JoJvxD46BIJptwrFriLCu
-        tOTQF0uRQELQ4l7z9/UAjdmOqLjodgBdDqt2WFOqCpRm87RWu4FvUWhg2NzkbnrI57GAr2
-        Cu5VM4C749gMxY43ERrvtPcultl6oCwVS0LLo2eMJgtP8AseLnehvU+5YOg/7nCo6iGl15
-        c8d/2qYDMTGoAWwjSunKzSB6mICQrwj8F1d0A891EmSu82kBraJBNQnv5rBl7qGe28oG5s
-        qV7uRJ789TOVXvQ7Rnzgj0RclunfTH/CpjOHvyMHYNFeI8PTmeiGhBU4rUrlag==
-ARC-Authentication-Results: i=1;
-        rspamd-7d9c4d5c9b-rgbjh;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Spill-Wide-Eyed: 5630d96d22087f69_1689039480163_2871403147
-X-MC-Loop-Signature: 1689039480163:693807151
-X-MC-Ingress-Time: 1689039480162
-Received: from pdx1-sub0-mail-a234.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.30.12 (trex/6.9.1);
-        Tue, 11 Jul 2023 01:38:00 +0000
-Received: from kmjvbox (unknown [71.198.86.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CgrK8riab39mc/l4RMQ9kP4UiPJ/E6e+0z17cQMh7m8=;
+        b=QSe+hgNxTna8/qL03cE8y2Ll7gLkmUe3I68ldn5OsAhtKdWcHk1baq3xFae4aKYMv/XwRh
+        uml05n5DnPGjZ5gjdWRncf9HW2Nra1Sc/iet/weOKvttQAuJauSQUtPYXYHfsGyxtEG+ep
+        mumHHESKGnVCX4e6QALTgVksRb7aPPs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-Nc2M2H8GO4WdFDGoVYDBIg-1; Mon, 10 Jul 2023 21:38:14 -0400
+X-MC-Unique: Nc2M2H8GO4WdFDGoVYDBIg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a234.dreamhost.com (Postfix) with ESMTPSA id 4R0NmR4QjFzYJ
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1689039479;
-        bh=5PpiEQMklI816ebRSrfaSOe/p+XsnMxbP2nT9Lvxh7E=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=GnyelvYY+4t170d0F5+gLLM5nhFNtQejR4H0kvM4fklyug0IWxbWM7kdASi4snYoL
-         yspaikeJEA1iZZXTgSMcsx4wOcyYpvtXjf5oyYEYvuaYIN16AT9x2gmj0kMMP5ojas
-         XgiqBUfHSxCpnNSuF9E4JBsR4+xfmmCgV5i+odjM=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0085
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Mon, 10 Jul 2023 18:37:23 -0700
-Date:   Mon, 10 Jul 2023 18:37:23 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        German Maglione <gmaglione@redhat.com>,
-        Greg Kurz <groug@kaod.org>, Max Reitz <mreitz@redhat.com>
-Subject: [RFC PATCH 2/2] fuse: ensure that submounts lookup their root
-Message-ID: <69bb95c34deb25f56b3b842528edcb40a098d38d.1689038902.git.kjlx@templeofstupid.com>
-References: <cover.1689038902.git.kjlx@templeofstupid.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4390680269A;
+        Tue, 11 Jul 2023 01:38:14 +0000 (UTC)
+Received: from [10.22.18.171] (unknown [10.22.18.171])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DAF92166B26;
+        Tue, 11 Jul 2023 01:38:13 +0000 (UTC)
+Message-ID: <c0fb6438-8d19-9d75-d717-68f047465332@redhat.com>
+Date:   Mon, 10 Jul 2023 21:38:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1689038902.git.kjlx@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+References: <20230627143508.1576882-1-longman@redhat.com>
+ <ZKxzTrN2yiKfXndI@slm.duckdns.org>
+ <305038a0-1db8-3d0d-3447-48be1f03d41c@redhat.com>
+ <ZKypl8cr3jxiZ6bo@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZKypl8cr3jxiZ6bo@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to this commit, the submount code assumed that the inode for the
-root filesystem could not be evicted.  When eviction occurs the server
-may forget the inode.  This author has observed a submount get an EBADF
-from a virtiofsd server that resulted from the sole dentry / inode
-pair getting evicted from a mount namespace and superblock where they
-were originally referenced.  The dentry shrinker triggered a forget
-after killing the dentry with the last reference.
+On 7/10/23 21:00, Tejun Heo wrote:
+> Hello,
+>
+> On Mon, Jul 10, 2023 at 08:33:11PM -0400, Waiman Long wrote:
+>> I would like to clarify that withdrawal of CPUs from cpuset.cpus.exclusive
+>> is always allowed. It is the addition of CPUs not presents in cpuset.cpus
+>> that will be rejected. The invariant is that cpuset.cpus.exclusive must
+>> always be a subset of cpuset.cpus. Any change that violates this rule is not
+>> allowed. Alternately I can silently dropped the offending CPUs without
+>> returning an error, but that may surprise users.
+> Right, that'd be confusing.
+>
+>> BTW, withdrawal of CPUs from cpuset.cpus will also withdraw them from
+>> cpuset.cpus.exclusive, if present. This allows the partition code to use
+>> cpuset.cpus.exclusive directly to determine the allowable exclusive CPUs
+>> without doing an intersection with cpuset.cpus each time it is used.
+> This is kinda confusing too, I think. Changing cpuset.cpus in an ancestor
+> doesn't affect the contents of the descendants' cpuset.cpus files but would
+> directly modify the contents of their cpuset.cpus.exclusive files.
+>
+> There's some inherent friction because cpuset.cpus separates configuration
+> (cpuset.cpus) and the current state (cpuset.cpus.effective) while
+> cpuset.cpus.exclusive is trying to do both in the same interface file. When
+> the two behavior modes collide, it becomes rather confusing. Do you think
+> it'd make sense to make cpus.exclusive follow the same pattern as
+> cpuset.cpus?
 
-As a result, a container that was also using this submount failed to
-access its filesystem because it had borrowed the reference instead of
-taking its own when setting up its superblock for the submount.
+I don't want to add another cpuset.cpus.exclusive.effective control 
+file. One possibility is to keep another effective masks in the struct 
+cpuset and list both exclusive cpus set by the user and the effective 
+ones side by side, like "<cpus> (<effective_cpus>)" if they differ or 
+some other format. What do you think?
 
-Fix by ensuring that submount superblock configuration looks up the
-nodeid for the submount as well.
-
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
----
- fs/fuse/dir.c    | 10 +++++-----
- fs/fuse/fuse_i.h |  6 ++++++
- fs/fuse/inode.c  | 32 ++++++++++++++++++++++++++++----
- 3 files changed, 39 insertions(+), 9 deletions(-)
-
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index bdf5526a0733..fe6b3fd4a49c 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -193,11 +193,11 @@ static void fuse_lookup_init(struct fuse_conn *fc, struct fuse_args *args,
- 	args->out_args[0].value = outarg;
- }
- 
--static int fuse_dentry_revalidate_lookup(struct fuse_mount *fm,
--					 struct dentry *entry,
--					 struct inode *inode,
--					 struct fuse_entry_out *outarg,
--					 bool *lookedup)
-+int fuse_dentry_revalidate_lookup(struct fuse_mount *fm,
-+				  struct dentry *entry,
-+				  struct inode *inode,
-+				  struct fuse_entry_out *outarg,
-+				  bool *lookedup)
- {
- 	struct dentry *parent;
- 	struct fuse_forget_link *forget;
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 9b7fc7d3c7f1..77b123eddb6d 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -1309,6 +1309,12 @@ void fuse_dax_dontcache(struct inode *inode, unsigned int flags);
- bool fuse_dax_check_alignment(struct fuse_conn *fc, unsigned int map_alignment);
- void fuse_dax_cancel_work(struct fuse_conn *fc);
- 
-+/* dir.c */
-+int fuse_dentry_revalidate_lookup(struct fuse_mount *fm, struct dentry *entry,
-+				  struct inode *inode,
-+				  struct fuse_entry_out *outarg,
-+				  bool *lookedup);
-+
- /* ioctl.c */
- long fuse_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
- long fuse_file_compat_ioctl(struct file *file, unsigned int cmd,
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index f19d748890f0..1032e4b05d9c 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -1441,6 +1441,10 @@ static int fuse_fill_super_submount(struct super_block *sb,
- 	struct super_block *parent_sb = parent_fi->inode.i_sb;
- 	struct fuse_attr root_attr;
- 	struct inode *root;
-+	struct inode *parent;
-+	struct dentry *pdent;
-+	bool lookedup = false;
-+	int ret;
- 
- 	fuse_sb_defaults(sb);
- 	fm->sb = sb;
-@@ -1456,14 +1460,34 @@ static int fuse_fill_super_submount(struct super_block *sb,
- 	if (parent_sb->s_subtype && !sb->s_subtype)
- 		return -ENOMEM;
- 
-+	/*
-+	 * It is necessary to lookup the parent_if->nodeid in case the dentry
-+	 * that triggered the automount of the submount is later evicted.
-+	 * If this dentry is evicted without the lookup count getting increased
-+	 * on the submount root, then the server can subsequently forget this
-+	 * nodeid which leads to errors when trying to access the root of the
-+	 * submount.
-+	 */
-+	parent = &parent_fi->inode;
-+	pdent = d_find_alias(parent);
-+	if (pdent) {
-+		struct fuse_entry_out outarg;
-+
-+		ret = fuse_dentry_revalidate_lookup(fm, pdent, parent, &outarg,
-+						    &lookedup);
-+		dput(pdent);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	fuse_fill_attr_from_inode(&root_attr, parent_fi);
- 	root = fuse_iget(sb, parent_fi->nodeid, 0, &root_attr, 0, 0);
- 	/*
--	 * This inode is just a duplicate, so it is not looked up and
--	 * its nlookup should not be incremented.  fuse_iget() does
--	 * that, though, so undo it here.
-+	 * fuse_iget() sets nlookup to 1 at creation time.  If this nodeid was
-+	 * not successfully looked up then decrement the count.
- 	 */
--	get_fuse_inode(root)->nlookup--;
-+	if (!lookedup)
-+		get_fuse_inode(root)->nlookup--;
- 	sb->s_d_op = &fuse_dentry_operations;
- 	sb->s_root = d_make_root(root);
- 	if (!sb->s_root)
--- 
-2.25.1
+Regards,
+Longman
 
