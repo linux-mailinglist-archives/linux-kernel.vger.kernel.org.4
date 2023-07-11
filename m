@@ -2,83 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD5074F15A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A78074F160
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjGKONS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S233561AbjGKON2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbjGKONN (ORCPT
+        with ESMTP id S233554AbjGKONY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:13:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EDDB0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:13:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E34BA61507
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A383C433C7;
-        Tue, 11 Jul 2023 14:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689084791;
-        bh=ey4qn+pT0IA1mK/T0+mJ6fLdRbp//RxtgG7x1mdoLLA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EciwUIRWaebB86Qom7c2/r8nP+TILoFVFBdaKK6DYkhMRyCA8COYXi7ESsPZ6Gs5g
-         O/igAFHMLW30AQAvyNH1IRHYHZZ71sLeUCmiHwtveXv9iVhaLzeeh55Q/Bv2LZ4Wj0
-         CICwMo4kyjDBC2xmrw/dwoOyMcLRqU6sUWlnlymtOBwoNjDB9e0VBADysTMLsExYvH
-         Jqb/turISJkZhLq/2hjcwzwZcQe9PPO/D6ZgcQ29/Tl4b0Yzag/n/lXxt7orIVRsLV
-         RlkQ3L4JQHzOPPWfkEUTcMNy9RodN62f99g9mrA7wXDkwjrILI9YXCSH1btkIv2BOw
-         8S1uGbN9Tptug==
-Message-ID: <b80ed611-7844-5cb8-255e-b41e78901942@kernel.org>
-Date:   Tue, 11 Jul 2023 22:13:06 +0800
+        Tue, 11 Jul 2023 10:13:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF710B0;
+        Tue, 11 Jul 2023 07:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689084803; x=1720620803;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RiocU3lLiq+39RFXSqs6p/cZudPc+izr4AUqqHXXmmI=;
+  b=ATDNh99c7/c2vBocNEiTyoQLo84BisJGmoDql8ZOISv88S5/5Shqcsb5
+   vpiE3EIyprLZTKtCn/hI5TrxnYeapvGk5tB8ZcnZQLtPPCSNv17hkKeJG
+   gjXadmjrJ9AuBmA35wcOM7GjgctXKd7Jy4fDhxHYRLpX0bd4OvI3ue5gS
+   adg6IXMXqZZclTnWk6jBaPFfy7ZZGbqsPe/BW3/mIaooZDhfChU2ix3o3
+   4kO6ovmf5Zhd9fj8LRcTR1kcPX+sao9ZAyJilaR/E2rLgFMWkxxcjK55R
+   0+azcvYFZ4eqXcoGSRy7Gvh8+JupcMnjGFsGmcxYcqT3JmZLcIRISzXdL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="395414831"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="395414831"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:13:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="834716022"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="834716022"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:13:19 -0700
+Message-ID: <1840b0c5-81aa-488c-1fbe-ac6681e3df35@linux.intel.com>
+Date:   Tue, 11 Jul 2023 16:13:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH] erofs: fix to avoid infinite loop in
- z_erofs_do_read_page() when read page beyond EOF
+Subject: Re: [PATCH 10/13] ASoC: Intel: avs: Convert to PCI device IDs defines
 Content-Language: en-US
-To:     Chunhai Guo <guochunhai@vivo.com>, xiang@kernel.org
-Cc:     huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230710093410.44071-1-guochunhai@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230710093410.44071-1-guochunhai@vivo.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-11-amadeuszx.slawinski@linux.intel.com>
+ <ZK1iiMgmjpCA02x+@smile.fi.intel.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <ZK1iiMgmjpCA02x+@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/10 17:34, Chunhai Guo wrote:
-> z_erofs_do_read_page() may loop infinitely due to the inappropriate
-> truncation in the below statement. Since the offset is 64 bits and min_t()
-> truncates the result to 32 bits. The solution is to replace unsigned int
-> with a 64-bit type, such as erofs_off_t.
->      cur = end - min_t(unsigned int, offset + end - map->m_la, end);
+On 7/11/2023 4:09 PM, Andy Shevchenko wrote:
+> On Tue, Jul 11, 2023 at 02:57:23PM +0200, Amadeusz Sławiński wrote:
+>> Use PCI device IDs from pci_ids.h header. Adjust AVS_MACH_ENTRY() macro,
+>> so device ID can be provided in short form.
 > 
->      - For example:
->          - offset = 0x400160000
->          - end = 0x370
->          - map->m_la = 0x160370
->          - offset + end - map->m_la = 0x400000000
->          - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
->      - Expected result:
->          - cur = 0
->      - Actual result:
->          - cur = 0x370
+> FWIW,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> Signed-off-by: Chunhai Guo <guochunhai@vivo.com>
+>> Acked-by: Mark Brown <broonie@kernel.org>
+>> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+>> ---
+>>   sound/soc/intel/avs/board_selection.c | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/sound/soc/intel/avs/board_selection.c b/sound/soc/intel/avs/board_selection.c
+>> index 60f8fb0bff95..b32e02940e30 100644
+>> --- a/sound/soc/intel/avs/board_selection.c
+>> +++ b/sound/soc/intel/avs/board_selection.c
+>> @@ -263,14 +263,14 @@ struct avs_acpi_boards {
+>>   };
+>>   
+>>   #define AVS_MACH_ENTRY(_id, _mach) \
+>> -	{ .id = (_id), .machs = (_mach), }
+>> +	{ .id = PCI_DEVICE_ID_INTEL_##_id, .machs = (_mach), }
+>>   
+>>   /* supported I2S boards per platform */
+>>   static const struct avs_acpi_boards i2s_boards[] = {
+>> -	AVS_MACH_ENTRY(0x9d70, avs_skl_i2s_machines), /* SKL */
+>> -	AVS_MACH_ENTRY(0x9d71, avs_kbl_i2s_machines), /* KBL */
+>> -	AVS_MACH_ENTRY(0x5a98, avs_apl_i2s_machines), /* APL */
+>> -	AVS_MACH_ENTRY(0x3198, avs_gml_i2s_machines), /* GML */
+>> +	AVS_MACH_ENTRY(HDA_SKL_LP, avs_skl_i2s_machines),
+>> +	AVS_MACH_ENTRY(HDA_KBL_LP, avs_kbl_i2s_machines),
+>> +	AVS_MACH_ENTRY(HDA_APL, avs_apl_i2s_machines),
+>> +	AVS_MACH_ENTRY(HDA_GML, avs_gml_i2s_machines),
+> 
+> Maybe sort them by name?
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+They are sorted by generation.
 
-Thanks,
