@@ -2,225 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4574EAE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E015874EAD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjGKJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
+        id S230091AbjGKJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjGKJkI (ORCPT
+        with ESMTP id S230513AbjGKJje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:40:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6B9172A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689068399; x=1720604399;
-  h=date:from:to:cc:subject:message-id;
-  bh=MgWIlI5zMFXpvDcSNfOj0wRHK4j2b+NbeLMYhwVTgpo=;
-  b=VAdxqfWZ+aO7cEzGMEQnO6pR5R8rrSYMfGfKiEPXbwqYgGFXKa75VCTP
-   SohSCqP5EwR9ldjFRfOOGRso9GxvJrqPcJNocb6Uetlo4VJjbM273LliR
-   6x4MbXwy/7e3DLsrbvpCZotAr/fqmjWAqeu0in0gsfQ3UKf0mtKhC5B3Z
-   xK+wvp0R+7D08nf524Fmwv+huB8pGMCBXYJCdmBTbZTlL7SktQaFo3t49
-   u/oPp0sKZi9Y6KPiYvGSgEb2dO6WBlm5CF2+qDTPsgKlalDtNFbl06sE0
-   MRxeEzakjjPTRg0sqZHMqGqGVzTj9BcwmRtz1NzdTv3eMwL6QJsZIVOBU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="368073051"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="368073051"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 02:39:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="865690353"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="865690353"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 02:39:57 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qJ9qe-0004gF-2f;
-        Tue, 11 Jul 2023 09:39:56 +0000
-Date:   Tue, 11 Jul 2023 17:39:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230710] BUILD REGRESSION
- 58f872f0089daa911786fdbd13d48a0c9147e5b1
-Message-ID: <202307111704.af0nVAgh-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Jul 2023 05:39:34 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8712136
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:39:22 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qJ9pw-00047e-HN; Tue, 11 Jul 2023 11:39:12 +0200
+Message-ID: <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
+Date:   Tue, 11 Jul 2023 11:39:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
+ (Samsung SM-953 Datacenter SSD)
+Content-Language: en-US, de-DE
+To:     Pankaj Raghav <p.raghav@samsung.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "Clemens S." <cspringsguth@gmail.com>,
+        Martin Belanger <martin.belanger@dell.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVMe <linux-nvme@lists.infradead.org>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        =?UTF-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
+ <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
+ <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
+ <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
+ <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
+ <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689068362;c61ff5f5;
+X-HE-SMSGID: 1qJ9pw-00047e-HN
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230710
-branch HEAD: 58f872f0089daa911786fdbd13d48a0c9147e5b1  openprom: Use struct_size() helper
+[CCing Linus for the "whack a mole" aspect in the second half]
 
-Error/Warning reports:
+On 11.07.23 08:54, Pankaj Raghav wrote:
+>>> I understand that, but I think we need middlemen for that, as I or Bagas
+>>> don't have the contacts -- and it's IMHO also a bit much too ask us for
+>>> in general, as regression tracking is hard enough already. At least
+>>> unless this becomes something that happen regularly, then a list of
+>>> persons we could contact would be fine I guess. But we simply can't deal
+>>> with too many subsystem specific special cases.
+>>
+>> I'm not asking the Linux regression trackers to fill that role, though.
 
-https://lore.kernel.org/oe-kbuild-all/202307110949.RG8TpHLo-lkp@intel.com
+Well, during our work we often encounter those bugs -- often from people
+that are no regular developers that already had a hard time
+understanding the issue and reporting it to us somehow. Asking those to...
 
-Error/Warning: (recently discovered and may have been fixed)
+>> I'm asking people who experience these issues report it to their vendor
 
-arch/sh/include/asm/io.h:29:49: warning: array subscript 0 is outside array bounds of 'volatile u8[0]' {aka 'volatile unsigned char[]'} [-Warray-bounds]
-arch/sparc/mm/init_64.c:3057:31: error: array subscript -1 is outside array bounds of 'char[]' [-Werror=array-bounds]
-include/asm-generic/io.h:547:13: warning: array subscript 0 is outside array bounds of 'volatile u8[0]' {aka 'volatile unsigned char[]'} [-Warray-bounds]
+...find the right destination and format to report their Linux problems
+to the vendors is unlikely to fly I suspect. And I'm not sure if that is
+in our interest, as then it might take a lot longer to get those quirk
+entries into the kernel source.
 
-Error/Warning ids grouped by kconfigs:
+But whatever, the main reason why I write this mail is different:
 
-gcc_recent_errors
-|-- sh-allmodconfig
-|   |-- arch-sh-include-asm-io.h:warning:array-subscript-is-outside-array-bounds-of-volatile-u8-aka-volatile-unsigned-char
-|   `-- include-asm-generic-io.h:warning:array-subscript-is-outside-array-bounds-of-volatile-u8-aka-volatile-unsigned-char
-|-- sparc-allyesconfig
-|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
-|-- sparc-randconfig-r053-20230710
-|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
-|-- sparc-randconfig-r063-20230710
-|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
-|-- sparc64-defconfig
-|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
-`-- sparc64-randconfig-r002-20230710
-    `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+>> directly because these device makers apparently have zero clue that
+>> their spec non-compliance is causing painful experiences for their
+>> customers and annoyance for maintainers. They keep pumping out more and
+>> more devices with the same breakage.
+>>
+>> This particular vendor has been great at engaging with Linux, but that's
+>> not necessarily normal among all device makers, and I don't have
+>> contacts with the majority of the vendors we've had to quirk for this
+>> issue.
+>>
+>> We did complain to the NVMe spec workgroup that their complaince cert
+>> suite is not testing for this. There was a little initial interest in
+>> fixing that gap, but it fizzled out...
 
-elapsed time: 720m
+Preface: this is not my area of expertise, and maybe I should keep my
+mouth shut. But whatever.
 
-configs tested: 124
-configs skipped: 5
+Well, that "They keep pumping out more and more devices with the same
+breakage" and the "new device" comment from Pankaj below bear the
+question: should we stop trying to play "whack a mole" with all those
+quirk entries and handle devices with duplicate ids just like Windows does?
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              alldefconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r024-20230710   gcc  
-arc                  randconfig-r043-20230711   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       netwinder_defconfig   clang
-arm                  randconfig-r035-20230710   clang
-arm                  randconfig-r046-20230711   clang
-arm                           sama5_defconfig   gcc  
-arm                        spear3xx_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r025-20230710   clang
-arm64                randconfig-r033-20230710   gcc  
-csky                                defconfig   gcc  
-hexagon                             defconfig   clang
-hexagon              randconfig-r006-20230710   clang
-hexagon              randconfig-r041-20230711   clang
-hexagon              randconfig-r045-20230711   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230710   gcc  
-i386         buildonly-randconfig-r005-20230710   gcc  
-i386         buildonly-randconfig-r006-20230710   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230710   gcc  
-i386                 randconfig-i002-20230710   gcc  
-i386                 randconfig-i003-20230710   gcc  
-i386                 randconfig-i004-20230710   gcc  
-i386                 randconfig-i005-20230710   gcc  
-i386                 randconfig-i006-20230710   gcc  
-i386                 randconfig-i011-20230710   clang
-i386                 randconfig-i012-20230710   clang
-i386                 randconfig-i013-20230710   clang
-i386                 randconfig-i014-20230710   clang
-i386                 randconfig-i015-20230710   clang
-i386                 randconfig-i016-20230710   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r011-20230710   gcc  
-loongarch            randconfig-r022-20230710   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5307c3_defconfig   gcc  
-m68k                 randconfig-r001-20230710   gcc  
-m68k                 randconfig-r004-20230710   gcc  
-m68k                 randconfig-r013-20230710   gcc  
-m68k                 randconfig-r026-20230710   gcc  
-m68k                 randconfig-r036-20230710   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath25_defconfig   clang
-mips                        bcm47xx_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r023-20230710   gcc  
-openrisc             randconfig-r016-20230710   gcc  
-openrisc             randconfig-r021-20230710   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                     mpc83xx_defconfig   gcc  
-powerpc                       ppc64_defconfig   gcc  
-powerpc              randconfig-r032-20230710   gcc  
-powerpc                     skiroot_defconfig   clang
-powerpc                     tqm8555_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230710   gcc  
-riscv                randconfig-r042-20230711   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             alldefconfig   clang
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230711   gcc  
-sh                               allmodconfig   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r002-20230710   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r005-20230710   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230710   gcc  
-x86_64       buildonly-randconfig-r002-20230710   gcc  
-x86_64       buildonly-randconfig-r003-20230710   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r015-20230710   clang
-x86_64               randconfig-x001-20230710   clang
-x86_64               randconfig-x002-20230710   clang
-x86_64               randconfig-x003-20230710   clang
-x86_64               randconfig-x004-20230710   clang
-x86_64               randconfig-x005-20230710   clang
-x86_64               randconfig-x006-20230710   clang
-x86_64               randconfig-x011-20230710   gcc  
-x86_64               randconfig-x012-20230710   gcc  
-x86_64               randconfig-x013-20230710   gcc  
-x86_64               randconfig-x014-20230710   gcc  
-x86_64               randconfig-x015-20230710   gcc  
-x86_64               randconfig-x016-20230710   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa               randconfig-r014-20230710   gcc  
-xtensa               randconfig-r034-20230710   gcc  
+That would "make things just work"(tm).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+And yes, I suspect there are good reasons why we went down the "quirk"
+route or why abandoning it might be hard. But maybe it's time to
+reconsider that path, as from my outside point of view things sound a
+lot like they are somewhat similar to the ACPI problems we dealt with
+~15 years ago: we learned that we have to deal with broken ACPI
+implementations and somehow use them in a way similar to how Windows
+uses them, as that's the OS the machine was designed for and tested with.
+
+Ciao, Thorsten
+
+>>> Another request came in today, even with a pseudo-patch:
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=217649
+>>>
+>>> To quote:
+>>> ```
+>>> As with numerous NVMe controllers these days, Samsung's
+>>> MZAL41T0HBLB-00BL2, which Lenovo builds into their 16ARP8 also suffers
+>>> from invalid IDs, breaking suspend and hibernate also on the latest
+>>> kernel 6.4.2.
+> [...]
+>> Panjaj, okay with this one too?
+> 
+> This looks a like a new device that might have a firmware update. I will ping
+> internally first.
+> 
+> As you mentioned, the recent addition of globally unique ID check
+> is breaking a lot of devices because of non-compliant firmware. I will try to create
+> some awareness about this issue internally as well.
