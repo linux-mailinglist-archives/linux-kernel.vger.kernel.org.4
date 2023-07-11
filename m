@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1329F74E728
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B3074E723
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjGKGWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S231205AbjGKGWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjGKGWj (ORCPT
+        with ESMTP id S229589AbjGKGWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:22:39 -0400
-Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEBEE51
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:38 -0700 (PDT)
-Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-1b3ca17f2a6so4368769fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:38 -0700 (PDT)
+        Tue, 11 Jul 2023 02:22:19 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40370E49
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:18 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6b98ac328so80376791fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689056557; x=1691648557;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oAOhq9P07eLDplhtLTT1tcsIlFj5k7H1L3tXJlOgLCo=;
-        b=d/u6KhCWa+HbTlst+lD44hjx/uPE6mkYk8t/U1cgZQ+rG8uR0vspAyOXTJytNDgvLu
-         MKkpktIPWohmTYwzXkUYnCPq9FhZePT1kmmrcT2gnKLqlv2V9Xq92sAeI2OaW38wT/BT
-         qCCcNEiv9xmMr8ANRmAwl8Li/Eqd/xvnolI9r64CY2cF9Rtsnc2zu7mE/7MvlMnXnz5J
-         CMLUKgQJ/0H0z/OeOj3P9EEDixuEf/yupESXVfYvVJ1AXgTb+pqRAAvLjQNlEHplPnZa
-         g3pPbSzasjHeQW1LmR/V2+J4sbYSnJW0+riWcIurE0vuIx8JLtXgYbkbRQNuoeGx8wDy
-         B5gg==
+        d=linaro.org; s=google; t=1689056536; x=1691648536;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BMq0CBBNFPwdDt7sKE2WVUIr1xaLmnE621Tq72fmvlo=;
+        b=KXF34s2LK1/OBl5Xe01l2pf5fI3j98hJjahYb83FRznicW3TYbQ+Fg5ZH8uGXsascY
+         okgUTLfxUfg7EkXx0Y0V8GOaZt3yOlIlumpIymQe3NUZ6XaqZyBk+v8uKV8nOtob2rBB
+         fE+px6vx4Sn9sYo+lebROfn9chilOiaYLkLX9a018rpqmuiGDjRtbcEnyL9fAifRGPu4
+         Sas6ELlvW8K36b7aIiINkkC5jzsC/k3hxC4FmgPITxFV+pnDhKX92KQbsbZrfENT2hUl
+         O0cODNDWq0hWV0xcuJCFuqd0hjN9aM8QJrj+hMISrXLBdbC6ns3RooHaOAbDknIfxULa
+         VDlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689056557; x=1691648557;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oAOhq9P07eLDplhtLTT1tcsIlFj5k7H1L3tXJlOgLCo=;
-        b=MVhe7EPNp+U+xKOUfYRCmDtpvoauw5fUusxmKyeukovcJY18RxhlGQkusm0aVKazYS
-         jWz3q2bEwxdT66f2l/Nco3Bjv1kPNiGz7tc1sBrchhuTi2h5Xll2nocBeJoo0ARwCY0j
-         NK7L3LZ5xaPlAikFcojBFvyEA2gZrNOg7m5XNmnptCwY1nl8jxjVD+LznQ9mZ8d69h/p
-         Jtmp4LcgAalAcF0kGXkYXiUfVSzG0+OHEEY3qp43OvEOTKXa3P4oxKywNxCN1s3SvCPW
-         o6d/Uemh8QOa42YCXXbRZ+TM8nwhxiwDCMBl291kgJKSQJTZDN7sJYJWXXMrp7Y0we5U
-         jCdQ==
-X-Gm-Message-State: ABy/qLZXjLtbEFTsRBeKr1qJBD+QeMPQf8aBLpOcXyNI7xjFoiFJtERv
-        g93Ak8i6LTW0kr2RCETcXIY=
-X-Google-Smtp-Source: APBJJlFhEu3/+l2Bh3HqICI1LhF877BOhGd5qBNEfGuzvLWsezxC7hd4093W8ajADVsZYNQII5ZQ7w==
-X-Received: by 2002:a05:6870:b48e:b0:1aa:f3:5b3b with SMTP id y14-20020a056870b48e00b001aa00f35b3bmr16428956oap.17.1689056557536;
-        Mon, 10 Jul 2023 23:22:37 -0700 (PDT)
-Received: from localhost ([212.107.28.55])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090ae50300b0025edb720cc1sm968558pjy.22.2023.07.10.23.22.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 23:22:37 -0700 (PDT)
-From:   Celeste Liu <coelacanthushex@gmail.com>
-X-Google-Original-From: Celeste Liu <CoelacanthusHex@gmail.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        Celeste Liu <CoelacanthusHex@gmail.com>,
-        Felix Yan <felixonmars@archlinux.org>,
-        Ruizhe Pan <c141028@gmail.com>,
-        Shiqi Zhang <shiqi@isrc.iscas.ac.cn>
-Subject: [PATCH] riscv: entry: set a0 prior to syscall_handler
-Date:   Tue, 11 Jul 2023 14:21:47 +0800
-Message-ID: <20230711062202.3542367-1-CoelacanthusHex@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        d=1e100.net; s=20221208; t=1689056536; x=1691648536;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BMq0CBBNFPwdDt7sKE2WVUIr1xaLmnE621Tq72fmvlo=;
+        b=jmS/bvr2YU4OxpNLqDLHx6yOjepIc5ycY5cqC31XuRzk6e+SFrnepRUN3HAIXe4qHW
+         lMckPifIxLrjqEYpG9KdSH7rV2A1/N7lMizqSVo7N4hpYplLg4zfiiBckFMODLfKMiSD
+         1WRl2zwsC0yaOKvewLIVA2ZBBi8thZQrsQIuu39Q/Bw3kJImL0YQVe4SFNRuOIoNg60t
+         YXTg09Ap5QNa55fXtCdQCjWT55m2rwk24v9CiiuQcqGXZu1pxbaThCQIeiOY3f+4f4if
+         7witKIGKv+XGUxycFN/PmxT7SW9RSOlVMijtjpP0mk+ifCA+5iK/zEB5F5TcqHqPFKfs
+         AVpA==
+X-Gm-Message-State: ABy/qLbpHTe1tTHm8mqwXTQxjQxWebm984ghOEoeLjwI45VREGt6NTBr
+        E3YguQUiI9G+7Q5cIMGvAaU5ng==
+X-Google-Smtp-Source: APBJJlFoMATq7vPBc/lWMvWA0+x1/ZhvVIc58N6ncv9I3EHgD/yjZVhuA/8Dad8k448XRfwAGDUJow==
+X-Received: by 2002:a2e:2414:0:b0:2b6:9b01:d40d with SMTP id k20-20020a2e2414000000b002b69b01d40dmr11762664ljk.30.1689056536556;
+        Mon, 10 Jul 2023 23:22:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id y24-20020a17090629d800b0098822e05539sm680198eje.191.2023.07.10.23.22.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 23:22:16 -0700 (PDT)
+Message-ID: <5e46383b-9ebd-23bf-6d20-2ce8e7afc1ad@linaro.org>
+Date:   Tue, 11 Jul 2023 08:22:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: power: Add compatible for sdx75
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1689054169-10800-3-git-send-email-quic_rohiagar@quicinc.com>
+ <afbab9c3-ae67-1a30-6fc5-e031f9f30286@linaro.org>
+ <0060bd2f-3884-ba12-08a6-ae7975d22e65@linaro.org>
+ <3f1c7089-87ad-ffc2-4978-d7a8664c462f@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3f1c7089-87ad-ffc2-4978-d7a8664c462f@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,52 +81,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we test seccomp with 6.4 kernel, we found errno has wrong value.
-If we deny NETLINK_AUDIT with EAFNOSUPPORT, after f0bddf50586d, we will
-get ENOSYS. We got same result with 9c2598d43510 ("riscv: entry: Save a0
-prior syscall_enter_from_user_mode()").
+On 11/07/2023 08:20, Rohit Agarwal wrote:
+> 
+> On 7/11/2023 11:25 AM, Krzysztof Kozlowski wrote:
+>> On 11/07/2023 07:53, Krzysztof Kozlowski wrote:
+>>> On 11/07/2023 07:42, Rohit Agarwal wrote:
+>>>> Add a compatible string that can be used to list PDs for sdx75.
+>>>>
+>>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>>> ---
+>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>> Ah, I forgot: you miss device name in subject prefixes. You do not add
+>> here sdx75 to all power bindings, do you? This applies to all your
+>> patches and commits.
+> Do you mean I need to update the subject as this?
+> 
+> dt-bindings: power: sdx75: Add compatible for sdx75
 
-Compared with x86 and loongarch's implementation of this part of the
-function, we think that regs->a0 = -ENOSYS should be advanced before
-syscall_handler to fix this problem. We have written the following patch,
-which can fix this problem after testing. But we don't know enough about
-this part of the code to explain the root cause. Hope someone can find
-a reasonable explanation. And we'd like to reword this commit message
-according to the explanation in v2
+No, the device binding is qcom,rpmpd.
 
-Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
-Reported-by: Felix Yan <felixonmars@archlinux.org>
-Co-developed-by: Ruizhe Pan <c141028@gmail.com>
-Signed-off-by: Ruizhe Pan <c141028@gmail.com>
-Co-developed-by: Shiqi Zhang <shiqi@isrc.iscas.ac.cn>
-Signed-off-by: Shiqi Zhang <shiqi@isrc.iscas.ac.cn>
-Signed-off-by: Celeste Liu <CoelacanthusHex@gmail.com>
-Tested-by: Felix Yan <felixonmars@archlinux.org>
----
- arch/riscv/kernel/traps.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index f910dfccbf5d2..ccadb5ffd063c 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -301,6 +301,7 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
- 
- 		regs->epc += 4;
- 		regs->orig_a0 = regs->a0;
-+		regs->a0 = -ENOSYS;
- 
- 		riscv_v_vstate_discard(regs);
- 
-@@ -308,8 +309,6 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
- 
- 		if (syscall < NR_syscalls)
- 			syscall_handler(regs, syscall);
--		else
--			regs->a0 = -ENOSYS;
- 
- 		syscall_exit_to_user_mode(regs);
- 	} else {
--- 
-2.41.0
+Best regards,
+Krzysztof
 
