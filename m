@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C4A74E472
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9121774E475
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjGKCqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 22:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S229987AbjGKCtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 22:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGKCqF (ORCPT
+        with ESMTP id S229517AbjGKCtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 22:46:05 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6740D188
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 19:46:02 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R0QGt2L7BzBHXkP
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:45:58 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689043558; x=1691635559; bh=yMCbkMYiTyHC8803omIwa+cF847
-        f+Xrhh1yZkyU7z/8=; b=o86gB03IoDt9VawXYng14a/StUEWudAL3zo+6d9xiYP
-        B8D9se2Nr7rFzLc++MViJlPz2DVjYiW21SJ9+KCugoWbBs7iTm2MMbYshZe6uPv6
-        /cqTexnDOb9zTtJvfwp0vuF6RvhodvCmItUynCYeDI21yFBosiYIGrTuql7sMB58
-        4PmiaN4i+fXE5rnBulekExwxdguH3Nf/hjhglEQPkZg/XX63SDO1+HNl8E8Vq/mw
-        3A27ilU4OAzK7s9XSb67LjrShnBRvV5VKSMroTXrfSg2U/ZCceL6ahU6TkMnkSCD
-        yyXqf/vOlSbMhFgJ12lFFgiKc1BoaoX9PLcJDyf0kqg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id YCFy2nwXfar2 for <linux-kernel@vger.kernel.org>;
-        Tue, 11 Jul 2023 10:45:58 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R0QGs6Z1XzBHXhc;
-        Tue, 11 Jul 2023 10:45:57 +0800 (CST)
+        Mon, 10 Jul 2023 22:49:50 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CE7120;
+        Mon, 10 Jul 2023 19:49:47 -0700 (PDT)
+X-QQ-mid: Yeas43t1689043677t873t55355
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [183.128.130.21])
+X-QQ-SSF: 00400000000000F0FPF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 2893266932846902209
+To:     "'YueHaibing'" <yuehaibing@huawei.com>,
+        <mengyuanlou@net-swift.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221105080722.20292-1-yuehaibing@huawei.com> <20221105080722.20292-3-yuehaibing@huawei.com>
+In-Reply-To: <20221105080722.20292-3-yuehaibing@huawei.com>
+Subject: RE: [PATCH net-next 2/2] net: txgbe: Fix unsigned comparison to zero in txgbe_calc_eeprom_checksum()
+Date:   Tue, 11 Jul 2023 10:47:56 +0800
+Message-ID: <031801d9b3a2$191cc510$4b564f30$@trustnetic.com>
 MIME-Version: 1.0
-Date:   Tue, 11 Jul 2023 10:45:57 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau/devinit: Move assignment outside if condition
-In-Reply-To: <20230711024429.78508-1-xujianghui@cdjrlc.com>
-References: <20230711024429.78508-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <ccc9e4541dcac0675e578825667b60ad@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain;
+        charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFi2DHPEYcXaQ1O7miR/ExBhxCcIQE5uFuqsJfCJPA=
+Content-Language: zh-cn
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following checkpatch errors:
+On Saturday, November 5, 2022 4:07 PM, YueHaibing wrote:
+> The error checks on checksum for a negative error return always fails because
+> it is unsigned and can never be negative.
+> 
+> Fixes: 049fe5365324 ("net: txgbe: Add operations to interact with firmware")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/net/ethernet/wangxun/txgbe/txgbe_hw.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_hw.c b/drivers/net/ethernet/wangxun/txgbe/txgbe_hw.c
+> index 9cf5fe33118e..167f7ff73192 100644
+> --- a/drivers/net/ethernet/wangxun/txgbe/txgbe_hw.c
+> +++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_hw.c
+> @@ -200,10 +200,11 @@ static int txgbe_calc_eeprom_checksum(struct txgbe_hw *hw, u16 *checksum)
+>  	if (eeprom_ptrs)
+>  		kvfree(eeprom_ptrs);
+> 
+> -	*checksum = TXGBE_EEPROM_SUM - *checksum;
+> -	if (*checksum < 0)
+> +	if (*checksum > TXGBE_EEPROM_SUM)
+>  		return -EINVAL;
+> 
+> +	*checksum = TXGBE_EEPROM_SUM - *checksum;
+> +
+>  	return 0;
+>  }
 
-ERROR: do not use assignment in if condition
+It is a pity, I didn't review this patch carefully. *checksum will sometimes
+be larger than TXGBE_EEPROM_SUM. It's correct to remove these two lines:
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv05.c | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
+-	if (*checksum < 0)
+-		return -EINVAL;
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv05.c 
-b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv05.c
-index 1410befd2285..8185e10efc49 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv05.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv05.c
-@@ -61,7 +61,8 @@ nv05_devinit_meminit(struct nvkm_devinit *init)
-      }
+I'll send a patch to fix it.
 
-      strap = (nvkm_rd32(device, 0x101000) & 0x0000003c) >> 2;
--    if ((data = bmp_mem_init_table(bios))) {
-+    data = bmp_mem_init_table(bios);
-+    if (data) {
-          ramcfg[0] = nvbios_rd08(bios, data + 2 * strap + 0);
-          ramcfg[1] = nvbios_rd08(bios, data + 2 * strap + 1);
-      } else {
