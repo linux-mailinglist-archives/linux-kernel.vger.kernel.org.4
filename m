@@ -2,122 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DD074FAD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D0F74FAD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjGKWSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S231373AbjGKWT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjGKWST (ORCPT
+        with ESMTP id S229714AbjGKWT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:18:19 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC291705
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:18:15 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b89b0c73d7so7506745ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:18:15 -0700 (PDT)
+        Tue, 11 Jul 2023 18:19:27 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036B910DD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:19:25 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b701e1ca63so100376711fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689113895; x=1689718695;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=linaro.org; s=google; t=1689113963; x=1691705963;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=r0QKuY6Gac4KtjHpQUjYNNJL6kvnxIXVmhMZHPYzaPQ=;
-        b=nEcWXQ1/do+JQ+fqs5nhW1aTSCZ1LlPzD6//MeTmoL2r47x5l54/InYcck7bFm+9oO
-         djVAk9evNEykAAqXZICjMVLhWFrC6VOWDsgJircdNV8DpVowDLSzt6dxoAO8QZNuesLR
-         3BfZ9k6FCo6LlCk1DvutIvnTSeeGBXZV3oSc9LRvHNdVG2c2bWyp8RvmR34V8ok0Pdq8
-         o/ZP8dQ4iPv9iye0vE+S8uplfMGd5BLSjK7H3ZG8nz4Jtthn5xrgavwpAYv80Z1dcabR
-         FBX/0SaMRgYDWOEXq2np0ld6UX/0TvA2KYmT98Uv0BhQOZtxWlebgOkGZCfXRJl187+u
-         xfNw==
+        bh=5q1KrjOHXjT68Y0PaVbVveaMBA+COJ1l8a0LXRUu520=;
+        b=gd9Om2oTt4fCPEtYkeiyxFlIDMTo1FumrjkynH6jqrvdcW3mvV3HBKK8B2Z4nEGEJ4
+         ylgBeYb9xIbTHHUFDI004O/SJNdUyQskQHhWknDVWmHBGJgm5TEYJIoSanRR4CDmhYNN
+         jPIMhBf4JSdVXkqF2pfMFhm+J0urwFsgQWdl2Q7x/69clT5YRhq97mUQ9cEYmlZRycqW
+         Nd1cUNbwaHIFhxS88NwYYlMKz68ENqSHzdxvBnCQ9fK93stJ1v3//ZQIFbk2WaQQ8RsV
+         rE6NBxuiWHXlDW7qa48lubFiMPYK1sjW4bz8n8OdLHAvIk0C8zDQtC0jz8vb5sXSKsG8
+         BeJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689113895; x=1689718695;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20221208; t=1689113963; x=1691705963;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r0QKuY6Gac4KtjHpQUjYNNJL6kvnxIXVmhMZHPYzaPQ=;
-        b=PkxvKh6/SjQ3O+pbYCOJAoNg3b/x9Ym/RNov8knbld6T3Qbktn45ItUeQ68IYs1Acf
-         SRlUFmRdCFtJYi1OWIcCzM7afmeiCtGZO76fnXkIZzBnXEGRJ1ixFpgxnHlhYDHl5Dev
-         VCUKMDSkS5kEpoBxaE61O7hhXJ2E81pmXtjrc8YYU9pVIqpDikA9W2Nu8oGb42aaAlyU
-         zOBvILNbL79KyNb/ogqy3WXEL9p6Eg6oqH6zmlAQ1gP1lOOJnp36gAwjohcavoVsKULh
-         ntLty3FeBP404S2S6hSLmTynwejH06xJ+xNkshhAtTuyszNqmSf6TZdElrR1Pgc4bnz6
-         TsPQ==
-X-Gm-Message-State: ABy/qLY9scLIRcrNxhIdgubk1FW+fGtpP9Q+RtL7LLWBikMBmZFDNWJC
-        auUjbYot/l6R7N+IWtYDBjhfb4i8RJTHTZxETFw=
-X-Google-Smtp-Source: APBJJlH1fB38TaeaX141/fYrGihQI6HUMtyNJ0dTyUnoqY0SEef9M8W+D+0os7O9mzigAXwQpsUtbQ==
-X-Received: by 2002:a17:902:da92:b0:1b8:35fa:cdcc with SMTP id j18-20020a170902da9200b001b835facdccmr21713869plx.5.1689113895139;
-        Tue, 11 Jul 2023 15:18:15 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jc17-20020a17090325d100b001b9dfa946b4sm2441594plb.49.2023.07.11.15.18.14
+        bh=5q1KrjOHXjT68Y0PaVbVveaMBA+COJ1l8a0LXRUu520=;
+        b=HvLc/9ps7lHs/EjJAF7ydl20xzP+0GkAMLgqu06w60d82nLWy79TBMcPgJ9NCS8t68
+         uuwzJ/Q3me6f0pM3jz74fjHFEjrNNmxQyItc3e3zZwdctLcQQdAXt1CnFPT8ow6Ud4+9
+         cacMmIbqFmB47HznRqmgG4Rjp+eRy9w3dWfMm6a22NXpYw0jHf0U+03MVoj7FHKm8IpQ
+         +x0Mn9ojbGa/wBWNiUShP8erf8eBQrApftL3XwBrl/u963JstVf+8+/NW2jRPHrTViwW
+         BDUGSoLUz53J2ghkQKLfNrSC0AoWy7ayQQFzNuT0bbsCT3muumEO37iY6A0b820kW0PR
+         Vz5w==
+X-Gm-Message-State: ABy/qLbcqyPSwHEzBnIj/ptbnYH8xBjz8at7hEX2NRXHPuNQqefzikRA
+        HpytSU+7RxdcQTCr4TBSXjV/yw==
+X-Google-Smtp-Source: APBJJlFpcD/UoHhzXSzKq1S+oRrlXgyKj4ujiUr7kye+kXhPCSmvqBUFf+bUEdnKtddza9VkwuDFBw==
+X-Received: by 2002:a2e:7e02:0:b0:2b7:7ab:3c60 with SMTP id z2-20020a2e7e02000000b002b707ab3c60mr13752134ljc.32.1689113963153;
+        Tue, 11 Jul 2023 15:19:23 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id j23-20020a2e8017000000b002b6daf32c7csm630129ljg.97.2023.07.11.15.19.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 15:18:14 -0700 (PDT)
-Message-ID: <bbc5f3cf-99f8-0695-1367-979301c64ecb@kernel.dk>
-Date:   Tue, 11 Jul 2023 16:18:13 -0600
+        Tue, 11 Jul 2023 15:19:22 -0700 (PDT)
+Message-ID: <916d6b67-0f37-3814-4a15-d4a6fd6891ab@linaro.org>
+Date:   Wed, 12 Jul 2023 01:19:22 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 5/5] io_uring: add IORING_OP_WAITID support
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Arnd Bergmann <arnd@arndb.de>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>
-References: <20230711204352.214086-1-axboe@kernel.dk>
- <20230711204352.214086-6-axboe@kernel.dk>
- <8431d207-5e52-4f8c-a12d-276836174bad@app.fastmail.com>
- <048cfbce-5238-2580-2d53-2ca740e72d79@kernel.dk>
-In-Reply-To: <048cfbce-5238-2580-2d53-2ca740e72d79@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH RFC v4 2/7] drm: Introduce pixel_source DRM plane property
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        quic_abhinavk@quicinc.com, contact@emersion.fr,
+        laurent.pinchart@ideasonboard.com, sebastian.wick@redhat.com,
+        ville.syrjala@linux.intel.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        wayland-devel@lists.freedesktop.org
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+ <20230404-solid-fill-v4-2-f4ec0caa742d@quicinc.com>
+ <6e3eec49-f798-ff91-8b4d-417d31089296@linaro.org>
+ <20230630112708.4d3a08a7@eldfell>
+ <eb78b4d6-6da2-1cb5-5fab-01d7bf233111@quicinc.com>
+ <e17db728-d91b-a2b3-08a9-1dd1fde9c727@linaro.org>
+ <53ca10d5-c1e0-285a-30b9-4e9a2a1b70c9@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <53ca10d5-c1e0-285a-30b9-4e9a2a1b70c9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/23 3:22 PM, Jens Axboe wrote:
-> On 7/11/23 3:11?PM, Arnd Bergmann wrote:
->> On Tue, Jul 11, 2023, at 22:43, Jens Axboe wrote:
->>> This adds support for an async version of waitid(2), in a fully async
->>> version. If an event isn't immediately available, wait for a callback
->>> to trigger a retry.
->>>
->>> The format of the sqe is as follows:
->>>
->>> sqe->len		The 'which', the idtype being queried/waited for.
->>> sqe->fd			The 'pid' (or id) being waited for.
->>> sqe->file_index		The 'options' being set.
->>> sqe->addr2		A pointer to siginfo_t, if any, being filled in.
->>>
->>> buf_index, add3, and waitid_flags are reserved/unused for now.
->>> waitid_flags will be used for options for this request type. One
->>> interesting use case may be to add multi-shot support, so that the
->>> request stays armed and posts a notification every time a monitored
->>> process state change occurs.
->>>
->>> Note that this does not support rusage, on Arnd's recommendation.
->>>
->>> See the waitid(2) man page for details on the arguments.
->>>
->>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>
->> Does this require argument conversion for compat tasks?
->>
->> Even without the rusage argument, I think the siginfo
->> remains incompatible with 32-bit tasks, unfortunately.
+On 12/07/2023 01:07, Jessica Zhang wrote:
 > 
-> Hmm yes good point, if compat_siginfo and siginfo are different, then it
-> does need handling for that. Would be a trivial addition, I'll make that
-> change. Thanks Arnd!
+> 
+> On 7/10/2023 1:11 PM, Dmitry Baryshkov wrote:
+>> On 10/07/2023 22:51, Jessica Zhang wrote:
+>>>
+>>>
+>>> On 6/30/2023 1:27 AM, Pekka Paalanen wrote:
+>>>> On Fri, 30 Jun 2023 03:42:28 +0300
+>>>> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+>>>>
+>>>>> On 30/06/2023 03:25, Jessica Zhang wrote:
+>>>>>> Add support for pixel_source property to drm_plane and related
+>>>>>> documentation.
+>>>>>>
+>>>>>> This enum property will allow user to specify a pixel source for the
+>>>>>> plane. Possible pixel sources will be defined in the
+>>>>>> drm_plane_pixel_source enum.
+>>>>>>
+>>>>>> The current possible pixel sources are DRM_PLANE_PIXEL_SOURCE_FB and
+>>>>>> DRM_PLANE_PIXEL_SOURCE_COLOR. The default value is *_SOURCE_FB.
+>>>>>
+>>>>> I think, this should come before the solid fill property addition. 
+>>>>> First
+>>>>> you tell that there is a possibility to define other pixel sources, 
+>>>>> then
+>>>>> additional sources are defined.
+>>>>
+>>>> Hi,
+>>>>
+>>>> that would be logical indeed.
+>>>
+>>> Hi Dmitry and Pekka,
+>>>
+>>> Sorry for the delay in response, was out of office last week.
+>>>
+>>> Acked.
+>>>
+>>>>
+>>>>>>
+>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>>>>> ---
+>>>>>>    drivers/gpu/drm/drm_atomic_state_helper.c |  1 +
+>>>>>>    drivers/gpu/drm/drm_atomic_uapi.c         |  4 ++
+>>>>>>    drivers/gpu/drm/drm_blend.c               | 81 
+>>>>>> +++++++++++++++++++++++++++++++
+>>>>>>    include/drm/drm_blend.h                  |  2 +
+>>>>>>    include/drm/drm_plane.h                  | 21 ++++++++
+>>>>>>    5 files changed, 109 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c 
+>>>>>> b/drivers/gpu/drm/drm_atomic_state_helper.c
+>>>>>> index fe14be2bd2b2..86fb876efbe6 100644
+>>>>>> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
+>>>>>> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+>>>>>> @@ -252,6 +252,7 @@ void 
+>>>>>> __drm_atomic_helper_plane_state_reset(struct drm_plane_state 
+>>>>>> *plane_state,
+>>>>>>        plane_state->alpha = DRM_BLEND_ALPHA_OPAQUE;
+>>>>>>        plane_state->pixel_blend_mode = DRM_MODE_BLEND_PREMULTI;
+>>>>>> +    plane_state->pixel_source = DRM_PLANE_PIXEL_SOURCE_FB;
+>>>>>>        if (plane_state->solid_fill_blob) {
+>>>>>>            drm_property_blob_put(plane_state->solid_fill_blob);
+>>>>>> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c 
+>>>>>> b/drivers/gpu/drm/drm_atomic_uapi.c
+>>>>>> index a28b4ee79444..6e59c21af66b 100644
+>>>>>> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+>>>>>> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+>>>>>> @@ -596,6 +596,8 @@ static int 
+>>>>>> drm_atomic_plane_set_property(struct drm_plane *plane,
+>>>>>>            drm_property_blob_put(solid_fill);
+>>>>>>            return ret;
+>>>>>> +    } else if (property == plane->pixel_source_property) {
+>>>>>> +        state->pixel_source = val;
+>>>>>>        } else if (property == plane->alpha_property) {
+>>>>>>            state->alpha = val;
+>>>>>>        } else if (property == plane->blend_mode_property) {
+>>>>>
+>>>>> I think, it was pointed out in the discussion that drm_mode_setplane()
+>>>>> (a pre-atomic IOCTL to turn the plane on and off) should also reset
+>>>>> pixel_source to FB.
+>>>
+>>> I don't remember drm_mode_setplane() being mentioned in the 
+>>> pixel_source discussion... can you share where it was mentioned?
+>>
+>> https://lore.kernel.org/dri-devel/20230627105849.004050b3@eldfell/
+>>
+>> Let me quote it here:
+>> "Legacy non-atomic UAPI wrappers can do whatever they want, and program
+>> any (new) properties they want in order to implement the legacy
+>> expectations, so that does not seem to be a problem."
+>>
+>>
+>>>
+>>> I'd prefer to avoid having driver change the pixel_source directly as 
+>>> it could cause some unexpected side effects. In general, I would like 
+>>> userspace to assign the value of pixel_source without driver doing 
+>>> anything "under the hood".
+>>
+>> s/driver/drm core/
+>>
+>> We have to remain compatible with old userspace, especially with the 
+>> non-atomic one. If the userspace calls ioctl(DRM_IOCTL_MODE_SETPLANE), 
+>> we have to display the specified FB, no matter what was the value of 
+>> PIXEL_SOURCE before this ioctl.
+> 
+> 
+> Got it, thanks the clarification -- I see your point.
+> 
+> I'm already setting plane_state->pixel_source to FB in 
+> __drm_atomic_helper_plane_reset() and it seems to me that all drivers 
+> are calling that within their respective plane_funcs->reset().
+> 
+> Since (as far as I know) reset() is being called for both the atomic and 
+> non-atomic paths, shouldn't that be enough to default pixel_source to FB 
+> for old userspace?
 
-Should be fixed in the current version:
+No, this will not clean up the state between userspace apps. Currently 
+the rule is simple: call DRM_IOCTL_MODE_SETPLANE, get the image from FB 
+displayed. We should keep it so.
 
-https://git.kernel.dk/cgit/linux/commit/?h=io_uring-waitid&id=08f3dc9b7cedbd20c0f215f25c9a7814c6c601cc
+>>>
+>>>>>
+>>>>>> @@ -671,6 +673,8 @@ drm_atomic_plane_get_property(struct drm_plane 
+>>>>>> *plane,
+>>>>>>        } else if (property == plane->solid_fill_property) {
+>>>>>>            *val =state->solid_fill_blob ?
+>>>>>>                state->solid_fill_blob->base.id : 0;
+>>>>>> +    } else if (property == plane->pixel_source_property) {
+>>>>>> +        *val = state->pixel_source;
+>>>>>>        } else if (property == plane->alpha_property) {
+>>>>>>            *val =state->alpha;
+>>>>>>        } else if (property == plane->blend_mode_property) {
+>>>>>> diff --git a/drivers/gpu/drm/drm_blend.c 
+>>>>>> b/drivers/gpu/drm/drm_blend.c
+>>>>>> index 38c3c5d6453a..8c100a957ee2 100644
+>>>>>> --- a/drivers/gpu/drm/drm_blend.c
+>>>>>> +++ b/drivers/gpu/drm/drm_blend.c
+>>>>>> @@ -189,6 +189,18 @@
+>>>>>>     *    solid_fill is set up with 
+>>>>>> drm_plane_create_solid_fill_property(). It
+>>>>>>     *    contains pixel data that drivers can use to fill a plane.
+>>>>>>     *
+>>>>>> + * pixel_source:
+>>>>>> + *    pixel_source is set up with 
+>>>>>> drm_plane_create_pixel_source_property().
+>>>>>> + *    It is used to toggle the source of pixel data for the plane.
+>>>>
+>>>> Other sources than the selected one are ignored?
+>>>
+>>> Yep, the plane will only display the data from the set pixel_source.
+>>>
+>>> So if pixel_source == FB and solid_fill_blob is non-NULL, 
+>>> solid_fill_blob will be ignored and the plane will display the FB 
+>>> that is set.
+>>
+>> correct.
+>>
+>>>
+>>> Will add a note about this in the comment docs.
+>>>
+>>>>
+>>>>>> + *
+>>>>>> + *    Possible values:
+>>>>
+>>>> Wouldn't hurt to explicitly mention here that this is an enum.
+>>>
+>>> Acked.
+>>>
+>>>>
+>>>>>> + *
+>>>>>> + *    "FB":
+>>>>>> + *        Framebuffer source
+>>>>>> + *
+>>>>>> + *    "COLOR":
+>>>>>> + *        solid_fill source
+>>>>
+>>>> I think these two should be more explicit. Framebuffer source is the
+>>>> usual source from the property "FB_ID". Solid fill source comes from
+>>>> the property "solid_fill".
+>>>
+>>> Acked.
+>>>
+>>>>
+>>>> Why "COLOR" and not, say, "SOLID_FILL"?
+>>>
+>>> Ah, that would make more sense :)
+>>>
+>>> I'll change this to "SOLID_FILL".
+>>>
+>>>>
+>>>>>> + *
+>>>>>>     * Note that all the property extensions described here apply 
+>>>>>> either to the
+>>>>>>     * plane or the CRTC (e.g. for the background color, which 
+>>>>>> currently is not
+>>>>>>     * exposed and assumed to be black).
+>>>>>> @@ -648,3 +660,72 @@ int 
+>>>>>> drm_plane_create_solid_fill_property(struct drm_plane *plane)
+>>>>>>        return 0;
+>>>>>>    }
+>>>>>>    EXPORT_SYMBOL(drm_plane_create_solid_fill_property);
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * drm_plane_create_pixel_source_property - create a new pixel 
+>>>>>> source property
+>>>>>> + * @plane: drm plane
+>>>>>> + * @supported_sources: bitmask of supported pixel_sources for the 
+>>>>>> driver (NOT
+>>>>>> + *                     including DRM_PLANE_PIXEL_SOURCE_FB, as it 
+>>>>>> will be supported
+>>>>>> + *                     by default).
+>>>>>
+>>>>> I'd say this is too strong. I'd suggest either renaming this to
+>>>>> extra_sources (mentioning that FB is enabled for all the planes) or
+>>>>> allowing any source bitmask (mentioning that FB should be enabled 
+>>>>> by the
+>>>>> caller, unless there is a good reason not to do so).
+>>>>
+>>>> Right. I don't see any problem with having planes of type OVERLAY that
+>>>> support only solid_fill and no FB. Planes of type PRIMARY and CURSOR I
+>>>> would expect to always support at least FB.
+>>>>
+>>>> Atomic userspace is prepared to have an OVERLAY plane fail for any
+>>>> arbitrary reason. Legacy userspace probably should not ever see a plane
+>>>> that does not support FB.
+>>>
+>>> Got it... If we allow the possibility of FB sources not being 
+>>> supported, then should the default pixel_source per plane be decided 
+>>> by the driver too?
+>>>
+>>> I'd forced FB support so that I could set pixel_source to FB in 
+>>> __drm_atomic_helper_plane_state_reset(). If we allow more flexibility 
+>>> in the default pixel_source value, I guess we can also store a 
+>>> default_pixel_source value in the plane_state.
+>>
+>> I'd say, the FB is a sane default. It the driver has other needs, it 
+>> can override the value in drm_plane_funcs::reset().
+>>
+>>>
+>>
+>> [skipped the rest]
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
+>>
 
 -- 
-Jens Axboe
-
+With best wishes
+Dmitry
 
