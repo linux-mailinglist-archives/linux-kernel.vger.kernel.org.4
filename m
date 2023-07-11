@@ -2,286 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D67774ED28
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BA774ED2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjGKLqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S230391AbjGKLrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjGKLqq (ORCPT
+        with ESMTP id S231134AbjGKLrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:46:46 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D204F188
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:46:43 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso5034141276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689076003; x=1691668003;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eaziZ94maZm3wxKZN4/6tJUYjnO13qJHKuU4Kto9J+o=;
-        b=gklfGfriPTido+OOaffg1UM/Xt3uZGiaFzQbkRiEj6Tmj1LRVBgGCZaGtlgvjvifMZ
-         wrfFgFRTGYkxKlE33IPeQPj3eak7jhg1sOM6XgI45GwHmBazMNL2tFZChE7wPpT2h1cg
-         Cu1Pp+6QIYTx4XPJXH5xPxdukAFLNb9SKlLGhEME+TjBVzOaMPNinHjcxv76viZC3dOS
-         E1MTllmiwz+oAUOrySRoWfKd1qxbHKEQQP2MEkVD4eoxfuIR22ihmtKZIGYeDwpuHqcl
-         ON7a+xowJIHUTdys1HPKAECxgvtZ8p6TPWspMn2Vfl7u0Oqi3biZcKpXQNfjl6eKeijQ
-         KxQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689076003; x=1691668003;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eaziZ94maZm3wxKZN4/6tJUYjnO13qJHKuU4Kto9J+o=;
-        b=Iqmsa7+db2DHyZmIGmYzLzWEEpvpixXS8lh6DSlXIgiyAiHrqZ1G30QLdX27LGli6F
-         DrYvQlWn193TKkTWeFJ6hN1Gq4tIHV+j+ToNNvN1VMsi7xOzXP+pFkx6BK8TWh8B/SBC
-         p+lI9/jOFa71NaCM2QRc1ggDtR2JPB225YL3B0HveCSiIwA08pMwFVjr1Ip0UowQvzRu
-         I4fIebTMCRmDtZ7fP/DcboKNQ7qkkuLUCQ6SGXHvrUs+OGYnQ38y0lIUq9Khsr/3o0cG
-         ATH4ldpabIvg+5bxUQktpsaQWLBj7E5SmEf4RomhEgs/DRyEwb6EtCA6/qPvZiqvk8So
-         w8Aw==
-X-Gm-Message-State: ABy/qLZKku7uchxZCMDiGt16qDNGLE2om84Z1SKv1dkj7GNhV3goB+VA
-        20inARwhUUTRFZ543b/4XgmDJO/ucyRhszSLmJ9O7P0Au6jtyadw
-X-Google-Smtp-Source: APBJJlEpthk74V4DSnuNchB9wf9luhREksQ4SwvkR+x6SOjLik7NxDv46DS6NX9oodSkOtJqYBdIsGCwVZYsO2rYqFM=
-X-Received: by 2002:a25:b34c:0:b0:c61:e9b6:82a5 with SMTP id
- k12-20020a25b34c000000b00c61e9b682a5mr11991300ybg.39.1689076002952; Tue, 11
- Jul 2023 04:46:42 -0700 (PDT)
+        Tue, 11 Jul 2023 07:47:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F385611D;
+        Tue, 11 Jul 2023 04:47:17 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R0fCg0kY5zMqWb;
+        Tue, 11 Jul 2023 19:43:59 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 11 Jul
+ 2023 19:47:15 +0800
+Subject: Re: [PATCH RFC net-next v4 6/9] iavf: switch to Page Pool
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Yunsheng Lin <yunshenglin0825@gmail.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        David Christensen <drc@linux.vnet.ibm.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, <netdev@vger.kernel.org>,
+        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
+References: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
+ <20230705155551.1317583-7-aleksander.lobakin@intel.com>
+ <6b8bc66f-8a02-b6b4-92cc-f8aaf067abd8@huawei.com>
+ <bc495d87-3968-495f-c672-bf1bab38524a@intel.com>
+ <4946b9df-66ea-d184-b97c-0ba687e41df8@gmail.com>
+ <95c5ba92-bccd-6a9a-5373-606a482e36a3@intel.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <558849ff-6b68-7547-cf99-36801ff24c25@huawei.com>
+Date:   Tue, 11 Jul 2023 19:47:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-References: <20230711-topic-rb1_regulator-v1-1-bc4398c35800@linaro.org>
- <CAA8EJpoeAeitC=_pbAxFATfxx8UK-4cAQ=Zr3nKc0jhAdoG5fg@mail.gmail.com>
- <43d290c9-fdec-4832-242e-6732d9f0ea6c@linaro.org> <CAA8EJpozgj=MvYo=eHx1a1YD4gkXEvqHvuvp_mUBXfGMjhYWGA@mail.gmail.com>
- <775764d2-5457-9150-74ca-6e14fa5b2870@linaro.org>
-In-Reply-To: <775764d2-5457-9150-74ca-6e14fa5b2870@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 11 Jul 2023 14:46:31 +0300
-Message-ID: <CAA8EJpraMoY6W9WfE1i3HNZ-AxcSD6UwCkRReM1mnrcB2YH7VQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: qrb2210-rb1: Add regulators
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <95c5ba92-bccd-6a9a-5373-606a482e36a3@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 at 14:41, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On 11.07.2023 12:56, Dmitry Baryshkov wrote:
-> > On Tue, 11 Jul 2023 at 13:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>
-> >> On 11.07.2023 12:44, Dmitry Baryshkov wrote:
-> >>> On Tue, 11 Jul 2023 at 13:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>>>
-> >>>> Add and assign RPM regulators coming from PM2250.
-> >>>>
-> >>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>>> ---
-> >> [...]
-> >>
-> >>>> +               pm2250_l5: l5 {
-> >>>> +                       /* CSI/DSI */
-> >>>> +                       regulator-min-microvolts = <1232000>;
-> >>>> +                       regulator-max-microvolts = <1232000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +                       regulator-boot-on;
-> >>>
-> >>> why?
-> >>>
-> >> To answer all of the questions in one go:
-> >>
-> >> "it's because the regulator is enabled at boot"
-> >
-> > I was more concerned about the following part:
-> >       If the bootloader didn't leave it on then OS should turn it on at boot ...
-> >
-> > Please remind me, are we declaring them as boot-on so that the
-> > regulator core can turn them off later if they are unused?
-> In the Linux implementation, yes.
+On 2023/7/10 21:34, Alexander Lobakin wrote:
+> From: Yunsheng Lin <yunshenglin0825@gmail.com>
+> Date: Sun, 9 Jul 2023 13:16:39 +0800
+> 
+>> On 2023/7/7 0:38, Alexander Lobakin wrote:
+>>
+>> ...
+>>  
+>>>>
+>>>>>  /**
+>>>>> @@ -766,13 +742,19 @@ void iavf_free_rx_resources(struct iavf_ring *rx_ring)
+>>>>>   **/
+>>>>>  int iavf_setup_rx_descriptors(struct iavf_ring *rx_ring)
+>>>>>  {
+>>>>> -	struct device *dev = rx_ring->dev;
+>>>>> -	int bi_size;
+>>>>> +	struct page_pool *pool;
+>>>>> +
+>>>>> +	pool = libie_rx_page_pool_create(&rx_ring->q_vector->napi,
+>>>>> +					 rx_ring->count);
+>>>>
+>>>> If a page is able to be spilt between more than one desc, perhaps the
+>>>> prt_ring size does not need to be as big as rx_ring->count.
+>>>
+>>> But we doesn't know in advance, right? Esp. given that it's hidden in
+>>> the lib. But anyway, you can only assume that in regular cases if you
+>>> always allocate frags of the same size, PP will split pages when 2+
+>>> frags can fit there or return the whole page otherwise, but who knows
+>>> what might happen.
+>>
+>> It seems intel driver is able to know the size of memory it needs when
+>> creating the ring/queue/napi/pp, maybe the driver only tell the libie
+>> how many descs does it use for queue, and libie can adjust it accordingly?
+> 
+> But libie can't say for sure how PP will split pages for it, right?
+> 
+>>
+>>> BTW, with recent recycling optimization, most of recycling is done
+>>> directly through cache, not ptr_ring. So I'd even say it's safe to start
+>>> creating smaller ptr_rings in the drivers.
+>>
+>> The problem is that we may use more memory than before for certain case
+>> if we don't limit the size of ptr_ring, unless we can ensure all of
+>> recycling is done directly through cache, not ptr_ring.
+> Also not sure I'm following =\
 
-Ack.
+Before adding page pool support, the max memory used in the driver is as
+below:
+rx_ring->count * PAGE_SIZE;
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+After adding page pool support, the max memory used in the driver is as
+below:
 
->
-> Konrad
-> >
-> >>
-> >> Konrad
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l6: l6 {
-> >>>> +                       /* DRAM PLL */
-> >>>> +                       regulator-min-microvolts = <928000>;
-> >>>> +                       regulator-max-microvolts = <928000>;
-> >>>> +                       regulator-always-on;
-> >>>> +                       regulator-boot-on;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l7: l7 {
-> >>>> +                       /* Wi-Fi CX/MX */
-> >>>> +                       regulator-min-microvolts = <664000>;
-> >>>> +                       regulator-max-microvolts = <664000>;
-> >>>> +               };
-> >>>> +
-> >>>> +               /*
-> >>>> +                * L8 - VDD_LPI_CX
-> >>>> +                * L9 - VDD_LPI_MX
-> >>>> +                */
-> >>>> +
-> >>>> +               pm2250_l10: l10 {
-> >>>> +                       /* Wi-Fi RFA */
-> >>>> +                       regulator-min-microvolts = <1300000>;
-> >>>> +                       regulator-max-microvolts = <1300000>;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l11: l11 {
-> >>>> +                       /* GPS RF1 */
-> >>>> +                       regulator-min-microvolts = <1000000>;
-> >>>> +                       regulator-max-microvolts = <1000000>;
-> >>>> +                       regulator-boot-on;
-> >>>
-> >>> Shouldn't it be handled by the modem on its own?
-> >>>
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l12: l12 {
-> >>>> +                       /* USB PHYs */
-> >>>> +                       regulator-min-microvolts = <928000>;
-> >>>> +                       regulator-max-microvolts = <928000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +                       regulator-boot-on;
-> >>>
-> >>> You guess the question (and further on)
-> >>>
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l13: l13 {
-> >>>> +                       /* USB/QFPROM/PLLs */
-> >>>> +                       regulator-min-microvolts = <1800000>;
-> >>>> +                       regulator-max-microvolts = <1800000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +                       regulator-boot-on;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l14: l14 {
-> >>>> +                       /* SDHCI1 VQMMC */
-> >>>> +                       regulator-min-microvolts = <1800000>;
-> >>>> +                       regulator-max-microvolts = <1800000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +                       /* Broken hardware, never turn it off! */
-> >>>> +                       regulator-always-on;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l15: l15 {
-> >>>> +                       /* WCD/DSI/BT VDDIO */
-> >>>> +                       regulator-min-microvolts = <1800000>;
-> >>>> +                       regulator-max-microvolts = <1800000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +                       regulator-always-on;
-> >>>> +                       regulator-boot-on;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l16: l16 {
-> >>>> +                       /* GPS RF2 */
-> >>>> +                       regulator-min-microvolts = <1800000>;
-> >>>> +                       regulator-max-microvolts = <1800000>;
-> >>>> +                       regulator-boot-on;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l17: l17 {
-> >>>> +                       regulator-min-microvolts = <3000000>;
-> >>>> +                       regulator-max-microvolts = <3000000>;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l18: l18 {
-> >>>> +                       /* VDD_PXn */
-> >>>> +                       regulator-min-microvolts = <1800000>;
-> >>>> +                       regulator-max-microvolts = <1800000>;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l19: l19 {
-> >>>> +                       /* VDD_PXn */
-> >>>> +                       regulator-min-microvolts = <1800000>;
-> >>>> +                       regulator-max-microvolts = <1800000>;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l20: l20 {
-> >>>> +                       /* SDHCI1 VMMC */
-> >>>> +                       regulator-min-microvolts = <2856000>;
-> >>>> +                       regulator-max-microvolts = <2856000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l21: l21 {
-> >>>> +                       /* SDHCI2 VMMC */
-> >>>> +                       regulator-min-microvolts = <2960000>;
-> >>>> +                       regulator-max-microvolts = <3300000>;
-> >>>> +                       regulator-allow-set-load;
-> >>>> +                       regulator-boot-on;
-> >>>> +               };
-> >>>> +
-> >>>> +               pm2250_l22: l22 {
-> >>>> +                       /* Wi-Fi */
-> >>>> +                       regulator-min-microvolts = <3312000>;
-> >>>> +                       regulator-max-microvolts = <3312000>;
-> >>>> +               };
-> >>>> +       };
-> >>>> +};
-> >>>> +
-> >>>>  &sdhc_1 {
-> >>>> +       vmmc-supply = <&pm2250_l20>;
-> >>>> +       vqmmc-supply = <&pm2250_l14>;
-> >>>>         pinctrl-0 = <&sdc1_state_on>;
-> >>>>         pinctrl-1 = <&sdc1_state_off>;
-> >>>>         pinctrl-names = "default", "sleep";
-> >>>> @@ -61,6 +322,8 @@ &sdhc_1 {
-> >>>>  };
-> >>>>
-> >>>>  &sdhc_2 {
-> >>>> +       vmmc-supply = <&pm2250_l21>;
-> >>>> +       vqmmc-supply = <&pm2250_l4>;
-> >>>>         cd-gpios = <&tlmm 88 GPIO_ACTIVE_LOW>;
-> >>>>         pinctrl-0 = <&sdc2_state_on &sd_det_in_on>;
-> >>>>         pinctrl-1 = <&sdc2_state_off &sd_det_in_off>;
-> >>>> @@ -104,6 +367,9 @@ &usb {
-> >>>>  };
-> >>>>
-> >>>>  &usb_hsphy {
-> >>>> +       vdd-supply = <&pm2250_l12>;
-> >>>> +       vdda-pll-supply = <&pm2250_l13>;
-> >>>> +       vdda-phy-dpdm-supply = <&pm2250_l21>;
-> >>>>         status = "okay";
-> >>>>  };
-> >>>>
-> >>>>
-> >>>> ---
-> >>>> base-commit: 8e4b7f2f3d6071665b1dfd70786229c8a5d6c256
-> >>>> change-id: 20230711-topic-rb1_regulator-44c4ade93246
-> >>>>
-> >>>> Best regards,
-> >>>> --
-> >>>> Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>>>
-> >>>
-> >>>
-> >
-> >
-> >
+ptr_ring->size * PAGE_SIZE +
+PP_ALLOC_CACHE_SIZE * PAGE_SIZE +
+rx_ring->count * PAGE_SIZE / pp.init_arg
 
-
-
--- 
-With best wishes
-Dmitry
+> 
+> [...]
+> 
+> Thanks,
+> Olek
+> 
+> .
+> 
