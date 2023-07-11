@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9F974F094
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CFF74F08B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbjGKNox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S232887AbjGKNoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjGKNon (ORCPT
+        with ESMTP id S232583AbjGKNoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:44:43 -0400
-Received: from out-41.mta0.migadu.com (out-41.mta0.migadu.com [91.218.175.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A30510EA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:44:33 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689083071;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DWoBZLJp+WRsNPKYFTkwd45CHiaHZQHz4IBv9pNm0BI=;
-        b=wsRa4v6j1gxN6ltbHwxF6ug4vCi8/vZRSUTYS2O3eSkMAp3YdhrIHUidj6oGzXjR50H5Kx
-        VAVmA965imEnh7Xy8fedRyKwSbeZ9qgs2vd7RmourgSM7ACCITBnBcX41lpiVFjMy3DiYi
-        FnfMggWk3PCp1pf6LfzlCFt3/quhGBM=
-From:   Sui Jingfeng <sui.jingfeng@linux.dev>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Sui@vger.kernel.org,
-        Jingfeng@loongson.cn
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: [PATCH 6/6] PCI/VGA: Replace full MIT license text with SPDX identifier
-Date:   Tue, 11 Jul 2023 21:43:54 +0800
-Message-Id: <20230711134354.755966-7-sui.jingfeng@linux.dev>
-In-Reply-To: <20230711134354.755966-1-sui.jingfeng@linux.dev>
-References: <20230711134354.755966-1-sui.jingfeng@linux.dev>
+        Tue, 11 Jul 2023 09:44:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6820E10C7;
+        Tue, 11 Jul 2023 06:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689083062; x=1720619062;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9whZIVbPFswM7Gv172Nf0MtfoDbbo099QAczhdHkuAs=;
+  b=DKj7955h4etJM1ghaGmg0Up/EioSo2H37b8dms18W00s4kHL6Hky4eFf
+   LxT7TvRZhJJkJUIWajIyyend457mofbEouqThlAHVNkm7Dt8Sc0PdGYSq
+   8Ruj3NxRIpecaUzUmbt3UnVd+2aJSvfwYx1t0Tfe8FC00YBtL3k9hiEXK
+   unIerEO3lEkNHTw/CSz75oNuQH9O247+bcmgJgJICpTrUz3qysl8xe5nD
+   tU2Emjf2Oqbbj7MHQv7j+AaZhVtK1foAhXrDTssThpArUqv6qvB4gSuA7
+   EL6GWa428wY2cLF1w2JViX27kdgm7AcgnzTa/qx4D7jxQPOtSgpKhkIBe
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="354483878"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="354483878"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 06:44:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="750766091"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="750766091"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 11 Jul 2023 06:44:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJDf8-001ra6-14;
+        Tue, 11 Jul 2023 16:44:18 +0300
+Date:   Tue, 11 Jul 2023 16:44:18 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
+ in netlink_update_socket_mc()
+Message-ID: <ZK1csjLgGM+ezG/J@smile.fi.intel.com>
+References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
+ <20230711063348.GB41919@unreal>
+ <2a2d55f167a06782eb9dfa6988ec96c2eedb7fba.camel@redhat.com>
+ <ZK002l0AojjdJptC@smile.fi.intel.com>
+ <20230711122012.GR41919@unreal>
+ <ZK1O7lBF1vH7/7UM@smile.fi.intel.com>
+ <20230711133259.GS41919@unreal>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711133259.GS41919@unreal>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+On Tue, Jul 11, 2023 at 04:32:59PM +0300, Leon Romanovsky wrote:
+> On Tue, Jul 11, 2023 at 03:45:34PM +0300, Andy Shevchenko wrote:
+> > On Tue, Jul 11, 2023 at 03:20:12PM +0300, Leon Romanovsky wrote:
+> > > On Tue, Jul 11, 2023 at 01:54:18PM +0300, Andy Shevchenko wrote:
+> > > > On Tue, Jul 11, 2023 at 12:21:12PM +0200, Paolo Abeni wrote:
+> > > > > On Tue, 2023-07-11 at 09:33 +0300, Leon Romanovsky wrote:
+> > > > > > On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
 
-Per Documentation/process/license-rules.rst, the SPDX MIT identifier is
-equivalent to including the entire MIT license text from
-LICENSES/preferred/MIT.
+...
 
-Replace the MIT license text with the equivalent SPDX identifier.
+> > > > > > So what is the outcome of "int - bool + bool" in the line above?
+> > > > 
+> > > > The same as with int - int [0 .. 1] + int [0 .. 1].
+> > > 
+> > > No, it is not. bool is defined as _Bool C99 type, so strictly speaking
+> > > you are mixing types int - _Bool + _Bool.
+> > 
+> > 1. The original code already does that. You still haven't reacted on that.
+> 
+> The original code was int - int + int.
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
----
- include/linux/vgaarb.h | 23 ++---------------------
- 1 file changed, 2 insertions(+), 21 deletions(-)
+No. You missed the callers part. They are using boolean.
 
-diff --git a/include/linux/vgaarb.h b/include/linux/vgaarb.h
-index 6d5465f8c3f2..97129a1bbb7d 100644
---- a/include/linux/vgaarb.h
-+++ b/include/linux/vgaarb.h
-@@ -1,3 +1,5 @@
-+/* SPDX-License-Identifier: MIT */
-+
- /*
-  * The VGA aribiter manages VGA space routing and VGA resource decode to
-  * allow multiple VGA devices to be used in a system in a safe way.
-@@ -5,27 +7,6 @@
-  * (C) Copyright 2005 Benjamin Herrenschmidt <benh@kernel.crashing.org>
-  * (C) Copyright 2007 Paulo R. Zanoni <przanoni@gmail.com>
-  * (C) Copyright 2007, 2009 Tiago Vignatti <vignatti@freedesktop.org>
-- *
-- * Permission is hereby granted, free of charge, to any person obtaining a
-- * copy of this software and associated documentation files (the "Software"),
-- * to deal in the Software without restriction, including without limitation
-- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-- * and/or sell copies of the Software, and to permit persons to whom the
-- * Software is furnished to do so, subject to the following conditions:
-- *
-- * The above copyright notice and this permission notice (including the next
-- * paragraph) shall be included in all copies or substantial portions of the
-- * Software.
-- *
-- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-- * DEALINGS
-- * IN THE SOFTWARE.
-- *
-  */
- 
- #ifndef LINUX_VGA_H
+> > 2. Is what you are telling a problema?
+> 
+> No, I'm saying that you took perfectly correct code which had all types
+> aligned and changed it to have mixed type arithmetic.
+
+And after this change it's perfectly correct code with less letters and hidden
+promotions (as a parameter to the function) and hence requires less cognitive
+energy to parse.
+
+So, the bottom line is the commit message you don't like, is it so?
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
