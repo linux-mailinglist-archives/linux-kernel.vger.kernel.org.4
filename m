@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7261C74F2F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB35A74F2F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjGKPGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S230038AbjGKPGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjGKPGo (ORCPT
+        with ESMTP id S229591AbjGKPGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:06:44 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC01310CF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:06:42 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2640a8ceefdso4225264a91.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689088002; x=1691680002;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JvD88681HbiR2SoA2cEn2GGKO41btg39V7tlXMdvHns=;
-        b=SVxtXNSX/kk+vJJKUkRSVBRWD1pizRMYKn3HL0clFDyxAD/8hCluES1y3RMCdY63hR
-         /+KoCLJD7jD6dXnlqLbcuIuASY+2JsGoGy1fRXXMTUAcQKU35+etOofgjGazN7fNyEw3
-         vakYdfPQfA3ZW8jCjhyhbLwp8uOWsF+aectobcPRJO50KIVh9qSPKIXhhmwe1QVU7rqQ
-         RrP60Ps0s4wf1/XbulQeaE+rsPNHzoVxj7i+Gav14CO2UDAQRrLUnP7lQT4kJknDTR6X
-         p3D5Ymrq18qQ1DTz0p5KnygCq+e7Z/zF96du2xWPHRoeroGq5p/lpkrYckrxVcsF9eRl
-         P1Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689088002; x=1691680002;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JvD88681HbiR2SoA2cEn2GGKO41btg39V7tlXMdvHns=;
-        b=cvanlNDSTqhMSjGYTkR4yGPsuClk6vZ35ijvwcYDH94LagYNf5YNSg7MPPTPxBgtdE
-         3j8SWgdquFn0n+T1KAloJ0hkZ+Cvm6BRG/JtDuPuCuVIhCAlPWIiL13KfkfH2Z3ySm7W
-         9WvNATL898avIIaqypXozpcv0cLTKhq5G9aBnaTmhsMX3Vovjgva3l/C6ME23WkAGX3c
-         GoO5QNUZBsOJ1tN6FMe/FOczSVoBulohY4iiC05eJLQGKdKVC8J+YhvjlaP0oqrwwhpj
-         9yFj6INR3jsx2Em38QghQuucglMlt9U9Otp4p5HlJI0QkRCm8JTHFjB59/+zui7fxxVh
-         2tFQ==
-X-Gm-Message-State: ABy/qLZ36hXmkIsz1mbEWOFH6KhhGa8JMldtNMzoMU45/RTrDbedtZ8E
-        fggNK0RWHJFdJZKm4ne/lYdGuI/lXCfCrOLZdBqaNw==
-X-Google-Smtp-Source: APBJJlFioyrNC+tB096lda4kFRj/UzJoN48xYCtcyAoXLHRvqiM1qJKYlTnKrYWB6Pr0UoaN+kLQW+T0aBD1vXiuBbI=
-X-Received: by 2002:a17:90a:ac0d:b0:262:ec13:d3a with SMTP id
- o13-20020a17090aac0d00b00262ec130d3amr17436983pjq.28.1689088001969; Tue, 11
- Jul 2023 08:06:41 -0700 (PDT)
+        Tue, 11 Jul 2023 11:06:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A7A10D2;
+        Tue, 11 Jul 2023 08:06:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E3461529;
+        Tue, 11 Jul 2023 15:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9569DC433C7;
+        Tue, 11 Jul 2023 15:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689088009;
+        bh=kZIeBvNcC0nOtzMWF800gLz1bn5znzCQrdohaF8tsvc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LrF6V7Vvgxw9nV4mmthPSEIQirtGB3yxNKRuQ0aEGrIB69Reaj8zk77jgJ6cYZ7ta
+         gc8qwDFYulhYV7Woi5zGl8ecXZGmtHOtY6cyvnwhhQw9gZA2Wzol4XnAVkE//IykgS
+         EOud/K9zjpNkyljQvll0KmseIx32s2VNHrTa7x6f7cZCwCln4ZnntcK/UNuejkFt8+
+         GmPEtkDQey2BcKM0y5yIgzomKtDUQhQC/VGn8nzyt8Q4dZCrsKcARbslbLaH90rxZv
+         qP4zAZOtCy1wWjfVFHLqXnJKbbdwuoKDi034fNBrtQylQyD4e31MAApLXPihDfS8h7
+         clSs1BYbKOC/g==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4fb9ae4cef6so9398715e87.3;
+        Tue, 11 Jul 2023 08:06:49 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZJc1aWy2XnucMjwFbF//fv1AJmCl4aI8DS/w5EXknK5GydqPll
+        iXzyUkoSH3xT+0TtSN4Zy7NIEqB78UR5zj3oPu8=
+X-Google-Smtp-Source: APBJJlGrLT89LzutG3S3N9QOzesfJED07ndmWdSZdToL3jggMkVPoM7Sq9DyqiEv1VteQSrNQMJLa07qvnGiWqJRW0k=
+X-Received: by 2002:ac2:58cf:0:b0:4f7:69b9:fa07 with SMTP id
+ u15-20020ac258cf000000b004f769b9fa07mr12515921lfo.45.1689088007614; Tue, 11
+ Jul 2023 08:06:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710164705.3985996-1-Naresh.Solanki@9elements.com>
- <20230710164705.3985996-2-Naresh.Solanki@9elements.com> <a307e9d6-bdd3-4fff-bf9b-f8919b6b0d69@roeck-us.net>
-In-Reply-To: <a307e9d6-bdd3-4fff-bf9b-f8919b6b0d69@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Tue, 11 Jul 2023 17:06:30 +0200
-Message-ID: <CABqG17iNH7tzs4GqJKu=Wd+nq3e03zjrJMKOcrd9eGpBf0aRWw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (dimmtemp) Add Sapphire Rappids support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20230711120807.1805186-1-maobibo@loongson.cn> <20230711120807.1805186-2-maobibo@loongson.cn>
+In-Reply-To: <20230711120807.1805186-2-maobibo@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 11 Jul 2023 23:06:36 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5k-FVhrRAQj58dckQAGPT9PNp2ghCCfHOMtsr3gf-wRw@mail.gmail.com>
+Message-ID: <CAAhV-H5k-FVhrRAQj58dckQAGPT9PNp2ghCCfHOMtsr3gf-wRw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
+ checking of eiointc_index
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
-
-On Mon, 10 Jul 2023 at 20:48, Guenter Roeck <linux@roeck-us.net> wrote:
+On Tue, Jul 11, 2023 at 8:08=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
+e:
 >
-> On Mon, Jul 10, 2023 at 06:47:04PM +0200, Naresh Solanki wrote:
-> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> >
-> > This patch extends the functionality of the hwmon (dimmtemp) to include
-> > support for Sapphire Rappids platform.
-> >
-> > Sapphire Rappids can accommodate up to 8 CPUs, each with 16 DIMMs. To
-> > accommodate this configuration, the maximum supported DIMM count is
-> > increased, and the corresponding Sapphire Rappids ID and threshold code
-> > are added.
-> >
-> > The patch has been tested on a 4S system with 64 DIMMs installed.
-> > Default thresholds are utilized for Sapphire Rappids, as accessing the
-> > threshold requires accessing the UBOX device on Uncore bus 0, which can
-> > only be achieved using MSR access. The non-PCI-compliant MMIO BARs are
-> > not available for this purpose.
-> >
-> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->
-> Does this patch depend on the other patch, the one introducing
-> Sapphire Rappids to peci/cputemp ?
-Yes they are dependent.
-Will bundle them together & resend.
+> Return value of function eiointc_index is int, however it is converted
+> into uint32_t and then compared smaller than zero. This causes logic
+> problem. There is eioint initialization problem on qemu virt-machine
+> where there is only one eioint node and more than 4 vcpus. Nodemap of
+> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
+> other vcpus can not response any external device interrupts and only loca=
+l
+> processor interrupts like ipi/timer can work.
+I'm sorry but there are still spelling problems...
+"eio", "eio intc", "eioint" should all be "eiointc".
 
-~Naresh
+Huacai
 
 >
-> Guenter
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
 >
-> > ---
-> >  drivers/hwmon/peci/dimmtemp.c | 24 +++++++++++++++++++++++-
-> >  1 file changed, 23 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-> > index ce89da3937a0..ea4ac5a023cf 100644
-> > --- a/drivers/hwmon/peci/dimmtemp.c
-> > +++ b/drivers/hwmon/peci/dimmtemp.c
-> > @@ -30,8 +30,10 @@
-> >  #define DIMM_IDX_MAX_ON_ICX  2
-> >  #define CHAN_RANK_MAX_ON_ICXD        4
-> >  #define DIMM_IDX_MAX_ON_ICXD 2
-> > +#define CHAN_RANK_MAX_ON_SPR 128
-> > +#define DIMM_IDX_MAX_ON_SPR  2
-> >
-> > -#define CHAN_RANK_MAX                CHAN_RANK_MAX_ON_HSX
-> > +#define CHAN_RANK_MAX                CHAN_RANK_MAX_ON_SPR
-> >  #define DIMM_IDX_MAX         DIMM_IDX_MAX_ON_HSX
-> >  #define DIMM_NUMS_MAX                (CHAN_RANK_MAX * DIMM_IDX_MAX)
-> >
-> > @@ -534,6 +536,15 @@ read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u
-> >       return 0;
-> >  }
-> >
-> > +static int
-> > +read_thresholds_spr(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-> > +{
-> > +     /* Use defaults */
-> > +     *data = (95 << 16) | (90 << 8);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  static const struct dimm_info dimm_hsx = {
-> >       .chan_rank_max  = CHAN_RANK_MAX_ON_HSX,
-> >       .dimm_idx_max   = DIMM_IDX_MAX_ON_HSX,
-> > @@ -576,6 +587,13 @@ static const struct dimm_info dimm_icxd = {
-> >       .read_thresholds = &read_thresholds_icx,
-> >  };
-> >
-> > +static const struct dimm_info dimm_spr = {
-> > +     .chan_rank_max  = CHAN_RANK_MAX_ON_SPR,
-> > +     .dimm_idx_max   = DIMM_IDX_MAX_ON_SPR,
-> > +     .min_peci_revision = 0x40,
-> > +     .read_thresholds = &read_thresholds_spr,
-> > +};
-> > +
-> >  static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
-> >       {
-> >               .name = "peci_cpu.dimmtemp.hsx",
-> > @@ -601,6 +619,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
-> >               .name = "peci_cpu.dimmtemp.icxd",
-> >               .driver_data = (kernel_ulong_t)&dimm_icxd,
-> >       },
-> > +     {
-> > +             .name = "peci_cpu.dimmtemp.spr",
-> > +             .driver_data = (kernel_ulong_t)&dimm_spr,
-> > +     },
-> >       { }
-> >  };
-> >  MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
-> > --
-> > 2.41.0
-> >
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
+-loongson-eiointc.c
+> index 92d8aa28bdf5..1c5a5b59f199 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -144,12 +144,14 @@ static int eiointc_router_init(unsigned int cpu)
+>         int i, bit;
+>         uint32_t data;
+>         uint32_t node =3D cpu_to_eio_node(cpu);
+> -       uint32_t index =3D eiointc_index(node);
+> +       int index =3D eiointc_index(node);
+>
+> -       if (index < 0) {
+> -               pr_err("Error: invalid nodemap!\n");
+> -               return -1;
+> -       }
+> +       /*
+> +        * qemu virt-machine has only one eio intc and more than four cpu=
+s
+> +        * irq from eio can only be routed to cpu 0-3 on virt machine
+> +        */
+> +       if (index < 0)
+> +               return 0;
+>
+>         if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) =3D=3D 0) {
+>                 eiointc_enable();
+> --
+> 2.27.0
+>
