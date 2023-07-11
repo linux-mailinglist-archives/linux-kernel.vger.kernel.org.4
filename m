@@ -2,276 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADDC74ED5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7493174ED5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjGKLw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S231297AbjGKLxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbjGKLwz (ORCPT
+        with ESMTP id S229868AbjGKLw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:52:55 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBC410E7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:52:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51e56749750so3088751a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1689076366; x=1691668366;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VMmzAbnQPb+hff08oGBX7AMmQrEjQkPWbeWYbWnEb2s=;
-        b=R6I4rQhZNuJhcRNVBlXhhbzoUBbtJugUPtDeDqspmlhc0LV6PhoXCtdxQT2Fj0bM/Z
-         D3kIChr40ply4orCGt+9ajW59qGsXI0q8dwmTjUCDnDH0ulp9uyX3O+SsEKbO2t7vinl
-         8gTJudbGuaMlUr/F2U1aCITw8lqIDA7UGsx63ZT1ftAReQn3Gp7VbkcsmETP/cRAyQai
-         lkIOqNqDJFzyv3RRj/Q+MFuMldUziVBZazHL8K6x6ggiatiMyxzswv65kZTUd+/j30i/
-         ceCU0hZSdHB7C1BCm/DJGmgVIEJr/TryA/39HtCJ72a1xnXsajO8AG8nwixG6ViSclLN
-         u3GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689076366; x=1691668366;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VMmzAbnQPb+hff08oGBX7AMmQrEjQkPWbeWYbWnEb2s=;
-        b=B8QiYD0hrSJYHuBU/xDJYvnKbITRJXhdS6yafo1g3jviKqfrDaEZ6R0aUtDwUK073v
-         S3ybL/9TLU2gmsdVoHGsrYk6EmJJZmlnNo9xWREn/HoUGlCFkjftzzXtdTVSEy4NRdVf
-         T96C5f/YxpglyFfcEkzW9CBXXuMq7gv57AlZb8VXhwlSr7+kuK0HduMIj6jGG+dkH1sg
-         6Kmg1xBZ4061RJUMINrkQZHY8KFUCwxj6B1esLw7RuVxGu9JbrtkiebQBJugf0iFNAic
-         5NpI40Bb3ufU1qZW9MO+O+WpdMH/ygQwVJC9+3MfYLnqK9S7DqCTwRdFiq6oalYzwcGJ
-         OpcQ==
-X-Gm-Message-State: ABy/qLbaSBdZQGibyuk1pahT9k+dX9KRPY0fAK+Pdz1m5G0yV+8WLMQx
-        BoWT9lqeL4pBmf56+xuATH7xZw==
-X-Google-Smtp-Source: APBJJlFxRCgoFvFTryd/EnnLREOPOgp5+SxcfOYu5/wDWMNeLe4NvM0dWgV+6D/1iKEYw/AVIF+zFw==
-X-Received: by 2002:a05:6402:506:b0:51e:26c8:25f7 with SMTP id m6-20020a056402050600b0051e26c825f7mr14275781edv.42.1689076365929;
-        Tue, 11 Jul 2023 04:52:45 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id u8-20020aa7d888000000b0051e0f21c43fsm1148663edq.31.2023.07.11.04.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 04:52:45 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 13:52:43 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
-Cc:     "kuba@kernel.org" <kuba@kernel.org>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "vadfed@fb.com" <vadfed@fb.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
-Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
-Message-ID: <ZK1CizcqjqO1L/RQ@nanopsycho>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <ZJq3a6rl6dnPMV17@nanopsycho>
- <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <ZJwWXZmZe4lQ04iK@nanopsycho>
- <DM6PR11MB4657751607C36FC711271D639B30A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <ZKv1FRTXWLnLGRRS@nanopsycho>
- <DM6PR11MB46575D14FFE115546FDC9DEB9B31A@DM6PR11MB4657.namprd11.prod.outlook.com>
+        Tue, 11 Jul 2023 07:52:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED0210FC;
+        Tue, 11 Jul 2023 04:52:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F82821D09;
+        Tue, 11 Jul 2023 11:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689076371; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4te5JwumvF8/GIgkO+TJ0V5B1TkpxMPkr04XN6p1A28=;
+        b=VZJbzOP9afXhZN7G+sPdUEroSa0FtkyX6R848TJmsI6bwBCCzelW/44TukY+ylg/n2eRgQ
+        +aKbEHzo+IgUHChuHawdB5oSk1EA0paU+2ES+ZtylsWY50PVEZLah94VKtl3TuGfOKWumd
+        65r259bjXC3jaokWPET6XBTaeGYyy9E=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 736A71390F;
+        Tue, 11 Jul 2023 11:52:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9hgZG5NCrWRrKgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 11 Jul 2023 11:52:51 +0000
+Date:   Tue, 11 Jul 2023 13:52:50 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Waiman Long <longman@redhat.com>, tj@kernel.org,
+        hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: update parent subparts cpumask while
+ holding css refcnt
+Message-ID: <tebnrmbl6ouz567vlalojcynk25siwwom7et7yn2vvi6zyv6nv@jj3r5o3kl52j>
+References: <20230701065049.1758266-1-linmiaohe@huawei.com>
+ <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
+ <74f1906e-fe58-c745-a851-b160374f7acf@redhat.com>
+ <30b1f809-a11b-efe8-289c-04a801f20207@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rpxvczwrelgzbfqd"
 Content-Disposition: inline
-In-Reply-To: <DM6PR11MB46575D14FFE115546FDC9DEB9B31A@DM6PR11MB4657.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <30b1f809-a11b-efe8-289c-04a801f20207@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Jul 11, 2023 at 12:34:11PM CEST, arkadiusz.kubalewski@intel.com wrote:
->>From: Jiri Pirko <jiri@resnulli.us>
->>Sent: Monday, July 10, 2023 2:10 PM
->>
->>Mon, Jul 10, 2023 at 12:07:30PM CEST, arkadiusz.kubalewski@intel.com wrote:
->>>>From: Jiri Pirko <jiri@resnulli.us>
->>>>Sent: Wednesday, June 28, 2023 1:16 PM
->>>>Wed, Jun 28, 2023 at 11:15:11AM CEST, arkadiusz.kubalewski@intel.com
->>wrote:
->>>>>>From: Jiri Pirko <jiri@resnulli.us>
->>>>>>Sent: Tuesday, June 27, 2023 12:18 PM
->>>>>>
->>>>>>Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
->>>>>>wrote:
->>>>>>
->>>>>>>v8 -> v9:
->>>>>>
->>>>>>Could you please address all the unresolved issues from v8 and send v10?
->>>>>>I'm not reviewing this one.
->>>>>>
->>>>>>Thanks!
->>>>>
->>>>>Sure, will do, but first missing to-do/discuss list:
->>>>>1) remove mode_set as not used by any driver
->>>
->>>I have implemented in ice (also added back the DPLL_MODE_FREERUN).
->>
->>Uh :/ Why exactly is it needed in this initial submission?
->>
->
->Without mode-set there is no need for device-set at all, right?
->So it is better to implement at least one set command, so we don't
->need remove device-set command entirely.
 
-The enum cmd valu could stay as a placeholder, the rest can go.
+--rpxvczwrelgzbfqd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jul 11, 2023 at 10:52:02AM +0800, Miaohe Lin <linmiaohe@huawei.com>=
+ wrote:
+> commit 2bdfd2825c9662463371e6691b1a794e97fa36b4
+> Author: Waiman Long <longman@redhat.com>
+> Date:   Wed Feb 2 22:31:03 2022 -0500
+>=20
+>     cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
 
->
->>
->>>
->>>>>2) remove "no-added-value" static functions descriptions in
->>>>>   dpll_core/dpll_netlink
->>>
->>>Removed.
->>>
->>>>>3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
->>>>>   after each patch apply
->>>
->>>Hope Vadim will decide on this, the thing is merging in two patches
->>>doesn't make much sense as there won't be any linking until both patches
->>>are there, so most sense it would be if 3 are merged into one, but
->>>then we will be back to one big blob patch issue.
->>>
->>>>>4) remove function return values descriptions/lists
->>>
->>>Fixed.
->>>
->>>>>5) Fix patch [05/10]:
->>>>>   - status Supported
->>>>>   - additional maintainers
->>>>>   - remove callback:
->>>>>     int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
->>>>>6) Fix patch [08/10]: rethink ice mutex locking scheme
->>>
->>>Fixed.
->>>
->>>>>7) Fix patch [09/10]: multiple comments on
->>>>>https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
->>>>>8) add PPS DPLL phase offset to the netlink get-device API
->>>>>
->>>
->>>Added few things on this matter
->>>- 1 dpll level attribute:
->>>  - phase-shift - measuring the phase difference between dpll input
->>>    and it's output
->>>- 1 dpll-pin tuple level attribute:
->>>  - pin-phase-adjust - set/get phase adjust of a pin on a dpll
->>>- 2 pin level attributes:
->>>  - pin-phase-adjust-min - provide user with min value that can be set
->>>  - pin-phase-adjust-max - provide user with max value that can be set
->>>- a constant:
->>>  - DPLL_PHASE_SHIFT_DIVIDER similar to DPLL_TEMP_DIVIDER for producing
->>>    fraction value of measured DPLL_A_PHASE_SHIFT
->>
->>Again, why do we need this in this initial submission? Why it can't be a
->>follow-up patchset to extend this? This way we never converge :/
->>Please focus on what we have now and bring it in. Let the extensions to
->>be addressed later on, please.
->>
->
->Well AFAIK, RHEL is doing some monitoring software, so the end-users need this.
+Aha, thanks for the pointer.
 
-They need it for the initial submission? Why? Why can't they wait 1 week
-for follow-up patchset?
+I've also found a paragraph in [1]:
+> In addition, the -rt patchset turns spinlocks into a sleeping locks so
+> that the corresponding critical sections can be preempted, which also
+> means that these sleeplockified spinlocks (but not other sleeping
+> locks!) may be acquire within -rt-Linux-kernel RCU read-side critical
+> sections.
 
+That suggests (together with practical use) that dicussed spinlocks
+should be fine in RCU read section. And the possible reason is deeper in
+generate_sched_domains() that do kmalloc(..., GFP_KERNEL).
 
->
->>
->>
->>>- implemented in dpll netlink and in ice
->>>
->>>>
->>>>You are missing removal of pin->prop.package_label = dev_name(dev); in
->>>>ice.
->>>>
->>>
->>>I didn't touch it, as we still need to discuss it, Jakub didn't respond
->>>on v8 thread.
->>>I don't see why we shall not name it the way. This is most meaningful
->>>label for those pins for the user right now.
->>
->>This is not meaningful, at all. dev_name() changes upon which pci slot
->>you plug the card into. package_label should be an actual label on a
->>silicon package. Why you think this two are related in aby way, makes me
->>really wonder. Could you elaborate the meaningfulness of this?
->>
->
->Without this, from end-user perspective, it would be very confusing.
->As in ice without any label there would 4 pins which differs only with id.
+Alas update_cpumask_hier() still calls generate_sched_domains(), OTOH,
+update_parent_subparts_cpumask() doesn't seem so.
 
-There you go, it does not have any label, yet you are trying hard to
-make up some. Does not make sense.
+The idea to not relieve rcu_read_lock() in update_cpumask() iteration
+(instead of the technically unneeded refcnt bump) would have to be
+verified with CONFIG_PROVE_RCU && CONFIG_LOCKDEP. WDYT?
 
+Michal
 
->What names would you suggest?
+[1] https://www.kernel.org/doc/html/latest/RCU/Design/Requirements/Requirem=
+ents.html?highlight=3Drcu+read+section#specialization
 
-That is the point I made previously. For synce usecase, the label does
-not make sense. There should be no label. You reference the pin by ID
-from netdev, that is enough.
+--rpxvczwrelgzbfqd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I think better to add the check to pin-register so future synce pin
-users don't have similar weird ideas. Could you please add this check?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks!
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZK1CkAAKCRAGvrMr/1gc
+jslQAP9hbBzspCiXduaN1xbeQyV+ZnUhEAOznzhyLOo8+dDxRgEA3FXd5SDDuVMJ
+87l6UFwCe1ThIrCymWRsgFxk2a+AJws=
+=Xt4s
+-----END PGP SIGNATURE-----
 
-
-
->
->Thank you!
->Arkadiusz
->
->>
->>>
->>>Thank you!
->>>Arkadiusz
->>>
->>>>
->>>>>Thank you!
->>>>>Arkadiusz
+--rpxvczwrelgzbfqd--
