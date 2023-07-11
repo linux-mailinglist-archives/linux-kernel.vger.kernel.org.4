@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C0D74F146
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D682174F14A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbjGKOKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S233400AbjGKOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbjGKOKp (ORCPT
+        with ESMTP id S229928AbjGKOML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:10:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105C310CB;
-        Tue, 11 Jul 2023 07:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689084644; x=1720620644;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xj/NaD7rJVegzRnQWSku6xyrxDMtYG0ROyHoK88TJTI=;
-  b=MAvRm020VBKswQ1HZY9Sx4bkLp125D28dzLrlWocW9iDy1wEXz7qs8u3
-   Se1OepW1ZI5p/B/tdVmk1bX/caEZqOIO6bzuuy3Ta7m6Zkr+JX0GdgKKg
-   4cLrLC+kduoGrHhe/MIXNdOOjjyMzMj2wkoe2wrsJzF6E+NOgkbOLqNWv
-   Frv1AR0yDoEHciOhG4eUzws3tK8LTwfW+HsE50CL6yqINx4YfcP9D4OO9
-   d5QeotvSD5oIVbFi7UaF8fBOX6ynuvC5HHqLttn4QkJCNZWwpkM+1vMUQ
-   kbkpqqw9wyATWDO7aTnmWx3vDjvjcn376D1RSpJSqCswmknb2xhnk6nLJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="364664850"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="364664850"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:10:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="791219489"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="791219489"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Jul 2023 07:10:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJE4c-001ryG-3C;
-        Tue, 11 Jul 2023 17:10:38 +0300
-Date:   Tue, 11 Jul 2023 17:10:38 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 11/13] ASoC: Intel: Skylake: Convert to PCI device IDs
- defines
-Message-ID: <ZK1i3pvgtuka8nJW@smile.fi.intel.com>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
- <20230711125726.3509391-12-amadeuszx.slawinski@linux.intel.com>
+        Tue, 11 Jul 2023 10:12:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0546B0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:12:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE90614E5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED1CC433C7;
+        Tue, 11 Jul 2023 14:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689084729;
+        bh=NRBCd7EYg1Ttg7Sd52hrW/FKaUnozUqBArGH46pm5Hs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dv3ZPcOrttwlRQ7ym+XMaMprZg4jGyXAIcnMCZRSQeRCMr+rPOx+AR2x6FEX+gXnQ
+         JsZ9nzbfIpxOMv7EyoXY5LJgHFl8NMwBFdr6qI/rnUm22VqNc+CWNgEThskgCZR0JZ
+         9XOm7XCRs+H/vlnlGMQ5Vg0k9wAffpQtZ8WSlAYw=
+Date:   Tue, 11 Jul 2023 16:12:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Clemens S." <cspringsguth@gmail.com>,
+        Martin Belanger <martin.belanger@dell.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVMe <linux-nvme@lists.infradead.org>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        =?utf-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
+ (Samsung SM-953 Datacenter SSD)
+Message-ID: <2023071135-opt-choosing-51dd@gregkh>
+References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
+ <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
+ <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
+ <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
+ <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
+ <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
+ <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
+ <20230711120609.GB27050@lst.de>
+ <23017407-83eb-8fb0-5d91-2c7c4ae02544@grimberg.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230711125726.3509391-12-amadeuszx.slawinski@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <23017407-83eb-8fb0-5d91-2c7c4ae02544@grimberg.me>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,172 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:57:24PM +0200, Amadeusz Sławiński wrote:
-> Use PCI device IDs from pci_ids.h header and while at it change to using
-> PCI_DEVICE_DATA() macro, to simplify declarations.
-
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-BXT --> APL ?
-
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> ---
->  sound/soc/intel/skylake/skl-messages.c | 16 ++++++------
->  sound/soc/intel/skylake/skl.c          | 36 +++++++-------------------
->  2 files changed, 18 insertions(+), 34 deletions(-)
+On Tue, Jul 11, 2023 at 03:14:54PM +0300, Sagi Grimberg wrote:
 > 
-> diff --git a/sound/soc/intel/skylake/skl-messages.c b/sound/soc/intel/skylake/skl-messages.c
-> index d31509298a0a..fc2eb04da172 100644
-> --- a/sound/soc/intel/skylake/skl-messages.c
-> +++ b/sound/soc/intel/skylake/skl-messages.c
-> @@ -169,7 +169,7 @@ static struct skl_dsp_loader_ops bxt_get_loader_ops(void)
->  
->  static const struct skl_dsp_ops dsp_ops[] = {
->  	{
-> -		.id = 0x9d70,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_SKL_LP,
->  		.num_cores = 2,
->  		.loader_ops = skl_get_loader_ops,
->  		.init = skl_sst_dsp_init,
-> @@ -177,7 +177,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = skl_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0x9d71,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_KBL_LP,
->  		.num_cores = 2,
->  		.loader_ops = skl_get_loader_ops,
->  		.init = skl_sst_dsp_init,
-> @@ -185,7 +185,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = skl_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0x5a98,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_APL,
->  		.num_cores = 2,
->  		.loader_ops = bxt_get_loader_ops,
->  		.init = bxt_sst_dsp_init,
-> @@ -193,7 +193,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = bxt_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0x3198,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_GML,
->  		.num_cores = 2,
->  		.loader_ops = bxt_get_loader_ops,
->  		.init = bxt_sst_dsp_init,
-> @@ -201,7 +201,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = bxt_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0x9dc8,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_CNL_LP,
->  		.num_cores = 4,
->  		.loader_ops = bxt_get_loader_ops,
->  		.init = cnl_sst_dsp_init,
-> @@ -209,7 +209,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = cnl_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0xa348,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_CNL_H,
->  		.num_cores = 4,
->  		.loader_ops = bxt_get_loader_ops,
->  		.init = cnl_sst_dsp_init,
-> @@ -217,7 +217,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = cnl_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0x02c8,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_CML_LP,
->  		.num_cores = 4,
->  		.loader_ops = bxt_get_loader_ops,
->  		.init = cnl_sst_dsp_init,
-> @@ -225,7 +225,7 @@ static const struct skl_dsp_ops dsp_ops[] = {
->  		.cleanup = cnl_sst_dsp_cleanup
->  	},
->  	{
-> -		.id = 0x06c8,
-> +		.id = PCI_DEVICE_ID_INTEL_HDA_CML_H,
->  		.num_cores = 4,
->  		.loader_ops = bxt_get_loader_ops,
->  		.init = cnl_sst_dsp_init,
-> diff --git a/sound/soc/intel/skylake/skl.c b/sound/soc/intel/skylake/skl.c
-> index 998bd0232cf1..77408a981b97 100644
-> --- a/sound/soc/intel/skylake/skl.c
-> +++ b/sound/soc/intel/skylake/skl.c
-> @@ -608,8 +608,8 @@ struct skl_clk_parent_src *skl_get_parent_clk(u8 clk_id)
->  static void init_skl_xtal_rate(int pci_id)
->  {
->  	switch (pci_id) {
-> -	case 0x9d70:
-> -	case 0x9d71:
-> +	case PCI_DEVICE_ID_INTEL_HDA_SKL_LP:
-> +	case PCI_DEVICE_ID_INTEL_HDA_KBL_LP:
->  		skl_clk_src[0].rate = 24000000;
->  		return;
->  
-> @@ -1145,44 +1145,28 @@ static void skl_remove(struct pci_dev *pci)
->  /* PCI IDs */
->  static const struct pci_device_id skl_ids[] = {
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_SKL)
-> -	/* Sunrise Point-LP */
-> -	{ PCI_DEVICE(0x8086, 0x9d70),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_skl_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_SKL_LP, &snd_soc_acpi_intel_skl_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_APL)
-> -	/* BXT-P */
-> -	{ PCI_DEVICE(0x8086, 0x5a98),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_bxt_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_APL, &snd_soc_acpi_intel_bxt_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_KBL)
-> -	/* KBL */
-> -	{ PCI_DEVICE(0x8086, 0x9D71),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_kbl_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_KBL_LP, &snd_soc_acpi_intel_kbl_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_GLK)
-> -	/* GLK */
-> -	{ PCI_DEVICE(0x8086, 0x3198),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_glk_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_GML, &snd_soc_acpi_intel_glk_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_CNL)
-> -	/* CNL */
-> -	{ PCI_DEVICE(0x8086, 0x9dc8),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_cnl_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CNL_LP, &snd_soc_acpi_intel_cnl_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_CFL)
-> -	/* CFL */
-> -	{ PCI_DEVICE(0x8086, 0xa348),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_cnl_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CNL_H, &snd_soc_acpi_intel_cnl_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_CML_LP)
-> -	/* CML-LP */
-> -	{ PCI_DEVICE(0x8086, 0x02c8),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_cnl_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CML_LP, &snd_soc_acpi_intel_cnl_machines) },
->  #endif
->  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_CML_H)
-> -	/* CML-H */
-> -	{ PCI_DEVICE(0x8086, 0x06c8),
-> -		.driver_data = (unsigned long)&snd_soc_acpi_intel_cnl_machines},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CML_H, &snd_soc_acpi_intel_cnl_machines) },
->  #endif
->  	{ 0, }
->  };
-> -- 
-> 2.34.1
+> > > Well, that "They keep pumping out more and more devices with the same
+> > > breakage" and the "new device" comment from Pankaj below bear the
+> > > question: should we stop trying to play "whack a mole" with all those
+> > > quirk entries and handle devices with duplicate ids just like Windows does?
+> > 
+> > As far as I can tell Windows completely ignores the IDs.  Which, looking
+> > back, I'd love to be able to do as well, but they are already used
+> > by udev for the /dev/disk/by-id/ links.   Those are usually not used
+> > on desktop systems, as they use the file system labels and UUIDs, but
+> > that doesn't work for non-file system uses.
+> > 
+> > And all this has been working really well with the good old enterprise
+> > SSDs, it's just that the cheap consumer devices keep fucking it up.
+> > 
+> > If we'd take it away now we'd break existing users, which puts us between
+> > a rock and a hard place.
+> 
+> Maybe the compromise would be to add a modparam that tells the driver
+> to ignore it altogether (like allow_bogus_identifiers) that would
+> default to false. Then people can just workaround the problem instead
+> of having the back-and-fourth with the vendor?
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Module parameters do not work on a per-device basis, sorry.  This isn't
+the 1990's anymore, please do not attempt to add new ones :)
 
+thanks,
 
+greg k-h
