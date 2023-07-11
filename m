@@ -2,276 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786BE74ED19
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB7274ED17
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjGKLnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S230311AbjGKLmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjGKLnF (ORCPT
+        with ESMTP id S229868AbjGKLml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:43:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAE3E0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:42:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689075735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TVNlN8Fu7HKmMU86W9Jarak9bhN5uqIsTvRRP5Jak7k=;
-        b=KCqyOyuInjXCSkaL4exPNgn7PQOZypf/+FHH7G2zdBGhg7OKMBk1DDZ6odFtaQu9yDHQmj
-        DgZptEP7c5WkImYHMbW4/bAhdFHCD7jr/jXcsmlVi2x/aNsiaC5UFlRGcoh6vnSCKzMi0d
-        4rD9VSLgA26BPfc5rY/EzQ9iK5wMT8w=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-352-KFrYEKc8OQmt4KPYw0-2pg-1; Tue, 11 Jul 2023 07:42:14 -0400
-X-MC-Unique: KFrYEKc8OQmt4KPYw0-2pg-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30932d15a30so3468391f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:42:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689075733; x=1691667733;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TVNlN8Fu7HKmMU86W9Jarak9bhN5uqIsTvRRP5Jak7k=;
-        b=Udze+WgFOVXp6VA7zVZrD3LTriFhK477TUGBKnAnVhMX1yUtEBT1lXnMkzfZPNN5ko
-         hZm2/4KC/K5dKvssIwNXQLzPX2Kg5a1kirHe3SerlAFW2fWqqbq4m61x6nMyNhF5dKo4
-         iPUKw71n6OFDq2klcc3cysHPaduNTrWeP+/jDF7gley5DjSB8fI6GV0jV6UPkrKVp4pv
-         Sx34sinfsQkjy7eGyuZjrhHEhEXHbfn9fOsDEjVs45okROIcW1Gnmyb2h5VvntI8vaSJ
-         p9UBXX5oxKt9Tpk5AUp+L8m7X5GDenAIfQHeVH8dCLfX9LmUU4E+Qz/4PbNIC+QIZUPu
-         WgqA==
-X-Gm-Message-State: ABy/qLagPyEjeBWqn7+Az4sKmnewzcz2MzxVVGgToWnVJ5khWktUoBHD
-        KZfY8VHE+gd3pAlHKiwXN/UP9r4fJB7+mwNwBPVv6K8Wf4Hr+PQG25L/K54xZgnXbIa+DEvCra/
-        1qCntCrs5cw97IZzKP6K0JiwK
-X-Received: by 2002:a05:6000:370:b0:313:f9a0:c530 with SMTP id f16-20020a056000037000b00313f9a0c530mr16858073wrf.52.1689075733282;
-        Tue, 11 Jul 2023 04:42:13 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlG930FaW9+FN5ODUew7AowqA5AQd10iiEj46Z4R/Iy1KQe+FGD8mJ1gLZStu1NIkLAOOBxXqA==
-X-Received: by 2002:a05:6000:370:b0:313:f9a0:c530 with SMTP id f16-20020a056000037000b00313f9a0c530mr16858053wrf.52.1689075732814;
-        Tue, 11 Jul 2023 04:42:12 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c745:4000:13ad:ed64:37e6:115d? (p200300cbc745400013aded6437e6115d.dip0.t-ipconnect.de. [2003:cb:c745:4000:13ad:ed64:37e6:115d])
-        by smtp.gmail.com with ESMTPSA id s15-20020adff80f000000b00313f9a0c521sm2045310wrp.107.2023.07.11.04.42.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 04:42:12 -0700 (PDT)
-Message-ID: <68a8cba5-55b6-4c8a-f4e6-d528fc839285@redhat.com>
-Date:   Tue, 11 Jul 2023 13:42:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v12 12/22] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1687784645.git.kai.huang@intel.com>
- <85ea233226ec7a05e8c5627a499e97ea4cbd6950.1687784645.git.kai.huang@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <85ea233226ec7a05e8c5627a499e97ea4cbd6950.1687784645.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 11 Jul 2023 07:42:41 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0AD136;
+        Tue, 11 Jul 2023 04:42:40 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id AD2745C00F7;
+        Tue, 11 Jul 2023 07:42:39 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Tue, 11 Jul 2023 07:42:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1689075759; x=1689162159; bh=ky
+        TmtQ94Bg/o37lAnBcJXDTnDF6sa4YBDC0JstTG714=; b=gtbNFIQOOkHrxN4hav
+        3oP75lU8LQIOux8o5t1A5AOT8qTdAHI6+c7vrM3YQYWCs+3Nvg1F6BV3TJiabDbY
+        /lXbBNsBsvuqNoe3LWFMQguuPW/4jLxyoK8UKxCLRCMTjb8dFVI+k/KhcgEgF3hh
+        BJEbGQ0C/HfJt5EbhoLJBxYDleV5FWApLKvxP/bzBcAkhLhGeuG0+EztHuCii3u7
+        9am+quXZGw0H+jB0lYD2YmevjzE1S5Z//PFOyUTNCPBE9689ZD+dLJbhhgz4ltLX
+        6nFwDrZZqcFexWYmSu0PcLC1/4D094rs0bzkVrYM4Seu9WrrvgGxOVeqoI8QZjn/
+        XSiQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1689075759; x=1689162159; bh=kyTmtQ94Bg/o3
+        7lAnBcJXDTnDF6sa4YBDC0JstTG714=; b=niWM8aPrJQ5hUolpkCao6rVenQnZU
+        fiqKidavvngPC7ZINAQdDWhz7uO6cKH2+hXj97e23ZSlXztW4CJ0sQELSp/H/IDW
+        WFOfAuXlhVv+TeQ9w3CrU6IDnDnCe9LGpRs6OPMW1isAyJEy8CfANJZmxe7aUO7Q
+        jlydbKZqDE0kuHhuSz4itPYSxqukguzNL6dmNBeuSp/IbSo2cSgrkgysoFwbZIk4
+        sHSqrqGFXU7XbEyzCpPm5ExUg4RNDV+bjRq1l8+zrIvtCCpE/CQK9ZTvcdD3933K
+        bF4vkMScH3PuNUqAWY8+4UJixDteqtPG+g9UoczsjcIEKlPMKOs2iwXYw==
+X-ME-Sender: <xms:L0CtZE_ne_WMkwdReZ1uX6hVQXRgra0DwO81qcNdsWgl-VlL6RG_vw>
+    <xme:L0CtZMuSXN5qY_cvffFveWSGpbFtBT6A8885nHXC6QAL0huplJuHHLoj3bAkBnD-p
+    A8YGF0mxhW4s8ZMPgc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdegfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefffeefudevhfehgfejudffudfhjeeftdfhfedtffehieelgfekveeifedujeej
+    ueenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgpdhmuhhslhdqlhhisggtrd
+    horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    rghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:L0CtZKA60S1lK1ry3X0RUBKJmw1LUKh5HdAgQOWfNo6aPOtcCbZ4DA>
+    <xmx:L0CtZEciJY2v9IPE5RUZv9dqBQUmMtLJ7-W1k9onN63j_twqjf2iNQ>
+    <xmx:L0CtZJMmU91hK7ySJQdpLpwkSXsBEOk1uEzWBnYJ984RtoacQ_aXqg>
+    <xmx:L0CtZOm5YB5ORfEYjlZfFUpkaGr4dE2Y2hFDo2mNqiECJPXpHejjzA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3F8831700089; Tue, 11 Jul 2023 07:42:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
+In-Reply-To: <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+Date:   Tue, 11 Jul 2023 13:42:19 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Alexey Gladkov" <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>
+Cc:     "Palmer Dabbelt" <palmer@sifive.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        "Jens Axboe" <axboe@kernel.dk>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        "Christian Borntraeger" <borntraeger@de.ibm.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, christian@brauner.io,
+        "Rich Felker" <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Deepa Dinamani" <deepa.kernel@gmail.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "David Howells" <dhowells@redhat.com>, fenghua.yu@intel.com,
+        firoz.khan@linaro.org, "Florian Weimer" <fweimer@redhat.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
+        "Kim Phillips" <kim.phillips@arm.com>, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, "Russell King" <linux@armlinux.org.uk>,
+        linuxppc-dev@lists.ozlabs.org, "Andy Lutomirski" <luto@kernel.org>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Namhyung Kim" <namhyung@kernel.org>, paul.burton@mips.com,
+        "Paul Mackerras" <paulus@samba.org>,
+        "Peter Zijlstra" <peterz@infradead.org>, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Tony Luck" <tony.luck@intel.com>, tycho@tycho.ws,
+        "Will Deacon" <will@kernel.org>, x86@kernel.org,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.06.23 16:12, Kai Huang wrote:
-> The TDX module uses additional metadata to record things like which
-> guest "owns" a given page of memory.  This metadata, referred as
-> Physical Address Metadata Table (PAMT), essentially serves as the
-> 'struct page' for the TDX module.  PAMTs are not reserved by hardware
-> up front.  They must be allocated by the kernel and then given to the
-> TDX module during module initialization.
-> 
-> TDX supports 3 page sizes: 4K, 2M, and 1G.  Each "TD Memory Region"
-> (TDMR) has 3 PAMTs to track the 3 supported page sizes.  Each PAMT must
-> be a physically contiguous area from a Convertible Memory Region (CMR).
-> However, the PAMTs which track pages in one TDMR do not need to reside
-> within that TDMR but can be anywhere in CMRs.  If one PAMT overlaps with
-> any TDMR, the overlapping part must be reported as a reserved area in
-> that particular TDMR.
-> 
-> Use alloc_contig_pages() since PAMT must be a physically contiguous area
-> and it may be potentially large (~1/256th of the size of the given TDMR).
-> The downside is alloc_contig_pages() may fail at runtime.  One (bad)
-> mitigation is to launch a TDX guest early during system boot to get
-> those PAMTs allocated at early time, but the only way to fix is to add a
-> boot option to allocate or reserve PAMTs during kernel boot.
-> 
-> It is imperfect but will be improved on later.
-> 
-> TDX only supports a limited number of reserved areas per TDMR to cover
-> both PAMTs and memory holes within the given TDMR.  If many PAMTs are
-> allocated within a single TDMR, the reserved areas may not be sufficient
-> to cover all of them.
-> 
-> Adopt the following policies when allocating PAMTs for a given TDMR:
-> 
->    - Allocate three PAMTs of the TDMR in one contiguous chunk to minimize
->      the total number of reserved areas consumed for PAMTs.
->    - Try to first allocate PAMT from the local node of the TDMR for better
->      NUMA locality.
-> 
-> Also dump out how many pages are allocated for PAMTs when the TDX module
-> is initialized successfully.  This helps answer the eternal "where did
-> all my memory go?" questions.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-> ---
-> 
-> v11 -> v12:
->   - Moved TDX_PS_NUM from tdx.c to <asm/tdx.h> (Kirill)
->   - "<= TDX_PS_1G" -> "< TDX_PS_NUM" (Kirill)
->   - Changed tdmr_get_pamt() to return base and size instead of base_pfn
->     and npages and related code directly (Dave).
->   - Simplified PAMT kb counting. (Dave)
->   - tdmrs_count_pamt_pages() -> tdmr_count_pamt_kb() (Kirill/Dave)
-> 
-> v10 -> v11:
->   - No update
-> 
-> v9 -> v10:
->   - Removed code change in disable_tdx_module() as it doesn't exist
->     anymore.
-> 
-> v8 -> v9:
->   - Added TDX_PS_NR macro instead of open-coding (Dave).
->   - Better alignment of 'pamt_entry_size' in tdmr_set_up_pamt() (Dave).
->   - Changed to print out PAMTs in "KBs" instead of "pages" (Dave).
->   - Added Dave's Reviewed-by.
-> 
-> v7 -> v8: (Dave)
->   - Changelog:
->    - Added a sentence to state PAMT allocation will be improved.
->    - Others suggested by Dave.
->   - Moved 'nid' of 'struct tdx_memblock' to this patch.
->   - Improved comments around tdmr_get_nid().
->   - WARN_ON_ONCE() -> pr_warn() in tdmr_get_nid().
->   - Other changes due to 'struct tdmr_info_list'.
-> 
-> v6 -> v7:
->   - Changes due to using macros instead of 'enum' for TDX supported page
->     sizes.
-> 
-> v5 -> v6:
->   - Rebase due to using 'tdx_memblock' instead of memblock.
->   - 'int pamt_entry_nr' -> 'unsigned long nr_pamt_entries' (Dave/Sagis).
->   - Improved comment around tdmr_get_nid() (Dave).
->   - Improved comment in tdmr_set_up_pamt() around breaking the PAMT
->     into PAMTs for 4K/2M/1G (Dave).
->   - tdmrs_get_pamt_pages() -> tdmrs_count_pamt_pages() (Dave).
-> 
-> - v3 -> v5 (no feedback on v4):
->   - Used memblock to get the NUMA node for given TDMR.
->   - Removed tdmr_get_pamt_sz() helper but use open-code instead.
->   - Changed to use 'switch .. case..' for each TDX supported page size in
->     tdmr_get_pamt_sz() (the original __tdmr_get_pamt_sz()).
->   - Added printing out memory used for PAMT allocation when TDX module is
->     initialized successfully.
->   - Explained downside of alloc_contig_pages() in changelog.
->   - Addressed other minor comments.
-> 
-> 
-> ---
->   arch/x86/Kconfig            |   1 +
->   arch/x86/include/asm/tdx.h  |   1 +
->   arch/x86/virt/vmx/tdx/tdx.c | 215 +++++++++++++++++++++++++++++++++++-
->   arch/x86/virt/vmx/tdx/tdx.h |   1 +
->   4 files changed, 213 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 2226d8a4c749..ad364f01de33 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1959,6 +1959,7 @@ config INTEL_TDX_HOST
->   	depends on KVM_INTEL
->   	depends on X86_X2APIC
->   	select ARCH_KEEP_MEMBLOCK
-> +	depends on CONTIG_ALLOC
->   	help
->   	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
->   	  host and certain physical attacks.  This option enables necessary TDX
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index d8226a50c58c..91416fd600cd 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -24,6 +24,7 @@
->   #define TDX_PS_4K	0
->   #define TDX_PS_2M	1
->   #define TDX_PS_1G	2
-> +#define TDX_PS_NR	(TDX_PS_1G + 1)
->   
->   /*
->    * Used to gather the output registers values of the TDCALL and SEAMCALL
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 2ffc1517a93b..fd5417577f26 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -221,7 +221,7 @@ static int tdx_get_sysinfo(struct tdsysinfo_struct *sysinfo,
->    * overlap.
->    */
->   static int add_tdx_memblock(struct list_head *tmb_list, unsigned long start_pfn,
-> -			    unsigned long end_pfn)
-> +			    unsigned long end_pfn, int nid)
->   {
->   	struct tdx_memblock *tmb;
->   
-> @@ -232,6 +232,7 @@ static int add_tdx_memblock(struct list_head *tmb_list, unsigned long start_pfn,
->   	INIT_LIST_HEAD(&tmb->list);
->   	tmb->start_pfn = start_pfn;
->   	tmb->end_pfn = end_pfn;
-> +	tmb->nid = nid;
->   
->   	/* @tmb_list is protected by mem_hotplug_lock */
->   	list_add_tail(&tmb->list, tmb_list);
-> @@ -259,9 +260,9 @@ static void free_tdx_memlist(struct list_head *tmb_list)
->   static int build_tdx_memlist(struct list_head *tmb_list)
->   {
->   	unsigned long start_pfn, end_pfn;
-> -	int i, ret;
-> +	int i, nid, ret;
->   
-> -	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, NULL) {
-> +	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
->   		/*
->   		 * The first 1MB is not reported as TDX convertible memory.
->   		 * Although the first 1MB is always reserved and won't end up
-> @@ -277,7 +278,7 @@ static int build_tdx_memlist(struct list_head *tmb_list)
->   		 * memblock has already guaranteed they are in address
->   		 * ascending order and don't overlap.
->   		 */
-> -		ret = add_tdx_memblock(tmb_list, start_pfn, end_pfn);
-> +		ret = add_tdx_memblock(tmb_list, start_pfn, end_pfn, nid);
->   		if (ret)
->   			goto err;
+On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
+> From: Palmer Dabbelt <palmer@sifive.com>
+>
+> On the userspace side fchmodat(3) is implemented as a wrapper
+> function which implements the POSIX-specified interface. This
+> interface differs from the underlying kernel system call, which does not
+> have a flags argument. Most implementations require procfs [1][2].
+>
+> There doesn't appear to be a good userspace workaround for this issue
+> but the implementation in the kernel is pretty straight-forward.
+>
+> The new fchmodat4() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
+> unlike existing fchmodat.
+>
+> [1] 
+> https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
+> [2] 
+> https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
+>
+> Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
 
-Why did you decide to defer remembering the nid as well? I'd just move 
-that part to the patch that adds add_tdx_memblock().
+I don't know the history of why we ended up with the different
+interface, or whether this was done intentionally in the kernel
+or if we want this syscall.
 
--- 
-Cheers,
+Assuming this is in fact needed, I double-checked that the
+implementation looks correct to me and is portable to all the
+architectures, without the need for a compat wrapper.
 
-David / dhildenb
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
