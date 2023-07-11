@@ -2,155 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8D674EFED
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FAE74EFEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbjGKNL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
+        id S232932AbjGKNLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjGKNL4 (ORCPT
+        with ESMTP id S232901AbjGKNLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:11:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81851A3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689081072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tK73mQT8AGrD7LXY9K8h9XH696dgpAMIKDD4qFnUUIM=;
-        b=Q/e19YX//hm2Jmc/V8y4sfBXX9W8/C1oUx6bslMxeDY0oBIrXzruCINFRXDwmq4O5k+K6y
-        4+tUgDQD6Fq8/acU6M+FYAs5kImspO07ys4+WOY9ov956ZduliSVfYUNd0h1FyNwBEB8lt
-        5RuFZ2LQpdYRXvqa1tcu0llgawT7azQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131-kfvEwjkPPZeXn96pDhPczQ-1; Tue, 11 Jul 2023 09:11:00 -0400
-X-MC-Unique: kfvEwjkPPZeXn96pDhPczQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC4C9887158;
-        Tue, 11 Jul 2023 13:10:32 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.17.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C9BFE40C6F5A;
-        Tue, 11 Jul 2023 10:55:30 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 09:10:24 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 2/2] Sched/fair: Block nohz tick_stop when cfs
- bandwidth in use
-Message-ID: <20230711131024.GA150804@lorien.usersys.redhat.com>
-References: <20230707195748.2918490-1-pauld@redhat.com>
- <20230707195748.2918490-3-pauld@redhat.com>
- <xm26lefnfhkd.fsf@google.com>
+        Tue, 11 Jul 2023 09:11:30 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC1E188
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:11:28 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-51452556acdso3903791a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689081088; x=1691673088;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPdyri92L3qWMfLakhYh6hhyYNfXQVLXTm4MfbgrCSM=;
+        b=HwueZwYKGASMpnXA54qa8kJRp+Y4TROwaWVjgJT4DHOi3ase5SMQmwObiWZdcOnT2b
+         CwCMZWz9Hl0Nf8clwIL1/U8+96qtWxYbRLt78/Fl90aPtkcN457gFUR5xSld5i5HM9tr
+         Oavf4f466zEk31fxGKU7oxnYu6069ftd+pioCLw9L1Zz95x2dH0oN3DPndP4gxw9RR2l
+         Q+6idxu3a9Gwva3IUt/XaDHCSfP8VtvG4OKolu00OkEPrPR6Bss4kT7j64ItS/p+g4OJ
+         /yCYIbcFLFzGPz5W1FDVexH7CCmz3cmPkKfhUC40s6RPZmxWu/Wm088eTy+yzVLEHOUU
+         7VGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689081088; x=1691673088;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wPdyri92L3qWMfLakhYh6hhyYNfXQVLXTm4MfbgrCSM=;
+        b=FZSiHI6SQoy3Mjkhu7o2JzCrIEeYquxyL5FawRWNgcHVjUPcdCvZ0HjWjPpDrntpFq
+         MUOSnQGCP4tuex0I94r9f4unA39fWBU6iTC0pGx2yhys9LRPzcek6Cbcko7vHaYfA9Qs
+         rjzCTEVJA4xDJ1fEwWDtfhJ56J1cMz3H1LsJ+BQaxRx6k1cpRNMRmB7RQqnGIweLJVkW
+         8BNLH1KOW8geUePEoVIHBwcq5fRJylTL87Kujeli4Pb9t1ivTlLVSAsP9syO65J3TRkM
+         2xHVA3iMpwWM/KaDOYncPP5seWEwYEprDjRaA8hj03Pko2fJmZdk4ZFVzxHRFTO0fc6P
+         hwfA==
+X-Gm-Message-State: ABy/qLayWpcCFVUL04e47V/sBwCBuhpqsepcH8RwkE6f70HFTmbighbP
+        Ds/nyMs9pWFg84eceqWvs1BZpg==
+X-Google-Smtp-Source: APBJJlH/pNqhx9Sk3rAUvsyO9Yo5N3ENJbgYjIKEPGeTeHsBGXcH1oaexcEKAHIm23DxD+Q1c2BUkg==
+X-Received: by 2002:a17:90a:df02:b0:25c:571:44bc with SMTP id gp2-20020a17090adf0200b0025c057144bcmr12789299pjb.28.1689081087984;
+        Tue, 11 Jul 2023 06:11:27 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id q17-20020a17090a2e1100b00256353eb8f2sm7811671pjd.5.2023.07.11.06.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 06:11:27 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qJD9J-0009xq-LG;
+        Tue, 11 Jul 2023 10:11:25 -0300
+Date:   Tue, 11 Jul 2023 10:11:25 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Christoph Hellwig <hch@lst.de>, John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZK1U/Vo0NvhNm9pq@ziepe.ca>
+References: <20230619110705.106ec599@kernel.org>
+ <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+ <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <ZKNA9Pkg2vMJjHds@ziepe.ca>
+ <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+ <ZKxDZfVAbVHgNgIM@ziepe.ca>
+ <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+ <ZKyZBbKEpmkFkpWV@ziepe.ca>
+ <CAHS8izOTiSO5PkM+x-CASjwew=U2j=JRNpbz_6NC6AsDTQ17Ug@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xm26lefnfhkd.fsf@google.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHS8izOTiSO5PkM+x-CASjwew=U2j=JRNpbz_6NC6AsDTQ17Ug@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 04:54:58PM -0700 Benjamin Segall wrote:
-> Phil Auld <pauld@redhat.com> writes:
+On Mon, Jul 10, 2023 at 05:45:05PM -0700, Mina Almasry wrote:
+
+> > At least from my position I want to see MEMORY_DEVICE_PCI_P2PDMA used
+> > to represent P2P memory.
 > 
-> > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> > can easily run well past their quotas before a remote tick does
-> > accounting.  This leads to long, multi-period stalls before such
-> > tasks can run again. Currently, when presented with these conflicting
-> > requirements the scheduler is favoring nohz_full and letting the tick
-> > be stopped. However, nohz tick stopping is already best-effort, there
-> > are a number of conditions that can prevent it, whereas cfs runtime
-> > bandwidth is expected to be enforced.
-> >
-> > Make the scheduler favor bandwidth over stopping the tick by setting
-> > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> > runtime limit enabled. We use cfs_b->hierarchical_quota to
-> > determine if the task requires the tick.
-> >
-> > Add check in pick_next_task_fair() as well since that is where
-> > we have a handle on the task that is actually going to be running.
-> >
-> > Add check in sched_can_stop_tick() to cover some edge cases such 
-> > as nr_running going from 2->1 and the 1 remains the running task.
-> >
-> > Add sched_feat HZ_BW (off by default) to control the tick_stop
-> > behavior.
-> >
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > Cc: Juri Lelli <juri.lelli@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Ben Segall <bsegall@google.com>
-> > Cc: Frederic Weisbecker <frederic@kernel.org>
-> > ---
-> >  kernel/sched/core.c     | 12 ++++++++++
-> >  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
-> >  kernel/sched/features.h |  2 ++
-> >  kernel/sched/sched.h    |  1 +
-> >  4 files changed, 64 insertions(+)
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 1b214e10c25d..4b8534abdf4f 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1229,6 +1229,18 @@ bool sched_can_stop_tick(struct rq *rq)
-> >  	if (rq->nr_running > 1)
-> >  		return false;
-> >  
-> > +	/*
-> > +	 * If there is one task and it has CFS runtime bandwidth constraints
-> > +	 * and it's on the cpu now we don't want to stop the tick.
-> > +	 * This check prevents clearing the bit if a newly enqueued task here is
-> > +	 * dequeued by migrating while the constrained task continues to run.
-> > +	 * E.g. going from 2->1 without going through pick_next_task().
-> > +	 */
-> > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && task_on_rq_queued(rq->curr)) {
-> > +		if (cfs_task_bw_constrained(rq->curr))
-> > +			return false;
-> > +	}
-> > +
-> 
-> I think we still need the fair_sched_class check with the bit being on
-> cfs_rq/tg rather than task.
-> 
+> Would using p2pdma API instead of dmabuf be an acceptable direction?
 
-Is there a way a non-fair_sched_class task will be in a cfs_rq with
-cfs_rq->runtime_enabled and/or cfs_b->hierarchical_quota set to non
-RUNTIME_INF?  I suppose if they are stale and it's had its class changed?
+"p2pdma API" is really just using MEMORY_DEVICE_PCI_P2PDMA and
+teaching the pagepool how to work with ZONE_DEVICE pages.
 
-That makes the condition pretty ugly but I can add that back if needed.
+I suspect this will clash badly with Matthew's work here:
 
+https://lore.kernel.org/all/20230111042214.907030-1-willy@infradead.org/
 
-Thanks,
-Phil
+As from a mm side we haven't ever considered that ZONE_DEVICE and
+"netmem" can be composed together. The entire point of netmem like
+stuff is that the allocator hands over the majority of struct page to
+the allocatee, and ZONE_DEVICE can't work like that. 
 
+However, assuming that can be solved in some agreeable way then it
+would be OK to go down this path.
 
+But, I feel like this is just overall too hard a direction from the mm
+perspective.
 
--- 
+I don't know anything about page pool, but the main sticking point is
+its reliance on struct page. If it can find another way to locate its
+meta data (eg an xarray), at least for some cases, it would make
+things alot easier.
 
+Jason
