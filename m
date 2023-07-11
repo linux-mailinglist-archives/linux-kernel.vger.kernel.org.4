@@ -2,126 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401E074F277
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA88674F278
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbjGKOj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S229843AbjGKOkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbjGKOj6 (ORCPT
+        with ESMTP id S230289AbjGKOkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:39:58 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795FA10C7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:39:56 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-313f5f5c6c3so1506812f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:39:56 -0700 (PDT)
+        Tue, 11 Jul 2023 10:40:36 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C947BC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:40:34 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbc6ab5ff5so60032025e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fireburn-co-uk.20221208.gappssmtp.com; s=20221208; t=1689086432; x=1691678432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yhzfiy+hPv0xsgJj8yvinve0G66Qt5ZrlIlGwcPKaMA=;
+        b=wQMgcTk+sYBVQSKvqZS2EU0Nclo5V2QGycAZRd9iihJAAg5ff679RK4upNANkYx7d+
+         Ox5E4m9+570jJ2/oDvRYFrR7CHBFJ48GwrQtDbd1fLcqJkrdWhRNFhD7k44edpNa/AD9
+         BDup0g8wi/d13nVPsI1KQ1dtV1SszzPQh762nN19y7ChS4MT93U3TPh8nomkfVPiz2bv
+         Bg6xIK4BpXRNMhZFPx1n746wxF8HBkpCEMC2uKes5lpBM7l3kKvxx6zjvsdVsBAacKmO
+         xAkCz3TsIdAs7JjmhzkQrT3RbGxyGn+EuX7IyHz4RSX4UuesH1iVeCgjHSWuREMzhSoA
+         Wycw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086395; x=1691678395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTZZyWSh5B06JRMOZ2wOYOUO2V2w0QiKG05HA/MJRFw=;
-        b=POeJFMs7nnZfBadPp202GgPiofyrY5YwD1kbGxDRRCtGJwZ+T3f6L/q3X9HwJuVdsH
-         gsqUTtSXNV/0BHIL24/n1IeX0Mqd0le0y6JmjkRzN8a869ycelPLxjGoMitkVodTYK+F
-         9IGjMKue0APeKBKF1m25u9puzHW7z8Jw28msrVhMm36tHCa19qPTqhleYDf4mcOJsaAD
-         ycdTRVZ6rWOcSE0QMMDo0TWliQPY/EEjXczcDEc+pI49SlYdkuWSzQCvdGBvH5yKLFCb
-         zZpdIJcIc4ckqBDnkXi/iSfrMDqMqifqnj0VoG9gA1dDRtFbyFo2F5wqaDlitahmWfgx
-         Dwgw==
-X-Gm-Message-State: ABy/qLZJ3rezn/mBTneXf4x1dPNXjmITIkw1y/hfBw33k7wq6OuT3sM1
-        mYrLe8qFgH97pnUkDW2Ww7I=
-X-Google-Smtp-Source: APBJJlGgdl8aDs0Ugo2WnDF7rxcBgbTYzXT7t367gYQci8IYgQGthLUOCpXloU8NyYb+4GuXvz5/lw==
-X-Received: by 2002:a5d:4c85:0:b0:314:1d7f:9e9 with SMTP id z5-20020a5d4c85000000b003141d7f09e9mr15798184wrs.0.1689086394648;
-        Tue, 11 Jul 2023 07:39:54 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id o6-20020a5d4a86000000b0030e5bd253aasm2413031wrq.39.2023.07.11.07.39.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 07:39:54 -0700 (PDT)
-Message-ID: <9e91ba36-0a4f-4613-e45c-7919205d8704@grimberg.me>
-Date:   Tue, 11 Jul 2023 17:39:51 +0300
+        d=1e100.net; s=20221208; t=1689086432; x=1691678432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yhzfiy+hPv0xsgJj8yvinve0G66Qt5ZrlIlGwcPKaMA=;
+        b=mFv1qc2UsehmkWLGWIs60JPS+hNUYvfc2mrFjmwji+litJm84kqsPJutsmlXpTv/0i
+         Tds+jw9MIPaXQcK/eRnHac46eX2rnqeo8isKKuiaPYz59YGvuu7nYD7zdwJZXuBSgvDL
+         NJn50uWiPGfIRsAZuFea9vBACxFfxFDG5DjxtJo0hoI4tUbfavbMKyCHh5H5PnThUhO1
+         W6nNVGwIxlLforvgQAPiK8y3kn/UYkVj7TxwYFZhs6A7XwoJRyZ7LPg/RGq2rrQOcEWl
+         mYTffSlaqHi2Q1j/FF0fLfOasMJmhIJQY5ueGqbrIGwMf2ykLTAjcbb7c0N6JI+yRHsD
+         yUyg==
+X-Gm-Message-State: ABy/qLYrkws/ZkCMbw0LHAzcyCFl0/4Ulor9mprk+lJ5K/zRgA4Co86l
+        E2i2a4e0LqDRP/FQJBbUSSOq2tw3A6dDyBpJO/DZwg==
+X-Google-Smtp-Source: APBJJlGiY50eZpre8FywirKQqTOcqIbDJXKpKXStAo4IC4QBUTLFH2ILmO21G6uLIT0yFCMV1IhpD8jyVUbXCkM7iKo=
+X-Received: by 2002:a7b:cc81:0:b0:3fc:472:d1e9 with SMTP id
+ p1-20020a7bcc81000000b003fc0472d1e9mr9458260wma.23.1689086432404; Tue, 11 Jul
+ 2023 07:40:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
- (Samsung SM-953 Datacenter SSD)
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Clemens S." <cspringsguth@gmail.com>,
-        Martin Belanger <martin.belanger@dell.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        John Meneghini <jmeneghi@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVMe <linux-nvme@lists.infradead.org>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        =?UTF-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
- <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
- <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
- <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
- <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
- <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
- <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
- <20230711120609.GB27050@lst.de>
- <23017407-83eb-8fb0-5d91-2c7c4ae02544@grimberg.me>
- <2023071135-opt-choosing-51dd@gregkh>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <2023071135-opt-choosing-51dd@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <cover.1681898595.git.petr.tesarik.ext@huawei.com>
+ <20230426141520.0caf4386@meshulam.tesarici.cz> <2023042617-wobble-enlighten-9361@gregkh>
+ <20230426144439.5674f8bc@meshulam.tesarici.cz> <20230509091635.27450bd9@meshulam.tesarici.cz>
+ <2023050949-grueling-verify-a43b@gregkh> <CAHbf0-HY0-u4MwgU39b53hjOM+bWfGmOEYQuvHARjV+6j+O7Kg@mail.gmail.com>
+ <20230711110325.2521472c@meshulam.tesarici.cz> <CAHbf0-FjiOAMHjh-7D_6gvS+oHr2tGKJArnYu=0AKYHbD8Ntrw@mail.gmail.com>
+ <20230711152145.7372af4a@meshulam.tesarici.cz>
+In-Reply-To: <20230711152145.7372af4a@meshulam.tesarici.cz>
+From:   Mike Lothian <mike@fireburn.co.uk>
+Date:   Tue, 11 Jul 2023 15:40:20 +0100
+Message-ID: <CAHbf0-Ey0k+B22a9guYksL7UuWfTV9hF8Zh+VWzR2iQKGh2KiA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Allow dynamic allocation of software IO TLB bounce buffers
+To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 11 Jul 2023 at 14:21, Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wro=
+te:
+>
+> On Tue, 11 Jul 2023 12:29:44 +0100
+> Mike Lothian <mike@fireburn.co.uk> wrote:
+>
+> > On Tue, 11 Jul 2023 at 10:03, Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>=
+ wrote:
+> > >
+> > > On Mon, 10 Jul 2023 23:23:45 +0100
+> > > Mike Lothian <mike@fireburn.co.uk> wrote:
+> > >
+> > > > Hi
+> > > >
+> > > > I was hoping this might land for 6.5-rc1, is there a new version th=
+at
+> > > > might apply against 6.5?
+> > >
+> > > Yes, there is a v3, which is a complete rewrite based on feedback fro=
+m
+> > > various people on this mailing list:
+> > >
+> > > https://lore.kernel.org/linux-iommu/cover.1687859323.git.petr.tesarik=
+.ext@huawei.com/T/
+> > >
+> > > Petr T
+> > >
+> >
+> >
+> > Patch 2 doesn't apply cleanly for me on 6.5-rc1
+>
+> Ah, right. I'm going to rebase the series and include a few other
+> suggested changes.
+>
+> I'm a bit worried that Christoph and all other maintainers (all taken
+> back into Cc) have stayed silent about the v3 series.
+>
+> @Christoph: Are uncomfortable with something in the idea itself, or are
+> you just busy with other things?
+>
+> Petr T
 
->>>> Well, that "They keep pumping out more and more devices with the same
->>>> breakage" and the "new device" comment from Pankaj below bear the
->>>> question: should we stop trying to play "whack a mole" with all those
->>>> quirk entries and handle devices with duplicate ids just like Windows does?
->>>
->>> As far as I can tell Windows completely ignores the IDs.  Which, looking
->>> back, I'd love to be able to do as well, but they are already used
->>> by udev for the /dev/disk/by-id/ links.   Those are usually not used
->>> on desktop systems, as they use the file system labels and UUIDs, but
->>> that doesn't work for non-file system uses.
->>>
->>> And all this has been working really well with the good old enterprise
->>> SSDs, it's just that the cheap consumer devices keep fucking it up.
->>>
->>> If we'd take it away now we'd break existing users, which puts us between
->>> a rock and a hard place.
->>
->> Maybe the compromise would be to add a modparam that tells the driver
->> to ignore it altogether (like allow_bogus_identifiers) that would
->> default to false. Then people can just workaround the problem instead
->> of having the back-and-fourth with the vendor?
->>
-> 
-> Module parameters do not work on a per-device basis, sorry.  This isn't
-> the 1990's anymore, please do not attempt to add new ones :)
+I imagine once 6.4 starts appearing in distros there will be more bugs
+appearing when people's wifi disconnects
 
-Don't get me wrong, I don't like adding this. But the source of this
-is that there are simply too many breakages of non-compliant consumer
-drives out there that maybe a compromise would be "globally relax
-compliance check in this specific area" as a workaround.
-
-Right now each time this issue is seen in the wild, the only
-resolution is either the vendor fixing it, or the driver adds
-a quirk, which is positive and exactly what we want. But more
-and more users complain, and there is no immediate workaround.
+If this is being delayed until 6.6 would it be better to increase the
+default number, perhaps based on how much memory the system has and
+maybe back port the fix?
