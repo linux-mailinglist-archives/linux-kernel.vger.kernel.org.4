@@ -2,171 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D3474F3F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A5674F3FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjGKPoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S232241AbjGKPp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjGKPn5 (ORCPT
+        with ESMTP id S232477AbjGKPpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:43:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184CC1BE4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:43:41 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CCD2E2278D;
-        Tue, 11 Jul 2023 15:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689090219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D8gS/AatCmSxkrWIi2yEwTN/4nvo6p/jXtb6v9XP55U=;
-        b=qwnkeimNpLDCjqlXCrtOCMCENwgeu1LAClk9C8cKCC9YAjpz6dtJcOzHiiK6ijZRGzsUrS
-        TKgDQc6qZEbJs/8Q8kPdjm2CKwmARe8A1nhA7CB7uGBpHsx9R8eba55wBX3dRztfpDFNTV
-        psR+tPEFkGu39VYPz0YoWDCaODSnpPw=
-Received: from suse.cz (pmladek.tcp.ovpn1.nue.suse.de [10.163.16.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 11 Jul 2023 11:45:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FB295
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689090296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YbWTeU1PSY53BYBv0g/QJEl8QodT4t6R2l7/kEZ8Rmg=;
+        b=T1az/EgyTILtcIWd3TNoKVlmZIfCn47l5BNp+kgPwDZKdK2tss4TDzE9awBjUZ0YPtww4p
+        K8Kkme/0EF97+M2zwbtq4YwqjfGQnPJ9FWMfUNDooZtdyG10XAPQzjeFoR7Dg0RBX6glou
+        41A1AqixzvjeQHP5sZJQt9eCereLFEs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-W7MyiY4zNFWDpOZFhCt0Wg-1; Tue, 11 Jul 2023 11:44:53 -0400
+X-MC-Unique: W7MyiY4zNFWDpOZFhCt0Wg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6BF902C142;
-        Tue, 11 Jul 2023 15:43:39 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 17:43:35 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v2 2/5] printk: Add NMI safety to
- console_flush_on_panic() and console_unblank()
-Message-ID: <ZK14p-ocWuuHkSAQ@alley>
-References: <20230710134524.25232-1-john.ogness@linutronix.de>
- <20230710134524.25232-3-john.ogness@linutronix.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 212B81C2BD67;
+        Tue, 11 Jul 2023 15:44:52 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B39B200AD6E;
+        Tue, 11 Jul 2023 15:44:51 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>, bluca@debian.org,
+        lennart@poettering.net, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: [RFC PATCH v2] x86/boot: add .sbat section to the bzImage
+Date:   Tue, 11 Jul 2023 11:44:49 -0400
+Message-Id: <20230711154449.1378385-1-eesposit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230710134524.25232-3-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-07-10 15:51:21, John Ogness wrote:
-> The printk path is NMI safe because it only adds content to the
-> buffer and then triggers the delayed output via irq_work. If the
-> console is flushed or unblanked on panic (from NMI context) then it
-> can deadlock in down_trylock_console_sem() because the semaphore is
-> not NMI safe.
+*Important*: this is just an RFC, as I am not expert in this area and
+I don't know what's the best way to achieve this.
 
-<thinking loudly>
+v2:
+* add standard "sbat,1,SBAT Version,..." header string
 
-Just to be sure. The semaphore is not NMI safe because even the
-trylock takes an internal spin lock. Am I right, please?
+The aim of this patch is to add a .sbat section to the linux binary
+(https://github.com/rhboot/shim/blob/main/SBAT.md).
+We mainly need SBAT in UKIs (Unified Kernel Images), as we might want
+to revoke authorizations to specific signed PEs that were initially
+considered as trusted. The reason might be for example a security issue
+related to a specific linux release.
 
-Alternative solution would be to make down_trylock() NMI safe
-by using raw_spin_trylock_irqsave() for the internal lock.
+A .sbat is simply a section containing a string with the component name
+and a version number. This version number is compared with the value in
+OVMF_VARS, and if it's less than the variable, the binary is not trusted,
+even if it is correctly signed.
 
-But this actually would not solve the whole problem. If the NMI safe
-down_trylock() succeeded then up() would need to be called
-in NMI as well. And up() really needs to take the spin lock
-which might get blocked in the meantime.
+Right now an UKI is built with a .sbat section containing the
+systemd-stub sbat string (upstream + vendor), we would like to add
+also a per-component specific string (ie vmlinux has its own sbat,
+again upstream + vendor, each signed add-on its own and so on).
+In this way, if a specific kernel version has an issue, we can revoke
+it without compromising all other UKIs that are using a different
+kernel with the same stub/initrd/something else.
 
+Issues with this patch:
+* the string is added in a file but it is never deleted
+* if the code is not modified but make is issued again, objcopy will
+  be called again and will fail because .sbat exists already, making
+  compilation fail
+* minor display issue: objcopy command is printed in the make logs
 
-Another question is whether we want to call c->unblank()
-in NMI even when down_trylock() was NMI safe. It seems that it
-is implemented only for struct console vt_console_driver.
-I am pretty sure that it takes more internal locks which
-are not NMI safe either.
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ arch/x86/boot/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On the other hand, if we would risk calling c->write() then
-we might risk calling c->unblank() either.
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index 9e38ffaadb5d..6982a50ba0c0 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -83,6 +83,9 @@ cmd_image = $(obj)/tools/build $(obj)/setup.bin $(obj)/vmlinux.bin \
+ 
+ $(obj)/bzImage: $(obj)/setup.bin $(obj)/vmlinux.bin $(obj)/tools/build FORCE
+ 	$(call if_changed,image)
++	@$(kecho) "sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md" > linux.sbat
++	@$(kecho) "linux,1,The Linux Developers,linux,$(KERNELVERSION),https://linux.org" >> linux.sbat;
++	$(OBJCOPY) --set-section-alignment '.sbat=512' --add-section .sbat=linux.sbat $@;
+ 	@$(kecho) 'Kernel: $@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat .version`)')'
+ 
+ OBJCOPYFLAGS_vmlinux.bin := -O binary -R .note -R .comment -S
+-- 
+2.39.1
 
-
-Finally, it is not only about NMI. Any locks might cause a deadlock
-in panic() in any context. It is because other CPUs are stopped
-and might block some locks.
-
-</thinking loudly>
-
-
-In my opinion, we should handle c->unblank() in panic() the same way
-as c->write() in panic().
-
-I suggest to create
-
-void __console_unblank(void)
-{
-	struct console *c;
-	int cookie;
-
-	cookie = console_srcu_read_lock();
-	for_each_console_srcu(c) {
-		if ((console_srcu_read_flags(c) & CON_ENABLED) && c->unblank)
-			c->unblank();
-	}
-	console_srcu_read_unlock(cookie);
-}
-
-and call this in console_flush_on_panic() without the console_lock().
-
-We still need to take the lock during Oops when the system tries
-to continue. In this case, the NMI check makes perfect sense.
-NMI might cause a deadlock. Other contexts should be safe
-because the CPUs are not stopped.
-
-
-> Avoid taking the console lock when flushing in panic. To prevent
-> other CPUs from taking the console lock while flushing, have
-> console_lock() block and console_trylock() fail for non-panic CPUs
-> during panic.
-
-I really like the trick that console_lock() and console_trylock()
-would start failing on non-panic CPUs. It should prevent races
-when the other CPUs were not stopped for some reasons.
-
-I am still slightly afraid to do this even before stopping other CPUs.
-But I do not have any real scenario where it might be a problem.
-And it is only about console_lock() which should preferably be
-available for the panic-CPU. Also we should _not_ rely on the other
-CPUs during panic() anyway. So, it should be fine after all.
-
-
-Well, would you mind to split this into two patches?
-
-1st patch would split __console_unblank(), call it from
-	console_flush_on_panic() after the trylock().
-
-	Also it would add the NMI check into the original
-	console_unblank() which would still be called in
-	bust_spinlocks().
-
-	The commit message should explain the motivation
-	(primary the internal spinlock in the semaphore
-	implementation). Also it should explain why only NMI
-	is a problem when called in the Oops path.
-	And why the locks are problem in any context
-	when called in panic() after CPUs were stopped.
-
-
-2nd patch would prevent taking console_lock on non-panic CPUs.
-	And it would remove console_trylock()/console_unlock() from
-	console_flush_on_panic().
-
-	The commit message should explain the motivation
-	(the internal spinlock in the semaphore code).
-	Also it would solve a problem with a potential
-	double unlock. And it should mention that it should
-	not be worse then before when the trylock() result
-	was ignored.
-
-IMHO, both patches has a potential to cause regressions.
-And it is better to do it in smaller steps.
-
-Best Regards,
-Petr
