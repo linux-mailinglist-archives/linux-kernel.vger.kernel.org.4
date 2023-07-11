@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CE374EF50
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E739C74EF4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjGKMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
+        id S229939AbjGKMtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKMtW (ORCPT
+        with ESMTP id S231296AbjGKMtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Jul 2023 08:49:22 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAAD127;
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FCD98;
         Tue, 11 Jul 2023 05:49:20 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36BCn2tr005755;
-        Tue, 11 Jul 2023 07:49:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1689079742;
-        bh=av9sGF2ONuxDxSWWPnCmNyIdnsN1IROS42kMnF1IAY8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=JEk/EjNRLW0M4e3YbItgX/tL0aMp+bTbAnACEuCpgvNcYYqE10Klr8n/q/LT6eVwP
-         zwH3jNXkrv4diQ1oGbQwt97dGosg7oXBcDlr86gUJo8luL4WwmaahosHLo2dGH+dlu
-         xkgDbNzrVuz8KFIKlPc+5SFRg4s7RkEtaBrN60a8=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36BCn24C017855
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Jul 2023 07:49:02 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
- Jul 2023 07:49:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 11 Jul 2023 07:49:01 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36BCn1Gc117977;
-        Tue, 11 Jul 2023 07:49:01 -0500
-Date:   Tue, 11 Jul 2023 07:49:01 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Tony Lindgren <tony@atomide.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <kristo@kernel.org>
-Subject: Re: [PATCH 15/18] soc: ti: Mover power-domain drivers to the genpd
- dir
-Message-ID: <20230711124901.7b3tw374n7eldjpj@puppy>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-16-ulf.hansson@linaro.org>
- <20230707175048.6yees6d3evcomyux@vacation>
- <CAPDyKFoc0hr=9LEtwwwe3R6rMn0b7TB1MCZN0ArUq+h9Pud08Q@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689079761; x=1720615761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OYszt38IqNikveaxxJtUvxsFTPNnv5LlXD+DX90BkWs=;
+  b=h6LD2uoeBepZ/ia2hLQyLMO1plgbpHOmm/4YGJYKWstai0T3NM3wCNpc
+   PwHL1I8A0zR2yxJo8OJZ7OM+tv7sOIePOkW95vd9it9Yr83ZX0McQ23C7
+   7uvRan3jA4UzqBfHbSXNBRPEgu2Xziqv9IeM0f/zm+dMVCjEwjztlTI/b
+   a7l5Ck0eodtIh18C63Oo1z/NqLfusmJOCatgsruU5NZdpbqerdtsV5L4i
+   zKautqKKuIt+i2/LbDIxQ1L1CrrAd8UygphxF6MJk6MZE1EbuqRRRfRHK
+   uuRJih4ayw8jSP/G7ck3TeWuL5MimvgPQ0zgmO29SPxcXp+Ss0oyZ2B6R
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="354470000"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="354470000"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:49:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="721078284"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="721078284"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 11 Jul 2023 05:49:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJCng-001qlR-32;
+        Tue, 11 Jul 2023 15:49:04 +0300
+Date:   Tue, 11 Jul 2023 15:49:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 13/15] spi: Rename SPI_MASTER_GPIO_SS to
+ SPI_CONTROLLER_GPIO_SS
+Message-ID: <ZK1PwMAz8OjsHgsE@smile.fi.intel.com>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-14-andriy.shevchenko@linux.intel.com>
+ <tvm772o6uqndgyjvycv27qouqq76crpre5tyqcnanaautqjjwn@pydiwhjzhbgd>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFoc0hr=9LEtwwwe3R6rMn0b7TB1MCZN0ArUq+h9Pud08Q@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <tvm772o6uqndgyjvycv27qouqq76crpre5tyqcnanaautqjjwn@pydiwhjzhbgd>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11:16-20230711, Ulf Hansson wrote:
-> On Fri, 7 Jul 2023 at 19:50, Nishanth Menon <nm@ti.com> wrote:
-> >
-> > On 16:04-20230707, Ulf Hansson wrote:
-> > > Cc: Nishanth Menon <nm@ti.com>
-> > > Cc: Santosh Shilimkar <ssantosh@kernel.org>
-> > > Cc: Tero Kristo <kristo@kernel.org>
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >  MAINTAINERS                                   | 3 ++-
-> > >  drivers/genpd/Makefile                        | 1 +
-> > >  drivers/genpd/ti/Makefile                     | 3 +++
-> > >  drivers/{soc => genpd}/ti/omap_prm.c          | 0
-> > >  drivers/{soc => genpd}/ti/ti_sci_pm_domains.c | 0
-> > >  drivers/soc/ti/Makefile                       | 2 --
-> > >  6 files changed, 6 insertions(+), 3 deletions(-)
-> > >  create mode 100644 drivers/genpd/ti/Makefile
-> > >  rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
-> > >  rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 9e580df3e5db..3cf16ffac892 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -21101,7 +21101,7 @@ F:    drivers/irqchip/irq-ti-sci-inta.c
-> > >  F:   drivers/irqchip/irq-ti-sci-intr.c
-> > >  F:   drivers/reset/reset-ti-sci.c
-> > >  F:   drivers/soc/ti/ti_sci_inta_msi.c
-> > > -F:   drivers/soc/ti/ti_sci_pm_domains.c
-> > > +F:   drivers/genpd/ti/ti_sci_pm_domains.c
-> > >  F:   include/dt-bindings/soc/ti,sci_pm_domain.h
-> > >  F:   include/linux/soc/ti/ti_sci_inta_msi.h
-> > >  F:   include/linux/soc/ti/ti_sci_protocol.h
-> > > @@ -21335,6 +21335,7 @@ L:    linux-kernel@vger.kernel.org
-> > >  L:   linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> > >  S:   Maintained
-> > >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
-> > > +F:   drivers/genpd/ti/omap_prm.c
-> >
-> > Probably the wrong place for this as omap_prm is'nt a keystone navigator
-> > driver set. Maybe Tony has a suggestion?
+On Tue, Jul 11, 2023 at 03:30:19PM +0300, Serge Semin wrote:
+> On Mon, Jul 10, 2023 at 06:49:30PM +0300, Andy Shevchenko wrote:
+> > Rename SPI_MASTER_GPIO_SS to SPI_CONTROLLER_GPIO_SS and
+> > convert the users to SPI_CONTROLLER_GPIO_SS to follow
 > 
-> I guess we could add it to the OMAP2+ section then?
+> * I'm not an expert in English, but imo the next would look a
+> * bit more readable:
+> * convert s/the users to SPI_CONTROLLER_GPIO_SS/the code to using SPI_CONTROLLER_GPIO_SS
 
-That would be my suggestion.
-
+> > the new naming shema.
 > 
-> In any case, I suggest we consider that as a separate patch on top, as
-> I am just obeying to the existing pattern that the get_maintainers
-> script provides.
-> 
+> s/shema/schema
 
-OK. otherwise, this looks good to me.
+Right, thank you!
 
-Reviewed-by: Nishanth Menon <nm@ti.com>
+...
+
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+Thank you for the review!
+
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+With Best Regards,
+Andy Shevchenko
+
+
