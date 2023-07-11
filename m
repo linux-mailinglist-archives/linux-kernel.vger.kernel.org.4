@@ -2,96 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEC874F962
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5605974F964
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjGKUyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S231252AbjGKU4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjGKUyo (ORCPT
+        with ESMTP id S229843AbjGKU4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:54:44 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99231709;
-        Tue, 11 Jul 2023 13:54:41 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 134251BF203;
-        Tue, 11 Jul 2023 20:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689108880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=biIajIQS8usePEbgPL/4UdQnxtkHBuw/MmCRAWoFrB0=;
-        b=Gq2ZmwVoHBOYBr9HyfaAHzYNOj8bWniPMkcjRkDuKNCZF4H7u6Ud6xvJRFS65MXplPeLZ3
-        sQVXZVA5ak7tnboAubSyeHTIywDWj7X3FLBUhphyBoKTNzS3pHzAzpBMB5pRnR/k9Osv5O
-        3Xjen2MRWTDLfkHf4IoyuxwEhZ0LkmlP9cN/4jkiZXZ/2OBvBdvG82gyotpE373dBPK9Bb
-        G/uEgUG0PjIs+N+Ik2ySDBBYZUkcPhqb6gYYv5vnaZ57X5p93gMX2xOppp3nJjhbCpT1pY
-        dh6hcnhqhgTqrEI+sOpDLr7eZnsQzxRrz+QhTlr9QHSauO4QywECEbjNct6H/g==
-Date:   Tue, 11 Jul 2023 22:54:39 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage
- via RTC_VL_BACKUP_LOW
-Message-ID: <2023071120543925735a3a@mail.local>
-References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
- <20230610083135e40dd2f6@mail.local>
- <1d532c45-ee33-9729-f0ac-b59c2bec8d7d@siemens.com>
- <202306111511569834cac2@mail.local>
- <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
- <202306112216153a75dfa3@mail.local>
- <c195c196-d99b-9e17-3854-fc147ac2e447@siemens.com>
- <69dd51b9-aab1-a9ec-91c2-b1dc79797f10@siemens.com>
+        Tue, 11 Jul 2023 16:56:18 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F032410DD;
+        Tue, 11 Jul 2023 13:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=orypT0PcLMcwunRr7HJCTZt2dNcjGKOQN6brONjfzCg=; b=PH/POPXe6NnDn2Nge+dfFAM9Li
+        s0rRpQu09mpPbgWcpJWSDm5X6DIvk/uiqcb3ZWQwSbN6WP5huFBN72CGNChs3s8TfyrXxNMmKFAXd
+        i03CK/J79nfBdk+Wy8tJ807VEoFE5fI0V5QdsLM29AIEWnoc8eDr+ZRyWFURbHyTHwHI63jZbhP+i
+        bO2um614jE5ddwZiED7Wp0wqqK5GodGjt9F1DhnFw9qINeSieP7/I80HQbNlkIILSnJHM6EfU1OmE
+        B7JLvfJEXNBhxKuL08z26kG24DdqnSAY7PVJMGL1nEAjRtLGZzqjRcHRDzCLHPPYCRxqtDHuvRtdE
+        VRexneBg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJKP9-00FsQb-2Z;
+        Tue, 11 Jul 2023 20:56:15 +0000
+Message-ID: <38d8820d-4ca0-0bf1-b707-94b850b08241@infradead.org>
+Date:   Tue, 11 Jul 2023 13:56:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69dd51b9-aab1-a9ec-91c2-b1dc79797f10@siemens.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 06/10] docs: ABI:
+ sysfs-bus-event_source-devices-hv_gpci: Document
+ affinity_domain_via_virtual_processor sysfs interface file
+Content-Language: en-US
+To:     Kajol Jain <kjain@linux.ibm.com>, mpe@ellerman.id.au
+Cc:     linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, disgoel@linux.ibm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230710092717.55317-1-kjain@linux.ibm.com>
+ <20230710092717.55317-7-kjain@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230710092717.55317-7-kjain@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 09:27:14+0200, Jan Kiszka wrote:
-> >>> Nope, that could be easily avoided in software. The actual problem is
-> >>> that the VL bit is not settable (clear-on-write). And that means we
-> >>> can't do anything about losing the low battery information across
-> >>> reboots - but that's no difference to the situation with the existing
-> >>> driver.
-> >>>
-> >>> There is no "fix" for userspace as there is no standard framework to
-> >>> read-out the status early and retrieve it from there when the user asks
-> >>> for it. That's best done in the kernel.
-> >>
-> >> That's not true, nothing prevents userspace from reading the battery
-> >> status before setting the time and destroying the information which is
-> >> exactly what you should be doing.
-> > 
-> > What is your "userspace"? Mine is stock Debian with systemd and
-> > timesyncd enabled. But there is no framework to read the status early
-> > enough and propagate that after timesyncd did its job. Any concrete
-> > suggestion to "fix" userspace?
-> > 
+Hi--
+
+On 7/10/23 02:27, Kajol Jain wrote:
+> Add details of the new hv-gpci interface file called
+> "affinity_domain_via_virtual_processor" in the ABI documentation.
 > 
-> Ping - I still have seen no suggestion to improve this situation otherwise.
+> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> ---
+>  .../sysfs-bus-event_source-devices-hv_gpci    | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
 > 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
+> index aff52dc3b05c..3b63d66658fe 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
+> +++ b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
+> @@ -144,3 +144,35 @@ Description:	admin read only
+>  			   more information.
+>  
+>  		* "-EFBIG" : System information exceeds PAGE_SIZE.
+> +
+> +What:		/sys/devices/hv_gpci/interface/affinity_domain_via_virtual_processor
+> +Date:		July 2023
+> +Contact:	Linux on PowerPC Developer List <linuxppc-dev@lists.ozlabs.org>
+> +Description:	admin read only
+> +		This sysfs file exposes the system topology information by making HCALL
+> +		H_GET_PERF_COUNTER_INFO. The HCALL is made with counter request value
+> +		AFFINITY_DOMAIN_INFORMATION_BY_VIRTUAL_PROCESSOR(0xA0).
+> +
+> +		* This sysfs file will be created only for power10 and above platforms.
+> +
+> +		* User needs root privileges to read data from this sysfs file.
+> +
+> +		* This sysfs file will be created, only when the HCALL returns "H_SUCESS",
 
-You can get systemd or any daemon to read the rtc flag before systemd
-decides to use NTP and set the time, destroying the information.
+		                                                                H_SUCCESS
 
-This is a systemd issue, not a kernel issue. I already have to handle
-two other issues caused by systemd because they don't want to budge, I
-will not take a third one.
+> +		  "H_AUTHORITY" and "H_PARAMETER" as the return type.
 
+		            s/and/or/
+
+> +
+> +		  HCALL with return error type "H_AUTHORITY", can be resolved during
+
+		Drop the comma:                             ^
+
+> +		  runtime by setting "Enable Performance Information Collection" option.
+> +
+> +		* The end user reading this sysfs file must decode the content as per
+> +		  underlying platform/firmware.
+> +
+> +		Possible error codes while reading this sysfs file:
+> +
+> +		* "-EPERM" : Partition is not permitted to retrieve performance information,
+> +			    required to set "Enable Performance Information Collection" option.
+> +
+> +		* "-EIO" : Can't retrieve system information because of invalid buffer length/invalid address
+> +			   or because of some hardware error. Refer getPerfCountInfo documentation for
+
+			                                      Refer to
+
+> +			   more information.
+> +
+> +		* "-EFBIG" : System information exceeds PAGE_SIZE.
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+~Randy
