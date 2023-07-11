@@ -2,148 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C1B74F241
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF6874F24C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbjGKO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S232556AbjGKOdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbjGKO20 (ORCPT
+        with ESMTP id S230313AbjGKOdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:28:26 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334B51BC0;
-        Tue, 11 Jul 2023 07:27:58 -0700 (PDT)
+        Tue, 11 Jul 2023 10:33:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D88EBC;
+        Tue, 11 Jul 2023 07:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689085678; x=1720621678;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Hd7KPTyRP0JRvFe990SYWoGyr6006I4GxCYcQVy1VCM=;
-  b=cUg4trA+t3NH/Vpxr1ucFyIePfFQzhzGQ8YdMlE4ZJ51QBXvU2LvrGGC
-   tREYZlZkCts73Gte83Ry6Z0Ip5I/kzMqGwkhvDkZ2JHnzVgMhR4UK3WRu
-   FjCFsCFSgHTUKzsRwmBQLc5dYx+JWRWt7EoXid73lC+9I/TEYom/dUHAM
-   K+o9m0rdjbFhDTkqQyBnHZXu6Jlt1cqLcUGPrdKtOkZanOFOZ6LkKsY9K
-   UXNuxliUy/DRUil0hp9Tr3LnbtF6k8WTBFeZ1lckhusQUYWh5fCbl8loD
-   NdEbxxXymT871Px0Hwp8mtXrkTn8hdWrip2+tFVSd5EZlhDhiRq9gwKWT
+  t=1689086023; x=1720622023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XYaVMQ3P2Xw+yr548W+rzf2xAqljuiRQQedbp9M8+Ao=;
+  b=KXwDwHKLP27yuoPmvmVV12rMD9w+8KTh+CVducRjShtdIin4KQDM7L0p
+   KxhOeKdVvEaUC2qxXauFPsitb9IZ6p0CfOKBlIRlvV76CNALnv6KN2OrV
+   JA6lCNx0+1JnsXHWPYmP6oSKNlQg+voKJIDUkjYE05wV2Nds0ZUI4kson
+   nVpIq61nNE4LZl3rcZrLuRf8jgmWckZfgrqbHEaHKGZS5xuPMyPh/+Trc
+   URGfn1uHdGRuNyxPYENnkOyZ9caokReaEPDwMjHj8VizQeM8srIaHjvTi
+   tBL9XI2FIx2tBl7MqXv2LwrtmWBiHBHlnZ8XlhRsRKRvpC2Dmdk3RgDDt
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367212620"
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="368135306"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="367212620"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:27:32 -0700
+   d="scan'208";a="368135306"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:33:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="750774534"
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="721103911"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="750774534"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:27:31 -0700
-Date:   Tue, 11 Jul 2023 07:32:28 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        dmaengine@vger.kernel.org, vkoul@kernel.org,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>, rex.zhang@intel.com,
-        xiaochen.shen@intel.com, narayan.ranganathan@intel.com,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v8 2/7] iommu: Move global PASID allocation from SVA to
- core
-Message-ID: <20230711073228.7c4977f8@jacob-builder>
-In-Reply-To: <08830c11-5528-0c42-0bc3-89c3796611fe@linux.intel.com>
-References: <20230602182212.150825-1-jacob.jun.pan@linux.intel.com>
-        <20230602182212.150825-3-jacob.jun.pan@linux.intel.com>
-        <08830c11-5528-0c42-0bc3-89c3796611fe@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+   d="scan'208";a="721103911"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 11 Jul 2023 07:33:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qJEQT-001sG8-2y;
+        Tue, 11 Jul 2023 17:33:13 +0300
+Date:   Tue, 11 Jul 2023 17:33:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 13/13] ASoC: Intel: sst: Convert to PCI device IDs defines
+Message-ID: <ZK1oKYW0rro4FnNO@smile.fi.intel.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-14-amadeuszx.slawinski@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230711125726.3509391-14-amadeuszx.slawinski@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
+On Tue, Jul 11, 2023 at 02:57:26PM +0200, Amadeusz Sławiński wrote:
+> Use PCI device IDs from pci_ids.h header.
 
-On Sat, 10 Jun 2023 20:13:03 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
+...
 
-> On 6/3/23 2:22 AM, Jacob Pan wrote:
-> > +ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
-> > +{
-> > +	int ret;
-> > +	ioasid_t max;
-> > +
-> > +	max = dev->iommu->max_pasids;
-> > +	/*
-> > +	 * max_pasids is set up by vendor driver based on number of
-> > PASID bits
-> > +	 * supported but the IDA allocation is inclusive.
-> > +	 */
-> > +	ret = ida_alloc_range(&iommu_global_pasid_ida,
-> > IOMMU_FIRST_GLOBAL_PASID, max - 1, GFP_KERNEL);
-> > +	if (ret < 0)
-> > +		return IOMMU_PASID_INVALID;
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid_dev);  
-> 
-> "dev->iommu->max_pasids == 0" indicates no pasid support on the device.
-> The code should return IOMMU_PASID_INVALID explicitly. Perhaps we can
-> make this function like this:
-> 
-> ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
-> {
->          int ret;
-> 
->          if (!dev->iommu->max_pasids)
->                  return IOMMU_PASID_INVALID;
-> 
->          /*
->           * max_pasids is set up by vendor driver based on number of 
-> PASID bits
->           * supported but the IDA allocation is inclusive.
->           */
->          ret = ida_alloc_range(&iommu_global_pasid_ida, 
-> IOMMU_FIRST_GLOBAL_PASID,
->                                dev->iommu->max_pasids - 1, GFP_KERNEL);
-> 
->          return ret < 0 ? IOMMU_PASID_INVALID : ret;
-> }
-> EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid_dev);
-> 
-good catch, sorry i missed this. let me send an updated version.
+>  	switch (sst->dev_id) {
+> -	case SST_MRFLD_PCI_ID:
+> +	case PCI_DEVICE_ID_INTEL_ADSP_TNG:
+>  	case SST_BYT_ACPI_ID:
+>  	case SST_CHV_ACPI_ID:
 
-> Other change in this series looks good to me.
-> 
-> I hope I can queue this series including above change as part of my VT-d
-> update for v6.5 to Joerg if no objection.
-> 
-> Let's try to re-enable this key feature of Intel idxd driver in v6.5.
-> 
-> Best regards,
-> baolu
+I think this needs a bit more, i.e. replacing the rest with respective PCI IDs.
+
+All three will be defined with SST prefix, which makes sense to me.
+
+ACPI here is a bit misleading, but correct. The ACPI specification assumes that
+respective part of the ID space covers 100% of PCI ID space.
+
+I have briefly checked the code and it seems that ID is used externally only
+for PCI case, so we may simply use the lower 16 bits of the ACPI _HID for the
+context.
+
+diff --git a/sound/soc/intel/atom/sst/sst.c b/sound/soc/intel/atom/sst/sst.c
+index a0d29510d2bc..b1f59604d825 100644
+--- a/sound/soc/intel/atom/sst/sst.c
++++ b/sound/soc/intel/atom/sst/sst.c
+@@ -222,7 +222,7 @@ static void sst_init_locks(struct intel_sst_drv *ctx)
+ }
+ 
+ int sst_alloc_drv_context(struct intel_sst_drv **ctx,
+-		struct device *dev, unsigned int dev_id)
++		struct device *dev, unsigned short dev_id)
+ {
+ 	*ctx = devm_kzalloc(dev, sizeof(struct intel_sst_drv), GFP_KERNEL);
+ 	if (!(*ctx))
+diff --git a/sound/soc/intel/atom/sst/sst.h b/sound/soc/intel/atom/sst/sst.h
+index 4d37d39fd8f4..c04f033e1d5f 100644
+--- a/sound/soc/intel/atom/sst/sst.h
++++ b/sound/soc/intel/atom/sst/sst.h
+@@ -358,7 +358,7 @@ struct sst_fw_save {
+ struct intel_sst_drv {
+ 	int			sst_state;
+ 	int			irq_num;
+-	unsigned int		dev_id;
++	unsigned short		dev_id;
+ 	void __iomem		*ddr;
+ 	void __iomem		*shim;
+ 	void __iomem		*mailbox;
+@@ -523,7 +523,7 @@ int sst_register(struct device *);
+ int sst_unregister(struct device *);
+ 
+ int sst_alloc_drv_context(struct intel_sst_drv **ctx,
+-		struct device *dev, unsigned int dev_id);
++		struct device *dev, unsigned short dev_id);
+ int sst_context_init(struct intel_sst_drv *ctx);
+ void sst_context_cleanup(struct intel_sst_drv *ctx);
+ void sst_configure_runtime_pm(struct intel_sst_drv *ctx);
+
+...
+
+>  /* driver names */
+>  #define SST_DRV_NAME "intel_sst_driver"
+
+> -#define SST_MRFLD_PCI_ID 0x119A
+>  #define SST_BYT_ACPI_ID	0x80860F28
+>  #define SST_CHV_ACPI_ID	0x808622A8
+
+And kill all three!
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Thanks,
-
-Jacob
