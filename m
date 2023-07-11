@@ -2,179 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FAF74E88A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8A274E893
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjGKH7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S231455AbjGKIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjGKH7l (ORCPT
+        with ESMTP id S230017AbjGKIAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:59:41 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A090CAF;
-        Tue, 11 Jul 2023 00:59:37 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6pTJL025624;
-        Tue, 11 Jul 2023 07:59:17 GMT
+        Tue, 11 Jul 2023 04:00:32 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6E3AF;
+        Tue, 11 Jul 2023 01:00:31 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6TqpC000364;
+        Tue, 11 Jul 2023 08:00:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id; s=qcppdkim1;
- bh=8Aw0Oyz2bMNGD9OgN2Nx4X90OOnin3v3pJwSa1hCECw=;
- b=a3kYwRFrbZK3C1Am9DMHot5sh/zruMaUlxmPpHBe5XKf3n0zH0Dah3dlVZVtwb1ezIpb
- +nZraqPZ6GRQBwGTHveXfihJZvAdpeyhYS4FyUEX9Fs/EVsI1QwcqLU5rS2aP7AaZFkc
- w4RJF2YzYi1QNZPA1C6ZmIgZrDm9vjsx8nEIXr4XqXC0JdnOjQ3K9yLsZk7Ct9tiOToT
- fR7QoxKKyO11ZdToq1dn3JuAp+3nfQcJ5jNtF4kE2NIeDLoyO4cTXDn1E/RQDBiodVPI
- jzWzGsT0vStf6wMHiUTWM2nH4dYDuK2kA+kTWVVF0hSGcsJnEu60iXu+sn7t9b5d+tmc aA== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0kpg92r-1
+ bh=6ZMtSrvijaC8ncQkhniQv7HOU7McCC2SYfET5rXnIGM=;
+ b=pzB9zWf3HGLIC/pieUvcoeHN65knT+8dwpB+Y2cx2yC/CHrPAZdBJKnmaFCFM2bhCKMH
+ gqhuKl/RDP4/p6Bvj/gncdyt996QobKFaTfu7bFSrOilwaJaXi2PNYlEX9wj13Ylrmnf
+ RTEb8NTUl2MuBClm7+9fVK+0BKGqiZC90n7khxxiXKWDINmfdwL4e33R39g5s6lA+W7r
+ M+k5V9Jt/YEjV7SGw0wZVWqKgeQqrQCDWAbatpoK8rp2engkk1UwR5VBDMmWlKbywoRo
+ AY8mG3jIR62OWyJ7JXLFQqfjbcEJkyfJ6OvioaoSJ1c4uVef9fabx+i99l55PFcfSHmu VA== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0vqr8g7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 07:59:16 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36B7xD5N014626;
-        Tue, 11 Jul 2023 07:59:13 GMT
+        Tue, 11 Jul 2023 08:00:26 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36B80Ncn006354;
+        Tue, 11 Jul 2023 08:00:23 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rq0vknt8x-1
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rq0vm2xkn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 11 Jul 2023 07:59:13 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36B7xD2H014621;
-        Tue, 11 Jul 2023 07:59:13 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 36B7xCDg014620;
-        Tue, 11 Jul 2023 07:59:13 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-        id 09FD84A95; Tue, 11 Jul 2023 15:59:12 +0800 (CST)
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        junwoo80.lee@samsung.com, martin.petersen@oracle.com,
-        quic_ziqichen@quicinc.com, quic_nitirawa@quicinc.com
-Cc:     linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-arm-msm@vger.kernel.org (open list:UNIVERSAL FLASH STORAGE HOST
-        CONTROLLER DRIVER...), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1] scsi: ufs: qcom: Get queue ID from MSI index in ESI handler
-Date:   Tue, 11 Jul 2023 15:59:08 +0800
-Message-Id: <1689062349-77385-1-git-send-email-quic_ziqichen@quicinc.com>
+        Tue, 11 Jul 2023 08:00:22 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36B80MvN006338;
+        Tue, 11 Jul 2023 08:00:22 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 36B80MpU006334;
+        Tue, 11 Jul 2023 08:00:22 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 811095033; Tue, 11 Jul 2023 13:30:21 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v3 0/3] Add regulators support for PMX75
+Date:   Tue, 11 Jul 2023 13:30:11 +0530
+Message-Id: <1689062414-3654-1-git-send-email-quic_rohiagar@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Kexr2B-IjMc2Y8jzM2WvGhlNgFfjgP2o
-X-Proofpoint-ORIG-GUID: Kexr2B-IjMc2Y8jzM2WvGhlNgFfjgP2o
+X-Proofpoint-GUID: oeK1vbbqdyE7FaBpKjXnHbsYDroCkG1M
+X-Proofpoint-ORIG-GUID: oeK1vbbqdyE7FaBpKjXnHbsYDroCkG1M
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- suspectscore=0 clxscore=1011 malwarescore=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110069
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=836 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110070
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_msi_domain_alloc_irqs() does not always get consecutive
-IRQ numbers, hence queue IDs calculated out from IRQ numbers may
-be incorrect if we assume IRQ numbers are consecutive. Fix it by
-passing msi_desc to ESI handler to use msi_desc->msi_index as
-queue ID.
+Hi,
 
-Signed-off-by: Can Guo <quic_cang@quicinc.com>
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 25 ++++++++++---------------
- drivers/ufs/host/ufs-qcom.h |  1 -
- 2 files changed, 10 insertions(+), 16 deletions(-)
+Changes in v3:
+ - Created a separate patch for updating the entry in pmx65 bindings.
+ - Changed the subject of patches [1/3] and [2/3] according to the convention.
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 8d6fd4c..f36bcdb 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1643,11 +1643,13 @@ static void ufs_qcom_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
- 	ufshcd_mcq_config_esi(hba, msg);
- }
- 
--static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *__hba)
-+static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *data)
- {
--	struct ufs_hba *hba = __hba;
-+	struct msi_desc *desc = data;
-+	struct device *dev = msi_desc_to_dev(desc);
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
--	u32 id = irq - host->esi_base;
-+	u32 id = desc->msi_index;
- 	struct ufs_hw_queue *hwq = &hba->uhq[id];
- 
- 	ufshcd_mcq_write_cqis(hba, 0x1, id);
-@@ -1665,8 +1667,6 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
- 
- 	if (host->esi_enabled)
- 		return 0;
--	else if (host->esi_base < 0)
--		return -EINVAL;
- 
- 	/*
- 	 * 1. We only handle CQs as of now.
-@@ -1675,16 +1675,15 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
- 	nr_irqs = hba->nr_hw_queues - hba->nr_queues[HCTX_TYPE_POLL];
- 	ret = platform_msi_domain_alloc_irqs(hba->dev, nr_irqs,
- 					     ufs_qcom_write_msi_msg);
--	if (ret)
-+	if (ret) {
-+		dev_err(hba->dev, "Failed to request Platform MSI %d\n", ret);
- 		goto out;
-+	}
- 
- 	msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
--		if (!desc->msi_index)
--			host->esi_base = desc->irq;
--
- 		ret = devm_request_irq(hba->dev, desc->irq,
- 				       ufs_qcom_mcq_esi_handler,
--				       IRQF_SHARED, "qcom-mcq-esi", hba);
-+				       IRQF_SHARED, "qcom-mcq-esi", desc);
- 		if (ret) {
- 			dev_err(hba->dev, "%s: Fail to request IRQ for %d, err = %d\n",
- 				__func__, desc->irq, ret);
-@@ -1712,12 +1711,8 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
- 	}
- 
- out:
--	if (ret) {
--		host->esi_base = -1;
--		dev_warn(hba->dev, "Failed to request Platform MSI %d\n", ret);
--	} else {
-+	if (!ret)
- 		host->esi_enabled = true;
--	}
- 
- 	return ret;
- }
-diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-index 6289ad5..7292403 100644
---- a/drivers/ufs/host/ufs-qcom.h
-+++ b/drivers/ufs/host/ufs-qcom.h
-@@ -226,7 +226,6 @@ struct ufs_qcom_host {
- 
- 	u32 hs_gear;
- 
--	int esi_base;
- 	bool esi_enabled;
- };
- 
+Changes in v2:
+ - Addressed Krzysztof to update the if:then: in bindings patch.
+ - Breaking the original series [1] into smaller series.
+
+This series adds regulators supports in PMX75 found on
+SDX75 platform.
+
+[1] https://lore.kernel.org/all/1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com/
+
+Thanks,
+Rohit.
+
+Rohit Agarwal (3):
+  regulator: dt-bindings: qcom,rpmh: Update PMX65 entry
+  regulator: dt-bindings: qcom,rpmh: Add PMX75 compatible
+  regulator: qcom-rpmh: Add regulators support for PMX75
+
+ .../bindings/regulator/qcom,rpmh-regulator.yaml    | 22 ++++++++++++-
+ drivers/regulator/qcom-rpmh-regulator.c            | 38 ++++++++++++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
+
 -- 
 2.7.4
 
