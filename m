@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D6674F868
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EA374F869
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjGKTcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 15:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S231488AbjGKTdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 15:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjGKTcs (ORCPT
+        with ESMTP id S230215AbjGKTdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:32:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42A410D2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:32:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 430BE614E4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 19:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5584AC433C8;
-        Tue, 11 Jul 2023 19:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1689103966;
-        bh=WbGGH319GGiAliOny1Q0FGLHKF8BtHi4+zSqoKNuvBQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a2ZSyKfkoLOLhvWO8FGdNVPfSyG27ErAEjli61nTXq9TEUiz31rUOWB0Bwa24zBlR
-         bWe9aFNV2pjACx1jIHzhbZyXmky5VZTfH1HqoKDdAhDacDOYXhwg2HKVzoEwh3vrQ4
-         niTbR3LtGB2DB9HZ5LfrLHt4N7Sh8KFYbEt0tX0c=
-Date:   Tue, 11 Jul 2023 12:32:45 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        willy@infradead.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, david@redhat.com
-Subject: Re: [PATCH v2 1/1] mm/filemap: remove hugetlb special casing in
- filemap.c
-Message-Id: <20230711123245.473400853fd1227459017650@linux-foundation.org>
-In-Reply-To: <20230710230450.110064-2-sidhartha.kumar@oracle.com>
-References: <20230710230450.110064-1-sidhartha.kumar@oracle.com>
-        <20230710230450.110064-2-sidhartha.kumar@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 11 Jul 2023 15:33:13 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0610D2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=1Cv6loIqwGzGXX1myECWKDvmI7cXXUoeUWYnDFsHsC0=; b=cBe1Y9vyYrSamoAfyxiK5PDX3H
+        w4K5LsEzm7iIkn/MQUbQ5L7eDGuJ5MeBuAtRS1ZBTwx064Jf+M1qYshtk6FEm+6EvkBK3NXVv+VhT
+        6w9i+hmQnvcUbltYzTxdSeGx7ArBWAWwU9eL2kltUB5rjNs+csrY+GiQCf8aroTGF46v9pt/+OkUf
+        jJglmqzIktYld4H2ZWs4/wHZwsyU8TGjAbBrTPCvOGAMOLDHtSfERY7PZwZm1TAgl0qJUg0plN8TN
+        GE8B1QJbREl1VJeqSQ3bue/WQvME8Uop0tI9CcWWTWNNJyA7g4sL9Wo4HWAaBzMY7f21eEsqMrCdg
+        QtyxD7rQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJJ6l-00FkZw-30;
+        Tue, 11 Jul 2023 19:33:11 +0000
+Message-ID: <5469d33c-8b23-79b0-3815-163908cffb40@infradead.org>
+Date:   Tue, 11 Jul 2023 12:33:11 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] lib:Fix more error checking for debugfs_create_dir()
+Content-Language: en-US
+To:     Wang Ming <machel@vivo.com>, linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com
+References: <20230711111727.2672-1-machel@vivo.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230711111727.2672-1-machel@vivo.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 16:04:50 -0700 Sidhartha Kumar <sidhartha.kumar@oracle.com> wrote:
+Hi--
 
-> Remove special cased hugetlb handling code within the page cache by
-> changing the granularity of each index to the base page size rather than
-> the huge page size. Adds new wrappers for hugetlb code to to interact with the
-> page cache which convert to a linear index.
+On 7/11/23 04:16, Wang Ming wrote:
+> In case of failure, debugfs_create_dir() does not return NULL,
+> but an error pointer.  Most incorrect error checks were fixed,
+> but the one in test_fpu_init() was forgotten.
+> 
+> Fix the remaining error check.
+> 
+> Signed-off-by: Wang Ming <machel@vivo.com>
 
-folio_more_pages() was just removed by "filemap: add
-filemap_map_folio_range()"
-(https://lkml.kernel.org/r/20230710204339.3554919-35-willy@infradead.org).
-It looks like simply dropping that hunk is OK, but please check.
-
-I'll be pushing this all out in a couple hours I expect.
-
-However the series which contains "filemap: add
-filemap_map_folio_range()" might be about to be dropped because of
-possible s390 breakage.
-
-Also, I don't think it's necessary to have a [0/N] intro for a single
-patch.  Maybe crunch all the (useful) info into the single patch's
-changelog?
+You need to send this to some maintainer who can merge it,
+so please an appropriate maintainer to send it to.
 
 Thanks.
+
+> ---
+>  lib/test_fpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/test_fpu.c b/lib/test_fpu.c
+> index e82db19fed84..5d6aa4691b4a 100644
+> --- a/lib/test_fpu.c
+> +++ b/lib/test_fpu.c
+> @@ -69,7 +69,7 @@ static struct dentry *selftest_dir;
+>  static int __init test_fpu_init(void)
+>  {
+>  	selftest_dir = debugfs_create_dir("selftest_helpers", NULL);
+> -	if (!selftest_dir)
+> +	if (IS_ERR(selftest_dir))
+>  		return -ENOMEM;
+>  
+>  	debugfs_create_file_unsafe("test_fpu", 0444, selftest_dir, NULL,
+
+-- 
+~Randy
