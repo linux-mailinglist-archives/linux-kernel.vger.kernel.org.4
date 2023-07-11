@@ -2,288 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C918374E80C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D151F74E810
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjGKHda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S229626AbjGKHeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjGKHd2 (ORCPT
+        with ESMTP id S229804AbjGKHen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:33:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D911A2;
-        Tue, 11 Jul 2023 00:33:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6926561355;
-        Tue, 11 Jul 2023 07:33:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA0CC433C7;
-        Tue, 11 Jul 2023 07:33:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689060805;
-        bh=ZzJs7jl+4dwk0J8YV8WPR3nY4dQUO+X9kJHL9hcrypY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nW+lKo1D0JAwMvWcioG5zh2rfp0gQA63RIw5wWEccsphe5Ch9cX5SW6FwhPj0OKWK
-         FrRp16HwdbkgEEty8Lc07pSpovC8WnY0N4RyNrWp+VNBCG4+GNrS2mNRX5sJKxb6wc
-         LlGIMoppWrGsUwPAabNjjQkmO03gR/6QnE36knA84uc/0DxB6JDtt6xBW7xZjFX4Z9
-         jTa7kMxoCsVJeL5+DGugVc5QmmwGquhVWgSn0jPYCwrpXUTelzp7U0cz54K/xCn3Qs
-         AaMMLfKLhvib/ntplxdsCC4CnL4ykk7v8nctQCbgx+ypufUyf25OtTaSg7VXy5NB9A
-         TbDsaGZItBFxA==
-Message-ID: <1504c4eb-9def-dd75-ceb0-bb6c32fb78f2@kernel.org>
-Date:   Tue, 11 Jul 2023 09:33:18 +0200
+        Tue, 11 Jul 2023 03:34:43 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA9B1A7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:34:34 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-99313a34b2dso622004066b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689060873; x=1691652873;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AVGsQe3FUvv+xqMI8vCQvvS1X9l7yvBVYvNRcfMvnjc=;
+        b=YoMU6R41iCVoQ6qW72RIftQJDCPOhxwNgyaEX5gI4GQIMoAYPBfxXeRz46h9k2Cv8U
+         LkcOG+wKEie73Dm/fAiI/WsvJRW9EI2puXkq676MtlZKucZ0t7NWHZzvnqZ3YgcQ16VZ
+         7Nt/eT7XKvo4PLODlyI1pEWM+zQHp9xu4+LlqKWgWZ4mieaREM5dFrlpedVnmiUaEG9f
+         DyRKIO+YznQ/DwxFvBqqzorE6ZW9p5VKiOQsi/3DVJvWw34+kvUQTSGaiFTsVq1Vhx6y
+         48df+zpXk+Cch2/S3SbocnH5cJkR9GdOcYxH7/JYpGKc/udntLkzlDgquSyOfi4Oghrk
+         Vz1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689060873; x=1691652873;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AVGsQe3FUvv+xqMI8vCQvvS1X9l7yvBVYvNRcfMvnjc=;
+        b=UzPzPctL7FoZqJSc8u8SUvH7Z5/KBdpa5RZqR0y+BNVd2BmWRt67JHc7GTqlGDgjbW
+         TCdA5Ohyhlxjc6D0QD/h1VIk3Qk18YyS+qt0wk7l0gaVhZsnlJuVDJ6ce9Txt2fuJbB8
+         X7glP7vut7M4IvcYS7G/qHVtrrhuXmCIdyqa3OdkqPOmXUMpVtaGWK5vJJmlQzbnGC1U
+         yq9+Fy2X7PZY4/7kKz1tQvBjY8uQ8RrDYjvPPF3lTdcluDQPm+ibQauHFdvpe5FbqbQQ
+         QmA5UpvpQH6AtofNtX+VZJiTdP+7Hj9zwHLASVJccxIUVbfPL3qQg4Vx41qqgA2aeW+B
+         rwxQ==
+X-Gm-Message-State: ABy/qLbALUDwrolHdeNCGTR1nr7d6CLDAoQ2MWgEPAGA3o4XCAp10Pza
+        8Ce/s7i/dkBN1cMnhA63k449rQ==
+X-Google-Smtp-Source: APBJJlEqf7DSKvBA7MMiWZC8+MdYyeLkgMHXXmaEaKpoeKhcuoF1fO5qhs6JE1aIC0sI1kQIpw7BZg==
+X-Received: by 2002:a17:906:51db:b0:993:f9b2:93c1 with SMTP id v27-20020a17090651db00b00993f9b293c1mr8448036ejk.9.1689060872827;
+        Tue, 11 Jul 2023 00:34:32 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id hb24-20020a170906b89800b00977c7566ccbsm753487ejb.164.2023.07.11.00.34.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 00:34:32 -0700 (PDT)
+Message-ID: <a6f44e59-1b4e-efe1-0ba8-575610ec4aae@linaro.org>
+Date:   Tue, 11 Jul 2023 09:34:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: add mcp4728 I2C DAC driver
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom,bwmon: Document
+ SC7180 BWMONs
 Content-Language: en-US
-To:     Andrea Collamati <andrea.collamati@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Georgi Djakov <djakov@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <87174c80-aa05-8db7-18e8-e22479d9c635@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <87174c80-aa05-8db7-18e8-e22479d9c635@gmail.com>
+References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
+ <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
+ <f937db2e-a5b2-8ad9-ce5f-ed1ee9f2dda4@linaro.org>
+ <5ce1c3b3-a55f-4ff8-f6db-dc66eebf9257@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5ce1c3b3-a55f-4ff8-f6db-dc66eebf9257@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your patch. There is something to discuss/improve.
-
-On 10/07/2023 22:43, Andrea Collamati wrote:
-> From 01b156ca1b27be83f4c74c288dbc0bcad178fe0b Mon Sep 17 00:00:00 2001
-> From: Andrea Collamati <andrea.collamati@gmail.com>
-> Date: Mon, 10 Jul 2023 16:20:40 +0200
-> Subject: [PATCH] iio: add mcp4728 I2C DAC driver
-
-1. That is not a proper patch header. I don't know how you got it, but
-it's wrong. Use just b4 or git format-patch and git send-email.
-
-2. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC (and consider --no-git-fallback argument). It
-might happen, that command when run on an older kernel, gives you
-outdated entries. Therefore please be sure you base your patches on
-recent Linux kernel.
-
-
+On 11/07/2023 09:23, Georgi Djakov wrote:
+> On 11.07.23 9:42, Krzysztof Kozlowski wrote:
+>> On 16/06/2023 01:46, Konrad Dybcio wrote:
+>>> SC7180 - just like SC7280 - has a BWMONv4 for CPU-LLCC and a BWMONv5
+>>> for DDR-LLCC paths. Document them.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>   Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
+>>
+>> Can we get this patch applied? DTS is already in next so without this
+>> patch there are 90 new warnings:
+>> https://krzk.eu/#/builders/90/builds/40/steps/25/logs/warnings__94_
+>>
 > 
-> Microchip MCP4728 is a 12-bit quad channel
-> digital-to-analog converter (DAC) with I2C interface.
-> 
-> This patch adds support for per-channel gain, power state and power down mode control.
+> Applied.
 
-3. Please do not use "This commit/patch", but imperative mood. See
-longer explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> Current state could be saved to on-chip EEPROM.
-> Internal voltage reference and external vdd ref are supported.
-> 
-> ---
->  .../bindings/iio/dac/microchip,mcp4728.yaml   |  42 ++
-
-4. Bindings are always separate patches.
-
-5. Please run scripts/checkpatch.pl and fix reported warnings. Some
-warnings can be ignored, but the code here looks like it needs a fix.
-Feel free to get in touch if the warning is not clear.
-
-
->  drivers/iio/dac/Kconfig                       |  12 +
->  drivers/iio/dac/Makefile                      |   1 +
->  drivers/iio/dac/mcp4728.c                     | 641 ++++++++++++++++++
->  4 files changed, 696 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/dac/microchip,mcp4728.yaml
->  create mode 100644 drivers/iio/dac/mcp4728.c
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/dac/microchip,mcp4728.yaml b/Documentation/devicetree/bindings/iio/dac/microchip,mcp4728.yaml
-> new file mode 100644
-> index 000000000000..68f4e359a921
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/dac/microchip,mcp4728.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/dac/microchip,mcp4728.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip mcp4728
-
-6. mcp or MCP? What is this? Proper title is missing...  also no
-description.
-
-> +
-> +maintainers:
-> +  - Andrea Collamati <andrea.collamati@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mcp4728      
-
-7. Blank line
-8. Whitespace errors
-
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vdd-supply:
-> +    description: |
-> +      Provides both power and acts as the reference supply on the mcp4728
-> +      when Internal Vref is not selected.      
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vdd-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        mcp4728_dac@64 {
-
-9. Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Also, underscores are not allowed in node names.
-
-Shouldn't this binding be just merged with existing mcp4725? Are you
-sure it's not similar device, IOW, are you sure you do not have vref supply?
-
-
-> +            compatible = "microchip,mcp4728";
-> +            reg = <0x60>;
-> +            vdd-supply = <&vdac_vdd>;
-> +        };
-> +    };
-
-...
-
-> +
-> +static int mcp4728_probe(struct i2c_client *client,
-> +             const struct i2c_device_id *id)
-> +{
-> +    struct mcp4728_data *data;
-> +    struct iio_dev *indio_dev;
-> +    int err;
-> +
-> +    indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
-> +    if (indio_dev == NULL)
-> +        return -ENOMEM;
-
-Missing blank line
-
-> +    data = iio_priv(indio_dev);
-> +    i2c_set_clientdata(client, indio_dev);
-> +    data->client = client;
-> +    if (dev_fwnode(&client->dev))
-> +        data->id = (uintptr_t)device_get_match_data(&client->dev);
-> +    else
-> +        data->id = id->driver_data;
-
-Dead code, drop.
-
-> +
-> +    data->vdd_reg = devm_regulator_get(&client->dev, "vdd");
-> +    if (IS_ERR(data->vdd_reg))
-> +        return PTR_ERR(data->vdd_reg);
-> +
-> +    err = regulator_enable(data->vdd_reg);
-> +    if (err)
-> +        goto err_disable_vdd_reg;
-> +
-> +    err = mcp4728_init_channels_data(data);
-> +    if (err) {
-> +        dev_err(&client->dev,
-> +            "failed to read mcp4728 current configuration\n");
-
-None of your statements look properly aligned. What's more everything
-has incorrect indentation.
-
-Run checkpatch --strict and fix ALL warnings and errors.
-
-> +        goto err_disable_vdd_reg;
-> +    }
-> +
-> +    indio_dev->name = id->name;
-> +    indio_dev->info = &mcp4728_info;
-> +    indio_dev->channels = mcp4728_channels;
-> +    indio_dev->num_channels = MCP4728_N_CHANNELS;
-> +    indio_dev->modes = INDIO_DIRECT_MODE;
-> +
-> +    err = iio_device_register(indio_dev);
-> +    if (err)
-> +        goto err_disable_vdd_reg;
-> +
-> +    return 0;
-> +
-> +err_disable_vdd_reg:
-> +    regulator_disable(data->vdd_reg);
-> +
-> +    return err;
-> +}
-> +
-> +static int mcp4728_remove(struct i2c_client *client)
-> +{
-> +    struct iio_dev *indio_dev = i2c_get_clientdata(client);
-> +    struct mcp4728_data *data = iio_priv(indio_dev);
-> +
-> +    iio_device_unregister(indio_dev);
-> +    regulator_disable(data->vdd_reg);
-> +    return 0;
-> +}
-> +
-> +static const struct i2c_device_id mcp4728_id[] = { { "mcp4728", MCP4728 }, {} };
-
-That's some odd formatting. Look at existing files:
-git grep i2c_device_id
-
-> +MODULE_DEVICE_TABLE(i2c, mcp4728_id);
-> +
-> +static const struct of_device_id mcp4728_of_match[] = {
-> +    { .compatible = "microchip,mcp4728", .data = (void *)MCP4728 },
-
-Drop unused MCP4728.
-
-> +    {}
-> +};
-> +MODULE_DEVICE_TABLE(of, mcp4728_of_match);
-> +
-> +static struct i2c_driver mcp4728_driver = {
-> +        .driver = {
-> +                .name = MCP4728_DRV_NAME,
-> +                .of_match_table = mcp4728_of_match,
-> +                .pm = pm_sleep_ptr(&mcp4728_pm_ops),
-> +        },
-> +        .probe = mcp4728_probe,
-> +        .remove = mcp4728_remove,
-> +        .id_table = mcp4728_id,
-> +};
-> +module_i2c_driver(mcp4728_driver);
-> +
-> +MODULE_AUTHOR("Andrea Collamati <andrea.collamati@gmail.com>");
-> +MODULE_DESCRIPTION("MCP4728 12-bit DAC");
-> +MODULE_LICENSE("GPL");
+Thank you!
 
 Best regards,
 Krzysztof
