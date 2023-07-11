@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6556B74F997
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFA074F9A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjGKVL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S230504AbjGKVU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjGKVL1 (ORCPT
+        with ESMTP id S229505AbjGKVU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:11:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E46133
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BZQBp1qDo2IW6ftJFZfiSBAckDEB2qosFIbNvmf9QzU=; b=w6Om+AAn3svGPuxzHcd7yzbMO2
-        9wR+1BoeKDrU9s9Ve90gOkkxX3V8s/G3SQwPNn+r3q90IKOFyCZjok4kkSHWjF0yMFl8KFJ1iRDJH
-        CAK76Exuq2cbWSfjkG2VVPGJ3SQbilaWh1scwV3JeAbdEKuHXmxbMu/2OMk4xAlRMn+j8wmVx6Qm1
-        6kfawQ2dTBzqT5X0emrDwBItOLNbex5IvVDdn+MpF76R1zRHqceQCdj6iOYBFsitc3gmgweffrk/X
-        9GVQknMD8Vfb9MFaOTk3UBEOppORSP8NRJmD+C7/qB/fmThirspRpgFoFBuGOwd68f9XN04P1Mjk6
-        AN6mZZrw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJKdj-00Ftm9-2r;
-        Tue, 11 Jul 2023 21:11:19 +0000
-Date:   Tue, 11 Jul 2023 14:11:19 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 0/5] variable-order, large folios for anonymous memory
-Message-ID: <ZK3FdyqlhIs5HRk8@bombadil.infradead.org>
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <78159ed0-a233-9afb-712f-2df1a4858b22@redhat.com>
- <4d4c45a2-0037-71de-b182-f516fee07e67@arm.com>
- <d9cb4563-c622-9660-287b-a2f35121aec7@redhat.com>
- <ZKgPIXSrxqymWrsv@casper.infradead.org>
+        Tue, 11 Jul 2023 17:20:26 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401C8133;
+        Tue, 11 Jul 2023 14:20:22 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.78.121) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 12 Jul
+ 2023 00:20:13 +0300
+Subject: Re: [PATCH net v3] net: ravb: Fix possible UAF bug in ravb_remove
+To:     Jakub Kicinski <kuba@kernel.org>, Lee Jones <lee@kernel.org>
+CC:     Zheng Wang <zyytlz.wz@163.com>, <davem@davemloft.net>,
+        <linyunsheng@huawei.com>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hackerzheng666@gmail.com>,
+        <1395428693sheep@gmail.com>, <alex000young@gmail.com>
+References: <20230311180630.4011201-1-zyytlz.wz@163.com>
+ <20230710114253.GA132195@google.com> <20230710091545.5df553fc@kernel.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <743cda21-58b7-35db-8c62-35e2b834645c@omp.ru>
+Date:   Wed, 12 Jul 2023 00:20:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKgPIXSrxqymWrsv@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230710091545.5df553fc@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.78.121]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/11/2023 20:35:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 178558 [Jul 11 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 521 521 0c3391dd6036774f2e1052158c81e48587b96e95
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_arrow_text}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.121 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.121 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;178.176.78.121:7.7.3,7.4.1,7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.78.121
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/11/2023 20:41:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/11/2023 2:37:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 02:12:01PM +0100, Matthew Wilcox wrote:
-> On Fri, Jul 07, 2023 at 01:40:53PM +0200, David Hildenbrand wrote:
+On 7/10/23 7:15 PM, Jakub Kicinski wrote:
+[...]
+
+>> For better or worse, it looks like this issue was assigned a CVE.
 > 
-> > Is swapping working as expected? zswap?
+> Ugh, what a joke. 
 > 
-> Suboptimally.  Swap will split folios in order to swap them.
+> Sergey, could you take a look at fixing this properly?
 
-Wouldn't that mean if high order folios are used a lot but swap is also
-used, until this is fixed you wouldn't get the expected reclaim gains
-for high order folios and we'd need compaction more then?
+   OK, started looking at it again...
+   I have no h/w anymore but I'm hoping to find a tester on #renesas-soc...
 
-> Somebody needs to fix that, but it should work.
-
-As we look at shmem stuff it was on the path so something we have
-considered doing. Ie, it's on our team's list of items to help with
-but currently on a backburner.
-
-  Luis
+MBR, Sergey
