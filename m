@@ -2,61 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E8F74EB9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417C074EBA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbjGKKTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S230260AbjGKKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjGKKS7 (ORCPT
+        with ESMTP id S229583AbjGKKWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:18:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835DCDB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vtPd+yN1U4IqTK91Y6Crv4zudJrwwIEUOH8XFLUTBIk=; b=hvSnWQcO6AvhXvooZhbMvXWvsD
-        nvp9B+MHb11v440DDTeYLHOU6tgz3037srEf9cWGxMnaFWPe9iyvnR31Effg9zOFfvg67JpHoTNP7
-        uLPgMxOwvbZYz7I4lEU4XTz+luagGQ12v5RAfAyCwtV63IwOgoGikK9mXfc6iPPmrTO9M7XnxLjeF
-        yX+7V7VnIxskknxlXCXy1khl0hD8VLsPyAzEYaV2aExTAIaj/cabdW/dYVcEw1w76bpTGLde5t4JS
-        tBYRP5PG94qiRTdOfuKEu8BitWE8Y/1ubwZvBm7t1CZh7gmxqd6qeiXQmWbt9WGXpv6mr+0UncX2H
-        1nL7eIhg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJAS1-00FcUY-SJ; Tue, 11 Jul 2023 10:18:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 71A1E3002B1;
-        Tue, 11 Jul 2023 12:18:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 587DB243429D0; Tue, 11 Jul 2023 12:18:32 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 12:18:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Vernet <void@manifault.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        gautham.shenoy@amd.com, kprateek.nayak@amd.com, aaron.lu@intel.com,
-        clm@meta.com, tj@kernel.org, roman.gushchin@linux.dev,
-        kernel-team@meta.com
-Subject: Re: [PATCH v2 5/7] sched: Implement shared runqueue in CFS
-Message-ID: <20230711101832.GF3062772@hirez.programming.kicks-ass.net>
-References: <20230710200342.358255-1-void@manifault.com>
- <20230710200342.358255-6-void@manifault.com>
+        Tue, 11 Jul 2023 06:22:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1973EDB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689070878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zxNChGIelKjoLuG8SrdI8P5hWqfFpZJORMAj7Wr1DkU=;
+        b=HwvPpfeWb7piwDg0zEqHwIDNijOf0CupwtjCYpPxFHfrVlDa3UaNou2iG8EtEAoq/en95B
+        S7EuF9MSj8/9jJR1b3Ur71IpC2civt0zQ6MshGa8otvwPFJ0bBLMVZBK5bTDfvnletQgoW
+        FRKqXRYKYa8QbVJjcmtq/UULrcKHL50=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-632-XGnvxWP4Nh6TKebtbCFyXQ-1; Tue, 11 Jul 2023 06:21:16 -0400
+X-MC-Unique: XGnvxWP4Nh6TKebtbCFyXQ-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-40234d83032so11494921cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:21:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689070876; x=1689675676;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zxNChGIelKjoLuG8SrdI8P5hWqfFpZJORMAj7Wr1DkU=;
+        b=K4d+PMzRcLSBQknxRWp6qYQFi94o9bU/d3XDxhnd2K4ar4yLLS6UXX2ytI2KwzuEjo
+         ntutTuKki7GEhkm2vPASjLkufZhowqXvleMIRtPbRmu4l6ZwSQejRMMwtuXmfiMoFN/A
+         0/NuUMauIEUDnRwtuZuAzB4z5mEngxDrNQhVqYyzFn6Yrugb+Aha0rtlIyiXQMJybbse
+         1O80VOvIL4qACHV0vCeAuK/Sg8RoGh2L0N3Gc+ZAktEeaoiwcXTV09gx38p0bgJD9x75
+         onGsLpKtE9RyCxHYQQkRnj/+49IQyondx1GafyV0jrZM4UNTaAQgwpsW/8V3BOXP0jah
+         p2sA==
+X-Gm-Message-State: ABy/qLYlVL/fvq8LKrIY4sFWL6IHsGx8xyoBqsfDldjPvqBt3IyFDQ5P
+        LleUclaLXbp3/UnwV+suNh/clp4S2ZX/8hu3PPdwnvaYkzIMBymYzvH/+G7hkP3jYjnGqpM/+q5
+        a49ww4p4nGt1Lb7vJ1Ci7ECYP
+X-Received: by 2002:a05:622a:1007:b0:3fd:eb2f:8627 with SMTP id d7-20020a05622a100700b003fdeb2f8627mr16474671qte.6.1689070876146;
+        Tue, 11 Jul 2023 03:21:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlE3KtM/WsWfyD0RTFaAra9Jvq2qFoYXTelie53paqoYE7qWLud5Wx2SOGqm6fMhIg5bzlRT5Q==
+X-Received: by 2002:a05:622a:1007:b0:3fd:eb2f:8627 with SMTP id d7-20020a05622a100700b003fdeb2f8627mr16474659qte.6.1689070875925;
+        Tue, 11 Jul 2023 03:21:15 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-235-188.dyn.eolo.it. [146.241.235.188])
+        by smtp.gmail.com with ESMTPSA id d4-20020ac851c4000000b00403ad6ec2e8sm954982qtn.26.2023.07.11.03.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 03:21:15 -0700 (PDT)
+Message-ID: <2a2d55f167a06782eb9dfa6988ec96c2eedb7fba.camel@redhat.com>
+Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
+ in netlink_update_socket_mc()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Leon Romanovsky <leon@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+Date:   Tue, 11 Jul 2023 12:21:12 +0200
+In-Reply-To: <20230711063348.GB41919@unreal>
+References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
+         <20230711063348.GB41919@unreal>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230710200342.358255-6-void@manifault.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,69 +85,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 03:03:40PM -0500, David Vernet wrote:
+On Tue, 2023-07-11 at 09:33 +0300, Leon Romanovsky wrote:
+> On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
+> > The bit operations take boolean parameter and return also boolean
+> > (in test_bit()-like cases). Don't threat booleans as integers when
+> > it's not needed.
+> >=20
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >  net/netlink/af_netlink.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> > index 383631873748..d81e7a43944c 100644
+> > --- a/net/netlink/af_netlink.c
+> > +++ b/net/netlink/af_netlink.c
+> > @@ -1623,9 +1623,10 @@ EXPORT_SYMBOL(netlink_set_err);
+> >  /* must be called with netlink table grabbed */
+> >  static void netlink_update_socket_mc(struct netlink_sock *nlk,
+> >  				     unsigned int group,
+> > -				     int is_new)
+> > +				     bool new)
+> >  {
+> > -	int old, new =3D !!is_new, subscriptions;
+> > +	int subscriptions;
+> > +	bool old;
+> > =20
+> >  	old =3D test_bit(group - 1, nlk->groups);
+> >  	subscriptions =3D nlk->subscriptions - old + new;
+>=20
+> So what is the outcome of "int - bool + bool" in the line above?
 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 1451f5aa82ac..3ad437d4ea3d 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
+FTR, I agree with Leon, the old code is more readable to me/I don't see
+a practical gain with this change.
 
-> @@ -9842,6 +9843,7 @@ void __init sched_init_smp(void)
->  
->  	init_sched_rt_class();
->  	init_sched_dl_class();
-> +	init_sched_fair_class_late();
->  
->  	sched_smp_initialized = true;
->  }
+Cheers,
 
-> @@ -12854,3 +12999,34 @@ __init void init_sched_fair_class(void)
->  #endif /* SMP */
->  
->  }
-> +
-> +__init void init_sched_fair_class_late(void)
-> +{
-> +#ifdef CONFIG_SMP
-> +	int i;
-> +	struct shared_runq *shared_runq;
-> +	struct rq *rq;
-> +	struct rq *llc_rq;
-> +
-> +	for_each_possible_cpu(i) {
-> +		if (per_cpu(sd_llc_id, i) == i) {
-> +			llc_rq = cpu_rq(i);
-> +
-> +			shared_runq = kzalloc_node(sizeof(struct shared_runq),
-> +					       GFP_KERNEL, cpu_to_node(i));
-> +			INIT_LIST_HEAD(&shared_runq->list);
-> +			spin_lock_init(&shared_runq->lock);
-> +			llc_rq->cfs.shared_runq = shared_runq;
-> +		}
-> +	}
-> +
-> +	for_each_possible_cpu(i) {
-> +		rq = cpu_rq(i);
-> +		llc_rq = cpu_rq(per_cpu(sd_llc_id, i));
-> +
-> +		if (rq == llc_rq)
-> +			continue;
-> +		rq->cfs.shared_runq = llc_rq->cfs.shared_runq;
-> +	}
-> +#endif /* SMP */
-> +}
+Paolo
 
-I don't think this is right; the llc_id thing depends on the online
-mask, not on possible mask. So if you boot with a number of CPUs offline
-and late bring them online, you're screwy (IIRC this is actually a very
-common thing in virt land).
-
-Additionally, llc_id depends on the sched_domain tree, if someone were
-to go create partitions, they can split an LLC and llc_id would split
-right along with it.
-
-I think you need to move this into sched/topology.c and handle hotplug /
-domain (re) creation.
-
-And yes, that's going to be a pain, because you might need to re-hash
-existing lists.
