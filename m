@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A81F74E633
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B1774E635
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGKFFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S230306AbjGKFGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 01:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjGKFEv (ORCPT
+        with ESMTP id S229583AbjGKFG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:04:51 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CD7FB;
-        Mon, 10 Jul 2023 22:04:50 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 05D8C6732D; Tue, 11 Jul 2023 07:04:46 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 07:04:45 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230711050445.GA19323@lst.de>
-References: <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com> <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org> <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com> <ZKNA9Pkg2vMJjHds@ziepe.ca> <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com> <ZKxDZfVAbVHgNgIM@ziepe.ca> <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com> <ZKyZBbKEpmkFkpWV@ziepe.ca> <20230711042708.GA18658@lst.de> <20230710215906.49514550@kernel.org>
+        Tue, 11 Jul 2023 01:06:28 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F1CFB;
+        Mon, 10 Jul 2023 22:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J9GM/ilzKp71HIAckRdNrtLwkcej9mux7tDYpRNE8jA=; b=OLuLrIvoJpoh+zQtPow9i0DJFd
+        FiuDwRevDBZdslkiTu5Mif0ylqDaxIu/g30Uk3RK5u3mBkNuvPCvszgbjt+CCtivUzZyMN5Ek7JpD
+        j6yAk9FJIEL7eqRj2SJ3xlZNvzPd2Blkh0PnQaj0D3Mn+e+EHaQuqwPjy/htojd4OBlp4rLj6QQzD
+        Aozk1XNqmFM0BNGExCIBTDacCFN1JYB4NFKkVfiBjYcvM2JlXy5FoMd9vbwosBlUU6S1JHr1rYELd
+        kML68F29Kx3SlTgBTfWkSbiqHZW7TiXwTgf/b77EkEoJT80OPAF9iJs6Z/dBzDpe//uey4/uKvtYm
+        caB/Fy2g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJ5Zv-00DiFr-00;
+        Tue, 11 Jul 2023 05:06:23 +0000
+Date:   Mon, 10 Jul 2023 22:06:22 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Lu Hongfei <luhongfei@vivo.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH] io_uring: Redefined the meaning of io_alloc_async_data's
+ return value
+Message-ID: <ZKzjTg1xaoikN9Hh@infradead.org>
+References: <20230710090957.10463-1-luhongfei@vivo.com>
+ <87o7kjr9d9.fsf@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230710215906.49514550@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <87o7kjr9d9.fsf@suse.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,15 +55,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 09:59:06PM -0700, Jakub Kicinski wrote:
-> On Tue, 11 Jul 2023 06:27:08 +0200 Christoph Hellwig wrote:
-> > Not going to comment on the rest of this as it seems bat shit crazy
-> > hacks for out of tree junk.  Why is anyone even wasting time on this?
-> 
-> Noob question - how does RDMA integrate with the out of tree junk?
-> AFAIU it's possible to run the "in-tree" RDMA stack and get "GPU
-> direct".
+On Mon, Jul 10, 2023 at 12:58:58PM -0400, Gabriel Krisman Bertazi wrote:
+> practice to change the symbol, making the change hard to miss.  Or
+> make the function return int instead of bool, which preserves the
+> interface and is a common C idiom.  Or leave it as it is, which is quite
+> readable already..
 
-I don't care and it has absolutel no business being discussed here.
-
-FYI at leat iWarp is a totally open standard.
+Yeah, returning -ENOMEM and 0 would make a lot more sense here.  But I'd
+only change it if we have any good reason to touch the interface anyway.
