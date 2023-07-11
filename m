@@ -2,229 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F011F74F424
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A75974F425
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjGKPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
+        id S233110AbjGKP4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjGKPzQ (ORCPT
+        with ESMTP id S230133AbjGKP4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:55:16 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E739C;
-        Tue, 11 Jul 2023 08:55:15 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-993a37b79e2so741903166b.1;
-        Tue, 11 Jul 2023 08:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689090914; x=1691682914;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hYTjCAF9/fZ07M5FVCiddDapg0DDmm7Ez7WqU3Ctpmo=;
-        b=eJ6avkAjUrcl2AOaDC1x9fRuiXP5S8wsNgafxWsxUlzYwPAMTjpqCAaeuiXNpJ/PUL
-         WvwQzsfPU1rHuiwJh2ti/kCN86wU0wIv7HSYsE6pH1TsFGzJDbJDp0jnkElFj3Zj0yjk
-         DJWssVlFqkteXbC4qCUDeFMoPH9dmOw0K8yfUrZ/1NB9Xn/EUY7KObn+vtWfYVISZvUO
-         B+kelN/2KOjy08q7z+qLP39L/Tip+r9WaIHyKoaCZhZmDjmpNvfD1XWljYjsqYjaygQv
-         WovxVAp3EdOoCR2fhtqxnpfRDZzrKtZLjtxXOytPsTuHnho4GFKSVD3EyK7pL9KvUgXN
-         o2Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689090914; x=1691682914;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hYTjCAF9/fZ07M5FVCiddDapg0DDmm7Ez7WqU3Ctpmo=;
-        b=DYuM8k4AJVGRg3LH/betcHbsHX8VEB8qEg08cA/JB4+hda7vz7SR4LOYGZ1UC09T8P
-         OZpkvTSw11b4LzVtWbxw73asJFnCTR9Gw7nmPZ2JnHLFAZ16cWvXY1l+6FVFHpuSGzs3
-         2Ovikouyx6QwmTP8+5S1E+b/AfZOii7oSnetKCqxXswI1Av/0ttjFLqtO4BtxxyJZKgn
-         fIEF0hOP0jwem1QZGA38+zsxYC+GqpHNTFOsW7rIC2fD8/mX2BNILQg9/K9L9hkYHIdE
-         KJh65OAiFmBaMixWmuyBvGuQISYBY1bMsAPUVgeXpOwJ2MZ+jb0fPZ+Jw2rblwYBrBtU
-         7mEA==
-X-Gm-Message-State: ABy/qLbF+s2OqKj+dPOYyoUjO15vXE8/C4/vCNuTL0SGm+NaqtSsKDN8
-        8RRdF7pCNrdQZ8j72UgHTgg=
-X-Google-Smtp-Source: APBJJlHIAlXp42vE8l8nTJTI/lRc7djKnatf6O3T+cmSLBw80ZcEWxdvYalKp8tWUflpNS59k4+0vw==
-X-Received: by 2002:a17:907:2177:b0:982:be38:a5df with SMTP id rl23-20020a170907217700b00982be38a5dfmr16118443ejb.63.1689090913481;
-        Tue, 11 Jul 2023 08:55:13 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170906394b00b00982b204678fsm1285462eje.207.2023.07.11.08.55.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 08:55:13 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 17:55:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Stanimir Varbanov <stanimir.varbanov@suse.com>
-Cc:     Stanimir Varbanov <svarbanov@suse.de>, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Krishna Reddy <vdumpa@nvidia.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [RFC PATCH] iommu: arm-smmu-nvidia: Add default domain type
- implementation op
-Message-ID: <ZK17X4ueSI5rWKVL@orome>
-References: <20230710082252.9702-1-svarbanov@suse.de>
- <ZKvgG4-IzqiYPSUT@orome>
- <93026b47-3b72-8439-486e-e0cda21dd0fe@suse.com>
+        Tue, 11 Jul 2023 11:56:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDD5FB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:56:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE936155E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90631C433C8;
+        Tue, 11 Jul 2023 15:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689090965;
+        bh=uTQms5QcQbX0tLF17LHS1X7OvrScgSP+WGAXd4DsUzk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=npK6tqEiblSIG4ozlKCi0inY6AMgiZiBoMhmqT2uHa7DIwCX+twA6HzOMrVxD5gnn
+         6aYk0UeZRf+7kqvkhvR5TZwjk7fGZHTegEikFuMb3lw1RJjlIJR8X7zp5yBK5doMSd
+         CWPk4HarT1+qxC/ZRNntYxN7H8WuKCFMHWfwIlyK09blwKSMcQ6LvS6mhwMM5wicFc
+         8NGozJ4jbWlSJiFYjirt0w9KSLXIU222yx4J2H6TCb0bUl8Qykh8wH7xnfTe8hxTMF
+         pMhwA9z6B+ax/i3FsrydWvz6dajsui0bLQ3xYfM7eX1Y37HYDvAkp9GA79v+ij7qt+
+         w3dusmlP6aYLw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B89B040516; Tue, 11 Jul 2023 12:56:02 -0300 (-03)
+Date:   Tue, 11 Jul 2023 12:56:02 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH 1/1 fyi] tools include UAPI: Sync linux/mount.h copy with the
+ kernel sources
+Message-ID: <ZK17kifP/iYl+Hcc@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="g9eZH3dUKMN+lQZU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <93026b47-3b72-8439-486e-e0cda21dd0fe@suse.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
---g9eZH3dUKMN+lQZU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+- Arnaldo
 
-On Tue, Jul 11, 2023 at 01:58:34PM +0300, Stanimir Varbanov wrote:
-> Hi Thierry,
->=20
-> Thank you for the comments!
->=20
-> On 7/10/23 13:40, Thierry Reding wrote:
-> > On Mon, Jul 10, 2023 at 11:22:52AM +0300, Stanimir Varbanov wrote:
-> >> Add def_domain_type implementation op and override default IOMMU
-> >> domain Kconfig option (CONFIG_IOMMU_DEFAULT_PASSTHROUGH=3Dy), which
-> >> could be enabled on some distros. The current quirk has been done
-> >> for Tegra234 machine, because I found the issue on it. The issue
-> >> itself appears on USB host controller which cannot be initialized
-> >> without IOMMU translation. Something more, we proved that IOMMU
-> >> translation is needed for display and GPU drivers as well.
-> >>
-> >> I evaluated few possible options to solve that:
-> >>
-> >>  a) select default IOMMU domain from .def_domain_type op
-> >>  b) Unset CONFIG_IOMMU_DEFAULT_PASSTHROUGH=3Dn
-> >>  c) add iommu.passthrough=3D0 on the kernel cmdline
-> >>  d) firmware - ACPI / DT
-> >>
-> >> a) This option is implemented in the proposed patch.
-> >>
-> >> b) Since that the community has agreed that pass-through is preferred
-> >> as a default IOMMU domain option because this will avoid performance
-> >> impacts on some of the platforms [1]. On the other side we have exampl=
-es
-> >> where you cannot even install Linux distribution on a machine where the
-> >> storage media cannot be detected and the system just hangs.
-> >=20
-> > That's not how I read that thread. It sounds more to me like Will and
-> > Robin had ideas on how to improve the performance and were planning to
-> > address these issues. It doesn't exactly sound to me like there was
-> > concensus to make passthrough the default.
-> >=20
-> > Having said that, given that it's possible for distributions and users
-> > to set CONFIG_IOMMU_DEFAULT_PASSTHROUGH=3Dy, I think it would be useful=
- in
-> > general to have a way of enforcing IOMMU translations if it's needed by
-> > the hardware.
->=20
-> Exactly, the problem is that some platforms prefer passthrough to avoid
-> performance impacts but others cannot even boot the kernel (and thus
-> installation failure). Passing iommu.passthrough=3D0 should be an
-> administrator decision, balancing between security and performance.
->=20
-> On the other hand the aforementioned mail thread gave some performance
-> numbers which might be are outdated having the improvements made in smmu
-> driver in mind. Unfortunately, I cannot confirm that the performance has
-> been improved during that time.
->=20
-> >=20
-> > I'm not sure I fully understand the particular problems that you're
-> > seeing on Tegra234, though. I'm not aware of anything in the USB host
-> > controller driver (or hardware, for that matter) that would require the
-> > IOMMU to be enabled. The only peculiarity that I can think of is the
-> > firmware, which is typically loaded by an early bootloader and therefore
-> > might perhaps need the IOMMU to properly map this in the kernel.
-> > However, my understanding is that this firmware is loaded into special
-> > carveout regions which don't require remapping.
->=20
-> On Jetson Orin AGX (R35.2.1) I see these errors:
->=20
-> tegra-mc 2c00000.memory-controller: unknown: write @0x0000000000000080:
-> EMEM address decode error (EMEM decode error)
->=20
-> tegra-xusb 3610000.usb: Error while assigning device slot ID
-> tegra-xusb 3610000.usb: Max number of devices this xHCI host supports is =
-36.
-> usb usb2-port3: couldn't allocate usb_device
-> tegra-mc 2c00000.memory-controller: unknown: write @0x0000000000000090:
-> EMEM address decode error (EMEM decode error)
-> tegra-xusb 3610000.usb: Error while assigning device slot ID
-> tegra-xusb 3610000.usb: Max number of devices this xHCI host supports is =
-36.
-> usb usb1-port3: couldn't allocate usb_device
->=20
-> tegra-mc 2c00000.memory-controller: unknown: write @0x00000000000000a0:
-> EMEM address decode error (EMEM decode error)
-> tegra-xusb 3610000.usb: Error while assigning device slot ID
-> tegra-xusb 3610000.usb: Max number of devices this xHCI host supports is =
-36.
-> usb usb1-port4: couldn't allocate usb_device
->=20
-> >=20
-> > However, passthrough is admittedly not something that we've thoroughly
-> > tested, so it's possible you're running into a use-case that I'm not
-> > aware of. In that case, could you provide a few more specifics (such as
-> > the DTB and .config) of your build configuration so that I can try and
-> > reproduce?
->=20
-> To reproduce you have to add iommu.passthrough=3D1 on kernel cmdline. The
-> dtb is from Jetpack.
+Full explanation:
 
-I was able to reproduce this on Jetson Orin NX (the differences to AGX
-Orin should be negligible in this context), though I ended up patching
-the DTB to disable all SMMUs. What fixed it for me was to drop the
-dma-coherent property from the usb@3610000 node. Can you try that on
-your end to see if that works for you as well?
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
-Not that that's a proper solution, of course, but just trying to find
-out if there's perhaps something else going on.
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-=46rom the looks of it, it seems like these devices aren't actually DMA
-coherent inherently, but rather the SMMU translations make the accesses
-to memory coherent. I'm trying to find out the exact details, but if it
-turns out to be the case, then what we really want is a way for an IOMMU
-to mark any devices that get attached to it as DMA coherent. It's not
-sufficient to hard-code this in DT because there are various ways in
-which device can end up not attached to an IOMMU despite what the DT
-says.
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
-Jason, or anyone of the IOMMU folks, any thoughts on how this could be
-achieved? DT already has a way of walking up the "DMA hierarchy" looking
-for a DMA coherent parent, but again, making this rely entirely on DT
-seems insufficient.
+E.g.:
 
-Thierry
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
 
---g9eZH3dUKMN+lQZU
-Content-Type: application/pgp-signature; name="signature.asc"
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
------BEGIN PGP SIGNATURE-----
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSte18ACgkQ3SOs138+
-s6Hw0Q//SZoAAhfg3rxkjWZQD8oOKqqp9u8yvEQxnpl6wxRLJwS7j1tMxWV5WUim
-rRHhhOiAYKX3boI7H/wC1d0104dCNz5eRC07rRKWcV2HgDjmROcVEN+RhnqvQ+RQ
-uuq6GkTKS5P36s8CeRHhCDYZIrmWgtORbc1KQ8o2fjRlhassj4Bzc4m+ciIufcI7
-bFWJBmUvGeQgAA7OQwF7piK6GfTKJI2G4xO+HqeOW4OE7MRvQfShuifbwoE/S4rh
-fdGGXAEcBdQLZJ77ReR+f4XtZ3E2L8XmW0VdH+tJyu1+uJuzaOO3wmDE+m5uKp6y
-tBvsX2rNNQD5s+/7geIRZbrSPFy0ttMdxBiTkJPHfq9SIzNzh8jw5PojJcbKQpgn
-p4gLVMrDUJBPSaFRGGvjYcr7E8gXRS3B0yMZi552/RL1OYeCORedPsMrNTzIGoWE
-wgwIdPMGy6mJj+FsaIr10OeYdDDBHZLE4rIHMRA7lR7Ty0/fgQ6aOZwlw5WzEjh3
-Teyr3SD2KcxRTaunjLfglfVHuZ2sbpM4UyDbtgLzEFXXFWc866spp4bZ9DQg9UbZ
-ejmX+rom2XKXDgwioAy2SHIdmH0eo/iS3fzBvv/lzeVFWelvZt7o5vQqGsNzCN00
-q9kQlNjg2mcGdAxf16ocSL3u7y0H3zfI6J0mWdFIurryvk3yGjs=
-=yplD
------END PGP SIGNATURE-----
+---
 
---g9eZH3dUKMN+lQZU--
+To pick the changes from:
+
+  6ac392815628f317 ("fs: allow to mount beneath top mount")
+
+That, after a fix to the move_mount_flags.sh script, harvests the new
+MOVE_MOUNT_BENEATH move_mount flag:
+
+  $ tools/perf/trace/beauty/move_mount_flags.sh > before
+  $ cp include/uapi/linux/mount.h tools/include/uapi/linux/mount.h
+  $ tools/perf/trace/beauty/move_mount_flags.sh > after
+  $
+  $ diff -u before after
+  --- before	2023-07-11 12:38:49.244886707 -0300
+  +++ after	2023-07-11 12:51:15.125255940 -0300
+  @@ -6,4 +6,5 @@
+   	[ilog2(0x00000020) + 1] = "T_AUTOMOUNTS",
+   	[ilog2(0x00000040) + 1] = "T_EMPTY_PATH",
+   	[ilog2(0x00000100) + 1] = "SET_GROUP",
+  +	[ilog2(0x00000200) + 1] = "BENEATH",
+   };
+  $
+
+That will then be properly decoded when used in tools like:
+
+  # perf trace -e move_mount
+
+This addresses this perf build warning:
+
+  Warning: Kernel ABI header differences:
+    diff -u tools/include/uapi/linux/mount.h include/uapi/linux/mount.h
+
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/uapi/linux/mount.h            | 3 ++-
+ tools/perf/trace/beauty/move_mount_flags.sh | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/uapi/linux/mount.h b/tools/include/uapi/linux/mount.h
+index 4d93967f8aea0780..8eb0d7b758d2835a 100644
+--- a/tools/include/uapi/linux/mount.h
++++ b/tools/include/uapi/linux/mount.h
+@@ -74,7 +74,8 @@
+ #define MOVE_MOUNT_T_AUTOMOUNTS		0x00000020 /* Follow automounts on to path */
+ #define MOVE_MOUNT_T_EMPTY_PATH		0x00000040 /* Empty to path permitted */
+ #define MOVE_MOUNT_SET_GROUP		0x00000100 /* Set sharing group instead */
+-#define MOVE_MOUNT__MASK		0x00000177
++#define MOVE_MOUNT_BENEATH		0x00000200 /* Mount beneath top mount */
++#define MOVE_MOUNT__MASK		0x00000377
+ 
+ /*
+  * fsopen() flags.
+diff --git a/tools/perf/trace/beauty/move_mount_flags.sh b/tools/perf/trace/beauty/move_mount_flags.sh
+index 32e552faf37a818b..ce5e632d14484bd2 100755
+--- a/tools/perf/trace/beauty/move_mount_flags.sh
++++ b/tools/perf/trace/beauty/move_mount_flags.sh
+@@ -10,7 +10,7 @@ fi
+ linux_mount=${linux_header_dir}/mount.h
+ 
+ printf "static const char *move_mount_flags[] = {\n"
+-regex='^[[:space:]]*#[[:space:]]*define[[:space:]]+MOVE_MOUNT_([^_]+_[[:alnum:]_]+)[[:space:]]+(0x[[:xdigit:]]+)[[:space:]]*.*'
++regex='^[[:space:]]*#[[:space:]]*define[[:space:]]+MOVE_MOUNT_([^_]+[[:alnum:]_]+)[[:space:]]+(0x[[:xdigit:]]+)[[:space:]]*.*'
+ grep -E $regex ${linux_mount} | \
+ 	sed -r "s/$regex/\2 \1/g"	| \
+ 	xargs printf "\t[ilog2(%s) + 1] = \"%s\",\n"
+-- 
+2.37.1
+
