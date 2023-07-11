@@ -2,158 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23A374F04D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F054874F05B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjGKNhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S231550AbjGKNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGKNhv (ORCPT
+        with ESMTP id S229479AbjGKNiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:37:51 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B97BC;
-        Tue, 11 Jul 2023 06:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689082669; x=1720618669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sDKsooMzYAP81kDUoSO2n2MLd1qZqSlgq3mclaJSUS4=;
-  b=Mfaw/GvEg4n67sXM3DfPJnE+wH6b67f8iIbX/YdPEKdvIh6aI1qwKKjs
-   7+P8GkUhdP7TMRfsY9ueiFdbIfIQUOjofteHfj4Dj/NqTB7pxBQq1jp9e
-   f0y8HK1oHtVSQIBNWcMZZr65dodHmTpUAARYBwQxipiU3Xdr62ASCrP1t
-   O6+ldiwkZQkdR2/LP03hK2upAE/Zvl1LjlRjVVRWAoL3/ngQ/bEoA1zuh
-   zZBh+Y2unhW+YCWcw+z1R0zNJEbHR2YyvKCaAGxm7prb8EfMqH0ESZrZp
-   9tu1KEVbLo7mHSyCBfG3l7wWelORIfWAIU4qH0bbTqY4WOjL9pLmnSetp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="428315944"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="428315944"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 06:37:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="721091183"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="721091183"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 11 Jul 2023 06:37:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJDYi-001rVJ-1K;
-        Tue, 11 Jul 2023 16:37:40 +0300
-Date:   Tue, 11 Jul 2023 16:37:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 04/13] ALSA: hda: Use global PCI match macro
-Message-ID: <ZK1bJJpZLv75acvc@smile.fi.intel.com>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
- <20230711125726.3509391-5-amadeuszx.slawinski@linux.intel.com>
+        Tue, 11 Jul 2023 09:38:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FED10DD;
+        Tue, 11 Jul 2023 06:38:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C447614F6;
+        Tue, 11 Jul 2023 13:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA99C433C7;
+        Tue, 11 Jul 2023 13:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689082700;
+        bh=MjkY+PryFAt8G+OdjO9LolQHYDzlX27UqcYtpMYnVwU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P4rG0DrQuYuh1KI2SaGRXPxMUodnyuoYxdgPkn1OMlHHieR1kS9r/CQh42NQdCEvi
+         jezSVyuSCMeYDxZrU2qgssSXxMITcDN0wrI2LdTTXRxdvNf91UYOmZ/oeiA0SkLMOm
+         ToPJ01f8m0qnXoBuvUPupXyZM8q39wgUuDsJ0IPd2i86nWZO8OaQ0Z1yj2zbd4H3fH
+         d4apNZ3SHU+N4XnwC2YHNvSjMrA6Ly/31Wexx13nYBwFVH2whpKLnzaVfdu9jfzTjD
+         b8h/GZBzFq03hxHoLJ1T4mgHcoT1KaxayCxO/eDkShAdahq/1VQ+nx1L6a75mBKsMI
+         HsKJyRD7qNvow==
+Date:   Tue, 11 Jul 2023 15:38:03 +0200
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, James.Bottomley@hansenpartnership.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        axboe@kernel.dk, benh@kernel.crashing.org, borntraeger@de.ibm.com,
+        bp@alien8.de, catalin.marinas@arm.com, christian@brauner.io,
+        dalias@libc.org, davem@davemloft.net, deepa.kernel@gmail.com,
+        deller@gmx.de, dhowells@redhat.com, fenghua.yu@intel.com,
+        firoz.khan@linaro.org, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
+        kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, palmer@sifive.com, paul.burton@mips.com,
+        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
+        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
+        x86@kernel.org, ysato@users.sourceforge.jp
+Subject: Re: [PATCH v3 5/5] selftests: add fchmodat4(2) selftest
+Message-ID: <ZK1bOxynxdVHR1Fu@example.org>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <c3606ec38227d921fa8a3e11613ffdb2f3ea7636.1689074739.git.legion@kernel.org>
+ <87pm4ybqct.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230711125726.3509391-5-amadeuszx.slawinski@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87pm4ybqct.fsf@oldenburg.str.redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:57:17PM +0200, Amadeusz Sławiński wrote:
-> Instead of using local macro to match PCI device, use global one.
-
-I believe from the previous discussion that this one needs a couple of words
-w.r.t. BXT --> APL change.
-
-Otherwise, FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> ---
->  sound/pci/hda/hda_intel.c | 20 ++++----------------
->  1 file changed, 4 insertions(+), 16 deletions(-)
+On Tue, Jul 11, 2023 at 02:10:58PM +0200, Florian Weimer wrote:
+> * Alexey Gladkov:
 > 
-> diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-> index ef831770ca7d..143efa54b9bf 100644
-> --- a/sound/pci/hda/hda_intel.c
-> +++ b/sound/pci/hda/hda_intel.c
-> @@ -330,18 +330,6 @@ enum {
->  #define needs_eld_notify_link(chip)	false
->  #endif
->  
-> -#define CONTROLLER_IN_GPU(pci) (((pci)->vendor == 0x8086) &&         \
-> -				       (((pci)->device == 0x0a0c) || \
-> -					((pci)->device == 0x0c0c) || \
-> -					((pci)->device == 0x0d0c) || \
-> -					((pci)->device == 0x160c) || \
-> -					((pci)->device == 0x490d) || \
-> -					((pci)->device == 0x4f90) || \
-> -					((pci)->device == 0x4f91) || \
-> -					((pci)->device == 0x4f92)))
-> -
-> -#define IS_BXT(pci) ((pci)->vendor == 0x8086 && (pci)->device == 0x5a98)
-> -
->  static const char * const driver_short_names[] = {
->  	[AZX_DRIVER_ICH] = "HDA Intel",
->  	[AZX_DRIVER_PCH] = "HDA Intel PCH",
-> @@ -573,7 +561,7 @@ static void hda_intel_init_chip(struct azx *chip, bool full_reset)
->  	snd_hdac_set_codec_wakeup(bus, false);
->  
->  	/* reduce dma latency to avoid noise */
-> -	if (IS_BXT(pci))
-> +	if (HDA_CONTROLLER_IS_APL(pci))
->  		bxt_reduce_dma_latency(chip);
->  
->  	if (bus->mlcap != NULL)
-> @@ -2175,7 +2163,7 @@ static int azx_probe(struct pci_dev *pci,
->  #endif /* CONFIG_SND_HDA_PATCH_LOADER */
->  
->  #ifndef CONFIG_SND_HDA_I915
-> -	if (CONTROLLER_IN_GPU(pci))
-> +	if (HDA_CONTROLLER_IN_GPU(pci))
->  		dev_err(card->dev, "Haswell/Broadwell HDMI/DP must build in CONFIG_SND_HDA_I915\n");
->  #endif
->  
-> @@ -2283,7 +2271,7 @@ static int azx_probe_continue(struct azx *chip)
->  			 * for other chips, still continue probing as other
->  			 * codecs can be on the same link.
->  			 */
-> -			if (CONTROLLER_IN_GPU(pci)) {
-> +			if (HDA_CONTROLLER_IN_GPU(pci)) {
->  				dev_err(chip->card->dev,
->  					"HSW/BDW HD-audio HDMI/DP requires binding with gfx driver\n");
->  				goto out_free;
-> @@ -2294,7 +2282,7 @@ static int azx_probe_continue(struct azx *chip)
->  		}
->  
->  		/* HSW/BDW controllers need this power */
-> -		if (CONTROLLER_IN_GPU(pci))
-> +		if (HDA_CONTROLLER_IN_GPU(pci))
->  			hda->need_i915_power = true;
->  	}
->  
-> -- 
-> 2.34.1
+> > The test marks as skipped if a syscall with the AT_SYMLINK_NOFOLLOW flag
+> > fails. This is because not all filesystems support changing the mode
+> > bits of symlinks properly. These filesystems return an error but change
+> > the mode bits:
+> >
+> > newfstatat(4, "regfile", {st_mode=S_IFREG|0640, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> > newfstatat(4, "symlink", {st_mode=S_IFLNK|0777, st_size=7, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> > syscall_0x1c3(0x4, 0x55fa1f244396, 0x180, 0x100, 0x55fa1f24438e, 0x34) = -1 EOPNOTSUPP (Operation not supported)
+> > newfstatat(4, "regfile", {st_mode=S_IFREG|0640, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> >
+> > This happens with btrfs and xfs:
+> >
+> >  $ /kernel/tools/testing/selftests/fchmodat4/fchmodat4_test
+> >  TAP version 13
+> >  1..1
+> >  ok 1 # SKIP fchmodat4(symlink)
+> >  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> >
+> >  $ stat /tmp/ksft-fchmodat4.*/symlink
+> >    File: /tmp/ksft-fchmodat4.3NCqlE/symlink -> regfile
+> >    Size: 7               Blocks: 0          IO Block: 4096   symbolic link
+> >  Device: 7,0     Inode: 133         Links: 1
+> >  Access: (0600/lrw-------)  Uid: (    0/    root)   Gid: (    0/    root)
+> >
+> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
 > 
+> This looks like a bug in those file systems?
+
+To me this looks like a bug. I'm fine if the operation ends with
+EOPNOTSUPP, but in that case the mode bits shouldn't change.
+
+> As an extra test, “echo 3 > /proc/sys/vm/drop_caches” sometimes has
+> strange effects in such cases because the bits are not actually stored
+> on disk, only in the dentry cache.
+
+tmpfs
+syscall_0x1c3(0xffffff9c, 0x7ffd58758574, 0, 0x100, 0x7f6cf18adc70, 0x7ffd58756ad8) = 0
++++ exited with 0 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+ext4
+syscall_0x1c3(0xffffff9c, 0x7ffedfdb4574, 0, 0x100, 0x7f7f40b45c70, 0x7ffedfdb3ae8) = -1 EOPNOTSUPP (Operation not supported)
++++ exited with 1 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+xfs
+syscall_0x1c3(0xffffff9c, 0x7ffcd03ce574, 0, 0x100, 0x7ff2f2980c70, 0x7ffcd03cdd38) = -1 EOPNOTSUPP (Operation not supported)
++++ exited with 1 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+btrfs
+syscall_0x1c3(0xffffff9c, 0x7fff13d2e574, 0, 0x100, 0x7f9b67f59c70, 0x7fff13d2ca88) = -1 EOPNOTSUPP (Operation not supported)
++++ exited with 1 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+reiserfs
+syscall_0x1c3(0xffffff9c, 0x7ffdf75af574, 0, 0x100, 0x7f7ad0634c70, 0x7ffdf75ae478) = 0
++++ exited with 0 +++
+l--------- 1 root root 1 Jul 11 16:43 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:43 /tmp/dir/link -> f
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Rgrds, legion
 
