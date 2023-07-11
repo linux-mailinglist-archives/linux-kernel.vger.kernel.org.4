@@ -2,172 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A93474E749
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB93674E74D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjGKG0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S229558AbjGKG1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGKG0q (ORCPT
+        with ESMTP id S231205AbjGKG04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:26:46 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E04E73
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:26:43 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc244d307so60835085e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689056801; x=1691648801;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aW5+rXuaq7TJXCcRzo6xDmek0tWPICmc1aRt4r1oLPg=;
-        b=SlUO/Mwxym9ydWKE/vvQ1EA0ONlJhRL4g8AyqssMYmCHKOof2daEbgK4J+7J6dFIsz
-         L0EzJYn2MKzJ2qtLzuMHfz25clYpkKQUkG7rUjcmOnH3WJqogCl2K2D25oPWdSvTQGZM
-         fYbXr1z5AamgOSMHL4EjeD+Li49NwjeHS7jxhayQEhDpIllV5Rld+HyvmyMc224f72ds
-         5E1MvqieWtb1ori16wYYI2iHHFVISSTlkkX4xccyD7EoVIlmNzZXVHfdsfwW8wJSQv8g
-         UexWfuGfqWhZe4w2YJiHLalJ4es68+1WSR8owV2ACNLzTD1P7g2unRZq2u/bC50h1QGU
-         bSVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689056801; x=1691648801;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aW5+rXuaq7TJXCcRzo6xDmek0tWPICmc1aRt4r1oLPg=;
-        b=YLN6JSGtieFFPx/O69n2vf47/ft99v9zxClKQHdFUX40uM1owO8T+5xr8H0tMEynUT
-         G9RqLLQrqHgbS0PMaHvIZJqYau254ZK9GNIQlnIfo5r0TVdCN8ipiSstO4q9cQ+rfoo4
-         vdJfso8FP8YfVy8VNkOnDNu9EwsYyG/M2DcgN0CshQOV+2a3aIL1iMs0GY/i6W+c4wua
-         h7QPhI1+mYRSpk184TjoImCsijzQhyBcPRDNCJqmH+62r5BxuVP0eVtHiwuqMaDgOwsp
-         PeSQlXzPTYqBXGeks4xlW6MCj8uevr2sjjT9NHXZ0K2PTsns00s4aBGq1o2kSvk+5WjH
-         HRGg==
-X-Gm-Message-State: ABy/qLbP9p+AwYQbeH+yFzbDfvgIl2ZbHGhzQh1c7Zu0h5v1UCrUnQRH
-        uvK7xgnsctyK0YhNw06whhXoimVwx3Nk/AOj+i0=
-X-Google-Smtp-Source: APBJJlFcygAOFYB5s3BZMDOQA2sdkTpuyxBJ7bP/LLurgp0PUce22pucUbk//Hrnd5VYzgW7/omiSQ==
-X-Received: by 2002:a05:6000:370:b0:313:f9a0:c530 with SMTP id f16-20020a056000037000b00313f9a0c530mr16037477wrf.52.1689056801434;
-        Mon, 10 Jul 2023 23:26:41 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id l6-20020adffe86000000b0031435731dfasm1305600wrr.35.2023.07.10.23.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 23:26:40 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 09:26:37 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Hsia-Jun Li <randy.li@synaptics.com>,
-        linux-media@vger.kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, ayaka@soulik.info,
-        hans.verkuil@cisco.com, tfiga@chromium.org, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, hiroh@chromium.org,
-        hverkuil@xs4all.nl, linux-kernel@vger.kernel.org,
-        nicolas@ndufresne.ca, "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-Subject: Re: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
-Message-ID: <396eb32d-5016-4eb7-aea2-b6e824aecadf@kadam.mountain>
+        Tue, 11 Jul 2023 02:26:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8CB10C4;
+        Mon, 10 Jul 2023 23:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689056809; x=1720592809;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Zt56k/ylATpiWcmI7Gmuu8RUv+NfirBJziZ1r67mpaI=;
+  b=cVYK4rIy0euTP0n1W85Fo/IoztsQpM6Gl3Jwtfp3vuRH0AjO+1/TlaAJ
+   eHTFZtztZE9BpIxxz5GKBqWPv73RTIbOH1lSvtxVDLf06urZgzI0S8nBP
+   Cxq2ixhvyv2lAzJYuYGfpXzO3mUNg/6OXqDmF5GunzVuI/oaGadbWiDGW
+   Sxvfoq4kLp/ictq3Di9mjLxq9aOiifRUR6gDUCmS6B7XbF701NNU1cbGn
+   EFCoS47IHNX3zoZTxTZFoxl6zP8i0x0CgcgP4Q3SqxgNaQo4xP5O3EKP4
+   fXxlR/ENAxmer52T9u77jYcsteQSx5JiVqiV5/UQXzQmNP7MPOikmmQ4j
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="349342410"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="349342410"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 23:26:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="671255776"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="671255776"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga003.jf.intel.com with ESMTP; 10 Jul 2023 23:26:45 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 23:26:45 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 10 Jul 2023 23:26:45 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 10 Jul 2023 23:26:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GxnQSeOtPu79OAwkG8VaGuaPPVYrQJChaXyan3a0VfXiKBYpwdnC9eEibYHCRLf8p7IpbECAQFrkg50sqZlxPHYUqXhQmOaVTOtAMVmbKeTzVwnRe/hotHPh6Y+EZ/Rdav+nCylexwAD2h/sn4XaIykymVG6k7Izqo3p87nmiMsRArDoH1yVeBzmUPq93sS4JmHZT+qWI7czYfpgML/g4I+gHRL5GvmPPtz2MzHFB4CtXK1eZE4hE1Sxg5y6MkFkVO+pDUPljjVF2HXB6XoJw/XthtLCVjRP1muamronwMPy6zmoGALjZY9yiMK0DwWGlvyRrAlA7ioTCPBn/z3Wdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nFF3lhjHzp7Vuj75/BSvCX25dPw9/sm89tgEb8BIVso=;
+ b=Sv31iB6w9qURWUmuGoTRZo8zNTMU18Uw0f2Qugs2gLLBDGQ4QxoRsm0yNECK66S6bX4/UvJ4zMlNRBa5bFjN+hQMZU9r2DaPlZQU/HURFu8kclC7sdVQz7Ap9142eswWnKXBG5DMC4wgsWN0RITRq3ahEBZKOhOq3XlXIjcvL0nFp81I9zLmrkA5mg5RHfU2hyDCVQs0JuuOd1L4DX/vvFlBBgHY5vRQTDt+JiRrTHObhuq7iI7T8QYuoP56l1qx9gf0oqWj9JNAuuB+Sb2+9XlYG8LayzSGanyZzOJIJxI8X7iZogOVDqLNLOfjRTLJXOPR36hYxJaOCa6xdgK6qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DS7PR11MB6200.namprd11.prod.outlook.com (2603:10b6:8:98::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Tue, 11 Jul
+ 2023 06:26:43 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
+ 06:26:43 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 9/9] iommu: Use fault cookie to store iopf_param
+Thread-Topic: [PATCH 9/9] iommu: Use fault cookie to store iopf_param
+Thread-Index: AQHZs5ROZ0DTU24O6Ue9hKGIoQNDRq+0GN5A
+Date:   Tue, 11 Jul 2023 06:26:43 +0000
+Message-ID: <BN9PR11MB5276454AD26C2BDC12CAEDE78C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
+ <20230711010642.19707-10-baolu.lu@linux.intel.com>
+In-Reply-To: <20230711010642.19707-10-baolu.lu@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS7PR11MB6200:EE_
+x-ms-office365-filtering-correlation-id: 49c137f8-374e-42c0-cfc4-08db81d7cb41
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: G2a2fXoRABPtuBBKBBlzRUtceziQPi7l9J39k8kexeZRt9tF+8U1r2K2Gp2aNXHPcIiOYQaEc0v1P488HyQrvDXEvUk3dj85/rrQfnBw/j23IMg7B+ACtBgGAi/yyt0EB5k5vOsx5cu9FFEEPO27dc7411dxd6vn6eJMZjBV8tnlNTlCRzf9R9xZeWZu+PRKicfS4E6SoN1TeBUiITtM+LEfnNlKOdZ3YccLxePrLU05oIA5dVDudCCYve2+aL3NeSXyEhtvQs9yjrvhM/ocvFcu+2X4OxqDfwcfUzBTtjjWuxgMyF9mrlZJ40QFMP5TbjeA3ek/HFlboKpMLF7wk9vPHQeZzW4O3ith92h/Ac5MbGrtmCnwasc35YBUOAZN9zJiYxjvSQqK/kJfYhNMP+2lk1Nyq9t9QLput5V+GY70n3jxIJ9nfUoYalJtHThNiWVRAbsNA3TR7KxuuK7yi+fB7JTSuLoy9u9on0hVpTluvYGBZ9MSVJCPbSPTRnvuoJeiw9NMyQ2fU6X0jUodrQXB8hnbP9GU1P1XEomu4OlvAGuyUJ25aaMRThQ3np1xloQ9ckZkeG4Q+RCG7JXC6fuLPu6J6A3u6N0Ax7v5mMxGfZp+v6ATHyPSbDx7EE1P
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199021)(38070700005)(33656002)(86362001)(55016003)(38100700002)(82960400001)(122000001)(478600001)(110136005)(71200400001)(41300700001)(54906003)(7696005)(8676002)(8936002)(5660300002)(52536014)(7416002)(2906002)(316002)(4326008)(66556008)(64756008)(66446008)(66946007)(76116006)(66476007)(4744005)(26005)(6506007)(9686003)(186003)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3GRyLW8ybsIeeOPXZFSsyCZdO+hsEs7gOTCEed+V11EOtaK83dlw1OEWPqtd?=
+ =?us-ascii?Q?0kwRVDIazLWfPeR3Q7PNxPXy3JxPEB3Cb38dj59uMf/YWt4vdRwc2EBBmCl7?=
+ =?us-ascii?Q?UFyPjnb9REBpaTJtG0BHdZo3oDIMXI/7iZhwfMX1l1Xn+OEXkbo3FtQsYBiq?=
+ =?us-ascii?Q?gErf8VawHR9qBzSa8+CQoGAgfEz5ngq5KfHG94j3e/ysJ1TpLp31BWt0490G?=
+ =?us-ascii?Q?Y2WWkROLsAhU8H7oK3JJkUifG5PEj+0IkFP6Q8rF/Enkq1k/JHnVC3ZKZVSg?=
+ =?us-ascii?Q?XRcHcqmr6DIWathBEm0nU7NYid6btQSknmRx+x+ypVI/clpW/myiTkCTv39c?=
+ =?us-ascii?Q?V0dvMH58Y4aaxx+ZOZFrM3V+on2jzRS0Af5iEibmDHVnRlek5Qq6xIplMEMw?=
+ =?us-ascii?Q?GkPuC52JI+AEdM55NJMLfWnvEX0nqD6xjL7lTL6iarEAEJj1vmJTKlj1r/4s?=
+ =?us-ascii?Q?3LI5vg24F5Ly7Mi6O0wXsNG0tS1CmSyn61+mvUZxC0yRpcFXkZI2vSxNp2rT?=
+ =?us-ascii?Q?DPYfk7jqJU4j2UxwnYA4cYDIDso/VBN1n98eUkZjNy5kCNayCryCkeHzo6ic?=
+ =?us-ascii?Q?NmyxRQaCsa0P570xV6L8bGN5U3Z2p5J29JsIP3SHvQPbxzyiKGNzqOLKr5wr?=
+ =?us-ascii?Q?qH0PddTn3+HZw862xdTfwYcBOdKbFHW7TgdEBcmqWaiq+yZLdZPtf+s3svmA?=
+ =?us-ascii?Q?JSQK0m7db3j2VfQXs1ZzwPAufNQwITYzpLJibR0JfqhSG+OCk4ccoqDxWfUy?=
+ =?us-ascii?Q?Gg77bdmMRo+x/F8EOVgS0ThksVK6Z1JU3/CMVbezwlO2pkBaCwqN7X++DbuZ?=
+ =?us-ascii?Q?2v2kF/KyXxD0zrCAgyyIGDOhxMtoTZA7cYETij2t2QkF/e6IViWgvKAfoxMG?=
+ =?us-ascii?Q?YtJN+4tly0PZJlevVd4+WWidd6/k6aW3D1ygcgFDONiEWUpREs4RsDIdtfUE?=
+ =?us-ascii?Q?/CS6J9ceO0uBnnarKG166awMOszmd1u5WR9Q8QAxVPYRV1XygQ9I3qHA7PAx?=
+ =?us-ascii?Q?f2LFTPk3gGik4TLCgHJIVYL8Jmz8nNFb7dNgROmn6JEbH6y6LnhWOYEPD2dO?=
+ =?us-ascii?Q?N8XkmxHJnolnK+3HGYefhVQj1iSLR1FCCwIp8jRf7VBzlUVpMm+vswHz8ts6?=
+ =?us-ascii?Q?W62BHEUZ8vOl/CB/2vh7ZaLIJVJJ+uKrsXIRi0KJdBUvb/jiJ9QMA1lH5Lmq?=
+ =?us-ascii?Q?4qUqBCKJiffAVMiZGrnwae58cW/LUzcBVt0P84NPIJesqwLM6T1nRHcSvT5T?=
+ =?us-ascii?Q?7TpMRdZ339K4B95RTN/4zokBZY4RnLfJjq6k4luvcHjYVovIEq6QRWnVlH2I?=
+ =?us-ascii?Q?OclFRyM9a6rxWJ5gVttNLlSS0cWNQ0WAI8+J06rZsP1TC52yywpyWVDxbj/V?=
+ =?us-ascii?Q?nXAuAeh5fcDIHEfP9T6qevPrng9T3nFbBircnpvc+6hgd2T3ced34WTEaD/6?=
+ =?us-ascii?Q?VrebD2leKXTfc3xgHCmRixTr6PFYkrRMPp2QZ4JYcJApb/dExlW7covIrbBX?=
+ =?us-ascii?Q?eXHwqVPNCSHvXJ77qnV+GwuVSwhlfMqJYX7Q+3NNxOtUBfnBemAT2KanfliT?=
+ =?us-ascii?Q?byX2gZCJHLKPMPUi3JV1R7ybM9xI7lBSrqG1MHcm?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704040044.681850-3-randy.li@synaptics.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49c137f8-374e-42c0-cfc4-08db81d7cb41
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2023 06:26:43.0603
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pci49cI5oAHEGAqKAtQ8+dGrRniEfygCPgAvSAdCLLF0w/EULGnzqwZTVPDJhiMbuOh4iiodFeDbU1JnFEcPwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6200
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hsia-Jun,
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> Sent: Tuesday, July 11, 2023 9:07 AM
+>=20
+> Remove the static iopf_param pointer from struct iommu_fault_param to
+> save memory.
 
-kernel test robot noticed the following build warnings:
+why is there memory saving? you replace a single pointer with a xarray now.=
+..
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> @@ -303,16 +303,27 @@ int iopf_queue_add_device(struct iopf_queue
+> *queue, struct device *dev)
+>=20
+>  	mutex_lock(&queue->lock);
+>  	mutex_lock(&param->lock);
+> -	if (!param->iopf_param) {
+> -		list_add(&iopf_param->queue_list, &queue->devices);
+> -		param->iopf_param =3D iopf_param;
+> -		ret =3D 0;
+> +	curr =3D iommu_set_device_fault_cookie(dev, 0, iopf_param);
+> +	if (IS_ERR(curr)) {
+> +		ret =3D PTR_ERR(curr);
+> +		goto err_free;
+>  	}
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hsia-Jun-Li/media-v4l2-mem2mem-allow-device-run-without-buf/20230704-120308
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230704040044.681850-3-randy.li%40synaptics.com
-patch subject: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
-config: arm64-randconfig-m041-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110324.A5LMPHou-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110324.A5LMPHou-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202307110324.A5LMPHou-lkp@intel.com/
-
-smatch warnings:
-drivers/media/v4l2-core/v4l2-mem2mem.c:343 __v4l2_m2m_try_queue() error: uninitialized symbol 'src'.
-drivers/media/v4l2-core/v4l2-mem2mem.c:343 __v4l2_m2m_try_queue() error: uninitialized symbol 'dst'.
-
-vim +/src +343 drivers/media/v4l2-core/v4l2-mem2mem.c
-
-9db3bbf58be59a drivers/media/v4l2-core/v4l2-mem2mem.c Ezequiel Garcia    2018-07-25  296  static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
-9db3bbf58be59a drivers/media/v4l2-core/v4l2-mem2mem.c Ezequiel Garcia    2018-07-25  297  				 struct v4l2_m2m_ctx *m2m_ctx)
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  298  {
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  299  	unsigned long flags_job;
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  300  	struct vb2_v4l2_buffer *dst, *src;
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  301  
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  302  	dprintk("Trying to schedule a job for m2m_ctx: %p\n", m2m_ctx);
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  303  
-f3e1a4c9d7a02d drivers/media/v4l2-core/v4l2-mem2mem.c Randy Li           2023-07-04  304  	if (!(m2m_ctx->out_q_ctx.q.streaming || m2m_ctx->out_q_ctx.buffered)
-f3e1a4c9d7a02d drivers/media/v4l2-core/v4l2-mem2mem.c Randy Li           2023-07-04  305  	    || !(m2m_ctx->cap_q_ctx.q.streaming
-f3e1a4c9d7a02d drivers/media/v4l2-core/v4l2-mem2mem.c Randy Li           2023-07-04  306  		 || m2m_ctx->cap_q_ctx.buffered)) {
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  307  		dprintk("Streaming needs to be on for both queues\n");
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  308  		return;
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  309  	}
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  310  
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  311  	spin_lock_irqsave(&m2m_dev->job_spinlock, flags_job);
-2ad5389b341282 drivers/media/v4l2-core/v4l2-mem2mem.c Shaik Ameer Basha  2013-09-20  312  
-2ad5389b341282 drivers/media/v4l2-core/v4l2-mem2mem.c Shaik Ameer Basha  2013-09-20  313  	/* If the context is aborted then don't schedule it */
-2ad5389b341282 drivers/media/v4l2-core/v4l2-mem2mem.c Shaik Ameer Basha  2013-09-20  314  	if (m2m_ctx->job_flags & TRANS_ABORT) {
-2ad5389b341282 drivers/media/v4l2-core/v4l2-mem2mem.c Shaik Ameer Basha  2013-09-20  315  		dprintk("Aborted context\n");
-cbec2836f8be61 drivers/media/v4l2-core/v4l2-mem2mem.c Sakari Ailus       2018-10-18  316  		goto job_unlock;
-2ad5389b341282 drivers/media/v4l2-core/v4l2-mem2mem.c Shaik Ameer Basha  2013-09-20  317  	}
-2ad5389b341282 drivers/media/v4l2-core/v4l2-mem2mem.c Shaik Ameer Basha  2013-09-20  318  
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  319  	if (m2m_ctx->job_flags & TRANS_QUEUED) {
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  320  		dprintk("On job queue already\n");
-cbec2836f8be61 drivers/media/v4l2-core/v4l2-mem2mem.c Sakari Ailus       2018-10-18  321  		goto job_unlock;
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  322  	}
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  323  
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  324) 	if (list_empty(&m2m_ctx->out_q_ctx.hw_queue)) {
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  325  		src = v4l2_m2m_next_src_buf(m2m_ctx);
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  326) 
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  327  		if (!src && !m2m_ctx->out_q_ctx.buffered) {
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  328  			dprintk("No input buffers available\n");
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  329  			goto job_unlock;
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  330  		}
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  331) 	}
-
-src uninitialized on else path.
-
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  332) 
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  333) 	if (list_empty(&m2m_ctx->cap_q_ctx.hw_queue)) {
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  334) 		dst = v4l2_m2m_next_dst_buf(m2m_ctx);
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  335  		if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-7f98639def42a6 drivers/media/video/v4l2-mem2mem.c     Pawel Osciak       2010-04-23  336  			dprintk("No output buffers available\n");
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  337  			goto job_unlock;
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  338  		}
-cafbe530b02613 drivers/media/v4l2-core/v4l2-mem2mem.c Hsia-Jun(Randy  Li 2023-07-04  339) 	}
-
-dst not initialized if !list_empty()
-
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  340  
-f07602ac388723 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  341  	m2m_ctx->new_frame = true;
-f07602ac388723 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  342  
-f07602ac388723 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11 @343  	if (src && dst && dst->is_held &&
-
-Uninitialized.
-
-f07602ac388723 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  344  	    dst->vb2_buf.copied_timestamp &&
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  345  	    dst->vb2_buf.timestamp != src->vb2_buf.timestamp) {
-86ef61ad686c17 drivers/media/v4l2-core/v4l2-mem2mem.c Nicolas Dufresne   2022-04-26  346  		dprintk("Timestamp mismatch, returning held capture buffer\n");
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  347  		dst->is_held = false;
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  348  		v4l2_m2m_dst_buf_remove(m2m_ctx);
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  349  		v4l2_m2m_buf_done(dst, VB2_BUF_STATE_DONE);
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  350  		dst = v4l2_m2m_next_dst_buf(m2m_ctx);
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  351  
-f8cca8c97a63d7 drivers/media/v4l2-core/v4l2-mem2mem.c Hans Verkuil       2019-10-11  352  		if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+So although the new xarray is called a per-pasid storage, here only
+slot#0 is used for sva which includes a list containing partial req's
+for many pasid's. It doesn't sound clean...
