@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46C274E923
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAFB74E926
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjGKIb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S230006AbjGKIbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjGKIb0 (ORCPT
+        with ESMTP id S231210AbjGKIbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:31:26 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C336BC2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:31:25 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-666ecb21f86so4804972b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:31:25 -0700 (PDT)
+        Tue, 11 Jul 2023 04:31:40 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD2191;
+        Tue, 11 Jul 2023 01:31:39 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-c49777d6e7aso6615218276.1;
+        Tue, 11 Jul 2023 01:31:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689064285; x=1691656285;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rofOJD2PEXHX+UfeHTQCqCECMr9/lYMQMtv8+LwhAUQ=;
-        b=P6A0pA9ITf6al+15du8ek7nlPUlClDBxUH1hZIB1C9IlYHPFlUbaVUPv4aE8lRt+H9
-         9urxpsHuYPzrnVXITxB0swQsGpnoTyvhAgWnCjLNTc8k27WUvzQdiVQ5NT1beq+MN8is
-         1aXkZZsDeaP+/iP91u7UBNkcezZh5pG7bP188=
+        d=gmail.com; s=20221208; t=1689064298; x=1691656298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YXQHwA7H4BKxYYTb2kjEWqMmKPsPln0gjwSHgBiVGpM=;
+        b=pwtCI+eA3pc8/M5Q+ZS9tZKwsbnA1P0CDApbwuntcWVRHjARj+uoJXkPoX4oFhyiHn
+         TUIzHvznIT+rTZEZijG/xFlaJrcfaoEzMax+ds+q3o3FXBwSSCcMeUbatAkaNOQ2Q4Mf
+         ylw3duVDFPu6Kq52ro6W9FYeArJ6ZseErLjvHZ5XRn+AFd3ycId9a8vTCBycGZb/GeTO
+         3oCYOk/WKc1C3bmV1R9Debu416gENyTEbfJZm5ewHrX5UOAxf3qWpKIAzraSBGFXdlrM
+         3/LWvD8WlFk/ohEl2M49IKqSYCS5FyEnecH2DLwDdd2U+B0crfPkVtcRzd4zcGMGO8iD
+         SQQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689064285; x=1691656285;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rofOJD2PEXHX+UfeHTQCqCECMr9/lYMQMtv8+LwhAUQ=;
-        b=BmniEa1uiWzLcvh531UAsWNcSVT/5e0LiB6kQQ51MdpOvcMh+eATD++prWk1BCZ+74
-         eLvtqohpzjIYkcgeM5Js5Pv4OrVduYYiN1bdvFKLZAIf9qlwA11AABWymEHgks9UrK6C
-         IsiR+oYMhVMG3UDVsytb+Z3h5bTJ3CfBTvJX6qB2QSKb60q31FuEJwLoRI+Och0CRYDQ
-         zTY+iTI4G8AyZRAZbIBb3eBI93JTxCf7v9PLoS2Gr6JI1F+SVff/FGSrlfo2ZWOIopeT
-         baja8HIKyPuNzxYAtvNGKM6jgMq+fhAX9Kjk0yaqKusxQnXeRoFTiE4cRr2Oj3kxSSaq
-         zyIA==
-X-Gm-Message-State: ABy/qLahoNwMwiPnQmcKBmY4bwfjtUt3loCjIvIF0n5zRuBS2O6/xHuq
-        BJiOS1XZI2gXjrLl347LWD+p2g==
-X-Google-Smtp-Source: APBJJlEVuRnWrgPtRHxfnSweZ6D18Mv5lFZ8nOu/CVG5UPhpVA599ndJjMw/jfjqWUfqQBYnnxvqzw==
-X-Received: by 2002:a17:903:41c8:b0:1b8:a73e:aaac with SMTP id u8-20020a17090341c800b001b8a73eaaacmr21002030ple.62.1689064285198;
-        Tue, 11 Jul 2023 01:31:25 -0700 (PDT)
-Received: from fshao-p620.tpe.corp.google.com ([2401:fa00:1:10:4de:ea8b:eb72:c51d])
-        by smtp.gmail.com with ESMTPSA id t8-20020a170902b20800b001b89466a5f4sm1273471plr.105.2023.07.11.01.31.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 01:31:24 -0700 (PDT)
-From:   Fei Shao <fshao@chromium.org>
-To:     Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Fei Shao <fshao@chromium.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: [PATCH] leds: pwm: Fix an error code
-Date:   Tue, 11 Jul 2023 16:30:41 +0800
-Message-ID: <20230711083055.1274409-1-fshao@chromium.org>
-X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
+        d=1e100.net; s=20221208; t=1689064298; x=1691656298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YXQHwA7H4BKxYYTb2kjEWqMmKPsPln0gjwSHgBiVGpM=;
+        b=L6DEXOGXlABR50wufjysrSEk35xbXDGFWS7DvBOw2dOe9edESd6IF5Iaq3vxdC2pHI
+         xlNVo3TfLsWEzmWf65+xDxKkCrxootje+jKyGk6b2356wdvU7s2nUbUfvKEagkG+xv/6
+         AZ0P8HDs+qcDlismhOURTB0bKp6JxQSfJkOCFN6GX7u9IIy2f57Dh5GIT64XTxA5/N6e
+         /ravkZbwAEEzDq+hGpZIULoDKDlWVfHIyxVmrDhF0gb86yjYU29kW9kc7fG4Dtjupz5K
+         Won9/pLFjF0uvCw8QWFAoEGnqj7Xjy7+LMilJ4WpiBexGfOwWB3xoZqP71+tL8XhnFOZ
+         FZtw==
+X-Gm-Message-State: ABy/qLZugImKImb/RMUnsSQedD/BY1bSu+Z9ZeOAGgICyrGJDfYehjqN
+        gb2uyiBrYnJWofTWY3BmlwxsGqUWYSTzmwu8AAE=
+X-Google-Smtp-Source: APBJJlFV9kBJSYVRF9EQGBKu1C+CXMwjV8RCu7fEsP63WQp2AzTYHA2QQpGgUQM8ahKiOs6f6MOd6DVqYRpCYNi9MtA=
+X-Received: by 2002:a25:2e45:0:b0:c6b:aef4:db27 with SMTP id
+ b5-20020a252e45000000b00c6baef4db27mr12058548ybn.17.1689064298622; Tue, 11
+ Jul 2023 01:31:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <1585899.1688486184@warthog.procyon.org.uk>
+In-Reply-To: <1585899.1688486184@warthog.procyon.org.uk>
+From:   =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>
+Date:   Tue, 11 Jul 2023 10:31:27 +0200
+Message-ID: <CAAUqJDv26FBuG+UYDc+xBYz0b8V-+eDzzLXjianmWAAo_JwvLg@mail.gmail.com>
+Subject: Re: [PATCH net] crypto: af_alg: Fix merging of written data into
+ spliced pages
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,29 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the negated -EINVAL as the error code.
+On Tue, Jul 4, 2023 at 5:56=E2=80=AFPM David Howells <dhowells@redhat.com> =
+wrote:
+> af_alg_sendmsg() takes data-to-be-copied that's provided by write(),
+> send(), sendmsg() and similar into pages that it allocates and will merge
+> new data into the last page in the list, based on the value of ctx->merge=
+.
+>
+> Now that af_alg_sendmsg() accepts MSG_SPLICE_PAGES, it adds spliced pages
+> directly into the list and then incorrectly appends data to them if there=
+'s
+> space left because ctx->merge says that it can.  This was cleared by
+> af_alg_sendpage(), but that got lost.
+>
+> Fix this by skipping the merge if MSG_SPLICE_PAGES is specified and
+> clearing ctx->merge after MSG_SPLICE_PAGES has added stuff to the list.
+>
+> Fixes: bf63e250c4b1 ("crypto: af_alg: Support MSG_SPLICE_PAGES")
+> Reported-by: Ondrej Mosn=C3=A1=C4=8Dek <omosnacek@gmail.com>
+> Link: https://lore.kernel.org/r/CAAUqJDvFuvms55Td1c=3DXKv6epfRnnP78438nZQ=
+-JKyuCptGBiQ@mail.gmail.com/
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: linux-crypto@vger.kernel.org
+> cc: netdev@vger.kernel.org
+> ---
+>  crypto/af_alg.c |    7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Fixes: 95138e01275e ("leds: pwm: Make error handling more robust")
-Signed-off-by: Fei Shao <fshao@chromium.org>
-
----
-
- drivers/leds/leds-pwm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/leds/leds-pwm.c b/drivers/leds/leds-pwm.c
-index 29194cc382af..87c199242f3c 100644
---- a/drivers/leds/leds-pwm.c
-+++ b/drivers/leds/leds-pwm.c
-@@ -146,7 +146,7 @@ static int led_pwm_create_fwnode(struct device *dev, struct led_pwm_priv *priv)
- 			led.name = to_of_node(fwnode)->name;
- 
- 		if (!led.name) {
--			ret = EINVAL;
-+			ret = -EINVAL;
- 			goto err_child_out;
- 		}
- 
--- 
-2.41.0.390.g38632f3daf-goog
-
+Thanks for the fix! I can confirm that it fixes the reported issue.
+There remains some kernel panic on s390x that I hadn't noticed in the
+results earlier, but that's probably a different issue. I'll
+investigate and send a report/patch when I have more information.
