@@ -2,84 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4EA74FAC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F1B74FAC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjGKWL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S231874AbjGKWMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjGKWL4 (ORCPT
+        with ESMTP id S231822AbjGKWMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:11:56 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070411BD7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:11:27 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b52875b8d9so66765ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689113487; x=1691705487;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHo0qMf4X1AE4fyMbmdJ4zDFrUO5AckTUAmIVNX3n3g=;
-        b=bfZUezdR6ChxnnxVGsBAilrCjBS5n76CuxktV8rcb2pcv/iqsYDm1kigi7cfmzReQu
-         MxKM6KU1x8k4rBHgYTBBVeVR/EaKKBZUZU+WrKJJuXjUPV8GWe3fqdc4HEC57iefR5nV
-         1BXmo2dcwW2j9jvDj0AA+XRR/ODoei+4k0Mx8x1HAlYvjL3raftlIctYj/zuqocHBJ6D
-         Hp5TlpKTG6IENYTKIjvWdg49gnzvpFgJyEdWba08B6bgvMft4nNuoV0VZtcZNfXRj0Gm
-         1ME2PQgm9azlZEx1S8PBu1N27cajbrj9BrAbWY05Nk5N22GGa1PfG7dn4emM4gT6UBi5
-         bwBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689113487; x=1691705487;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EHo0qMf4X1AE4fyMbmdJ4zDFrUO5AckTUAmIVNX3n3g=;
-        b=RXTpWKBveZGPXH/AoujaYzaWwPXYe7MW2w2dgMlX+8Vc3s3IjFPedpEdH0jPD930T9
-         kOx0CKb6FFLQPwThucuTvrUGdPZkuuJYaF9Mksw3oV7LiontonzzO2YmthUCvkYNRGc9
-         Ug+rI5HsekludFpf4NI+KgNwzBUVRXC9jHEO1qRZhkWNo4efX+A3qExACC8JRZmB8E8r
-         Cf2jDeF7cjXbhV7s0pZWqG+t+vp4VbE7YnGOg/QT4dw9WDdcJJBsCpbUBdEycEUpQz35
-         dWQpnM5MuBp7teVt1RMBY3iIee6z+da3wLC0MBfvz+djI1sfwRt3ClKoYweSXxST/R81
-         4ggA==
-X-Gm-Message-State: ABy/qLYCyRMjwsyMAQ0iQKX/Pv0fgXJgnFA/PbnFqA3HoD4nVupuoD9a
-        8kbQ3pU6I6H335pPCR3u35/nxg==
-X-Google-Smtp-Source: APBJJlHqZ0qfiC4zcfhS1XF3OMF9UVOH+LxsU51wscEEc3H0iT4AUmhd8wDhsXS45SiLuMmywDpiFQ==
-X-Received: by 2002:a17:902:f688:b0:1b8:c666:1fc1 with SMTP id l8-20020a170902f68800b001b8c6661fc1mr88703plg.20.1689113487138;
-        Tue, 11 Jul 2023 15:11:27 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:8944:7c0b:5d4e:f65b])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa79196000000b00682a839d0aesm2181015pfa.112.2023.07.11.15.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 15:11:26 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 15:11:22 -0700
-From:   Isaac Manjarres <isaacmanjarres@google.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        John Stultz <jstultz@google.com>, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kernel-team@android.com,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] regmap-irq: Fix out-of-bounds access when allocating
- config buffers
-Message-ID: <ZK3TiuPZr0A8iaNN@google.com>
-References: <20230711193059.2480971-1-isaacmanjarres@google.com>
- <8e5fba54-9ec7-45a7-8dd6-6ea63d853907@sirena.org.uk>
+        Tue, 11 Jul 2023 18:12:07 -0400
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D741F1BE5;
+        Tue, 11 Jul 2023 15:11:32 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1qJLZu-0074lE-JO; Tue, 11 Jul 2023 22:11:26 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8mm: add imx8mm-venice-gw72xx-0x-rpidsi overlay for display
+Date:   Tue, 11 Jul 2023 15:11:24 -0700
+Message-Id: <20230711221124.2127186-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e5fba54-9ec7-45a7-8dd6-6ea63d853907@sirena.org.uk>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,29 +45,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 08:50:08PM +0100, Mark Brown wrote:
-> On Tue, Jul 11, 2023 at 12:30:58PM -0700, Isaac J. Manjarres wrote:
-> 
-> > [   14.033877][    T1] ==================================================================
-> > [   14.042507][    T1] BUG: KASAN: invalid-access in regmap_add_irq_chip_fwnode+0x594/0x1364
-> > [   14.050796][    T1] Write of size 8 at addr 06ffff8081021850 by task init/1
-> > [   14.057841][    T1] Pointer tag: [06], memory tag: [fe]
-> > [   14.063124][    T1]
-> > [   14.065349][    T1] CPU: 2 PID: 1 Comm: init Tainted: G        W   E      6.4.0-mainline-g6a4b67fef3e2 #1
-> > [   14.075014][    T1] Hardware name: Thundercomm Dragonboard 845c (DT)
-> > [   14.081432][    T1] Call trace:
-> 
-> Please think hard before including complete backtraces in upstream
-> reports, they are very large and contain almost no useful information
-> relative to their size so often obscure the relevant content in your
-> message. If part of the backtrace is usefully illustrative (it often is
-> for search engines if nothing else) then it's usually better to pull out
-> the relevant sections.
+Add support for the following Raspberry Pi displays:
+ - DFROBOT DRF0678 7in 800x480 TFT DSI capacitive touch
+ - DFROBOT DRF0550 5in 800x480 TFT DSI capacitive touch
 
-Hi Mark,
+Both have the following hardware:
+ - FocalTech FT5406 10pt touch controller (with no interrupt)
+ - Powertip PH800480T013-IDF02 compatible panel
+ - Toshiba TC358762 compatible DSI to DBI bridge
+ - ATTINY based regulator used for backlight controller and panel enable
 
-Thanks for your feedback. I'll go ahead and send out a new version of
-the patch with a trimmed down commit message.
+Support is added via a device-tree overlay. The touch controller is not
+yet supported as polling mode is needed.
 
-Thanks,
-Isaac
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  2 +
+ .../imx8mm-venice-gw72xx-0x-rpidsi.dtso       | 87 +++++++++++++++++++
+ 2 files changed, 89 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rpidsi.dtso
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index df572cfd0931..454b07ed09fc 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -147,6 +147,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8ulp-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb
+ 
+ imx8mm-venice-gw72xx-0x-imx219-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-imx219.dtbo
++imx8mm-venice-gw72xx-0x-rpidsi-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rpidsi.dtbo
+ imx8mm-venice-gw72xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs232-rts.dtbo
+ imx8mm-venice-gw72xx-0x-rs422-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs422.dtbo
+ imx8mm-venice-gw72xx-0x-rs485-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs485.dtbo
+@@ -157,6 +158,7 @@ imx8mm-venice-gw73xx-0x-rs422-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-
+ imx8mm-venice-gw73xx-0x-rs485-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs485.dtbo
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-imx219.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rpidsi.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs232-rts.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs422.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs485.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rpidsi.dtso b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rpidsi.dtso
+new file mode 100644
+index 000000000000..45bf88fa7c16
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rpidsi.dtso
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 Gateworks Corporation
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "imx8mm-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	compatible = "gw,imx8mm-gw73xx-0x", "fsl,imx8mm";
++
++	panel {
++		compatible = "powertip,ph800480t013-idf02";
++		power-supply = <&attiny>;
++		backlight = <&attiny>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&bridge_out>;
++			};
++		};
++	};
++};
++
++&i2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	attiny: regulator@45 {
++		compatible = "raspberrypi,7inch-touchscreen-panel-regulator";
++		reg = <0x45>;
++	};
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&mipi_dsi {
++	samsung,burst-clock-frequency = <891000000>;
++	samsung,esc-clock-frequency = <54000000>;
++	samsung,pll-clock-frequency = <27000000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	bridge@0 {
++		compatible = "toshiba,tc358762";
++		reg = <0>;
++		vddc-supply = <&attiny>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				bridge_in: endpoint {
++					remote-endpoint = <&dsi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				bridge_out: endpoint {
++					remote-endpoint = <&panel_in>;
++				};
++			};
++		};
++	};
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++			dsi_out: endpoint {
++				remote-endpoint = <&bridge_in>;
++			};
++		};
++	};
++};
+-- 
+2.25.1
+
