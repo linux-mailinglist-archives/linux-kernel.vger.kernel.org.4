@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE06874F000
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99E074F00C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjGKNSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        id S232383AbjGKNXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjGKNSF (ORCPT
+        with ESMTP id S232288AbjGKNXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:18:05 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5533912F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:18:04 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so8332313e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689081482; x=1691673482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1M416nxinRPhMN72vt3UGKfG1j5hFyRnFIH3z1K8CY0=;
-        b=mLWHy13gnfEODDnVaE+Cd9BMvRPT1potqsYTW7tW6KH3+OCJNqCXPRfpaKFPQ+O6UK
-         At5idoRZXXjHXtri/l0U9ytWKOn362jHTwRZIykgJvLMO/RG5uVUhyXEcs1S3qKWpD2R
-         7LGVvosyn4tDvneqDBHdUGMIfhuIzIv5iBCDtnwoKoy3Ae2L9x3tlIzXn8vIJUBsZ8wb
-         g/7SepshLR7SY7Y3uMMbftC1vE3RAMMgAF/Hs3rSfQbe/pWg3wZWQKwb56YZqhQesCPn
-         zZgUHjvpiMy1+qxFHWMdS23fuvMp9YWI1rpkyQs02ronAbtT23DQHtVH45WsEpuFvtx7
-         0DTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689081482; x=1691673482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1M416nxinRPhMN72vt3UGKfG1j5hFyRnFIH3z1K8CY0=;
-        b=U0GGJuAjpghB5wO4xogiNS2xnz+08MIgReb8P6BlhMdcbIweAH/Ums2u7z3E3EFxT7
-         cV1iBO31maidSKEU++itG09ewLG1Zgq3Cx0iqWttUnpss3l3LHobJvGOCubmzhrRSXkI
-         ftpHhBBrcScrwcDExOD0uOO+IgkvGLIkRQo0bGvxNLXhmyDsckC1l44Y1lT1HDTnAJH3
-         8Vr1ruZv82eJrukriMrNdIv0/ByPKbYaN9nGR6CQevuQAzB07H1CViALRL98aoysB0qO
-         5ybZ/ssXFodCobj+hxWtp75liJ4KRYdkHtxKd/FDeGGdDicbXJVqZdIB3+D15FbmwdHk
-         SX7Q==
-X-Gm-Message-State: ABy/qLZBVNPu9RHuNMAVRhKckCFF11IhqCrjEWYD5iAGGsiXNSVTOhua
-        iPcRPv+24q5lN+KSVbgnwmoXo1x2ZJqPN3NZ+f0=
-X-Google-Smtp-Source: APBJJlG4jJrWm0lu72w6bT3WD8bOW7mvytM/mXWOJRIPSonej9X8klrk5olkHCz3glygAVziSdytAw==
-X-Received: by 2002:ac2:4c52:0:b0:4fb:85b2:cf78 with SMTP id o18-20020ac24c52000000b004fb85b2cf78mr15387499lfk.37.1689081482480;
-        Tue, 11 Jul 2023 06:18:02 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.194.156])
-        by smtp.gmail.com with ESMTPSA id q16-20020a056402033000b0051e2a1502a1sm1239244edw.68.2023.07.11.06.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 06:18:02 -0700 (PDT)
-Message-ID: <9a20851f-7981-bf31-eed1-7dd77528ca02@linaro.org>
-Date:   Tue, 11 Jul 2023 15:18:00 +0200
+        Tue, 11 Jul 2023 09:23:49 -0400
+X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jul 2023 06:23:47 PDT
+Received: from mail.vlsi.fi (mail.vlsi.fi [195.197.254.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7C5718D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:23:47 -0700 (PDT)
+Received: from mail.vlsi.fi (localhost [127.0.0.1])
+        by mail.vlsi.fi (Postfix) with ESMTP id EEDB917E1408
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:18:01 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=vlsi.fi; h=message-id:date
+        :mime-version:to:from:subject:content-type
+        :content-transfer-encoding; s=alpha; bh=19Ha4HfwVzaKUrbb13yyrSTI
+        ms8=; b=Sm4OvDnqzvGhf8DH54ymobFeJ+lPelmonbAldfWs2JzkNaMWPIEvgXOW
+        N8TEYSQuM/ljeHGrF3XY8WEFydgnTJTx9AA4NE5by6PJQHC+cWrFEwOb3j9+N7zw
+        oZG+hhlR/z4Ef3YoSL5hWVM+bXdm/NxCpV0sPT99M6KVvUGNoNg=
+DomainKey-Signature: a=rsa-sha1; c=nofws; d=vlsi.fi; h=message-id:date
+        :mime-version:to:from:subject:content-type
+        :content-transfer-encoding; q=dns; s=alpha; b=sSv3AjAID4XF8C+0an
+        9JZi4+yvccfoxpAhXNJUHX4gV92B62lsZNTj2efMv+4/y8TW6Q2ly+io3HYmcYNi
+        5fD3ndKJGo1X47XapoHdfc2s5zMPTqLqdc8f3zypDVnHokAZ7oeuKhhf9Nq3y7vb
+        Pwqk4MYu2ogNZ0W/Vg95M0qBM=
+Message-ID: <0831fc40-267d-f974-8785-d304265837d5@vlsi.fi>
+Date:   Tue, 11 Jul 2023 16:18:01 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
- checking of eiointc_index
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+To:     linux-kernel@vger.kernel.org
 Content-Language: en-US
-To:     Bibo Mao <maobibo@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230711120807.1805186-1-maobibo@loongson.cn>
- <20230711120807.1805186-2-maobibo@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230711120807.1805186-2-maobibo@loongson.cn>
+From:   Mikko Saari <Mikko.Saari@vlsi.fi>
+Subject: riscv pending interrupts freezes the kernel, fixing by csr_clear-call
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,22 +52,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/23 14:08, Bibo Mao wrote:
-> Return value of function eiointc_index is int, however it is converted
-> into uint32_t and then compared smaller than zero. This causes logic
-> problem. There is eioint initialization problem on qemu virt-machine
-> where there is only one eioint node and more than 4 vcpus. Nodemap of
-> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
-> other vcpus can not response any external device interrupts and only local
-> processor interrupts like ipi/timer can work.
-> 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->   drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
->   1 file changed, 7 insertions(+), 5 deletions(-)
+Hello Linux! In earlier Linux Risc-V-patches (ultraembedded 4.20-kernel) 
+there was interrupt handling implemented by following way in 
+"linux/arch/riscv/kernel/irq.c".
+-----------------------------------------------------------------------------kernel 
+4.20
+  case INTERRUPT_CAUSE_EXTERNAL:
+#ifdef CONFIG_XILINX_INTC
+                 {
+                      unsigned int irq;
+                         irq = xintc_get_irq();
+                 next_irq:
+                         BUG_ON(!irq);
+                         generic_handle_irq(irq);
 
-Fixes: dd281e1a1a93 ("irqchip: Add Loongson Extended I/O interrupt 
-controller support")
+                         irq = xintc_get_irq();
+                         if (irq != -1U) {
+                 pr_debug("next irq: %d\n", irq);
+                 goto next_irq;
+             }
+         }
+                 csr_clear(sip, 1 << INTERRUPT_CAUSE_EXTERNAL);
+#else
+              handle_arch_irq(regs);
+#endif
+               break;
+     default:
+                 panic("unexpected interrupt cause");
+-------------------------------------------------------------------------------
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+   However, in current Linux version (6.5) there is no corresponding   
+csr_clear(sip, 1 << INTERRUPT_CAUSE_EXTERNAL)-call anywhere, at least I 
+haven't been able to find it.
+Instead I did a "quick and dirty" -fix to the file 
+"linux/drivers/irqchip/irq-xilinx-intc.c" and put the corresponding 
+call     csr_clear(CSR_SIP, IE_EIE);
+to function
+------------------------------------------------------------------------kernel 
+6.5
+  static void xil_intc_irq_handler(struct irq_desc *desc)
+{
+     struct irq_chip *chip = irq_desc_get_chip(desc);
+     struct xintc_irq_chip *irqc;
+     u32 pending;
 
+
+     irqc = irq_data_get_irq_handler_data(&desc->irq_data);
+     chained_irq_enter(chip, desc);
+     do {
+         pending = xintc_get_irq_local(irqc);
+         if (pending == 0)
+             break;
+         generic_handle_irq(pending);
+     } while (true);
+     chained_irq_exit(chip, desc);
+     csr_clear(CSR_SIP, IE_EIE);
+}
+---------------------------------------------------------------------------
+Now the interrupts are not pending and the system is not halted as it 
+was before for example while using spidevtest before the modifications. 
+The call csr_clear() clears pending interrupts that would otherwise halt 
+the Linux kernel.
+I wonder if this should be fixed somehow more elegantly? I am grateful 
+for any answers. I am just a beginner in the adventure of the driver 
+development, and any sensible answer is real help :)
+Best Regards, Mikko Saari
