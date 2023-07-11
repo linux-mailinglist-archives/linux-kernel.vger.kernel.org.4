@@ -2,102 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B5674F3B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4133574F3B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjGKPhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S232665AbjGKPh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjGKPg5 (ORCPT
+        with ESMTP id S232606AbjGKPg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Jul 2023 11:36:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574E919B9;
-        Tue, 11 Jul 2023 08:36:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1188619BD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:36:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E94F36142E;
-        Tue, 11 Jul 2023 15:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 101EFC433C8;
-        Tue, 11 Jul 2023 15:36:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D488614DC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:36:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF09C433CC;
+        Tue, 11 Jul 2023 15:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689089785;
-        bh=3yGJUv7mG9w66QWvUDiFCAxpjPym06sfQHYY0aD+gSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YtCM+nu/ST2wx6EMLwwyQNSq47eBjxkB5xPshmtwN7aZSIBvA5JPxYL4RY6P5WAIy
-         NmY0PZC+/lTrZWkJCg+CP5ZG53KLiv6co4gXdLxBwKsVjUo473qGbqNI2hr69F+5ce
-         O7dADWw+IEZjXGU1plNOK9mbtucA0yU73dxlDASu7WYXr0be3zkIWhAep8GxTRD5v2
-         J2P5031nNIjI11JtKPIUt2NqfrZv7zNZ656/HadyzqnKRGLj5TuJ3abccwENp5Pxi5
-         U0RXUVcexPFn1VKQCGYVbo+ARY/5rx5vL0aWf2H0E52eK5ZLmR1exzEm4L8WwMN9RU
-         k8mIGvP/kvzTw==
-Date:   Tue, 11 Jul 2023 16:36:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 00/13] PCI: Define Intel PCI IDs and use them in drivers
-Message-ID: <46d612f4-24a4-4493-aa9f-0ace5225a38b@sirena.org.uk>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
- <bc2484ba-3bb2-7d74-fcd1-55c9ec253b9c@linux.intel.com>
+        s=k20201202; t=1689089790;
+        bh=fpzblsPSQYpoP86N5Eq39fYdejh6sSoZdOdfkJkZF2s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UFAoX/KoJ4MTJqDW16Qy4ZewD6kIoJ/icPvg1Mnrvdy+bJeQzgK72oVPkqfGq54Yt
+         PpU+l6XQAlWbCFQtsi1qah2V7H1C/r2GMZdlH2+KSD6vabNFqKsY+yGm5Joni/4U5l
+         HSnIBUYIhhk82nWgWBtKnm1YDvsCKK5mMlkQeHejr2K0TUfPkSz8vh8y7Kn8t9WZNg
+         zpck6twrEeunHRLtmZazsZgiX4bQCL91dg90JNkROibTGTQDv2BuKWMmcLg/2E25k9
+         SDk4mpfTaNZkGqJprGziLk1a9rz0arezvKYGsV9WFtHWSOokbUbEjkhxmfGhyL//pb
+         IjInw3D2oG2dA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 02AC540516; Tue, 11 Jul 2023 12:36:26 -0300 (-03)
+Date:   Tue, 11 Jul 2023 12:36:26 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Binbin Wu <binbin.wu@linux.intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Ricardo Koller <ricarkol@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync linux/kvm.h with the kernel
+ sources
+Message-ID: <ZK12+virXMIXMysy@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ugnuzEbNXZzUGQ5Y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bc2484ba-3bb2-7d74-fcd1-55c9ec253b9c@linux.intel.com>
-X-Cookie: marriage, n.:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
---ugnuzEbNXZzUGQ5Y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+- Arnaldo
 
-On Tue, Jul 11, 2023 at 05:24:07PM +0200, Pierre-Louis Bossart wrote:
-> On 7/11/23 14:57, Amadeusz S=C5=82awi=C5=84ski wrote:
+Full explanation:
 
-> > Simplify things, by adding PCI IDs to global header and make use of them
-> > in drivers. This allows for removal of comments by having IDs themselves
-> > being self explanatory. Additionally it allows for removal of existing
-> > inconsistencies by having one source of truth.
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
-> I'd like to hear from Takashi and Mark on how this would work, we have
-> to provide new PCI IDs for both trees using a common 'pci_ids.h' file.
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-We can probably just agree on a tree to apply things and work from
-there.  It does make for a bit more friction though, you're right there.
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
---ugnuzEbNXZzUGQ5Y
-Content-Type: application/pgp-signature; name="signature.asc"
+E.g.:
 
------BEGIN PGP SIGNATURE-----
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmStdvMACgkQJNaLcl1U
-h9AQowf/frH4ZuVWxLoHCFW2XNC+zViR9SfL0G/UaMowMZGcAe9fQFOpcTfXCw+8
-0LcnZKN2gPtOqRGuIDyD9ybZs8HPwXAYNysA+gz6l9uCXVeDDYo5NHxFP7D9DW3G
-pfBPQIY7O5MQNw6GThz/RCmlxUtxTBt/Lct+BWtaPAqofAlWWoSdhtimxBxEi0Qo
-t+hiE1R6Nnnn1hKMnag4Lv7S1xANiDUmU8+ZJ31cnaq1fod2MDk2mAo2X1BNmy5U
-OS1f5KaOOjcJkRK1FHA/aFiwfXDUG9hyNHWTp6BrcmBvEZxDQANh7Qrot2rBZUAs
-TfMxDv+4m47o6doA8eWgHQOcS+c39w==
-=y0s8
------END PGP SIGNATURE-----
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
---ugnuzEbNXZzUGQ5Y--
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
+---
+
+To pick the changes in:
+
+  89d01306e34d6ace ("RISC-V: KVM: Implement device interface for AIA irqchip")
+  22725266bdf95bdd ("KVM: Fix comment for KVM_ENABLE_CAP")
+  2f440b72e852be42 ("KVM: arm64: Add KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE")
+
+That just rebuilds perf, as these patches don't add any new KVM ioctl to
+be harvested for the the 'perf trace' ioctl syscall argument
+beautifiers.
+
+This addresses this perf build warning:
+
+  Warning: Kernel ABI header differences:
+    diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Anup Patel <apatel@ventanamicro.com>
+Cc: Binbin Wu <binbin.wu@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>
+Cc: Ricardo Koller <ricarkol@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/uapi/linux/kvm.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
+index 737318b1c1d9a163..f089ab290978450e 100644
+--- a/tools/include/uapi/linux/kvm.h
++++ b/tools/include/uapi/linux/kvm.h
+@@ -1190,6 +1190,8 @@ struct kvm_ppc_resize_hpt {
+ #define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 225
+ #define KVM_CAP_PMU_EVENT_MASKED_EVENTS 226
+ #define KVM_CAP_COUNTER_OFFSET 227
++#define KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE 228
++#define KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES 229
+ 
+ #ifdef KVM_CAP_IRQ_ROUTING
+ 
+@@ -1442,6 +1444,8 @@ enum kvm_device_type {
+ #define KVM_DEV_TYPE_XIVE		KVM_DEV_TYPE_XIVE
+ 	KVM_DEV_TYPE_ARM_PV_TIME,
+ #define KVM_DEV_TYPE_ARM_PV_TIME	KVM_DEV_TYPE_ARM_PV_TIME
++	KVM_DEV_TYPE_RISCV_AIA,
++#define KVM_DEV_TYPE_RISCV_AIA		KVM_DEV_TYPE_RISCV_AIA
+ 	KVM_DEV_TYPE_MAX,
+ };
+ 
+@@ -1613,7 +1617,7 @@ struct kvm_s390_ucas_mapping {
+ #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+ #define KVM_SET_DEBUGREGS         _IOW(KVMIO,  0xa2, struct kvm_debugregs)
+ /*
+- * vcpu version available with KVM_ENABLE_CAP
++ * vcpu version available with KVM_CAP_ENABLE_CAP
+  * vm version available with KVM_CAP_ENABLE_CAP_VM
+  */
+ #define KVM_ENABLE_CAP            _IOW(KVMIO,  0xa3, struct kvm_enable_cap)
+-- 
+2.37.1
+
