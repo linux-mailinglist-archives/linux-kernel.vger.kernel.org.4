@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4E374F7BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2572B74F7C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjGKSFk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 14:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S231435AbjGKSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 14:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjGKSFi (ORCPT
+        with ESMTP id S230305AbjGKSF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:05:38 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B325B10D2;
-        Tue, 11 Jul 2023 11:05:37 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3145fcecef6so1286629f8f.0;
-        Tue, 11 Jul 2023 11:05:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689098736; x=1689703536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jN4aAUtnCM1PMkPeyFKL9GEE0yIi4I315hV3adntXQQ=;
-        b=cQTtPWtuAXSc5Sb7Dezk6Q70atT8nC4y+lcDiFvlIKMqCiL+lx96IxiyV8yCXPBitE
-         CmdGWGHJl/YvB9v1TY+dCI6cqs23YXbqNrOEydd/CBdljHjwcKCpoCNbEw9qopbQYDCC
-         O7Kt6G1w8uidbOmb0f/M2aMKaLkxwsDWyqZNCPkXm19e69PZpXykls29sdL5EwSL1AyR
-         7ZOV4lQNA42rZgDz7O5/A3gcYlsMLv1mAld5KysFO4ga/wzsDObwQwJbv+cyn6xnXeSq
-         /G4siGauTKZeAtE72yMkYwQUT2TnY8liCXCzzfXbHdI/Uel4PQtygRVqNxt/Sk0BfNBj
-         OSkg==
-X-Gm-Message-State: ABy/qLZzDU4eUrdNzqe2jBDHYGJ6mOCDFOwQJYffb6QUV7DjEE6XEet5
-        uU175wbWxd9nYDqc6yPfku/iGWD42mnq/01lSSQ=
-X-Google-Smtp-Source: APBJJlFmMOy5GRp17SG0GzxU/8aBXeeFTTrPAluCrUjPtiK7fzAge2wfiPvLTTBvTIXdxh2MfIW4Azgvf4F1qKQDdWQ=
-X-Received: by 2002:adf:cd86:0:b0:314:1af1:4ea6 with SMTP id
- q6-20020adfcd86000000b003141af14ea6mr15669150wrj.5.1689098735993; Tue, 11 Jul
- 2023 11:05:35 -0700 (PDT)
+        Tue, 11 Jul 2023 14:05:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88651716;
+        Tue, 11 Jul 2023 11:05:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6851A615B6;
+        Tue, 11 Jul 2023 18:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE81EC433C8;
+        Tue, 11 Jul 2023 18:05:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689098754;
+        bh=xIq4UPJc5cJM6QesWCRibpmblqZYNDtcrH7yYHl3oK8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mWaDSgMdD4UzMmzKqW6Lxv4GAHzx73ct8iijKJbB5W+gmcZcf1g4mTyEDxU/WBCFx
+         +3cqk+Xk6nCGHIj7hPMbJUxa8tfoGcg3xZFAJge3mW7Lo1N2kHmbPm74BHmTapWjNs
+         R5XXG4mwhC4C5ANrfJAmAFGEM3LVVGldL8dhjsbYnCY9FsHLoO9YO42nnzmI6QwrNf
+         CbOqf2IDC9lRytEtWxsvGP7/qhOCKvtB1Tp9c4svbUctXaYy8lf6xtzqYjSeF6BVr6
+         0gcweyNJH3KuERy2BcMiB93WaQycOJiT80L9nBBl9/ZsbU+AUw//GzBg9lgaeHVl/5
+         l2r+UBmUfbppw==
+Date:   Tue, 11 Jul 2023 19:05:49 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Huqiang Qin <huqiang.qin@amlogic.com>
+Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        brgl@bgdev.pl, andy@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] dt-bindings: gpio: Add a header file for Amlogic
+ C3 SoCs
+Message-ID: <20230711-monthly-return-8792ce346c26@spud>
+References: <20230710042812.2007928-1-huqiang.qin@amlogic.com>
+ <20230710042812.2007928-2-huqiang.qin@amlogic.com>
+ <20230710-maybe-mantis-e647d94fd13a@spud>
+ <424cb61a-9102-9a43-c999-36939e8d6cc0@amlogic.com>
 MIME-Version: 1.0
-References: <20230708112720.2897484-1-a.fatoum@pengutronix.de> <20230708112720.2897484-2-a.fatoum@pengutronix.de>
-In-Reply-To: <20230708112720.2897484-2-a.fatoum@pengutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Jul 2023 20:05:24 +0200
-Message-ID: <CAJZ5v0jS-VVjj7AS-W4dGNY2E=hAiXS-ZtNbj6mNSzCVFXxCwg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: of: fix double-free on unregistration
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BB6EK5uDa3jar4Xq"
+Content-Disposition: inline
+In-Reply-To: <424cb61a-9102-9a43-c999-36939e8d6cc0@amlogic.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 1:27 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->
-> Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal
-> zone parameters structure"), thermal_zone_device_register() allocates
-> a copy of the tzp argument and frees it when unregistering, so
-> thermal_of_zone_register() now ends up leaking its original tzp and
-> double-freeing the tzp copy. Fix this by locating tzp on stack instead.
->
-> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Daniel, this looks like a genuine fix to me, so I'm inclined to pick
-it up directly.
+--BB6EK5uDa3jar4Xq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Any objections?
+On Tue, Jul 11, 2023 at 10:55:40AM +0800, Huqiang Qin wrote:
+> Hi Conor,
+>=20
+> On 2023/7/11 0:38, Conor Dooley wrote:
+> >> diff --git a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-p=
+inctrl-a1.yaml b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pi=
+nctrl-a1.yaml
+> >> index 99080c9eaac3..e019b6aa6ca3 100644
+> >> --- a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-=
+a1.yaml
+> >> +++ b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-=
+a1.yaml
+> >> @@ -17,6 +17,7 @@ properties:
+> >>      enum:
+> >>        - amlogic,meson-a1-periphs-pinctrl
+> >>        - amlogic,meson-s4-periphs-pinctrl
+> >> +      - amlogic,c3-periphs-pinctrl
+> > Alphanumerical order here perhaps?
+>=20
+> Okay
+>=20
+> >=20
+> >> +++ b/include/dt-bindings/gpio/amlogic-c3-gpio.h
+> >> @@ -0,0 +1,72 @@
+> >> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
+> > Any reason to deviate from the usual license terms for bindings, which =
+is
+> > "GPL-2.0-only OR BSD-2-Clause"?
+>=20
+> I initially used the license commonly used by Amlogic (reference: meson-s=
+4-gpio.h):
+> ```
+> /* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> ```
+>=20
+> But when I checked the patch, some warnings appeared:
+> ```
+> WARNING: DT binding headers should be licensed (GPL-2.0-only OR .*)
+> #37: FILE: include/dt-bindings/gpio/amlogic-c3-gpio.h:1:
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> ```
+> So I followed the prompts and changed the license.
+>=20
+> Can I ignore this warning and use the (GPL-2.0+ OR MIT) license?
 
-> ---
->  drivers/thermal/thermal_of.c | 27 ++++++---------------------
->  1 file changed, 6 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 6fb14e521197..bc07ae1c284c 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -238,17 +238,13 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
->         return 0;
->  }
->
-> -static struct thermal_zone_params *thermal_of_parameters_init(struct device_node *np)
-> +static void thermal_of_parameters_init(struct device_node *np,
-> +                                      struct thermal_zone_params *tzp)
->  {
-> -       struct thermal_zone_params *tzp;
->         int coef[2];
->         int ncoef = ARRAY_SIZE(coef);
->         int prop, ret;
->
-> -       tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
-> -       if (!tzp)
-> -               return ERR_PTR(-ENOMEM);
-> -
->         tzp->no_hwmon = true;
->
->         if (!of_property_read_u32(np, "sustainable-power", &prop))
-> @@ -267,8 +263,6 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
->
->         tzp->slope = coef[0];
->         tzp->offset = coef[1];
-> -
-> -       return tzp;
->  }
->
->  static struct device_node *thermal_of_zone_get_by_name(struct thermal_zone_device *tz)
-> @@ -442,13 +436,11 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
->  static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
->  {
->         struct thermal_trip *trips = tz->trips;
-> -       struct thermal_zone_params *tzp = tz->tzp;
->         struct thermal_zone_device_ops *ops = tz->ops;
->
->         thermal_zone_device_disable(tz);
->         thermal_zone_device_unregister(tz);
->         kfree(trips);
-> -       kfree(tzp);
->         kfree(ops);
->  }
->
-> @@ -477,7 +469,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->  {
->         struct thermal_zone_device *tz;
->         struct thermal_trip *trips;
-> -       struct thermal_zone_params *tzp;
-> +       struct thermal_zone_params tzp = {};
->         struct thermal_zone_device_ops *of_ops;
->         struct device_node *np;
->         int delay, pdelay;
-> @@ -509,12 +501,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->                 goto out_kfree_trips;
->         }
->
-> -       tzp = thermal_of_parameters_init(np);
-> -       if (IS_ERR(tzp)) {
-> -               ret = PTR_ERR(tzp);
-> -               pr_err("Failed to initialize parameter from %pOFn: %d\n", np, ret);
-> -               goto out_kfree_trips;
-> -       }
-> +       thermal_of_parameters_init(np, &tzp);
->
->         of_ops->bind = thermal_of_bind;
->         of_ops->unbind = thermal_of_unbind;
-> @@ -522,12 +509,12 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->         mask = GENMASK_ULL((ntrips) - 1, 0);
->
->         tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-> -                                                    mask, data, of_ops, tzp,
-> +                                                    mask, data, of_ops, &tzp,
->                                                      pdelay, delay);
->         if (IS_ERR(tz)) {
->                 ret = PTR_ERR(tz);
->                 pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-> -               goto out_kfree_tzp;
-> +               goto out_kfree_trips;
->         }
->
->         ret = thermal_zone_device_enable(tz);
-> @@ -540,8 +527,6 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->
->         return tz;
->
-> -out_kfree_tzp:
-> -       kfree(tzp);
->  out_kfree_trips:
->         kfree(trips);
->  out_kfree_of_ops:
-> --
+If the tools are happy then I suppose you are okay.. I'll leave that to
+Rob or Krzysztof, but if you have a reason for diverging that seems fine
+to me.
+
+Thanks,
+Conor.
+
+--BB6EK5uDa3jar4Xq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK2Z/QAKCRB4tDGHoIJi
+0gtfAP9/EXCGxkNjEP4so+mvz8Kfk7PRNhgkTxX9QnngeOPp1AD/XndZ8ks4QCwV
+IXXaGza3r7f0IgKHFv0erzhbfM1q7gY=
+=JIPw
+-----END PGP SIGNATURE-----
+
+--BB6EK5uDa3jar4Xq--
