@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB3974F48D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6E774F490
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbjGKQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S232871AbjGKQMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbjGKQLe (ORCPT
+        with ESMTP id S232879AbjGKQMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:11:34 -0400
+        Tue, 11 Jul 2023 12:12:10 -0400
 Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81525171E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:10 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89d47ffb6so29828495ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE219BB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:58 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89114266dso44140905ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689091870; x=1691683870;
+        d=chromium.org; s=google; t=1689091918; x=1691683918;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=14BF34CA+deUxHLUvuKK0NdUXrmzEpT2HQriQO+aNSc=;
-        b=lAX+nmUnvQh8Wr4sSat33joYcFucraRvBlLjDezD4gl2CuEiTvYwK1rISc2zz7VGl3
-         4Z9xm4yMTWpiCWj83z0n3GITD7+A8laRk8aL0Ab2ADl3io+anea7vTXZTAG1PvdDyofW
-         w0Vyjl/9h85bclpewVFAtdHzjAJ7OSyEq+mpc=
+        bh=gKlyg81WY1Ahyf8Z4TEgmZZoIPC/F0LheVwd7/XJwxg=;
+        b=S9a3gHgP1uCjVZRBcpWoA1CLnj31G1NCAYspUTQ+H7udjIiIX0cy/WdxDAqk1tml3A
+         ofwTLdI2VrgN1TAonv2cA/FSKRtmo0lrllh0eXaG0HqZRH1gd61D+FrdMIc337ulTwDf
+         EKqDyh0l5QbJTqNQUegbtz33egnXVJNgEwvd8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689091870; x=1691683870;
+        d=1e100.net; s=20221208; t=1689091918; x=1691683918;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=14BF34CA+deUxHLUvuKK0NdUXrmzEpT2HQriQO+aNSc=;
-        b=JjyKatxB9z0+/Murwj7KstfiMym2s2ntaLUXLiSl4G7VHzr01UaLoggM5Ug5yNNIE1
-         0jw2mDPyBItvxy+ft5v7TCwTf8qA9xhNwYWOKJ1m2SbU+OFT/CRIMu59yk82XtmfzUon
-         4cUEVkXS2FwM7cmAWj5A8Pdktygs7XlhaH26zAkmhcfyg7dfz5UD7hXCgTxON16jOCdq
-         /w6gR7WzL30GuRPtRwGDwUrPIYlrUGhX+MBadYhkaP92UPwjGEpssF7dPaFdVGgJS7BO
-         D+HMyCAk7Hbgel0gU6Uhb6R1wPoxgT3rtyverePzerQOVtmqaBaYxE6b6pbc7MyjW4mq
-         P9XQ==
-X-Gm-Message-State: ABy/qLboqGOuGZJRwtqyj0J9mYJ8oGFJ7BzxA7j/9kqheKw5AM2y+nJ2
-        gLu+r2Ka5rsACXzBbX5AOvn2Pw==
-X-Google-Smtp-Source: APBJJlGtLe6pwcli4y1GKQQMwNq1rjUHkyjEzCkkqTqxZcuk3wugA2wX5iXhBtkX+30AaZAOZXOf2g==
-X-Received: by 2002:a17:902:e548:b0:1b9:e1d5:c826 with SMTP id n8-20020a170902e54800b001b9e1d5c826mr4519362plf.16.1689091869978;
-        Tue, 11 Jul 2023 09:11:09 -0700 (PDT)
+        bh=gKlyg81WY1Ahyf8Z4TEgmZZoIPC/F0LheVwd7/XJwxg=;
+        b=NNOeYKGU5lq5kUCVS1WGr05HoVtRsQADA80+KJ/EMYIU6d5NONAfaKaNQAMudj+KGs
+         pP8FVRpgYHSX7l1WuNR9/BizhvhwUU8hMIw4EwYM7y0UE6nedFIdehV63O3ghO/NcJH/
+         j9xlW8EAcTlfnZpJBerkGcusNCn6LjDWY3CiTYwP82tD6AJXNjtafQMhHICO/HhCigDd
+         NyQZk/mFy3FPC6+77AzojyTOIzxhacjMuyY78iQR8oIJUIeJkyRtDbQqVvBKCWP/FfyN
+         GFK5ybmLzsiB6MZqsGEpm17K9cOSU2iqO4moNGe8TBEqTwbY1E0cyYL0yAM6qHzuO3mM
+         UDFg==
+X-Gm-Message-State: ABy/qLbpsZuqOsKuLs8fCc7tF7HlV6n5sFcNzfUIxBmingEdw8ZEP1x6
+        hAgL7cThhGmVu8zDaVEJACFUXw==
+X-Google-Smtp-Source: APBJJlEUrtENyInsVOCTeanHUkQu6UdS5LjzN+KXc76SyB1fRhX8h+uTrQ0omTebC3KsSHxKHBmohA==
+X-Received: by 2002:a17:902:a509:b0:1b8:76ce:9d91 with SMTP id s9-20020a170902a50900b001b876ce9d91mr14470522plq.1.1689091917989;
+        Tue, 11 Jul 2023 09:11:57 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170902c1d200b001b872695c1csm2098419plc.256.2023.07.11.09.11.08
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001b6674b6140sm2102562pld.290.2023.07.11.09.11.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 09:11:08 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 09:11:08 -0700
+        Tue, 11 Jul 2023 09:11:57 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 09:11:56 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Greg Ungerer <gerg@kernel.org>
-Cc:     linux-arm@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, brauner@kernel.org
-Subject: Re: [PATCH] fs: binfmt_elf_efpic: fix personality for fdpic ELF
-Message-ID: <202307110901.7E9A0D0AE5@keescook>
-References: <20230711133955.483393-1-gerg@kernel.org>
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: fix bindgen build error with UBSAN_BOUNDS_STRICT
+Message-ID: <202307110911.D0E735849@keescook>
+References: <20230711071914.133946-1-andrea.righi@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230711133955.483393-1-gerg@kernel.org>
+In-Reply-To: <20230711071914.133946-1-andrea.righi@canonical.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -69,81 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 11:39:55PM +1000, Greg Ungerer wrote:
-> The elf-fdpic loader hard sets the process personality to either
-> PER_LINUX_FDPIC for true elf-fdpic binaries or to PER_LINUX for
-> normal ELF binaries (in this case they would be constant displacement
-> compiled with -pie for example). The problem with that is that it
-> will lose any other bits that may be in the ELF header personality
-> (such as the "bug emulation" bits).
+On Tue, Jul 11, 2023 at 09:19:14AM +0200, Andrea Righi wrote:
+> With commit 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC") if
+> CONFIG_UBSAN is enabled and gcc supports -fsanitize=bounds-strict, we
+> can trigger the following build error due to bindgen lacking support for
+> this additional build option:
 > 
-> On the ARM architecture the ADDR_LIMIT_32BIT flag is used to signify
-> a normal 32bit binary - as opposed to a legacy 26bit address binary.
-> This matters since start_thread() will set the ARM CPSR register as
-> required based on this flag. If the elf-fdpic loader loses this bit
-> the process will be mis-configured and crash out pretty quickly.
+>    BINDGEN rust/bindings/bindings_generated.rs
+>  error: unsupported argument 'bounds-strict' to option '-fsanitize='
 > 
-> Modify elf-fdpic loaders personality setting for ELF binaries so that
-> it preserves the upper three bytes by using the SET_PERSONALITY macro
-> to set it. This macro in the generic case sets PER_LINUX but and
-> preserves the upper bytes. Architectures can override this for their
-> specific use case, and ARM does exactly this.
-
-Thanks for tracking this down!
-
-There are some twisty macros in use across all the architectures here!
-
-I notice the bare set_personality() call remains, though. Is that right?
-
-For example, ARM (and sh and xtensa) also sets:
-
-#define elf_check_fdpic(x) ((x)->e_ident[EI_OSABI] == ELFOSABI_ARM_FDPIC)
-
-so it's possible the first half of the "if" below could get executed,
-and ARM (and possibly other architectures) would again lose the other
-flags, if I'm reading correctly.
-
-(And the fact that PER_LINUX is actually 0x0 is oddly handled, leaving
-it implicit in most architectures.)
-
-What seems perhaps more correct is to remove the "if" entirely and make
-sure that SET_PERSONALITY() checks the header flags on all architectures?
-
-But I'm less familiar with this area, so please let me know what I'm
-missing. :)
-
+> Fix by adding -fsanitize=bounds-strict to the list of skipped gcc flags
+> for bindgen.
 > 
-> Signed-off-by: Greg Ungerer <gerg@kernel.org>
-> ---
-> 
-> Is anyone out there using elf-fdpic on ARM?
+> Fixes: 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC")
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 
-It would seem you're the first? :) (_Should_ it be usable on ARM?)
+Thanks for catching this!
 
--Kees
-
-> This seems to break it rather badly due to the loss of that ADDR_LIMIT_32BIT
-> bit from the process personality.
-> 
->  fs/binfmt_elf_fdpic.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-> index a05eafcacfb2..f29ae1d96fd7 100644
-> --- a/fs/binfmt_elf_fdpic.c
-> +++ b/fs/binfmt_elf_fdpic.c
-> @@ -348,7 +348,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
->  	if (elf_check_fdpic(&exec_params.hdr))
->  		set_personality(PER_LINUX_FDPIC);
->  	else
-> -		set_personality(PER_LINUX);
-> +		SET_PERSONALITY(exec_params.hdr);
->  	if (elf_read_implies_exec(&exec_params.hdr, executable_stack))
->  		current->personality |= READ_IMPLIES_EXEC;
->  
-> -- 
-> 2.25.1
-> 
+Acked-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
