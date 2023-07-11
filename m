@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A180774FA94
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160F974FA96
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjGKWEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S231790AbjGKWES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjGKWEJ (ORCPT
+        with ESMTP id S231669AbjGKWEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:04:09 -0400
+        Tue, 11 Jul 2023 18:04:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C926B170E;
-        Tue, 11 Jul 2023 15:04:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40AB170C;
+        Tue, 11 Jul 2023 15:04:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 597A261632;
-        Tue, 11 Jul 2023 22:04:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D65C433C9;
-        Tue, 11 Jul 2023 22:04:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8897E6162C;
+        Tue, 11 Jul 2023 22:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF5FC433CC;
+        Tue, 11 Jul 2023 22:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689113044;
-        bh=sgG4GZ2s6ORnJwOxVKfOxW49a30kTh+UGbUpknPHOBQ=;
+        s=k20201202; t=1689113049;
+        bh=1qUIYTa5qH+71pJpjqPgB4HJsLDFKxPRZi5HFjGOMLs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=oa6PeJxwcztQH9DanqQVH5fAhuRixAg62OTeT4DKUnXdNUerUHGGSWIGiGd0wlq9M
-         6LwdMofWimHXsbFwxMHxtf/VQDy40eaUx41eFrWPJ3xT5Z6wbK6X686whBO3jietaO
-         yyzLIuG7E0mVHyGOi6V4FdTrMj12xcwPaMJtYtr0pIuzZxp9t6dx12sHcICn2TBglR
-         oyLfA2mhHzHFBL/WKZlN58By9ES2HfXSfMAzV9enohJIfrk8mRQp2PxBfWSi+qqIEX
-         89A9X0U00PGwNBFe7bvwSVu51f5a10FweTauVReEYr2bpOUJ9m3BLKLgGK5IwxPe3B
-         HLLblQ30yl5mg==
+        b=oOEPJja8myKtu19uf9CQ22ifaq3vPiL2ri5Z2xQ2P/8FEMrI+Wt5t3BMttW+5e8ou
+         VclyQXWp77ziXpg6foLd9+45yaV4m7qByHvMf9Q8VyG0SFYLgVu3h17u9rYSLzukGx
+         9CzwkBdcJl6WHekct/4Mtj46BZIUkzpPHRE1z9DaAdlIYJIpQGaM76D4EQbdkokyJ5
+         cDeIXQjItFmtOo6M0MzYsiDUmWwOwgA0GncP9pnNTGrm2Eu70zMz7VXip1FLLKwJvH
+         u4KHioJPeJEjJmoGa8bz42SHinZoDFyx6Yku+vcpkIAnm3eqJSC6kh69vUoU0TKchz
+         FRZtXi2ZOAVEQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Cc:     linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru
-In-Reply-To: <20230703094518.53755-1-mmkurbanov@sberdevices.ru>
-References: <20230703094518.53755-1-mmkurbanov@sberdevices.ru>
-Subject: Re: [PATCH v1 0/2] spi: amlogic-spifc-a1: fixes and improvements
- for amlogic-spifc-a1
-Message-Id: <168911304326.642798.13272097605762748928.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 23:04:03 +0100
+To:     Valentin Caron <valentin.caron@foss.st.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230706081342.468090-1-valentin.caron@foss.st.com>
+References: <20230706081342.468090-1-valentin.caron@foss.st.com>
+Subject: Re: [PATCH v3] spi: stm32: disable device mode with st,stm32f4-spi
+ compatible
+Message-Id: <168911304710.642798.3178025159634647364.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 23:04:07 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -58,15 +61,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jul 2023 12:45:16 +0300, Martin Kurbanov wrote:
-> This series adds support for max_speed_hz and implement adjust_op_size()
-> callback.
+On Thu, 06 Jul 2023 10:13:42 +0200, Valentin Caron wrote:
+> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
+> Stop probing if this case happens.
 > 
-> Martin Kurbanov (2):
->   spi: amlogic-spifc-a1: implement adjust_op_size()
->   spi: amlogic-spifc-a1: add support for max_speed_hz
 > 
-> [...]
 
 Applied to
 
@@ -74,10 +73,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: amlogic-spifc-a1: implement adjust_op_size()
-      commit: 9bee51722cdc1b32193d4ddf6ea6952d666d8f13
-[2/2] spi: amlogic-spifc-a1: add support for max_speed_hz
-      commit: 54b8422cc64d6236024ec7d72bc63ca3ca90b87f
+[1/1] spi: stm32: disable device mode with st,stm32f4-spi compatible
+      commit: fee681646fc831b154619ac0261afedcc7e671e7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
