@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C02974E524
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2651774E52E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjGKDNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 23:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
+        id S230314AbjGKDRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 23:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjGKDNQ (ORCPT
+        with ESMTP id S229774AbjGKDRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 23:13:16 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22223EA;
-        Mon, 10 Jul 2023 20:13:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0Vn6n-l6_1689045189;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vn6n-l6_1689045189)
-          by smtp.aliyun-inc.com;
-          Tue, 11 Jul 2023 11:13:09 +0800
-Message-ID: <1689045049.360526-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next V1 0/4] virtio_net: add per queue interrupt coalescing support
-Date:   Tue, 11 Jul 2023 11:10:49 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Gavin Li <gavinl@nvidia.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org, mst@redhat.com,
-        jasowang@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        jiri@nvidia.com, dtatulea@nvidia.com,
-        Heng Qi <hengqi@linux.alibaba.com>
-References: <20230710092005.5062-1-gavinl@nvidia.com>
- <1688981109.6377137-1-xuanzhuo@linux.alibaba.com>
- <ea32a1cf-3a77-d63b-034f-0f80d2dd80ea@nvidia.com>
-In-Reply-To: <ea32a1cf-3a77-d63b-034f-0f80d2dd80ea@nvidia.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 23:17:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A790F9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689045376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fXhj7EzANXxG2zR22cPkd+LCDvsMw/4Z29S4c6txddw=;
+        b=GbbFDT9pMIGhkhP/CKNTCvEA52857SvX5YaW5PnYE1kbhMtYE/HVSPzY1a5R1SYJVfCTrt
+        OieZzDJ4C7dZSbLQhjr7s8SfdAtwAeT9p43UDUOO52lrfOtVOj5XvZJBPMqzx/YE02GRwN
+        VVPMp3UsMrhSbP5v7340cfMAMoH1JBM=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-52-WyDR3BM8NDWyxCJVnoIbcw-1; Mon, 10 Jul 2023 23:16:15 -0400
+X-MC-Unique: WyDR3BM8NDWyxCJVnoIbcw-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3a3df1e1f38so4768842b6e.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:16:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689045374; x=1691637374;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fXhj7EzANXxG2zR22cPkd+LCDvsMw/4Z29S4c6txddw=;
+        b=LGSYOKJvvAzPKUj6uNr9g6/tQ6WTHnHNY2ZTGyBh6rKd0vh7BmOOL71dVzmIdyQYNj
+         0bEnmerPF/3oVrjEutIwKY9OBcG0zZMKmlgJsSLhF3NuLDePcJ/YoQ4jPTdh7XXHRceU
+         ZCUbDwVPCN+XoLqVm/lYAPVCPGEAItucPjrH2WiwXyDWcbKtxOKaYIQ1YYiHuG1mmwzz
+         /A9PTn7nH1SmIxChcf+oseB9N7729TaDvR8edc0JKV+G2i7deXeTP9jghPYZP4T4uAnS
+         cvtmk8dLpAx9TuNGL7Ufy943qtg5dDxJGn5tqLBZbH1xeFOLn5t7h63yX4jJMxrb41k/
+         u/VQ==
+X-Gm-Message-State: ABy/qLYh0SqjOWfWtaVhvYTZTvzJqq21a3qScyBijIxpli/QW0FPQAV+
+        HpUQRm/OLX9FPejAK3/9usu0bDC3edN25gx4lLKWgmzSK17eTjhfumpY6WRq61JkLgGVtFgS4/q
+        xyfHDK4RCctehrqkXO1IBBJ+r
+X-Received: by 2002:a05:6808:190b:b0:3a3:aedd:6b21 with SMTP id bf11-20020a056808190b00b003a3aedd6b21mr18778774oib.39.1689045374372;
+        Mon, 10 Jul 2023 20:16:14 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFxYZvl0B8mwmdXFaSoLskIzmhRC10jfKsKeBAMSMVBzej0sbUxtdM0TFtWtEyJ4k8kWK+yIg==
+X-Received: by 2002:a05:6808:190b:b0:3a3:aedd:6b21 with SMTP id bf11-20020a056808190b00b003a3aedd6b21mr18778752oib.39.1689045373985;
+        Mon, 10 Jul 2023 20:16:13 -0700 (PDT)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id s4-20020aa78284000000b0066883d75932sm488806pfm.204.2023.07.10.20.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 20:16:13 -0700 (PDT)
+From:   Coiby Xu <coxu@redhat.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        kexec@lists.infradead.org (open list:KEXEC),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] kexec_file: ima: allow loading a kernel with its IMA signature verified
+Date:   Tue, 11 Jul 2023 11:16:03 +0800
+Message-ID: <20230711031604.717124-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 10:34:33 +0800, Gavin Li <gavinl@nvidia.com> wrote:
->
-> On 7/10/2023 5:25 PM, Xuan Zhuo wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Mon, 10 Jul 2023 12:20:01 +0300, Gavin Li <gavinl@nvidia.com> wrote:
-> >
-> > As far as I know, Heng Qi does that. I'm not sure, it's the same piece.
-> >
-> > cc @Heng Qi
-> >
-> > Thanks.
-> Do you mean the one below?
+When IMA has verified the signature of the kernel image, kexec'ing this
+kernel should be allowed.
 
-YES
+Fixes: af16df54b89d ("ima: force signature verification when CONFIG_KEXEC_SIG is configured")
+Signed-off-by: Coiby Xu <coxu@redhat.com>
+---
+ kernel/kexec_file.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 881ba0d1714c..96fce001fbc0 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -162,6 +162,13 @@ kimage_validate_signature(struct kimage *image)
+ 	ret = kexec_image_verify_sig(image, image->kernel_buf,
+ 				     image->kernel_buf_len);
+ 	if (ret) {
++		/*
++		 * If the kernel image already has its IMA signature verified, permit it.
++		 */
++		if (ima_appraise_signature(READING_KEXEC_IMAGE)) {
++			pr_notice("The kernel image already has its IMA signature verified.\n");
++			return 0;
++		}
+ 
+ 		if (sig_enforce) {
+ 			pr_notice("Enforced kernel signature verification failed (%d).\n", ret);
+@@ -169,12 +176,9 @@ kimage_validate_signature(struct kimage *image)
+ 		}
+ 
+ 		/*
+-		 * If IMA is guaranteed to appraise a signature on the kexec
+-		 * image, permit it even if the kernel is otherwise locked
+-		 * down.
++		 * When both IMA and KEXEC_SIG fail in lockdown mode, reject it.
+ 		 */
+-		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
+-		    security_locked_down(LOCKDOWN_KEXEC))
++		if (security_locked_down(LOCKDOWN_KEXEC))
+ 			return -EPERM;
+ 
+ 		pr_debug("kernel signature verification failed (%d).\n", ret);
+-- 
+2.41.0
 
->
-> https://lists.oasis-open.org/archives/virtio-dev/202303/msg00415.html
->
-> The code is to implement what it described and I don't have better
-> words. So, I copied the text from Heng Qi's.
-
-Maybe he wrote code for it. I think you should ask him about his plans first.
-
-Thanks.
-
-
->
-> >
-> >
-> >> Currently, coalescing parameters are grouped for all transmit and receive
-> >> virtqueues. This patch series add support to set or get the parameters for
-> >> a specified virtqueue.
-> >>
-> >> When the traffic between virtqueues is unbalanced, for example, one virtqueue
-> >> is busy and another virtqueue is idle, then it will be very useful to
-> >> control coalescing parameters at the virtqueue granularity.
-> >>
-> >> Example command:
-> >> $ ethtool -Q eth5 queue_mask 0x1 --coalesce tx-packets 10
-> >> Would set max_packets=10 to VQ 1.
-> >> $ ethtool -Q eth5 queue_mask 0x1 --coalesce rx-packets 10
-> >> Would set max_packets=10 to VQ 0.
-> >> $ ethtool -Q eth5 queue_mask 0x1 --show-coalesce
-> >>   Queue: 0
-> >>   Adaptive RX: off  TX: off
-> >>   stats-block-usecs: 0
-> >>   sample-interval: 0
-> >>   pkt-rate-low: 0
-> >>   pkt-rate-high: 0
-> >>
-> >>   rx-usecs: 222
-> >>   rx-frames: 0
-> >>   rx-usecs-irq: 0
-> >>   rx-frames-irq: 256
-> >>
-> >>   tx-usecs: 222
-> >>   tx-frames: 0
-> >>   tx-usecs-irq: 0
-> >>   tx-frames-irq: 256
-> >>
-> >>   rx-usecs-low: 0
-> >>   rx-frame-low: 0
-> >>   tx-usecs-low: 0
-> >>   tx-frame-low: 0
-> >>
-> >>   rx-usecs-high: 0
-> >>   rx-frame-high: 0
-> >>   tx-usecs-high: 0
-> >>   tx-frame-high: 0
-> >>
-> >> In this patch series:
-> >> Patch-1: Extract interrupt coalescing settings to a structure.
-> >> Patch-2: Extract get/set interrupt coalesce to a function.
-> >> Patch-3: Support per queue interrupt coalesce command.
-> >> Patch-4: Enable per queue interrupt coalesce feature.
-> >>
-> >> Gavin Li (4):
-> >>    virtio_net: extract interrupt coalescing settings to a structure
-> >>    virtio_net: extract get/set interrupt coalesce to a function
-> >>    virtio_net: support per queue interrupt coalesce command
-> >>    virtio_net: enable per queue interrupt coalesce feature
-> >>
-> >>   drivers/net/virtio_net.c        | 169 ++++++++++++++++++++++++++------
-> >>   include/uapi/linux/virtio_net.h |  14 +++
-> >>   2 files changed, 154 insertions(+), 29 deletions(-)
-> >>
-> >> --
-> >> 2.39.1
-> >>
