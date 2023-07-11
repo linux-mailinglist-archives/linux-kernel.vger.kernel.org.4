@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA80174E95F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037A374E965
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjGKIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S231330AbjGKIwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjGKIu2 (ORCPT
+        with ESMTP id S229560AbjGKIw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:50:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C8E10C7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B566139D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 88CDDC433C9;
-        Tue, 11 Jul 2023 08:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689065421;
-        bh=/k5olDGpbnyZ4n9IScGnO/ghFsMW4z+IdHliHFazRfY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QQdaVSMQf4Cl2d1URQhv/st9xBAGVyHlQnIRt+bNnJON7uqdHNVD1T6FxqBY7s+Vf
-         a2zcnX0dkaZBEYvxMgbS1H21aLNWqAfsdhs/IeCborE4VgQZ5Zu3W1cYJ9T9I+lHkL
-         vDi6be6VxrsmJUd1yA+UX+4kYRDmWh8UBK2EFqI5atIu2nXPkE+uoezEc0vjS0IA1v
-         8DEa0uMpjD2fTBdbLyMOCZ6a0Kr7h3urVQpvFd7aTWP6Mq/WkhlX6cSMpywmnkDMSx
-         m7nqPLZL5A1azKj/Tad4gi8k4Tw5/DMFdj2ThNB33pS8WUwRHrRwr6cESa/aNPXuT9
-         9S82HvLTXZGSg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69161C4167B;
-        Tue, 11 Jul 2023 08:50:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 11 Jul 2023 04:52:27 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0751AC;
+        Tue, 11 Jul 2023 01:52:23 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B7txQJ001204;
+        Tue, 11 Jul 2023 08:51:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=psB2BOzZd/2zFLoy2RpG9Xw41+FGJJhB82wMlnilYAI=;
+ b=gdJyJurfyEIPnquqABRYsZhYpyvoXGG9waHi84t9gGvUo7H+++lYGamDfwPjIwMHgst8
+ EbHbzGDKOmqQDQFvpp5hO1eVn+xhFzDp77W7nRvKKRuJMqO2CPPDOGgbcF/WBEZPTRPq
+ BBxTM6bhLSiC/+e9gmtIUT1W4+Hyzrr9sdL9nrleUb9CgGTDgmvzjOyFJFDbNhfYBjJY
+ /BSVNPSR2xTKhweT8vFCGag9nj238rhvcs6w8PA8zFsbZVJqO3CMlkvAi+lmEW+FFKvQ
+ 02i0BC9uv/Ost2KIB7swkyxxiNBjcxJK8Rd/KoaPHSy8+WB7tfvUGyWmZT1biP56P1lX Eg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs1e40adt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 08:51:52 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B8ppki011359
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 08:51:51 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 11 Jul 2023 01:51:43 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v3 0/6] Enable IPQ5332 USB2
+Date:   Tue, 11 Jul 2023 14:21:06 +0530
+Message-ID: <cover.1689065318.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2 net 0/4] net: fec: fix some issues of ndo_xdp_xmit()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168906542142.15715.5308120032595362444.git-patchwork-notify@kernel.org>
-Date:   Tue, 11 Jul 2023 08:50:21 +0000
-References: <20230706081012.2278063-1-wei.fang@nxp.com>
-In-Reply-To: <20230706081012.2278063-1-wei.fang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, shenwei.wang@nxp.com,
-        xiaoning.wang@nxp.com, netdev@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: sVW9l_olDRz5x77YAzA0dw9fStBRwpKk
+X-Proofpoint-ORIG-GUID: sVW9l_olDRz5x77YAzA0dw9fStBRwpKk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 clxscore=1011
+ mlxlogscore=277 mlxscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110078
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+This patch series adds the relevant phy and controller
+configurations for enabling USB2 on IPQ5332
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+v3:
+	Fix bindings file based on review comments
 
-On Thu,  6 Jul 2023 16:10:08 +0800 you wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> We encountered some issues when testing the ndo_xdp_xmit() interface
-> of the fec driver on i.MX8MP and i.MX93 platforms. These issues are
-> easy to reproduce, and the specific reproduction steps are as follows.
-> 
-> step1: The ethernet port of a board (board A) is connected to the EQOS
-> port of i.MX8MP/i.MX93, and the FEC port of i.MX8MP/i.MX93 is connected
-> to another ethernet port, such as a switch port.
-> 
-> [...]
+v1:
+	Cleanup DTS
+	Combine driver, kconfig and makefile patches
+	Remove unused functions from M31 driver
+	Drop the clock driver changes
 
-Here is the summary with links:
-  - [V2,net,1/4] net: fec: dynamically set the NETDEV_XDP_ACT_NDO_XMIT feature of XDP
-    https://git.kernel.org/netdev/net/c/be7ecbe7ec7d
-  - [V2,net,2/4] net: fec: recycle pages for transmitted XDP frames
-    https://git.kernel.org/netdev/net/c/20f797399035
-  - [V2,net,3/4] net: fec: increase the size of tx ring and update tx_wake_threshold
-    https://git.kernel.org/netdev/net/c/56b3c6ba53d0
-  - [V2,net,4/4] net: fec: use netdev_err_once() instead of netdev_err()
-    https://git.kernel.org/netdev/net/c/84a109471987
+Varadarajan Narayanan (6):
+  dt-bindings: usb: dwc3: Add IPQ5332 compatible
+  dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+  phy: qcom-m31: Introduce qcom,m31 USB phy driver
+  arm64: dts: qcom: ipq5332: Add USB related nodes
+  arm64: dts: qcom: ipq5332: Enable USB
+  arm64: defconfig: Enable M31 USB phy driver
 
-You are awesome, thank you!
+ .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml       |  49 ++++
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +
+ arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts        |  12 +
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi              |  54 +++++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/phy/qualcomm/Kconfig                       |  11 +
+ drivers/phy/qualcomm/Makefile                      |   1 +
+ drivers/phy/qualcomm/phy-qcom-m31.c                | 256 +++++++++++++++++++++
+ 8 files changed, 387 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.7.4
 
