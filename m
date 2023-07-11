@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE5B74FA89
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F46574FA91
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjGKWDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S231755AbjGKWEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjGKWDm (ORCPT
+        with ESMTP id S231689AbjGKWEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:03:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A50D170C;
-        Tue, 11 Jul 2023 15:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ruHFUTBYjMeb32nlu48tPWaF8pJMw/xDaOvIEKoJxjs=; b=dM0kbTdzbqKGUs8PimqMlhNiuL
-        9K4ZZr2jq02N7HlVgZJqCrsXNsqTj6GnaTbU8l/IjScJNP6nakX2h0eCO+bC333AGt7nU/hvME/Lj
-        ZHVdPns8UL3cG9OrzULU08YpFnZGnmAjWcNiDKuWfUwxQv1RqOmOCHD3fX4RJTaARboBTqyXv6dHZ
-        8udt53NgleBXCmfQNQEp22OAtqArpSuFhdiJTOSQIrSPtxCceljxvAiJLDr6q9/hhcD6V5kDiDN+r
-        3avXUTIcn9afQ0u+MWJAaiMKgXRUqGsbdTmuRtkfYVLg+w2KIXqkL0lYcqc1RUQhDqk3Fi0X2Vn0v
-        hEDneSog==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJLSM-00G5VK-9M; Tue, 11 Jul 2023 22:03:38 +0000
-Date:   Tue, 11 Jul 2023 23:03:38 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v5 00/38] New page table range API
-Message-ID: <ZK3Ruo6g4fujTrOY@casper.infradead.org>
-References: <20230710204339.3554919-1-willy@infradead.org>
- <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
- <ZK1My5hQYC2Kb6G1@casper.infradead.org>
- <20230711172440.77504856@p-imbrenda>
- <20230711095233.aa74320d729c1da818a6a4ed@linux-foundation.org>
+        Tue, 11 Jul 2023 18:04:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA7171C;
+        Tue, 11 Jul 2023 15:04:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97EB3615FF;
+        Tue, 11 Jul 2023 22:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70006C433C8;
+        Tue, 11 Jul 2023 22:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689113043;
+        bh=oBxNVJg4vSx6LNjM26ubu2NlwygUbvR3D4ABT5dk5Iw=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=KhdRHRpYv5ncqt72lmW3ddspokU1/xDMSuttpRxmaWqiVEUqS4nGB59QP/HkZyYCV
+         3ZlRvkqxNyytgnNoRiWpTYR/rbyx+tMWoCYRAIYJlyZTDiPHcy5xu/nE80+rt+JmX5
+         ctS9GW2hN8MbTv7i5Q1QtDe8C4G3T3vT6QnBEd/348pso578iM+zsG4u3URGEHx8Cy
+         1wzZ9sMpdXhu0tDBduFZxw6y3aflqDA+QM0UURdZPBPwX5SSu5UIyfotdlvbZLzeyx
+         lcxqyiG0gMCQCaAz7y0bAIGF4oj5wrr0rP1wlniGuHo6ye5ZD5HHxUY9qWFm/9U5TG
+         9XdTvaCyeObuA==
+From:   Mark Brown <broonie@kernel.org>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Stefan Moring <stefan.moring@technolution.nl>
+In-Reply-To: <20230628125406.237949-1-stefan.moring@technolution.nl>
+References: <20230628125406.237949-1-stefan.moring@technolution.nl>
+Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on
+ transfer length
+Message-Id: <168911304110.642798.9300862955272613470.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 23:04:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711095233.aa74320d729c1da818a6a4ed@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,59 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 09:52:33AM -0700, Andrew Morton wrote:
-> On Tue, 11 Jul 2023 17:24:40 +0200 Claudio Imbrenda <imbrenda@linux.ibm.com> wrote:
+On Wed, 28 Jun 2023 14:54:06 +0200, Stefan Moring wrote:
+> IMX51 supports 4096 bit burst lengths. Using the spi transfer length
+> instead of bits_per_word increases performance significantly.
 > 
-> > On Tue, 11 Jul 2023 13:36:27 +0100
-> > Matthew Wilcox <willy@infradead.org> wrote:
-> > 
-> > > On Tue, Jul 11, 2023 at 11:07:06AM +0200, Christian Borntraeger wrote:
-> > > > Am 10.07.23 um 22:43 schrieb Matthew Wilcox (Oracle):  
-> > > > > This patchset changes the API used by the MM to set up page table entries.
-> > > > > The four APIs are:
-> > > > >      set_ptes(mm, addr, ptep, pte, nr)
-> > > > >      update_mmu_cache_range(vma, addr, ptep, nr)
-> > > > >      flush_dcache_folio(folio)
-> > > > >      flush_icache_pages(vma, page, nr)
-> > > > > 
-> > > > > flush_dcache_folio() isn't technically new, but no architecture
-> > > > > implemented it, so I've done that for them.  The old APIs remain around
-> > > > > but are mostly implemented by calling the new interfaces.
-> > > > > 
-> > > > > The new APIs are based around setting up N page table entries at once.
-> > > > > The N entries belong to the same PMD, the same folio and the same VMA,
-> > > > > so ptep++ is a legitimate operation, and locking is taken care of for
-> > > > > you.  Some architectures can do a better job of it than just a loop,
-> > > > > but I have hesitated to make too deep a change to architectures I don't
-> > > > > understand well.
-> > > > > 
-> > > > > One thing I have changed in every architecture is that PG_arch_1 is now a
-> > > > > per-folio bit instead of a per-page bit.  This was something that would
-> > > > > have to happen eventually, and it makes sense to do it now rather than
-> > > > > iterate over every page involved in a cache flush and figure out if it
-> > > > > needs to happen.  
-> > > > 
-> > > > I think we do use PG_arch_1 on s390 for our secure page handling and
-> > > > making this perf folio instead of physical page really seems wrong
-> > > > and it probably breaks this code.  
-> > > 
-> > > Per-page flags are going away in the next few years, so you're going to
-> > 
-> > For each 4k physical page frame, we need to keep track whether it is
-> > secure or not.
-> > 
-> > A bit in struct page seems the most logical choice. If that's not
-> > possible anymore, how would you propose we should do?
-> > 
-> > > need a new design.  s390 seems to do a lot of unusual things.  I wish
-> > 
-> > s390 is an unusual architecture. we are working on un-weirding our
-> > code, but it takes time
-> > 
 > 
-> This issue sounds fatal for this version of this patchset?
 
-It's only declared as being per-folio in the cover letter to this
-patchset.  I haven't done anything that will prohibit s390 from using it
-the way they do now.  So it's not fatal, but it sounds like the
-in_range() macro might be ...
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: Increase imx51 ecspi burst length based on transfer length
+      commit: 15a6af94a2779d5dfb42ee4bfac858ea8e964a3f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
