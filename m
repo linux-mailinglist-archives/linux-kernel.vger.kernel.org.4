@@ -2,184 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0291D74E703
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8242574E706
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjGKGO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S231241AbjGKGQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjGKGOy (ORCPT
+        with ESMTP id S229947AbjGKGP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:14:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA901BC;
-        Mon, 10 Jul 2023 23:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689056093; x=1720592093;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=l5i0Xa4P0ItZXOFIZm4tJERzjODQkKvf93IVVETG01U=;
-  b=G0N3E9YOtw7LvQq6q/fVlRbFiOHscV14XaesF/d4X0z0Hi/siXCHIt3B
-   JwwPN5znunu8dtcrHPjhVto70yLBjyTyxV3nYqRfE8iJoX2gcc+1sSyPn
-   5AySSHdIVOgViVgUmFfVM6ap+XqAU+x0wyDVXyObiMa8LWWVRM62HxGCQ
-   4g8u2WURgZKf26xq85t6OkEdAOLaQapOK7h6lIrfhRjao11xt575HMeav
-   t7aibERpCv4cRNNZV6JSK4RGStoUXMlmg7zf0WUxEkAzCyl6zWNq7Qey/
-   FFoP9z9A5CqS4pdjqsCydMI+Su1ivV4COvn/7VGlNYmLYluaoD8SaZWEJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361997435"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="361997435"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 23:14:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="1051640011"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="1051640011"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jul 2023 23:14:52 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 23:14:52 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 23:14:51 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 10 Jul 2023 23:14:51 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Mon, 10 Jul 2023 23:14:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XEqIumLvma3JtOU0Yd+4+Dv9jQq/E2kXpkoco7M0ft4s+9ZEwLsEvY0Xgz5AOzBg33T5pyc6PdGMXd5J5y3z/OMDjrOfsD0M5b8k3eyWp9CFQXkGVfj/ucGrNK/ml47d/eXIYMHWI0CgfOk7B2GRi0wxD5bZTG4hE4H3aIxG5ImLbxGM5S1cftcjHfcZ2nRrfnxctMbPw4ViZOkjOIGg5pnjri5xC+zhBPTk/DFjE73UyNiFFyqYCabZbg0p5+SWY75gDx639GhaEnHG+FxqOgxsTpgNCG58BjgVQ7jINO0u/vhUVwvD1t4DJ/siZFk9QmgRqU8eSN3CuKUVz1tANw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8CcHCg2SffVyR3Yq5WlZlTCTL1MqlSbz+RPtbh/vCzM=;
- b=MXB/XB7W0XpgLk9u8XiWxXhOODYx91VpsDUFeW1sqyqMT30M4ARBUMm9SJNH+rMIECGtaXn6LULZiujt0MpaTPNMaEP/ObQDEj0bAYwMeFjEEkJGW2v2cZnd/DGOofs6jmep/JazuDEZOExPS4I8JLF5h7z3LFZIfv7fMtK2em5eBobmLGY/3QUMgfsudAGealf3yUIPr4HCzugsQAH0pW3XHLOMLOy0kc1Cz1lG31h0GkQ2OQlrGyEeUVAvtneevoeGkRfOrUQgz2a/2HGRbcktf1c4VpfAtPh/x4u7ifW/70mB0B6ZizOLxlB7Xph1lhnsrj6K77mDF7IcI7sHgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SA1PR11MB6847.namprd11.prod.outlook.com (2603:10b6:806:29e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Tue, 11 Jul
- 2023 06:14:42 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
- 06:14:42 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 5/9] iommu: Make fault_param generic
-Thread-Topic: [PATCH 5/9] iommu: Make fault_param generic
-Thread-Index: AQHZs5RHv1DdatEmukqpigeHJWriGq+0FnVQ
-Date:   Tue, 11 Jul 2023 06:14:42 +0000
-Message-ID: <BN9PR11MB52763F7A1433C73CF6589F2E8C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
- <20230711010642.19707-6-baolu.lu@linux.intel.com>
-In-Reply-To: <20230711010642.19707-6-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA1PR11MB6847:EE_
-x-ms-office365-filtering-correlation-id: 84d65bbb-afa8-4458-a02d-08db81d61de7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /KO/+dd1wBO300w8DALXx6yxuwoa64Umfsb62iift+jH8OhYEA7RaLYTCUxuEevPRxdUi9HNCXnDdskfjgePnl+/XcaTJuT17MRfuOCqQrnAW7oVn3T40smiTb96Uys/S/Kqz/uli1Ugl7eqyxBiQXbNrbZkl46LBzEyt5YVVcWkdNtg8A/2iofPXhOXwIumSZK5ZiCeZSczGxSIVpZYaFoQfX/idtelH4U08mfRWLGJiVObqZLqC9i8dpxlTO5cnnWT0mZ/TgQk1wvTmROFxgpQmnPAWsEzKGjmfD2DFL22bvCkjnCuwT23ySsLPHEgUT6h7CooAt4TjSvPs+7YPBrQRkRkVOcTOzvYb6b+4XgsWsboEeQW3iIdPCMZIte0kurto7MHvTB49tflq6KPaY/vJrNttPVQ00BtFBeLHJfXNLJyEd/TMWyEpNC5H1d7Ipdtk43RVvPHdNDivhhXENZNJ2+2hr7HEUICY1YpQuoDXEl4p/Wg0T2qDmEEii+1vDxzyECa3ZAQYCcK3dlmwLPSRsRmQU7fKqy3mYOeT8FValpeTl394Bo/L8BYTVb8iojVFl2SEgIju8X8fbq+0wWL9lbXGVJO74SWeoWBITjq+N2Fss50Jk3gUE8voyhctWdoAA6jdERAI6K0PFQRyA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(376002)(396003)(346002)(39860400002)(451199021)(7696005)(478600001)(71200400001)(110136005)(54906003)(76116006)(9686003)(26005)(6506007)(2906002)(186003)(316002)(41300700001)(66476007)(4326008)(52536014)(66446008)(66946007)(66556008)(5660300002)(7416002)(8936002)(82960400001)(8676002)(122000001)(64756008)(38100700002)(86362001)(33656002)(38070700005)(83380400001)(55016003)(4744005)(41533002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Yfw/rNkClyF5HvethVKMCjkS550pltRj20iP4m4TxwvOsD//CJs2cOrIpedR?=
- =?us-ascii?Q?AYKcdwkrRICWvTn61zrgV7ZywrbWiWqpjArtZL9iz8A1Kqf3V3nrwiCFXsLv?=
- =?us-ascii?Q?po14f4Hi/fVd0uls7LyphxA04zrVf5wIx/ey2fsIqyVoJ+d7E2LmGjzd3npa?=
- =?us-ascii?Q?rTXWd3u01HtDk7cWdBcw4sawcM6Naty54gHgiaArut8Y7LSf0R0pGbIEpUb4?=
- =?us-ascii?Q?0uOdAKQm0F2XYuahP7fXLU4gyfyhagsZZzuB6zBbof8ED6lhSTbSCDLqJnnD?=
- =?us-ascii?Q?V5DQogSFGUfq2YSeTCVf1ElRUtGaPP5w6YSdaWXLzuAIg6G60DmPbSdcVaRA?=
- =?us-ascii?Q?KtyoktbipjmwWj6arOlIsjphvpq/YwlrFb1XRPBcBK8F2vyzwNe6vM7oM1iH?=
- =?us-ascii?Q?Px2rEZ7ZzrZudDv8cBtV8ay9kfLyVa6rKFcqESTjoP+vgKnCAsmI470RPIrW?=
- =?us-ascii?Q?2/WVaUoUimUtHJ1ILIdag5542ad6JH5X7GIZCrZrqg3QD4+DKhvplL8xN6wu?=
- =?us-ascii?Q?Cb+F0E0aX7wG+phqgpH6MMO1VME5VeMSQFSpZHyamZo9eVYeg8oRDd2rQ0AT?=
- =?us-ascii?Q?ogtxCbWUHKU7+TH6/y5wAEe2NJkZn9/y9bEUBRgdY4Ad2XMeyEmtobTzYw9A?=
- =?us-ascii?Q?yF5GYebEoTnZyoOtANnIA0lxS+bLp7cdwF9WPxd72d4QPOWc+gM9+ON0Mdg8?=
- =?us-ascii?Q?tf+pbROF74Ew4Js6PG5FRh5QFwpnAp16N23WPIGma18ZKjkOVDRXaZU7FMDF?=
- =?us-ascii?Q?l5nVsgkbsOCa64lzzUulU9jBKnz7XP1muQARoaho5aOcRFarR5PIb3GFLtTe?=
- =?us-ascii?Q?KuKcBbCMw5u+xnPJXFwHIEU/2VFE8ATLQQaiub10y7dOgldsrewV43QU8V3o?=
- =?us-ascii?Q?QiGSOi0Su0XpArjCbh4ZeymM5uAtKiv348+9zl7RDYKPED8Wc/gCmJ1FeE/X?=
- =?us-ascii?Q?gTKU+RKUqZLt4eYSIov7mbRiFEZtbiXOB0ObJ0SBAzw9s5sST9qaL+uBb/2K?=
- =?us-ascii?Q?GwFD3j3SEtCowN4HN3bftpnr4jIBDVy+CosxfGsGbW/X3nmSNKJO0DhVzORz?=
- =?us-ascii?Q?HZ/GOsieucB95w+YzhiCmjUQZgSGs0I79rZK+LXHTZ/7a9Yl0XBeQxUiCz70?=
- =?us-ascii?Q?PTSsn2KH8sN3asZISaBrZ/aElYw7bR5JFQYdsCqJACLF5hStuYf/Dl9+D3ll?=
- =?us-ascii?Q?C0YGygGhewG9NaArI2SEQfg0dj3EbvERvQQ5huv1IdZ0a4m5D40niQjOl9BG?=
- =?us-ascii?Q?76jaSjn8ox5bxI6JGe0HbMmgeeTMYdAFn4FLWaYr62TbftspKyg7kVDHSggy?=
- =?us-ascii?Q?QQiEAp5iri84wS9rCs1FvDmFH7KslP4SQNByL1lZbOdNL8pnvDqMlmS7i5+A?=
- =?us-ascii?Q?DpKf2T9aV8A3sd3OFuJFJKjKs76JnU8h+JzUQhqPzC43U414+U0emDUoBDVg?=
- =?us-ascii?Q?HOozRY1mvkGmvkfbFdlXdraKZhThrBww4eLFhynlmSdiPNRW756Mw7yqJNcA?=
- =?us-ascii?Q?C1U7MmHc7mYcrYbaEFWnAF6TKs4EOkW07J/icAjnGpPGRgeEKAuRWBWDRRd7?=
- =?us-ascii?Q?cXxegUxEdVSUBQKACODicg/fLcddSbCJC44gKs90?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 11 Jul 2023 02:15:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BBFE5;
+        Mon, 10 Jul 2023 23:15:58 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6Fcuu019060;
+        Tue, 11 Jul 2023 06:15:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dM7/ZnZfOBpFxzcTE0r5c6y7E8JjAk//H9NvG5BBSZA=;
+ b=WfE+OZq8r7UUeByWjlxHd8Mg8hzhbqCPT5vhpVN8M2+vjiCzwg64Xs0diQ2bq+MfZJSn
+ vgJm1C9E7BwtO3bCXn3ZLF1Gbq7jbR+/V5sASSYPOcBPe7f/ADymj1rbM1btw+dyHJmB
+ kc3JXfqX+wLROhrJ7SiaoPWmF39AnqEg+bWlfedJrgxmJkRvHrZh2z4Vs9fHsGyi5lIN
+ Cm/G/LMshMtn5KcNA7nOtBf6zjsMJaYSE2icWLOkYMqyBBDFgCU0lU96wc/eSjfOOdNg
+ zwbleb0+slJ9aSp7YfJTU6fbVI9SOm9PLsY0wnL9CkG54aNkDoHo119SK+5wd3o2Di8s UA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0kpg3h6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 06:15:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B6FZAd007429
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 06:15:35 GMT
+Received: from [10.217.219.216] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 23:15:30 -0700
+Message-ID: <e125c79b-3aea-da04-ab54-e532d4e54bfe@quicinc.com>
+Date:   Tue, 11 Jul 2023 11:45:27 +0530
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84d65bbb-afa8-4458-a02d-08db81d61de7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2023 06:14:42.7737
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NcGo4E6hIkNomILy2MN/BPS0Anl4PfChC2yservpMKrfQhX9mRMKByLCT4RI0XlALc0n2RHF/3Lzw9DYTEOQgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6847
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 9/9] bus: mhi: ep: wake up host is the MHI state is in
+ M3
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+CC:     <manivannan.sadhasivam@linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_vbadigan@quicinc.com>, <quic_nitegupt@quicinc.com>,
+        <quic_skananth@quicinc.com>, <quic_ramkri@quicinc.com>,
+        <krzysztof.kozlowski@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Bo Liu <liubo03@inspur.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Dan Carpenter <error27@gmail.com>,
+        "open list:MHI BUS" <mhi@lists.linux.dev>
+References: <20230707151209.GA139708@bhelgaas>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20230707151209.GA139708@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xWVVvg5VB4J3HzVVqqRw1ImNyGtgHVI4
+X-Proofpoint-ORIG-GUID: xWVVvg5VB4J3HzVVqqRw1ImNyGtgHVI4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_02,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 phishscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110054
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Tuesday, July 11, 2023 9:07 AM
->=20
-> @@ -299,7 +299,15 @@ static int dev_iommu_get(struct device *dev)
->  		return -ENOMEM;
->=20
->  	mutex_init(&param->lock);
-> +	param->fault_param =3D kzalloc(sizeof(*param->fault_param),
-> GFP_KERNEL);
-> +	if (!param->fault_param) {
-> +		kfree(param);
-> +		return -ENOMEM;
-> +	}
-> +	mutex_init(&param->fault_param->lock);
-> +	INIT_LIST_HEAD(&param->fault_param->faults);
->  	dev->iommu =3D param;
-> +
->  	return 0;
->  }
 
-Upon above changes is it slightly cleaner to call it dev_iommu_init()
-to better pair with dev_iommu_free()?
+On 7/7/2023 8:42 PM, Bjorn Helgaas wrote:
+> On Fri, Jul 07, 2023 at 02:41:57PM +0300, Dan Carpenter wrote:
+>> On Fri, Jul 07, 2023 at 04:33:56PM +0530, Krishna chaitanya chundru wrote:
+>>> If the MHI state is in M3 then the most probably the host kept the
+>>> device in D3 hot or D3 cold, due to that endpoint transctions will not
+>>> be read by the host, so endpoint wakes up host to bring the host to D0
+>>> which eventually bring back the MHI state to M0.
+>>>
+>>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>>> ---
+>>>   drivers/bus/mhi/ep/main.c | 28 ++++++++++++++++++++++++++++
+>>>   1 file changed, 28 insertions(+)
+>>>
+>>> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+>>> index 6008818..46a8a3c 100644
+>>> --- a/drivers/bus/mhi/ep/main.c
+>>> +++ b/drivers/bus/mhi/ep/main.c
+>>> @@ -25,6 +25,27 @@ static DEFINE_IDA(mhi_ep_cntrl_ida);
+>>>   static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id);
+>>>   static int mhi_ep_destroy_device(struct device *dev, void *data);
+>>>   
+>>> +static bool mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
+>>> +{
+>>> +	enum mhi_state state;
+>>> +	bool mhi_reset;
+>>> +	u32 count = 0;
+>>> +
+>>> +	mhi_cntrl->wakeup_host(mhi_cntrl);
+>>> +
+>>> +	/* Wait for Host to set the M0 state */
+>>> +	do {
+>>> +		msleep(M0_WAIT_DELAY_MS);
+>>> +		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
+>>> +		count++;
+>>> +	} while (state != MHI_STATE_M0 && count < M0_WAIT_COUNT);
+>>> +
+>>> +	if (state != MHI_STATE_M0)
+>>> +		return false;
+>> Functions which return false on success are an abomination.  Also
+>> boolean functions should be named for the question they answer such
+>> as access_ok() or has_feature() etc.
+> +1.  Also nice if boolean functions do not have side effects, so in
+> this case, where mhi_ep_wake_host() *does* something that might fail,
+> I think "return 0 for success or negative error value" is easier to
+> read.
+
+sure Dan and Bjorn I will replace bool with int return type as suggested 
+in the next patch series.
+
+- KC
+
+>> Write it like this:
+>>
+>> static int mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
+>> {
+>> 	enum mhi_state state;
+>> 	bool mhi_reset;
+>> 	int count = 0;
+>>
+>> 	mhi_cntrl->wakeup_host(mhi_cntrl);
+>>
+>> 	while (count++ < M0_WAIT_COUNT) {
+>> 		msleep(M0_WAIT_DELAY_MS);
+>>
+>> 		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
+>> 		if (state == MHI_STATE_M0)
+>> 			return 0;
+>> 	}
+>> 	return -ENODEV;
+>> }
