@@ -2,409 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648CE74E2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E2C74E2CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjGKAuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S230263AbjGKAwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjGKAuR (ORCPT
+        with ESMTP id S229964AbjGKAwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:50:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68231BE;
-        Mon, 10 Jul 2023 17:50:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5539661143;
-        Tue, 11 Jul 2023 00:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22480C433C8;
-        Tue, 11 Jul 2023 00:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689036611;
-        bh=mZmsLSP5c8pSPcG/BlSgKxjmgEV+HlIp/6GqTKi3MCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EBAlG74wtNwEaFpLHKoRzRSo5JRzTj2CCx44ZJ2KVJZSUMtRYwTuD+7vw2XAo8T/I
-         WBzkon6LhTYKpSe+WkZmRqxKyNWuO3ZsVbUklHYyoLhsAMn6tf/ZiW+/5OUJehsiov
-         HZHtrJfNCv9T8sObIkqcgGoROf/psXiQ5+kIRMDYfncyKYrqKRea+EeG60T/nRcoMG
-         N+v2cXtQN8g+Vw7X+TCu183oy225Bmhy3B70nCEZZzEcTLekRoUpxYvZU7jnWzh8uY
-         ON0rMlEZ1NObU3vpSvBxVHILIrxnqUsFJ73nXSCPc5+RT/angr39G1FTgEHqTjpU9D
-         8TpqzegIyimxw==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 11 Jul 2023 03:50:05 +0300
-Message-Id: <CTYXI8TL7C36.2SCWH82FAZWBO@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>
-Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
-        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
-        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
-        <lukas@wunner.de>, <p.rosenberger@kunbus.com>,
-        "kernel test robot" <yujie.liu@intel.com>
-Subject: Re: [PATCH 3] tpm,tpm_tis: Disable interrupts after 1000 unhandled
- IRQs
-X-Mailer: aerc 0.14.0
-References: <20230619092219.2600-1-LinoSanfilippo@gmx.de>
-In-Reply-To: <20230619092219.2600-1-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 20:52:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C83A0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689036680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=MJ/4HkLY1wW5PY2UP1gAVu3W5msABdqpAvgoaBBXxyc=;
+        b=LkCHmh0fo0ua3gliW6cA7jehzw2WglEz2NdLAfQjFnVMi94dtmibYCXY1jUJN6IFMRt+BL
+        UOvwPedR2RCjeJFRE56J8PpOvgY56KaZ1rBtN3yOkGlfpVlp9gghhMglaM8yIPI7/WWJSt
+        /Hxi4pXA+FLm230r4vIJ+fU9f+w8QzQ=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-37-kqSkWzbxNQ2bjNqWp3N3Tw-1; Mon, 10 Jul 2023 20:51:17 -0400
+X-MC-Unique: kqSkWzbxNQ2bjNqWp3N3Tw-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-76594ad37fcso552487785a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:51:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689036677; x=1691628677;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MJ/4HkLY1wW5PY2UP1gAVu3W5msABdqpAvgoaBBXxyc=;
+        b=U4WamSWsogBBIOPFUKhA6FSzpfFBYmuJrY41j0mrR3crbdbHNlvrnibOZ1hzgmRVHb
+         4K7mLWFjkbm2uS2+lBev+zqpofPIDS/DfG4aXuJgGtMrloRDWsv77m7+njYOiWpPb4jT
+         sifI7EdlIg/JhDHQe/w2QE9g5RDsf3EGi0zrfkUEhXu9iMctPzaNCxu1wjIgNzqtUv5e
+         7sHSGzbkApefr8Q9qtcfz/rplSJ2Y1TqmHw+vqpHCVww9ZC30ZzoqEZym/Cl2mICoqDB
+         QcJrj0T3u6AuFQH2Ekfc8q1x7dpyG1gOPYAnaqcy7t8oHbL4DHM2qh4HEjwbKrBeSB+k
+         aEkw==
+X-Gm-Message-State: ABy/qLZEkxfDiW1Q17cmbxTiw0DLKchmT/DJ4Mv76/jXjiPQIvCbeu2Z
+        WQyWg6IZopRXLyET2PRAecUCaDZ/EVyPHTxceru/d+3zTpoWiJHaS+gN5COCpHWnLmIrdykGHSB
+        XPKYYC7vbdhyTWvwfNlMVQQgO
+X-Received: by 2002:a05:620a:b57:b0:75b:23a1:8336 with SMTP id x23-20020a05620a0b5700b0075b23a18336mr12765906qkg.49.1689036676710;
+        Mon, 10 Jul 2023 17:51:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHzDOfZF8oJq5yfEuCz/x8zyAuvVdgw/tvDkEQJ+UPGvrcBkgELqwP3xFYb/bgd50b1ti7Xew==
+X-Received: by 2002:a05:620a:b57:b0:75b:23a1:8336 with SMTP id x23-20020a05620a0b5700b0075b23a18336mr12765896qkg.49.1689036676457;
+        Mon, 10 Jul 2023 17:51:16 -0700 (PDT)
+Received: from thinkpad2021 ([64.99.149.73])
+        by smtp.gmail.com with ESMTPSA id s8-20020a05620a16a800b00767d6d11eb8sm420546qkj.67.2023.07.10.17.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 17:51:16 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 20:51:14 -0400
+From:   "John B. Wyatt IV" <jwyatt@redhat.com>
+To:     linux-rt-users@vger.kernel.org
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        jlelli@redhat.com, vschneid@redhat.com, pauld@redhat.com,
+        rt-maint@redhat.com
+Subject: [preempt-rt] BUG: sleeping function called from invalid context at
+ drivers/gpu/drm/i915/gt/uc/intel_guc.h
+Message-ID: <ZKyngsXKztAU9J3r@thinkpad2021>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello everyone, I am a new kernel developer with the Red Hat real-time team.
 
-BTW, you should do next time:
+I am seeing two different call traces with 6.4-rt6 on my 12th Gen Intel Framework Laptop with i915 emit the same bug. Both of them occurred in the same boot. This kernel was built and tested on RHEL8. [1] occurs only once. [2] occurs ~50 times in a boot and log in to the gnome desktop.
 
-git format-patch -v4 to get "[PATCH v4]", which defacto way to mark up
-patch set versions.
+[1]
 
-On Mon Jun 19, 2023 at 12:22 PM EEST, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> After activation of interrupts for TPM TIS drivers 0-day reports an
-> interrupt storm on an Inspur NF5180M6 server.
->
-> Fix this by detecting the storm and falling back to polling:
-> Count the number of unhandled interrupts within a 10 ms time interval. In
-> case that more than 1000 were unhandled deactivate interrupts entirely,
-> deregister the handler and use polling instead.
->
-> Also print a note to point to the tpm_tis_dmi_table.
->
-> Since the interrupt deregistration function devm_free_irq() waits for all
-> interrupt handlers to finish, only trigger a worker in the interrupt
-> handler and do the unregistration in the worker to avoid a deadlock.
->
-> Note: the storm detection logic equals the implementation in
-> note_interrupt() which uses timestamps and counters stored in struct
-> irq_desc. Since this structure is private to the generic interrupt core
-> the TPM TIS core uses its own timestamps and counters. Furthermore the TP=
-M
-> interrupt handler always returns IRQ_HANDLED to prevent the generic
-> interrupt core from processing the interrupt storm.
->
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202305041325.ae8b0c43-yujie.liu@in=
-tel.com/
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 117 ++++++++++++++++++++++++++++----
->  drivers/char/tpm/tpm_tis_core.h |   4 ++
->  2 files changed, 106 insertions(+), 15 deletions(-)
->
-> Changes to v2:
-> - use define for max number of unhandles irqs(requested by Jarko)
-> - rename intmask to int_mask (requested by Jarko)
-> - rephrased short summary (requested by Jarko)
-> - rename disable_interrupts to tpm_tis_disable_interrupts (requested by J=
-arko)
-> - print info message concerning adding an entry to tpm_tis_dmi_table
->   (suggested by Jerry)
-> - amended commit message
-> - handle failure of locality request by returning IRQ_NONE
-> - dont take and release locality in __tpm_tis_disable_interrupts but in i=
-ts
-> caller
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index 558144fa707a..d42537b985c5 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -24,9 +24,12 @@
->  #include <linux/wait.h>
->  #include <linux/acpi.h>
->  #include <linux/freezer.h>
-> +#include <linux/dmi.h>
->  #include "tpm.h"
->  #include "tpm_tis_core.h"
-> =20
-> +#define TPM_TIS_MAX_UNHANDLED_IRQS	1000
-> +
->  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value);
-> =20
->  static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
-> @@ -468,25 +471,29 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	return rc;
->  }
-> =20
-> -static void disable_interrupts(struct tpm_chip *chip)
-> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	u32 int_mask =3D 0;
-> +
-> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &int_mask);
-> +	int_mask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), int_mask);
-> +
-> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +}
-> +
-> +static void tpm_tis_disable_interrupts(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	u32 intmask;
-> -	int rc;
-> =20
->  	if (priv->irq =3D=3D 0)
->  		return;
-> =20
-> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -	if (rc < 0)
-> -		intmask =3D 0;
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	devm_free_irq(chip->dev.parent, priv->irq, chip);
->  	priv->irq =3D 0;
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
+[ 3800.598054] BUG: sleeping function called from invalid context at drivers/gpu/drm/i915/gt/uc/intel_guc.h:329
+[ 3800.598060] in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 207, name: kworker/4:1H
+[ 3800.598063] preempt_count: 0, expected: 0
+[ 3800.598065] RCU nest depth: 5, expected: 0
+[ 3800.598066] 11 locks held by kworker/4:1H/207:
+[ 3800.598069] #0: ffff93b400054f38 ((wq_completion)events_highpri){+.+.}-{0:0}, at: process_one_work (./include/linux/list.h:927 ./include/linux/hashtable.h:107 kernel/workqueue.c:2446) 
+[ 3800.598084] #1: ffffbc7441087e70 ((work_completion)(&(&engine->heartbeat.work)->work)){+.+.}-{0:0}, at: process_one_work (./include/linux/list.h:899 ./include/linux/list.h:927 ./include/linux/hashtable.h:107 kernel/workqueue.c:2446) 
+[ 3800.598093] #2: ffff93b401cfd470 (kernel_context){+.+.}-{3:3}, at: heartbeat (./include/linux/rcupdate.h:805 ./drivers/gpu/drm/i915/i915_request.h:622 drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:148) i915
+[ 3800.598247] #3: ffff93bb8cc207e0 ((softirq_ctrl.lock)){+.+.}-{2:2}, at: __local_bh_disable_ip (kernel/softirq.c:157 (discriminator 19)) 
+[ 3800.598258] #4: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3800.598268] #5: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: __local_bh_disable_ip (kernel/softirq.c:157 (discriminator 15)) 
+[ 3800.598276] #6: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: submit_notify (./include/linux/rcupdate.h:805 drivers/gpu/drm/i915/i915_request.c:798) i915
+[ 3800.598457] #7: ffff93b5a1ccaa68 (&sched_engine->lock/2){+.+.}-{2:2}, at: guc_submit_request (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1985 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:2001) i915
+[ 3800.598632] #8: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3800.598639] #9: ffff93b5a1e4f6f0 (&ce->guc_state.lock){+.+.}-{2:2}, at: add_to_context (./include/linux/list.h:134 ./include/linux/list.h:229 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3408) i915
+[ 3800.598801] #10: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3800.598813] Hardware name: Framework Laptop (12th Gen Intel Core)/FRANGACP04, BIOS 03.04 07/15/2022
+[ 3800.598816] Workqueue: events_highpri heartbeat [i915]
+[ 3800.598935] Call Trace:
+[ 3800.598937]  <TASK>
+[ 3800.598940] dump_stack_lvl (lib/dump_stack.c:113) 
+[ 3800.598947] __might_resched+0x1a0/0x260 
+[ 3800.598956] guc_context_set_prio (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3345 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:4009) i915
+[ 3800.599123] ? lock_is_held_type+0xe1/0x140 
+[ 3800.599133] add_to_context (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3386 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3430 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:4034) i915
+[ 3800.599300] __i915_request_submit (drivers/gpu/drm/i915/i915_request.c:199 drivers/gpu/drm/i915/i915_request.c:210 drivers/gpu/drm/i915/i915_request.c:691) i915
+[ 3800.599460] guc_submit_request (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1966 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:2003) i915
+[ 3800.599622] submit_notify (./include/linux/refcount.h:199 ./include/linux/refcount.h:250 ./include/linux/refcount.h:267 ./include/linux/kref.h:45 ./include/linux/dma-fence.h:308 ./include/linux/dma-fence.h:305 ./drivers/gpu/drm/i915/i915_request.h:402 drivers/gpu/drm/i915/i915_request.c:309 drivers/gpu/drm/i915/i915_request.c:786) i915
+[ 3800.599784] __i915_sw_fence_complete (drivers/gpu/drm/i915/i915_sw_fence.c:201) i915
+[ 3800.599919] __i915_request_queue (./include/linux/bottom_half.h:33 drivers/gpu/drm/i915/i915_request.c:1832) i915
+[ 3800.600108] heartbeat (drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:285) i915
+[ 3800.600241] process_one_work (./arch/x86/include/asm/bitops.h:228 ./arch/x86/include/asm/bitops.h:240 ./include/asm-generic/bitops/instrumented-non-atomic.h:142 ./include/linux/cpumask.h:504 ./include/linux/cpumask.h:1082 ./include/trace/events/workqueue.h:82 kernel/workqueue.c:2407) 
+[ 3800.600261] worker_thread (kernel/workqueue.c:2556) 
+[ 3800.600269] ? __pfx_worker_thread (kernel/workqueue.c:2498) 
+[ 3800.600273] kthread (kernel/kthread.c:348) 
+[ 3800.600278] ? __pfx_kthread (kernel/kthread.c:332) 
+[ 3800.600287] ret_from_fork (arch/x86/entry/entry_64.S:308) 
+[ 3800.600312]  </TASK>
 
-These look pretty good.
+[2]
 
-> =20
->  /*
-> @@ -552,7 +559,7 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *bu=
-f, size_t len)
->  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
->  		tpm_msleep(1);
->  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
-> -		disable_interrupts(chip);
-> +		tpm_tis_disable_interrupts(chip);
->  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  	return rc;
->  }
-> @@ -752,6 +759,71 @@ static bool tpm_tis_req_canceled(struct tpm_chip *ch=
-ip, u8 status)
->  	return status =3D=3D TPM_STS_COMMAND_READY;
->  }
-> =20
-> +static irqreturn_t tpm_tis_reenable_polling(struct tpm_chip *chip)
+[ 3796.648741] BUG: sleeping function called from invalid context at drivers/gpu/drm/i915/gt/uc/intel_guc.h:329
+[ 3796.648746] in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 47819, name: gnome-shell
+[ 3796.648749] preempt_count: 0, expected: 0
+[ 3796.648750] RCU nest depth: 6, expected: 0
+[ 3796.648752] 12 locks held by gnome-shell/47819:
+[ 3796.648824] #0: ffffbc74443b3d28 (crtc_ww_class_acquire){+.+.}-{0:0}, at: drm_mode_page_flip_ioctl (drivers/gpu/drm/drm_plane.c:1342) drm
+[ 3796.648887] #1: ffff93b4438e5088 (crtc_ww_class_mutex){+.+.}-{3:3}, at: drm_modeset_lock (drivers/gpu/drm/drm_modeset_lock.c:317) drm
+[ 3796.648944] #2: ffff93bb8bc207e0 ((softirq_ctrl.lock)){+.+.}-{2:2}, at: __local_bh_disable_ip (kernel/softirq.c:157 (discriminator 19)) 
+[ 3796.648954] #3: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3796.648963] #4: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: __local_bh_disable_ip (kernel/softirq.c:157 (discriminator 15)) 
+[ 3796.648971] #5: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: fence_set_priority (drivers/gpu/drm/i915/gem/i915_gem_wait.c:105 drivers/gpu/drm/i915/gem/i915_gem_wait.c:92) i915
+[ 3796.649136] #6: ffffffffc0a4fa40 (schedule_lock){+.+.}-{2:2}, at: i915_schedule (drivers/gpu/drm/i915/i915_scheduler.c:163 drivers/gpu/drm/i915/i915_scheduler.c:292) i915
+[ 3796.649279] #7: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3796.649285] #8: ffff93b5a1ccaa68 (&sched_engine->lock/2){+.+.}-{2:2}, at: i915_schedule (drivers/gpu/drm/i915/i915_scheduler.c:294) i915
+[ 3796.649425] #9: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3796.649431] #10: ffff93b4405762b0 (&ce->guc_state.lock){+.+.}-{2:2}, at: guc_bump_inflight_request_prio (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:4019) i915
+[ 3796.649572] #11: ffffffff9fe21000 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock (kernel/locking/spinlock_rt.c:95) 
+[ 3796.649583] Hardware name: Framework Laptop (12th Gen Intel Core)/FRANGACP04, BIOS 03.04 07/15/2022
+[ 3796.649584] Call Trace:
+[ 3796.649586]  <TASK>
+[ 3796.649589] dump_stack_lvl (lib/dump_stack.c:113) 
+[ 3796.649596] __might_resched+0x1a0/0x260 
+[ 3796.649603] guc_context_set_prio (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3345 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:4009) i915
+[ 3796.649735] ? lock_is_held_type+0xe1/0x140 
+[ 3796.649743] guc_bump_inflight_request_prio (drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3385) i915
+[ 3796.649904] i915_schedule (drivers/gpu/drm/i915/i915_scheduler.c:338) i915
+[ 3796.650082] ? lock_release+0x15e/0x450 
+[ 3796.650101] fence_set_priority (drivers/gpu/drm/i915/gem/i915_gem_wait.c:70) i915
+[ 3796.650274] i915_gem_fence_wait_priority (./include/linux/bottom_half.h:31 drivers/gpu/drm/i915/gem/i915_gem_wait.c:144 drivers/gpu/drm/i915/gem/i915_gem_wait.c:115) i915
+[ 3796.650448] i915_gem_object_wait_priority (drivers/gpu/drm/i915/gem/i915_gem_wait.c:157 (discriminator 3)) i915
+[ 3796.650617] intel_prepare_plane_fb (drivers/gpu/drm/i915/display/intel_atomic_plane.c:1077) i915
+[ 3796.650783] ? is_module_address (./arch/x86/include/asm/preempt.h:121 kernel/module/main.c:3169) 
+[ 3796.650790] ? static_obj+0x5a/0x70 
+[ 3796.650802] drm_atomic_helper_prepare_planes (drivers/gpu/drm/drm_atomic_helper.c:2580 drivers/gpu/drm/drm_atomic_helper.c:2556) drm_kms_helper
+[ 3796.650828] intel_atomic_commit (drivers/gpu/drm/i915/display/intel_display.c:6767 drivers/gpu/drm/i915/display/intel_display.c:7576) i915
+[ 3796.650982] drm_atomic_helper_page_flip (./arch/x86/include/asm/atomic.h:190 ./include/linux/atomic/atomic-instrumented.h:177 ./include/linux/refcount.h:272 ./include/linux/refcount.h:315 ./include/linux/refcount.h:333 ./include/linux/kref.h:64 ./include/drm/drm_atomic.h:490 drivers/gpu/drm/drm_atomic_helper.c:3647) drm_kms_helper
+[ 3796.651000] drm_mode_page_flip_ioctl (drivers/gpu/drm/drm_plane.c:1377) drm
+[ 3796.651057] ? __pfx_drm_mode_page_flip_ioctl (drivers/gpu/drm/drm_plane.c:1213) drm
+[ 3796.651094] drm_ioctl_kernel (drivers/gpu/drm/drm_ioctl.c:794) drm
+[ 3796.651136] drm_ioctl (./include/linux/thread_info.h:277 ./include/linux/thread_info.h:313 ./include/linux/uaccess.h:190 drivers/gpu/drm/drm_ioctl.c:892) drm
+[ 3796.651175] ? __pfx_drm_mode_page_flip_ioctl (drivers/gpu/drm/drm_plane.c:1213) drm
+[ 3796.651210] ? lock_release+0xeb/0x450 
+[ 3796.651222] __x64_sys_ioctl (fs/ioctl.c:51 fs/ioctl.c:870 fs/ioctl.c:856 fs/ioctl.c:856) 
+[ 3796.651228] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+[ 3796.651233] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120) 
+[ 3796.651237] RIP: 0033:0x7fd3cc0fe7cb
 
-
-I'd rename this to tpm_tis_revert_interrupts(), as it reverts enabling
-the interrupts. Polling was never enabled in a fully initialized driver
-so the function name is implying something that never happened.
-
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	const char *product;
-> +	const char *vendor;
-> +
-> +	dev_warn(&chip->dev, FW_BUG
-> +		 "TPM interrupt storm detected, polling instead\n");
-> +
-> +	vendor =3D dmi_get_system_info(DMI_SYS_VENDOR);
-> +	product =3D dmi_get_system_info(DMI_PRODUCT_VERSION);
-> +
-> +	if (vendor && product) {
-> +		dev_info(&chip->dev,
-> +			"Consider adding the following entry to tpm_tis_dmi_table:\n");
-> +		dev_info(&chip->dev, "\tDMI_SYS_VENDOR: %s\n", vendor);
-> +		dev_info(&chip->dev, "\tDMI_PRODUCT_VERSION: %s\n", product);
-> +	}
-> +
-> +	if (tpm_tis_request_locality(chip, 0) !=3D 0)
-> +		return IRQ_NONE;
-> +
-> +	__tpm_tis_disable_interrupts(chip);
-> +	tpm_tis_relinquish_locality(chip, 0);
-> +
-> +	/*
-> +	 * devm_free_irq() must not be called from within the interrupt handler=
-,
-> +	 * since this function waits for running handlers to finish and thus it
-> +	 * would deadlock. Instead trigger a worker that takes care of the
-> +	 * unregistration.
-> +	 */
-
-Way too complex description. This should do:
-
-	/* Defer devm_free_irq() outside the interrupt context: */
-
-> +	schedule_work(&priv->free_irq_work);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t tpm_tis_check_for_interrupt_storm(struct tpm_chip *ch=
-ip)
-
-What does checking interrupt storm mean, anyway?
-
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	irqreturn_t irqret =3D IRQ_HANDLED;
-> +
-> +	/*
-> +	 * The worker to free the TPM interrupt (free_irq_work) may already
-> +	 * be scheduled, so make sure it is not scheduled again.
-> +	 */
-
-I don't understand the text in the comment. It is not even a proper
-sentence ("to work to free").
-
-> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
-> +		return IRQ_HANDLED;
-> +
-> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
-> +		priv->unhandled_irqs =3D 1;
-> +	else
-> +		priv->unhandled_irqs++;
-> +
-> +	priv->last_unhandled_irq =3D jiffies;
-> +
-> +	if (priv->unhandled_irqs > TPM_TIS_MAX_UNHANDLED_IRQS)
-> +		irqret =3D tpm_tis_reenable_polling(chip);
-> +
-> +	/*
-> +	 * Prevent the genirq code from starting its own interrupt storm
-> +	 * handling by always reporting that the interrupt was handled.
-> +	 */
-
-Ditto, textual content is confusing.
-
-You can either make them more informative, or add a short description
-before the function.
-
-> +	return irqret;
-> +}
-> +
->  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  {
->  	struct tpm_chip *chip =3D dev_id;
-> @@ -761,10 +833,10 @@ static irqreturn_t tis_int_handler(int dummy, void =
-*dev_id)
-> =20
->  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt)=
-;
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
-
-s/unhandled/err/g
-
-> =20
->  	if (interrupt =3D=3D 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
-> =20
->  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
-> @@ -780,10 +852,13 @@ static irqreturn_t tis_int_handler(int dummy, void =
-*dev_id)
->  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt)=
-;
->  	tpm_tis_relinquish_locality(chip, 0);
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
-> =20
->  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->  	return IRQ_HANDLED;
-> +
-> +unhandled:
-> +	return tpm_tis_check_for_interrupt_storm(chip);
->  }
-> =20
->  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
-> @@ -804,6 +879,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *c=
-hip)
->  		chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
-> +static void tpm_tis_free_irq_func(struct work_struct *work)
-> +{
-> +	struct tpm_tis_data *priv =3D container_of(work, typeof(*priv), free_ir=
-q_work);
-> +	struct tpm_chip *chip =3D priv->chip;
-> +
-> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
-> +	priv->irq =3D 0;
-> +}
-> +
->  /* Register the IRQ and issue a command that will cause an interrupt. If=
- an
->   * irq is seen then leave the chip setup for IRQ operation, otherwise re=
-verse
->   * everything and leave in polling mode. Returns 0 on success.
-> @@ -816,6 +900,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *=
-chip, u32 intmask,
->  	int rc;
->  	u32 int_status;
-> =20
-> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
-> =20
->  	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
->  				       tis_int_handler, IRQF_ONESHOT | flags,
-> @@ -918,6 +1003,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
->  		interrupt =3D 0;
-> =20
->  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
-> +	flush_work(&priv->free_irq_work);
-> =20
->  	tpm_tis_clkrun_enable(chip, false);
-> =20
-> @@ -1021,6 +1107,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
-m_tis_data *priv, int irq,
->  	chip->timeout_b =3D msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
->  	chip->timeout_c =3D msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
->  	chip->timeout_d =3D msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
-> +	priv->chip =3D chip;
->  	priv->timeout_min =3D TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max =3D TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops =3D phy_ops;
-> @@ -1179,7 +1266,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
-m_tis_data *priv, int irq,
->  			rc =3D tpm_tis_request_locality(chip, 0);
->  			if (rc < 0)
->  				goto out_err;
-> -			disable_interrupts(chip);
-> +			tpm_tis_disable_interrupts(chip);
->  			tpm_tis_relinquish_locality(chip, 0);
->  		}
->  	}
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_c=
-ore.h
-> index 610bfadb6acf..b1a169d7d1ca 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,11 +91,15 @@ enum tpm_tis_flags {
->  };
-> =20
->  struct tpm_tis_data {
-> +	struct tpm_chip *chip;
->  	u16 manufacturer_id;
->  	struct mutex locality_count_mutex;
->  	unsigned int locality_count;
->  	int locality;
->  	int irq;
-> +	struct work_struct free_irq_work;
-> +	unsigned long last_unhandled_irq;
-> +	unsigned int unhandled_irqs;
->  	unsigned int int_mask;
->  	unsigned long flags;
->  	void __iomem *ilb_base_addr;
->
-> base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
-> --=20
-> 2.40.1
-
-
-BR, Jarkko
