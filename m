@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C88E74F258
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCEB74F25E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbjGKOev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S232653AbjGKOfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbjGKOej (ORCPT
+        with ESMTP id S230180AbjGKOfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:34:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F1C1A3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-57745160c1dso65056867b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:15 -0700 (PDT)
+        Tue, 11 Jul 2023 10:35:40 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A05170C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:35:19 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6b98ac328so88905651fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689086054; x=1691678054;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x2+pNKeYSTTkMHkj+CaenjYOksDIkk5vhNRhS7msv78=;
-        b=rWmTYzGgcwZ9eiHk++iMkj2Y4zpLmf08k7Fa3FxbN2PPOiL0EOcRfmzpzmhxyA4emz
-         Zg9vbMS+wwftUe4xhBLzikZhynzAc5rkXBa1gKdfPrw20WY6j7lwbreVixWTX2F+Q7GV
-         MyzX+OLukg3yi87YVhK8m131BpFH4KFNk82gxBnH1oLyPQmyOci6MGj/rKMLxnB78zy7
-         0xjIe4k9etocylJpPsc3HYGBeTSh54bew9GyNu+UTR1qCleLfNcoc8QtaPrvdilWLAur
-         sCWvVN7UZnFy5mwKJ4MrZdhTXXQQiUV2S92piY3NcUDDBVoBgWhQtNG73j7TeETUv+JI
-         pB1Q==
+        d=linaro.org; s=google; t=1689086117; x=1691678117;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHcWpUkeDbQbs1rYaPD7kUy5+LtT4XMVDwCPnvZoH8c=;
+        b=MYsaUfBca0WkbY7zvuRVyV+tJU3Yr8/RTf/P9D3Aqs2el32fJcbhCPzbj19wNgYENC
+         GC35DugRMGevn8bwgCzQIJ2EPp6arnmFokBPxko52FbWnpuwoRVD3Nal4tVIyR6UM87L
+         DL3hcB5Mzn5p1OoHSaL75tJo2IY+NVSWrYK0+nX/e9DS7dXf9PUb9tGBWznXu2taD8eb
+         2jFYDd2zZ1rs7B+F+0It3XPnigk142qytitTUcopQy9xVWGJeKE6fFvpflqntU/4IY0B
+         sp1knS1GJzUOfNNXuMGa9pj6Z+VoOTBs6ham9rP4LuS2BHTHw5u59uIuVMuiWQ/t/kx/
+         h06w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086054; x=1691678054;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x2+pNKeYSTTkMHkj+CaenjYOksDIkk5vhNRhS7msv78=;
-        b=eyoElSU0aC8jYBBGjEcR9lSVK9LaL/PmHEjFsUhNnPMLNQAdS1ycmSZqtg4p1oah+x
-         e1tNLqpZfZ9ia4WQnX4iRQ0wdWEHhFg/1XNuNZw/sqgvJdyi5bX7zPgFJiHT/+ebVIH1
-         +qnha1CmKzFrzb6d3qGwM9sVeh26zhCLAd29hPK64NUdc2XywLS6PKzVI+FXRxam/QzW
-         VI2p3zhq5oQ6eX5dACK+kYODVb9dsCkZDLBIdNaR1wDEJ/AwKaseRBHCbakSN3QwKcRA
-         11J7mRIHHeiDPJGws+N2c1dicwWi/cbSwVa1ojHiK8mZobwW3pLK/owmPQopiWiNesYY
-         R8sA==
-X-Gm-Message-State: ABy/qLYGiji2BUdZJUfeh5+wcCy5A5KEyuCzfm68fPDw3fiC3VE5FW3U
-        6Yya+g/vqnAWVXr2ZLxFH7T9x11rA/k=
-X-Google-Smtp-Source: APBJJlGMXFL68J/yseQS6WSJsGcs08hmpVoTnEriAaqp762LgxsoCDYkaMziTccnqGd7qTZ2i7dyeqWztoc=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:564d:3aaa:6b5f:4419])
- (user=glider job=sendgmr) by 2002:a81:e304:0:b0:573:8316:8d04 with SMTP id
- q4-20020a81e304000000b0057383168d04mr130837ywl.4.1689086053931; Tue, 11 Jul
- 2023 07:34:13 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:33:37 +0200
-In-Reply-To: <20230711143337.3086664-1-glider@google.com>
-Mime-Version: 1.0
-References: <20230711143337.3086664-1-glider@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711143337.3086664-11-glider@google.com>
-Subject: [PATCH 5/5] fixup mteswap
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com, catalin.marinas@arm.com, will@kernel.org,
-        pcc@google.com, andreyknvl@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        eugenis@google.com, yury.norov@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1689086117; x=1691678117;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHcWpUkeDbQbs1rYaPD7kUy5+LtT4XMVDwCPnvZoH8c=;
+        b=I4uEfIhra3AliuR0JTAV1JhXA6Jyjm/qbAfh5KtDif3F4D/PkjVdbLo3X1r0c+JZa7
+         uUNxRA7nQTYgU0o0Y6j9+j4Q6/9SuUD9Ju5/f4rahQP4uXpx+nfcHw8UfrJf5zGaaCQv
+         sbUh4Wb8dFNMdaV2b0L2/EZe160DcQVMmgjlT15odeKUM4vO8GihvFTTlqAypBzmA6v9
+         j70xkfO1CtM6eI126WZ/l2zZ78qTzbNiLsLTnplrhoj3z/e/y7Gde/1fmgbSrQqZjVaa
+         fP2hkAAu/SrpQ8zZr7l54bBr+E/rgCvDtA/T0dSLRxWFqVU5MZ6J7Spp1MtCgFuK882V
+         hYHw==
+X-Gm-Message-State: ABy/qLYj/8Ms4v0MVedjTbp5UNfSxvl41eH0PA6SNwg0L5lzcpVpOf0c
+        OUVZv7voChw+mU5+lk9LfvXCKQ==
+X-Google-Smtp-Source: APBJJlEYEvmHjNNBBf1LhH9mi813TJZJ3d0iLAZprpwzUq/1d/NNBi7BsFwWfIFYKf8VKKBs2uHL1A==
+X-Received: by 2002:a2e:7c0c:0:b0:2b6:cf5e:5da0 with SMTP id x12-20020a2e7c0c000000b002b6cf5e5da0mr13218656ljc.40.1689086116794;
+        Tue, 11 Jul 2023 07:35:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyl96.neoplus.adsl.tpnet.pl. [83.9.31.96])
+        by smtp.gmail.com with ESMTPSA id o11-20020a2e90cb000000b002b71c128ea0sm484221ljg.117.2023.07.11.07.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 07:35:16 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/4] SM8250 + SM6350 BWMONs
+Date:   Tue, 11 Jul 2023 16:35:12 +0200
+Message-Id: <20230711-topic-sm638250_bwmon-v1-0-bd4bb96b0673@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKBorWQC/x2NWwrCMBAAr1L220AerVqvIlKSdGMX2k1JtAqld
+ 3fxcwaG2aFiIaxwa3YouFGlzALm1ECcPD9R0SgMVlunL8aoV14pqrqc3dV2egifJbNqO4f9mAz
+ 2bQJJg6+oQvEcJ4n5Pc8i14KJvv/X/XEcPzeojy17AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689086115; l=997;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=fPunmtKbb98JtOFKIGe99194Dk6r5bCp5cWmEu+rUiM=;
+ b=pnuPGi4kYKrOxq+3JzlxPDCYK7msNRO0QW7+Dus/tqDofY2/x3JBWNpfDAi7ydiARyX8Id7gn
+ ZpeM5QHQVh3DQgQ6ONUjmNOZMRhPS3LiQMxC5DZqFXFceaZtVxYI8wT
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
- arch/arm64/mm/mteswap.c | 1 -
- 1 file changed, 1 deletion(-)
+SM8250 and SM6350 both have 5 BWMONs: one for the CPU path, one for the
+LLCC path and 3 more for the NPU.
 
-diff --git a/arch/arm64/mm/mteswap.c b/arch/arm64/mm/mteswap.c
-index 7e8ee43e0d389..e072c1209fbb6 100644
---- a/arch/arm64/mm/mteswap.c
-+++ b/arch/arm64/mm/mteswap.c
-@@ -30,7 +30,6 @@ int mte_save_tags(struct page *page)
- 		return 0;
- 
- 	tag_storage = _mte_alloc_and_save_tags(page);
--	pr_err("HERE: %s:%d\n", __FILE__, __LINE__); // TODO
- 	if (!tag_storage)
- 		return -ENOMEM;
- 
+This series hooks up the first two for both SoCs.
+
+Rebased on top of djakov/icc/icc-next, atop the 7180 addition.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (4):
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Add SM8250 bwmon instances
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Add SM6350 bwmon instances
+      arm64: dts: qcom: sm8250: Add BWMONs
+      arm64: dts: qcom: sm6350: Add BWMONs
+
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |   4 +
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |  97 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 122 +++++++++++++++++++++
+ 3 files changed, 223 insertions(+)
+---
+base-commit: cf8c999ab33287103179fee7ee98d2faea3adffe
+change-id: 20230711-topic-sm638250_bwmon-453e9df1e94f
+
+Best regards,
 -- 
-2.41.0.255.g8b1d071c50-goog
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
