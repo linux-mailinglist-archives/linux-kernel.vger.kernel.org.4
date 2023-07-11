@@ -2,144 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E015874EAD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F2F74EADF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjGKJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S231882AbjGKJkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjGKJje (ORCPT
+        with ESMTP id S230426AbjGKJjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:39:34 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8712136
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:39:22 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qJ9pw-00047e-HN; Tue, 11 Jul 2023 11:39:12 +0200
-Message-ID: <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
-Date:   Tue, 11 Jul 2023 11:39:11 +0200
+        Tue, 11 Jul 2023 05:39:46 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F2F173D;
+        Tue, 11 Jul 2023 02:39:31 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B93kDu005223;
+        Tue, 11 Jul 2023 09:39:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2avxJUP+4HyvxRssNsSEI120gBiBgsaffbOZA3w7hDI=;
+ b=I+MFNCnfTX3N3SVS48BhWKtef6ZyVJvPsvMTLNlfp+peVLEXScfB2A1hJu+zHtJTVMMB
+ JE1U1snQWwviiNfEOTL8ga3L9f86r/5a8wQiJEZAOLs3BDTYZfUQNx1CfELmaKp6ZOMM
+ ymjJ7FPQuftl3d2jWdT36ppuWcDb12OmAw/H29mTjUOjRlBCDMVHyl4CkSQ1IsXC2mg9
+ czieFF8ZoYxi7pnjzfSdJWOe5y6MQJNK0TjuQ2LTcnrsDv3OIOYRlpES1/ioxEk4oTmh
+ 62DszA1uRX3I9lPqWGWpjnfahQkYmjRm0uq050fTMQBRTteUuX33T7xxiU00M7Eti+c2 yQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs442g23j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:39:25 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B9dOPL005017
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:39:24 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 02:39:19 -0700
+Message-ID: <59ea653e-c5da-71cb-eb85-1aa3c72e2089@quicinc.com>
+Date:   Tue, 11 Jul 2023 15:09:16 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
- (Samsung SM-953 Datacenter SSD)
-Content-Language: en-US, de-DE
-To:     Pankaj Raghav <p.raghav@samsung.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "Clemens S." <cspringsguth@gmail.com>,
-        Martin Belanger <martin.belanger@dell.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        John Meneghini <jmeneghi@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVMe <linux-nvme@lists.infradead.org>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        =?UTF-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
- <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
- <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
- <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
- <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
- <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/6] dt-bindings: thermal: tsens: Add nvmem cells for
+ calibration data
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-2-quic_ipkumar@quicinc.com>
+ <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689068362;c61ff5f5;
-X-HE-SMSGID: 1qJ9pw-00047e-HN
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cOXwsqatvLm-DqG7cHYCTI0oX7ajyobY
+X-Proofpoint-GUID: cOXwsqatvLm-DqG7cHYCTI0oX7ajyobY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110085
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing Linus for the "whack a mole" aspect in the second half]
 
-On 11.07.23 08:54, Pankaj Raghav wrote:
->>> I understand that, but I think we need middlemen for that, as I or Bagas
->>> don't have the contacts -- and it's IMHO also a bit much too ask us for
->>> in general, as regression tracking is hard enough already. At least
->>> unless this becomes something that happen regularly, then a list of
->>> persons we could contact would be fine I guess. But we simply can't deal
->>> with too many subsystem specific special cases.
+On 7/11/2023 1:40 AM, Krzysztof Kozlowski wrote:
+> On 10/07/2023 12:37, Praveenkumar I wrote:
+>> Add TSENS V2 calibration nvmem cells for IPQ5332
 >>
->> I'm not asking the Linux regression trackers to fill that role, though.
-
-Well, during our work we often encounter those bugs -- often from people
-that are no regular developers that already had a hard time
-understanding the issue and reporting it to us somehow. Asking those to...
-
->> I'm asking people who experience these issues report it to their vendor
-
-...find the right destination and format to report their Linux problems
-to the vendors is unlikely to fly I suspect. And I'm not sure if that is
-in our interest, as then it might take a lot longer to get those quirk
-entries into the kernel source.
-
-But whatever, the main reason why I write this mail is different:
-
->> directly because these device makers apparently have zero clue that
->> their spec non-compliance is causing painful experiences for their
->> customers and annoyance for maintainers. They keep pumping out more and
->> more devices with the same breakage.
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> ---
+>>   .../bindings/thermal/qcom-tsens.yaml          | 26 +++++++++++++++++--
+>>   1 file changed, 24 insertions(+), 2 deletions(-)
 >>
->> This particular vendor has been great at engaging with Linux, but that's
->> not necessarily normal among all device makers, and I don't have
->> contacts with the majority of the vendors we've had to quirk for this
->> issue.
->>
->> We did complain to the NVMe spec workgroup that their complaince cert
->> suite is not testing for this. There was a little initial interest in
->> fixing that gap, but it fizzled out...
+>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> index 27e9e16e6455..8b7863c3989e 100644
+>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> @@ -91,7 +91,7 @@ properties:
+>>       maxItems: 2
+>>   
+>>     nvmem-cells:
+>> -    oneOf:
+>> +    anyOf:
+>>         - minItems: 1
+>>           maxItems: 2
+>>           description:
+>> @@ -106,9 +106,13 @@ properties:
+>>           description: |
+>>             Reference to nvmem cells for the calibration mode, two calibration
+>>             bases and two cells per each sensor, main and backup copies, plus use_backup cell
+>> +      - maxItems: 17
+>> +        description: |
+>> +          V2 of TSENS, reference to nvmem cells for the calibration mode, two calibration
+>> +          bases and one cell per each sensor
+> I think this is already included in one of the previous entries.
+> Otherwise, are you sure that all new devices will have exactly 17 entries?
+Previous entries does not support TSENS version 2.X.X QFPROM. TSENS V2 
+QFPROM has mode, base0, base1 and s[0-15]+_offset.
+Ideally it should be like,
+- minItems: 4
+- maxItems: 19
+But dt binding check fails in oneOf / anyOf condition. So added the 
+IPQ5332 properties which is exactly 17.
+>
+>>   
+>>     nvmem-cell-names:
+>> -    oneOf:
+>> +    anyOf:
+>>         - minItems: 1
+>>           items:
+>>             - const: calib
+>> @@ -205,6 +209,24 @@ properties:
+>>             - const: s9_p2_backup
+>>             - const: s10_p1_backup
+>>             - const: s10_p2_backup
+>> +      - items:
+>> +          - const: mode
+>> +          - const: base0
+>> +          - const: base1
+>> +          - const: s0_offset
+>> +          - const: s3_offset
+>> +          - const: s4_offset
+>> +          - const: s5_offset
+>> +          - const: s6_offset
+>> +          - const: s7_offset
+>> +          - const: s8_offset
+>> +          - const: s9_offset
+>> +          - const: s10_offset
+>> +          - const: s11_offset
+>> +          - const: s12_offset
+>> +          - const: s13_offset
+>> +          - const: s14_offset
+>> +          - const: s15_offset
+> Don't introduce new naming style. Existing uses s[0-9]+, without offset
+> suffix. Why this should be different?
+As I mentioned above, s[0-9]+_p1 / s[0-9]+p2 is for TSENS V1. TSENS V2 
+QFPROM layout is different from the existing one.
+I would like to add mode, base0, base1 and 16 patterns 
+'^s[0-15]+_offset$'. But DT binding check is failing in oneOf/ anyOf 
+condintion.
 
-Preface: this is not my area of expertise, and maybe I should keep my
-mouth shut. But whatever.
-
-Well, that "They keep pumping out more and more devices with the same
-breakage" and the "new device" comment from Pankaj below bear the
-question: should we stop trying to play "whack a mole" with all those
-quirk entries and handle devices with duplicate ids just like Windows does?
-
-That would "make things just work"(tm).
-
-And yes, I suspect there are good reasons why we went down the "quirk"
-route or why abandoning it might be hard. But maybe it's time to
-reconsider that path, as from my outside point of view things sound a
-lot like they are somewhat similar to the ACPI problems we dealt with
-~15 years ago: we learned that we have to deal with broken ACPI
-implementations and somehow use them in a way similar to how Windows
-uses them, as that's the OS the machine was designed for and tested with.
-
-Ciao, Thorsten
-
->>> Another request came in today, even with a pseudo-patch:
->>> https://bugzilla.kernel.org/show_bug.cgi?id=217649
->>>
->>> To quote:
->>> ```
->>> As with numerous NVMe controllers these days, Samsung's
->>> MZAL41T0HBLB-00BL2, which Lenovo builds into their 16ARP8 also suffers
->>> from invalid IDs, breaking suspend and hibernate also on the latest
->>> kernel 6.4.2.
-> [...]
->> Panjaj, okay with this one too?
-> 
-> This looks a like a new device that might have a firmware update. I will ping
-> internally first.
-> 
-> As you mentioned, the recent addition of globally unique ID check
-> is breaking a lot of devices because of non-compliant firmware. I will try to create
-> some awareness about this issue internally as well.
+--
+Thanks,
+Praveenkumar
+>
+>>   
+>>     "#qcom,sensors":
+>>       description:
+> Best regards,
+> Krzysztof
+>
