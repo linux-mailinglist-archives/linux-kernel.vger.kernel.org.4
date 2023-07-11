@@ -2,109 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBE874F5A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D5C74F5AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjGKQhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S232012AbjGKQid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjGKQhn (ORCPT
+        with ESMTP id S233044AbjGKQh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:37:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C6F1720;
-        Tue, 11 Jul 2023 09:37:19 -0700 (PDT)
+        Tue, 11 Jul 2023 12:37:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B610F2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:37:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B3BB6155E;
-        Tue, 11 Jul 2023 16:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5455DC433C7;
-        Tue, 11 Jul 2023 16:37:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE1DA6156A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:37:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C128C433C8;
+        Tue, 11 Jul 2023 16:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689093427;
-        bh=aHT875jqb7GCXnWc2Ry1gRBSKWwPBNo+nPkkwZHSA7o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XZcDX6MuV+y8LxjpADtuxJN9kkfLBsqNkhqyXEa3psF4oOdOqc7RnUlVqRXrzujQx
-         U7z6hXEp3i1p7PnWWUws8u7XMruc5KZg+optBKJZs4J5sNj8goDRJpdSN+Z8iuVOOJ
-         QniYqPd7vbqZMUv4lnKK4zCM5yIDha1JSBvNLBWiwT2fZCTFpAW67TyYK8KWH5iF5H
-         qI6F9kT+t5g2omPrQcCHlRiBXiGKNucyuEDNHjmprkwPf13Zi+RUiU2PE1jLMRUVDd
-         Srz3L511P+Go6bRM1JShlUd6lZ9ESMqe3iOvNXbIP7bnTf3acQ4E5x+yUxgasMGKva
-         gfOsNkBSXpwbw==
-Date:   Tue, 11 Jul 2023 09:37:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Yunsheng Lin <yunshenglin0825@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Liang Chen <liangchen.linux@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        "Leon Romanovsky" <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>
-Subject: Re: [PATCH v5 RFC 1/6] page_pool: frag API support for 32-bit arch
- with 64-bit DMA
-Message-ID: <20230711093705.45454e41@kernel.org>
-In-Reply-To: <8639b838-8284-05a2-dbc3-7e4cb45f163a@intel.com>
-References: <20230629120226.14854-1-linyunsheng@huawei.com>
-        <20230629120226.14854-2-linyunsheng@huawei.com>
-        <20230707170157.12727e44@kernel.org>
-        <3d973088-4881-0863-0207-36d61b4505ec@gmail.com>
-        <20230710113841.482cbeac@kernel.org>
-        <8639b838-8284-05a2-dbc3-7e4cb45f163a@intel.com>
+        s=k20201202; t=1689093457;
+        bh=xwrQzJ2dPBefw8SrU0veV0e4RUL16gINKdqQOT1r1Os=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a9bSCGHQml4R4EP5ud3D0GZeI6wk0Hga7xZdCGrwoQrXbNJ+w+vRcBoIA4ahKznoA
+         tEIXn6GB/xAMTeBatsy56IhSDzpWBAJ/vT/JMe4oIxwhYVm9b4U1WwL0V2wI+n5YiE
+         AySCy+WAnNV/Z8JePQgKHYWm4PqLSIGDJFIK1kouLBl77mC4oHpRvdO+zPFMXd40Mk
+         39U1mVgBytAYct5P2BkBc1c5rj5Qse2gEiKn9oDOrTa7Y1Lh0/NiLvhhYEwi8+bqyG
+         qLTqvLa4g0LdBTel5b7SfrpeZUtuvxDt23wsgaX5lSgRHQVQL+gxhIKLKcFdFllq/Q
+         TELULtaC2yuSg==
+Date:   Tue, 11 Jul 2023 09:37:35 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Daejun Park <daejun7.park@samsung.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: do not issue small discard commands
+ during checkpoint
+Message-ID: <ZK2FT9CUjxXvQ2K5@google.com>
+References: <20230613203947.2745943-1-jaegeuk@kernel.org>
+ <ZInmkgjDnAUD5Nk0@google.com>
+ <50d5fa8c-4fe9-8a03-be78-0b5383e55b62@kernel.org>
+ <ZKP6EJ5dZ4f4wScp@google.com>
+ <65143701-4c19-ab66-1500-abd1162639cd@kernel.org>
+ <ZKWovWZDiHjMavtB@google.com>
+ <cadfb8d7-f5d0-a3ec-cafb-a0c06ad7d290@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cadfb8d7-f5d0-a3ec-cafb-a0c06ad7d290@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 12:59:00 +0200 Alexander Lobakin wrote:
-> I'm fine with that, although ain't really able to work on this myself
-> now :s (BTW I almost finished Netlink bigints, just some more libie/IAVF
-> crap).
+On 07/06, Chao Yu wrote:
+> On 2023/7/6 1:30, Jaegeuk Kim wrote:
+> > On 07/04, Chao Yu wrote:
+> > > On 2023/7/4 18:53, Jaegeuk Kim wrote:
+> > > > On 07/03, Chao Yu wrote:
+> > > > > On 2023/6/15 0:10, Jaegeuk Kim wrote:
+> > > > > > If there're huge # of small discards, this will increase checkpoint latency
+> > > > > > insanely. Let's issue small discards only by trim.
+> > > > > > 
+> > > > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > > > ---
+> > > > > > 
+> > > > > >     Change log from v1:
+> > > > > >      - move the skip logic to avoid dangling objects
+> > > > > > 
+> > > > > >     fs/f2fs/segment.c | 2 +-
+> > > > > >     1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > > > > > index 8c7af8b4fc47..0457d620011f 100644
+> > > > > > --- a/fs/f2fs/segment.c
+> > > > > > +++ b/fs/f2fs/segment.c
+> > > > > > @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+> > > > > >     			len = next_pos - cur_pos;
+> > > > > >     			if (f2fs_sb_has_blkzoned(sbi) ||
+> > > > > > -			    (force && len < cpc->trim_minlen))
+> > > > > > +					!force || len < cpc->trim_minlen)
+> > > > > >     				goto skip;
+> > > > > 
+> > > > > Sorry for late reply.
+> > > > > 
+> > > > > We have a configuration for such case, what do you think of setting
+> > > > > max_small_discards to zero? otherwise, w/ above change, max_small_discards
+> > > > > logic may be broken?
+> > > > > 
+> > > > > What:           /sys/fs/f2fs/<disk>/max_small_discards
+> > > > > Date:           November 2013
+> > > > > Contact:        "Jaegeuk Kim" <jaegeuk.kim@samsung.com>
+> > > > > Description:    Controls the issue rate of discard commands that consist of small
+> > > > >                   blocks less than 2MB. The candidates to be discarded are cached until
+> > > > >                   checkpoint is triggered, and issued during the checkpoint.
+> > > > >                   By default, it is disabled with 0.
+> > > > > 
+> > > > > Or, if we prefer to disable small_discards by default, what about below change:
+> > > > 
+> > > > I think small_discards is fine, but need to avoid long checkpoint latency only.
+> > > 
+> > > I didn't get you, do you mean we can still issue small discard by
+> > > fstrim, so small_discards functionality is fine?
+> > 
+> > You got the point.
+> 
+> Well, actually, what I mean is max_small_discards sysfs entry's functionality
+> is broken. Now, the entry can not be used to control number of small discards
+> committed by checkpoint.
 
-FWIW I was thinking about the bigints recently, and from ynl
-perspective I think we may want two flavors :( One which is at
-most the length of platform's long long, and another which is
-always a bigint. The latter will be more work for user space
-to handle, so given 99% of use cases don't need more than 64b
-we should make its life easier?
+Could you descrbie this problem first?
 
-> It just needs to be carefully designed, because if we want move ALL the
-> inlines to a new header, we may end up including 2 PP's headers in each
-> file. That's why I'd prefer "core/driver" separation. Let's say skbuff.c
-> doesn't need page_pool_create(), page_pool_alloc(), and so on, while
-> drivers don't need some of its internal functions.
-> OTOH after my patch it's included in only around 20-30 files on
-> allmodconfig. That is literally nothing comparing to e.g. kernel.h
-> (w/includes) :D
-
-Well, once you have to rebuilding 100+ files it gets pretty hard to
-clean things up ;) 
-
-I think I described the preferred setup, previously:
-
-$path/page_pool.h:
-
-#include <$path/page_pool/types.h>
-#include <$path/page_pool/helpers.h>
-
-$path/page_pool/types.h - has types
-$path/page_pool/helpers.h - has all the inlines
-
-C sources can include $path/page_pool.h, headers should generally only
-include $path/page_pool/types.h.
+> 
+> I think there is another way to achieve "avoid long checkpoint latency caused
+> by committing huge # of small discards", the way is we can set max_small_discards
+> to small value or zero, w/ such configuration, it will take checkpoint much less
+> time or no time to committing small discard due to below control logic:
+> 
+> f2fs_flush_sit_entries()
+> {
+> ...
+> 			if (!(cpc->reason & CP_DISCARD)) {
+> 				cpc->trim_start = segno;
+> 				add_discard_addrs(sbi, cpc, false);
+> 			}
+> ...
+> }
+> 
+> add_discard_addrs()
+> {
+> ...
+> 	while (force || SM_I(sbi)->dcc_info->nr_discards <=
+> 				SM_I(sbi)->dcc_info->max_discards) {
+> 
+> It will break the loop once nr_discards is larger than max_discards, if
+> max_discards is set to zero, checkpoint won't take time to handle small discards.
+> 
+> ...
+> 		if (!de) {
+> 			de = f2fs_kmem_cache_alloc(discard_entry_slab,
+> 						GFP_F2FS_ZERO, true, NULL);
+> 			de->start_blkaddr = START_BLOCK(sbi, cpc->trim_start);
+> 			list_add_tail(&de->list, head);
+> 		}
+> ...
+> 	}
+> ...
+> 
+> Thanks,
+> 
+> > 
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > > > 
+> > > > >   From eb89d9b56e817e3046d7fa17165b12416f09d456 Mon Sep 17 00:00:00 2001
+> > > > > From: Chao Yu <chao@kernel.org>
+> > > > > Date: Mon, 3 Jul 2023 09:06:53 +0800
+> > > > > Subject: [PATCH] Revert "f2fs: enable small discard by default"
+> > > > > 
+> > > > > This reverts commit d618ebaf0aa83d175658aea5291e0c459d471d39 in order
+> > > > > to disable small discard by default, so that if there're huge number of
+> > > > > small discards, it will decrease checkpoint's latency obviously.
+> > > > > 
+> > > > > Also, this patch reverts 9ac00e7cef10 ("f2fs: do not issue small discard
+> > > > > commands during checkpoint"), due to it breaks small discard feature which
+> > > > > may be configured via sysfs entry max_small_discards.
+> > > > > 
+> > > > > Fixes: 9ac00e7cef10 ("f2fs: do not issue small discard commands during checkpoint")
+> > > > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > > > ---
+> > > > >    fs/f2fs/segment.c | 4 ++--
+> > > > >    1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > > 
+> > > > > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > > > > index 14c822e5c9c9..0a313368f18b 100644
+> > > > > --- a/fs/f2fs/segment.c
+> > > > > +++ b/fs/f2fs/segment.c
+> > > > > @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+> > > > >    			len = next_pos - cur_pos;
+> > > > > 
+> > > > >    			if (f2fs_sb_has_blkzoned(sbi) ||
+> > > > > -					!force || len < cpc->trim_minlen)
+> > > > > +			    (force && len < cpc->trim_minlen))
+> > > > >    				goto skip;
+> > > > > 
+> > > > >    			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
+> > > > > @@ -2269,7 +2269,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
+> > > > >    	atomic_set(&dcc->queued_discard, 0);
+> > > > >    	atomic_set(&dcc->discard_cmd_cnt, 0);
+> > > > >    	dcc->nr_discards = 0;
+> > > > > -	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
+> > > > > +	dcc->max_discards = 0;
+> > > > >    	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
+> > > > >    	dcc->min_discard_issue_time = DEF_MIN_DISCARD_ISSUE_TIME;
+> > > > >    	dcc->mid_discard_issue_time = DEF_MID_DISCARD_ISSUE_TIME;
+> > > > > -- 
+> > > > > 2.40.1
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > >     			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
