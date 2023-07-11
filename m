@@ -2,168 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6547174F17A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23A374F14F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbjGKOQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        id S233407AbjGKOMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233358AbjGKOP7 (ORCPT
+        with ESMTP id S230402AbjGKOMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:15:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A411012A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689084905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1pOGR1OljASy2bUmotj5py8g/E83mf7vWRZig5PbuEs=;
-        b=BOVaF+dKD0Klr4F9aOs3vWa0qTrzpoba56ox87OVWzeZ1CXV5WiWk5V//6zY2sjsQign5r
-        o+ldsS2J9Lp9AbFnnNKq4ddEEMpXZP5mcyDQWAkA4yRKgr0R1MYqH/zFIVKKBLLFFb4SwG
-        SUvuftEqpnxgB5/VVV1ic2wYuddLwAk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-414-RLSu_dQkM8CP6iyDbHG9sg-1; Tue, 11 Jul 2023 10:15:03 -0400
-X-MC-Unique: RLSu_dQkM8CP6iyDbHG9sg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F9D7108BD88;
-        Tue, 11 Jul 2023 14:12:13 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.17.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F118E200B406;
-        Tue, 11 Jul 2023 14:12:12 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 10:12:10 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 2/2] Sched/fair: Block nohz tick_stop when cfs
- bandwidth in use
-Message-ID: <20230711141210.GC150804@lorien.usersys.redhat.com>
-References: <20230707195748.2918490-1-pauld@redhat.com>
- <20230707195748.2918490-3-pauld@redhat.com>
- <xm26lefnfhkd.fsf@google.com>
- <20230711131024.GA150804@lorien.usersys.redhat.com>
+        Tue, 11 Jul 2023 10:12:30 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E637B0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:12:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3142a9ffa89so6540799f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1689084748; x=1691676748;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kfD1QKdUUlCP07+roOoFywxk5muRqmFooE0qd5aLBns=;
+        b=Kt9VufYvB/j33LbCFZgmXbkZGy73eeJnSwJU6p4I6FPhIWqWc/XSW9TCpHoNIlP8rV
+         OTYAZr32mXwnI6z3yyXxO3bpKIrZwF4CJPrTbU2HTgCOTL8WMBFfMHVQkP+g87VqCPXM
+         qfcuNn4l4ev0h26GQGWG3Mj1Xjeoo7InCIXUFEca6NR+P2cDr5X8/3eeI8WqJoWAg2TN
+         iFQSJqpzrhAGrQ2tebTqq7MlT5APaAGqd1W+pXzuOdgmFeQ6Ka8F9I90N6QOuceU/gy6
+         pk6Xn9jWWHFGkTJ+GvzoQk6r/PRePEf4t7JPhZchGETRjvERS3nflezo9XljrQUBYOa2
+         thgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689084748; x=1691676748;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kfD1QKdUUlCP07+roOoFywxk5muRqmFooE0qd5aLBns=;
+        b=kegnJ57viTvxB6qyBRKa2sLhhxa1MRLas8ePhVtVXnB13fND5aA60ArZEu5p8c5TeA
+         9aNRcQrh9hLkxVHjW9BL9cOdjQ1ngTIjv1HIhzuzw4IkcXCA5VfOe/ucGfjdYTejTWBU
+         /pgrf3l0fSR1fbJHfkbE1GK3ag/QO1KSCNUbr1zyeo9/cw3auGhKzHHK5sn9GKunv++h
+         ug/RgyEmlO3zocHadAm67XICkPjN0KlGBrxdhY97ev3GBQI6GuKv+2yXXUnK68XhF3D7
+         552uJ2O3/GRMr+cBxM6WP6b1MkzYhHIs2AeZweJOe0wcv8EMnBU8rHtsbErbv4McsCKc
+         ZiQw==
+X-Gm-Message-State: ABy/qLZFRBnwKDVSmIsWS5k1aDVh5/Lb2BIpPeWuY88GZkGAYedTAuD3
+        NekkX4KjCdpdDUqleKiSEGBN3g==
+X-Google-Smtp-Source: APBJJlHdpMDer9jq8C+08J0C6lUJOUhXFT5I8NKyZycrI5aqDIXOSH3usMO5vCEWntD4j587cS4rRw==
+X-Received: by 2002:adf:db04:0:b0:313:ee73:cc9a with SMTP id s4-20020adfdb04000000b00313ee73cc9amr13524583wri.70.1689084747658;
+        Tue, 11 Jul 2023 07:12:27 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id o18-20020adfe812000000b00314417f5272sm2354907wrm.64.2023.07.11.07.12.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 07:12:27 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:12:26 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Conor Dooley <conor@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 2/9] irqchip/riscv-intc: Add support for RISC-V AIA
+Message-ID: <20230711-df9211fcae3b67948896b77f@orel>
+References: <20230710094321.1378351-1-apatel@ventanamicro.com>
+ <20230710094321.1378351-3-apatel@ventanamicro.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230711131024.GA150804@lorien.usersys.redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230710094321.1378351-3-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 09:10:24AM -0400 Phil Auld wrote:
-> On Mon, Jul 10, 2023 at 04:54:58PM -0700 Benjamin Segall wrote:
-> > Phil Auld <pauld@redhat.com> writes:
-> > 
-> > > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> > > can easily run well past their quotas before a remote tick does
-> > > accounting.  This leads to long, multi-period stalls before such
-> > > tasks can run again. Currently, when presented with these conflicting
-> > > requirements the scheduler is favoring nohz_full and letting the tick
-> > > be stopped. However, nohz tick stopping is already best-effort, there
-> > > are a number of conditions that can prevent it, whereas cfs runtime
-> > > bandwidth is expected to be enforced.
-> > >
-> > > Make the scheduler favor bandwidth over stopping the tick by setting
-> > > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> > > runtime limit enabled. We use cfs_b->hierarchical_quota to
-> > > determine if the task requires the tick.
-> > >
-> > > Add check in pick_next_task_fair() as well since that is where
-> > > we have a handle on the task that is actually going to be running.
-> > >
-> > > Add check in sched_can_stop_tick() to cover some edge cases such 
-> > > as nr_running going from 2->1 and the 1 remains the running task.
-> > >
-> > > Add sched_feat HZ_BW (off by default) to control the tick_stop
-> > > behavior.
-> > >
-> > > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > > Cc: Ingo Molnar <mingo@redhat.com>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > > Cc: Juri Lelli <juri.lelli@redhat.com>
-> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > Cc: Ben Segall <bsegall@google.com>
-> > > Cc: Frederic Weisbecker <frederic@kernel.org>
-> > > ---
-> > >  kernel/sched/core.c     | 12 ++++++++++
-> > >  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
-> > >  kernel/sched/features.h |  2 ++
-> > >  kernel/sched/sched.h    |  1 +
-> > >  4 files changed, 64 insertions(+)
-> > >
-> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > > index 1b214e10c25d..4b8534abdf4f 100644
-> > > --- a/kernel/sched/core.c
-> > > +++ b/kernel/sched/core.c
-> > > @@ -1229,6 +1229,18 @@ bool sched_can_stop_tick(struct rq *rq)
-> > >  	if (rq->nr_running > 1)
-> > >  		return false;
-> > >  
-> > > +	/*
-> > > +	 * If there is one task and it has CFS runtime bandwidth constraints
-> > > +	 * and it's on the cpu now we don't want to stop the tick.
-> > > +	 * This check prevents clearing the bit if a newly enqueued task here is
-> > > +	 * dequeued by migrating while the constrained task continues to run.
-> > > +	 * E.g. going from 2->1 without going through pick_next_task().
-> > > +	 */
-> > > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && task_on_rq_queued(rq->curr)) {
-> > > +		if (cfs_task_bw_constrained(rq->curr))
-> > > +			return false;
-> > > +	}
-> > > +
-> > 
-> > I think we still need the fair_sched_class check with the bit being on
-> > cfs_rq/tg rather than task.
-> > 
-> 
-> Is there a way a non-fair_sched_class task will be in a cfs_rq with
-> cfs_rq->runtime_enabled and/or cfs_b->hierarchical_quota set to non
-> RUNTIME_INF?  I suppose if they are stale and it's had its class changed?
-> 
-> That makes the condition pretty ugly but I can add that back if needed.
-> 
+On Mon, Jul 10, 2023 at 03:13:14PM +0530, Anup Patel wrote:
+> The RISC-V advanced interrupt architecture (AIA) extends the per-HART
+> local interrupts in following ways:
+> 1. Minimum 64 local interrupts for both RV32 and RV64
+> 2. Ability to process multiple pending local interrupts in same
+>    interrupt handler
+> 3. Priority configuration for each local interrupts
+> 4. Special CSRs to configure/access the per-HART MSI controller
 
-Sigh, yeah. I took that out when I had the bit in the task. I'll put it
-back in...
-
-
-
-Cheers,
-Phil
+afaict, we're only doing (1) and (2) from this list in this patch.
 
 > 
-> Thanks,
-> Phil
+> This patch adds support for RISC-V AIA in the RISC-V intc driver.
 > 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  drivers/irqchip/irq-riscv-intc.c | 36 ++++++++++++++++++++++++++------
+>  1 file changed, 30 insertions(+), 6 deletions(-)
 > 
-> 
+> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> index 4adeee1bc391..e235bf1708a4 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/smp.h>
+> +#include <asm/hwcap.h>
+>  
+>  static struct irq_domain *intc_domain;
+>  
+> @@ -30,6 +31,15 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+>  	generic_handle_domain_irq(intc_domain, cause);
+>  }
+>  
+> +static asmlinkage void riscv_intc_aia_irq(struct pt_regs *regs)
+> +{
+> +	unsigned long topi;
+> +
+> +	while ((topi = csr_read(CSR_TOPI)))
+> +		generic_handle_domain_irq(intc_domain,
+> +					  topi >> TOPI_IID_SHIFT);
+> +}
+> +
+>  /*
+>   * On RISC-V systems local interrupts are masked or unmasked by writing
+>   * the SIE (Supervisor Interrupt Enable) CSR.  As CSRs can only be written
+> @@ -39,12 +49,18 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+>  
+>  static void riscv_intc_irq_mask(struct irq_data *d)
+>  {
+> -	csr_clear(CSR_IE, BIT(d->hwirq));
+> +	if (d->hwirq < BITS_PER_LONG)
+> +		csr_clear(CSR_IE, BIT(d->hwirq));
+> +	else
+> +		csr_clear(CSR_IEH, BIT(d->hwirq - BITS_PER_LONG));
+
+We can optimize rv64 by allowing the compiler to remove the branch
+
+ if (IS_ENABLED(CONFIG_32BIT) && d->hwirq >= 32)
+    csr_clear(CSR_IEH, BIT(d->hwirq - 32));
+ else
+    csr_clear(CSR_IE, BIT(d->hwirq));
+
+
+>  }
+>  
+>  static void riscv_intc_irq_unmask(struct irq_data *d)
+>  {
+> -	csr_set(CSR_IE, BIT(d->hwirq));
+> +	if (d->hwirq < BITS_PER_LONG)
+> +		csr_set(CSR_IE, BIT(d->hwirq));
+> +	else
+> +		csr_set(CSR_IEH, BIT(d->hwirq - BITS_PER_LONG));
+
+Same comment as above.
+
+>  }
+>  
+>  static void riscv_intc_irq_eoi(struct irq_data *d)
+> @@ -115,16 +131,22 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
+>  
+>  static int __init riscv_intc_init_common(struct fwnode_handle *fn)
+>  {
+> -	int rc;
+> +	int rc, nr_irqs = BITS_PER_LONG;
+> +
+> +	if (riscv_isa_extension_available(NULL, SxAIA) && BITS_PER_LONG == 32)
+> +		nr_irqs = nr_irqs * 2;
+
+The AIA spec states sie and sip are explicitly 64, so how about writing
+this as
+
+ int rc, nr_irqs = BITS_PER_LONG;
+
+ if (riscv_isa_extension_available(NULL, SxAIA))
+     nr_irqs = 64;
+
+>  
+> -	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
+> +	intc_domain = irq_domain_create_linear(fn, nr_irqs,
+>  					       &riscv_intc_domain_ops, NULL);
+>  	if (!intc_domain) {
+>  		pr_err("unable to add IRQ domain\n");
+>  		return -ENXIO;
+>  	}
+>  
+> -	rc = set_handle_irq(&riscv_intc_irq);
+> +	if (riscv_isa_extension_available(NULL, SxAIA))
+> +		rc = set_handle_irq(&riscv_intc_aia_irq);
+> +	else
+> +		rc = set_handle_irq(&riscv_intc_irq);
+
+nit: blank line here
+
+>  	if (rc) {
+>  		pr_err("failed to set irq handler\n");
+>  		return rc;
+> @@ -132,7 +154,9 @@ static int __init riscv_intc_init_common(struct fwnode_handle *fn)
+>  
+>  	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
+>  
+> -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
+> +	pr_info("%d local interrupts mapped%s\n",
+> +		nr_irqs, (riscv_isa_extension_available(NULL, SxAIA)) ?
+
+nit: unnecessary ()
+
+> +			 " using AIA" : "");
+>  
+>  	return 0;
+>  }
 > -- 
-> 
+> 2.34.1
+>
 
--- 
-
+Thanks,
+drew
