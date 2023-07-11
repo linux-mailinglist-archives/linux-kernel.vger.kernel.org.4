@@ -2,202 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D9074E307
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE6374E2F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjGKBJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S230426AbjGKBHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGKBJp (ORCPT
+        with ESMTP id S229655AbjGKBHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:09:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2D21715;
-        Mon, 10 Jul 2023 18:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689037757; x=1720573757;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+AYwr3bKWy7rpxtl+3/vsQbCiRF0Z5vJWyLMxV8Tnsg=;
-  b=j+bLA1HVho0kUV6c5hloOBr5qerIUVXDKyMUuNqKhwvv29AoI1Wos/y6
-   CumZQZauMYoNPLWe5QSmzHJBgNbv0aoFo724mZXbkgwURec+OSsmwyXhz
-   I6E1H+e51DIA9iubp1ztP8WnxkqoKf+YBOP4syd8LiGrN5AbCBL6gBkYj
-   DeocInu0a42cKYaDBkR8o+wo7GovbveqnLi0MYtb0BWZiFjTj729X+vsS
-   d1sAFTvYxrRUUXryQZOxiokwdUGVMDDsyNKP6RNUDsY+NhbvDZ+6z4PBb
-   m3WaAXk89/Mq3cxGw1UVZpmp0fll+7FWk1SrQU5wiK6sdXDekY6blGK+u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344816168"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="344816168"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 18:09:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="810999967"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="810999967"
-Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jul 2023 18:09:06 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-Cc:     Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 9/9] iommu: Use fault cookie to store iopf_param
-Date:   Tue, 11 Jul 2023 09:06:42 +0800
-Message-Id: <20230711010642.19707-10-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230711010642.19707-1-baolu.lu@linux.intel.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
+        Mon, 10 Jul 2023 21:07:18 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D362DE9;
+        Mon, 10 Jul 2023 18:07:13 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8ad356f03so33054425ad.1;
+        Mon, 10 Jul 2023 18:07:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689037633; x=1691629633;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IxBIJVCy8BSte3A+R6dkOVqHWVmw7XdfvWAKQ51rWXE=;
+        b=iUPgdvmc76GAhsSeiyKt1afxZwczuvHmWhxciN5pTKOMxs8Y6qHZv4aZJbyiAzs3MD
+         RpkVN7uTX+lmBkUSEyYUbdaVf1vk0iM3HfaqNO4w/1mNhQKjaqiwLi/4PyhJwpHBJIuw
+         T0wCBhqgpCS3FVuvNRx1TMtnTitnxGOe6tsgtvkwFNxWh4qdRlW98ezZ3UUnz2VRikUG
+         2Y0UIlrr3dF5gX8jbIozxxXvoqmlZj6F0X0FFA7yipiYTTgK78q7cTJmoXfWGkQ8DAZg
+         shoKh0pYE4emU7FwZD909nkygrIJ/F72a3z6F+k3Nds1p0lLqUs25ELUCUVpRxdPUk2D
+         sEGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689037633; x=1691629633;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IxBIJVCy8BSte3A+R6dkOVqHWVmw7XdfvWAKQ51rWXE=;
+        b=cC1A86PxIEtTL77tjnZPDVxikcMcJpOy4o0dStIOjA7IeNrKxjOKaYz0TTApwjHkqh
+         htNpSpYL9UyZF3cATOtYfnJQBJg0qqrJMkJozVGaZGv/CeuX9BOGPa3nZbpc9t/6okI4
+         fQWgRw1ckjXe6a6IW0SBnjcsnh4Y2xE1VRUYG5IKB+HtyoUuXqiEAGo141h4GRuMB2uw
+         FNeh0Lc6uQ/vOwK7LpAJJgTMsZYLrei8mn4Iesk0fs+bs3EFpHaVX0Dk+fuuplFfJB2C
+         W7kgsXUQOyCJDcF88wrQKlV3T5PBElwXpS2cD+VcGzGWGtUcQEmgU9ZI9sosAgSJ5bZB
+         7z1g==
+X-Gm-Message-State: ABy/qLZmh4mvNVXhNnSVYAeM+IfpCRMfJA/eGeRVQG7bzKSrFur+ToSH
+        BrU6Gsmyqj8Qn22zlCDE8MVfsiIbxcYDRA==
+X-Google-Smtp-Source: APBJJlH2W63t5F+9E31N010LmiQJn2T65kJKJjz90m9QZ2Wv9mVwJZoaJBnqB1WyJi0fRqrCnjwhkw==
+X-Received: by 2002:a17:902:8308:b0:1b8:9044:9ede with SMTP id bd8-20020a170902830800b001b890449edemr12013743plb.62.1689037633174;
+        Mon, 10 Jul 2023 18:07:13 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id iy14-20020a170903130e00b001b895a17429sm489274plb.280.2023.07.10.18.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 18:07:12 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 15:07:11 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [PATCH v4 8/9] cgroup/cpuset: Documentation update for partition
+Message-ID: <ZKyrP74UzVb4Ltwi@slm.duckdns.org>
+References: <20230627143508.1576882-1-longman@redhat.com>
+ <20230627143508.1576882-9-longman@redhat.com>
+ <ZKx4ZJowRhRtjZxB@slm.duckdns.org>
+ <6d5aee58-f558-868c-76e0-0b58f8332110@redhat.com>
+ <ZKyljsbJgLNpsBLI@slm.duckdns.org>
+ <a429e60a-fc4f-60b0-3978-71596fed9542@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a429e60a-fc4f-60b0-3978-71596fed9542@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the static iopf_param pointer from struct iommu_fault_param to
-save memory.
+Hello,
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- include/linux/iommu.h      |  2 --
- drivers/iommu/io-pgfault.c | 47 +++++++++++++++++++++++---------------
- 2 files changed, 29 insertions(+), 20 deletions(-)
+On Mon, Jul 10, 2023 at 08:53:18PM -0400, Waiman Long wrote:
+> For local partition, it doesn't make sense to have a cpust.cpus.exclusive
+> that is not the same as cpuset.cpus as it artificially reduce the set of
+> CPUs that can be used in a partition. In the case of a remote partition, the
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index ffd6fe1317f4..5fe37a7c5a55 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -551,7 +551,6 @@ struct iommu_fault_param {
-  * struct dev_iommu - Collection of per-device IOMMU data
-  *
-  * @fault_param: IOMMU detected device fault reporting data
-- * @iopf_param:	 I/O Page Fault queue and data
-  * @fwspec:	 IOMMU fwspec data
-  * @iommu_dev:	 IOMMU device this device is linked to
-  * @priv:	 IOMMU Driver private data
-@@ -564,7 +563,6 @@ struct iommu_fault_param {
- struct dev_iommu {
- 	struct mutex lock;
- 	struct iommu_fault_param	*fault_param;
--	struct iopf_device_param	*iopf_param;
- 	struct iommu_fwspec		*fwspec;
- 	struct iommu_device		*iommu_dev;
- 	void				*priv;
-diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-index 1749e0869f2e..6a3a4e08e67e 100644
---- a/drivers/iommu/io-pgfault.c
-+++ b/drivers/iommu/io-pgfault.c
-@@ -158,7 +158,7 @@ int iommu_queue_iopf(struct iommu_fault *fault, struct device *dev)
- 	 * As long as we're holding param->lock, the queue can't be unlinked
- 	 * from the device and therefore cannot disappear.
- 	 */
--	iopf_param = param->iopf_param;
-+	iopf_param = iommu_get_device_fault_cookie(dev, 0);
- 	if (!iopf_param)
- 		return -ENODEV;
- 
-@@ -235,7 +235,7 @@ int iopf_queue_flush_dev(struct device *dev)
- 		return -ENODEV;
- 
- 	mutex_lock(&param->lock);
--	iopf_param = param->iopf_param;
-+	iopf_param = iommu_get_device_fault_cookie(dev, 0);
- 	if (iopf_param)
- 		flush_workqueue(iopf_param->queue->wq);
- 	else
-@@ -286,9 +286,9 @@ EXPORT_SYMBOL_GPL(iopf_queue_discard_partial);
-  */
- int iopf_queue_add_device(struct iopf_queue *queue, struct device *dev)
- {
--	int ret = -EBUSY;
--	struct iopf_device_param *iopf_param;
-+	struct iopf_device_param *iopf_param, *curr;
- 	struct dev_iommu *param = dev->iommu;
-+	int ret;
- 
- 	if (!param)
- 		return -ENODEV;
-@@ -303,16 +303,27 @@ int iopf_queue_add_device(struct iopf_queue *queue, struct device *dev)
- 
- 	mutex_lock(&queue->lock);
- 	mutex_lock(&param->lock);
--	if (!param->iopf_param) {
--		list_add(&iopf_param->queue_list, &queue->devices);
--		param->iopf_param = iopf_param;
--		ret = 0;
-+	curr = iommu_set_device_fault_cookie(dev, 0, iopf_param);
-+	if (IS_ERR(curr)) {
-+		ret = PTR_ERR(curr);
-+		goto err_free;
- 	}
-+
-+	if (curr) {
-+		ret = -EBUSY;
-+		goto err_restore;
-+	}
-+	list_add(&iopf_param->queue_list, &queue->devices);
- 	mutex_unlock(&param->lock);
- 	mutex_unlock(&queue->lock);
- 
--	if (ret)
--		kfree(iopf_param);
-+	return 0;
-+err_restore:
-+	iommu_set_device_fault_cookie(dev, 0, curr);
-+err_free:
-+	mutex_unlock(&param->lock);
-+	mutex_unlock(&queue->lock);
-+	kfree(iopf_param);
- 
- 	return ret;
- }
-@@ -329,7 +340,6 @@ EXPORT_SYMBOL_GPL(iopf_queue_add_device);
-  */
- int iopf_queue_remove_device(struct iopf_queue *queue, struct device *dev)
- {
--	int ret = -EINVAL;
- 	struct iopf_fault *iopf, *next;
- 	struct iopf_device_param *iopf_param;
- 	struct dev_iommu *param = dev->iommu;
-@@ -339,16 +349,17 @@ int iopf_queue_remove_device(struct iopf_queue *queue, struct device *dev)
- 
- 	mutex_lock(&queue->lock);
- 	mutex_lock(&param->lock);
--	iopf_param = param->iopf_param;
--	if (iopf_param && iopf_param->queue == queue) {
--		list_del(&iopf_param->queue_list);
--		param->iopf_param = NULL;
--		ret = 0;
-+	iopf_param = iommu_get_device_fault_cookie(dev, 0);
-+	if (!iopf_param || iopf_param->queue != queue) {
-+		mutex_unlock(&param->lock);
-+		mutex_unlock(&queue->lock);
-+		return -EINVAL;
- 	}
-+
-+	list_del(&iopf_param->queue_list);
-+	iommu_set_device_fault_cookie(dev, 0, NULL);
- 	mutex_unlock(&param->lock);
- 	mutex_unlock(&queue->lock);
--	if (ret)
--		return ret;
- 
- 	/* Just in case some faults are still stuck */
- 	list_for_each_entry_safe(iopf, next, &iopf_param->partial, list)
+Yeah, I was wondering about local partitions. "Automatic but can be
+overridden" behavior becomes confusing if it's difficult for the user to
+easily tell which part is automatic when. I wonder whether it'd be better to
+make the condition static - e.g. for a partition cgroup, cpus.exclusive
+always contains all bits in cpus no matter what value is written to it. Or,
+if we separate out cpus.exclusive and cpus.exclusive.effective, no matter
+what cpus.exclusive is set, a partition root's cpus.exclusive.effective
+always includes all bits in cpus.effective.
+
+Thanks.
+
 -- 
-2.34.1
-
+tejun
