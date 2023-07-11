@@ -2,150 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6553B74EFF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED49F74EFF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjGKNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S231811AbjGKNOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjGKNOi (ORCPT
+        with ESMTP id S233003AbjGKNN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:14:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CC8E6C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689081227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+iyLeoAPn93dXROnVnHivE6YyowgqiCgtRGSaKlCmDk=;
-        b=jMH6DT+kcpnIZ6Qm/B+nfB6KpJhXcmzNIZ0+tdOVwYZdk+zTRqq2QKpnEj3uE2DqsuvslS
-        /Tr6kjzxLX6S6/kq8xWWoRjbMzEZOgQ/Lxr4WsefyTZUfFcLUupOOhnin1zligknQNqE0y
-        NpGHGWHAeOsoQA6bXwnzQ9yLb+YMbog=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-486-pQpbtKXKP_mcBC6Ug2ZnVg-1; Tue, 11 Jul 2023 09:13:44 -0400
-X-MC-Unique: pQpbtKXKP_mcBC6Ug2ZnVg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D06BD1C2BD63;
-        Tue, 11 Jul 2023 13:13:43 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.17.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 538AD492C13;
-        Tue, 11 Jul 2023 13:13:43 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 09:13:41 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 1/2] sched, cgroup: Restore meaning to
- hierarchical_quota
-Message-ID: <20230711131341.GB150804@lorien.usersys.redhat.com>
-References: <20230707195748.2918490-1-pauld@redhat.com>
- <20230707195748.2918490-2-pauld@redhat.com>
- <xm26h6qbfhbo.fsf@google.com>
+        Tue, 11 Jul 2023 09:13:58 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F00E60;
+        Tue, 11 Jul 2023 06:13:54 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-78666f06691so190508239f.0;
+        Tue, 11 Jul 2023 06:13:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689081233; x=1691673233;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NWpP4+fEKqWe2iQI82jLwDEACDw2gqnxMbAmFifLElw=;
+        b=NZNU/OFmLgLeAWyJesl0g666kJ5GAIklW8smtcdjn5gO5HkDqx8ce0ynsAlsB5YoK4
+         95Bo/PjZSrqWumrLni65k1PwEmS3OlckHUOmBs7WJzVFpDF/8I8HWw+cZiW7oIWrxOxE
+         c5WCDbMM6Xb4LbnB9e05uG0D37DTaz/z32h4denerFyCsgpMF3DzENfl9+u5D+IgUxj4
+         A1C0gAc/jP894GxIlOQESuJ42iJngEzjR8XoY+pZbrV8nkIhPbnwhZQYCUBDE651CSdK
+         VnninPVvDGmyFlGtQH7HN2aq7YAzSTV+OF1moHlPv1+nNQewo8thVR9WxtewTN+s/hoh
+         HAUw==
+X-Gm-Message-State: ABy/qLYAQsLpTKfr7xA5iCELIJvQlLKs05RCbrAyW4ky9fRQN0fcsefD
+        wCJyDoBSsttW5Nytjfe7dwBqPqof6Q==
+X-Google-Smtp-Source: APBJJlH0f3M58j0GXXQis+UmNXxff+m6WDBMiwo9rAt1gCISYr4pmF6Cv55ooDei9fMghPrqjHeWFg==
+X-Received: by 2002:a5e:c910:0:b0:77e:3d2f:d1f4 with SMTP id z16-20020a5ec910000000b0077e3d2fd1f4mr14965853iol.15.1689081233268;
+        Tue, 11 Jul 2023 06:13:53 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id c21-20020a056602335500b0078702f4894asm620420ioz.9.2023.07.11.06.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 06:13:52 -0700 (PDT)
+Received: (nullmailer pid 802164 invoked by uid 1000);
+        Tue, 11 Jul 2023 13:13:50 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xm26h6qbfhbo.fsf@google.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
+Message-Id: <168908123059.802078.8312643733472251777.robh@kernel.org>
+Subject: Re: [PATCH 02/53] dt-bindings: interconnect: qcom,bcm-voter: Add
+ qcom,bcm-voter-idx
+Date:   Tue, 11 Jul 2023 07:13:50 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 05:00:11PM -0700 Benjamin Segall wrote:
-> Phil Auld <pauld@redhat.com> writes:
-> 
-> > In cgroupv2 cfs_b->hierarchical_quota is set to -1 for all task
-> > groups due to the previous fix simply taking the min.  It should
-> > reflect a limit imposed at that level or by an ancestor. Even
-> > though cgroupv2 does not require child quota to be less than or
-> > equal to that of its ancestors the task group will still be
-> > constrained by such a quota so this should be shown here. Cgroupv1
-> > continues to set this correctly.
-> >
-> > In both cases, add initialization when a new task group is created
-> > based on the current parent's value (or RUNTIME_INF in the case of
-> > root_task_group). Otherwise, the field is wrong until a quota is
-> > changed after creation and __cfs_schedulable() is called.
-> 
-> Reviewed-by: Ben Segall <bsegall@google.com>
->
 
-Thanks, I'll hold on to this for the next version where I update the comment
-if that's okay. I was just going to send that but based on your comment
-on patch 2 may just do a v6 of the whole thing.
-
-
-Cheers,
-Phil
-
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index a68d1276bab0..1b214e10c25d 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -11038,11 +11038,14 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
-> >  
-> >  		/*
-> >  		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
-> > -		 * always take the min.  On cgroup1, only inherit when no
-> > -		 * limit is set:
-> > +		 * always take the non-RUNTIME_INF min.  On cgroup1, only
-> > +		 * inherit when no limit is set:
-> >  		 */
-> >  		if (cgroup_subsys_on_dfl(cpu_cgrp_subsys)) {
-> > -			quota = min(quota, parent_quota);
-> > +			if (quota == RUNTIME_INF)
-> > +				quota = parent_quota;
-> > +			else if (parent_quota != RUNTIME_INF)
-> > +				quota = min(quota, parent_quota);
-> >  		} else {
-> >  			if (quota == RUNTIME_INF)
-> >  				quota = parent_quota;
+On Tue, 11 Jul 2023 14:18:01 +0200, Konrad Dybcio wrote:
+> In order to (at least partially) untangle the global BCM voter lookup
+> (as again, they are shared throughout the entire system and not bound to
+> individual buses/providers), introduce a new required property to assign
+> a unique identifier to each BCM voter.
 > 
-> I suppose you could also set RUNTIME_INF to be a positive value or
-> better yet just compare at unsigned, but it's not like config needs to
-> be fast, so no need to mess with that.
-> 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 373ff5f55884..92381f9ecf37 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6005,13 +6005,14 @@ static enum hrtimer_restart sched_cfs_period_timer(struct hrtimer *timer)
-> >  	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
-> >  }
-> >  
-> > -void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
-> > +void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent)
-> >  {
-> >  	raw_spin_lock_init(&cfs_b->lock);
-> >  	cfs_b->runtime = 0;
-> >  	cfs_b->quota = RUNTIME_INF;
-> >  	cfs_b->period = ns_to_ktime(default_cfs_period());
-> >  	cfs_b->burst = 0;
-> > +	cfs_b->hierarchical_quota = ((parent) ? parent->hierarchical_quota : RUNTIME_INF);
-> 
-> Minor style nit: don't need any of these parens here.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml       | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
 
--- 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb: rsc@18200000: bcm-voter: 'qcom,bcm-voter-idx' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,rpmh-rsc.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb: bcm-voter: 'qcom,bcm-voter-idx' is a required property
+	from schema $id: http://devicetree.org/schemas/interconnect/qcom,bcm-voter.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
