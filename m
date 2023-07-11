@@ -2,115 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FF374E98D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9314C74E983
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjGKI4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S231846AbjGKIyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGKI4K (ORCPT
+        with ESMTP id S231916AbjGKIya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:56:10 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ACEBF;
-        Tue, 11 Jul 2023 01:56:08 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 11 Jul 2023 04:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F041BC1;
+        Tue, 11 Jul 2023 01:54:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 8F44361E5FE01;
-        Tue, 11 Jul 2023 10:53:08 +0200 (CEST)
-Message-ID: <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
-Date:   Tue, 11 Jul 2023 10:53:07 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7674B61389;
+        Tue, 11 Jul 2023 08:53:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D952C433C7;
+        Tue, 11 Jul 2023 08:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689065638;
+        bh=s0Ui7MxnciCydraCEjHzngOSBAQ9dkb9Vl5INw0OUpA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WZe4hcpj2wPeN9hguHAqfalg0lwP8SsH16jAuxyGZHFfWqzstiIgwTHELh6fQVDd0
+         tdtKTq1yADGinAIgw+bxiJMQuv5Y/GP3Ut1SOJ8w+SgoDfI8z8Yu3fxXueWJXhs+F7
+         1uG+ZpOusE4vempJ1FQ8SiwRWrNdBB+a8enovR506Ur3kcKXySL/jNah8ABorSVF0P
+         sC4jmlSTzP1Ck1XVAfEjoUZw9EoQsHqc8pIOiFNoU8qb4YTibWK8WEI1ki7i7eVvTy
+         d2hxfyBKq+vjkU+ZIDdrrnWZIhecOMrQEI2MlUU1gH7Q5iyq8sZeKjww4iyaYrJBMz
+         uh8vBrjOcwEqA==
+Message-ID: <55418c89-b1b2-5aec-34d3-0dbf9510c551@kernel.org>
+Date:   Tue, 11 Jul 2023 16:53:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [Intel-wired-lan] [PATCH net-next v2 00/10] Remove unnecessary
- (void*) conversions
+Subject: Re: [f2fs-dev] [PATCH] f2fs: flush inode if atomic file is aborted
 Content-Language: en-US
-To:     Su Hui <suhui@nfschina.com>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        irusskikh@marvell.com, rmody@marvell.com, skalluru@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, yisen.zhuang@huawei.com,
-        salil.mehta@huawei.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, steve.glendinning@shawell.net,
-        iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
-        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, mostrows@earthlink.net, xeb@mail.ru,
-        qiang.zhao@nxp.com, uttenthaler@ems-wuensche.com,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, yunchuan@nfschina.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <20230710063828.172593-1-suhui@nfschina.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230710063828.172593-1-suhui@nfschina.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     syzbot+e1246909d526a9d470fa@syzkaller.appspotmail.com,
+        stable@vger.kernel.org
+References: <20230707141142.2276510-1-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230707141142.2276510-1-jaegeuk@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Su,
-
-
-Thank you for your patch.
-
-Am 10.07.23 um 08:38 schrieb Su Hui:
-> From: wuych <yunchuan@nfschina.com>
-
-Can you please write the full name correctly? Maybe Yun Chuan?
-
-     git config --global user.name "Yun Chuan"
-     git commit --amend --author="Yun Chuan <yunchuan@nfschina.com>"
-
-I only got the cover letter by the way.
-
-
-Kind regards,
-
-Paul
-
-
-> Changes in v2:
-> 	move declarations to be reverse xmas tree.
-> 	compile it in net and net-next branch.
-> 	remove some error patches in v1.
+On 2023/7/7 22:11, Jaegeuk Kim wrote:
+> Let's flush the inode being aborted atomic operation to avoid stale dirty
+> inode during eviction in this call stack:
 > 
-> PATCH v1 link:
-> https://lore.kernel.org/all/20230628024121.1439149-1-yunchuan@nfschina.com/
+>    f2fs_mark_inode_dirty_sync+0x22/0x40 [f2fs]
+>    f2fs_abort_atomic_write+0xc4/0xf0 [f2fs]
+>    f2fs_evict_inode+0x3f/0x690 [f2fs]
+>    ? sugov_start+0x140/0x140
+>    evict+0xc3/0x1c0
+>    evict_inodes+0x17b/0x210
+>    generic_shutdown_super+0x32/0x120
+>    kill_block_super+0x21/0x50
+>    deactivate_locked_super+0x31/0x90
+>    cleanup_mnt+0x100/0x160
+>    task_work_run+0x59/0x90
+>    do_exit+0x33b/0xa50
+>    do_group_exit+0x2d/0x80
+>    __x64_sys_exit_group+0x14/0x20
+>    do_syscall_64+0x3b/0x90
+>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
-> wuych (10):
->    net: wan: Remove unnecessary (void*) conversions
->    net: atlantic: Remove unnecessary (void*) conversions
->    net: ppp: Remove unnecessary (void*) conversions
->    net: hns3: remove unnecessary (void*) conversions
->    net: hns: Remove unnecessary (void*) conversions
->    ice: remove unnecessary (void*) conversions
->    ethernet: smsc: remove unnecessary (void*) conversions
->    net: mdio: Remove unnecessary (void*) conversions
->    can: ems_pci: Remove unnecessary (void*) conversions
->    net: bna: Remove unnecessary (void*) conversions
+> This triggers f2fs_bug_on() in f2fs_evict_inode:
+>   f2fs_bug_on(sbi, is_inode_flag_set(inode, FI_DIRTY_INODE));
 > 
->   drivers/net/can/sja1000/ems_pci.c             |  6 +++---
->   .../aquantia/atlantic/hw_atl2/hw_atl2.c       | 12 ++++++------
->   .../atlantic/hw_atl2/hw_atl2_utils_fw.c       |  2 +-
->   drivers/net/ethernet/brocade/bna/bnad.c       | 19 +++++++++----------
->   .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  2 +-
->   drivers/net/ethernet/hisilicon/hns_mdio.c     | 10 +++++-----
->   drivers/net/ethernet/intel/ice/ice_main.c     |  4 ++--
->   drivers/net/ethernet/smsc/smsc911x.c          |  4 ++--
->   drivers/net/ethernet/smsc/smsc9420.c          |  4 ++--
->   drivers/net/mdio/mdio-xgene.c                 |  4 ++--
->   drivers/net/ppp/pppoe.c                       |  4 ++--
->   drivers/net/ppp/pptp.c                        |  4 ++--
->   drivers/net/wan/fsl_ucc_hdlc.c                |  6 +++---
->   13 files changed, 40 insertions(+), 41 deletions(-)
+> This fixes the syzbot report:
+> 
+> loop0: detected capacity change from 0 to 131072
+> F2FS-fs (loop0): invalid crc value
+> F2FS-fs (loop0): Found nat_bits in checkpoint
+> F2FS-fs (loop0): Mounted with checkpoint version = 48b305e4
+> ------------[ cut here ]------------
+> kernel BUG at fs/f2fs/inode.c:869!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 5014 Comm: syz-executor220 Not tainted 6.4.0-syzkaller-11479-g6cd06ab12d1a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+> RIP: 0010:f2fs_evict_inode+0x172d/0x1e00 fs/f2fs/inode.c:869
+> Code: ff df 48 c1 ea 03 80 3c 02 00 0f 85 6a 06 00 00 8b 75 40 ba 01 00 00 00 4c 89 e7 e8 6d ce 06 00 e9 aa fc ff ff e8 63 22 e2 fd <0f> 0b e8 5c 22 e2 fd 48 c7 c0 a8 3a 18 8d 48 ba 00 00 00 00 00 fc
+> RSP: 0018:ffffc90003a6fa00 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff8880273b8000 RSI: ffffffff83a2bd0d RDI: 0000000000000007
+> RBP: ffff888077db91b0 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000001 R12: ffff888029a3c000
+> R13: ffff888077db9660 R14: ffff888029a3c0b8 R15: ffff888077db9c50
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f1909bb9000 CR3: 00000000276a9000 CR4: 0000000000350ef0
+> Call Trace:
+>   <TASK>
+>   evict+0x2ed/0x6b0 fs/inode.c:665
+>   dispose_list+0x117/0x1e0 fs/inode.c:698
+>   evict_inodes+0x345/0x440 fs/inode.c:748
+>   generic_shutdown_super+0xaf/0x480 fs/super.c:478
+>   kill_block_super+0x64/0xb0 fs/super.c:1417
+>   kill_f2fs_super+0x2af/0x3c0 fs/f2fs/super.c:4704
+>   deactivate_locked_super+0x98/0x160 fs/super.c:330
+>   deactivate_super+0xb1/0xd0 fs/super.c:361
+>   cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1254
+>   task_work_run+0x16f/0x270 kernel/task_work.c:179
+>   exit_task_work include/linux/task_work.h:38 [inline]
+>   do_exit+0xa9a/0x29a0 kernel/exit.c:874
+>   do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
+>   __do_sys_exit_group kernel/exit.c:1035 [inline]
+>   __se_sys_exit_group kernel/exit.c:1033 [inline]
+>   __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f309be71a09
+> Code: Unable to access opcode bytes at 0x7f309be719df.
+> RSP: 002b:00007fff171df518 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> RAX: ffffffffffffffda RBX: 00007f309bef7330 RCX: 00007f309be71a09
+> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+> RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f309bef1e40
+> R10: 0000000000010600 R11: 0000000000000246 R12: 00007f309bef7330
+> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+>   </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:f2fs_evict_inode+0x172d/0x1e00 fs/f2fs/inode.c:869
+> Code: ff df 48 c1 ea 03 80 3c 02 00 0f 85 6a 06 00 00 8b 75 40 ba 01 00 00 00 4c 89 e7 e8 6d ce 06 00 e9 aa fc ff ff e8 63 22 e2 fd <0f> 0b e8 5c 22 e2 fd 48 c7 c0 a8 3a 18 8d 48 ba 00 00 00 00 00 fc
+> RSP: 0018:ffffc90003a6fa00 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff8880273b8000 RSI: ffffffff83a2bd0d RDI: 0000000000000007
+> RBP: ffff888077db91b0 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000001 R12: ffff888029a3c000
+> R13: ffff888077db9660 R14: ffff888029a3c0b8 R15: ffff888077db9c50
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f1909bb9000 CR3: 00000000276a9000 CR4: 0000000000350ef0
+> 
+> Cc: <stable@vger.kernel.org>
+> Reported-by: syzbot+e1246909d526a9d470fa@syzkaller.appspotmail.com
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+
+Reviewed-by: Chao Yu <chao@kernel.org>
+
+Thanks,
+
+> ---
+>   fs/f2fs/segment.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 0457d620011f..6e5d1039ca76 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -205,6 +205,8 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+>   		f2fs_i_size_write(inode, fi->original_i_size);
+>   		fi->original_i_size = 0;
+>   	}
+> +	/* avoid stale dirty inode during eviction */
+> +	sync_inode_metadata(inode, 0);
+>   }
+>   
+>   static int __replace_atomic_write_block(struct inode *inode, pgoff_t index,
