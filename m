@@ -2,57 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DE874EDA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A75574EDA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjGKMJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S231205AbjGKMJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjGKMJJ (ORCPT
+        with ESMTP id S231297AbjGKMJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:09:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3D781708;
-        Tue, 11 Jul 2023 05:08:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A88E72B;
-        Tue, 11 Jul 2023 05:09:41 -0700 (PDT)
-Received: from [10.163.47.87] (unknown [10.163.47.87])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 766923F67D;
-        Tue, 11 Jul 2023 05:08:53 -0700 (PDT)
-Message-ID: <86792ab2-864a-5c27-95c1-54c4057024db@arm.com>
-Date:   Tue, 11 Jul 2023 17:38:51 +0530
+        Tue, 11 Jul 2023 08:09:12 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC5010E5;
+        Tue, 11 Jul 2023 05:09:09 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 54F1667373; Tue, 11 Jul 2023 14:09:06 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 14:09:06 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Chengming Zhou <chengming.zhou@linux.dev>
+Cc:     Christoph Hellwig <hch@lst.de>, axboe@kernel.dk,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com
+Subject: Re: [PATCH 1/2] blk-flush: fix rq->flush.seq for post-flush
+ requests
+Message-ID: <20230711120906.GA27827@lst.de>
+References: <20230710064705.1847287-1-chengming.zhou@linux.dev> <20230710133024.GA23157@lst.de> <4431d779-e6e7-aff1-5cf8-4147de974d8d@linux.dev> <20230711113126.GA26978@lst.de> <6825f687-9573-51eb-bb89-17eadb60f71b@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 3/4] arm_pmu: Remove unused
- PERF_PMU_CAP_HETEROGENEOUS_CPUS capability
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, irogers@google.com
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230710122138.1450930-1-james.clark@arm.com>
- <20230710122138.1450930-4-james.clark@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230710122138.1450930-4-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6825f687-9573-51eb-bb89-17eadb60f71b@linux.dev>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,45 +41,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/10/23 17:51, James Clark wrote:
-> Since commit bd2756811766 ("perf: Rewrite core context handling") the
-> relationship between perf_event_context and PMUs has changed so that
-> the error scenario that PERF_PMU_CAP_HETEROGENEOUS_CPUS originally
-> silenced no longer exists.
+On Tue, Jul 11, 2023 at 07:52:11PM +0800, Chengming Zhou wrote:
+> On 2023/7/11 19:31, Christoph Hellwig wrote:
+> > On Tue, Jul 11, 2023 at 07:06:20PM +0800, Chengming Zhou wrote:
+> >> Ok, will add a Fixes tag and send it as a separate patch since it's a bug fix.
+> > 
+> > Btw, it's probably not worth resending patch 2 until we've figured out
+> > and dealt with the SATA flush regression that Chuck reported.
 > 
-> Remove the capability and associated comment to avoid confusion that it
-> actually influences any perf core behavior. This change should be a
-> no-op.
-> 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/perf/arm_pmu.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index d8844a9461a2..297906df6628 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -872,15 +872,12 @@ struct arm_pmu *armpmu_alloc(void)
->  		.attr_groups	= pmu->attr_groups,
->  		/*
->  		 * This is a CPU PMU potentially in a heterogeneous
-> -		 * configuration (e.g. big.LITTLE). This is not an uncore PMU,
-> -		 * and we have taken ctx sharing into account (e.g. with our
-> -		 * pmu::filter callback and pmu::event_init group validation).
-> -		 *
-> +		 * configuration (e.g. big.LITTLE) so
->  		 * PERF_PMU_CAP_EXTENDED_HW_TYPE is required to open the legacy
->  		 * PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events on a
->  		 * specific PMU.
->  		 */
-> -		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS |
-> +		.capabilities	= PERF_PMU_CAP_EXTENDED_REGS |
->  				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
+> Ok, I will not resend patch 2. As for the patch 1, should I resend it as a separate patch
+> or just put it in that series [1] before other flush optimizations ?
 
-Small nit, the second line could be folded back into the first one.
-
->  	};
->  
+I'd wait a bit for debugging the regression.  For the worst case we'll have
+to revert the patch, which currently can be done cleanly, but can't be
+with that patch.
