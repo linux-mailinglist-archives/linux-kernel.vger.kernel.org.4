@@ -2,280 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C9F74F18F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B133474F1D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbjGKORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S233019AbjGKOV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjGKOQ6 (ORCPT
+        with ESMTP id S232756AbjGKOVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:16:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B121715;
-        Tue, 11 Jul 2023 07:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689085001; x=1720621001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=GydZ/1lpJ/AnE3XIEbDEpzC1D7bZ7OxWRWr9gYhGDh8=;
-  b=Vy1fytWKMV6F/bxIIwT7vm+CxXY0NXY2hlgLJKbacBUFM7sdqMf4k45N
-   iDxCoLhy+bhuwpdCcR9m9HqKdKmZyvNrVPdhbItjzIwV2c1QadbS6OIPb
-   AUBQw4qUToBrz/IsrFzjI7jvkwAoBWAQtl6sFNJkJ5CWJ1BrlNnDNxRyE
-   x1N/cYLJ2j2IViBL0Z+5UA+S7a+8KGm9CLYrePq/EVyRuyujIL7ZYlbZ7
-   o/HNd7dAGf3DxzG4fxQG5l+ur1dg0LeUuH4wKhfm0sk0mcXn4MvaSGIkt
-   2VfExg/0W8mOljriEh5cn8wWMnvPOzopoeXUCI3r19sEf9B/SpBsmIPFd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="450989631"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="450989631"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:16:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="715173555"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="715173555"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 07:16:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJEAI-001s37-0N;
-        Tue, 11 Jul 2023 17:16:30 +0300
-Date:   Tue, 11 Jul 2023 17:16:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 12/13] ASoC: SOF: Intel: Convert to PCI device IDs defines
-Message-ID: <ZK1kPXm+FieJ+vya@smile.fi.intel.com>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
- <20230711125726.3509391-13-amadeuszx.slawinski@linux.intel.com>
+        Tue, 11 Jul 2023 10:21:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7EB1988
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689085225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NY9zvWPkMIRBdIzQwvp51bTldJwjnkTeVv0DGYO1saU=;
+        b=WpQi7eVGRaA8/Qsb3Hc8suoooFGLtYBtFTuJ/xaY69xEXdXq7AcX0brMbdxaUgmroc5Q1J
+        beNnx+cp1r4Pk7G74cDMWxA+UJd1O6PCtNyrhVW1umXQy4nGy/i6hg8TsfLSrqUUkUoJ/W
+        60T+H5rEu496W+uLDbjKB3nPpbz3x3k=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-owKJyGXMPSOsyC8L1C253A-1; Tue, 11 Jul 2023 10:20:22 -0400
+X-MC-Unique: owKJyGXMPSOsyC8L1C253A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52C1B28040B2;
+        Tue, 11 Jul 2023 14:16:56 +0000 (UTC)
+Received: from [10.39.208.24] (unknown [10.39.208.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6434B40C2070;
+        Tue, 11 Jul 2023 14:16:54 +0000 (UTC)
+Message-ID: <3a8073d5-dab4-ed13-2c53-84ed5093bacb@redhat.com>
+Date:   Tue, 11 Jul 2023 16:16:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230711125726.3509391-13-amadeuszx.slawinski@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Cindy Lu <lulu@redhat.com>, jasowang@redhat.com, mst@redhat.com,
+        xieyongji@bytedance.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+References: <20230628065919.54042-1-lulu@redhat.com>
+ <20230628065919.54042-2-lulu@redhat.com>
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: Re: [RFC 1/4] vduse: Add the struct to save the vq reconnect info
+In-Reply-To: <20230628065919.54042-2-lulu@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:57:25PM +0200, Amadeusz Sławiński wrote:
-> Use PCI device IDs from pci_ids.h header and while at it change to using
-> PCI_DEVICE_DATA() macro, to simplify declarations.
+Hello Cindy,
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Oh, additional remark below.
-
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+On 6/28/23 08:59, Cindy Lu wrote:
+> From: Your Name <you@example.com>
+> 
+> this struct is to save the reconnect info struct, in this
+> struct saved the page info that alloc to save the
+> reconnect info
+> 
+> Signed-off-by: Cindy Lu <lulu@redhat.com>
 > ---
->  sound/soc/sof/intel/pci-apl.c |  9 +++----
->  sound/soc/sof/intel/pci-cnl.c | 15 ++++--------
->  sound/soc/sof/intel/pci-icl.c | 12 ++++------
->  sound/soc/sof/intel/pci-mtl.c |  3 +--
->  sound/soc/sof/intel/pci-skl.c |  6 ++---
->  sound/soc/sof/intel/pci-tgl.c | 45 ++++++++++++-----------------------
->  sound/soc/sof/intel/pci-tng.c |  3 +--
->  7 files changed, 31 insertions(+), 62 deletions(-)
+>   drivers/vdpa/vdpa_user/vduse_dev.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
-> diff --git a/sound/soc/sof/intel/pci-apl.c b/sound/soc/sof/intel/pci-apl.c
-> index 69cad5a6bc72..083659ddfe6b 100644
-> --- a/sound/soc/sof/intel/pci-apl.c
-> +++ b/sound/soc/sof/intel/pci-apl.c
-> @@ -85,12 +85,9 @@ static const struct sof_dev_desc glk_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	{ PCI_DEVICE(0x8086, 0x5a98), /* BXT-P (ApolloLake) */
-> -		.driver_data = (unsigned long)&bxt_desc},
-> -	{ PCI_DEVICE(0x8086, 0x1a98),/* BXT-T */
-> -		.driver_data = (unsigned long)&bxt_desc},
-> -	{ PCI_DEVICE(0x8086, 0x3198), /* GeminiLake */
-> -		.driver_data = (unsigned long)&glk_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_APL, &bxt_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_APL_T, &bxt_desc) },
+> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> index 26b7e29cb900..f845dc46b1db 100644
+> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> @@ -72,6 +72,12 @@ struct vduse_umem {
+>   	struct page **pages;
+>   	struct mm_struct *mm;
+>   };
+> +struct vdpa_reconnect_info {
+> +	u32 index;
+> +	phys_addr_t addr;
+> +	unsigned long vaddr;
+> +	phys_addr_t size;
+> +};
+>   
+>   struct vduse_dev {
+>   	struct vduse_vdpa *vdev;
+> @@ -106,6 +112,7 @@ struct vduse_dev {
+>   	u32 vq_align;
+>   	struct vduse_umem *umem;
+>   	struct mutex mem_lock;
+> +	struct vdpa_reconnect_info reconnect_info[64];
 
-Have we ever had APL-T? What is that? I remember that we have had two or
-three BXTs inside, and then products become for Broxton and Apollo Lake
-SoC codenames. I never have heard about -T...
+Why 64?
+Shouldn't it be part of struct vduse_virtqueue instead?
 
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_GML, &glk_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> diff --git a/sound/soc/sof/intel/pci-cnl.c b/sound/soc/sof/intel/pci-cnl.c
-> index 8895508a0be6..e2c50e7b0aa7 100644
-> --- a/sound/soc/sof/intel/pci-cnl.c
-> +++ b/sound/soc/sof/intel/pci-cnl.c
-> @@ -120,16 +120,11 @@ static const struct sof_dev_desc cml_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	{ PCI_DEVICE(0x8086, 0x9dc8), /* CNL-LP */
-> -		.driver_data = (unsigned long)&cnl_desc},
-> -	{ PCI_DEVICE(0x8086, 0xa348), /* CNL-H */
-> -		.driver_data = (unsigned long)&cfl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x02c8), /* CML-LP */
-> -		.driver_data = (unsigned long)&cml_desc},
-> -	{ PCI_DEVICE(0x8086, 0x06c8), /* CML-H */
-> -		.driver_data = (unsigned long)&cml_desc},
-> -	{ PCI_DEVICE(0x8086, 0xa3f0), /* CML-S */
-> -		.driver_data = (unsigned long)&cml_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CNL_LP, &cnl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CNL_H, &cfl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CML_LP, &cml_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CML_H, &cml_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_CML_S, &cml_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> diff --git a/sound/soc/sof/intel/pci-icl.c b/sound/soc/sof/intel/pci-icl.c
-> index 5fb5a820693e..0a65df3ed9e2 100644
-> --- a/sound/soc/sof/intel/pci-icl.c
-> +++ b/sound/soc/sof/intel/pci-icl.c
-> @@ -86,14 +86,10 @@ static const struct sof_dev_desc jsl_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	{ PCI_DEVICE(0x8086, 0x34C8), /* ICL-LP */
-> -		.driver_data = (unsigned long)&icl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x3dc8), /* ICL-H */
-> -		.driver_data = (unsigned long)&icl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x38c8), /* ICL-N */
-> -		.driver_data = (unsigned long)&jsl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x4dc8), /* JSL-N */
-> -		.driver_data = (unsigned long)&jsl_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ICL_LP, &icl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ICL_H, &icl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ICL_N, &jsl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_JSL_N, &jsl_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> diff --git a/sound/soc/sof/intel/pci-mtl.c b/sound/soc/sof/intel/pci-mtl.c
-> index e276e1e37fed..7868b0827e84 100644
-> --- a/sound/soc/sof/intel/pci-mtl.c
-> +++ b/sound/soc/sof/intel/pci-mtl.c
-> @@ -52,8 +52,7 @@ static const struct sof_dev_desc mtl_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	{ PCI_DEVICE(0x8086, 0x7E28), /* MTL */
-> -		.driver_data = (unsigned long)&mtl_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_MTL, &mtl_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> diff --git a/sound/soc/sof/intel/pci-skl.c b/sound/soc/sof/intel/pci-skl.c
-> index 5e69af6eed34..a6588b138a8c 100644
-> --- a/sound/soc/sof/intel/pci-skl.c
-> +++ b/sound/soc/sof/intel/pci-skl.c
-> @@ -69,10 +69,8 @@ static struct sof_dev_desc kbl_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	/* Sunrise Point-LP */
-> -	{ PCI_DEVICE(0x8086, 0x9d70), .driver_data = (unsigned long)&skl_desc},
-> -	/* KBL */
-> -	{ PCI_DEVICE(0x8086, 0x9d71), .driver_data = (unsigned long)&kbl_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_SKL_LP, &skl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_KBL_LP, &kbl_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> diff --git a/sound/soc/sof/intel/pci-tgl.c b/sound/soc/sof/intel/pci-tgl.c
-> index ca37ff1bbd2a..d688f9373fb2 100644
-> --- a/sound/soc/sof/intel/pci-tgl.c
-> +++ b/sound/soc/sof/intel/pci-tgl.c
-> @@ -284,36 +284,21 @@ static const struct sof_dev_desc rpl_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	{ PCI_DEVICE(0x8086, 0xa0c8), /* TGL-LP */
-> -		.driver_data = (unsigned long)&tgl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x43c8), /* TGL-H */
-> -		.driver_data = (unsigned long)&tglh_desc},
-> -	{ PCI_DEVICE(0x8086, 0x4b55), /* EHL */
-> -		.driver_data = (unsigned long)&ehl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x4b58), /* EHL */
-> -		.driver_data = (unsigned long)&ehl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x7ad0), /* ADL-S */
-> -		.driver_data = (unsigned long)&adls_desc},
-> -	{ PCI_DEVICE(0x8086, 0x7a50), /* RPL-S */
-> -		.driver_data = (unsigned long)&rpls_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51c8), /* ADL-P */
-> -		.driver_data = (unsigned long)&adl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51c9), /* ADL-PS */
-> -		.driver_data = (unsigned long)&adl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51ca), /* RPL-P */
-> -		.driver_data = (unsigned long)&rpl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51cb), /* RPL-P */
-> -		.driver_data = (unsigned long)&rpl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51cc), /* ADL-M */
-> -		.driver_data = (unsigned long)&adl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51cd), /* ADL-P */
-> -		.driver_data = (unsigned long)&adl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51ce), /* RPL-M */
-> -		.driver_data = (unsigned long)&rpl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x51cf), /* RPL-PX */
-> -		.driver_data = (unsigned long)&rpl_desc},
-> -	{ PCI_DEVICE(0x8086, 0x54c8), /* ADL-N */
-> -		.driver_data = (unsigned long)&adl_n_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_TGL_LP, &tgl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_TGL_H, &tglh_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_EHL_0, &ehl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_EHL_3, &ehl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ADL_S, &adls_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_RPL_S, &rpls_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ADL_P, &adl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ADL_PS, &adl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_RPL_P_0, &rpl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_RPL_P_1, &rpl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ADL_M, &adl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ADL_PX, &adl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_RPL_M, &rpl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_RPL_PX, &rpl_desc) },
-> +	{ PCI_DEVICE_DATA(INTEL, HDA_ADL_N, &adl_n_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> diff --git a/sound/soc/sof/intel/pci-tng.c b/sound/soc/sof/intel/pci-tng.c
-> index 8c22a00266c0..12e81456a80c 100644
-> --- a/sound/soc/sof/intel/pci-tng.c
-> +++ b/sound/soc/sof/intel/pci-tng.c
-> @@ -225,8 +225,7 @@ static const struct sof_dev_desc tng_desc = {
->  
->  /* PCI IDs */
->  static const struct pci_device_id sof_pci_ids[] = {
-> -	{ PCI_DEVICE(0x8086, 0x119a),
-> -		.driver_data = (unsigned long)&tng_desc},
-> +	{ PCI_DEVICE_DATA(INTEL, ADSP_TNG, &tng_desc) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sof_pci_ids);
-> -- 
-> 2.34.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+>   };
+>   
+>   struct vduse_dev_msg {
 
