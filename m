@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B82774EC78
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CA074EC7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjGKLPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S231416AbjGKLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjGKLPO (ORCPT
+        with ESMTP id S229845AbjGKLQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:15:14 -0400
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1559B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1689074105;
-        bh=CIo+pyUDR3XhnEvp8A3FZTnxNPcQHlDMhrpSmNz+R64=;
-        h=From:To:Cc:Subject:Date;
-        b=fQOBtbP53p7LjZ7k/NJ3+HGXi8SJh56CH8Vys1Fs+8qMhtKqSIabEkvumODmpxCij
-         WM9Eo+YntJEJm23/W0HYN5EhzCvEJLROux5sjzmQALv1b4R+GJ2TA5Loc0Jy7/GLxP
-         oScNfLI57YK7U3LikuT4iTD9ol3V+oICwYjsBDWw=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
-        id 3C1976B3; Tue, 11 Jul 2023 19:15:01 +0800
-X-QQ-mid: xmsmtpt1689074101t3lfnbjqd
-Message-ID: <tencent_C6AD4AD72BEFE813228FC188905F96C6A506@qq.com>
-X-QQ-XMAILINFO: MFdGPHhuqhNoOqo3bURn4hkkJ4pSi2y6IOl6LhsaQpH6LiMMzjmCRA0V9Oj8iG
-         qvNeiut2h5FRriHaK3g3NOmEFMI5qSqVGuAA1GpqlgPBiM+6OcY9tcvarwG2e8k8T2BLM82nhIqt
-         htpb+3yDaAHX95XoYo7cgiASSA4IdwMUK3NNxNu3jBQXXDTsm1Ta8QPRzmZn2yu73qoGnG5Q7/xd
-         m7OA+Cl8ieGlK/Pue5vypA3QEIegJXRZhYOYxNth4Q3UoDepQnUaSVcTVoloV+VailWI/6rSV3QE
-         syMT/TuglJ4lPthe2BYEoedZezGfQtgHVYrx6nyTm1/W53uOj7s6rBGjEk0YZuM0y+AnNk2SM5rP
-         bai1Utphewop7/tfhVuB9PoqL5uN6aNohdJ010XNsQ3a6VAWrXlDeojo73DSXpRVkvr6VS85ikWt
-         R5Dl9COp3Dd8+hr0orGfDPlJ5LrqYq9MX2e5MuP07fWbg1k7Q+VvzwNqI5tep5l2QNZCoJPTi6sp
-         Wt8WlCkBbSTdn8J1deDW//mdt6QY98oa23uITkcrbUzJAVdJuilnXzBReBkNWor+FKE+HsODv0vi
-         WXT2hP6qqrAGhdMnaxRRwbD3efI1dmW++R4lx/QtgpdfZqKFyf220zJTuLXBBv1jgruRTanLE3Qp
-         R/tglA/ik6ZJg/BS3k3QC8BRHLLyPNkAz5yizJdtPklt7XCuUNLRNzywQ8QGV8TB/1/9sFV2kjxG
-         LLOpz04cIfzqyoJSf3NyRSNvH6Im6v9OrQn5SqwsCy9mc2eXABhSnrT0NT70xPIJOPDzsoHa1a2l
-         VVWuHNzIAHCFl04peWnW9q6lratZucfvdnj0HcKJR7mWpbvv77K3pVWlKkiOCNSlKQzVhBX+UplY
-         PZLlM4ZlkE6mVJ/x8yg0gpBcSq/Bq1EnxZVbiZs563dZFuobgrXFlXb1DsF0I8M3USXzDSKBc/iK
-         7Rr90+1GPfiGiI91fFeMyCq6mN20e28/bP8zA5KWkVBHRTobr2vw==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     ast@kernel.org
-Cc:     rongtao@cestc.cn, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
-        Tools)), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next] samples/bpf: syscall_tp: aarch64 no open syscall
-Date:   Tue, 11 Jul 2023 19:14:59 +0800
-X-OQ-MSGID: <20230711111500.30517-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
+        Tue, 11 Jul 2023 07:16:13 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B754DBE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:15:48 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b8bd586086so41591215ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1689074148; x=1691666148;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=em9xgVa3hdk9NBQVYgyeIMHyNqzlL7w7PxEQ9l0udqc=;
+        b=byFHlSTvLjX+wwzL1uvRmsJT9gApAjyX+arz4B0WuWLIPXf9adRD8JGCC0m5rpdMe9
+         Rukv7xRdLlo5TDO474aEnxzG63b/BhXJkW5O4RfRWQCvj9Uc9DxxydaeT5APXWcdTzJL
+         JpEIF92j/ko0dB3fiPlUgLJukl2johew+Z+rIH8MkWU6bmh0tk/5bm3qWKllXxSkGMWI
+         P/DlqxcbxQIiygAcPMKj+x2/9j4ceknrwJLjoejsMqEfoa1fNcHpBTyc2+nsxoMIPaKI
+         SdQYCKoSVvk9MqAyIX8fki/wYIypjuA0H9N+hS3B9i5HW2JSajuTBsM0em2NQgZii6sO
+         yN9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689074148; x=1691666148;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=em9xgVa3hdk9NBQVYgyeIMHyNqzlL7w7PxEQ9l0udqc=;
+        b=WpWWUEr6VFA3Aazasr4Um2Yx1ZnHN39zAjhaJl+2rHfNOqgeekmjeEe5mdZlzIDyyY
+         7Ploo1zUyD+GbG2DboOpWpJpUnM1rro772BqgkIXwsbVwA3esAkaGZ8bBfU8ES5E2aYc
+         8Ve6p9XlPpSjzJE95Vg8erQVIhqb75XOl3zMJnkQbe/ulA5EJIKcJy+WdS/Xwq/QCKYA
+         F1eHA167Bs9i3LiVfkdqxV3J+RrShtp9Wcj0ytucVwJHFZEksZe6Kh8EOC7/MhqcMqqk
+         FULNiLpQJMECxdcIEVGupsbdBz/xnz67T2ClkxvnqiqVGtqD8K2xyFhZDf3baB9hvquw
+         CROg==
+X-Gm-Message-State: ABy/qLYpbtTelOIgm/CEANoD7jhgLr3JdxdCc3QKPtnCtMWiS7DDfcFW
+        vSt/htrVJh1d4tMflTmf5+V4dA==
+X-Google-Smtp-Source: APBJJlFbdvpSFJFyEKHvLn6aFsX3912I0T7xfw27aLE/jleSdcztYBOYpNDmwbR0v5hKNcPTbyO9/w==
+X-Received: by 2002:a17:903:22c6:b0:1b8:72e2:c63 with SMTP id y6-20020a17090322c600b001b872e20c63mr18675118plg.8.1689074148225;
+        Tue, 11 Jul 2023 04:15:48 -0700 (PDT)
+Received: from [10.4.5.144] ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id bc2-20020a170902930200b001b9f032bb3dsm1305219plb.3.2023.07.11.04.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 04:15:47 -0700 (PDT)
+Message-ID: <d0e823d9-292d-932c-9849-1d4d08c9f4eb@bytedance.com>
+Date:   Tue, 11 Jul 2023 19:15:43 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [External] Re: [PATCH 1/2] blk-flush: fix rq->flush.seq for
+ post-flush requests
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chengming Zhou <chengming.zhou@linux.dev>
+References: <20230710064705.1847287-1-chengming.zhou@linux.dev>
+ <20230710133024.GA23157@lst.de>
+ <4431d779-e6e7-aff1-5cf8-4147de974d8d@linux.dev>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <4431d779-e6e7-aff1-5cf8-4147de974d8d@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On 2023/7/11 19:06, Chengming Zhou wrote:
+> On 2023/7/10 21:30, Christoph Hellwig wrote:
+>> On Mon, Jul 10, 2023 at 02:47:04PM +0800, chengming.zhou@linux.dev wrote:
+>>> From: Chengming Zhou <zhouchengming@bytedance.com>
+>>>
+>>> If the policy == (REQ_FSEQ_DATA | REQ_FSEQ_POSTFLUSH), it means that the
+>>> data sequence and post-flush sequence need to be done for this request.
+>>>
+>>> The rq->flush.seq should record what sequences have been done (or don't
+>>> need to be done). So in this case, pre-flush doesn't need to be done,
+>>> we should init rq->flush.seq to REQ_FSEQ_PREFLUSH not REQ_FSEQ_POSTFLUSH.
+>>>
+>>> Of course, this doesn't cause any problem in fact, since pre-flush and
+>>> post-flush sequence do the same thing for now.
+>>
+>> I wonder if it really doesn't cause any problems, but the change for
+>> sure looks good:
+>>
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>>
+>> It should probably go before your other flush optimizations and maybe
+>> grow a fixes tag.
+> 
+> Ok, will add a Fixes tag and send it as a separate patch since it's a bug fix.
+> 
 
-__NR_open never exist on AArch64.
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- samples/bpf/syscall_tp_kern.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/samples/bpf/syscall_tp_kern.c b/samples/bpf/syscall_tp_kern.c
-index e7121dd1ee37..090fecfe641a 100644
---- a/samples/bpf/syscall_tp_kern.c
-+++ b/samples/bpf/syscall_tp_kern.c
-@@ -44,12 +44,14 @@ static __always_inline void count(void *map)
- 		bpf_map_update_elem(map, &key, &init_val, BPF_NOEXIST);
- }
- 
-+#if !defined(__aarch64__)
- SEC("tracepoint/syscalls/sys_enter_open")
- int trace_enter_open(struct syscalls_enter_open_args *ctx)
- {
- 	count(&enter_open_map);
- 	return 0;
- }
-+#endif
- 
- SEC("tracepoint/syscalls/sys_enter_openat")
- int trace_enter_open_at(struct syscalls_enter_open_args *ctx)
-@@ -65,12 +67,14 @@ int trace_enter_open_at2(struct syscalls_enter_open_args *ctx)
- 	return 0;
- }
- 
-+#if !defined(__aarch64__)
- SEC("tracepoint/syscalls/sys_exit_open")
- int trace_enter_exit(struct syscalls_exit_open_args *ctx)
- {
- 	count(&exit_open_map);
- 	return 0;
- }
-+#endif
- 
- SEC("tracepoint/syscalls/sys_exit_openat")
- int trace_enter_exit_at(struct syscalls_exit_open_args *ctx)
--- 
-2.41.0
+Well, I should put it in that series before other flush optimizations instead.
 
