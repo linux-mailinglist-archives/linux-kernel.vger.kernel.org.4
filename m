@@ -2,98 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5B874EC91
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD3D74ECB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjGKLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S231936AbjGKL2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGKLZt (ORCPT
+        with ESMTP id S231767AbjGKL2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:25:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB96E7E;
-        Tue, 11 Jul 2023 04:25:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 11 Jul 2023 07:28:07 -0400
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EF5E7E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:28:01 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-223-P9VisGTbPgGWqvxb_D7cHg-1; Tue, 11 Jul 2023 07:26:13 -0400
+X-MC-Unique: P9VisGTbPgGWqvxb_D7cHg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D4DA6147F;
-        Tue, 11 Jul 2023 11:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72ED6C433CC;
-        Tue, 11 Jul 2023 11:25:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689074740;
-        bh=ukUjCeCdruXdkiTh7KIF8MyySLBbuQHe+rPdQaoxZJU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=boJsxhUixxmLnT7F5Q4u//Lh5Xwjgp2OMmp6SpFQH9y2pmO0FF36ai6geFE8vFM9m
-         EbP3hWTRWiZ2F7a4HOIzC+9d4gQ1OMi+YODKPb+nPA6rRqGFEMrr14RYZH8nRDH25+
-         hJYDxwPMvOHowM+hoUZJwONVC2QOpfVQT4oiHPzFch2muFek67IUbGyRUU3BB8zBA0
-         ZU9ik4q8wvDZrX2jH9CxYasAoQosSGSwVEitAmFHwz/dRJW0vUliOlw0PAx5KqbPd1
-         yaTOFFrRWzYWke90zp5FI6ngKsnzV03a65skVHO5oW9BnoFQePGJA9Sm1s8r55h1gR
-         03xdWRsyWnb1Q==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Minda Chen <minda.chen@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-In-Reply-To: <20230629075115.11934-1-minda.chen@starfivetech.com>
-References: <20230629075115.11934-1-minda.chen@starfivetech.com>
-Subject: Re: (subset) [PATCH v8 0/5] Add JH7110 USB PHY driver support
-Message-Id: <168907473599.198426.16779806941255747951.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 16:55:35 +0530
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A4AF10504C9;
+        Tue, 11 Jul 2023 11:26:13 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.45.225.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B08863F3C;
+        Tue, 11 Jul 2023 11:25:59 +0000 (UTC)
+From:   Alexey Gladkov <legion@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Cc:     James.Bottomley@HansenPartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        dhowells@redhat.com, fenghua.yu@intel.com, firoz.khan@linaro.org,
+        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
+        kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, palmer@sifive.com, paul.burton@mips.com,
+        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
+        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
+        x86@kernel.org, ysato@users.sourceforge.jp
+Subject: [PATCH v3 0/5] Add a new fchmodat4() syscall
+Date:   Tue, 11 Jul 2023 13:25:41 +0200
+Message-Id: <cover.1689074739.git.legion@kernel.org>
+In-Reply-To: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch set adds fchmodat4(), a new syscall. The actual
+implementation is super simple: essentially it's just the same as
+fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
+I've attempted to make this match "man 2 fchmodat" as closely as
+possible, which says EINVAL is returned for invalid flags (as opposed to
+ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
+I have a sketch of a glibc patch that I haven't even compiled yet, but
+seems fairly straight-forward:
 
-On Thu, 29 Jun 2023 15:51:10 +0800, Minda Chen wrote:
-> This patchset adds USB and PCIe PHY for the StarFive JH7110 SoC.
-> The patch has been tested on the VisionFive 2 board.
-> 
-> This patchset is base on v6.4-rc6
-> 
-> patch 1 is usb phy dt-binding document.
-> patch 2 is Pcie PHY dt-binding document.
-> patch 3 is USB 2.0 PHY driver.
-> patch 4 is PCIe PHY driver.
-> patch 5 is PCIe PHY dts
-> 
-> [...]
+    diff --git a/sysdeps/unix/sysv/linux/fchmodat.c b/sysdeps/unix/sysv/linux/fchmodat.c
+    index 6d9cbc1ce9e0..b1beab76d56c 100644
+    --- a/sysdeps/unix/sysv/linux/fchmodat.c
+    +++ b/sysdeps/unix/sysv/linux/fchmodat.c
+    @@ -29,12 +29,36 @@
+     int
+     fchmodat (int fd, const char *file, mode_t mode, int flag)
+     {
+    -  if (flag & ~AT_SYMLINK_NOFOLLOW)
+    -    return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
+    -#ifndef __NR_lchmod		/* Linux so far has no lchmod syscall.  */
+    +  /* There are four paths through this code:
+    +      - The flags are zero.  In this case it's fine to call fchmodat.
+    +      - The flags are non-zero and glibc doesn't have access to
+    +	__NR_fchmodat4.  In this case all we can do is emulate the error codes
+    +	defined by the glibc interface from userspace.
+    +      - The flags are non-zero, glibc has __NR_fchmodat4, and the kernel has
+    +	fchmodat4.  This is the simplest case, as the fchmodat4 syscall exactly
+    +	matches glibc's library interface so it can be called directly.
+    +      - The flags are non-zero, glibc has __NR_fchmodat4, but the kernel does
+    +	not.  In this case we must respect the error codes defined by the glibc
+    +	interface instead of returning ENOSYS.
+    +    The intent here is to ensure that the kernel is called at most once per
+    +    library call, and that the error types defined by glibc are always
+    +    respected.  */
+    +
+    +#ifdef __NR_fchmodat4
+    +  long result;
+    +#endif
+    +
+    +  if (flag == 0)
+    +    return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
+    +
+    +#ifdef __NR_fchmodat4
+    +  result = INLINE_SYSCALL (fchmodat4, 4, fd, file, mode, flag);
+    +  if (result == 0 || errno != ENOSYS)
+    +    return result;
+    +#endif
+    +
+       if (flag & AT_SYMLINK_NOFOLLOW)
+         return INLINE_SYSCALL_ERROR_RETURN_VALUE (ENOTSUP);
+    -#endif
 
-Applied, thanks!
+    -  return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
+    +  return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
+     }
 
-[1/5] dt-bindings: phy: Add StarFive JH7110 USB PHY
-      commit: 6172141bf8ce6ec8f0b5d33533bf5a5646880e3c
-[2/5] dt-bindings: phy: Add StarFive JH7110 PCIe PHY
-      commit: 2b236fd4912141074a1cf34a7b3ef724d5bc8d8d
-[3/5] phy: starfive: Add JH7110 USB 2.0 PHY driver
-      commit: 7ac349186842972ee2b17413a0eee34231324eb1
-[4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-      commit: 26cea0e28057d4ee440af4157f13a5312e3918b7
+I've never added a new syscall before so I'm not really sure what the
+proper procedure to follow is.  Based on the feedback from my v1 patch
+set it seems this is somewhat uncontroversial.  At this point I don't
+think there's anything I'm missing, though note that I haven't gotten
+around to testing it this time because the diff from v1 is trivial for
+any platform I could reasonably test on.  The v1 patches suggest a
+simple test case, but I didn't re-run it because I don't want to reboot
+my laptop.
 
-Best regards,
+Changes since v2 [20190717012719.5524-1-palmer@sifive.com]:
+
+* Rebased to master.
+* The lookup_flags passed to sys_fchmodat4 as suggested by Al Viro.
+* Selftest added.
+
+Changes since v1 [20190531191204.4044-1-palmer@sifive.com]:
+
+* All architectures are now supported, which support squashed into a
+  single patch.
+* The do_fchmodat() helper function has been removed, in favor of directly
+  calling do_fchmodat4().
+* The patches are based on 5.2 instead of 5.1.
+
+---
+
+Alexey Gladkov (1):
+  selftests: add fchmodat4(2) selftest
+
+Palmer Dabbelt (4):
+  Non-functional cleanup of a "__user * filename"
+  fs: Add fchmodat4()
+  arch: Register fchmodat4, usually as syscall 451
+  tools headers UAPI: Sync files changed by new fchmodat4 syscall
+
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/open.c                                     |  18 ++-
+ include/linux/syscalls.h                      |   4 +-
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ tools/include/uapi/asm-generic/unistd.h       |   5 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   1 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   1 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   1 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/fchmodat4/.gitignore  |   2 +
+ tools/testing/selftests/fchmodat4/Makefile    |   6 +
+ .../selftests/fchmodat4/fchmodat4_test.c      | 151 ++++++++++++++++++
+ 29 files changed, 207 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/fchmodat4/.gitignore
+ create mode 100644 tools/testing/selftests/fchmodat4/Makefile
+ create mode 100644 tools/testing/selftests/fchmodat4/fchmodat4_test.c
+
 -- 
-~Vinod
-
+2.33.8
 
