@@ -2,129 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B100574EC0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C3B74EC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjGKK4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
+        id S231210AbjGKK44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjGKK4h (ORCPT
+        with ESMTP id S230257AbjGKK4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:56:37 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350AEE49;
-        Tue, 11 Jul 2023 03:56:35 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BA4j4g002334;
-        Tue, 11 Jul 2023 12:56:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=q7P65G86//NJ5DH+61LgfBPYAsjNDY1bl+p5SrAy/sI=;
- b=Q7Wm5PjGi9YswKi3Q5t8YJLBvSzYUiJa0LINQwLvzKWH2Ut4PDiDiCD2lD7VIue8yGCA
- x4yLvVA8lUwVfNZV6Kv6/a9Aa4RBRAub8USr7oM0LKkvOn8Y+23soQrs0/MBmmmmE4qq
- lqLdOcQyYh4OjGHH44VBpwHQw/5FS6BmGyqAh3cu/2OKzOPbt6EuxJvMzCpA6AJtyQF4
- hn++ODmYvDfCS832OKLf+UTGif2kw2bR8QBCMctJb3W7OkewKuWJbyqtbGkH2TyuC/UB
- TqKfIequR7NrS7EhHfREu3XfqVhqCKhGYtZNx+UiFmGfpMG0xtI9R+iS5Zda/6aKQ/wx lg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rs2d81vy8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 12:56:20 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64B92100057;
-        Tue, 11 Jul 2023 12:56:18 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5D9DE21B501;
-        Tue, 11 Jul 2023 12:56:18 +0200 (CEST)
-Received: from [10.201.21.122] (10.201.21.122) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 11 Jul
- 2023 12:56:17 +0200
-Message-ID: <6433912f-28b9-3579-fe79-3466a5f1ba06@foss.st.com>
-Date:   Tue, 11 Jul 2023 12:56:16 +0200
+        Tue, 11 Jul 2023 06:56:54 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3105510DD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:56:50 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-bff27026cb0so6573093276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689073009; x=1691665009;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdEaMTzs+XXYjIuNpNh0IB+VB2+ffqlErSPxppKly84=;
+        b=Oa3YES42WQZkvCdA4koWnUpLL2D0QOzWZX2FRa1J8kpaIF8KxxO899oAxgPcDii+mf
+         L62gaL0y/3AW214fk6W/3Y+TJ187apOGonUDW+cSR8dxC2VaD9Q5yOeGI44FLo3RLUnr
+         5IpE/r6yoWZ4xLpGCda2Fa6PqMF07yiNzh8Ts3rr2MqOoKfUENUkYYx0YxfSYtIFeNCs
+         ZIOWKwxdIpBFtvkmWRq4QjmBDK4VRrRveAbKR9n6I22WAPS7Vyr2oYfCSvC1lQ63GOhu
+         N+YDYeg/AVpef7fPS197nTqUlJvk59sBuvZVaLXo3H0VNYYlH0cQEmbi1bzmkAeE2ekJ
+         7Elg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689073009; x=1691665009;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HdEaMTzs+XXYjIuNpNh0IB+VB2+ffqlErSPxppKly84=;
+        b=NGhQ+qsKF4X1inOMj0X7y9ucNATPkB69Ih619jMJsbTiW6xmhDDLsQwMRLVZa1M+CW
+         h/jF1EzXz7r0HOR/yYp95Hzsq+pjHnPgEMr/1nOjKlKv/StaC3fstpfZZRNU8EjyF0px
+         2/T+pSLLvzo3/jl4D8/Isfe5LegVp8q7pOMn2pkTMDdRA+aALI9kAz3m8Fya8bALcxNT
+         krmj0buRws4Qtcj/cCuOwZVOlCx4NskIwBLg/KzSmwS3CixYHB0RxS+d6krBtAH4qTjM
+         5SfRVkGBstGo3ch+0RUBWdjDRF6L2C5TjzRN2I7xart1q9HrTNmxQycjr2/rgcVc916o
+         6i+A==
+X-Gm-Message-State: ABy/qLYxX7eQqgX7qrns4CtBojYm5yXjfGKICyUBw/GbUAK1tRxgZQ3f
+        DZW0dkBm72PJtIAXbY/ZBF4gvRfvpv99ZfRuLMpVnMEqf3gNXDvHk9U=
+X-Google-Smtp-Source: APBJJlE4WlJSuO4jMeeQVAWrkXELPSY1mvn3a2ov6yizHaUPLiP+tNgBMZ3KeFS1IUMUQAXM3bCfZGEsW2Dq7aPed1E=
+X-Received: by 2002:a25:5842:0:b0:c39:e0f5:8616 with SMTP id
+ m63-20020a255842000000b00c39e0f58616mr12999616ybb.46.1689073009292; Tue, 11
+ Jul 2023 03:56:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] ARM: dts: stm32: add touchscreen on stm32f746-disco
- board
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Conor Dooley <conor+dt@kernel.org>,
+References: <20230711-topic-rb1_regulator-v1-1-bc4398c35800@linaro.org>
+ <CAA8EJpoeAeitC=_pbAxFATfxx8UK-4cAQ=Zr3nKc0jhAdoG5fg@mail.gmail.com> <43d290c9-fdec-4832-242e-6732d9f0ea6c@linaro.org>
+In-Reply-To: <43d290c9-fdec-4832-242e-6732d9f0ea6c@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 11 Jul 2023 13:56:38 +0300
+Message-ID: <CAA8EJpozgj=MvYo=eHx1a1YD4gkXEvqHvuvp_mUBXfGMjhYWGA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: qrb2210-rb1: Add regulators
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230704173407.590544-1-dario.binacchi@amarulasolutions.com>
- <20230704173407.590544-2-dario.binacchi@amarulasolutions.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230704173407.590544-2-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.122]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_05,2023-07-11_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/23 19:34, Dario Binacchi wrote:
-> The patch adds support for touchscreen on the stm32f746-disco board.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-> 
->   arch/arm/boot/dts/st/stm32f746-disco.dts | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/st/stm32f746-disco.dts b/arch/arm/boot/dts/st/stm32f746-disco.dts
-> index c11616ed5fc6..4830ccd48cb3 100644
-> --- a/arch/arm/boot/dts/st/stm32f746-disco.dts
-> +++ b/arch/arm/boot/dts/st/stm32f746-disco.dts
-> @@ -45,6 +45,7 @@
->   #include "stm32f746-pinctrl.dtsi"
->   #include <dt-bindings/input/input.h>
->   #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
->   
->   / {
->   	model = "STMicroelectronics STM32F746-DISCO board";
-> @@ -99,6 +100,22 @@ &i2c1 {
->   	status = "okay";
->   };
->   
-> +&i2c3 {
-> +	pinctrl-0 = <&i2c3_pins_a>;
-> +	pinctrl-names = "default";
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		compatible = "edt,edt-ft5306";
-> +		reg = <0x38>;
-> +		interrupt-parent = <&gpioi>;
-> +		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-> +		touchscreen-size-x = <480>;
-> +		touchscreen-size-y = <272>;
-> +	};
-> +};
-> +
->   &sdio1 {
->   	status = "okay";
->   	vmmc-supply = <&mmc_vcard>;
+On Tue, 11 Jul 2023 at 13:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> On 11.07.2023 12:44, Dmitry Baryshkov wrote:
+> > On Tue, 11 Jul 2023 at 13:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> >>
+> >> Add and assign RPM regulators coming from PM2250.
+> >>
+> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> ---
+> [...]
+>
+> >> +               pm2250_l5: l5 {
+> >> +                       /* CSI/DSI */
+> >> +                       regulator-min-microvolts = <1232000>;
+> >> +                       regulator-max-microvolts = <1232000>;
+> >> +                       regulator-allow-set-load;
+> >> +                       regulator-boot-on;
+> >
+> > why?
+> >
+> To answer all of the questions in one go:
+>
+> "it's because the regulator is enabled at boot"
 
-Series applied on stm32-next.
+I was more concerned about the following part:
+      If the bootloader didn't leave it on then OS should turn it on at boot ...
 
-Thanks
-Alex
+Please remind me, are we declaring them as boot-on so that the
+regulator core can turn them off later if they are unused?
+
+>
+> Konrad
+> >> +               };
+> >> +
+> >> +               pm2250_l6: l6 {
+> >> +                       /* DRAM PLL */
+> >> +                       regulator-min-microvolts = <928000>;
+> >> +                       regulator-max-microvolts = <928000>;
+> >> +                       regulator-always-on;
+> >> +                       regulator-boot-on;
+> >> +               };
+> >> +
+> >> +               pm2250_l7: l7 {
+> >> +                       /* Wi-Fi CX/MX */
+> >> +                       regulator-min-microvolts = <664000>;
+> >> +                       regulator-max-microvolts = <664000>;
+> >> +               };
+> >> +
+> >> +               /*
+> >> +                * L8 - VDD_LPI_CX
+> >> +                * L9 - VDD_LPI_MX
+> >> +                */
+> >> +
+> >> +               pm2250_l10: l10 {
+> >> +                       /* Wi-Fi RFA */
+> >> +                       regulator-min-microvolts = <1300000>;
+> >> +                       regulator-max-microvolts = <1300000>;
+> >> +               };
+> >> +
+> >> +               pm2250_l11: l11 {
+> >> +                       /* GPS RF1 */
+> >> +                       regulator-min-microvolts = <1000000>;
+> >> +                       regulator-max-microvolts = <1000000>;
+> >> +                       regulator-boot-on;
+> >
+> > Shouldn't it be handled by the modem on its own?
+> >
+> >> +               };
+> >> +
+> >> +               pm2250_l12: l12 {
+> >> +                       /* USB PHYs */
+> >> +                       regulator-min-microvolts = <928000>;
+> >> +                       regulator-max-microvolts = <928000>;
+> >> +                       regulator-allow-set-load;
+> >> +                       regulator-boot-on;
+> >
+> > You guess the question (and further on)
+> >
+> >> +               };
+> >> +
+> >> +               pm2250_l13: l13 {
+> >> +                       /* USB/QFPROM/PLLs */
+> >> +                       regulator-min-microvolts = <1800000>;
+> >> +                       regulator-max-microvolts = <1800000>;
+> >> +                       regulator-allow-set-load;
+> >> +                       regulator-boot-on;
+> >> +               };
+> >> +
+> >> +               pm2250_l14: l14 {
+> >> +                       /* SDHCI1 VQMMC */
+> >> +                       regulator-min-microvolts = <1800000>;
+> >> +                       regulator-max-microvolts = <1800000>;
+> >> +                       regulator-allow-set-load;
+> >> +                       /* Broken hardware, never turn it off! */
+> >> +                       regulator-always-on;
+> >> +               };
+> >> +
+> >> +               pm2250_l15: l15 {
+> >> +                       /* WCD/DSI/BT VDDIO */
+> >> +                       regulator-min-microvolts = <1800000>;
+> >> +                       regulator-max-microvolts = <1800000>;
+> >> +                       regulator-allow-set-load;
+> >> +                       regulator-always-on;
+> >> +                       regulator-boot-on;
+> >> +               };
+> >> +
+> >> +               pm2250_l16: l16 {
+> >> +                       /* GPS RF2 */
+> >> +                       regulator-min-microvolts = <1800000>;
+> >> +                       regulator-max-microvolts = <1800000>;
+> >> +                       regulator-boot-on;
+> >> +               };
+> >> +
+> >> +               pm2250_l17: l17 {
+> >> +                       regulator-min-microvolts = <3000000>;
+> >> +                       regulator-max-microvolts = <3000000>;
+> >> +               };
+> >> +
+> >> +               pm2250_l18: l18 {
+> >> +                       /* VDD_PXn */
+> >> +                       regulator-min-microvolts = <1800000>;
+> >> +                       regulator-max-microvolts = <1800000>;
+> >> +               };
+> >> +
+> >> +               pm2250_l19: l19 {
+> >> +                       /* VDD_PXn */
+> >> +                       regulator-min-microvolts = <1800000>;
+> >> +                       regulator-max-microvolts = <1800000>;
+> >> +               };
+> >> +
+> >> +               pm2250_l20: l20 {
+> >> +                       /* SDHCI1 VMMC */
+> >> +                       regulator-min-microvolts = <2856000>;
+> >> +                       regulator-max-microvolts = <2856000>;
+> >> +                       regulator-allow-set-load;
+> >> +               };
+> >> +
+> >> +               pm2250_l21: l21 {
+> >> +                       /* SDHCI2 VMMC */
+> >> +                       regulator-min-microvolts = <2960000>;
+> >> +                       regulator-max-microvolts = <3300000>;
+> >> +                       regulator-allow-set-load;
+> >> +                       regulator-boot-on;
+> >> +               };
+> >> +
+> >> +               pm2250_l22: l22 {
+> >> +                       /* Wi-Fi */
+> >> +                       regulator-min-microvolts = <3312000>;
+> >> +                       regulator-max-microvolts = <3312000>;
+> >> +               };
+> >> +       };
+> >> +};
+> >> +
+> >>  &sdhc_1 {
+> >> +       vmmc-supply = <&pm2250_l20>;
+> >> +       vqmmc-supply = <&pm2250_l14>;
+> >>         pinctrl-0 = <&sdc1_state_on>;
+> >>         pinctrl-1 = <&sdc1_state_off>;
+> >>         pinctrl-names = "default", "sleep";
+> >> @@ -61,6 +322,8 @@ &sdhc_1 {
+> >>  };
+> >>
+> >>  &sdhc_2 {
+> >> +       vmmc-supply = <&pm2250_l21>;
+> >> +       vqmmc-supply = <&pm2250_l4>;
+> >>         cd-gpios = <&tlmm 88 GPIO_ACTIVE_LOW>;
+> >>         pinctrl-0 = <&sdc2_state_on &sd_det_in_on>;
+> >>         pinctrl-1 = <&sdc2_state_off &sd_det_in_off>;
+> >> @@ -104,6 +367,9 @@ &usb {
+> >>  };
+> >>
+> >>  &usb_hsphy {
+> >> +       vdd-supply = <&pm2250_l12>;
+> >> +       vdda-pll-supply = <&pm2250_l13>;
+> >> +       vdda-phy-dpdm-supply = <&pm2250_l21>;
+> >>         status = "okay";
+> >>  };
+> >>
+> >>
+> >> ---
+> >> base-commit: 8e4b7f2f3d6071665b1dfd70786229c8a5d6c256
+> >> change-id: 20230711-topic-rb1_regulator-44c4ade93246
+> >>
+> >> Best regards,
+> >> --
+> >> Konrad Dybcio <konrad.dybcio@linaro.org>
+> >>
+> >
+> >
+
+
+
+-- 
+With best wishes
+Dmitry
