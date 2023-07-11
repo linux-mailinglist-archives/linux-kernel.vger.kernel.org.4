@@ -2,128 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4B574F5AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDC974F5BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjGKQjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S231721AbjGKQmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjGKQjl (ORCPT
+        with ESMTP id S229972AbjGKQmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:39:41 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2123.outbound.protection.outlook.com [40.107.243.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B4E54;
-        Tue, 11 Jul 2023 09:39:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UkVbkrvZXL5NVp2Mp1ZP4WmeMlM8Y4uvuvAqopdzNCWSR1rhEq3cc2k2Vt7TDJuZCUEv9/xQmvIwkY8Yu8ZMw2qKNWXWtkk63+Rd62HNQbY/zhCtJNcg3MFnRNb7ZpmNw6EFsAIB6YA3CJLLHQf4fXhcxb40FG71+BVBrzuoo15jLnqwIHLahRfqeixKO57wsVjfVFSHe84SWl5LQLgi2Qvy9sMTHVtGPNIcZigORgkjACYw/jKdEgy5S32QrgYyxXVgOTg39PjMcEV2X6zBiKwsqJSorMgo1rXiaJTY0VeJqApB1j7tBCLlvuyYG6/S8T+14RG6IV20C0jxqCiDmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tx6A1fuYcAtC9ylVbt7r/PrRgyDq68Z4655vQJaqb1o=;
- b=YPYrm1IMZjto01ZgXHwKXuhTB5XX61rgjc/HmQbPqMzkvDubekLbWYM4sA7dddUDraeCfRwBEt/wGuXSXjblo5Co4CuMZX49/WUDXOIJ2FLs8BXBZ4f0+Fo1eglhN51X6dJlfDdQqX4SLPZvHZaNrZbtg5us17L+1AdIONj0hTJQAqXJogl1P/jJwhhFt8v9aSGDuB3UjTjyVC7QPhb3mEVJXiz/eor+erN2LeRb51slxDnKX0KYBGJfGnuz7WkOQrI2ZA+btckKSmjjPktQdhLpfsIqEyLWn+APwaMHa/HJ4qPiFTyq65wkYV4Tgxpp6cjccL+ZUe1uLQL8lY9ibw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tx6A1fuYcAtC9ylVbt7r/PrRgyDq68Z4655vQJaqb1o=;
- b=tUvnHhLjl5v3DmAcFgqJMwpVuFiACQpSfaIAGW1N5ZnqRbyEp3oKY88coYZkYUwgzm0J8FngsAolNnQS6H4zdjXparD3Ioahp4kFQ6Io3v2e2o64Z0IgYIgmlz6dR34RhKHQBLOYmiB19WjlAg8AveLnVBqbavzLPUQ8pXesTSY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL0PR13MB4481.namprd13.prod.outlook.com (2603:10b6:208:1c9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Tue, 11 Jul
- 2023 16:39:36 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::d23a:8c12:d561:470]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::d23a:8c12:d561:470%6]) with mapi id 15.20.6588.017; Tue, 11 Jul 2023
- 16:39:36 +0000
-Date:   Tue, 11 Jul 2023 17:39:27 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     daniel@iogearbox.net, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        hsinweih@uci.edu, jakub@cloudflare.com, john.fastabend@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
-Subject: Re: [PATCH bpf-next] bpf, sockops: Enhance the return capability of
- sockops
-Message-ID: <ZK2Fvzl8yygg4/sT@corigine.com>
-References: <20230706100243.318109-1-liuxin350@huawei.com>
+        Tue, 11 Jul 2023 12:42:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A4412F;
+        Tue, 11 Jul 2023 09:42:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BB6F61562;
+        Tue, 11 Jul 2023 16:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AC4C433C8;
+        Tue, 11 Jul 2023 16:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689093718;
+        bh=e12fVv+jbg+rtuqgZVdbfY4QsX3pyZ0VOma3IqU2+NY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZA/ODN8NQ5VUYztVEv5WCj/EDFBzIgVSBCbRM8NBJgB04WuxBTE9U+m3rV/eFzGbY
+         eecTHXoY3UfvaaRq1fMeI2KQF1UbO21eUW4TJNMFUNxNf4iBfcvUMk6iZDx1QmpKIg
+         Zl55cGXb2v/WSII0Th2ZwiS2p+K5jJbJ1CWY3Q57xOUrm9h/2jtLwD48dT8zfZnack
+         tneQPkaq+r3SpbZ5/+y+K83NPjcPN8VE0J+3jyuNe2CEF6anJulMSDWZwENXHnOraY
+         xSb0/bo+KrIRUmhbrVTQTYewg0IQiu/RQAwCatuKoqmEj9R4WkEVWC32AxRZ53XYAJ
+         c0kAL6xmQbAvA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 709E9CE03F1; Tue, 11 Jul 2023 09:41:58 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 09:41:58 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kernel test robot <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [linus:master] [rcu/nocb]  7625926086:
+ WARNING:at_kernel/rcu/tree_nocb.h:#rcu_nocb_try_bypass
+Message-ID: <842683bc-5859-48be-8ca5-17a1e4bf3f39@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202307111535.4823c255-oliver.sang@intel.com>
+ <ZK1983kQCrN+zCqs@lothringen>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230706100243.318109-1-liuxin350@huawei.com>
-X-ClientProxiedBy: LO4P123CA0650.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:296::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL0PR13MB4481:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0a5d501-0a82-4e50-9065-08db822d6984
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0LNmtYZUdKqa8rQyaTPnYF+CszC0UotT0ZhE3ikb0bzObipBrBgKwJCWrZoHbkTIGejwGZiXJ7yE4Absnr/UVeng3yP8NVJYnQtVRvU+4JpubUZ+QFOm47+Th1ujycZSJUmhzRyoSqe8SNltbUh475w/PaadlIdc+hMUSAwS1QG9T/x1+6asGhrBXQfThhxvb+B24DPnSzvfUGVMOJAF+5fCqxiGrPQHK33VK8EUua+rkIMmyJ5vN/zxhirFGkBTkCX2juqGw87xIM0MSx4uzQJ6PHR2FT0WWLmtpNYpTOhAuHO7tIJdYCLbO0Qd3Ap+XA9u+CdFVF+W7kpMAjtlsZwirOtDCiALXoFVlts24ijzzDDOr8pwTe8JarU2h7gQicIXv1PhychAq87Z5cl2SdJyv20OQQ7PaOtBraMsv7YFHbOGohufKoFR1ND3cucnJ03wONOnp0r7DWC861GENcLVSXf3/30E/QIwSFK9tuvPFQcKNoHfvu0TJjiD2OnsqJ0F/zp2XklPXXjxq5L+TAEXuMfeAARXzV6ldaO4dSQS90xneeAip4xZvLkxWfdu6tFJ0stmg5Td0AXQ9pmydp+l4dNDspu6vXhTe+nXQUU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(376002)(136003)(366004)(346002)(451199021)(6486002)(186003)(6666004)(86362001)(2616005)(478600001)(6506007)(26005)(44832011)(7416002)(316002)(36756003)(8936002)(8676002)(41300700001)(5660300002)(558084003)(6512007)(66476007)(66556008)(66946007)(6916009)(2906002)(4326008)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ld8NzC1Ygcu42fPM/2Kn7l+wCwVXS4dPUmM0GmxeOXiVzE4OQGhxAWtRybvi?=
- =?us-ascii?Q?9Oi6EhtJNcSqiKkAXZ4r03f+tdRVHvE/Qc+TdP8T9VVHrctizQCjOUO5hEMX?=
- =?us-ascii?Q?T32POJa8FZSbYSiGlOb2dUknNogLWyTr6tATM9cKgKREQmHqrNGWe9W2AN6Q?=
- =?us-ascii?Q?uSRZ0x1HsLf+RrcLvnTH3ry9gj/N8qS5N22vo9ipx7mLOwQLTToUtkTQUU3y?=
- =?us-ascii?Q?/HS/s510gaP6wSEpGsWqJgtFiOCHamdraJYOteP6F47TDUuLwN2Y/3olG0ef?=
- =?us-ascii?Q?e/BYcbyu65HPKr4VTD7GhVGD7bSH2YqZ7WAMpCBSk3QK3f7tRoORzp7VgWPb?=
- =?us-ascii?Q?+Rsq1rC0xJ5hMjlbQLwUdIxiNsV1P1VTIghg7/9ALKwqsn9h1ChGGqxp3S+C?=
- =?us-ascii?Q?oNZJRb4xih7bO1bjn+5borLzofHXWQOBwc5KfDVzKWveT2X0/5p5ijehiKd+?=
- =?us-ascii?Q?OZ0v5N+kCwz1enFM749IAvmQiz2uvw07biWZbH+M3Vy38xJCxrjB2dLllJeg?=
- =?us-ascii?Q?Ghtik05o0g5/JuOppdC/8xaV3A/IqLBPWNF08rcEzKloMMu1D3C/9DIWBlpG?=
- =?us-ascii?Q?izsSRr/WDE3jUL3uI8Nug3ita5pR3yjNdbdJk5jlIBXISbwXNVN7dhk3YT4E?=
- =?us-ascii?Q?seKfLGPId5tHeSND72qV+ClS97zhNWmoCiBJBTJAy2Bb8tggJgOnuziCkdQZ?=
- =?us-ascii?Q?pIPJUgBXELsHfKZHZDVzCDc4oYd3J8I+2uhalpySzv2HyYcW+wUD7I6xzCG4?=
- =?us-ascii?Q?gb57M7V+t6Y/2jqFIoRXFcVYuTYOOFUz9G8If8haCBdGTKbgDK7oH2iHi8/T?=
- =?us-ascii?Q?HimVE6iSG/IEdnnRf9ijxOmXbiM0YhjjY+OFDK2fzbniJ2pGu6e7OJEtGI1f?=
- =?us-ascii?Q?QU/8NhUwX12JSa6aVwjX/T0lo4GNCzfuBZ0ATbfvVaQQCSZSzIPs9Pwg7xnN?=
- =?us-ascii?Q?I+TCSE28lt6SPn1QK7+kWJUPYNeYhoiYFPv0inFlPA85h7cFgn7nEkA0HnSv?=
- =?us-ascii?Q?cOkqUaNBbdJipg3yd4SpU9VOLoB0A0q9VqYVNnNgiXOsstYYi1FzeHKxRLEH?=
- =?us-ascii?Q?4wLLsVhPhZWqbnCVCGysu0M1s6MgD0iP4n5pjU8Y167H3Ss2RCgUY1K4xx2X?=
- =?us-ascii?Q?Vksnl1fHMwtYkrh77XQ+wyzowWAw8Pb1O3B5EUdmc7fd5BaQ8D7WWBrh/y0X?=
- =?us-ascii?Q?4Xe2tFv1bRLS78xzrxII8Pvw2MPF5YeWIvqRV2BfYL1sfUpjmB9SUUhvT2Vk?=
- =?us-ascii?Q?tyKNdoMD6Bnpe6obpeXvO4ewKg/n6swkpFdL9fizbvA2ZvJTwKUgad1DVP0B?=
- =?us-ascii?Q?TFFuMW13PnxSRiF81ssRwVdxIsAOt+gEQgwrByR/+dx/HgPvglYzZgX36lhi?=
- =?us-ascii?Q?qciSMadPSlZlEMeK8QB1qW7JIXYmE8IDgTbwJl40Bba3cId/uxf0AbTq/4hy?=
- =?us-ascii?Q?aohH8JTVlNUhOlOSeLK2q9G/I4iDfRFiGaZpyQTkWEJn5IPulDWmNlV3H6nJ?=
- =?us-ascii?Q?pvl5RDcGveeqJANfEbFHkT7sOHRWLvLZq16jrCujquFyczqLLARHd++zksMc?=
- =?us-ascii?Q?/K/Sp3EGeUVZH7leAoxA1UuKLK4hsEqC3SMRzQ4NXdXbkvK8fb4MMovkFpVz?=
- =?us-ascii?Q?7w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0a5d501-0a82-4e50-9065-08db822d6984
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 16:39:35.9774
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LnS7PdO8uFEHb2te4tFYIzdVxH6PP94pFvvaKCnH9TIMyxh90dEyj0h46aIs1R5n28Dz0iEav75dCKOo/4n35aiYSsLMz6CYwnfxGurpRBw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR13MB4481
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZK1983kQCrN+zCqs@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 06:02:43PM +0800, Xin Liu wrote:
-> Since commit 2585cd62f098 ("bpf: Only reply field should be writeable"),
-> sockops is not allowd to modify the replylong field except replylong[0].
+On Tue, Jul 11, 2023 at 06:06:11PM +0200, Frederic Weisbecker wrote:
+> On Tue, Jul 11, 2023 at 04:48:06PM +0800, kernel test robot wrote:
+> > 
+> > 
+> > Hello,
+> > 
+> > kernel test robot noticed "WARNING:at_kernel/rcu/tree_nocb.h:#rcu_nocb_try_bypass" on:
+> > 
+> > commit: 7625926086765123251f765d91fc3a70617d334d ("rcu/nocb: Fix shrinker race against callback enqueuer")
+> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > 
+> > [test failed on linus/master Linux 6.5-rc1]
+> > [test failed on linux-next/master fe57d0d86f03a8b2afe2869a95477d0ed1824c96]
+> > 
+> > in testcase: trinity
+> > version: trinity-i386-abe9de86-1_20230429
+> > with following parameters:
+> > 
+> > 	runtime: 300s
+> > 	group: group-00
+> > 
+> > test-description: Trinity is a linux system call fuzz tester.
+> > test-url: http://codemonkey.org.uk/projects/trinity/
+> > 
+> > 
+> > compiler: gcc-12
+> > test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> > 
+> > (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > 
+> > 
+> > the WARNING only happens in a low rate (10 out of 204 runs as below).
+> > but since we never observed the issue on parent, and we also noticed
+> > there is a WARN_ON_ONCE in code change, so just report what we observed
+> > in our tests FYI.
+> > 
+> > 5c83cedbaaad6dfe 7625926086765123251f765d91f
+> > ---------------- ---------------------------
+> >        fail:runs  %reproduction    fail:runs
+> >            |             |             |
+> >            :202          5%          10:204   dmesg.RIP:rcu_nocb_bypass_lock
+> >            :202          5%          10:204   dmesg.RIP:rcu_nocb_try_bypass
+> >            :202          5%          10:204   dmesg.WARNING:at_kernel/rcu/tree_nocb.h:#rcu_nocb_bypass_lock
+> >            :202          5%          10:204   dmesg.WARNING:at_kernel/rcu/tree_nocb.h:#rcu_nocb_try_bypass
+> > 
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <oliver.sang@intel.com>
+> > | Closes: https://lore.kernel.org/oe-lkp/202307111535.4823c255-oliver.sang@intel.com
+> > 
+> > 
+> > 
+> > [ 315.569574][ T16] WARNING: CPU: 1 PID: 16 at kernel/rcu/tree_nocb.h:124
+> > rcu_nocb_try_bypass (kernel/rcu/tree_nocb.h:124 kernel/rcu/tree_nocb.h:513)
+> 
+> It's:
+> 
+> static void rcu_nocb_wait_contended(struct rcu_data *rdp)
+> {
+> 	WARN_ON_ONCE(smp_processor_id() != rdp->cpu);
+> 	while (WARN_ON_ONCE(atomic_read(&rdp->nocb_lock_contended))) <<< HERE
+> 		cpu_relax();
+> }
+> 
+> This is called on enqueue time by rcu_nocb_try_bypass().
+> 
+> The places that can increment ->nocb_lock_contended are:
+> 
+> * rcu_nocb_try_bypass() itself, but it's not re-entrant
+> 
+> * rcu_nocb_rdp_deoffload(), but it executes on the local CPU with
+>   IRQs disabled, so rcu_nocb_try_bypass() can't race
+>   
+> * lazy_rcu_shrink_scan(): that's indeed the issue here
+> 
+> * rcu_barrier_entrain(), executed either locally with IRQs disabled
+>   or remotely when the target is dead, so can't race with rcu_nocb_try_bypass()
+>   
+> * rcutree_migrate_callback(): locally with IRQs disabled, can't race
+> 
+> So indeed lazy_rcu_shrink_scan() is the only possible culprit. But then
+> I wonder, what is the purpose of this ->nocb_lock_contended if it's actually
+> not an allowed behaviour?
+> 
+> Paul, any recollection of that?
 
-nit: allowd -> allowed
+Heh!
+
+The purpose was to see if this lock was ever contended.  I guess we now
+have an answer, which is "Yes, but rarely."
+
+It looks like the victim commit increased the size of the ->nocb_lock
+critical section, just enough to make this happen sometimes.
+
+Removing the WARN_ON_ONCE() seems appropriate, especially given that
+this only happens when shrinking.
+
+Should we add something that monitors that lock's contention?  It is
+often the case that lock contention rises over time as new features and
+optimizations are added.
+
+							Thanx, Paul
