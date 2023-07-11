@@ -2,74 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8274674EBD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDED874EBD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjGKKib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S231148AbjGKKie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjGKKi2 (ORCPT
+        with ESMTP id S230286AbjGKKia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:38:28 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218111A2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:38:26 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:2b42:575f:41f:104f])
-        by albert.telenet-ops.be with bizsmtp
-        id KmeP2A0024w94eT06mePsZ; Tue, 11 Jul 2023 12:38:25 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qJAl6-0017MR-5u;
-        Tue, 11 Jul 2023 12:38:23 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qJAlC-00Clyk-VC;
-        Tue, 11 Jul 2023 12:38:22 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] workqueue: Fix cpu_intensive_thresh_us name in help text
-Date:   Tue, 11 Jul 2023 12:38:20 +0200
-Message-Id: <5fc042e1d3c5d63b9367a1e1587dcf6b548087ff.1689071768.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 11 Jul 2023 06:38:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2D1A2;
+        Tue, 11 Jul 2023 03:38:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7889F6145A;
+        Tue, 11 Jul 2023 10:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE782C433C8;
+        Tue, 11 Jul 2023 10:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689071908;
+        bh=l7rA7FZ4v3VJG93gzPCayIPGspcK+RXdD4/nkf2Epag=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rrbagt7BgQmnoFA71crth3Q3uDToM/ulNHPUdKxMCIA+RruYLdfOHz8mMsMoV3qlu
+         vlvRlDpixXu6hQv+BPN83euKpTLR1V4uotSyXkt8mV1Xvzll42V1YriLBIXOeog4N/
+         TtvzPI3RKtXzg5BI6HU2Y3MWdNDyCcSn03BAye/0b27YTGxvzk5bpVumeCErnDiNdC
+         sEtunQbSEp74BbumZq89/q3Y3epS7XON8yNY520jpOHcmzX7pguzj9hNzqSCEYHL1o
+         0Vr+TljqLWkq7Cq7wDLK4UVes50/vGcR3cp1/DP3AmYlGzbhLPm0xjGHwTaC1DYDVQ
+         zWkmUfVcfzSkQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qJAlG-00C5gY-Cc;
+        Tue, 11 Jul 2023 11:38:26 +0100
+Date:   Tue, 11 Jul 2023 11:38:26 +0100
+Message-ID: <86cz0ywx5p.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+Cc:     <will@kernel.org>, <corbet@lwn.net>, <catalin.marinas@arm.com>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+In-Reply-To: <8a950aa5-fdd8-f983-0411-4b39ade596f4@quicinc.com>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+        <875y6s8bwb.wl-maz@kernel.org>
+        <32f442e3-3d5c-4cec-9791-0da039f88287@quicinc.com>
+        <874jmc8654.wl-maz@kernel.org>
+        <6e07ad52-2629-346e-6217-ec07777ebc5b@quicinc.com>
+        <86lefnvsto.wl-maz@kernel.org>
+        <8a950aa5-fdd8-f983-0411-4b39ade596f4@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_aiquny@quicinc.com, will@kernel.org, corbet@lwn.net, catalin.marinas@arm.com, quic_pkondeti@quicinc.com, quic_kaushalk@quicinc.com, quic_satyap@quicinc.com, quic_shashim@quicinc.com, quic_songxue@quicinc.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There exists no parameter called "cpu_intensive_threshold_us".
-The actual parameter name is "cpu_intensive_thresh_us".
+On Tue, 11 Jul 2023 11:12:48 +0100,
+"Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+> 
+> For the KVM part, per my understanding, as long as the current feature
+> id being overriden, the KVM system also get the current vcpu without
+> the lse atomic feature enabled.
+> KVM vcpu will read the sys reg from host arm64_ftr_regs which is
+> already been controled by the idreg_overrides.
 
-Fixes: 6363845005202148 ("workqueue: Report work funcs that trigger automatic CPU_INTENSIVE mechanism")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- lib/Kconfig.debug | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You're completely missing the point.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index c8371502b4b2e678..5da00849edebafdd 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1200,7 +1200,7 @@ config WQ_CPU_INTENSIVE_REPORT
- 	help
- 	  Say Y here to enable reporting of concurrency-managed per-cpu work
- 	  items that hog CPUs for longer than
--	  workqueue.cpu_intensive_threshold_us. Workqueue automatically
-+	  workqueue.cpu_intensive_thresh_us. Workqueue automatically
- 	  detects and excludes them from concurrency management to prevent
- 	  them from stalling other per-cpu work items. Occassional
- 	  triggering may not necessarily indicate a problem. Repeated
+The guest is free to map memory as non-cacheable *and* to use LSE
+atomics even if the idregs pretend this is not available. At which
+point the HW throws a fit and the system is dead. Is that acceptable?
+Of course not.
+
+So there are two aspects to your problem:
+
+- for Linux, there is nothing to do: the kernel will correctly behave,
+  and as long as you don't expose non-cacheable memory to userspace.
+  Out of tree drivers are none of our concern here.
+
+- for guests, it looks like the HW doesn't provide the basic
+  requirements for virtualisation, and you should always disable KVM
+  on this HW (or even better, enter the kernel at EL1).
+
+In both cases, nothing to do in the kernel, which is good news.
+
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
