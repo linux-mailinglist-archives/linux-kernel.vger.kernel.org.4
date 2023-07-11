@@ -2,114 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895DE74ED8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7617274ED90
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjGKMFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S229947AbjGKMGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGKMFH (ORCPT
+        with ESMTP id S229548AbjGKMGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:05:07 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2639E12F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:05:05 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-634ddd17647so38408546d6.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689077104; x=1691669104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sDj/nUPhv/hb6kVZTAGV+ec/xse6Mtcau18exq4wFfg=;
-        b=mJnWqKwDMLasfvZIgnnLjeZubYFEXhgQUriyniboKusYls6+C/mL95Tb4P3ahgb2ly
-         UfehINYtKiyzWMJO7IBeL7aNkUVN35SC7VJSVhsw9KFV+q6daoC6BFGPiFkn9FxJajzq
-         DGaYAQI13Yu06T7GpFqdzzv2PTbbTGLptVEHwLsBhHqorONeJqwlaEcsfs34Zcq3U9NW
-         XheotZD5oo/pIyPuubqGr9ReOeVNnM5310WYJjx2KhOphWoCWgsJm7SEkfyGIZEM39en
-         /F4Qgy6k5T17Cq8QWsHYSMwY4649dC6Iii0F1d1VtBiEHgup1B7AOz6IJUhmKOxeJZFa
-         AZsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689077104; x=1691669104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sDj/nUPhv/hb6kVZTAGV+ec/xse6Mtcau18exq4wFfg=;
-        b=AeIVAmFUOuG4XfPKFO/KPUYCfZXOYUDQsbaJj7JSajpGGCh1upulCHL26RtGyP3ekj
-         8nNgnHS9MjLQ6eBV7/CzoAEl+pJcs42mJJHIB+WjEFSgySgsUj6n9c7XcpWCRNjWFFN6
-         h+sZvGhi76/dCt442UVklKHsgbfWPHOvUNyUR0hdYFDAY4CNrfqM5/+ha0nM8lb3D/kJ
-         I8JVBvWeYW1zhLkOI2Wya7pNHyO2K0jlNYRa+KAAH4dd1sGegZlEtpqDvuqHpdzb+qiL
-         iDliM/Amv1X8k5dEyVzbnDPr+3O4MrkCyD+NG/9Blfep43UXkakYHk5WJB6bGOOHEq6W
-         YOBA==
-X-Gm-Message-State: ABy/qLYo3VqKnNT8eZRmV5ItneXCEBeSDqGon3udPDX8e+9eVg2Fs0Rq
-        K/NDAxg3hh4qYLeOZ/U30FmK7w==
-X-Google-Smtp-Source: APBJJlHlMSiZUq+WY356by/kwiQKIEq734XHbryNHy9OPRb10YQGqsssS7qFeOD/eSjn/EPBX8tRnQ==
-X-Received: by 2002:a0c:a98d:0:b0:635:e209:178c with SMTP id a13-20020a0ca98d000000b00635e209178cmr12615604qvb.10.1689077104237;
-        Tue, 11 Jul 2023 05:05:04 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id q17-20020a0ce211000000b006362d4eeb6esm956869qvl.144.2023.07.11.05.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 05:05:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qJC74-0008zp-Q7;
-        Tue, 11 Jul 2023 09:05:02 -0300
-Date:   Tue, 11 Jul 2023 09:05:02 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <ZK1FbjG+VP/zxfO1@ziepe.ca>
-References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
- <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
- <ZKNA9Pkg2vMJjHds@ziepe.ca>
- <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
- <ZKxDZfVAbVHgNgIM@ziepe.ca>
- <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
- <ZKyZBbKEpmkFkpWV@ziepe.ca>
- <20230711042708.GA18658@lst.de>
- <20230710215906.49514550@kernel.org>
- <20230711050445.GA19323@lst.de>
+        Tue, 11 Jul 2023 08:06:15 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73FCE4B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:06:14 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1466867373; Tue, 11 Jul 2023 14:06:10 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 14:06:09 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "Clemens S." <cspringsguth@gmail.com>,
+        Martin Belanger <martin.belanger@dell.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVMe <linux-nvme@lists.infradead.org>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        =?utf-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
+ (Samsung SM-953 Datacenter SSD)
+Message-ID: <20230711120609.GB27050@lst.de>
+References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com> <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com> <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info> <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com> <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com> <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com> <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230711050445.GA19323@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,23 +54,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 07:04:45AM +0200, Christoph Hellwig wrote:
-> On Mon, Jul 10, 2023 at 09:59:06PM -0700, Jakub Kicinski wrote:
-> > On Tue, 11 Jul 2023 06:27:08 +0200 Christoph Hellwig wrote:
-> > > Not going to comment on the rest of this as it seems bat shit crazy
-> > > hacks for out of tree junk.  Why is anyone even wasting time on this?
-> > 
-> > Noob question - how does RDMA integrate with the out of tree junk?
-> > AFAIU it's possible to run the "in-tree" RDMA stack and get "GPU
-> > direct".
-> 
-> I don't care and it has absolutel no business being discussed here.
-> 
-> FYI at leat iWarp is a totally open standard.
+On Tue, Jul 11, 2023 at 11:39:11AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+> Well, that "They keep pumping out more and more devices with the same
+> breakage" and the "new device" comment from Pankaj below bear the
+> question: should we stop trying to play "whack a mole" with all those
+> quirk entries and handle devices with duplicate ids just like Windows does?
 
-So is Infiniband, Jakub has a unique definition of "proprietary".
+As far as I can tell Windows completely ignores the IDs.  Which, looking
+back, I'd love to be able to do as well, but they are already used
+by udev for the /dev/disk/by-id/ links.   Those are usually not used
+on desktop systems, as they use the file system labels and UUIDs, but
+that doesn't work for non-file system uses.
 
-RDMA works with the AMD and Intel intree drivers using DMABUF without
-requiring struct pages using the DRM hacky scatterlist approach.
+And all this has been working really well with the good old enterprise
+SSDs, it's just that the cheap consumer devices keep fucking it up.
 
-Jason
+If we'd take it away now we'd break existing users, which puts us between
+a rock and a hard place.
+
