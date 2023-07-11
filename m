@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344FE74FAD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DD074FAD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjGKWSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S230393AbjGKWSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjGKWR4 (ORCPT
+        with ESMTP id S229714AbjGKWST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:17:56 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A62B10DD;
-        Tue, 11 Jul 2023 15:17:55 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89cfb4571so46780625ad.3;
-        Tue, 11 Jul 2023 15:17:55 -0700 (PDT)
+        Tue, 11 Jul 2023 18:18:19 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC291705
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:18:15 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b89b0c73d7so7506745ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:18:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689113874; x=1691705874;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GUQ/8zCRZuDXl9Bj16DtG+5Txck+M49Fz3vYnY4FgQc=;
-        b=ARXS4+iJF7czWLwSLs3uaant6Rd7iPZWrVB+mB2ZqjJuIlIygjiSudDipepnELI/3x
-         JOhbeMt9Sd8sWzsK/vDruGsWToq1MCbP6+Hp/TboDopRI2RKtdOeg/rjGBmdSs0G5GRf
-         HWq6EIzhbA39r6vmEXpBX+yBAbQKMICh2YQmi0kOqLHzR3AE/Rfpe58PUNNZ5YwfWoIr
-         OldbsoCDG41DMYgsV2dueQGmjKmwClHsMNdKOE8LetFAQ2210Mqs+rGUoFRzhtdyh8+8
-         DjpBv52aB4BV9qkMoAGMoSRt7oLRZ8RodheH1dNWLH5EOQzQYi/C3G9XxTyUC7Xm1afZ
-         30qw==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689113895; x=1689718695;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r0QKuY6Gac4KtjHpQUjYNNJL6kvnxIXVmhMZHPYzaPQ=;
+        b=nEcWXQ1/do+JQ+fqs5nhW1aTSCZ1LlPzD6//MeTmoL2r47x5l54/InYcck7bFm+9oO
+         djVAk9evNEykAAqXZICjMVLhWFrC6VOWDsgJircdNV8DpVowDLSzt6dxoAO8QZNuesLR
+         3BfZ9k6FCo6LlCk1DvutIvnTSeeGBXZV3oSc9LRvHNdVG2c2bWyp8RvmR34V8ok0Pdq8
+         o/ZP8dQ4iPv9iye0vE+S8uplfMGd5BLSjK7H3ZG8nz4Jtthn5xrgavwpAYv80Z1dcabR
+         FBX/0SaMRgYDWOEXq2np0ld6UX/0TvA2KYmT98Uv0BhQOZtxWlebgOkGZCfXRJl187+u
+         xfNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689113874; x=1691705874;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GUQ/8zCRZuDXl9Bj16DtG+5Txck+M49Fz3vYnY4FgQc=;
-        b=iEKmcU15MKW2oR02dq5POVgXAjpwt8P9pIcchXqe97GLi7jd3CuKWSIF3pRBU4VwmZ
-         XuB7sS+33V3VO989vVRyk+V/eAnp2sCxTrKAppyPw71mI+RZv5f3tI78LwvDN67GBdZe
-         mJc+wCJlRM7nyHvIzp7XsV7f+EtSZqbq18Wv+8MLxVw8ECOs9VycOQvRQShEqxjP8yz1
-         loDABLkHOa48rQIRPvyoPVXhSeYX3um6EWf8tazITtedpDBrDXTf5rxEcZQGmZXlA845
-         u9H95qfYz4ReHkDaHuuOZXFyURafji3Zx6P9mhOewrpaXOH47vFFTUVyl+mK105ZPCEs
-         Lvkw==
-X-Gm-Message-State: ABy/qLbtbgDQ/fMRcLXSx94pN7L2j6EQYyB/XAKpzJ/UdJ02SqTApGWP
-        YZ4pcRLewVVbWVxj3YroVNWLcvdP8ZqzgA==
-X-Google-Smtp-Source: APBJJlEeB9eQ9zhBAmdgyKXmkeARvRdkh7Lo22MREuuIBb+xm1J4qul+hzI5KiIy84cA5L72/MTDyw==
-X-Received: by 2002:a17:902:a614:b0:1b8:9225:4367 with SMTP id u20-20020a170902a61400b001b892254367mr15708150plq.65.1689113874468;
-        Tue, 11 Jul 2023 15:17:54 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:9374])
-        by smtp.gmail.com with ESMTPSA id w19-20020a1709027b9300b001ae3f73b9c1sm2427013pll.101.2023.07.11.15.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 15:17:54 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 11 Jul 2023 12:17:52 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 0/9] rust: workqueue: add bindings for the workqueue
-Message-ID: <ZK3VEPeBEyErmerR@slm.duckdns.org>
-References: <20230711093303.1433770-1-aliceryhl@google.com>
+        d=1e100.net; s=20221208; t=1689113895; x=1689718695;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r0QKuY6Gac4KtjHpQUjYNNJL6kvnxIXVmhMZHPYzaPQ=;
+        b=PkxvKh6/SjQ3O+pbYCOJAoNg3b/x9Ym/RNov8knbld6T3Qbktn45ItUeQ68IYs1Acf
+         SRlUFmRdCFtJYi1OWIcCzM7afmeiCtGZO76fnXkIZzBnXEGRJ1ixFpgxnHlhYDHl5Dev
+         VCUKMDSkS5kEpoBxaE61O7hhXJ2E81pmXtjrc8YYU9pVIqpDikA9W2Nu8oGb42aaAlyU
+         zOBvILNbL79KyNb/ogqy3WXEL9p6Eg6oqH6zmlAQ1gP1lOOJnp36gAwjohcavoVsKULh
+         ntLty3FeBP404S2S6hSLmTynwejH06xJ+xNkshhAtTuyszNqmSf6TZdElrR1Pgc4bnz6
+         TsPQ==
+X-Gm-Message-State: ABy/qLY9scLIRcrNxhIdgubk1FW+fGtpP9Q+RtL7LLWBikMBmZFDNWJC
+        auUjbYot/l6R7N+IWtYDBjhfb4i8RJTHTZxETFw=
+X-Google-Smtp-Source: APBJJlH1fB38TaeaX141/fYrGihQI6HUMtyNJ0dTyUnoqY0SEef9M8W+D+0os7O9mzigAXwQpsUtbQ==
+X-Received: by 2002:a17:902:da92:b0:1b8:35fa:cdcc with SMTP id j18-20020a170902da9200b001b835facdccmr21713869plx.5.1689113895139;
+        Tue, 11 Jul 2023 15:18:15 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id jc17-20020a17090325d100b001b9dfa946b4sm2441594plb.49.2023.07.11.15.18.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 15:18:14 -0700 (PDT)
+Message-ID: <bbc5f3cf-99f8-0695-1367-979301c64ecb@kernel.dk>
+Date:   Tue, 11 Jul 2023 16:18:13 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711093303.1433770-1-aliceryhl@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 5/5] io_uring: add IORING_OP_WAITID support
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Arnd Bergmann <arnd@arndb.de>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Brauner <brauner@kernel.org>
+References: <20230711204352.214086-1-axboe@kernel.dk>
+ <20230711204352.214086-6-axboe@kernel.dk>
+ <8431d207-5e52-4f8c-a12d-276836174bad@app.fastmail.com>
+ <048cfbce-5238-2580-2d53-2ca740e72d79@kernel.dk>
+In-Reply-To: <048cfbce-5238-2580-2d53-2ca740e72d79@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,37 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Jul 11, 2023 at 09:32:54AM +0000, Alice Ryhl wrote:
-> This patchset contains Rust bindings for the kernel workqueue.
+On 7/11/23 3:22 PM, Jens Axboe wrote:
+> On 7/11/23 3:11?PM, Arnd Bergmann wrote:
+>> On Tue, Jul 11, 2023, at 22:43, Jens Axboe wrote:
+>>> This adds support for an async version of waitid(2), in a fully async
+>>> version. If an event isn't immediately available, wait for a callback
+>>> to trigger a retry.
+>>>
+>>> The format of the sqe is as follows:
+>>>
+>>> sqe->len		The 'which', the idtype being queried/waited for.
+>>> sqe->fd			The 'pid' (or id) being waited for.
+>>> sqe->file_index		The 'options' being set.
+>>> sqe->addr2		A pointer to siginfo_t, if any, being filled in.
+>>>
+>>> buf_index, add3, and waitid_flags are reserved/unused for now.
+>>> waitid_flags will be used for options for this request type. One
+>>> interesting use case may be to add multi-shot support, so that the
+>>> request stays armed and posts a notification every time a monitored
+>>> process state change occurs.
+>>>
+>>> Note that this does not support rusage, on Arnd's recommendation.
+>>>
+>>> See the waitid(2) man page for details on the arguments.
+>>>
+>>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>
+>> Does this require argument conversion for compat tasks?
+>>
+>> Even without the rusage argument, I think the siginfo
+>> remains incompatible with 32-bit tasks, unfortunately.
 > 
-> One of the primary goals behind the design used in this patch is that we
-> must support embedding the `work_struct` as a field in user-provided
-> types, because this allows you to submit things to the workqueue without
-> having to allocate, making the submission infallible. If we didn't have
-> to support this, then the patch would be much simpler. One of the main
-> things that make it complicated is that we must ensure that the function
-> pointer in the `work_struct` is compatible with the struct it is
-> contained within.
-> 
-> The original version of the workqueue bindings was written by Wedson,
-> but I have rewritten much of it so that it uses the pin-init
-> infrastructure and can be used with containers other than `Arc`.
+> Hmm yes good point, if compat_siginfo and siginfo are different, then it
+> does need handling for that. Would be a trivial addition, I'll make that
+> change. Thanks Arnd!
 
-I don't understand a lot but the part that I understand (Alice helped me a
-lot, thanks) and the example usages look fine to me. While the interface
-leaves some workqueue features uncovered (e.g. flushing, creating custom
-workqueues, queueing on a specific CPU), there's nothing blocking adding
-them later and this looks like a good place to start. So, from workqueue
-POV:
+Should be fixed in the current version:
 
- Acked-by: Tejun Heo <tj@kernel.org>
-
-Please feel free to route the patches through the rust tree. If you want
-them to go through the workqueue tree, please let me know.
-
-Thanks.
+https://git.kernel.dk/cgit/linux/commit/?h=io_uring-waitid&id=08f3dc9b7cedbd20c0f215f25c9a7814c6c601cc
 
 -- 
-tejun
+Jens Axboe
+
+
