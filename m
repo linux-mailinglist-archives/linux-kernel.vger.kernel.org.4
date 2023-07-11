@@ -2,172 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B9B74E8A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1634274E8A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjGKIDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
+        id S230131AbjGKIFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjGKIDS (ORCPT
+        with ESMTP id S229798AbjGKIFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:03:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E992
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689062597; x=1720598597;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=eyGG6dzB9CZXuAsyxkAbXw//cArH8N9tfew36H3vcQI=;
-  b=XenKIbs3c8CpPK7EhUozwdZh/K1gajc2o0sV84iBKlQ2hmcmG44bKCyq
-   Zm+3CbKNGv2fx7forYAUv/e1eNLU3j5VXUsowZmf/ZTveC3tKn29aFKCZ
-   14rl3OdbBcSAUQLPClLhrL+2TjYCi+VTrANkRusUYYxdSpkeMA7qC8+kd
-   a0jA3oEUogT5D85x2nGmUw8CJBNeshLlNa99DMVcG/DEEhuT73axEPO4H
-   s/7zgs32CNPvUPfdj23vmtMEirdwq+jWOKxpoV+5TGOrq76BvraG34k88
-   KdbxmYPHM3D/tVqU3v8klfmyAVttX9Mobvmh3IdOrcSTkji3rbTb4ithF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="430643154"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="430643154"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 01:03:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="715108432"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="715108432"
-Received: from sneaga-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.52.179])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 01:03:13 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Li Yi <liyi@loongson.cn>
-Cc:     loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] drm/loongson: Fix two warnings because of passing wrong
- type
-In-Reply-To: <afbbda82-0635-bef3-b9ff-d5c6575631b8@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230710100931.255234-1-suijingfeng@loongson.cn>
- <87h6qcjc46.fsf@intel.com>
- <afbbda82-0635-bef3-b9ff-d5c6575631b8@loongson.cn>
-Date:   Tue, 11 Jul 2023 11:03:11 +0300
-Message-ID: <87edlej2o0.fsf@intel.com>
+        Tue, 11 Jul 2023 04:05:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C3092;
+        Tue, 11 Jul 2023 01:05:00 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E9BB2660700B;
+        Tue, 11 Jul 2023 09:04:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689062698;
+        bh=/V0I7v/mPKMX5r0sk/NMla2fyPgsaDd1OqBwVtFEoZk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Pkmw4Hc/+NkfN79HurY+KiRwaqNw3dKK7n3YLe5y160Aj3rw+tSbq6R2k3hKKZgYs
+         aP1mzJXB2R/rK95018uNp57dc9UfNal5nM3VPnZrkd0dpJyAPDG3SlrDjfW/Q7ur+w
+         1Ov3kCIuvfjkqkITTUUfV3Rq5fywVV/u1YSfEvx7HlrOUn7mX1qXWL+5wBkoe28d8C
+         uswFPnlhWKIRNRD7uY1ygbNCSdCH0JBKZsoxkm2I1LyRuwqNU1havi5OOxn91j03zv
+         6SwJLA0eo0mAN8zM69V8TYyQelOhr0m2YddzkLfJGmW6idOhZiadnetmbTY/mK8yHD
+         tJMGSfz8X+NuQ==
+Message-ID: <44d70b15-2929-1a2d-4ea0-f61b2294d72b@collabora.com>
+Date:   Tue, 11 Jul 2023 10:04:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 14/21] thermal/drivers/mediatek/lvts_thermal: convert
+ to use devm_request*_irq_probe()
+To:     Yangtao Li <frank.li@vivo.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230710095926.15614-1-frank.li@vivo.com>
+ <20230710095926.15614-14-frank.li@vivo.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230710095926.15614-14-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023, suijingfeng <suijingfeng@loongson.cn> wrote:
-> Hi,
->
-> On 2023/7/10 18:26, Jani Nikula wrote:
->> On Mon, 10 Jul 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->>> When accessing I/O memory, we should pass '__iomem *' type instead of
->>> 'void *' simply, otherwise sparse tests will complain. After applied
->>> this patch, the following two sparse warnings got fixed.
->> Usually the commit message should explain why it's okay to cast away the
->> warning.
->>
->> Because realistically this doesn't "fix" the warning, this merely hides
->> it.
->
->
-> My understanding is that a point itself is just a variable where store a=
-=20
-> address,
->
-> if this address originally point to I/O memory,
->
-> then, we can other cast it to u64 type, then cast it back to '__iomem *'=
-=20
-> again.
->
-> as long as the type's=C2=A0 bit-width is width enough to store this addre=
-ss,=20
-> we won't lost the information.
->
->
-> 'void *' or 'u64' is just a intermediate represent of the address.
->
-> we can other cast it to u64 type, then cast it back to 'void __iomem *'=20
-> or 'void *' again.
->
->
-> Why it's okay ? My answer is that
->
-> As long as a address is really point to the I/O memory, cast it to 'void=
-=20
-> __iomem *' is OK.
->
-> As long as a address is really point to the system memory, cast it to=20
-> 'void *' is OK.
+Il 10/07/23 11:59, Yangtao Li ha scritto:
+> There are more than 700 calls to devm_request_threaded_irq method and
+> more than 1000 calls to devm_request_irq method. Most drivers only
+> request one interrupt resource, and these error messages are basically
+> the same. If error messages are printed everywhere, more than 2000 lines
+> of code can be saved by removing the msg in the driver.
+> 
+> And tglx point out that:
+> 
+>    If we actually look at the call sites of
+>    devm_request_threaded_irq() then the vast majority of them print more or
+>    less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+> 
+>       519 messages total (there are probably more)
+> 
+>       352 unique messages
+> 
+>       323 unique messages after lower casing
+> 
+>           Those 323 are mostly just variants of the same patterns with
+>           slight modifications in formatting and information provided.
+> 
+>       186 of these messages do not deliver any useful information,
+>           e.g. "no irq", "
+> 
+>       The most useful one of all is: "could request wakeup irq: %d"
+> 
+>    So there is certainly an argument to be made that this particular
+>    function should print a well formatted and informative error message.
+> 
+>    It's not a general allocator like kmalloc(). It's specialized and in the
+>    vast majority of cases failing to request the interrupt causes the
+>    device probe to fail. So having proper and consistent information why
+>    the device cannot be used _is_ useful.
+> 
+> So convert to use devm_request*_irq_probe() API, which ensure that all
+> error handling branches print error information.
+> 
+> In this way, when this function fails, the upper-layer functions can
+> directly return an error code without missing debugging information.
+> Otherwise, the error message will be printed redundantly or missing.
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-The point of __iomem is to have sparse help you in tracking that, so you
-don't accidentally mix up the two.
-
-BR,
-Jani.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
->
->
->> BR,
->> Jani.
->>
->>> 1) drivers/gpu/drm/loongson/lsdc_benchmark.c:27:35:
->>>     sparse:     expected void volatile [noderef] __iomem *
->>>     sparse:     got void *kptr
->>>
->>> 2) drivers/gpu/drm/loongson/lsdc_benchmark.c:42:51:
->>>     sparse:     expected void const volatile [noderef] __iomem *
->>>     sparse:     got void *kptr
->>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Closes: https://lore.kernel.org/oe-kbuild-all/202307100243.v3hv6aes-lkp=
-@intel.com/
->>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>> ---
->>>   drivers/gpu/drm/loongson/lsdc_benchmark.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/loongson/lsdc_benchmark.c b/drivers/gpu/dr=
-m/loongson/lsdc_benchmark.c
->>> index b088646a2ff9..36e352820bdb 100644
->>> --- a/drivers/gpu/drm/loongson/lsdc_benchmark.c
->>> +++ b/drivers/gpu/drm/loongson/lsdc_benchmark.c
->>> @@ -24,7 +24,7 @@ static void lsdc_copy_gtt_to_vram_cpu(struct lsdc_bo =
-*src_bo,
->>>   	lsdc_bo_kmap(dst_bo);
->>>=20=20=20
->>>   	while (n--)
->>> -		memcpy_toio(dst_bo->kptr, src_bo->kptr, size);
->>> +		memcpy_toio((void __iomem *)dst_bo->kptr, src_bo->kptr, size);
->>>=20=20=20
->>>   	lsdc_bo_kunmap(src_bo);
->>>   	lsdc_bo_kunmap(dst_bo);
->>> @@ -39,7 +39,7 @@ static void lsdc_copy_vram_to_gtt_cpu(struct lsdc_bo =
-*src_bo,
->>>   	lsdc_bo_kmap(dst_bo);
->>>=20=20=20
->>>   	while (n--)
->>> -		memcpy_fromio(dst_bo->kptr, src_bo->kptr, size);
->>> +		memcpy_fromio(dst_bo->kptr, (void __iomem *)src_bo->kptr, size);
->>>=20=20=20
->>>   	lsdc_bo_kunmap(src_bo);
->>>   	lsdc_bo_kunmap(dst_bo);
->
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
