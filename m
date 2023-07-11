@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9314C74E983
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AABB74E985
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjGKIyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S231789AbjGKIyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjGKIya (ORCPT
+        with ESMTP id S230314AbjGKIyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:54:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F041BC1;
-        Tue, 11 Jul 2023 01:54:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7674B61389;
-        Tue, 11 Jul 2023 08:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D952C433C7;
-        Tue, 11 Jul 2023 08:53:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689065638;
-        bh=s0Ui7MxnciCydraCEjHzngOSBAQ9dkb9Vl5INw0OUpA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WZe4hcpj2wPeN9hguHAqfalg0lwP8SsH16jAuxyGZHFfWqzstiIgwTHELh6fQVDd0
-         tdtKTq1yADGinAIgw+bxiJMQuv5Y/GP3Ut1SOJ8w+SgoDfI8z8Yu3fxXueWJXhs+F7
-         1uG+ZpOusE4vempJ1FQ8SiwRWrNdBB+a8enovR506Ur3kcKXySL/jNah8ABorSVF0P
-         sC4jmlSTzP1Ck1XVAfEjoUZw9EoQsHqc8pIOiFNoU8qb4YTibWK8WEI1ki7i7eVvTy
-         d2hxfyBKq+vjkU+ZIDdrrnWZIhecOMrQEI2MlUU1gH7Q5iyq8sZeKjww4iyaYrJBMz
-         uh8vBrjOcwEqA==
-Message-ID: <55418c89-b1b2-5aec-34d3-0dbf9510c551@kernel.org>
-Date:   Tue, 11 Jul 2023 16:53:54 +0800
+        Tue, 11 Jul 2023 04:54:37 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2A71FD7;
+        Tue, 11 Jul 2023 01:54:11 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-577497ec6c6so58462137b3.2;
+        Tue, 11 Jul 2023 01:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689065651; x=1691657651;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7NMyJSrXr/UF/wHZuTRsTrpqjvTUJ9zAnuA38jm6aC0=;
+        b=NR5Zil1Ut51vJjbGpeM7hQpCxXMNddGz+wEm0nehiE7189z6LR8A7zDNYqWbGpHO7S
+         p9vkd8+NZJ71RR3NjCItwdjSin1MNB/xjy6FKCWPM4zaP0K//BbhbkcrUoivsA1v/nX8
+         v0XavUEBKL8XSOkJZfC+fjFAEqiDWiG3E1c6MppayGHbXvc8LSXq+M2hIun0UXR6jH8w
+         6/EAekCnP6MMi8hz0wNPBQmdwn9pzugm8RVM6Z/+39NKcKgmYBToAdbcAxPPSh1hI60+
+         5HLxxsfs3bceRoc2WqeI8NivG2Na0XxSFgG/De2SGnz0sE7WP55hVy06TlB3a1tPuFO5
+         3tQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689065651; x=1691657651;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7NMyJSrXr/UF/wHZuTRsTrpqjvTUJ9zAnuA38jm6aC0=;
+        b=Z9ZIjJXq3Rbu5Ro0hkiC07J4l8KxByPHALcZ5qgxPSKkre5Xx+qFO8XPiRpVe4/ZiD
+         am9T/iIw/cxkW2rtoWaYwwL9Upabz0rdkYJXz3PK+eelVsQuTwD5gnYYhaavRMHvNaM6
+         T5NyRXmQ4xREIxeMS+RV4AosURROWX16bhASn5MZ/Cg14GnepAPDyFcXcLehNDJI4ONW
+         pE5D3SocX69DDeVtGM/D2yE4iXyw0HMyhqW9bts1g85Gxjjbq92CK4/zW9fH72NMAt5w
+         G/K2hXX0A4b9rLTnRrUApmbXklr5WfU0ll8Wjl9xYImZRkdIj2sRqt2BfcojhluzFbgo
+         9CmA==
+X-Gm-Message-State: ABy/qLaITNnAvl0sGnEdQE/MnaSk2DClOybgGHlmnkC194MZHeu3uv8t
+        LQtilSiF3//d46B5/GFXH5wcS9ra+oBpB2hf/Ug=
+X-Google-Smtp-Source: APBJJlGKfjsYALosVBg9j0HXxd5FSGneVtTbIkqSExMAGBD1PGWF9szRPXhizWpgt7aYvkVVAzKRE27H36FANlcMR8s=
+X-Received: by 2002:a81:e94e:0:b0:577:3ad5:54de with SMTP id
+ e14-20020a81e94e000000b005773ad554demr14516198ywm.38.1689065650689; Tue, 11
+ Jul 2023 01:54:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [f2fs-dev] [PATCH] f2fs: flush inode if atomic file is aborted
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     syzbot+e1246909d526a9d470fa@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-References: <20230707141142.2276510-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230707141142.2276510-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20230710094747.943782-1-imagedong@tencent.com> <20230711063125.GA41919@unreal>
+In-Reply-To: <20230711063125.GA41919@unreal>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 11 Jul 2023 16:53:59 +0800
+Message-ID: <CADxym3YHmKOQ+pL+s6vuyTwE1FZ8D4uaYVcF13OjGrzgrFK=Pw@mail.gmail.com>
+Subject: Re: [PATCH RESEND net-next] bnxt_en: use dev_consume_skb_any() in bnxt_tx_int
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     michael.chan@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,118 +71,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/7 22:11, Jaegeuk Kim wrote:
-> Let's flush the inode being aborted atomic operation to avoid stale dirty
-> inode during eviction in this call stack:
-> 
->    f2fs_mark_inode_dirty_sync+0x22/0x40 [f2fs]
->    f2fs_abort_atomic_write+0xc4/0xf0 [f2fs]
->    f2fs_evict_inode+0x3f/0x690 [f2fs]
->    ? sugov_start+0x140/0x140
->    evict+0xc3/0x1c0
->    evict_inodes+0x17b/0x210
->    generic_shutdown_super+0x32/0x120
->    kill_block_super+0x21/0x50
->    deactivate_locked_super+0x31/0x90
->    cleanup_mnt+0x100/0x160
->    task_work_run+0x59/0x90
->    do_exit+0x33b/0xa50
->    do_group_exit+0x2d/0x80
->    __x64_sys_exit_group+0x14/0x20
->    do_syscall_64+0x3b/0x90
->    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> This triggers f2fs_bug_on() in f2fs_evict_inode:
->   f2fs_bug_on(sbi, is_inode_flag_set(inode, FI_DIRTY_INODE));
-> 
-> This fixes the syzbot report:
-> 
-> loop0: detected capacity change from 0 to 131072
-> F2FS-fs (loop0): invalid crc value
-> F2FS-fs (loop0): Found nat_bits in checkpoint
-> F2FS-fs (loop0): Mounted with checkpoint version = 48b305e4
-> ------------[ cut here ]------------
-> kernel BUG at fs/f2fs/inode.c:869!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 5014 Comm: syz-executor220 Not tainted 6.4.0-syzkaller-11479-g6cd06ab12d1a #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-> RIP: 0010:f2fs_evict_inode+0x172d/0x1e00 fs/f2fs/inode.c:869
-> Code: ff df 48 c1 ea 03 80 3c 02 00 0f 85 6a 06 00 00 8b 75 40 ba 01 00 00 00 4c 89 e7 e8 6d ce 06 00 e9 aa fc ff ff e8 63 22 e2 fd <0f> 0b e8 5c 22 e2 fd 48 c7 c0 a8 3a 18 8d 48 ba 00 00 00 00 00 fc
-> RSP: 0018:ffffc90003a6fa00 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff8880273b8000 RSI: ffffffff83a2bd0d RDI: 0000000000000007
-> RBP: ffff888077db91b0 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff888029a3c000
-> R13: ffff888077db9660 R14: ffff888029a3c0b8 R15: ffff888077db9c50
-> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f1909bb9000 CR3: 00000000276a9000 CR4: 0000000000350ef0
-> Call Trace:
->   <TASK>
->   evict+0x2ed/0x6b0 fs/inode.c:665
->   dispose_list+0x117/0x1e0 fs/inode.c:698
->   evict_inodes+0x345/0x440 fs/inode.c:748
->   generic_shutdown_super+0xaf/0x480 fs/super.c:478
->   kill_block_super+0x64/0xb0 fs/super.c:1417
->   kill_f2fs_super+0x2af/0x3c0 fs/f2fs/super.c:4704
->   deactivate_locked_super+0x98/0x160 fs/super.c:330
->   deactivate_super+0xb1/0xd0 fs/super.c:361
->   cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1254
->   task_work_run+0x16f/0x270 kernel/task_work.c:179
->   exit_task_work include/linux/task_work.h:38 [inline]
->   do_exit+0xa9a/0x29a0 kernel/exit.c:874
->   do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
->   __do_sys_exit_group kernel/exit.c:1035 [inline]
->   __se_sys_exit_group kernel/exit.c:1033 [inline]
->   __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f309be71a09
-> Code: Unable to access opcode bytes at 0x7f309be719df.
-> RSP: 002b:00007fff171df518 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 00007f309bef7330 RCX: 00007f309be71a09
-> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-> RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f309bef1e40
-> R10: 0000000000010600 R11: 0000000000000246 R12: 00007f309bef7330
-> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
->   </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:f2fs_evict_inode+0x172d/0x1e00 fs/f2fs/inode.c:869
-> Code: ff df 48 c1 ea 03 80 3c 02 00 0f 85 6a 06 00 00 8b 75 40 ba 01 00 00 00 4c 89 e7 e8 6d ce 06 00 e9 aa fc ff ff e8 63 22 e2 fd <0f> 0b e8 5c 22 e2 fd 48 c7 c0 a8 3a 18 8d 48 ba 00 00 00 00 00 fc
-> RSP: 0018:ffffc90003a6fa00 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff8880273b8000 RSI: ffffffff83a2bd0d RDI: 0000000000000007
-> RBP: ffff888077db91b0 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff888029a3c000
-> R13: ffff888077db9660 R14: ffff888029a3c0b8 R15: ffff888077db9c50
-> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f1909bb9000 CR3: 00000000276a9000 CR4: 0000000000350ef0
-> 
-> Cc: <stable@vger.kernel.org>
-> Reported-by: syzbot+e1246909d526a9d470fa@syzkaller.appspotmail.com
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+On Tue, Jul 11, 2023 at 2:31=E2=80=AFPM Leon Romanovsky <leon@kernel.org> w=
+rote:
+>
+> On Mon, Jul 10, 2023 at 05:47:47PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Replace dev_kfree_skb_any() with dev_consume_skb_any() in bnxt_tx_int()
+> > to clear the unnecessary noise of "kfree_skb" event.
+>
+> Can you please be more specific in the commit message what "unnecessary
+> noise" you reduced?
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+OK! How about the description like this:
 
-Thanks,
+In bnxt_tx_int(), the skb in the tx ring buffer will be freed after the
+transmission completes with dev_kfree_skb_any(), which will produce
+noise on the tracepoint "skb:kfree_skb":
 
-> ---
->   fs/f2fs/segment.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 0457d620011f..6e5d1039ca76 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -205,6 +205,8 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
->   		f2fs_i_size_write(inode, fi->original_i_size);
->   		fi->original_i_size = 0;
->   	}
-> +	/* avoid stale dirty inode during eviction */
-> +	sync_inode_metadata(inode, 0);
->   }
->   
->   static int __replace_atomic_write_block(struct inode *inode, pgoff_t index,
+$ perf record -e skb:kfree_skb -a
+$ perf script
+         swapper     0 [006]  5072.553459: skb:kfree_skb:
+skbaddr=3D0xffff88810ec47700 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [006]  5072.554796: skb:kfree_skb:
+skbaddr=3D0xffff8881370348e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [006]  5072.554806: skb:kfree_skb:
+skbaddr=3D0xffff888137035ae0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.605012: skb:kfree_skb:
+skbaddr=3D0xffff8881372926e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.648249: skb:kfree_skb:
+skbaddr=3D0xffff8881372916e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.655732: skb:kfree_skb:
+skbaddr=3D0xffff8881372928e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.697115: skb:kfree_skb:
+skbaddr=3D0xffff8881372916e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.744718: skb:kfree_skb:
+skbaddr=3D0xffff8881372928e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.786947: skb:kfree_skb:
+skbaddr=3D0xffff8881372916e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [010]  5072.838535: skb:kfree_skb:
+skbaddr=3D0xffff8881372928e0 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+         swapper     0 [003]  5072.853599: skb:kfree_skb:
+skbaddr=3D0xffff888108380500 protocol=3D2048
+location=3Ddev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+
+Replace dev_kfree_skb_any() with dev_consume_skb_any() in bnxt_tx_int()
+to reduce the noise.
+
+
+Thanks!
+Menglong Dong
+
+
+>
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+>
+> Thanks,
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
