@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BE774F4AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AD274F4A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjGKQQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        id S231992AbjGKQPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjGKQP4 (ORCPT
+        with ESMTP id S232113AbjGKQPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:15:56 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B239B10F6;
-        Tue, 11 Jul 2023 09:15:53 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so11886910a12.0;
-        Tue, 11 Jul 2023 09:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689092152; x=1691684152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+3YNvBazbMQlNenlLt7Z8u6jmQ7PpLqo2Es7F9N7uLc=;
-        b=m6wv+eZCBxEQXr8Ozexh8K+SxK/QKGuR6+iDyfzVSoR4HB0ekoJN8PAFacAcLZHTzM
-         gI9bLUwRKfSr47ck4O6Cm06ExIp5FywzJPfDkKdtbCTMpMZDRTKdyINAdTAzckwIWFHv
-         ne2WbmkCM7pxZQ8/WwVCvuEqAWBNIRW2s0X1HDkUyHzCYhf38/Q+uedwNWtsrOtcbOKp
-         R5+4wYehC97hw1fsdl/FFoR7lPM1ta9idisqtyyezymqeaWDOKReuWkMYRmWiHryUGuF
-         5lpvi1yYsqqIgBuSgIa6v1wlFs2sboFBUxIFH0SHnuWZoF00Twt0WZuj6hWzOwhgTcDi
-         JGTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689092152; x=1691684152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+3YNvBazbMQlNenlLt7Z8u6jmQ7PpLqo2Es7F9N7uLc=;
-        b=Egnj+c+8ijI3mbuhGHatwPEAgEHrHzbWCzG9GZ259h6ajA2lkaAngO7PL5K7O/VL+q
-         IFbzHa6nlUAXfpGTBOYdwzXmzUjemFhY2QLDypMw/BOHT5y0W5uiekikRKtzCkLBDmQ6
-         VvjRQdBvGCg5PZTav4hYf3iu9PoP6VO+5TCSayl7YOLzCJvrH5WioS08Q4nuGp/85k0M
-         gMb7+LcyD6SSGWKsgGjgh5iP4uX0L6x/2NUSz0jF/flfbT9V0b/yBkp0ZFFfxWTGV+a8
-         nwjDgqyLbEwXPMSgo/Pa+OXuhWSV4Z9UZvL20mCo2SP4pw6FIY7I3TwXx1HY9FhqC/93
-         O5Dw==
-X-Gm-Message-State: ABy/qLbJ5eU3qjABt1y5H7CMjPD4oiQgae57kyM8qa5rk2Rf/OFy+4WZ
-        0pQvJAsvxumKlnDloEgwa7bSYaftMh13/qqlFNbd7AMxoKI=
-X-Google-Smtp-Source: APBJJlHSXqPqdNg9nnoASTSEuBu/eCf9o59OGyGq528wv1PX0B78LaXDuF8U+4qcWEHulEjmRsjBiA1XAwwxF4iGXYs=
-X-Received: by 2002:a05:6402:520c:b0:51e:538c:1e19 with SMTP id
- s12-20020a056402520c00b0051e538c1e19mr14034219edd.15.1689092151844; Tue, 11
- Jul 2023 09:15:51 -0700 (PDT)
+        Tue, 11 Jul 2023 12:15:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD1EE7E;
+        Tue, 11 Jul 2023 09:15:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E39D61549;
+        Tue, 11 Jul 2023 16:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A382FC433C8;
+        Tue, 11 Jul 2023 16:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689092131;
+        bh=bJhJ5ldqh1RC4u2ucoivoNiS+23oP96DkhoEyS6UazY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y2nW+rWmftosc01WmZ8NJ7bttTZcZT8YyUX5AcF1p9XE2oDkFijgHysYyRzuO8wR8
+         k0qrpc+Xt4OrMhqkjpzvNe8ic6CKy1KEDa9GS7o12lStT8qoaDRmYq2803uU5Rg4G2
+         Ni42N1f8UlbNkD30Z8AS82rj1A6RI2I3V2EVATkpAGKxm7gzXyhDoYYICoWxdF/XHA
+         hwRx5q9WqnbmZYCoA3aOYnpa7HuzU/81/pH7xdLYhh50S+n5l3w7G+e2Tck3VCfK89
+         1I/SjU+Dh5mrHaoaWWiWXv4lw9DoQXqwqVTiRwDww+isTaunx8rUIs/l9HMkRuwXER
+         bIMC52Fnjz1Ug==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 550DE40516; Tue, 11 Jul 2023 13:15:29 -0300 (-03)
+Date:   Tue, 11 Jul 2023 13:15:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Thomas Richter <tmricht@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        jolsa@kernel.org, rostedt@goodmis.org, svens@linux.ibm.com,
+        gor@linux.ibm.com, sumanthk@linux.ibm.com, hca@linux.ibm.com
+Subject: Re: [PATCH v2] perf/build: fix broken dependency check for libtracefs
+Message-ID: <ZK2AISIWZX5GlOZv@kernel.org>
+References: <20230711135338.397473-1-tmricht@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230711151248.4750-1-asmaa@nvidia.com>
-In-Reply-To: <20230711151248.4750-1-asmaa@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 11 Jul 2023 19:15:15 +0300
-Message-ID: <CAHp75Vczih4F9G_UN7GNU8Th+OS=_GLbO51QxJJ+uFHTH_JbkA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio: mmio: handle "ngpios" properly in bgpio_init()
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davthompson@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711135338.397473-1-tmricht@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,42 +59,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 6:13=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wro=
-te:
->
-> bgpio_init() uses "sz" argument to populate ngpio, which is not
-> accurate. Instead, read the "ngpios" property from the DT and if it
-> doesn't exist, use the "sz" argument. With this change, drivers no
-> longer need to overwrite the ngpio variable after calling bgpio_init().
->
-> If the "ngpios" property is specified, bgpio_bits is calculated
-> as the round up value of ngpio. At the moment, the only requirement
-> specified is that the round up value must be a multiple of 8 but
-> it should also be a power of 2 because we provide accessors based
-> on the bank size in bgpio_setup_accessors().
->
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> ---
-> The following 2 patches were approved in March 2023 but didn't make
-> it into the tree:
-> [PATCH v4] gpio: mmio: handle "ngpios" properly in bgpio_init()
-> [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
->
-> They needed a rebase and were combined into a single patch since
-> "gpio: mmio: fix calculation of bgpio_bits" fixes a bug in
-> "gpio: mmio: handle "ngpios" properly in bgpio_init()"
+Em Tue, Jul 11, 2023 at 03:53:38PM +0200, Thomas Richter escreveu:
+> Perf build auto-detects features and packages already installed
+> for its build. This is done in directory tools/build/feature. This
+> directory contains small sample programs. When they successfully
+> compile the necessary prereqs in form of libraries and header
+> files are present.
+> 
+> Such a check is also done for libtracefs. And this check fails:
+> 
+> Output before:
+>  # rm -f test-libtracefs.bin; make test-libtracefs.bin
+>  gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
+> 	 > test-libtracefs.make.output 2>&1 -ltracefs
+>  make: *** [Makefile:211: test-libtracefs.bin] Error 1
+>  # cat test-libtracefs.make.output
+>  In file included from test-libtracefs.c:2:
+>  /usr/include/tracefs/tracefs.h:11:10: fatal error: \
+> 	 event-parse.h: No such file or directory
+>    11 | #include <event-parse.h>
+>       |          ^~~~~~~~~~~~~~~
+>  compilation terminated.
+>  #
+> 
+> The root cause of this compile error is
+> commit 880885d9c22e ("libtracefs: Remove "traceevent/" from referencing libtraceevent headers")
+> in the libtracefs project hosted here:
+>  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+> 
+> That mentioned patch removes the traceevent/ directory name from
+> the include statement, causing the file not to be included even
+> when the libtraceevent-devel package is installed. This package contains
+> the file referred to in tracefs/tracefs.h:
+>  # rpm -ql libtraceevent-devel
+>  /usr/include/traceevent
+>  /usr/include/traceevent/event-parse.h  <----- here
+>  /usr/include/traceevent/event-utils.h
+>  /usr/include/traceevent/kbuffer.h
+>  /usr/include/traceevent/trace-seq.h
+>  /usr/lib64/libtraceevent.so
+>  /usr/lib64/pkgconfig/libtraceevent.pc
+>  #
+> 
+> With this patch the compile succeeds.
+> 
+> Output after:
+>  # rm -f test-libtracefs.bin; make test-libtracefs.bin
+>  gcc  -MD -Wall -Werror -o test-libtracefs.bin test-libtracefs.c \
+> 	 > test-libtracefs.make.output 2>&1 -I/usr/include/traceevent -ltracefs
+>  #
 
-And hence Linus' tag had been dropped.
+Thanks! I test it like this:
 
-LGTM now, thank you for pursuing this!
-I hope Linus can review it again and Bart will be okay with the result
-to be applied.
+Committer testing:
 
-> v1->v2:
-> - Added the tags
-> - Updated the changelog
+  $ make -k BUILD_BPF_SKEL=1 CORESIGHT=1 O=/tmp/build/perf-tools -C tools/perf install-bin
 
---=20
-With Best Regards,
-Andy Shevchenko
+Before:
+
+  $ cat /tmp/build/perf-tools/feature/test-libtracefs.make.output
+  In file included from test-libtracefs.c:2:
+  /usr/include/tracefs/tracefs.h:11:10: fatal error: event-parse.h: No such file or directory
+     11 | #include <event-parse.h>
+        |          ^~~~~~~~~~~~~~~
+  compilation terminated.
+  $
+  $ grep -i tracefs /tmp/build/perf-tools/FEATURE-DUMP
+  feature-libtracefs=0
+  $
+
+After:
+
+  $ cat /tmp/build/perf-tools/feature/test-libtracefs.make.output
+  $
+  $ grep -i tracefs /tmp/build/perf-tools/FEATURE-DUMP
+  feature-libtracefs=1
+  $
+
+Applied to perf-tools, for v6.5.
+
+- Arnaldo
