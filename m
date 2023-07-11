@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DDE74F282
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8256574F283
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjGKOml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S232054AbjGKOmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjGKOmj (ORCPT
+        with ESMTP id S231898AbjGKOmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:42:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A44CBC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:38 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-57704a25be9so84568037b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:38 -0700 (PDT)
+        Tue, 11 Jul 2023 10:42:42 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47210BC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:41 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57320c10635so63070157b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689086558; x=1691678558;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JUYDVerV8URpwGJ6F0fNfWvwfXeGFLCwYeiofYpp/QI=;
-        b=FqXpeZjc4sttpuWzmF3jWCSEBcVkYsunCs48g4nQPBHG01elPa9vB7+xnkIcnUlOc4
-         IZ86oal0oY7zOPlMq4NxW48QHHGG/Y1DL1ZLVxNQNzZhsSN1uzOwFLRwJ6wL9t3vSDYO
-         FGIUxXokO757d1lZ6tmoruS6re+Kj+2bkUxvxu6MIxOSqdJNf3D4sQI+yF5ho4KAR0x9
-         Ayn7RicV+Kr+klHsefaDAk+AjhlCiz72Sf+zpbK9COQitEzzbi0IlzQ7yoUxRX58D4Tx
-         CtwuG3Sh9AAVrlIEGQfWSrBUcho3i7hzbS5PUG9RjNQjnERlbzMOy4d2bK96VK5DHI6+
-         fIVQ==
+        d=google.com; s=20221208; t=1689086560; x=1691678560;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dufumGN0X5SXjxYpittS7pKflaiJdPliu9At6Sap++c=;
+        b=dLRkccixklYYXR2WU6Ln/pjVdN3Qd9Ec+IRQSqKyylEED1pH7A8wD4Qv2myKG/RfLD
+         Jmz7qFSWO5vQZdgvSSTVF0jfpbFG+iIWCuI73GkGjsLdmmFtHeaEXarEarzKRxLo3Bbu
+         Oa7iNom8QaPEKsXkrFwKbZwche58tepyDYMn2uuFlCkTDLEMqryEOghFXXF/Xr3QtaQA
+         O9v+M21PEGqtdr36HSBveJlshivuqQkleC6reypNk8f7QOeE59/oCbcDig3awR0KcPbJ
+         GOVy7GA+6yaCuScu0UfAVfJfq/ycqEaCCA0f2JkINq5xfGn+SvqCQktRwaRosZt61X7s
+         6FDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086558; x=1691678558;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JUYDVerV8URpwGJ6F0fNfWvwfXeGFLCwYeiofYpp/QI=;
-        b=GKQFc698tHsOdgIdFNtZssvO645NrSuedocAHcyHWPxkXUckJsI9ibEK3guvzbPZlx
-         JSS6taPQJoqzjpLn+ljE1OS+PxpSe+sK5qCptK0LLq1gLoR7nSAaMdJTVtqM72q3dyT8
-         +1Z13CoFysF1ZDWJIUq2P4EiqPqT4KMcR8hPPynflc8ihCbYjOkNgHWYB7cybMzGDMbm
-         53qx8493V5HEB8C9f+JHv8EZs8oQXCINcOXznouqx68zf4u5C3rvFY5XG//yzH+bYARH
-         UgJAe0OqM7DT/w3t/gGMp1DKg4267R4Q7AMQ7iM9RAE3SPya4kx+G8sDOjgQ2jxPB/Xw
-         6L0Q==
-X-Gm-Message-State: ABy/qLZLoaw3HOroRY+Yvzxh7lIt3QU+lRX145Zu1Rb+hAihGUd6zWrf
-        HTfVbLX2J3LPkCbua0jGQ5Gf20zfm7A=
-X-Google-Smtp-Source: APBJJlG8H5mxRAaZPSqfDthhmY3+Q9TwHSjryqeG2QVFvwHLl2FTUuvh4e8eI7hJ628wohDrg1Uo9DDM7Wg=
+        d=1e100.net; s=20221208; t=1689086560; x=1691678560;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dufumGN0X5SXjxYpittS7pKflaiJdPliu9At6Sap++c=;
+        b=jbWyCw0gm32sqLV6q/bag/3DoyNaCVJ+AZYIhuaszxJRoD2vSYV8ZPFQkNSHyF/lI8
+         xro4BC/7qmbeEn9zq4fpGbki1QX4qj57HfBkOdoAZmVBaAjnXAPZvKJWGeuGRepo0RZX
+         HKZVUHaEFVMQuflCHzeJhZskqVYooBGEe6cPYii/bdZzKyXSHzai7+UBIANfFXJs5/Za
+         YgRHAONUplBj1qvz+Bk9hMxkOG9+dnySc2lmsDk8IpmTip2GZqgToLQuZ8z4J6HwhDAC
+         D/OkKx5D3mhL3SSSxq48ovqHMrREMmy03hQBdvx0aiYVfS9fESAi94JbVepHWoKLSUj0
+         SWgQ==
+X-Gm-Message-State: ABy/qLYBzpOS1bHdtInqcmRYFHusUvds/IsIskfA2RFrkhjdZ1ZpVKDP
+        nwEP0llwQVQC3TKX8dfr6y9b78APywA=
+X-Google-Smtp-Source: APBJJlFIZz3CqK9sHFiNkuXlFYUZxhErF6A+cY/vC/nVCEfDRQwrtiXHgvzlHG6TlEhbEb3LNYtF3wh57Bs=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:564d:3aaa:6b5f:4419])
- (user=glider job=sendgmr) by 2002:a81:aa53:0:b0:577:6462:24c3 with SMTP id
- z19-20020a81aa53000000b00577646224c3mr269427ywk.4.1689086557872; Tue, 11 Jul
- 2023 07:42:37 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:42:28 +0200
+ (user=glider job=sendgmr) by 2002:a05:690c:705:b0:565:a42c:79fe with SMTP id
+ bs5-20020a05690c070500b00565a42c79femr126547ywb.1.1689086560587; Tue, 11 Jul
+ 2023 07:42:40 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:42:29 +0200
+In-Reply-To: <20230711144233.3129207-1-glider@google.com>
 Mime-Version: 1.0
+References: <20230711144233.3129207-1-glider@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711144233.3129207-1-glider@google.com>
-Subject: [Resend v1 0/5] Implement MTE tag compression for swapped pages
+Message-ID: <20230711144233.3129207-2-glider@google.com>
+Subject: [Resend v1 1/5] linux/bitqueue.h: add the bit queue implementation
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com, catalin.marinas@arm.com, will@kernel.org,
         pcc@google.com, andreyknvl@gmail.com
@@ -67,61 +69,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, when MTE pages are swapped out, the tags are kept in the
-memory, occupying 128 bytes per page. This is especially problematic
-for devices that use zram-backed in-memory swap, because tags stored
-uncompressed in the heap effectively reduce the available amount of
-swap memory.
+struct bitq represents a bit queue with external storage.
 
-The RLE-based EA0 algorithm suggested by Evgenii Stepanov and
-implemented in this patch series is able to efficiently compress
-128-byte tag buffers, resulting in practical compression ratio between
-2.5x and 20x. In most cases it is possible to store the compressed data
-in 63-bit Xarray values, resulting in no extra memory allocations.
+Its purpose is to easily pack sub-byte values, which can be used, for
+example, to implement RLE algorithms.
 
-Our measurements show that EA0 provides better compression than existing
-kernel compression algorithms (LZ4, LZO, LZ4HC, ZSTD) can offer, because
-EA0 specifically targets 128-byte buffers.
-
-To implement compression/decompression, we introduce <linux/bitqueue.h>,
-which provides a simple bit queue interface.
-
-We refactor arch/arm64/mm/mteswap.c to support both the compressed
-(CONFIG_ARM64_MTE_COMP) and non-compressed case. For the former, in
-addition to tag compression, we move tag allocation from kmalloc() to
-separate kmem caches, providing greater locality and relaxing the
-alignment requirements.
-
-Alexander Potapenko (5):
-  linux/bitqueue.h: add the bit queue implementation
-  linux/bitqueue.h: add a KUnit test for bitqueue.h
-  arm64: mte: implement CONFIG_ARM64_MTE_COMP
-  arm64: mte: add a test for MTE tags compression
-  arm64: mte: add compression support to mteswap.c
-
- arch/arm64/Kconfig               |  20 ++
- arch/arm64/include/asm/mtecomp.h |  60 +++++
- arch/arm64/mm/Makefile           |   7 +
- arch/arm64/mm/mtecomp.c          | 398 +++++++++++++++++++++++++++++++
- arch/arm64/mm/mteswap.c          |  19 +-
- arch/arm64/mm/mteswap.h          |  12 +
- arch/arm64/mm/mteswap_comp.c     |  50 ++++
- arch/arm64/mm/mteswap_nocomp.c   |  37 +++
- arch/arm64/mm/test_mtecomp.c     | 175 ++++++++++++++
- include/linux/bitqueue.h         | 144 +++++++++++
- lib/Kconfig.debug                |   8 +
- lib/Makefile                     |   1 +
- lib/test_bitqueue.c              | 244 +++++++++++++++++++
- 13 files changed, 1164 insertions(+), 11 deletions(-)
- create mode 100644 arch/arm64/include/asm/mtecomp.h
- create mode 100644 arch/arm64/mm/mtecomp.c
- create mode 100644 arch/arm64/mm/mteswap.h
- create mode 100644 arch/arm64/mm/mteswap_comp.c
- create mode 100644 arch/arm64/mm/mteswap_nocomp.c
- create mode 100644 arch/arm64/mm/test_mtecomp.c
+Signed-off-by: Alexander Potapenko <glider@google.com>
+---
+ include/linux/bitqueue.h | 144 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 144 insertions(+)
  create mode 100644 include/linux/bitqueue.h
- create mode 100644 lib/test_bitqueue.c
 
+diff --git a/include/linux/bitqueue.h b/include/linux/bitqueue.h
+new file mode 100644
+index 0000000000000..c4393f703c697
+--- /dev/null
++++ b/include/linux/bitqueue.h
+@@ -0,0 +1,144 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * A simple bit queue which supports enqueueing/dequeueing of sub-byte values.
++ *
++ * This can be used to pack complex bitfields into byte arrays.
++ */
++#ifndef _LINUX_BITQUEUE_H
++#define _LINUX_BITQUEUE_H
++
++#include <linux/string.h>
++#include <linux/types.h>
++
++/**
++ * struct bitq - represents a bit queue with external storage.
++ * @data:	data buffer used by the queue.
++ * @size:	size of @data in bytes.
++ * @bit_pos:	current bit position.
++ */
++struct bitq {
++	u8 *data;
++	int size, bit_pos;
++};
++
++/**
++ * bitq_init - initialize an empty bit queue.
++ * @q:		struct bitq to be initialized.
++ * @data:	external data buffer to use.
++ * @size:	capacity in bytes.
++ *
++ * Return:	0 in the case of success, -1 if either of the pointers is NULL.
++ */
++static inline int bitq_init(struct bitq *q, u8 *data, int size)
++{
++	if (!q || !data)
++		return -1;
++	q->data = data;
++	q->size = size;
++	memset(data, 0, size);
++	q->bit_pos = 0;
++	return 0;
++}
++
++/**
++ * bitq_init_full - make a bit queue from an initialized byte array.
++ * @q:		struct bitq to be initialized.
++ * @data:	external data buffer to use.
++ * @size:	capacity in bytes.
++ *
++ * Return:	0 in the case of success, -1 if either of the pointers is NULL.
++ */
++static inline int bitq_init_full(struct bitq *q, u8 *data, int size)
++{
++	if (!q || !data)
++		return -1;
++	q->data = data;
++	q->size = size;
++	q->bit_pos = q->size * 8;
++	return 0;
++}
++
++/**
++ * bitq_enqueue - push up to 8 bits to the end of the queue.
++ * @q:		struct bitq.
++ * @value:	byte containing the value to be pushed.
++ * @bits:	number of bits (1 to 8) to push.
++ *
++ * Return:	number of bits pushed, or -1 in the case of an error.
++ */
++static inline int bitq_enqueue(struct bitq *q, u8 value, int bits)
++{
++	int byte_pos, left_in_byte, max_pos;
++	u8 hi, lo;
++
++	if (!q || (bits < 1) || (bits > 8))
++		return -1;
++
++	max_pos = q->size * 8;
++	if ((max_pos - q->bit_pos) < bits)
++		return -1;
++
++	left_in_byte = 8 - (q->bit_pos % 8);
++	byte_pos = q->bit_pos / 8;
++	/* Clamp @value. */
++	value %= (1 << bits);
++	if (left_in_byte >= bits) {
++		/* @value fits into the current byte. */
++		value <<= (left_in_byte - bits);
++		q->data[byte_pos] |= value;
++	} else {
++		/*
++		 * @value needs to be split between the current and the
++		 * following bytes.
++		 */
++		hi = value >> (bits - left_in_byte);
++		q->data[byte_pos] |= hi;
++		byte_pos++;
++		lo = value << (8 - (bits - left_in_byte));
++		q->data[byte_pos] |= lo;
++	}
++	q->bit_pos += bits;
++	return bits;
++}
++
++/**
++ * bitq_dequeue - pop up to 8 bits from the beginning of the queue.
++ * @q:		struct bitq.
++ * @value:	u8* to store the popped value (can be NULL).
++ * @bits:	number of bits (1 to 8) to pop.
++ *
++ * Return:	number of bits popped, or -1 in the case of an error.
++ */
++
++#include <linux/printk.h>
++static inline int bitq_dequeue(struct bitq *q, u8 *value, int bits)
++{
++	int rem_bits = 8 - bits, i;
++	u8 output;
++
++	/* Invalid arguments. */
++	if (!q || (bits < 1) || (bits > 8))
++		return -1;
++	/* Not enough space to insert @bits. */
++	if (q->bit_pos < bits)
++		return -1;
++	/* Take the first @bits bits from the first byte. */
++	output = q->data[0];
++	output >>= rem_bits;
++	if (value)
++		*value = output;
++
++	/*
++	 * Shift every byte in the queue to the left by @bits, carrying over to
++	 * the previous byte.
++	 */
++	for (i = 0; i < q->size - 1; i++) {
++		q->data[i] = (q->data[i] << bits) |
++			     (q->data[i + 1] >> rem_bits);
++	}
++	q->data[q->size - 1] <<= bits;
++	q->bit_pos -= bits;
++	return bits;
++}
++
++#endif // _LINUX_BITQUEUE_H
 -- 
 2.41.0.255.g8b1d071c50-goog
 
