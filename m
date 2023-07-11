@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283B974E9B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E594074E9C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjGKJBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S231819AbjGKJDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjGKJBl (ORCPT
+        with ESMTP id S232054AbjGKJDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:01:41 -0400
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCB310FF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:01:34 -0700 (PDT)
-Received: from [192.168.108.81] (unknown [213.36.7.13])
-        (Authenticated sender: marc.w.gonzalez@free.fr)
-        by smtp2-g21.free.fr (Postfix) with ESMTPSA id BE6B02003C6;
-        Tue, 11 Jul 2023 11:01:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-        s=smtp-20201208; t=1689066092;
-        bh=kzLwFEZiiwK9VWldSuslytwZfQEdKH1LYg5EawYSmjQ=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=YFIe1QKymp3K6OhI+PW3VS6QUKiUiicO6XH7GZNOeW0weanp9MkZQQ/Ur2AlHwoM4
-         OoHGgoNsGXeo4sb2u6ijsoDw+7SVgD+20f6p5lknaoC8ZSTfld+1/MFJHHCq/IrsKg
-         2mYRSPZ8uEARrj2Hs59VVU/kx7aiEbcaQMH8Vfpjqc5dyjYIQ+ztxD00kUKkgOwenG
-         8NZIFf9QEoueKfwlW5PXvZsuzBOPw1RghnP19bq6X7OAQtCyRoJto/gh6AcShkwifo
-         cuQ0QfUcKZzt7Oe7bQ1alqg4ALBO/2NMNKa+j7DqDlKKLZxElK53g0SthBxi8GmAtM
-         QJ1WTa2Zp//lw==
-Message-ID: <0caa0a41-4eb9-1683-8aa5-cc830b12dfe3@free.fr>
-Date:   Tue, 11 Jul 2023 11:01:17 +0200
+        Tue, 11 Jul 2023 05:03:11 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6194C93;
+        Tue, 11 Jul 2023 02:03:10 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 476B661E5FE03;
+        Tue, 11 Jul 2023 11:01:25 +0200 (CEST)
+Message-ID: <237f5cac-5696-93ea-1ab4-f5da4ea790a9@molgen.mpg.de>
+Date:   Tue, 11 Jul 2023 11:01:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: RFC: Faster memtest (possibly bypassing data cache)
+ Thunderbird/102.13.0
+Subject: Re: [Intel-wired-lan] [PATCH net-next v2 00/10] Remove unnecessary
+ (void*) conversions
 Content-Language: en-US
-From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-To:     LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Vladimir Murzin <vladimir.murzin@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tomas Mudrunka <tomas.mudrunka@gmail.com>,
-        HPeter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <b74d93bc-ed02-4019-e5e4-0841bdceb44c@free.fr>
-In-Reply-To: <b74d93bc-ed02-4019-e5e4-0841bdceb44c@free.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Su Hui <suhui@nfschina.com>
+Cc:     andrew@lunn.ch, irusskikh@marvell.com,
+        kernel-janitors@vger.kernel.org, jesse.brandeburg@intel.com,
+        edumazet@google.com, iyappan@os.amperecomputing.com,
+        anthony.l.nguyen@intel.com, quan@os.amperecomputing.com,
+        qiang.zhao@nxp.com, linux@armlinux.org.uk, xeb@mail.ru,
+        intel-wired-lan@lists.osuosl.org, kuba@kernel.org,
+        pabeni@redhat.com, yisen.zhuang@huawei.com, wg@grandegger.com,
+        steve.glendinning@shawell.net, keyur@os.amperecomputing.com,
+        linux-can@vger.kernel.org, mkl@pengutronix.de,
+        salil.mehta@huawei.com, GR-Linux-NIC-Dev@marvell.com,
+        uttenthaler@ems-wuensche.com, rmody@marvell.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, yunchuan@nfschina.com,
+        linuxppc-dev@lists.ozlabs.org, skalluru@marvell.com,
+        hkallweit1@gmail.com
+References: <20230710063828.172593-1-suhui@nfschina.com>
+ <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
+In-Reply-To: <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 17:41, Marc Gonzalez wrote:
+[Cc: Remove mostrows@earthlink.net (550 5.5.1 Recipient rejected - 
+ELNK001_403 -)]
 
-> Hello,
-> 
-> When dealing with a few million devices (x86 and arm64),
-> it is statistically expected to have "a few" devices with
-> at least one bad RAM cell. (How many?)
-> 
-> For one particular model, we've determined that ~0.1% have
-> at least one bad RAM cell (ergo, a few thousand devices).
-> 
-> I've been wondering if someone more experienced knows:
-> Are these RAM cells bad from the start, or do they become bad
-> with time? (I assume both failure modes exist.)
-> 
-> Once the first bad cell is detected, is it more likely
-> to detect other bad cells as time goes by?
-> In other words, what are the failure modes of ageing RAM?
+Am 11.07.23 um 10:53 schrieb Paul Menzel:
+> Dear Su,
 > 
 > 
-> Closing the HW tangent, focusing on the SW side of things:
+> Thank you for your patch.
 > 
-> Since these bad RAM cells wreak havoc for the device's user,
-> especially with ASLR (different stuff crashes across reboots),
-> I've been experimenting with mm/memtest.c as a first line
-> of defense against bad RAM cells.
+> Am 10.07.23 um 08:38 schrieb Su Hui:
+>> From: wuych <yunchuan@nfschina.com>
 > 
-> However, I have a run into a few issues.
+> Can you please write the full name correctly? Maybe Yun Chuan?
 > 
-> Even though early_memtest is called, well... early, memory has
-> already been mapped as regular *cached* memory.
+>      git config --global user.name "Yun Chuan"
+>      git commit --amend --author="Yun Chuan <yunchuan@nfschina.com>"
 > 
-> This means that when we test an area smaller than L3 cache, we're
-> not even hitting RAM, we're just testing the cache hierarchy.
-> I suppose it /might/ make sense to test the cache hierarchy,
-> as it could(?) have errors as well?
-> However, I suspect defects in cache are much more rare
-> (and thus detection might not be worth the added run-time).
+> I only got the cover letter by the way.
 > 
-> On x86, I ran a few tests using SIMD non-temporal stores
-> (to bypass the cache on stores), and got 30% reduction in run-time.
-> (Minimal run-time is critical for being able to deploy the code
-> to millions of devices for the benefit of a few thousand users.)
-> AFAIK, there are no non-temporal loads, the normal loads probably
-> thrashed the data cache.
 > 
-> I was hoping to be able to test a different implementation:
+> Kind regards,
 > 
-> When we enter early_memtest(), we remap [start, end]
-> as UC (or maybe WC?) so as to entirely bypass the cache.
-> We read/write using the largest size available for stores/loads,
-> e.g. entire cache lines on recent x86 HW.
-> Then when we leave, we remap as was done originally.
+> Paul
 > 
-> Is that possible?
 > 
-> Hopefully, the other cores are not started at this point?
-> (Otherwise this whole charade would be pointless.)
-> 
-> To summarize: is it possible to tweak memtest to make it
-> run faster while testing RAM in all cases?
-
-Hello again,
-
-I had a short chat with Robin on IRC.
-
-He said trying to bypass the cache altogether was a bad idea(TM)
-performance-wise. Do others agree with this assessment? :)
-
-Would like to read people's thoughts about the whole thing.
-
-What is the kernel API to flush a kernel memory range to memory?
-
-  int flush_cache_to_memory(void *va_start, void *va_end);
-
-On aarch64, I would test LDNP/STNP. Possibly also LD4/ST4.
-
-Regards,
-
-Marc
-
+>> Changes in v2:
+>>     move declarations to be reverse xmas tree.
+>>     compile it in net and net-next branch.
+>>     remove some error patches in v1.
+>>
+>> PATCH v1 link:
+>> https://lore.kernel.org/all/20230628024121.1439149-1-yunchuan@nfschina.com/
+>>
+>> wuych (10):
+>>    net: wan: Remove unnecessary (void*) conversions
+>>    net: atlantic: Remove unnecessary (void*) conversions
+>>    net: ppp: Remove unnecessary (void*) conversions
+>>    net: hns3: remove unnecessary (void*) conversions
+>>    net: hns: Remove unnecessary (void*) conversions
+>>    ice: remove unnecessary (void*) conversions
+>>    ethernet: smsc: remove unnecessary (void*) conversions
+>>    net: mdio: Remove unnecessary (void*) conversions
+>>    can: ems_pci: Remove unnecessary (void*) conversions
+>>    net: bna: Remove unnecessary (void*) conversions
+>>
+>>   drivers/net/can/sja1000/ems_pci.c             |  6 +++---
+>>   .../aquantia/atlantic/hw_atl2/hw_atl2.c       | 12 ++++++------
+>>   .../atlantic/hw_atl2/hw_atl2_utils_fw.c       |  2 +-
+>>   drivers/net/ethernet/brocade/bna/bnad.c       | 19 +++++++++----------
+>>   .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  2 +-
+>>   drivers/net/ethernet/hisilicon/hns_mdio.c     | 10 +++++-----
+>>   drivers/net/ethernet/intel/ice/ice_main.c     |  4 ++--
+>>   drivers/net/ethernet/smsc/smsc911x.c          |  4 ++--
+>>   drivers/net/ethernet/smsc/smsc9420.c          |  4 ++--
+>>   drivers/net/mdio/mdio-xgene.c                 |  4 ++--
+>>   drivers/net/ppp/pppoe.c                       |  4 ++--
+>>   drivers/net/ppp/pptp.c                        |  4 ++--
+>>   drivers/net/wan/fsl_ucc_hdlc.c                |  6 +++---
+>>   13 files changed, 40 insertions(+), 41 deletions(-)
