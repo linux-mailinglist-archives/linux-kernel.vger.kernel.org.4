@@ -2,334 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2516174FB51
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BDB74FB83
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjGKWvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
+        id S231737AbjGKW6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjGKWvw (ORCPT
+        with ESMTP id S229963AbjGKW6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:51:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEEBE60;
-        Tue, 11 Jul 2023 15:51:51 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BMhBw9019399;
-        Tue, 11 Jul 2023 22:51:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=E+XLmP9vvV6+Iuom+ooIwxz5tceGTgkIEgVqiggsEgQ=;
- b=ESy7PQ+nRggBjfrtOcyz9N0JqWoDDSfWaTI6FKCw9WvCSt80uuqTrgBaTOD7Dl7zSoCS
- N4hEPc9jYaAw5AAmNBcMAsteYId22NgeL/fwPL+rgVXB/9Net3VPrBtFpXqomG2Su9xF
- grcJ4YCSgQ1gwUZfWjVy0mIpDR/OO66asG7GsbPV33nWgWmunNl5zUIQPPglGkG/zCNt
- vKL+YFXqZoTvRl4DeX7f+eEd70aUfjt9ZnMzR4J7q1yUt36Sb3e+l4vj+qt/Qy/H37F6
- U+Ne82kMrI35T9hVEvy0yqcfrCgwsbAdSJ3UvJCqUh0vdphCGOldC4TAkTSBkGPRDSOb vQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsct58bvs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 22:51:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BMpa9q019942
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 22:51:36 GMT
-Received: from [10.110.62.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
- 2023 15:51:35 -0700
-Message-ID: <af332749-fdd7-e744-16f1-21f972161589@quicinc.com>
-Date:   Tue, 11 Jul 2023 15:51:35 -0700
+        Tue, 11 Jul 2023 18:58:39 -0400
+Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A3710FA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:58:37 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 26E2E3420F8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 22:52:20 +0000 (UTC)
+Received: from pdx1-sub0-mail-a234.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 6019C3421CE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 22:52:18 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1689115938; a=rsa-sha256;
+        cv=none;
+        b=cqqdjMudO2gIMdp/Druu/qv3YJGwKhlEtfjsErDwQANyGLQsXSKa3ndCsDLAtOapskTo6b
+        tPJPSxK3hdrQxk3l/z9AcxegJbJxBR9g0AXfMll1XZVcAdCgaKJY6zh8RzWH3I0lLkj6Ro
+        jKlPIUfEQ+hrT3jmrAMMhWME60IaftdD6wr3Of/gTqoyWXV/IFFmrsnY0Sfw1huRvDfzGP
+        xxWXeGQF8g8/Wd3ZQ/txsvIOpFF5qqkkNOifCFJg+ba0iY9lRZ0MsufdAasULD/RrZRsme
+        BYXWnasEXd5BaU+Fs6FOCCTju/HWWMLB6GSyazrLqV8WT9QqHe0yc977nI90qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1689115938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=XV8yVFLS5zMgqY/+/PS/KFJu/og6DkPIRq5kY6V6N08=;
+        b=vtZB/S5aqF/4vW97FNYFh3u/yt0S4nT8jiIwdVBPFHQsAjWZKKxwYfonXfOzMWfGIC4LxR
+        iotlwMQAUS4GxfJXmjL0LX/Dz6fKRLEB61TaI2xebtu8PXMgOKMlvRLw8vCE5NlePf4hLD
+        QCWR8MqT9u8O+jDBUFK18yClM/dB18TSgSNb034ZGfIsPKKPHfXp9Trv4HpXLogRHvRnsY
+        czvC3xSLNpL3yUyoviBOdWBjzVpp377mWoiiA+FlyraEnW+NCh+HZQNpu0nSemCVNoxrjQ
+        cqSPMveTy15fswrcpL/Wu4UhRaBhjUqB+nF7QC2qwQhGnS9kNw0+3+aFJB5nGw==
+ARC-Authentication-Results: i=1;
+        rspamd-7d9c4d5c9b-wnsgc;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Good
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Versed-Print: 2ff7e5cb0d26ca60_1689115939820_828126116
+X-MC-Loop-Signature: 1689115939820:2793529742
+X-MC-Ingress-Time: 1689115939820
+Received: from pdx1-sub0-mail-a234.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.119.120.47 (trex/6.9.1);
+        Tue, 11 Jul 2023 22:52:19 +0000
+Received: from kmjvbox (unknown [71.198.86.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a234.dreamhost.com (Postfix) with ESMTPSA id 4R0x2l5tTNzFP
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1689115936;
+        bh=XV8yVFLS5zMgqY/+/PS/KFJu/og6DkPIRq5kY6V6N08=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=CttG4FAtMe7nJzvGrVpLzPnS4lSDLwydVef8srYLzGTtqb6JyBP1Q1RMr9e9ZDE94
+         0GPkqExwHk5JDXfHiI63zyEtUa9WgUj7ijxSrxFwP2lrFXPOBM8rtnbEGH0IttDzy+
+         eJ1q77E6AjGNVfzcAZpRCggXERTuT3HPgIJFyAnc=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e00cb
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Tue, 11 Jul 2023 15:52:10 -0700
+Date:   Tue, 11 Jul 2023 15:52:10 -0700
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Shay Agroskin <shayagr@amazon.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net] net: ena: fix shift-out-of-bounds in exponential
+ backoff
+Message-ID: <20230711225210.GA2088@templeofstupid.com>
+References: <20230711013621.GE1926@templeofstupid.com>
+ <pj41zllefmpbw7.fsf@u95c7fd9b18a35b.ant.amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rogerq@kernel.org" <rogerq@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
- <20230711174320.24058-4-quic_eserrao@quicinc.com>
- <20230711220748.vmnvwwcu5nhrvyvi@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230711220748.vmnvwwcu5nhrvyvi@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: y2sIB-0-wFr-DV5sA0MqAecVr-qT1OOC
-X-Proofpoint-ORIG-GUID: y2sIB-0-wFr-DV5sA0MqAecVr-qT1OOC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110208
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <pj41zllefmpbw7.fsf@u95c7fd9b18a35b.ant.amazon.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/11/2023 3:07 PM, Thinh Nguyen wrote:
-> On Tue, Jul 11, 2023, Elson Roy Serrao wrote:
->> The current implementation blocks the runtime pm operations when cable
->> is connected. This would block platforms from entering system wide suspend
->> during bus suspend scenario. Modify the runtime pm ops to handle bus
->> suspend case for such platforms where the controller low power mode
->> entry/exit is handled by the glue driver. This enablement is controlled
->> through a dt property and platforms capable of detecting bus resume can
->> benefit from this feature. Also modify the remote wakeup operations to
->> trigger runtime resume before sending wakeup signal.
->>
->> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->> ---
->>   drivers/usb/dwc3/core.c   | 26 ++++++++++++++++++++++---
->>   drivers/usb/dwc3/core.h   |  3 +++
->>   drivers/usb/dwc3/gadget.c | 40 ++++++++++++++++++++++++++++++++-------
->>   3 files changed, 59 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index f6689b731718..898c0f68e190 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1534,6 +1534,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>   	dwc->dis_split_quirk = device_property_read_bool(dev,
->>   				"snps,dis-split-quirk");
->>   
->> +	dwc->allow_rtsusp_on_u3 = device_property_read_bool(dev,
->> +				"snps,allow-rtsusp-on-u3");
->> +
->>   	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
->>   	dwc->tx_de_emphasis = tx_de_emphasis;
->>   
->> @@ -1984,11 +1987,21 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>   {
->>   	unsigned long	flags;
->>   	u32 reg;
->> +	int link_state;
->>   
->>   	switch (dwc->current_dr_role) {
->>   	case DWC3_GCTL_PRTCAP_DEVICE:
->>   		if (pm_runtime_suspended(dwc->dev))
->>   			break;
->> +
->> +		if (dwc->connected) {
->> +			link_state = dwc3_gadget_get_link_state(dwc);
->> +			/* bus suspend case */
->> +			if (dwc->allow_rtsusp_on_u3 &&
->> +			    link_state == DWC3_LINK_STATE_U3)
->> +				break;
->> +			return -EBUSY;
->> +		}
->>   		dwc3_gadget_suspend(dwc);
->>   		synchronize_irq(dwc->irq_gadget);
->>   		dwc3_core_exit(dwc);
->> @@ -2045,6 +2058,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>   
->>   	switch (dwc->current_dr_role) {
->>   	case DWC3_GCTL_PRTCAP_DEVICE:
->> +		/* bus resume case */
->> +		if (dwc->connected)
->> +			break;
->>   		ret = dwc3_core_init_for_resume(dwc);
->>   		if (ret)
->>   			return ret;
->> @@ -2123,9 +2139,6 @@ static int dwc3_runtime_suspend(struct device *dev)
->>   	struct dwc3     *dwc = dev_get_drvdata(dev);
->>   	int		ret;
->>   
->> -	if (dwc3_runtime_checks(dwc))
->> -		return -EBUSY;
->> -
->>   	ret = dwc3_suspend_common(dwc, PMSG_AUTO_SUSPEND);
->>   	if (ret)
->>   		return ret;
->> @@ -2160,9 +2173,15 @@ static int dwc3_runtime_resume(struct device *dev)
->>   static int dwc3_runtime_idle(struct device *dev)
->>   {
->>   	struct dwc3     *dwc = dev_get_drvdata(dev);
->> +	int		link_state;
->>   
->>   	switch (dwc->current_dr_role) {
->>   	case DWC3_GCTL_PRTCAP_DEVICE:
->> +		link_state = dwc3_gadget_get_link_state(dwc);
->> +		/* for bus suspend case return success */
->> +		if (dwc->allow_rtsusp_on_u3 && dwc->connected &&
->> +		    link_state == DWC3_LINK_STATE_U3)
->> +			goto autosuspend;
->>   		if (dwc3_runtime_checks(dwc))
->>   			return -EBUSY;
->>   		break;
->> @@ -2172,6 +2191,7 @@ static int dwc3_runtime_idle(struct device *dev)
->>   		break;
->>   	}
->>   
->> +autosuspend:
->>   	pm_runtime_mark_last_busy(dev);
->>   	pm_runtime_autosuspend(dev);
->>   
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index 8b1295e4dcdd..33b2ccbbd963 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1127,6 +1127,8 @@ struct dwc3_scratchpad_array {
->>    * @num_ep_resized: carries the current number endpoints which have had its tx
->>    *		    fifo resized.
->>    * @debug_root: root debugfs directory for this device to put its files in.
->> + * @allow_rtsusp_on_u3: true if dwc3 runtime suspend is allowed during bus
->> + *			suspend scenario.
->>    */
->>   struct dwc3 {
->>   	struct work_struct	drd_work;
->> @@ -1343,6 +1345,7 @@ struct dwc3 {
->>   	int			last_fifo_depth;
->>   	int			num_ep_resized;
->>   	struct dentry		*debug_root;
->> +	bool			allow_rtsusp_on_u3;
->>   };
->>   
->>   #define INCRX_BURST_MODE 0
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 5fd067151fbf..0797cffa2d48 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2401,15 +2401,21 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
->>   		return -EINVAL;
->>   	}
->>   
->> -	spin_lock_irqsave(&dwc->lock, flags);
->>   	if (!dwc->gadget->wakeup_armed) {
->>   		dev_err(dwc->dev, "not armed for remote wakeup\n");
->> -		spin_unlock_irqrestore(&dwc->lock, flags);
->>   		return -EINVAL;
->>   	}
->> -	ret = __dwc3_gadget_wakeup(dwc, true);
->>   
->> +	ret = pm_runtime_resume_and_get(dwc->dev);
->> +	if (ret < 0) {
->> +		pm_runtime_set_suspended(dwc->dev);
->> +		return ret;
->> +	}
->> +
->> +	spin_lock_irqsave(&dwc->lock, flags);
->> +	ret = __dwc3_gadget_wakeup(dwc, true);
->>   	spin_unlock_irqrestore(&dwc->lock, flags);
->> +	pm_runtime_put_noidle(dwc->dev);
->>   
->>   	return ret;
->>   }
->> @@ -2428,6 +2434,12 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>   		return -EINVAL;
->>   	}
->>   
->> +	ret = pm_runtime_resume_and_get(dwc->dev);
->> +	if (ret < 0) {
->> +		pm_runtime_set_suspended(dwc->dev);
->> +		return ret;
->> +	}
->> +
->>   	spin_lock_irqsave(&dwc->lock, flags);
->>   	/*
->>   	 * If the link is in U3, signal for remote wakeup and wait for the
->> @@ -2438,6 +2450,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>   		ret = __dwc3_gadget_wakeup(dwc, false);
->>   		if (ret) {
->>   			spin_unlock_irqrestore(&dwc->lock, flags);
->> +			pm_runtime_put_noidle(dwc->dev);
->>   			return -EINVAL;
->>   		}
->>   		dwc3_resume_gadget(dwc);
->> @@ -2452,6 +2465,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>   		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
->>   
->>   	spin_unlock_irqrestore(&dwc->lock, flags);
->> +	pm_runtime_put_noidle(dwc->dev);
->>   
->>   	return ret;
->>   }
->> @@ -2732,21 +2746,23 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>   	/*
->>   	 * Avoid issuing a runtime resume if the device is already in the
->>   	 * suspended state during gadget disconnect.  DWC3 gadget was already
->> -	 * halted/stopped during runtime suspend.
->> +	 * halted/stopped during runtime suspend except for bus suspend case
->> +	 * where we would have skipped the controller halt.
->>   	 */
->>   	if (!is_on) {
->>   		pm_runtime_barrier(dwc->dev);
->> -		if (pm_runtime_suspended(dwc->dev))
->> +		if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
->>   			return 0;
->>   	}
->>   
->>   	/*
->>   	 * Check the return value for successful resume, or error.  For a
->>   	 * successful resume, the DWC3 runtime PM resume routine will handle
->> -	 * the run stop sequence, so avoid duplicate operations here.
->> +	 * the run stop sequence except for bus resume case, so avoid
->> +	 * duplicate operations here.
->>   	 */
->>   	ret = pm_runtime_get_sync(dwc->dev);
->> -	if (!ret || ret < 0) {
->> +	if ((!ret && !dwc->connected) || ret < 0) {
->>   		pm_runtime_put(dwc->dev);
->>   		if (ret < 0)
->>   			pm_runtime_set_suspended(dwc->dev);
->> @@ -4331,6 +4347,8 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
->>   	}
->>   
->>   	dwc->link_state = next;
->> +	pm_runtime_mark_last_busy(dwc->dev);
->> +	pm_request_autosuspend(dwc->dev);
->>   }
->>   
->>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
->> @@ -4718,7 +4736,15 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
->>   {
->>   	if (dwc->pending_events) {
->>   		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
->> +		pm_runtime_put(dwc->dev);
->>   		dwc->pending_events = false;
->>   		enable_irq(dwc->irq_gadget);
->> +		/*
->> +		 * We have only stored the pending events as part
->> +		 * of dwc3_interrupt() above, but those events are
->> +		 * not yet handled. So explicitly invoke the
->> +		 * interrupt handler for handling those events.
->> +		 */
->> +		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
+On Tue, Jul 11, 2023 at 08:47:32PM +0300, Shay Agroskin wrote:
 > 
-> Why do we have to do this? If there are events, the threaded interrupt
-> should be woken up.
+> Krister Johansen <kjlx@templeofstupid.com> writes:
 > 
+> > diff --git a/drivers/net/ethernet/amazon/ena/ena_com.c
+> > b/drivers/net/ethernet/amazon/ena/ena_com.c
+> > index 451c3a1b6255..633b321d7fdd 100644
+> > --- a/drivers/net/ethernet/amazon/ena/ena_com.c
+> > +++ b/drivers/net/ethernet/amazon/ena/ena_com.c
+> > @@ -35,6 +35,8 @@
+> >  #define ENA_REGS_ADMIN_INTR_MASK 1
+> > +#define ENA_MAX_BACKOFF_DELAY_EXP 16U
+> > +
+> >  #define ENA_MIN_ADMIN_POLL_US 100
+> >  #define ENA_MAX_ADMIN_POLL_US 5000
+> > @@ -536,6 +538,7 @@ static int ena_com_comp_status_to_errno(struct
+> > ena_com_admin_queue *admin_queue,
+> >    static void ena_delay_exponential_backoff_us(u32 exp, u32  delay_us)
+> >  {
+> > +	exp = min_t(u32, exp, ENA_MAX_BACKOFF_DELAY_EXP);
+> >  	delay_us = max_t(u32, ENA_MIN_ADMIN_POLL_US, delay_us);
+> >  	delay_us = min_t(u32, delay_us * (1U << exp),  ENA_MAX_ADMIN_POLL_US);
+> >  	usleep_range(delay_us, 2 * delay_us);
+> 
+> Hi, thanks for submitting this patch (:
 
-dwc3_thread_interrupt will be woken up only if dwc3_interrupt() handler 
-is invoked by the interrupt framework when the return value of 
-IRQ_WAKE_THREAD is handled. But while processing the pending events the 
-interrupt framework is not involved. We explicitly invoke the 
-dwc3_interrupt() above within the dwc3 driver. So the 
-dwc3_thread_interrupt() has to be explicitly invoked as well for 
-processing those pending events.
+Absolutely; thanks for the review!
 
-Thanks
-Elson
+> Going over the logic here, the driver sleeps for `delay_us` micro-seconds in
+> each iteration that this function gets called.
+> 
+> For an exp = 14 it'd sleep (I added units notation)
+> delay_us * (2 ^ exp) us = 100 * (2 ^ 14) us = (10 * (2 ^ 14)) / (1000000) s
+> = 1.6 s
+> 
+> For an exp = 15 it'd sleep
+> (10 * (2 ^ 15)) / (1000000) = 3.2s
+> 
+> To even get close to an overflow value, say exp=29 the driver would sleep in
+> a single iteration
+> 53687 s = 14.9 hours.
+> 
+> The driver should stop trying to get a response from the device after a
+> timeout period received from the device which is 3 seconds by default.
+> 
+> The point being, it seems very unlikely to hit this overflow. Did you
+> experience it or was the issue discovered by a static analyzer ?
 
+No, no use of fuzzing or static analysis.  This was hit on a production
+instance that was having ENA trouble.
+
+I'm apparently reading the code differently.  I thought this line:
+
+> >  	delay_us = min_t(u32, delay_us * (1U << exp),  ENA_MAX_ADMIN_POLL_US);
+
+Was going to cap that delay_us at (delay_us * (1U << exp)) or
+5000us, whichever is smaller.  By that measure, if delay_us is 100 and
+ENA_MAX_ADMIN_POLL_US is 5000, this should start getting capped after
+exp = 6, correct?  By my estimate, that puts it at between 160ms and
+320ms of sleeping before one could hit this problem.
+
+I went and pulled the logs out of the archive and have the following
+timeline.  This is seconds from boot as reported by dmesg:
+
+   11244.226583 - ena warns TX not completed on time, 10112000 usecs since
+    last napi execution, missing tx timeout val of 5000 msec
+   
+   11245.190453 - netdev watchdog fires
+   
+   11245.190781 - ena records Transmit timeout
+   11245.250739 - ena records Trigger reset on
+   
+   11246.812620 - UBSAN message to console
+   
+   11248.590441 - ena reports Reset inidication didn't turn off
+   11250.633545 - ena reports failure to reset device
+   12013.529338 - last logline before new boot
+
+While the difference between the panic and the trigger reset is more
+than 320ms, it is definitely on the order of seconds instead of hours.
+
+> Regarding the patch itself, I don't mind adding it since exp=16 limit should
+> be more than enough to wait for the device's response.
+> Reviewed-by: Shay Agroskin <shayagr@amazon.com>
+
+Thanks,
+
+-K
