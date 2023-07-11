@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B6C74F92B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F395974F977
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjGKUe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S230381AbjGKU6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjGKUeY (ORCPT
+        with ESMTP id S230398AbjGKU6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:34:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729ECB7;
-        Tue, 11 Jul 2023 13:34:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07195615F6;
-        Tue, 11 Jul 2023 20:34:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AAEC433C7;
-        Tue, 11 Jul 2023 20:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689107662;
-        bh=Tvmu/JdqsFHoqwxn8e5DiBMwjsswLbqpvPrbdWqX3mU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KT2GetEFtYlkaoWB9SkIWERR/pM6252wtR3+uYa5U8hU6Z72yd0jGdfKEHGRCUPDg
-         cV6CxM61kiS9aR8QbLm1lVOKFqo7tiDLKsmIyqsbhxa0VksU16jxRrop0XkHgITqSP
-         EFW3qqHEOocqEyXqP1oLbP2Pw7wZbnpXltb/judIGIutmoF5JzbncOkM51LN3SO7bm
-         E6tbNJFPipV38BWXPsj0vvodOwB6lnCc+5okEl9j4wKGIrXJaVLbiLW7Ru/TvHo4J8
-         Gr9Nye/bZVAOskwP2AUf4LN5Tsox+cB+wfVMSPjU9nO5urg3uBLRwuMcGC+sSUCrVw
-         seVSCxPh1GKNg==
-Date:   Tue, 11 Jul 2023 13:34:20 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230711133420.5df88f02@kernel.org>
-In-Reply-To: <ZK2k9YQiXTtcGhp0@ziepe.ca>
-References: <ZKxDZfVAbVHgNgIM@ziepe.ca>
-        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
-        <ZKyZBbKEpmkFkpWV@ziepe.ca>
-        <20230711042708.GA18658@lst.de>
-        <20230710215906.49514550@kernel.org>
-        <20230711050445.GA19323@lst.de>
-        <ZK1FbjG+VP/zxfO1@ziepe.ca>
-        <20230711090047.37d7fe06@kernel.org>
-        <ZK2Gh2qGxlpZexCM@ziepe.ca>
-        <20230711100636.63b0a88a@kernel.org>
-        <ZK2k9YQiXTtcGhp0@ziepe.ca>
+        Tue, 11 Jul 2023 16:58:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FFD1709
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689109084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=f+hIo3oC9fPc83S0WFvpQBdDffxEHtx3wU0gPObo34Y=;
+        b=Ddwi4WcbvYdl9J5pRzVzBAMxiEqynnbuzK26TEgjpER/U6zs/+Ct+8gTljUhRqa/AkMj/0
+        iqrnqvKJAp8PwQs9+tyJX7J9vKkEHQXt3GztgGXxr6MVLgklXfJZ0Ek6X6aofjeFi8JjM0
+        AJf/a/5tZLKUTSyfm06hnYQ1od4lijA=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-446-kATfmpPxOuW178GWf-eToA-1; Tue, 11 Jul 2023 16:58:03 -0400
+X-MC-Unique: kATfmpPxOuW178GWf-eToA-1
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-5618857518dso50202617b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:58:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689109082; x=1691701082;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f+hIo3oC9fPc83S0WFvpQBdDffxEHtx3wU0gPObo34Y=;
+        b=FNDf8BIK0c89g3es9jqbOrQTgUc54Lnjw8cMszIh96XTiqVSlKaXk+LcpLzrOoVZTv
+         NSCg0zBxErGzj6Rb3/K1l1V+5NR5ov2DXShPhIG5TJqyHAxHq7DEDVUFPuExqgFE+b1b
+         nueduv/ISwYfL3u80CXjJqqhkp1q6rv4C3AT8+Z4td/SYNxRJbzwItUOObU/npbCGwf0
+         igY2QsjL5O370B+3YTuBBXksXYssnbUiO6rUY/s2+Qfy/bxv+Kqmz/ZjzJm5m6AMQeGW
+         yoWuz7WGGyzSQLbdjANGLnl4qqWzZTxmWdIQzQoFDF35Ry3NtZBKC/SpXWkt7/GldQXB
+         leeg==
+X-Gm-Message-State: ABy/qLYky3hBVZpwKGD7R4K94+OSJuE+b08v+n38mWdQzQn8+Cdx3jex
+        XbQWTBpwC0p/Gv4eIlLid96T1oYvcQN0awLEuVQqot7rbWbHg6vH9gK6NLvcEEfoAm17PnXi1Uq
+        wKJMLEtSN+pgUnDREXR2WMzpcVlsO+n1W4y9yJoMcyljOlqUCbUiPQKP0YRo+lrDe3ZHbrPAB80
+        ZRKBn8BdkT
+X-Received: by 2002:a0d:e284:0:b0:570:28a9:fe40 with SMTP id l126-20020a0de284000000b0057028a9fe40mr16227311ywe.5.1689109082715;
+        Tue, 11 Jul 2023 13:58:02 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGA6n45gkHkTv6XI6HgkyWTiJIRi19JmwhiTyxapecnmiZP7znNfnQP5MUvwPurdzpN+R7zUA==
+X-Received: by 2002:a0d:e284:0:b0:570:28a9:fe40 with SMTP id l126-20020a0de284000000b0057028a9fe40mr16227284ywe.5.1689109082375;
+        Tue, 11 Jul 2023 13:58:02 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id j136-20020a81928e000000b00545a08184cesm785353ywg.94.2023.07.11.13.58.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 13:58:02 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        mcoquelin.stm32@gmail.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, joabreu@synopsys.com,
+        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
+        bhupesh.sharma@linaro.org, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, jsuraj@qti.qualcomm.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH RFC/RFT net-next 0/3] net: stmmac: Increase clk_ptp_ref rate
+Date:   Tue, 11 Jul 2023 15:35:29 -0500
+Message-ID: <20230711205732.364954-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 15:52:37 -0300 Jason Gunthorpe wrote:
-> > Now we're getting into our favorite argument and completely
-> > sidetracking the conversation, aren't we? :) And as usual 
-> > our ability to present facts is limited by various NDAs..  
-> 
-> Yes, well, maybe I should stop taking the bait everytime you write
-> "proprietary" :)
-> 
-> > > We also have the roce support in the switch from all major
-> > > switch vendors.  
-> > 
-> > By which you mean all major switch vendors should support basic RoCE
-> > requirements. But most vendors will try to put special features into
-> > their switches trying to make the full NIC + switch solution as sticky
-> > as possible.  
-> 
-> Yep. At the high end open standards based ethernet has also notably
-> "failed" as well. Every switch vendor now offers their own proprietary
-> ecosystem on a whole bunch of different axis. They all present
-> "ethernet" toward the host but the host often needs to work in a
-> special way to really take full advantage of the proprietary fabric
-> behaviors.
+DO NOT MERGE, patch 2 and 3 are duplications at differing levels
+(platform vs driver wide). They work fine together but it makes no sense
+to take both.
 
-I'm not familiar with "high end open standards based on ethernet", would
-those be some RDMA / storage things? For TCP/IP networks pretty much
-the only things that matter in a switch are bandwidth, size of buffers,
-power... Implementation stuff.
+Disclosure: I don't know much about PTP beyond what you can google in an
+afternoon, don't have access to documentation about the stmmac IP,
+and have only tested that (based on code comments and git commit
+history) the programming of the subsecond register (and the clock rate)
+makes more sense with these changes.
 
-> > Last I checked every generation of HW from even a single vendor came out
-> > with a new congestion control algorithm and add-ons.   
-> 
-> Probably, but I don't really view this as an IB or roce issue.
-> 
-> Back in the day, there was "data center ethernet" which was a
-> standardization effort to try and tame some of these problems. roce
-> was imagined as an important workload over DCE, but the effort was
-> ethernet focused and generic. Sadly DCE and successor standard based
-> congestion mangement approaches did not work, or were "standardized"
-> in a way that had a big hole that needed to be filled with proprietary
-> algorithms. Eventualy the interest in standardization seems to have
-> waned and several of the big network operators seem to be valuing
-> their unique congestion management as a proprietary element. From a
-> vendor perspective this is has turned into an interop train
-> wreck. Sigh.
-> 
-> roce is just highly sensitive to loss - which is managed in ethernet
-> through congestion management. This is why you see roce and congestion
-> management so tightly linked, and perhaps in some deployments becomes
-> the motivating reason to look at congestion management.
+I'm hoping to start some discussion and get some insight about this.
+Recently I found myself discussing PTP and some possible changes from
+downstream that might need to be upstreamed. In doing so, I noticed that
+the PTP reference clock (clk_ptp_ref) was running at a much lower value
+than was being discussed. Digging in a bit, nobody is calling
+clk_set_rate() of any value on clk_ptp_ref, so you get whatever the
+default rate is when enabled. On Qualcomm platforms I have access to
+this results in a 19.2 MHz clock instead of a possible 230.4 MHz clock.
 
-A lot of "standardization" efforts are just attempts to prove to 
-a buyers that an ecosystem exists.
+This series proposes setting the clock rate. Patch 2 is the "safe"
+approach where a platform must handle it, patch 3 is the big hammer
+where we max out the clock for all users. I think patch 2 is using
+a proper callback (I want to document those a bit in the future to make
+it easier for future folks using them). My guess is that doing this
+driver wide might be undesirable for some reasons I'm not
+aware of (right now I blindly request the max frequency but the IP
+could have an upper limit here, platform maintainers maybe upset if
+their careful validation at prior frequencies changes, etc).
 
-Open source the firmware. Let people actually hack on it and when
-the users bring their own algorithms de facto standardization will
-happen. Short of that it's all smoke and mirrors.
+I've only tested that the Qualcomm boards I have access to in a remote
+lab still work (i.e. throughput testing, etc) and that the PTP
+programming is now what I expected it to be theoretically.
+
+I'd really appreciate someone with the ability (and know how!) to test
+PTP tried this on at least the Qualcomm platforms. Bonus points if
+someone explains how one would even test PTP networks like this.
+
+Thanks,
+Andrew
+
+Andrew Halaney (3):
+  net: stmmac: Make ptp_clk_freq_config variable type explicit
+  net: stmmac: dwmac-qcom-ethqos: Use max frequency for clk_ptp_ref
+  net: stmmac: Use the max frequency possible for clk_ptp_ref
+
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c  |  3 +--
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c         | 18 ++++++++++++++++++
+ .../ethernet/stmicro/stmmac/stmmac_platform.c  |  5 +++++
+ include/linux/stmmac.h                         |  4 +++-
+ 4 files changed, 27 insertions(+), 3 deletions(-)
+
+-- 
+2.41.0
+
