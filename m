@@ -2,152 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0B674E2EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E5B74E2F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjGKBBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S230482AbjGKBIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjGKBBK (ORCPT
+        with ESMTP id S230040AbjGKBIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:01:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E53CE;
-        Mon, 10 Jul 2023 18:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689037267;
-        bh=B4DwB8zOKuSyVO8uxq9Dy+tWno5pkUGZDOX2npkrOD0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FqgRuQwsI8m5TJWRKxGQU19rmC2knnq0gj7qmZEsQwbK+Fje37fEzCqEcAyjKJDji
-         rKninmF78dATO6nX5GwjJJI6iimcmp0EXe808LB/JOt3Krcle4+1MWAhxHVth0VDeW
-         BTPBecpJkPr5av6LNy8D32qp8NtDzjr0T9ojG6JaBXfvUWELqRyM8xBxBL2N812/YI
-         SNOZKn2SMKF+Xpa7iSXee9xKHt2QMOjRGMrKDM8iM+lc0UykkWst6RZdL9RDzUgZPC
-         dkBi501Qvi4pU4KW3b89L0oILpMbL6F/jTg22kpPIoMJJwM2EFuvPyqNcIQjQ8wQSR
-         h3AwpOEL5wm7g==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0Mxt43rfz4whq;
-        Tue, 11 Jul 2023 11:01:06 +1000 (AEST)
-Date:   Tue, 11 Jul 2023 11:01:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: Re: linux-next: manual merge of the vhost tree with the net-next
- tree
-Message-ID: <20230711110105.467f896d@canb.auug.org.au>
-In-Reply-To: <20230623130443.6c9a481e@canb.auug.org.au>
-References: <20230623130443.6c9a481e@canb.auug.org.au>
+        Mon, 10 Jul 2023 21:08:37 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC6A194;
+        Mon, 10 Jul 2023 18:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689037716; x=1720573716;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X6HARK8d7O3/CsqjXmQ+dxc6FJwEi+B6duwTtCj4/ZQ=;
+  b=B/oUzrvksvmPaANnyqdUm2329rW6ukl7R/AnkPGVyZhs9ksuYlAhjOn5
+   RQY9cbOe8fNM4yFGp2qc1zh63H5QOwHbGjdkryBMRM5LXPTnBB2jiw9k4
+   r0Puv/H3/iIp4HWNrRRbiGO5xeRXTbMqe9XrgtSlaKaOQ91XxUNTxudYw
+   BBYtJjt7AB+0uH4uKfp7ma67KtpIXhyPro85P5xZuPKVlabXUWHHZ5yPj
+   6iyYiwpuEOEwFlMPK4I2ovZ62bwCVNMnQhol/BuzBunPkdFUhkqnx9F4q
+   dA0BhF7PcqKjObe3ZihFQM5Y6MfLRSorwgm0lYcK4adW7sZ7+9l2csePB
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344816038"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="344816038"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 18:08:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="810999790"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="810999790"
+Received: from allen-box.sh.intel.com ([10.239.159.127])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Jul 2023 18:08:32 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>
+Cc:     Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH 0/9] iommu: Prepare to deliver page faults to user space
+Date:   Tue, 11 Jul 2023 09:06:33 +0800
+Message-Id: <20230711010642.19707-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vYM/I6ZyNfC9j0yYpl4QqtM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vYM/I6ZyNfC9j0yYpl4QqtM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+When a user-managed page table is attached to an IOMMU, it is necessary
+to deliver IO page faults to user space so that they can be handled
+appropriately. One use case for this is nested translation, which is
+currently being discussed in the mailing list.
 
-Hi all,
+I have posted a RFC series [1] that describes the implementation of
+delivering page faults to user space through IOMMUFD. This series has
+received several comments on the IOMMU refactoring, which I have
+addressed in this series.
 
-On Fri, 23 Jun 2023 13:04:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the vhost tree got a conflict in:
->=20
->   drivers/net/virtio_net.c
->=20
-> between commit:
->=20
->   80f50f918c6e ("virtio_net: separate the logic of freeing the rest merge=
-able buf")
->=20
-> from the net-next tree and commit:
->=20
->   21081476b808 ("virtio_net: support dma premapped")
+The major refactoring includes:
 
-This is now commit
+- Removing include/uapi/linux/iommu.h.
+- Removing iommu_[un]register_device_fault_handler().
+- Making fault_param always available between iommu device probe and
+  release.
+- Using fault cookie to store temporary data used for processing faults.
 
-  c8dc5b9adff9 ("virtio_net: support dma premapped")
+This is also available at github [2]. I would appreciate your feedback
+on this series.
 
-> from the vhost tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc drivers/net/virtio_net.c
-> index 0db14f6b87d3,d67b36fdba0d..000000000000
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@@ -1128,28 -1136,6 +1233,28 @@@ err
->   	return NULL;
->   }
->  =20
->  +static void mergeable_buf_free(struct receive_queue *rq, int num_buf,
->  +			       struct net_device *dev,
->  +			       struct virtnet_rq_stats *stats)
->  +{
->  +	struct page *page;
->  +	void *buf;
->  +	int len;
->  +
->  +	while (num_buf-- > 1) {
-> - 		buf =3D virtqueue_get_buf(rq->vq, &len);
-> ++		buf =3D virtnet_rq_get_buf(rq, &len, NULL);
->  +		if (unlikely(!buf)) {
->  +			pr_debug("%s: rx error: %d buffers missing\n",
->  +				 dev->name, num_buf);
->  +			dev->stats.rx_length_errors++;
->  +			break;
->  +		}
->  +		stats->bytes +=3D len;
->  +		page =3D virt_to_head_page(buf);
->  +		put_page(page);
->  +	}
->  +}
->  +
->   /* Why not use xdp_build_skb_from_frame() ?
->    * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
->    * virtio-net there are 2 points that do not match its requirements:
+[1] https://lore.kernel.org/linux-iommu/20230530053724.232765-1-baolu.lu@linux.intel.com/
+[2] https://github.com/LuBaolu/intel-iommu/commits/preparatory-io-pgfault-delivery-v1
 
-This is now a conflict between the vhost tree and Linus' tree.
+Best regards,
+baolu
 
---=20
-Cheers,
-Stephen Rothwell
+Lu Baolu (9):
+  iommu: Move iommu fault data to linux/iommu.h
+  iommu: Add device parameter to iopf handler
+  iommu: Add common code to handle IO page faults
+  iommu: Change the return value of dev_iommu_get()
+  iommu: Make fault_param generic
+  iommu: Remove iommu_[un]register_device_fault_handler()
+  iommu: Add helper to set iopf handler for domain
+  iommu: Add iommu page fault cookie helpers
+  iommu: Use fault cookie to store iopf_param
 
---Sig_/vYM/I6ZyNfC9j0yYpl4QqtM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ include/linux/iommu.h                         | 206 +++++++++++++++---
+ drivers/iommu/iommu-sva.h                     |   8 +-
+ include/uapi/linux/iommu.h                    | 161 --------------
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  13 +-
+ drivers/iommu/intel/iommu.c                   |  18 +-
+ drivers/iommu/io-pgfault.c                    |  55 +++--
+ drivers/iommu/iommu-sva.c                     |   2 +-
+ drivers/iommu/iommu.c                         | 199 ++++++++---------
+ MAINTAINERS                                   |   1 -
+ 9 files changed, 320 insertions(+), 343 deletions(-)
+ delete mode 100644 include/uapi/linux/iommu.h
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.34.1
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsqdEACgkQAVBC80lX
-0GyZPwf/cFvPmsfrNh9BzsRVjwY6977gPEoHeWXeTWzEamrXxH9+UOS3MTsf1NN5
-uBJb1Rm0aRlrsfShLxBK4T5R72fjuRIGlr1W5xesLn69O4uRnMcPpCB4FfZRFU8A
-5rywlnAQVJjt/AgQkjOKhaxzC52h9msxHAvNNwqtYRp6o3ysLumE2WcPoIX8AtCZ
-I50pnZ94DJIwS+APgaNL7q/yNZl7UezYcXbhmHQqg02Tgp4sYfoE0lkFo6jGXkjW
-u9whwIXx+uctvAUzQUFpxijZmUrD9U19X9h245jZJRu+T/oh7jJDDPEVyoZd8ihE
-R5SgjBc7rFEFuIJHnlLVcOkovYZFaA==
-=uY7L
------END PGP SIGNATURE-----
-
---Sig_/vYM/I6ZyNfC9j0yYpl4QqtM--
