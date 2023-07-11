@@ -2,136 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C4F74F73F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D0F74F745
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjGKRab convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 13:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S231676AbjGKReB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjGKRa3 (ORCPT
+        with ESMTP id S229964AbjGKReA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:30:29 -0400
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3745A1;
-        Tue, 11 Jul 2023 10:30:28 -0700 (PDT)
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-47e793ccdc7so1898391e0c.1;
-        Tue, 11 Jul 2023 10:30:28 -0700 (PDT)
+        Tue, 11 Jul 2023 13:34:00 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2159F;
+        Tue, 11 Jul 2023 10:33:58 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f8680d8bf2so1816550e87.1;
+        Tue, 11 Jul 2023 10:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689096837; x=1689701637;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NUHcTmlGLboH99dkrgeb1BpfM9EbRmwDC30QGqF0lMU=;
+        b=gcTtfGBxNI3W3KE0iLlTZvhBuYVZREko9DKFe5SFMuzEkYj5RC4xo1HARnTfb2MjdA
+         702P1qnazlVcruisGS2fdboOKOEGWxmN+HH1YM+HlFRC19ljmmt+NqHYbJYzIDYKFKaG
+         9CRU2vHqUbSLeXAISMlJhGdaf7iqJex3/f1PQu7t3TERmmWBcRg8WHXIVNIoW8uezqiU
+         ryj1vDcWmcw4VC6H0rVf3pyYy88xNitYz9+1ihapUL6E8ZQbOI2kYB6aAfVanObwRd0i
+         Iw6O+x+CZOlOOvSm2qxrxLTB4EvsPLIvA4mJNNZzCdpvAVpAwgiCSrenOV21dF319uDU
+         G97g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689096628; x=1691688628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1689096837; x=1689701637;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PwVGOGhzlbrDjjqXvCrudYlu5CQ3HrJeIcRNYeurvBA=;
-        b=jVN0i7sdojVfBpaC77C2ko7XARkadAI2BCQ9JWHid2qyixU48RojXaq/wwKTyS/1lL
-         ljaJZ35Wtrp3fuWKISW8+MyGL5ubMZQmX0Y7By6w3/v6uT0QpJjZC4bl7GK7y916+H0B
-         vL1jUPYPXu4neUZe1yiqxWqtvgQU05vO9BbeHFyInA5S19nk0XwW7pS9STqBud10cAq4
-         bgjN+Yg508QTM9iGRqtAYKceO2mKwyVayNYwvVbU8oT7PdUNLPtJ6O//rxCIEvLE1oVV
-         6aPo2kXC3zU+bdvGBBhFKe7+hz89JoE9rEfA3A8+tb8cz2vYjYZrPxam5iCPsSSJSc70
-         MDNw==
-X-Gm-Message-State: ABy/qLYlYOiBPe4dPVtWMeNpKOblRyYHOSGxiV/aNCDtx4cIcjFEQa3g
-        WN/YyjhPO3OeymRPzDApDaaAHvPemcZRRP6KjalIQ7Yk
-X-Google-Smtp-Source: APBJJlHPDIiWNNx7gZC4xz1m3OvYDtp2Gk5/Hxi2GnB6KjNqUTH93hQtcSVpZuvx05JkEUxapJ84ljJrDB5ZTLwrioM=
-X-Received: by 2002:a1f:4544:0:b0:47e:a218:86b2 with SMTP id
- s65-20020a1f4544000000b0047ea21886b2mr5481714vka.15.1689096627914; Tue, 11
- Jul 2023 10:30:27 -0700 (PDT)
+        bh=NUHcTmlGLboH99dkrgeb1BpfM9EbRmwDC30QGqF0lMU=;
+        b=kEhv52izcYYSHosDS7FqKMh+CuY6vTc+VJ5DgGmLFi4TyJ15HaWHJTIi4ALeC3za8J
+         g5jkM8vYH2mY19+VuLmDkOvtNjq/CMT28YQkFpYX8FoGhEDt4vr2oSAr0cjPz4X7my9/
+         4GS2G915q3pgw5IFCTwq71mZ1hnixrAplttIk+wr74hk1+EUwM+EjmanjLrDwd41Di1u
+         ABqyHAAMY0gmAgV1W2DVeUzdFxMMBePmijsigMkgm9u9yRQ6bAuTY+QNZXpxbORo1bpy
+         e9W7aeerz3ddttToimtC6eQHkYLehjoZ40dhB2ru17qJ3KJOijtkC13tEP/2TmE4KWEk
+         WbYg==
+X-Gm-Message-State: ABy/qLZ3gu5m3CMRb5PgIiOAwRVDOMDfTvYM/c82fl8LDoVnPIp1hUaV
+        cc7DTjt5sb/oktc4dexQ84k=
+X-Google-Smtp-Source: APBJJlEnsxOu2vNeScCB8qNrjN1sUqZ3F7LSLMdaAWulAlUHhEHIJhQACgICw14ADBNVFNC8HuwDaQ==
+X-Received: by 2002:ac2:4249:0:b0:4fb:9477:f713 with SMTP id m9-20020ac24249000000b004fb9477f713mr10116706lfl.6.1689096836503;
+        Tue, 11 Jul 2023 10:33:56 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id 15-20020ac2482f000000b004fb88fffd19sm394454lft.146.2023.07.11.10.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 10:33:56 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 20:33:48 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v7 3/8] KVM: Make __kvm_follow_pfn not imply FOLL_GET
+Message-ID: <20230711203348.00000fb8.zhi.wang.linux@gmail.com>
+In-Reply-To: <CAD=HUj5cbzjrc0KD7xcibtRMRCzoJRJAzt7jTHSXUSpzyAYbdg@mail.gmail.com>
+References: <20230704075054.3344915-1-stevensd@google.com>
+        <20230704075054.3344915-4-stevensd@google.com>
+        <20230705161914.00004070.zhi.wang.linux@gmail.com>
+        <CAD=HUj5cbzjrc0KD7xcibtRMRCzoJRJAzt7jTHSXUSpzyAYbdg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230620201818.1670753-1-namhyung@kernel.org> <20230620201818.1670753-3-namhyung@kernel.org>
- <a791e982-ada3-7f26-e105-bc7fa9c7d346@intel.com>
-In-Reply-To: <a791e982-ada3-7f26-e105-bc7fa9c7d346@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 11 Jul 2023 10:30:16 -0700
-Message-ID: <CAM9d7cjZA9JD_bxkaRyJxgt4sirCvwdyCARVTGMPOGHsip+MHA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] perf machine: Include data symbols in the kernel map
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+On Thu, 6 Jul 2023 15:49:39 +0900
+David Stevens <stevensd@chromium.org> wrote:
 
-On Tue, Jul 11, 2023 at 8:19 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> On Wed, Jul 5, 2023 at 10:19___PM Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+> >
+> > On Tue,  4 Jul 2023 16:50:48 +0900
+> > David Stevens <stevensd@chromium.org> wrote:
+> >  
+> > > From: David Stevens <stevensd@chromium.org>
+> > >
+> > > Make it so that __kvm_follow_pfn does not imply FOLL_GET. This allows
+> > > callers to resolve a gfn when the associated pfn has a valid struct page
+> > > that isn't being actively refcounted (e.g. tail pages of non-compound
+> > > higher order pages). For a caller to safely omit FOLL_GET, all usages of
+> > > the returned pfn must be guarded by a mmu notifier.
+> > >
+> > > This also adds a is_refcounted_page out parameter to kvm_follow_pfn that
+> > > is set when the returned pfn has an associated struct page with a valid
+> > > refcount. Callers that don't pass FOLL_GET should remember this value
+> > > and use it to avoid places like kvm_is_ad_tracked_page that assume a
+> > > non-zero refcount.
+> > >
+> > > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > > ---
+> > >  include/linux/kvm_host.h | 10 ++++++
+> > >  virt/kvm/kvm_main.c      | 67 +++++++++++++++++++++-------------------
+> > >  virt/kvm/pfncache.c      |  2 +-
+> > >  3 files changed, 47 insertions(+), 32 deletions(-)
+> > >
+> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > index ef2763c2b12e..a45308c7d2d9 100644
+> > > --- a/include/linux/kvm_host.h
+> > > +++ b/include/linux/kvm_host.h
+> > > @@ -1157,6 +1157,9 @@ unsigned long gfn_to_hva_memslot_prot(struct kvm_memory_slot *slot, gfn_t gfn,
+> > >  void kvm_release_page_clean(struct page *page);
+> > >  void kvm_release_page_dirty(struct page *page);
+> > >
+> > > +void kvm_set_page_accessed(struct page *page);
+> > > +void kvm_set_page_dirty(struct page *page);
+> > > +
+> > >  struct kvm_follow_pfn {
+> > >       const struct kvm_memory_slot *slot;
+> > >       gfn_t gfn;
+> > > @@ -1164,10 +1167,17 @@ struct kvm_follow_pfn {
+> > >       bool atomic;
+> > >       /* Allow a read fault to create a writeable mapping. */
+> > >       bool allow_write_mapping;
+> > > +     /*
+> > > +      * Usage of the returned pfn will be guared by a mmu notifier. Must  
+> >                                               ^guarded  
+> > > +      * be true if FOLL_GET is not set.
+> > > +      */
+> > > +     bool guarded_by_mmu_notifier;
+> > >  
+> > It seems no one sets the guraded_by_mmu_notifier in this patch. Is
+> > guarded_by_mmu_notifier always equal to !foll->FOLL_GET and set by the
+> > caller of __kvm_follow_pfn()?  
+> 
+> Yes, this is the case.
+> 
+> > If yes, do we have to use FOLL_GET to resolve GFN associated with a tail page?
+> > It seems gup can tolerate gup_flags without FOLL_GET, but it is more like a
+> > temporary solution. I don't think it is a good idea to play tricks with
+> > a temporary solution, more like we are abusing the toleration.  
+> 
+> I'm not sure I understand what you're getting at. This series never
+> calls gup without FOLL_GET.
+> 
+> This series aims to provide kvm_follow_pfn as a unified API on top of
+> gup+follow_pte. Since one of the major clients of this API uses an mmu
+> notifier, it makes sense to support returning a pfn without taking a
+> reference. And we indeed need to do that for certain types of memory.
+> 
+
+I am not having prob with taking a pfn without taking a ref. I am
+questioning if using !FOLL_GET in struct kvm_follow_pfn to indicate taking
+a pfn without a ref is a good idea or not, while there is another flag
+actually showing it.
+
+I can understand that using FOLL_XXX in kvm_follow_pfn saves some
+translation between struct kvm_follow_pfn.{write, async, xxxx} and GUP
+flags. However FOLL_XXX is for GUP. Using FOLL_XXX for reflecting the
+requirements of GUP in the code path that going to call GUP is reasonable.
+
+But using FOLL_XXX with purposes that are not related to GUP call really
+feels off. Those flags can be changed in future because of GUP requirements.
+Then people have to figure out what actually is happening with FOLL_GET here
+as it is not actually tied to GUP calls.
+
+
+> > Is a flag like guarded_by_mmu_notifier (perhaps a better name) enough to
+> > indicate a tail page?  
+> 
+> What do you mean by to indicate a tail page? Do you mean to indicate
+> that the returned pfn refers to non-refcounted page? That's specified
+> by is_refcounted_page.
 >
-> On 20/06/23 23:18, Namhyung Kim wrote:
-> > When perf record -d is used, it needs data mmaps to symbolize global data.
-> > But it missed to collect kernel data maps so it cannot symbolize them.
-> > Instead of having a separate map, just increase the kernel map size to
-> > include the data section.
-> >
-> > Probably we can have a separate kernel map for data, but the current
-> > code assumes a single kernel map.  So it'd require more changes in other
-> > places and looks error-prone.  I decided not to go that way for now.
-> >
-> > Also it seems the kernel module size already includes the data section.
-> >
-> > For example, my system has the following.
-> >
-> >   $ grep -e _stext -e _etext -e _edata /proc/kallsyms
-> >   ffffffff99800000 T _stext
-> >   ffffffff9a601ac8 T _etext
-> >   ffffffff9b446a00 D _edata
-> >
-> > Size of the text section is (0x9a601ac8 - 0x99800000 = 0xe01ac8) and
-> > size of the data section is (0x9b446a00 - 0x99800000 = 0x1c46a00).
-> >
-> > Before:
-> >   $ perf record -d true
-> >
-> >   $ perf report -D | grep MMAP | head -1
-> >   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0xe01ac8) @ 0xffffffff99800000]: x [kernel.kallsyms]_text
-> >                                                                ^^^^^^^^
-> >                                                                  here
-> > After:
-> >   $ perf report -D | grep MMAP | head -1
-> >   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0x1c46a00) @ 0xffffffff99800000]: x [kernel.kallsyms]_text
-> >                                                                ^^^^^^^^^
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/util/machine.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > index ddc0a2130caf..e93a66f6e0b3 100644
-> > --- a/tools/perf/util/machine.c
-> > +++ b/tools/perf/util/machine.c
-> > @@ -1218,7 +1218,10 @@ static int machine__get_running_kernel_start(struct machine *machine,
-> >
-> >       *start = addr;
-> >
-> > -     err = kallsyms__get_function_start(filename, "_etext", &addr);
-> > +     if (machine->has_data_mmap)
-> > +             err = kallsyms__get_symbol_start(filename, "_edata", &addr);
-> > +     else
-> > +             err = kallsyms__get_function_start(filename, "_etext", &addr);
->
-> What is the downside of just extending it unconditionally?
 
-I don't know.. maybe some people would argue it needs the
-proper protection bits other than 'x' but this patch also breaks it.
-But as I said, I'm not sure if we really want to change that now.
+I figured out the reason why I got confused.
 
-That said, we can make it unconditional. :)
++	 * Otherwise, certain IO or PFNMAP mappings can be backed with valid
++	 * struct pages but be allocated without refcounting e.g., tail pages of
++	 * non-compound higher order allocations. If FOLL_GET is set and we
++	 * increment such a refcount, then when that pfn is eventually passed to
++	 * kvm_release_pfn_clean, its refcount would hit zero and be incorrectly
++	 * freed. Therefore don't allow those pages here when FOLL_GET is set.
+ 	 */ 
 
-Thanks,
-Namhyung
+The above statements only explains the wrong behavior, but doesn't explain the
+expected behavior. It would be better to explain that for manipulating mmu
+notifier guard page (!FOLL_GET), we put back the reference taken by GUP.
+FOLL_GET stuff really confused me a lot.
 
->
-> >       if (!err)
-> >               *end = addr;
-> >
->
+-	if (!kvm_try_get_pfn(pfn))
++	page = kvm_pfn_to_refcounted_page(pfn);
++	if (!page)
++		goto out;
++
++	if (get_page_unless_zero(page)) {
++		foll->is_refcounted_page = true;
++		if (!(foll->flags & FOLL_GET))
++			put_page(page);
++	} else if (foll->flags & FOLL_GET) {
+ 		r = -EFAULT;
++	}
+
+> -David
+
