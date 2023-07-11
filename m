@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DBB74F94F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1038E74F955
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjGKUr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S229961AbjGKUtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjGKUr1 (ORCPT
+        with ESMTP id S229524AbjGKUtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:47:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463BD9B;
-        Tue, 11 Jul 2023 13:47:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D32791FE45;
-        Tue, 11 Jul 2023 20:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689108444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 11 Jul 2023 16:49:47 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE56E9B;
+        Tue, 11 Jul 2023 13:49:45 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 7FF0F1C0AC1; Tue, 11 Jul 2023 22:49:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1689108583;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4LaucvtloWCHpaXc2axnPFcfthuhw0RH1IRv8sUy6fI=;
-        b=Az2OzX9RYGO8kSztwAv4FZoRnv5TOlOzw0ViMusf5VKfMCKXaADhC0TL7skKzP8DIheEch
-        bWfai/uJzSP/rQvtcCOjTq3oQsYuJA704x2WmTkwkrMt39x3fItBjoXz1pHH9RDYLD0NOF
-        Hxc172rmIwbv7DbuXntJ9W00Y1Slafs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AFF7D1390F;
-        Tue, 11 Jul 2023 20:47:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lGSQKNy/rWQOKQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 11 Jul 2023 20:47:24 +0000
-Date:   Tue, 11 Jul 2023 22:47:24 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v1] mm/memory_hotplug: document the signal_pending()
- check in offline_pages()
-Message-ID: <ZK2/3Kq8VlDwcCpc@dhcp22.suse.cz>
-References: <20230711174050.603820-1-david@redhat.com>
+        bh=pjvzqHFp8LIfdFXjHOUI6Im7LV07g2ArgXcDiJugfM8=;
+        b=dMl7NkMoZr9kB38vZDHQimokyDUoKjZ6f19n2vmw5fIdTSPZS7qkiu7X0Cx8+9rewDFTwl
+        EdBZ4RNT912YKtcrHQ597FWiZD79aiRc0zEE/T6UknW4+GC45QF1vBVzrVP11n4JRBTXyK
+        97CD0xQQLUa60aRiwNySkrXg7yQuLz0=
+Date:   Tue, 11 Jul 2023 22:49:43 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Steve French <stfrench@microsoft.com>, pc@cjr.nz,
+        lsahlber@redhat.com, pc@manguebit.com, ematsumiya@suse.de,
+        zhangxiaoxu5@huawei.com, dhowells@redhat.com, brauner@kernel.org,
+        vl@samba.org
+Subject: Re: [PATCH AUTOSEL 6.1 06/15] cifs: fix sockaddr comparison in
+ iface_cmp
+Message-ID: <ZK3AZzm0BCglXXKN@duo.ucw.cz>
+References: <20230626215031.179159-1-sashal@kernel.org>
+ <20230626215031.179159-6-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="PrDF4c4GHgG1I1r/"
 Content-Disposition: inline
-In-Reply-To: <20230711174050.603820-1-david@redhat.com>
+In-Reply-To: <20230626215031.179159-6-sashal@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -64,67 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 11-07-23 19:40:50, David Hildenbrand wrote:
-> Let's update the documentation that any signal is sufficient, and
-> add a comment that not only checking for fatal signals is historical
-> baggage: changing it now could break existing user space. although
-> unlikely.
-> 
-> For example, when an app provides a custom SIGALRM handler and triggers
-> memory offlining, the timeout cmd would no longer stop memory offlining,
-> because SIGALRM would no longer be considered a fatal signal.
 
-Yes, and it is likely goot to mention here that this is an antipattern
-for many other kernel operations like IO (e.g. write) but it is a long
-term behavior that somebody might depend on and it is safer to reflect
-the documentation to the realitity rather than other way around (which
-would be imho better).
+--PrDF4c4GHgG1I1r/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Hi!
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+> +++ b/fs/cifs/connect.c
+> @@ -1332,6 +1332,56 @@ cifs_demultiplex_thread(void *p)
+>  	module_put_and_kthread_exit(0);
+>  }
+> =20
+> +++ b/fs/cifs/smb2ops.c
+> @@ -510,6 +510,43 @@ smb3_negotiate_rsize(struct cifs_tcon *tcon, struct =
+smb3_fs_context *ctx)
+>  	return rsize;
+>  }
+> =20
+> +/*
+> + * compare two interfaces a and b
+> + * return 0 if everything matches.
+> + * return 1 if a is rdma capable, or rss capable, or has higher link spe=
+ed
+> + * return -1 otherwise.
+> + */
+> +static int
+> +iface_cmp(struct cifs_server_iface *a, struct cifs_server_iface *b)
+> +{
+> +	int cmp_ret =3D 0;
+> +
+> +	WARN_ON(!a || !b);
+> +	if (a->rdma_capable =3D=3D b->rdma_capable) {
+> +		if (a->rss_capable =3D=3D b->rss_capable) {
+> +			if (a->speed =3D=3D b->speed) {
+> +				cmp_ret =3D cifs_ipaddr_cmp((struct sockaddr *) &a->sockaddr,
+> +							  (struct sockaddr *) &b->sockaddr);
+> +				if (!cmp_ret)
+> +					return 0;
+> +				else if (cmp_ret > 0)
+> +					return 1;
+> +				else
+> +					return -1;
 
-> ---
->  Documentation/admin-guide/mm/memory-hotplug.rst | 2 +-
->  mm/memory_hotplug.c                             | 5 +++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
-> index 1b02fe5807cc..bd77841041af 100644
-> --- a/Documentation/admin-guide/mm/memory-hotplug.rst
-> +++ b/Documentation/admin-guide/mm/memory-hotplug.rst
-> @@ -669,7 +669,7 @@ when still encountering permanently unmovable pages within ZONE_MOVABLE
->  (-> BUG), memory offlining will keep retrying until it eventually succeeds.
->  
->  When offlining is triggered from user space, the offlining context can be
-> -terminated by sending a fatal signal. A timeout based offlining can easily be
-> +terminated by sending a signal. A timeout based offlining can easily be
->  implemented via::
->  
->  	% timeout $TIMEOUT offline_block | failure_handling
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 3f231cf1b410..7cfd13c91568 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1843,6 +1843,11 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->  	do {
->  		pfn = start_pfn;
->  		do {
-> +			/*
-> +			 * Historically we always checked for any signal and
-> +			 * can't limit it to fatal signals without eventually
-> +			 * breaking user space.
-> +			 */
->  			if (signal_pending(current)) {
->  				ret = -EINTR;
->  				reason = "signal backoff";
-> -- 
-> 2.41.0
+cifs_ipaddr_cmp already returns 0/1/-1, so this can really be "return cmp_r=
+et".
 
--- 
-Michal Hocko
-SUSE Labs
+Best regards,
+									Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--PrDF4c4GHgG1I1r/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZK3AZwAKCRAw5/Bqldv6
+8uRHAJwP4r0wJjkrQds9FYH8w/a4U5stQACcCF0ivTGiLDSBXupgRSc9djKk3QU=
+=c7q1
+-----END PGP SIGNATURE-----
+
+--PrDF4c4GHgG1I1r/--
