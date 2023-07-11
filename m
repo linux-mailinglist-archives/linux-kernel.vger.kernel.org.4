@@ -2,213 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6F974ED98
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1AC74EDA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjGKMIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S230455AbjGKMJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjGKMIN (ORCPT
+        with ESMTP id S230352AbjGKMJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:08:13 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A735AE5C;
-        Tue, 11 Jul 2023 05:08:09 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.9.158])
-        by gateway (Coremail) with SMTP id _____8DxfesoRq1kjH8DAA--.7411S3;
-        Tue, 11 Jul 2023 20:08:08 +0800 (CST)
-Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxfSMnRq1k+6goAA--.1095S4;
-        Tue, 11 Jul 2023 20:08:08 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v3 2/2] irqchip/loongson-eiointc: Simplify irq routing on some platforms
-Date:   Tue, 11 Jul 2023 20:08:07 +0800
-Message-Id: <20230711120807.1805186-3-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20230711120807.1805186-1-maobibo@loongson.cn>
-References: <20230711120807.1805186-1-maobibo@loongson.cn>
+        Tue, 11 Jul 2023 08:09:09 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2056.outbound.protection.outlook.com [40.107.6.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C81E10FA;
+        Tue, 11 Jul 2023 05:08:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M16r+oNjxIyDB36OU4kTuIppoeS9mt2cNbbbwYCA5GciqqhHU+T3AxpNC7xDdgrGvzkY3+rjbrSPETxE9jZBABkOt/kSrxy1lN4cB9NUqdVaQqpPEMlvH6VkZ+DydIzV15O3V0gm0a2fLy4Ly3WvfFybbgtnLd55197Wj6YvVa7af7z4ENcWwhhatr3Goy0TRjdLF2KqkpO+QtBpDdUlAzTlU8ml4u25XSbIftROWdpjB9lEEUs0ST/5qwxWbiYWzAoGgyqdxOp9vAuo/uzG0fDNSYFn4IxZwK73LMHbSaAu/pCUSs3mFQHor5EUjx0cCCoP6p3yGgCfjX/qgTXPOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K7OkhIarVXB3Ym6fNrE2sJl68n1Sp+LO0BLsyONYEPY=;
+ b=Z2rbpt5ernGB9bpUDACeUqd5jNXRLJeMLQDg1tVaimdCoo8Xczyba1/VUYRI+TSwFQzwHSgKy+TfruhzE25k01hw+OtOY3aZTYP9a0ppE/a10qfZxJ8jpB2AzbjOaJqSMhZDfmncnB+Cq//CXk6FsqVpwIfCYe7gX6kF1TgFnXHqzCn8TjdkVVYeS4oJ7kiOt0SZsSCIUAMKB2HEvi2MnUF//WYgjEfkvBmdaOx0cWyVhc4fB81/426Ao5wTRxLUtxWXyu0UASWWaEgbL1dmuKJpv6kN/KBhf+LqjgnWaIPD+Tgxy6R1t6/33SeDWZoMDNcNF3vBCPPDBcFWfci2Sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=redhat.com smtp.mailfrom=siemens.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K7OkhIarVXB3Ym6fNrE2sJl68n1Sp+LO0BLsyONYEPY=;
+ b=nLuaUPcMJuNLLU8S3vTBQ/d4aiHEVKru/TidudPgY0E1L5vqRNMGzZ0Bg52+LNnHlHEyfyaQ6pJgz2eFXbfYsmcGbUX4hFp9xrJkN1EXldAQqfyKChsZyvi52HPLAl/sk4CmhN+wkP8CaVV3oOcGMqFgEqURdwW2O/j9lWSQJYz2zgF1NaQc6UpyvN3OwyQ0xK8EmWjLAjqi98WJp1haFbcJdFagFVR41hvvpsw8VcXgRSgeCHRPF6jb4Kb3wcRrMnBnlKcQkIJzvBgv8NdpBPMKZiaGMj5RYRH0QhfunRWDddLRmlSYZxUaYxBbNEE862bH4lifPVGzrllwwgccoA==
+Received: from DB8P191CA0009.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:130::19)
+ by AS2PR10MB6950.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:57a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Tue, 11 Jul
+ 2023 12:08:54 +0000
+Received: from DB5EUR01FT021.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:130:cafe::7f) by DB8P191CA0009.outlook.office365.com
+ (2603:10a6:10:130::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31 via Frontend
+ Transport; Tue, 11 Jul 2023 12:08:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT021.mail.protection.outlook.com (10.152.4.245) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.16 via Frontend Transport; Tue, 11 Jul 2023 12:08:53 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 11 Jul 2023 14:08:53 +0200
+Received: from md1za8fc.ppmd.siemens.net (139.25.68.237) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 11 Jul 2023 14:08:53 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH 0/2] platform/x86: simatic-ipc: add another model and hwmon module loading
+Date:   Tue, 11 Jul 2023 14:08:40 +0200
+Message-ID: <20230711120842.30044-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxfSMnRq1k+6goAA--.1095S4
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxKFykCr13Xw18KFyxCF4rZwc_yoW7GrWxpF
-        WUGas0qr48Ja15WrZakw4DZFyayr93X3yDtF4fua97AFWY9w4jgF1FyFnrAF1jk34UAF1Y
-        yF4UXFy8uFn8AacCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-        6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-        Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-        IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-        Ja73UjIFyTuYvjxU4AhLUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [139.25.68.237]
+X-ClientProxiedBy: DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT021:EE_|AS2PR10MB6950:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76d53f7f-1e35-4861-d403-08db820798a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q5INs2sgN29fg8RIVuk6nDy4+6z2lkTZr5wv15jN7G1Up7TSKI0hymRcVudxWkDO4DBrE9YLxwttsTQsz7FM3l9Orp/YYTLgyEnpvfnJ2cDSVcZ8IY7sKa34l3mjw9SvH8OE179DI6nvTJyY/bF+tUI0RlyhUStU9r/zpdHnyl1cMy0YVZf5SxVoqbHodCXp666V33u8OJoj2Qez062XtJOGUfuAAD5g5B6YsmAOoGDSWd4t8ACVQ3I3QcX/Ucee3/CkP3Alrn/UtVamXIbdGJNdMa3PayMvlWRVeTeEFOvBkHr65ZuY3frRzIAR2o+4abo7mEl5x/nCx2swZYOvbzeBw29f9UQo4wBatvxwyyGC7oYqfhW6F6u23dVmgjUfNNyMFHzgmvjzO5Srkm8smP8NtmBGv3VmkvvH3HtLfLk+GzKkZmJyVqL01AV7I4q06pZAffjataYJm+kRPPu2EAztddtvvPX/tTS1rbA9OLTQgU4r/ZPOsvlVS7x21lsaAptoXvxTUWhpK9+MXvxFox7cy7YUo+GtywLWWSNqpn4BXcFOtC3gA7v/5sRrzsGawDqZfTaogCDr3A7hGNbnoaN6V2kHpJwzYWnFdSb0XXqw7ipozOq7arJs9v7Fi/y/pTljqdy8kB8/c3f9D/89lEhZ3j46BZpg+RKYC+oYMbe6SyFutNI5e4Io8TymRlaYqCwCfmP0bqRXi4r0bCZQt+sdrpuBuvRUbHIoLt8ey/S/I8vLpRyUgNPihbcDqtmMlwdBR+0d5Sxpp4/K0gDyDg==
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(8936002)(8676002)(36860700001)(5660300002)(47076005)(956004)(2616005)(83380400001)(16526019)(186003)(86362001)(41300700001)(107886003)(26005)(44832011)(54906003)(316002)(6666004)(1076003)(82310400005)(70206006)(356005)(36756003)(2906002)(4326008)(336012)(82960400001)(82740400003)(40480700001)(70586007)(40460700003)(4744005)(110136005)(478600001)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 12:08:53.9689
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76d53f7f-1e35-4861-d403-08db820798a5
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT021.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR10MB6950
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some LoongArch systems have only one eiointc node such as 3A5000/2K2000
-and qemu virt-machine. If there is only one eiointc node, all cpus can
-access eiointc registers directly; if there is multiple eiointc nodes, each
-cpu can only access eiointc belonging to specified node group, so anysend
-or ipi needs to be used to configure irq routing. IRQ routing is simple on
-such systems with one node, hacking method like anysend is not necessary.
+The second patch loads modules for hwmon support, should they be
+available. That will save users the need to detect and manually load
+those modules after a machine has been clearly identified by its Siemens
+Simatic IPC station id.
 
-This patch provides simpile IRQ routing method for systems with one eiointc
-node, and is tested on 3A5000 board and qemu virt-machine.
+The first patch just adds a device that is pretty similar to another one
+we already had here.
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- drivers/irqchip/irq-loongson-eiointc.c | 79 ++++++++++++++++++++++++--
- 1 file changed, 73 insertions(+), 6 deletions(-)
+Henning Schild (2):
+  platform/x86: simatic-ipc: add another model
+  platform/x86: simatic-ipc: add auto-loading of hwmon modules
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index 1c5a5b59f199..5c15a582075d 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -127,6 +127,48 @@ static int eiointc_set_irq_affinity(struct irq_data *d, const struct cpumask *af
- 	return IRQ_SET_MASK_OK;
- }
- 
-+static int eiointc_single_set_irq_affinity(struct irq_data *d,
-+				const struct cpumask *affinity, bool force)
-+{
-+	unsigned int cpu;
-+	unsigned long flags;
-+	uint32_t vector, regaddr, data, coremap;
-+	struct cpumask mask;
-+	struct eiointc_priv *priv = d->domain->host_data;
-+
-+	cpumask_and(&mask, affinity, cpu_online_mask);
-+	cpumask_and(&mask, &mask, &priv->cpuspan_map);
-+	if (cpumask_empty(&mask))
-+		return -EINVAL;
-+
-+	cpu = cpumask_first(&mask);
-+	vector = d->hwirq;
-+	regaddr = EIOINTC_REG_ENABLE + ((vector >> 5) << 2);
-+	data = ~BIT(vector & 0x1F);
-+	coremap = BIT(cpu_logical_map(cpu) % CORES_PER_EIO_NODE);
-+
-+	/*
-+	 * simplify for only one eio node
-+	 * access eio registers directly rather than
-+	 * use any_send hack method here
-+	 */
-+	raw_spin_lock_irqsave(&affinity_lock, flags);
-+	iocsr_write32(EIOINTC_ALL_ENABLE & data, regaddr);
-+	/*
-+	 * get irq route info for continuous 4 vectors
-+	 * and set affinity for specified vector
-+	 */
-+	data = iocsr_read32(EIOINTC_REG_ROUTE + (vector & ~3));
-+	data &=  ~(0xff << ((vector & 3) * 8));
-+	data |= coremap << ((vector & 3) * 8);
-+	iocsr_write32(data, EIOINTC_REG_ROUTE + (vector & ~3));
-+	iocsr_write32(EIOINTC_ALL_ENABLE, regaddr);
-+	raw_spin_unlock_irqrestore(&affinity_lock, flags);
-+
-+	irq_data_update_effective_affinity(d, cpumask_of(cpu));
-+	return IRQ_SET_MASK_OK;
-+}
-+
- static int eiointc_index(int node)
- {
- 	int i;
-@@ -237,22 +279,39 @@ static struct irq_chip eiointc_irq_chip = {
- 	.irq_set_affinity	= eiointc_set_irq_affinity,
- };
- 
-+static struct irq_chip eiointc_irq_chipi_single = {
-+	.name			= "EIOINTC-S",
-+	.irq_ack		= eiointc_ack_irq,
-+	.irq_mask		= eiointc_mask_irq,
-+	.irq_unmask		= eiointc_unmask_irq,
-+#ifdef CONFIG_SMP
-+	.irq_set_affinity       = eiointc_single_set_irq_affinity,
-+#endif
-+};
-+
- static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 				unsigned int nr_irqs, void *arg)
- {
- 	int ret;
- 	unsigned int i, type;
- 	unsigned long hwirq = 0;
--	struct eiointc *priv = domain->host_data;
-+	struct eiointc_priv *priv = domain->host_data;
-+	struct irq_chip *chip;
- 
- 	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
- 	if (ret)
- 		return ret;
- 
--	for (i = 0; i < nr_irqs; i++) {
--		irq_domain_set_info(domain, virq + i, hwirq + i, &eiointc_irq_chip,
-+	/*
-+	 * use simple irq route method for single node eiointc
-+	 */
-+	if ((nr_pics == 1) && (nodes_weight(priv->node_map) == 1))
-+		chip = &eiointc_irq_chipi_single;
-+	else
-+		chip = &eiointc_irq_chip;
-+	for (i = 0; i < nr_irqs; i++)
-+		irq_domain_set_info(domain, virq + i, hwirq + i, chip,
- 					priv, handle_edge_irq, NULL, NULL);
--	}
- 
- 	return 0;
- }
-@@ -309,6 +368,7 @@ static void eiointc_resume(void)
- 	int i, j;
- 	struct irq_desc *desc;
- 	struct irq_data *irq_data;
-+	struct irq_chip *chip;
- 
- 	eiointc_router_init(0);
- 
-@@ -318,7 +378,8 @@ static void eiointc_resume(void)
- 			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
- 				raw_spin_lock(&desc->lock);
- 				irq_data = irq_domain_get_irq_data(eiointc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
--				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
-+				chip = irq_data_get_irq_chip(irq_data);
-+				chip->irq_set_affinity(irq_data, irq_data->common->affinity, 0);
- 				raw_spin_unlock(&desc->lock);
- 			}
- 		}
-@@ -496,7 +557,13 @@ static int __init eiointc_of_init(struct device_node *of_node,
- 	priv->node = 0;
- 	priv->domain_handle = of_node_to_fwnode(of_node);
- 
--	ret = eiointc_init(priv, parent_irq, 0);
-+	/*
-+	 * 2k0500 and 2k2000 has only one eio node
-+	 * set nodemap as 1 for simple irq routing
-+	 * what about for future embedded board more than 4 cpus??
-+	 * nodemap and node need be added in dts like acpi table
-+	 */
-+	ret = eiointc_init(priv, parent_irq, 1);
- 	if (ret < 0)
- 		goto out_free_priv;
- 
+ drivers/platform/x86/simatic-ipc.c            | 19 +++++++++++++++++++
+ include/linux/platform_data/x86/simatic-ipc.h |  1 +
+ 2 files changed, 20 insertions(+)
+
 -- 
-2.27.0
+2.41.0
 
