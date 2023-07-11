@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5EA74E3BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A9D74E3BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjGKBv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S230266AbjGKBvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjGKBvV (ORCPT
+        with ESMTP id S230182AbjGKBvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:51:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7721CB6;
-        Mon, 10 Jul 2023 18:50:53 -0700 (PDT)
+        Mon, 10 Jul 2023 21:51:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A955136;
+        Mon, 10 Jul 2023 18:51:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 116CC612C3;
-        Tue, 11 Jul 2023 01:50:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C2BC433C8;
-        Tue, 11 Jul 2023 01:50:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C81612AB;
+        Tue, 11 Jul 2023 01:51:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCB6C433C7;
+        Tue, 11 Jul 2023 01:51:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689040252;
-        bh=G53cisJ1oPIw1E6Ka9hA5wzdkbxHiWemrgTO3t6vUgU=;
+        s=k20201202; t=1689040263;
+        bh=DyLifkE+mWkAJUWftPR5lGeD6sKueyYzATZh59IvHwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YSU9s+PAzFuCiDGKH9vHy8rem2/DY9PbpK/6bUGql+kKCiDqfW+Qbvl4+QVA0vuDt
-         zh3kL+cUW8kav3KW/YbyKIx6/2cvcDlBkB014nG4SAoDUgM99tZDWezx0nRwhQjCUq
-         sQsLQtANnT7abWt+M/+6xH4QuR+7FS7qb0GzSjZCgwujOCgui2s82sWeZ6qh2g7cvP
-         SUZlHejcuVrPISlkg6UI2F4ZdO7eumJkNoKsoyafTY3fowcSAAbKTfFGnJzEV2NXIs
-         kBNoTqWZvHYh6mC3x/uIuD9XwIiAs1XLa1t8iSYUnR5Rjd2tJOpZYgbdtDxmbReevl
-         IDVTvz1xLJXEA==
+        b=hoJ0l1uO1SG+a0wjcEMYnieBeWbRZEPyqQUJaeEcVX3zfM8X8IpzK2aG0G/3KCs4E
+         30Q2WG56TYfXxP96eJ+QjIgVk4cA5Evomj7TK0ebhyIj8BNRHtdrr0r1Ku44lSUgKZ
+         6/2qNGxfZEe31jVAP9TyUyoAVOi8q70izu8rQ2z2JMNbFCviz+k/6MmEDY3pIlOm9D
+         /BuNnB5ozUhlZmRjh4zZZwQft4iEouEfYe1IiqKukeWFLzLeIg2AtxV7cpGeEoYLdy
+         1OK+0/EiiFDPfZttGzRLqBD2p8NGplr49H0VK/qk111g7ywuJLfyF3RCyJQnFoOaOj
+         vkHXND+BsUMDg==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
@@ -40,9 +40,9 @@ Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
         hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 1/2] kprobes: Prohibit probing on CFI preamble symbol
-Date:   Tue, 11 Jul 2023 10:50:47 +0900
-Message-Id: <168904024679.116016.18089228029322008512.stgit@devnote2>
+Subject: [PATCH v2 2/2] x86/kprobes: Prohibit probing on compiler generated CFI checking code
+Date:   Tue, 11 Jul 2023 10:50:58 +0900
+Message-Id: <168904025785.116016.12766408611437534723.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <168904023542.116016.10540228903086100726.stgit@devnote2>
 References: <168904023542.116016.10540228903086100726.stgit@devnote2>
@@ -50,8 +50,8 @@ User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,48 +62,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Do not allow to probe on "__cfi_" or "__pfx_" started symbol, because those
-are used for CFI and not executed. Probing it will break the CFI.
+Prohibit probing on the compiler generated CFI typeid checking code
+because it is used for decoding typeid when CFI error happens.
+
+The compiler generates the following instruction sequence for indirect
+call checks on x86;
+
+   movl    -<id>, %r10d       ; 6 bytes
+   addl    -4(%reg), %r10d    ; 4 bytes
+   je      .Ltmp1             ; 2 bytes
+   ud2                        ; <- regs->ip
+
+And handle_cfi_failure() decodes these instructions (movl and addl)
+for the typeid and the target address. Thus if we put a kprobe on
+those instructions, the decode will fail and report a wrong typeid
+and target address.
+
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- Changes in v2:
-  - Check "__pfx_" prefix functions too.
-  - Make the check unconditional.
----
- kernel/kprobes.c |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ arch/x86/kernel/kprobes/core.c |   34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 00e177de91cc..3da9726232ff 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1545,6 +1545,17 @@ static int check_ftrace_location(struct kprobe *p)
- 	return 0;
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index f7f6042eb7e6..fa8c2b41cbaf 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -54,6 +54,7 @@
+ #include <asm/insn.h>
+ #include <asm/debugreg.h>
+ #include <asm/ibt.h>
++#include <asm/cfi.h>
+ 
+ #include "common.h"
+ 
+@@ -293,7 +294,40 @@ static int can_probe(unsigned long paddr)
+ #endif
+ 		addr += insn.length;
+ 	}
++	if (IS_ENABLED(CONFIG_CFI_CLANG)) {
++		/*
++		 * The compiler generates the following instruction sequence
++		 * for indirect call checks and cfi.c decodes this;
++		 *
++		 *   movl    -<id>, %r10d       ; 6 bytes
++		 *   addl    -4(%reg), %r10d    ; 4 bytes
++		 *   je      .Ltmp1             ; 2 bytes
++		 *   ud2                        ; <- regs->ip
++		 *   .Ltmp1:
++		 *
++		 * Also, these movl and addl are used for showing expected
++		 * type. So those must not be touched.
++		 */
++		__addr = recover_probed_instruction(buf, addr);
++		if (!__addr)
++			return 0;
++
++		if (insn_decode_kernel(&insn, (void *)__addr) < 0)
++			return 0;
++
++		if (insn.opcode.value == 0xBA)
++			offset = 12;
++		else if (insn.opcode.value == 0x3)
++			offset = 6;
++		else
++			goto out;
++
++		/* This movl/addl is used for decoding CFI. */
++		if (is_cfi_trap(addr + offset))
++			return 0;
++	}
+ 
++out:
+ 	return (addr == paddr);
  }
  
-+static bool is_cfi_preamble_symbol(unsigned long addr)
-+{
-+	char symbuf[KSYM_NAME_LEN];
-+
-+	if (lookup_symbol_name(addr, symbuf))
-+		return false;
-+
-+	return str_has_prefix("__cfi_", symbuf) ||
-+		str_has_prefix("__pfx_", symbuf);
-+}
-+
- static int check_kprobe_address_safe(struct kprobe *p,
- 				     struct module **probed_mod)
- {
-@@ -1563,7 +1574,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
- 	    within_kprobe_blacklist((unsigned long) p->addr) ||
- 	    jump_label_text_reserved(p->addr, p->addr) ||
- 	    static_call_text_reserved(p->addr, p->addr) ||
--	    find_bug((unsigned long)p->addr)) {
-+	    find_bug((unsigned long)p->addr) ||
-+	    is_cfi_preamble_symbol((unsigned long)p->addr)) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
 
