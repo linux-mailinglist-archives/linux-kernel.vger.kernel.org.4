@@ -2,536 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F6C74F48E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A20E74F487
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjGKQLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S233289AbjGKQKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbjGKQLg (ORCPT
+        with ESMTP id S230345AbjGKQKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:11:36 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE7D170B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:13 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4R0m5W1QLJz9sFQ;
-        Tue, 11 Jul 2023 18:09:03 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ImeBvd80un5Y; Tue, 11 Jul 2023 18:09:03 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4R0m5C6PN4z9sFS;
-        Tue, 11 Jul 2023 18:08:47 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D7FE48B763;
-        Tue, 11 Jul 2023 18:08:47 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id yEpAzXIs1e1Z; Tue, 11 Jul 2023 18:08:47 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.184])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 002DA8B78B;
-        Tue, 11 Jul 2023 18:08:46 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 36BG8ktA3696860
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 18:08:46 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 36BG8kvL3696859;
-        Tue, 11 Jul 2023 18:08:46 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Naveen N Rao <naveen@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v4 15/15] powerpc: Implement UACCESS validation on PPC32
-Date:   Tue, 11 Jul 2023 18:08:41 +0200
-Message-ID: <dc3c8785588ad716478089c8af423d285787b2e0.1689091394.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1689091394.git.christophe.leroy@csgroup.eu>
-References: <cover.1689091394.git.christophe.leroy@csgroup.eu>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689091706; l=15786; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=v6EEfkjahz4Q5UtE7x5g0L/3XYx24okZA6rlhISqk4Q=; b=+striK7ipBZaHPwAPlH17GnR+39DUH1yZESK047SFO+vKEeA51Pdv25cztmb87s1QYc5H00Fo UJTHzB3YoI6B8bKTEdzCRrKtuDQHaL2njXBIMwoFUadWUcgGvWDjh5A
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+        Tue, 11 Jul 2023 12:10:31 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C9312F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:10:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VN3B17G5YxPkmSPpXzfgBZlgM4P7bxMH0co6/ztyrfE28YOOWbviqfbnA4UF7fJVl3gpLycpwpBK4TBES7KG6eIh+9o8hbm1t0nPneZS8rnjSNEBrt9vMbv4jjerO44yRSILX148awcKV1XnQcZuY0H7trNrZdk2AesG9T7ao5U0m7/eVAsswAfznpgE7K1mvLjNrtXdXN0WHELydVJwQv/FL2aVP3rruobX1CdneZ6beI1C0S8F8wzyCbX/0wNKpWH8d6zkXH0cstu5/D4xAmNAd8SugrRYxMt6kMjK2VoCUw8Xcma3EU/J03HxcDQfBkMl6mFGfFXJhpqA3eVSkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z7kitYC+N/ZEKnVeRXUrpwC5sUAB1jQpQ/0i8cEbgdE=;
+ b=BvI6BLrdyJ5E0Vz+CMVddGCtZYjsORLcqL3ZqrfC6dIvM2LmBBYZHnjZUUBodFNs83kVJC68QrxJDl8ajucBtedOuvt8S3rRQ/I/VzQgXH7Rzp6UuMjxmiF9KfjK3Emgich977Za2ZmBVuKJpdKi5LQvD8csXr+EK23XQs1a6pOnDOHYeceqXIzLqIctwRsWTZYyFO/YzONHAvN5g9S5fgY6eIz6UezXdyXHwHJwfeY9K+G39zqwCkrTl96OrFBecX2LrsyITUXsQ58NXdvAKaQ3kDQpJC+XyZwECcXyVtTCNS3s0cInwXQEj7nXRYv/L4sn62MECQni3HNUAwV47Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z7kitYC+N/ZEKnVeRXUrpwC5sUAB1jQpQ/0i8cEbgdE=;
+ b=SS+iVxHRSx7HK+MNLFtceH0EY+4V98hI58tUgoyr7XT2pordSKNjhgOevSnphYSTr3RssX9L4VIxlfiqAUwDiyOReH/hD28OSE8rHYiBc90fBYKxq2k5ViaggY9kzommahQC0iKa7kpuDxxzXZkKVNVB96O+R8e4X1CSovnLPCo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by PH8PR12MB7375.namprd12.prod.outlook.com (2603:10b6:510:215::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Tue, 11 Jul
+ 2023 16:10:09 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::4666:2db3:db1e:810c]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::4666:2db3:db1e:810c%7]) with mapi id 15.20.6565.026; Tue, 11 Jul 2023
+ 16:10:09 +0000
+Message-ID: <b94c0ce9-ef64-3bfa-1f04-73104f942372@amd.com>
+Date:   Tue, 11 Jul 2023 12:10:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] amd/display: only accept async flips for fast updates
+Content-Language: en-US
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     pierre-eric.pelloux-prayer@amd.com,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        michel.daenzer@mailbox.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com
+References: <20230621202459.979661-1-andrealmeid@igalia.com>
+ <20230621202459.979661-2-andrealmeid@igalia.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230621202459.979661-2-andrealmeid@igalia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YQXPR0101CA0005.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:15::18) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|PH8PR12MB7375:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28899a74-a856-418d-e18f-08db82294c51
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hedUpD1ptl2ywP37hlfjeUBJPfvCxlZqPyt5MIws1bQrgDVuBX4QzZMJr3XFZ1CX66Kke3VsdLKp9PuxqgtE2FJndVyag8Kix/3YuZnrxJdos86Wiz7cuWBTw0vRhNM3pFBfNE4851c4wYa86/TGYI/GuKbsBEZ7Os+fuyQVoIk1NM6TWHn21K6WnvuShjO0jn5wFUHgN5YcWKrH/SRsVBaFb0TcZW6308h/GHsubCZTX2AAITcUvpsRlgzWg4oYhNppOhSd/zbkUjF8fvehSeQ145iTyuIljKDvNFJezINfYdG3gHG1f+Xlum2aoIZd11+OH6qGChkqU8ZZv32rIwDgQhANhz/zOY1iJM9JVVtIpIkhJhvJo8aXy7TYG/YvTY38oi8zM3To7I+gmgsfEYEKZKx22xy0e0mNYRwmZ966MzWO7uXhOgAnxcnORBWRyQqpUV0Bq39SFMF1R/fxP1rzrxzvedUsd+zY3q0n4sAHFdXWsM7EIWhY0DYvC/i8HUEoHxsYICcNlYmJfiZy9snpdIOqC/ciWdgblc9hkIx5WN5xEJffkd7B1sQ8yM3EKnyAXJ4rmAOF803SDoTbDLlrd0HaINschg6VkdCCljgUJFra3BBMi8b5s9yN3VoLsgBFTuQBC16gdETA+eQ35g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199021)(31686004)(6486002)(6666004)(478600001)(2616005)(83380400001)(31696002)(36756003)(86362001)(186003)(2906002)(66946007)(6506007)(15650500001)(6512007)(66556008)(38100700002)(66476007)(26005)(316002)(8936002)(4326008)(41300700001)(5660300002)(53546011)(8676002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEtzRFVGM3BJVDJ6aVA0c09lY0F6aHNZY20rZ0xOaC84VFB0TmVMMENibXJs?=
+ =?utf-8?B?Y3BVS0Q2cnFvenN6SU5RdDRnT2JBZ1FLV2Y1ZkJ6WVdGQXphanpFc25zaHBh?=
+ =?utf-8?B?dGdTMzFFR0lxU2ZBSFJBSnpxTFo4SmtVZ0ZISVg5Y2trNjJkdE5IZzU3TnRs?=
+ =?utf-8?B?UlRpR3Body8zcSs3bjE3eTBFdlV6elREZ1pMMFFhcjBybFJKYTNWU2szeUZT?=
+ =?utf-8?B?eWxxRWFBOFhJMGVpWUVMdTlaL050YVJRTXRGNFBTY0RRTUsrWVQyYTZFS0Fo?=
+ =?utf-8?B?eGo5T1I3WmtiNGJTc3pUL2ZoOWplVGFPdE56bXE3amh5azVBdXMzQ1JuOU0z?=
+ =?utf-8?B?UzBZM1lteG9oUkxwZTIwTWVxbVJmYXM4OHpMUlpCc0RiREcwOTJKd29hYVRF?=
+ =?utf-8?B?VzlXNGRKeFlIQ1NsR1VsMllheUNoZnRjQkkxR2hYNWlCbDNWWEJiR0RmL29p?=
+ =?utf-8?B?TVVZVEt2bG01TlBzUU5lc2RaK3U5OFpNaDNvS3hNcFIxV0tNbnRIRTFmTzMv?=
+ =?utf-8?B?Smt3NVZRWGxoMlJoUlhnUnNwK2kzaEMvTjhRc0o3bXk3ZmY5c0NzNk1qZXNs?=
+ =?utf-8?B?NFBGODJmNWRONU5TNTFLTEZZSlBzYkNaSXBKVWRTZHQxSFY4eGgybUx6K0ky?=
+ =?utf-8?B?Tm9zdjB2SDFPVGRqWG1aWmQ1STBScFh5L2o2UFIyNDNBdjRYbUVwUkZFRUUx?=
+ =?utf-8?B?elhJSG1iK0thR1diZXR1WWcwREJlM0YyV2ovdnZvZnc2ZnY1Nm04VkdRN1Yz?=
+ =?utf-8?B?RmZSNnpsYzAwaUd1MG01WTF5L0xaWkwyem94dlNJNFhQc2FlQWt3V25NNjBH?=
+ =?utf-8?B?Ymw5QUxIREYweUNRNkM3K3ZCLzVQdjE5TzVTcEowb3pnaXh0aDBPb052NHpK?=
+ =?utf-8?B?eGpXSTFDcU9FdVhVV1Y3Y3ZKVHJnc3ljODN0bTN5eGJjQzdwdlIrNXB3Q1Fi?=
+ =?utf-8?B?TmpSTnlUUGNZeGlwbElGWVI1OWdna1Iza2hnbG5LakUxZGhibkFSMXlZTG96?=
+ =?utf-8?B?VE13dzhTOGpFdkh1aVVvOU91WmVJZnFhZlhCMGFLREo5WlFMaE5jNFBEYWpU?=
+ =?utf-8?B?bis1UU52RUpERWRsUWN1eVBad09ldlpqczNRc0l1VEgvNjg0UUdKZ2hJRmQ1?=
+ =?utf-8?B?QzdtTFVHTlRSOUQ3OFBxN1c2NGJJTjZQWElmai9kenpObnJOS3laWEd1RUZF?=
+ =?utf-8?B?dk85bUtmTXh3TUpsQUY2Smo5bUh5YlM0dkQ5T1JmSFVOaldTOXIxd0hlWjUx?=
+ =?utf-8?B?THVDRysya3JvdEk1TE9VcU5XMGl6a1J2SDhWL1VtSGVJdk9PdzhWYW1IVGN2?=
+ =?utf-8?B?cmVtVTc0VnNrZHNobzhiV2o3YWZoUmQwU0dnZkVOSW11R29GMHcrSUVWSzA2?=
+ =?utf-8?B?OC9uSmh2ZWtBeEcwSzRBc2tJcmFQbWF1ZWNhTm5yM1F0K2I1SU4zQm43amly?=
+ =?utf-8?B?N2NKUHRKaDhCSmRKNzlxMlVidm5obkUzeENRbk8xRVFjaWNHb2VjTEZsSjhK?=
+ =?utf-8?B?WjZpMXVYUGV4S3hxcDRYUEdKc1J2SVF1eEtEYUx2KzVzZGR0KzZxWGI4VTdH?=
+ =?utf-8?B?OFRHOFFRcWRxMEtrYzUrSHFlcEUzVG0rWTR1MjZKWGtyV2lMU3FxLzFmL085?=
+ =?utf-8?B?NnUyYVF4ZmJNMlFCRHJRekhJLzJSaG43ck43NXRObnFOczN1Q3RBRWxXRDF0?=
+ =?utf-8?B?TlFJUUJXMlJjdVY0TlN6ZWVvZnlpWEZBL3dpMm1tOXgwcm9UL01zcjlnSHJW?=
+ =?utf-8?B?NXpNK0dsQTVTZ3hHSHp1TGc2N3pXa0oxT1g3ZmRBdTRDeURYb1daWDU4cU1z?=
+ =?utf-8?B?TitLSExKMkxwWmIvTnJvS0h3Zmt3dzZOQW9GdWZSK21aVmJLS3lBSHZvaE9G?=
+ =?utf-8?B?UzlCWjRzM0RPM1FDWml0TitZdWlJSXR4MkYvQWRLV1RGTHBlSzVwb2ZPN0d4?=
+ =?utf-8?B?NWFVM0hhVmpqcGVGN1RJRzB1bTRBTU9VSnJvRnlzK3B4MUxkL1RDWHJmL1hn?=
+ =?utf-8?B?RG83SU5tdjdNdUZ6MXhNVStsNlplbmw2ZkVxWHdETjlHMmFVSmZSaVRIeFY1?=
+ =?utf-8?B?YmlnVFMxamo0WkQ4YUZRV0tEQ3VabE96TUhPSEN0d2JVYW1GM2RYd29CaWlJ?=
+ =?utf-8?Q?AkQ/F4nuLv2kRMJp7FRTvQDkc?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28899a74-a856-418d-e18f-08db82294c51
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 16:10:09.2233
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5tHZ+jtsQ2I+XrzTBQMTe59oqnvaoRl5h2Td8t8S7oszHlrVRghE0Jm1idGaoj5H9TNopg5qxC16ewBxdgT8HA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7375
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to implement UACCESS validation, objtool support
-for powerpc needs to be enhanced to decode more instructions.
+On 2023-06-21 16:24, André Almeida wrote:
+> From: Simon Ser <contact@emersion.fr>
+> 
+> Up until now, amdgpu was silently degrading to vsync when
+> user-space requested an async flip but the hardware didn't support
+> it.
+> 
+> The hardware doesn't support immediate flips when the update changes
+> the FB pitch, the DCC state, the rotation, enables or disables CRTCs
+> or planes, etc. This is reflected in the dm_crtc_state.update_type
+> field: UPDATE_TYPE_FAST means that immediate flip is supported.
+> 
+> Silently degrading async flips to vsync is not the expected behavior
+> from a uAPI point-of-view. Xorg expects async flips to fail if
+> unsupported, to be able to fall back to a blit. i915 already behaves
+> this way.
+> 
+> This patch aligns amdgpu with uAPI expectations and returns a failure
+> when an async flip is not possible.
+> 
+> Signed-off-by: Simon Ser <contact@emersion.fr>
+> Reviewed-by: André Almeida <andrealmeid@igalia.com>
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+> Signed-off-by: André Almeida <andrealmeid@igalia.com>
 
-It also requires implementation of switch tables finding.
-On PPC32 it is similar to x86, switch tables are anonymous in .rodata,
-the difference is that the value is relative to its index in the table.
-But several switch tables can be nested so the register containing
-the table base address also needs to be tracked and taken into account.
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-Don't activate if for Clang for now because its switch tables are
-different from GCC switch tables.
+Harry
 
-Then comes the UACCESS enabling/disabling instructions. On booke and
-8xx it is done with a mtspr instruction. For 8xx that's in SPRN_MD_AP,
-for booke that's in SPRN_PID. Annotate those instructions.
-
-No work has been done for ASM files, they are not used for UACCESS
-so for the moment just tell objtool to ignore ASM files.
-
-For relocable code, the .got2 relocation preceding each global
-function needs to be marked as ignored because some versions of GCC
-do this:
-
-     120:	00 00 00 00	.long 0x0
-			120: R_PPC_REL32	.got2+0x7ff0
-
-00000124 <tohex>:
-     124:	94 21 ff f0 	stwu    r1,-16(r1)
-     128:	7c 08 02 a6 	mflr    r0
-     12c:	42 9f 00 05 	bcl     20,4*cr7+so,130 <tohex+0xc>
-     130:	39 00 00 00 	li      r8,0
-     134:	39 20 00 08 	li      r9,8
-     138:	93 c1 00 08 	stw     r30,8(r1)
-     13c:	7f c8 02 a6 	mflr    r30
-     140:	90 01 00 14 	stw     r0,20(r1)
-     144:	80 1e ff f0 	lwz     r0,-16(r30)
-     148:	7f c0 f2 14 	add     r30,r0,r30
-     14c:	81 5e 80 00 	lwz     r10,-32768(r30)
-     150:	80 fe 80 04 	lwz     r7,-32764(r30)
-
-Also declare longjmp() and start_secondary_resume() as global noreturn
-functions, and declare __copy_tofrom_user() and __arch_clear_user()
-as UACCESS safe.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                          |   2 +
- arch/powerpc/include/asm/book3s/32/kup.h      |   2 +
- arch/powerpc/include/asm/nohash/32/kup-8xx.h  |   4 +-
- arch/powerpc/include/asm/nohash/kup-booke.h   |   4 +-
- arch/powerpc/kexec/core_32.c                  |   4 +-
- arch/powerpc/mm/nohash/kup.c                  |   2 +
- tools/objtool/arch/powerpc/decode.c           | 155 +++++++++++++++++-
- .../arch/powerpc/include/arch/noreturns.h     |  11 ++
- tools/objtool/arch/powerpc/special.c          |  36 +++-
- tools/objtool/check.c                         |   6 +-
- 10 files changed, 211 insertions(+), 15 deletions(-)
- create mode 100644 tools/objtool/arch/powerpc/include/arch/noreturns.h
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 0b1172cbeccb..cdaca38868e1 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -159,6 +159,7 @@ config PPC
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-+	select ARCH_OBJTOOL_SKIP_ASM
- 	select ARCH_OPTIONAL_KERNEL_RWX		if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_SPLIT_ARG64			if PPC32
-@@ -257,6 +258,7 @@ config PPC
- 	select HAVE_OPTPROBES
- 	select HAVE_OBJTOOL			if PPC32 || MPROFILE_KERNEL
- 	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
-+	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL && PPC_KUAP && PPC32 && CC_IS_GCC
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/include/asm/book3s/32/kup.h
-index 4e14a5427a63..842d9a6f4b7a 100644
---- a/arch/powerpc/include/asm/book3s/32/kup.h
-+++ b/arch/powerpc/include/asm/book3s/32/kup.h
-@@ -34,6 +34,7 @@ static __always_inline void uaccess_begin_32s(unsigned long addr)
- 	asm volatile(ASM_MMU_FTR_IFSET(
- 		"mfsrin %0, %1;"
- 		"rlwinm %0, %0, 0, %2;"
-+		ASM_UACCESS_BEGIN
- 		"mtsrin %0, %1;"
- 		"isync", "", %3)
- 		: "=&r"(tmp)
-@@ -48,6 +49,7 @@ static __always_inline void uaccess_end_32s(unsigned long addr)
- 	asm volatile(ASM_MMU_FTR_IFSET(
- 		"mfsrin %0, %1;"
- 		"oris %0, %0, %2;"
-+		ASM_UACCESS_END
- 		"mtsrin %0, %1;"
- 		"isync", "", %3)
- 		: "=&r"(tmp)
-diff --git a/arch/powerpc/include/asm/nohash/32/kup-8xx.h b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-index 46bc5925e5fd..38c7ed766445 100644
---- a/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-+++ b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-@@ -39,13 +39,13 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- 
- static __always_inline void uaccess_begin_8xx(unsigned long val)
- {
--	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1", "", %2) : :
-+	asm(ASM_UACCESS_BEGIN ASM_MMU_FTR_IFSET("mtspr %0, %1", "", %2) : :
- 	    "i"(SPRN_MD_AP), "r"(val), "i"(MMU_FTR_KUAP) : "memory");
- }
- 
- static __always_inline void uaccess_end_8xx(void)
- {
--	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1", "", %2) : :
-+	asm(ASM_UACCESS_END ASM_MMU_FTR_IFSET("mtspr %0, %1", "", %2) : :
- 	    "i"(SPRN_MD_AP), "r"(MD_APG_KUAP), "i"(MMU_FTR_KUAP) : "memory");
- }
- 
-diff --git a/arch/powerpc/include/asm/nohash/kup-booke.h b/arch/powerpc/include/asm/nohash/kup-booke.h
-index 0c7c3258134c..26eb6d10a964 100644
---- a/arch/powerpc/include/asm/nohash/kup-booke.h
-+++ b/arch/powerpc/include/asm/nohash/kup-booke.h
-@@ -63,13 +63,13 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- 
- static __always_inline void uaccess_begin_booke(unsigned long val)
- {
--	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1; isync", "", %2) : :
-+	asm(ASM_UACCESS_BEGIN ASM_MMU_FTR_IFSET("mtspr %0, %1; isync", "", %2) : :
- 	    "i"(SPRN_PID), "r"(val), "i"(MMU_FTR_KUAP) : "memory");
- }
- 
- static __always_inline void uaccess_end_booke(void)
- {
--	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1; isync", "", %2) : :
-+	asm(ASM_UACCESS_END ASM_MMU_FTR_IFSET("mtspr %0, %1; isync", "", %2) : :
- 	    "i"(SPRN_PID), "r"(0), "i"(MMU_FTR_KUAP) : "memory");
- }
- 
-diff --git a/arch/powerpc/kexec/core_32.c b/arch/powerpc/kexec/core_32.c
-index c95f96850c9e..6e955f32e7c3 100644
---- a/arch/powerpc/kexec/core_32.c
-+++ b/arch/powerpc/kexec/core_32.c
-@@ -17,7 +17,7 @@
- typedef void (*relocate_new_kernel_t)(
- 				unsigned long indirection_page,
- 				unsigned long reboot_code_buffer,
--				unsigned long start_address) __noreturn;
-+				unsigned long start_address);
- 
- /*
-  * This is a generic machine_kexec function suitable at least for
-@@ -61,6 +61,8 @@ void default_machine_kexec(struct kimage *image)
- 	/* now call it */
- 	rnk = (relocate_new_kernel_t) reboot_code_buffer;
- 	(*rnk)(page_list, reboot_code_buffer_phys, image->start);
-+
-+	unreachable();	/* For objtool */
- }
- 
- int machine_kexec_prepare(struct kimage *image)
-diff --git a/arch/powerpc/mm/nohash/kup.c b/arch/powerpc/mm/nohash/kup.c
-index e1f7de2e54ec..e23c7ca269fe 100644
---- a/arch/powerpc/mm/nohash/kup.c
-+++ b/arch/powerpc/mm/nohash/kup.c
-@@ -24,6 +24,8 @@ void setup_kuap(bool disabled)
- 
- 	pr_info("Activating Kernel Userspace Access Protection\n");
- 
-+	/* Performed a paired allow/prevent to silence objtool warning */
-+	allow_user_access(NULL, NULL, 0, KUAP_READ_WRITE);
- 	prevent_user_access(KUAP_READ_WRITE);
- }
- #endif
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-index 53b55690f320..62774d2cca33 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -39,28 +39,164 @@ const char *arch_ret_insn(int len)
- 	exit(-1);
- }
- 
-+static u32 read_instruction(struct objtool_file *file, const struct section *sec,
-+			    unsigned long offset)
-+{
-+	return bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
-+}
-+
-+/*
-+ * Try to find the register used as base for a table jump.
-+ * If not found return r1 which is the stack so can't be valid
-+ *
-+ * For relative jump tables we expect the following sequence
-+ *   lwzx rx, reg1, reg2 or lwz rx, 0(reg)
-+ *   add ry, rx, rbase or add ry, rbase, rx
-+ *   mtctr ry
-+ *   bctr
-+ *
-+ * For absolute jump tables we expect the following sequence
-+ *   lwzx rx, rbase, rindex
-+ *   mtctr rx
-+ *   bctr
-+ *
-+ * Those sequences might be nested with other code, but we expect
-+ * it within the last 16 instructions.
-+ */
-+static unsigned int arch_decode_jumptable_base(struct objtool_file *file,
-+					       const struct section *sec,
-+					       struct instruction *jump_insn)
-+{
-+	int i;
-+	unsigned int td = ~0, ta = ~0, tb = ~0;
-+	struct instruction *insn;
-+
-+	for (insn = jump_insn, i = 0;
-+	     insn && i < 16;
-+	     insn = prev_insn_same_sec(file, insn), i++) {
-+		u32 ins = read_instruction(file, sec, insn->offset);
-+		unsigned int ra = (ins >> 16) & 0x1f;
-+		unsigned int rb = (ins >> 11) & 0x1f;
-+		unsigned int rd = (ins >> 21) & 0x1f;
-+
-+		if (td == ~0 && ta == ~0) {
-+			if ((ins & 0xfc1ffffe) == 0x7c0903a6)	/* mtctr rd */
-+				td = rd;
-+			continue;
-+		}
-+			/* lwzx td, ra, rb */
-+		if (td != ~0 && (ins & 0xfc0007fe) == 0x7c00002e && rd == td)
-+			return ra;
-+
-+			/* lwzx ta, ra, rb  or  lwzx tb, ra, rb */
-+		if (ta != ~0 && (ins & 0xfc0007fe) == 0x7c00002e && (rd == ta || rd == tb))
-+			return rd == ta ? tb : ta;
-+
-+			/* lwz ta, 0(ra)  or  lwz tb, 0(ra) */
-+		if (ta != ~0 && (ins & 0xfc00ffff) == 0x80000000 && (rd == ta || rd == tb))
-+			return rd == ta ? tb : ta;
-+
-+			/* add td, ta, tb */
-+		if (ta == ~0 && (ins & 0xfc0007ff) == 0x7c000214 && rd == td) {
-+			ta = ra;
-+			tb = rb;
-+			td = ~0;
-+		}
-+	}
-+	return 1;
-+}
-+
- int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
- 			    unsigned long offset, unsigned int maxlen,
- 			    struct instruction *insn)
- {
--	unsigned int opcode;
-+	unsigned int opcode, xop;
-+	unsigned int rs, ra, rb, bo, bi, to, uimm, simm, lk, aa;
- 	enum insn_type typ;
- 	unsigned long imm;
--	u32 ins;
-+	u32 ins = read_instruction(file, sec, offset);
-+
-+	if (!ins && file->elf->ehdr.e_flags & EF_PPC_RELOCATABLE_LIB) {
-+		struct reloc *reloc;
-+
-+		reloc = find_reloc_by_dest_range(file->elf, insn->sec, insn->offset, 4);
-+
-+		if (reloc && reloc_type(reloc) == R_PPC_REL32 &&
-+		    !strncmp(reloc->sym->sec->name, ".got2", 5)) {
-+			insn->type = INSN_OTHER;
-+			insn->ignore = true;
-+			insn->len = 4;
-+
-+			return 0;
-+		}
-+	}
- 
--	ins = bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
- 	opcode = ins >> 26;
--	typ = INSN_OTHER;
--	imm = 0;
-+	xop = (ins >> 1) & 0x3ff;
-+	rs = bo = to = (ins >> 21) & 0x1f;
-+	ra = bi = (ins >> 16) & 0x1f;
-+	rb = (ins >> 11) & 0x1f;
-+	uimm = simm = (ins >> 0) & 0xffff;
-+	aa = ins & 2;
-+	lk = ins & 1;
- 
- 	switch (opcode) {
-+	case 3:
-+		if (to == 31 && ra == 0 && simm == 0) /* twi 31, r0, 0 */
-+			typ = INSN_BUG;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 16: /* bc[l][a] */
-+		if (lk)	/* bcl[a] */
-+			typ = INSN_OTHER;
-+		else		/* bc[a] */
-+			typ = INSN_JUMP_CONDITIONAL;
-+
-+		imm = ins & 0xfffc;
-+		if (imm & 0x8000)
-+			imm -= 0x10000;
-+		insn->immediate = imm | aa;
-+		break;
- 	case 18: /* b[l][a] */
--		if ((ins & 3) == 1) /* bl */
-+		if (lk)	/* bl[a] */
- 			typ = INSN_CALL;
-+		else		/* b[a] */
-+			typ = INSN_JUMP_UNCONDITIONAL;
- 
- 		imm = ins & 0x3fffffc;
- 		if (imm & 0x2000000)
- 			imm -= 0x4000000;
-+		insn->immediate = imm | aa;
-+		break;
-+	case 19:
-+		if (xop == 16 && bo == 20 && bi == 0)	/* blr */
-+			typ = INSN_RETURN;
-+		else if (xop == 16)	/* bclr */
-+			typ = INSN_RETURN_CONDITIONAL;
-+		else if (xop == 50)	/* rfi */
-+			typ = INSN_JUMP_DYNAMIC;
-+		else if (xop == 528 && bo == 20 && bi == 0 && !lk)	/* bctr */
-+			typ = INSN_JUMP_DYNAMIC;
-+		else if (xop == 528 && bo == 20 && bi == 0 && lk)	/* bctrl */
-+			typ = INSN_CALL_DYNAMIC;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 24:
-+		if (rs == 0 && ra == 0 && uimm == 0)
-+			typ = INSN_NOP;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 31:
-+		if (xop == 4 && to == 31 && ra == 0 && rb == 0) /* trap */
-+			typ = INSN_BUG;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	default:
-+		typ = INSN_OTHER;
- 		break;
- 	}
- 
-@@ -70,13 +206,18 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 		insn->len = 4;
- 
- 	insn->type = typ;
--	insn->immediate = imm;
-+
-+	if (typ == INSN_JUMP_DYNAMIC)
-+		insn->gpr = arch_decode_jumptable_base(file, sec, insn);
- 
- 	return 0;
- }
- 
- unsigned long arch_jump_destination(struct instruction *insn)
- {
-+	if (insn->immediate & 2)
-+		return insn->immediate & ~2;
-+
- 	return insn->offset + insn->immediate;
- }
- 
-diff --git a/tools/objtool/arch/powerpc/include/arch/noreturns.h b/tools/objtool/arch/powerpc/include/arch/noreturns.h
-new file mode 100644
-index 000000000000..664f17d39026
---- /dev/null
-+++ b/tools/objtool/arch/powerpc/include/arch/noreturns.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+/*
-+ * This is a (sorted!) list of all known __noreturn functions in arch/powerpc.
-+ * It's needed for objtool to properly reverse-engineer the control flow graph.
-+ *
-+ * Yes, this is unfortunate.  A better solution is in the works.
-+ */
-+NORETURN(longjmp)
-+NORETURN(start_secondary_resume)
-+NORETURN(unrecoverable_exception)
-diff --git a/tools/objtool/arch/powerpc/special.c b/tools/objtool/arch/powerpc/special.c
-index a7dd2559b536..c241a6dca8b0 100644
---- a/tools/objtool/arch/powerpc/special.c
-+++ b/tools/objtool/arch/powerpc/special.c
-@@ -3,7 +3,7 @@
- #include <stdlib.h>
- #include <objtool/special.h>
- #include <objtool/builtin.h>
--
-+#include <objtool/endianness.h>
- 
- bool arch_support_alt_relocation(struct special_alt *special_alt,
- 				 struct instruction *insn,
-@@ -16,5 +16,37 @@ struct reloc *arch_find_switch_table(struct objtool_file *file,
- 				     struct instruction *insn,
- 				     struct instruction *orig_insn)
- {
--	exit(-1);
-+	struct reloc *text_reloc;
-+	struct section *table_sec;
-+	unsigned long table_offset;
-+	u32 ins;
-+
-+	/* look for a relocation which references .rodata */
-+	text_reloc = find_reloc_by_dest_range(file->elf, insn->sec,
-+					      insn->offset, insn->len);
-+	if (!text_reloc || reloc_type(text_reloc) != R_PPC_ADDR16_LO ||
-+	    text_reloc->sym->type != STT_SECTION || !text_reloc->sym->sec->rodata)
-+		return NULL;
-+
-+	ins = bswap_if_needed(file->elf, *(u32 *)(insn->sec->data->d_buf + insn->offset));
-+	if (orig_insn && ((ins >> 21) & 0x1f) != orig_insn->gpr)
-+		return NULL;
-+
-+	table_offset = reloc_addend(text_reloc);
-+	table_sec = text_reloc->sym->sec;
-+
-+	/*
-+	 * Make sure the .rodata address isn't associated with a
-+	 * symbol.  GCC jump tables are anonymous data.
-+	 *
-+	 * Also support C jump tables which are in the same format as
-+	 * switch jump tables.  For objtool to recognize them, they
-+	 * need to be placed in the C_JUMP_TABLE_SECTION section.  They
-+	 * have symbols associated with them.
-+	 */
-+	if (find_symbol_containing(table_sec, table_offset) &&
-+	    strcmp(table_sec->name, C_JUMP_TABLE_SECTION))
-+		return NULL;
-+
-+	return find_reloc_by_dest(file->elf, table_sec, table_offset);
- }
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 5af6c6c3fbed..0d2df15f553a 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1259,13 +1259,17 @@ static const char *uaccess_safe_builtin[] = {
- 	"stackleak_track_stack",
- 	/* misc */
- 	"csum_partial_copy_generic",
-+	"ftrace_likely_update", /* CONFIG_TRACE_BRANCH_PROFILING */
-+	/* misc x86 */
- 	"copy_mc_fragile",
- 	"copy_mc_fragile_handle_tail",
- 	"copy_mc_enhanced_fast_string",
--	"ftrace_likely_update", /* CONFIG_TRACE_BRANCH_PROFILING */
- 	"rep_stos_alternative",
- 	"rep_movs_alternative",
- 	"__copy_user_nocache",
-+	/* misc powerpc */
-+	"__copy_tofrom_user",
-+	"__arch_clear_user",
- 	NULL
- };
- 
--- 
-2.41.0
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c    |  8 ++++++++
+>  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c   | 12 ++++++++++++
+>  2 files changed, 20 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 514f6785a020..1d9b84e5835f 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -8136,7 +8136,15 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+>  		 * Only allow immediate flips for fast updates that don't
+>  		 * change memory domain, FB pitch, DCC state, rotation or
+>  		 * mirroring.
+> +		 *
+> +		 * dm_crtc_helper_atomic_check() only accepts async flips with
+> +		 * fast updates.
+>  		 */
+> +		if (crtc->state->async_flip &&
+> +		    acrtc_state->update_type != UPDATE_TYPE_FAST)
+> +			drm_warn_once(state->dev,
+> +				      "[PLANE:%d:%s] async flip with non-fast update\n",
+> +				      plane->base.id, plane->name);
+>  		bundle->flip_addrs[planes_count].flip_immediate =
+>  			crtc->state->async_flip &&
+>  			acrtc_state->update_type == UPDATE_TYPE_FAST &&
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+> index 440fc0869a34..30d4c6fd95f5 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+> @@ -398,6 +398,18 @@ static int dm_crtc_helper_atomic_check(struct drm_crtc *crtc,
+>  		return -EINVAL;
+>  	}
+>  
+> +	/*
+> +	 * Only allow async flips for fast updates that don't change the FB
+> +	 * pitch, the DCC state, rotation, etc.
+> +	 */
+> +	if (crtc_state->async_flip &&
+> +	    dm_crtc_state->update_type != UPDATE_TYPE_FAST) {
+> +		drm_dbg_atomic(crtc->dev,
+> +			       "[CRTC:%d:%s] async flips are only supported for fast updates\n",
+> +			       crtc->base.id, crtc->name);
+> +		return -EINVAL;
+> +	}
+> +
+>  	/* In some use cases, like reset, no stream is attached */
+>  	if (!dm_crtc_state->stream)
+>  		return 0;
 
