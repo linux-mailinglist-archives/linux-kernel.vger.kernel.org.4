@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CA074EC7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE8F74EC7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjGKLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
+        id S231702AbjGKLQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjGKLQN (ORCPT
+        with ESMTP id S229845AbjGKLQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:16:13 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B754DBE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:15:48 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b8bd586086so41591215ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1689074148; x=1691666148;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=em9xgVa3hdk9NBQVYgyeIMHyNqzlL7w7PxEQ9l0udqc=;
-        b=byFHlSTvLjX+wwzL1uvRmsJT9gApAjyX+arz4B0WuWLIPXf9adRD8JGCC0m5rpdMe9
-         Rukv7xRdLlo5TDO474aEnxzG63b/BhXJkW5O4RfRWQCvj9Uc9DxxydaeT5APXWcdTzJL
-         JpEIF92j/ko0dB3fiPlUgLJukl2johew+Z+rIH8MkWU6bmh0tk/5bm3qWKllXxSkGMWI
-         P/DlqxcbxQIiygAcPMKj+x2/9j4ceknrwJLjoejsMqEfoa1fNcHpBTyc2+nsxoMIPaKI
-         SdQYCKoSVvk9MqAyIX8fki/wYIypjuA0H9N+hS3B9i5HW2JSajuTBsM0em2NQgZii6sO
-         yN9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689074148; x=1691666148;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=em9xgVa3hdk9NBQVYgyeIMHyNqzlL7w7PxEQ9l0udqc=;
-        b=WpWWUEr6VFA3Aazasr4Um2Yx1ZnHN39zAjhaJl+2rHfNOqgeekmjeEe5mdZlzIDyyY
-         7Ploo1zUyD+GbG2DboOpWpJpUnM1rro772BqgkIXwsbVwA3esAkaGZ8bBfU8ES5E2aYc
-         8Ve6p9XlPpSjzJE95Vg8erQVIhqb75XOl3zMJnkQbe/ulA5EJIKcJy+WdS/Xwq/QCKYA
-         F1eHA167Bs9i3LiVfkdqxV3J+RrShtp9Wcj0ytucVwJHFZEksZe6Kh8EOC7/MhqcMqqk
-         FULNiLpQJMECxdcIEVGupsbdBz/xnz67T2ClkxvnqiqVGtqD8K2xyFhZDf3baB9hvquw
-         CROg==
-X-Gm-Message-State: ABy/qLYpbtTelOIgm/CEANoD7jhgLr3JdxdCc3QKPtnCtMWiS7DDfcFW
-        vSt/htrVJh1d4tMflTmf5+V4dA==
-X-Google-Smtp-Source: APBJJlFbdvpSFJFyEKHvLn6aFsX3912I0T7xfw27aLE/jleSdcztYBOYpNDmwbR0v5hKNcPTbyO9/w==
-X-Received: by 2002:a17:903:22c6:b0:1b8:72e2:c63 with SMTP id y6-20020a17090322c600b001b872e20c63mr18675118plg.8.1689074148225;
-        Tue, 11 Jul 2023 04:15:48 -0700 (PDT)
-Received: from [10.4.5.144] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id bc2-20020a170902930200b001b9f032bb3dsm1305219plb.3.2023.07.11.04.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 04:15:47 -0700 (PDT)
-Message-ID: <d0e823d9-292d-932c-9849-1d4d08c9f4eb@bytedance.com>
-Date:   Tue, 11 Jul 2023 19:15:43 +0800
+        Tue, 11 Jul 2023 07:16:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D6BE7E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:16:21 -0700 (PDT)
+Received: from [10.231.127.5] (91-133-79-89.stat.cablelink.at [91.133.79.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8960A660700D;
+        Tue, 11 Jul 2023 12:16:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689074180;
+        bh=XXqx6jjzqVFPldsbdR5LC87NiCTrfy5oA1jjDLavIQE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ggY/vBPqfvEy5CTrXVgzmQ/UK1f9T8bC9cMAMRP1LSqSErFVdV/kK0GZ7S2CkK1UM
+         +JYHmeTLRQ6Q0+kgV7vAoXhp2vYFmKAzEKHGd9SQuXIHKma52faWb9GHusNcOsgDh+
+         Qegg6dFAUuKik9YxFSsBNFXA92r8HZYgRrrK1q2OW2RXLJ2O/2yynkhvrfzek6CaCe
+         Ql5x1w2gt7z8eraccbT5ptKoKXezTyI9XfWFX2mnL6BYrWAM4V6jkHLd8VRoKwlnRm
+         PlZ/aIL/e54fOIhCEPCCkUYyEGXiyFFBQdEuFk1mAmj+cfz9misy2L9eElNTAE9KOw
+         qHoYHvZpVHAiQ==
+Message-ID: <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
+Date:   Tue, 11 Jul 2023 16:46:14 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [External] Re: [PATCH 1/2] blk-flush: fix rq->flush.seq for
- post-flush requests
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
 Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, ming.lei@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <chengming.zhou@linux.dev>
-References: <20230710064705.1847287-1-chengming.zhou@linux.dev>
- <20230710133024.GA23157@lst.de>
- <4431d779-e6e7-aff1-5cf8-4147de974d8d@linux.dev>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <4431d779-e6e7-aff1-5cf8-4147de974d8d@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Maksim Panchenko <maks@meta.com>,
+        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
+        kernelci@lists.linux.dev,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
+ <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+ <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
+ <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
+ <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <2023052247-bobtail-factsheet-d104@gregkh>
+ <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
+ <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
+ <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
+ <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
+ <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
+ <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -79,31 +84,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 19:06, Chengming Zhou wrote:
-> On 2023/7/10 21:30, Christoph Hellwig wrote:
->> On Mon, Jul 10, 2023 at 02:47:04PM +0800, chengming.zhou@linux.dev wrote:
->>> From: Chengming Zhou <zhouchengming@bytedance.com>
->>>
->>> If the policy == (REQ_FSEQ_DATA | REQ_FSEQ_POSTFLUSH), it means that the
->>> data sequence and post-flush sequence need to be done for this request.
->>>
->>> The rq->flush.seq should record what sequences have been done (or don't
->>> need to be done). So in this case, pre-flush doesn't need to be done,
->>> we should init rq->flush.seq to REQ_FSEQ_PREFLUSH not REQ_FSEQ_POSTFLUSH.
->>>
->>> Of course, this doesn't cause any problem in fact, since pre-flush and
->>> post-flush sequence do the same thing for now.
->>
->> I wonder if it really doesn't cause any problems, but the change for
->> sure looks good:
->>
->> Reviewed-by: Christoph Hellwig <hch@lst.de>
->>
->> It should probably go before your other flush optimizations and maybe
->> grow a fixes tag.
-> 
-> Ok, will add a Fixes tag and send it as a separate patch since it's a bug fix.
-> 
 
-Well, I should put it in that series before other flush optimizations instead.
+On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrote:
+> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> for once, to make this easily accessible to everyone.
+>
+> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
+> progress made to address this? Or is this maybe (accidentally?) fixed
+> with 6.5-rc1?
 
+Hi Thorsten,
+
+I still see the regression happening so it doesn't seem to be fixed.
+https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
+
+Masahiro had submitted a fix for this issue here.
+
+https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
+
+But I don't see any movement there. Masahiro, are you planning to send a 
+v2 for it?
+
+
+Thanks,
+Shreeya Patel
+
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+>
+> #regzbot poke
+>
+> On 20.06.23 06:19, Masahiro Yamada wrote:
+>> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
+>> <shreeya.patel@collabora.com> wrote:
+>>> On 24/05/23 02:57, Nick Desaulniers wrote:
+>>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
+>>>> <shreeya.patel@collabora.com> wrote:
+>>>>> Hi Nick and Masahiro,
+>>>>>
+>>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
+>>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
+>>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>>>>>>>>> It could be; if the link order was changed, it's possible that this
+>>>>>>>>> target may be hitting something along the lines of:
+>>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
+>>>>>>>>> initialization order fiasco"
+>>>>>>>>>
+>>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
+>>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
+>>>>>>>>> think I was playing with converting Kbuild to use Ninja rather than
+>>>>>>>>> Make; the resulting kernel image wouldn't boot because I had modified
+>>>>>>>>> the order the object files were linked in.  If you were to randomly
+>>>>>>>>> shuffle the object files in the kernel, I recall some hazard that may
+>>>>>>>>> prevent boot.
+>>>>>>>> I thought that was specifically a C++ problem? But then again, the
+>>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
+>>>>>>>> significant in some instances [1]:
+>>>>>>> Yes, it matters, you can not change it.  If you do, systems will break.
+>>>>>>> It is the only way we have of properly ordering our init calls within
+>>>>>>> the same "level".
+>>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
+>>>>>>
+>>>>>> (There's a joke in there similar to the use of regexes to solve a
+>>>>>> problem resulting in two new problems; initcalls have levels for
+>>>>>> ordering, but we still have (unexpressed) dependencies between calls
+>>>>>> of the same level; brittle!).
+>>>>>>
+>>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
+>>>>>>
+>>>>>> Ricardo,
+>>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
+>>>>>> mentions that there's a kernel command line param `initcall_debug`.
+>>>>>> Perhaps that can be used to see if
+>>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
+>>>>>> ordering, resulting in a config that cannot boot?
+>>>>> Here are the links to Lava jobs ran with initcall_debug added to the
+>>>>> kernel command line.
+>>>>>
+>>>>> 1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
+>>>>> https://lava.collabora.dev/scheduler/job/10417706
+>>>>> <https://lava.collabora.dev/scheduler/job/10417706>
+>>>>>
+>>>>> 2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
+>>>>> https://lava.collabora.dev/scheduler/job/10418012
+>>>>> <https://lava.collabora.dev/scheduler/job/10418012>
+>>>> Thanks!
+>>>>
+>>>> Yeah, I can see a diff in the initcall ordering as a result of
+>>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
+>>>>
+>>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
+>>>>
+>>>> Not just different orderings, but some initcalls seem unique to the
+>>>> before vs. after, which is troubling. (example init_events and
+>>>> init_fs_sysctls respectively)
+>>>>
+>>>> That isn't conclusive evidence that changes to initcall ordering are
+>>>> to blame, but I suspect confirming that precisely to be very very time
+>>>> consuming.
+>>>>
+>>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
+>>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
+>>>> mainline.
+>>> I'm not sure if you followed the conversation but we are still seeing
+>>> this regression with the latest kernel builds and would like to know if
+>>> you plan to revert 5750121ae738?
+>>
+>> Reverting 5750121ae738 does not solve the issue
+>> because the issue happens even before 5750121ae738.
+>> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
+>> fails to boot in the same way.
+>>
+>> The revert would hide the issue on a particular build setup.
+>>
+>>
+>> I submitted a patch to more pin-point the issue.
+>> Let's see how it goes.
+>> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
+>>
+>>
+>> (BTW, the initcall order is unrelated)
+>>
+>>
+>>
+>>
+>>
+>>>
+>>> Thanks,
+>>> Shreeya Patel
+>>>
+>>>>> Thanks,
+>>>>> Shreeya Patel
+>>>>>
+>> --
+>> Best Regards
+>> Masahiro Yamada
+>>
+>>
