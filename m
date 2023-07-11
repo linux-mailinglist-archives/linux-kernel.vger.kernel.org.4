@@ -2,137 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E5974E9DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B0B74E9EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjGKJHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
+        id S231381AbjGKJKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGKJHq (ORCPT
+        with ESMTP id S230455AbjGKJKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:07:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493FCE5C;
-        Tue, 11 Jul 2023 02:07:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D186A6136C;
-        Tue, 11 Jul 2023 09:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558BEC433C7;
-        Tue, 11 Jul 2023 09:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689066461;
-        bh=F9j7QSkCdEGLHSTYKupjSgHRjPvmMCsP/Dnn5N7amao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CXir5RtXPR1h/1vENjENygKXbfM+5LZPSFNVaUI/IVb252c7CCGzFqcOQGKyfW9nt
-         44m/DTsuw2i1oBA26bzQrxtocX/pQBw22Qq7TSagMMmeAHCygFQ/kHYuVtdd1lvMOU
-         SWg9HgbsRe0SMd/C3TlI6eAq8VTs2w89oRQByNKBEeY47j2FWraO4gyn7EBqZ3B3j/
-         XDdzCejUoJUQ+e9ShQQOd47b8f9Vm1mIbFBcyuXN5NY2hf+Z3kWYh01djIH6QU/v4U
-         XCZXGxttGtXNKCgvUUTeT2dH44fQhB+JxIVl9IaZqxeeQrYtu+0/cFtUbGw8juSKL6
-         af0PBlU04G20w==
-Date:   Tue, 11 Jul 2023 11:07:36 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Wen Yang <wenyang.linux@foxmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] eventfd: avoid overflow to ULLONG_MAX when ctx->count is
- 0
-Message-ID: <20230711-kroll-wellen-f6a9059e943d@brauner>
-References: <tencent_7588DFD1F365950A757310D764517A14B306@qq.com>
- <20230710-fahrbahn-flocken-03818a6b2e91@brauner>
- <tencent_BCEA8520DBC99F741C6666BF8167B32A2007@qq.com>
+        Tue, 11 Jul 2023 05:10:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536FE10DF;
+        Tue, 11 Jul 2023 02:10:30 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d804c7d14so6794159a12.3;
+        Tue, 11 Jul 2023 02:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689066629; x=1691658629;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MjowR5bw3wBCNWz7mfQrfHZlHNcMw4ZgHqW91f/hVJo=;
+        b=la/X8t3Ga0N+dw3/AHxRaF9wH/3Z00193fZMz7EmwoxGkRe9a1HJgCO/yh31JeGROD
+         jMIvdWWwkpZMdxbjHJFbjdJfP7ZIPBR7E+jdO1ucminHtLlwxOckcYwWormybHfRRcA9
+         J4Vcby6Y2wpoub3fbdWZv5e1qozYb9KGCOD2qgfHsAWhtFWCreZS/tuiJpGM4nncfx3V
+         o3ga0kLbBGziozashSi+nKu3jYdWtgHC9VIUBsYIRdmtn1BU53E18Ib9cw0eU4DSXxl/
+         dqGkSQG46GCHnOo6jGQgyeLIW2SGVLBS9wsvZ4h8cvuVbgAGN4HhsSkWioccFbR1aQGb
+         DPXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689066629; x=1691658629;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MjowR5bw3wBCNWz7mfQrfHZlHNcMw4ZgHqW91f/hVJo=;
+        b=jWHVRa/+10PwlFaxap5OkNjqiMPFvWRqsRLlyY7sRRWn4mdMbyN/jL7hvGlhcuezpz
+         9e03VRId1Gv5UB93ZyBsiK1fcOGaUdgG+49q24mOx0p4Qt7h+MelE4lGY65Q83uEXQ25
+         E4LAgs2+H6fKGnP3yfxrqN4x8EU1KRy9twN0nVWSjD7eg5Za0d+0SWcqG519FLZz30Nn
+         Roed+x8QTRrRQhDs9PXg1YgpPfxpxGqTsLvkoPyu4s9I21vqHLe9uV8+dCL3RhxKfN6+
+         nuIzocQZgqiQvo++CYNHY72kSozZxSlwrDgg30IALK1iZeCPgORws2+ZSePkiV2qx1j6
+         UrPg==
+X-Gm-Message-State: ABy/qLZcC3Wknn0SEQNcD9tUbqYrDgAnEy66Tq7AgD0AUjiLY3VtMHl8
+        RE6RgZpx3Me1jDxa43gEXQi7yrBDe001hSaIttg=
+X-Google-Smtp-Source: APBJJlFSt3r+dAHjt8X5SfVSlZsx5J38NW0SSgu3FulttGOsfcK2j0TPu/vSGbnFuTMT6jOK47ZfvAZHEekVQhoddWs=
+X-Received: by 2002:a17:906:b84c:b0:98e:933:28fe with SMTP id
+ ga12-20020a170906b84c00b0098e093328femr13071523ejb.66.1689066628717; Tue, 11
+ Jul 2023 02:10:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <tencent_BCEA8520DBC99F741C6666BF8167B32A2007@qq.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230711083055.1274409-1-fshao@chromium.org>
+In-Reply-To: <20230711083055.1274409-1-fshao@chromium.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 11 Jul 2023 12:09:52 +0300
+Message-ID: <CAHp75VfSL5j-ZUYkezELWzq+c_V+CFL6iVQWQ=roPYrZ=h1rSw@mail.gmail.com>
+Subject: Re: [PATCH] leds: pwm: Fix an error code
+To:     Fei Shao <fshao@chromium.org>
+Cc:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 11:02:33PM +0800, Wen Yang wrote:
-> 
-> On 2023/7/10 22:12, Christian Brauner wrote:
-> > On Sun, Jul 09, 2023 at 02:54:51PM +0800, wenyang.linux@foxmail.com wrote:
-> > > From: Wen Yang <wenyang.linux@foxmail.com>
-> > > 
-> > > For eventfd with flag EFD_SEMAPHORE, when its ctx->count is 0, calling
-> > > eventfd_ctx_do_read will cause ctx->count to overflow to ULLONG_MAX.
-> > > 
-> > > Fixes: cb289d6244a3 ("eventfd - allow atomic read and waitqueue remove")
-> > > Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-> > > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> > > Cc: Jens Axboe <axboe@kernel.dk>
-> > > Cc: Christian Brauner <brauner@kernel.org>
-> > > Cc: Christoph Hellwig <hch@lst.de>
-> > > Cc: Dylan Yudaken <dylany@fb.com>
-> > > Cc: David Woodhouse <dwmw@amazon.co.uk>
-> > > Cc: Matthew Wilcox <willy@infradead.org>
-> > > Cc: linux-fsdevel@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > ---
-> > So this looks ok but I would like to see an analysis how the overflow
-> > can happen. I'm looking at the callers and it seems that once ctx->count
-> > hits 0 eventfd_read() won't call eventfd_ctx_do_read() anymore. So is
-> > there a caller that can call directly or indirectly
-> > eventfd_ctx_do_read() on a ctx->count == 0?
-> eventfd_read() ensures that ctx->count is not 0 before calling
-> eventfd_ctx_do_read() and it is correct.
-> 
-> But it is not appropriate for eventfd_ctx_remove_wait_queue() to call
-> eventfd_ctx_do_read() unconditionally,
-> 
-> as it may not only causes ctx->count to overflow, but also unnecessarily
-> calls wake_up_locked_poll().
+On Tue, Jul 11, 2023 at 11:31=E2=80=AFAM Fei Shao <fshao@chromium.org> wrot=
+e:
+>
+> Use the negated -EINVAL as the error code.
 
-Hm, so I think you're right and an underflow can be triggered for at
-least three subsystems:
+Thank you, it seems Dan had been the first one.
 
-(1) virt/kvm/eventfd.c
-(2) drivers/vfio/virqfd.c
-(3) drivers/virt/acrn/irqfd.c
+Message ID <a33b981a-b2c4-4dc2-b00a-626a090d2f11@moroto.mountain>
 
-where (2) and (3) are just modeled after (1). The eventfd must've been
-set to EFD_SEMAPHORE and ctx->count must been or decremented zero. The
-only way I can see the _underflow_ happening is if the irqfd is shutdown
-through an ioctl() like KVM_IRQFD with KVM_IRQFD_FLAG_DEASSIGN raised
-while ctx->count is zero:
-
-kvm_vm_ioctl()
--> kvm_irqfd()
-   -> kvm_irqfd_deassign()
-      -> irqfd_deactivate()
-         -> irqfd_shutdown()
-            -> eventfd_ctx_remove_wait_queue(&cnt)
-
-which would underflow @cnt and cause a spurious wakeup. Userspace would
-still read one because of EFD_SEMAPHORE semantics and wouldn't notice
-the underflow.
-
-I think it's probably not that bad because afaict, this really can only
-happen when (1)-(3) are shutdown. But we should still fix it ofc.
-
-> 
-> 
-> I am sorry for just adding the following string in the patch:
-> Fixes: cb289d6244a3 ("eventfd - allow atomic read and waitqueue remove")
-> 
-> 
-> Looking forward to your suggestions.
-
-What I usually look for is some callchain/analysis that explain under
-what circumstance what this is fixing can happen. That makes life for
-reviewers a lot easier because they don't have to dig out that work
-themselves which takes time.
+--=20
+With Best Regards,
+Andy Shevchenko
