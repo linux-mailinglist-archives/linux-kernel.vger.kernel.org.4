@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F027E74EC02
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2804474EC01
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjGKKwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S231308AbjGKKwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjGKKwJ (ORCPT
+        with ESMTP id S230200AbjGKKwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Jul 2023 06:52:09 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52231E49
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325C0E69
         for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:52:08 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so57292045e9.3
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-34570ed4cb8so21035415ab.1
         for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689072727; x=1691664727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V1PdMizM80C3ZI8rblEgvVMyPGq6EddPu4QPQ4ja35g=;
-        b=u9OCUAqgxqoO71TrPr/ab1c4ktAGG42chSTWX2bXgly1ZqQ/DoLJJOb0dbXh5LNU8J
-         xKcUNyD/dtZSeBcrGlbbqwzhuLkF2c5KyuzsHNO4+8G360nMrm1GQxKkDTV9ue3i/Jzn
-         mahw/QKd1GGTyhH7ODvCCeAY33VViShF+8OSosFGxgXfFwM/JJzSQAgxXDgIm8Br0jHK
-         imvUDI7c5Z/oXy/vt5ElX8pB3R0vi/r9NIcPJPJJCgupZI+BkPU67nFWHNUjUXW6r+PF
-         5p4GSNOjp26G+4MHblcj+eVAdN8OuA06uNf9DfAIhxss3ZoF3i1EgDWktFrqaMI2vTCN
-         +rpg==
+        d=gmail.com; s=20221208; t=1689072727; x=1691664727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2lUqyNFR/3dbpsLATQPRyo4SUfiIO9bHmuUGRrxMZ08=;
+        b=lAtnbdoFrngPAW5pUeXeJEeAvltQ++NgRMGvvUHaIp+rkJH2muolPGXKrMLNjH3cWf
+         tDfDjf4rpr6uJUZd8QRB1Q1jMTFsQ26a9ehpmiXESXGgKl96LdereHIl1nIcHIg2PzuL
+         jrG4ihC/baeZoNyCpS+aVcMxFSAuY1fKCKi5XGx6ZxjHl4djODDc7hmvytVLyz9MN9An
+         Aeo90RvRF/IUdnQSNuVmlKyqjdIR3a3EZtS+AZPy+Cg0ajBbIMvN8Sv/4btQ4fqwNfmM
+         4pncVSlwd74vz3B7B9E1tgK6D1D41ifUSnQYV9LmKyWJeg5iFIBpIdG+oUVFIXLtwdvl
+         txng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1689072727; x=1691664727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V1PdMizM80C3ZI8rblEgvVMyPGq6EddPu4QPQ4ja35g=;
-        b=NtF/hG5/CZfknl6BXTKxcMS4oZIWS+Q1y3oLrKzXM8pEKJOfmLynOLzL2vXb7PGxE4
-         kPmnriSA/QPCRLhNe9J/ROw0lj9J+MXYU9JOuEcvgsHvCnd0gbNOt5VcnBEIcTWWO2gf
-         htcI41p4euBevSQbgVnZzRuUawddAoYww0NXcVFuk+KzV7VfhlW43GXHIuDjEdcyATpS
-         uioM9r0GzSsDZPukITI8zyGO9OtCgNKR2jD9os8jqygJcBfmjnR7CIxtNjD5CyXFTSv0
-         odBe7qA2w3qtwkzpxYyZw7TjKMqFab3Zj1hvUPiJZ0MemcDMLYqT2CfOXlnxjdfqm9QB
-         eD0A==
-X-Gm-Message-State: ABy/qLaAQ7uxwOYkWUsSNyvCpFLfaZAlnDHnHm2HuIHQiqtRfQaf+fak
-        lO8o4++Ym4ysmqfNP7wlksBVmXewkI1uYAtJCUuCAg==
-X-Google-Smtp-Source: APBJJlGpdVefawHmCXphduQKsmic0iBz7dS012j6apOKODRTQOukmx93N03K5S1INpevsq04JQqhq9PJyPHkvzwBelg=
-X-Received: by 2002:a5d:684c:0:b0:314:4915:689 with SMTP id
- o12-20020a5d684c000000b0031449150689mr15212682wrw.34.1689072726749; Tue, 11
- Jul 2023 03:52:06 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2lUqyNFR/3dbpsLATQPRyo4SUfiIO9bHmuUGRrxMZ08=;
+        b=HtDsErIqq/Ht0XDagXh0ncgQAR9INLdbb39HUgvQVAewnEjbQi8wnk+7j7WUwO5WIC
+         odY2L1gaVR6kkhjllD9Pm+9YCOL5GgIeQxUZesfyrTHNG6TkSu+05DNQGvpo/Bg3Rhqs
+         hM0a2xaLlUcOwTxaavzNRRT02VNJ2h6TFr/ZKxnI4jF+TyJmru+piJ/K3ATBPGXjnopC
+         zDRPqz3InUT79JJYZ1Zz8tB6k0kIibsopyPYGVOEbfw2uOO/2xwUBk4IFfYVYVlha/5W
+         7kiXck+W+Gqn1Ch5oaSNcFg6KzTwWAzRS/c2Nfy5cDQVgSO9h9GeIIEMQVVZTPvVJ/18
+         ATbw==
+X-Gm-Message-State: ABy/qLbPFLAwgoOmwhoIEqt/awqToMML33AuWpJo8Dy4OUZXm2+ntRW0
+        94XdR/HidVYHnpKdHsN3t1w=
+X-Google-Smtp-Source: APBJJlHnWcPq3rZ0s3CNgbTFqH3PLXbC9OQqyCNcDrjgDVv+oE384KHWjDyRjzBdB7UYG8wxUwVlyw==
+X-Received: by 2002:a92:c987:0:b0:346:6afb:c9f5 with SMTP id y7-20020a92c987000000b003466afbc9f5mr3093263iln.1.1689072727475;
+        Tue, 11 Jul 2023 03:52:07 -0700 (PDT)
+Received: from localhost.localdomain ([58.240.82.166])
+        by smtp.gmail.com with ESMTPSA id z12-20020aa785cc000000b0064cca73d911sm1422601pfn.103.2023.07.11.03.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 03:52:07 -0700 (PDT)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, alexghiti@rivosinc.com, bjorn@rivosinc.com,
+        suagrfillet@gmail.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv: correct pt_level name via pgtable_l5/4_enabled
+Date:   Tue, 11 Jul 2023 18:52:02 +0800
+Message-Id: <20230711105202.842408-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230704121837.248976-1-alexghiti@rivosinc.com> <mhng-c5a71036-061e-4704-bcdf-2b23cab36908@palmer-ri-x1c9a>
-In-Reply-To: <mhng-c5a71036-061e-4704-bcdf-2b23cab36908@palmer-ri-x1c9a>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 11 Jul 2023 12:51:56 +0200
-Message-ID: <CAHVXubiU7XUSDmJ1YuUX85kLtMO=Y00fYYHuepc2=d3oG8Aq4g@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Start of DRAM should at least be aligned on PMD
- size for the direct mapping
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        suagrfillet@gmail.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(sorry for the delay!)
+The pt_level uses CONFIG_PGTABLE_LEVELS to display page table names.
+But if downgrading page mode from kernel cmdline in 64BIT, it will
+give a wrong name.
 
-On Thu, Jul 6, 2023 at 7:05=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
->
-> On Tue, 04 Jul 2023 05:18:37 PDT (-0700), alexghiti@rivosinc.com wrote:
-> > So that we do not end up mapping the whole linear mapping using 4K
-> > pages, which is slow at boot time, and also very likely at runtime.
-> >
-> > So make sure we align the start of DRAM on a PMD boundary.
-> >
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > ---
-> >  arch/riscv/mm/init.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > index 4fa420faa780..4a43ec275c6d 100644
-> > --- a/arch/riscv/mm/init.c
-> > +++ b/arch/riscv/mm/init.c
-> > @@ -214,8 +214,13 @@ static void __init setup_bootmem(void)
-> >       memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
-> >
-> >       phys_ram_end =3D memblock_end_of_DRAM();
-> > +
-> > +     /*
-> > +      * Make sure we align the start of the memory on a PMD boundary s=
-o that
-> > +      * at worst, we map the linear mapping with PMD mappings.
-> > +      */
-> >       if (!IS_ENABLED(CONFIG_XIP_KERNEL))
-> > -             phys_ram_base =3D memblock_start_of_DRAM();
-> > +             phys_ram_base =3D memblock_start_of_DRAM() & PMD_MASK;
->
-> This rounds down, which IIUC will result in mappings outside what
-> memblock detected as the start af DRAM.  I'd expect that to cause bad
-> behavior somewhere.
+Like, using no4lvl for sv39, ptdump named the 1G-mapping as "PUD"
+that should be "PGD":
 
-Actually we are not mapping this new region as it is not present in
-the memblock regions, we are just re-aligning the virtual and physical
-address: phys_ram_base is only used for the virtual to physical
-translations.
+0xffffffd840000000-0xffffffd900000000    0x00000000c0000000         3G PUD     D A G . . W R V
 
->
-> Shouldn't we be rounding up?
+So select "P4D/PUD" or "PGD" via pgtable_l5/4_enabled to correct it.
 
-Doing so would remove memory from the memory map, but I'm not sure
-this is correct, we could remove memory that contains "something" that
-needs to be accessed using the linear mapping (ACPI tables? DT?).
+Fixes: 26e7aacb83df ("riscv: Allow to downgrade paging mode from the command line")
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+---
+ arch/riscv/mm/ptdump.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-More testing is welcome as I can be wrong of course.
+diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
+index 20a9f991a6d7..cfdd327981ee 100644
+--- a/arch/riscv/mm/ptdump.c
++++ b/arch/riscv/mm/ptdump.c
+@@ -384,6 +384,11 @@ static int __init ptdump_init(void)
+ 
+ 	kernel_ptd_info.base_addr = KERN_VIRT_START;
+ 
++#ifdef CONFIG_64BIT
++	pg_level[1].name = pgtable_l5_enabled ? "P4D" : "PGD";
++	pg_level[2].name = pgtable_l4_enabled ? "PUD" : "PGD";
++#endif
++
+ 	for (i = 0; i < ARRAY_SIZE(pg_level); i++)
+ 		for (j = 0; j < ARRAY_SIZE(pte_bits); j++)
+ 			pg_level[i].mask |= pte_bits[j].mask;
+-- 
+2.20.1
 
-Thanks,
-
-Alex
-
-
->
-> >
-> >       /*
-> >        * In 64-bit, any use of __va/__pa before this point is wrong as =
-we
