@@ -2,71 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872CE74E2A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE18B74E2AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjGKAky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S229964AbjGKAlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjGKAkw (ORCPT
+        with ESMTP id S229468AbjGKAlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:40:52 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C521AC;
-        Mon, 10 Jul 2023 17:40:50 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-66f3fc56ef4so3977499b3a.0;
-        Mon, 10 Jul 2023 17:40:50 -0700 (PDT)
+        Mon, 10 Jul 2023 20:41:23 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47F71AC;
+        Mon, 10 Jul 2023 17:41:22 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b6ff1ada5dso80498691fa.2;
+        Mon, 10 Jul 2023 17:41:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689036049; x=1691628049;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gv3YcFx+E67TlMawHPFpx9khsk0UQoRAm7W/1UIFjxw=;
-        b=leUms+CBlpLmSsE/qf03mSipNOUG3B43fCdqlgeHH+fNh8OZsq/BXX/yvfGVL8CTLG
-         L7mVyJdoDLgO/XtDeGx6yLQtoVGegg9WzuD5V08HPmHYm8Ll1kOL8gcGGrReae/EVe6D
-         +WAol/sd7AheBfOcpR2GuVRQvoehfDPXq/FjQpzEKKqXMFubkmmjhfJt35kcOVZU32yH
-         Y+X4zG7qB6Uad84r0tv+PDr7C33IoQ0wKF9eSXSPoEpWkxKnKI3w1EtxbOUqLo+Cwy67
-         FxY3BhGLWnBtoijx+f4sNqWX5JXX3qnbpJQ5SV/u5IBpAiQuKLfYz4rxIzJJV28L5zWt
-         bzaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689036049; x=1691628049;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1689036081; x=1691628081;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gv3YcFx+E67TlMawHPFpx9khsk0UQoRAm7W/1UIFjxw=;
-        b=jh4H3eedCy2Jr7Yh4x6S0R61RPrzjEFwC3f2RJSg+UpWwVIvxgQTwEmgD6xe5Whhv6
-         4A285vWEmWwaUtqJuw+Qnvpd/v0HQyRqq4/VZSsbuyjljXSxRvXMaxzueoLXE7JEfkCv
-         IYnBaXyeg0LGhBU16uyx52hcAWFINiZlez6E7T+jbSe9f7kvsX2CEhb/7uUH8hadvJtb
-         /uFnQFu0uE32fSLUKzbQUDSLR7m/T8OLpOjXNYcgkXkGZjin4kRc9tB5Av9zDJZsvuK6
-         E/rYyEtlRtvWjsvJjp7UbSON+OUoYD9v/AHm7mzFGna99GzKcjkobZA0jDdpVJX3Tnbk
-         RYvQ==
-X-Gm-Message-State: ABy/qLYzp6CrpuV9CV3aw57i0AK8Zs6RvVRjxqrl9LaODcT7TJoU4+nK
-        RHm+D056s8AbIz2s8KTwQ2I=
-X-Google-Smtp-Source: APBJJlHVHuFWb1DBTwEgEs4Na5PXZ8piu5rpwuRUnYbKv90ZemBiZgvC7ON2H5iDAh5Loo26oohNZQ==
-X-Received: by 2002:a05:6a20:9383:b0:12e:c5fb:757 with SMTP id x3-20020a056a20938300b0012ec5fb0757mr23302594pzh.5.1689036049405;
-        Mon, 10 Jul 2023 17:40:49 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:96bf:7e77:39eb:7a23])
-        by smtp.gmail.com with ESMTPSA id bu16-20020a632950000000b0055bac197d70sm287489pgb.53.2023.07.10.17.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 17:40:49 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 17:40:46 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Vladimir Zapolskiy <vz@mleia.com>,
-        Kevin Wells <wellsk40@gmail.com>,
-        Durgesh Pattamatta <durgesh.pattamatta@nxp.com>,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/10] Input: lpc32xx_ts - stop_tsc when driver remove
-Message-ID: <ZKylDj4ONoD9cAUm@google.com>
-References: <20230705052346.39337-1-frank.li@vivo.com>
- <20230705052346.39337-9-frank.li@vivo.com>
+        bh=efOAgxEmmwfXTjqPB7I0Z2dgqV2TvYCNGg5OCjQJVI4=;
+        b=B+3OS09MuotFOVY1dDveToEz2WoT5xkcB3LzHb6Z+2tOWZQ84ha0XpAoqRFu8tNIgl
+         7Uj90GnG4Yml9Bj40WCMsC01xMMal/sHbREfSoKFrIXtt7X241sCWPXGb+M9WdE/BGz/
+         4Joe6k93ob75Inpyix+DVPJ/OHbqPjLg3kLRTbZt3d4dxR0m+C1tUqMfl3kQ+Ouoitgi
+         5sC0r3tQL8mS4qQqOBlSPt1QNPL/6Whceai7ALHec3LXf0+HW5N/01JZ0Kr5PfFoTVcR
+         wqT5pvQ+Adwa0szw82oz1/mBXkHeDak7VxrAHoWqQ6Cvppb7ibPCzHuYpNKUSvxvTZ5c
+         fjqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689036081; x=1691628081;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=efOAgxEmmwfXTjqPB7I0Z2dgqV2TvYCNGg5OCjQJVI4=;
+        b=frVijC4tNI+4JD7u6aV1/HByf163CJw2gBrECSg16/BScF/106EEYTNKplr1yU0Mq1
+         cr9Mrx/OmgoM70+mPszAcB9s0wXjb3zW9UlhnBuzsnCwZHwII3M2WkNPDw2aqvYfIMti
+         bLai9OLzbphEVkKRjCdPWDRmEnOqQu9K1s9Pmj+MRZbr6G3o3TXaElVRJixaaiwE19F/
+         Ne/dD8oQi35sS3R4C1YexQLuchuNbVoGxwFHfhyqfe+UUaDi/RwcpCLiGQbzJ+SE3yCR
+         H8gPPTf7YTNsDzkdfYhQrf/3atODAABub/HfrTldpuiFCBIRKwrGuEsbvbu88ChiuxqS
+         8a3Q==
+X-Gm-Message-State: ABy/qLbI159XA/s3wXOC2FlOLBpopGwdUWnNnPomFcF8sq8Kl+JKJv4y
+        9+Vt4kcmNw1760akZH8PJFAycfAXSg9cVzyfGpM=
+X-Google-Smtp-Source: APBJJlE0xkzS08RMt8yd7eqeNOa+sfpj/or0uIsa7m/WeT7ybK4WWGVR/nd2iSYTODdqjMCKQeeVPXXhFVq9VpATKiI=
+X-Received: by 2002:a2e:8883:0:b0:2b6:e2c2:d234 with SMTP id
+ k3-20020a2e8883000000b002b6e2c2d234mr11356614lji.33.1689036080823; Mon, 10
+ Jul 2023 17:41:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705052346.39337-9-frank.li@vivo.com>
+References: <CAN+4W8iRH6kpDmmY8i5r1nKbckaYghmOCqRXe+4bDHE7vzVMMA@mail.gmail.com>
+ <20230706153327.99298-1-kuniyu@amazon.com>
+In-Reply-To: <20230706153327.99298-1-kuniyu@amazon.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 10 Jul 2023 17:41:09 -0700
+Message-ID: <CAADnVQK5gorOuM+GTANJjrwTNSfVcEO-cL_ESqXOjUBdpJLvGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets
+ with bpf_sk_assign
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Lorenz Bauer <lmb@isovalent.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Hemanth Malla <hemanthmalla@gmail.com>,
+        Joe Stringer <joe@cilium.io>, Joe Stringer <joe@wand.net.nz>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,33 +93,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jul 6, 2023 at 8:33=E2=80=AFAM Kuniyuki Iwashima <kuniyu@amazon.com=
+> wrote:
+>
+> From: Lorenz Bauer <lmb@isovalent.com>
+> Date: Thu, 6 Jul 2023 09:11:15 +0100
+> > On Thu, Jul 6, 2023 at 1:41=E2=80=AFAM Kuniyuki Iwashima <kuniyu@amazon=
+.com> wrote:
+> > >
+> > > Sorry for late reply.
+> > >
+> > > What we know about sk before inet6?_lookup_reuseport() are
+> > >
+> > >   (1) sk was full socket in bpf_sk_assign()
+> > >   (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
+> > >   (3) sk was TCP_LISTEN here if TCP
+> >
+> > Are we looking at the same bpf_sk_assign? Confusingly there are two
+> > very similarly named functions. The one we care about is:
+> >
+> > BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64=
+, flags)
+> > {
+> >     if (!sk || flags !=3D 0)
+> >         return -EINVAL;
+> >     if (!skb_at_tc_ingress(skb))
+> >         return -EOPNOTSUPP;
+> >     if (unlikely(dev_net(skb->dev) !=3D sock_net(sk)))
+> >         return -ENETUNREACH;
+> >     if (sk_is_refcounted(sk) &&
+> >         unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
+> >         return -ENOENT;
+> >
+> >     skb_orphan(skb);
+> >     skb->sk =3D sk;
+> >     skb->destructor =3D sock_pfree;
+> >
+> >     return 0;
+> > }
+> >
+> > From this we can't tell what state the socket is in or whether it is
+> > RCU freed or not.
+>
+> But we can in inet6?_steal_sock() by calling sk_is_refcounted() again
+> via skb_steal_sock().
+>
+> In inet6?_steal_sock(), we call inet6?_lookup_reuseport() only for
+> sk that was a TCP listener or UDP non-connected socket until just before
+> the sk_state checks.  Then, we know *refcounted should be false for such
+> sockets even before inet6?_lookup_reuseport().
+>
+> After the checks, sk might be poped out of the reuseport group before
+> inet6?_lookup_reuseport() and reuse_sk might be NULL, but it's not
+> related because *refcounted is a value for sk, not for reuse_sk.
 
-On Wed, Jul 05, 2023 at 01:23:45PM +0800, Yangtao Li wrote:
-> When the driver is removed, we need to close the device.
-> 
-> Fixes: 3045a5f5202a ("Input: add LPC32xx touchscreen controller driver")
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  drivers/input/touchscreen/lpc32xx_ts.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/input/touchscreen/lpc32xx_ts.c b/drivers/input/touchscreen/lpc32xx_ts.c
-> index 15b5cb763526..ffdd748a9992 100644
-> --- a/drivers/input/touchscreen/lpc32xx_ts.c
-> +++ b/drivers/input/touchscreen/lpc32xx_ts.c
-> @@ -305,6 +305,8 @@ static int lpc32xx_ts_remove(struct platform_device *pdev)
->  	struct lpc32xx_tsc *tsc = platform_get_drvdata(pdev);
->  	struct resource *res;
->  
-> +	lpc32xx_stop_tsc(tsc);
-> +
-
-This change is not needed because lpc32xx_stop_tsc() is already being
-called from lpc32xx_ts_close() which is called when we unregister input
-device (provided that open() was called earlier).
-
-Thanks.
-
--- 
-Dmitry
+I was about to apply v5 before I noticed this discussion on v4.
+Sounds like v6 will be needed.
+Next time please continue discussion in the latest version.
