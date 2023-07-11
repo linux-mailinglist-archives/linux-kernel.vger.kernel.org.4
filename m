@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1A674EFE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EB374EFE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjGKNKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S231183AbjGKNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbjGKNKD (ORCPT
+        with ESMTP id S229907AbjGKNKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:10:03 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB989188;
-        Tue, 11 Jul 2023 06:10:02 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qJD7v-0002JU-9d; Tue, 11 Jul 2023 15:09:59 +0200
-Message-ID: <cfa28818-9eaf-0dc9-cb4a-1b3de318e627@leemhuis.info>
-Date:   Tue, 11 Jul 2023 15:09:58 +0200
+        Tue, 11 Jul 2023 09:10:55 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C9F7;
+        Tue, 11 Jul 2023 06:10:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-991da766865so717070966b.0;
+        Tue, 11 Jul 2023 06:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689081052; x=1691673052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KRZ9gjmw87g4brURnBpYdWp0aYueIrOdUQ52IUQwaEM=;
+        b=cl3zLznOWKZlQ4FhQ4x9jVeFgq49i98IJvZ5DzdrnsEHtyTjAG3YAYm9ZCG79BqkE3
+         PpW6MoOehui8YuNMfi8PIM7BEK/XXpGx8gO/mCl4KtxFQBb3OrEG9G+gtJz8Ao6xqWb4
+         w7fgHoggn6rdQ7bBRh7FTNCl4iqXbBReeINgUwtwy/lLQvfYeCx5KGUI259XGPKXqn7u
+         H8bTGZuVjpEeuibFOQR7ddYDIb3d1JxNNfPDBxa/hjr8C7aNL8jxkxQjVUFoPTucbX2L
+         QDLUaJ1/q89+lKUJIEW1Pqpn4XeSfFG/lwnE7ytlKUkOFjBoausDyn9l8jZxOkypjZH3
+         3/ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689081052; x=1691673052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KRZ9gjmw87g4brURnBpYdWp0aYueIrOdUQ52IUQwaEM=;
+        b=bQ4BCzwEirIjlNuKhPubiBdWObPVLvhYT7ntYX7fni6u6PVfA4n+l8ZrBmjfZM5YWm
+         wiJQXeXTYVIolH6dqn/FvC1oE7PMkoeF0XYdPTkQm3HXma5iErPWruwqM+adNNKTbAqe
+         odtpdHR10o38X8bmAg3vLkfqUjohrOvZfclXZ5XzSV8Y4DA9LtAIUKHtluu74YIcYM0r
+         t7MvMirQtYdEY4LNZBsGBwW7dXgQ1FgHavbZ46gqvvztgsMX6z0LHDoI8akBIfrDa74o
+         5S1vuZZMiqkpbKlfLr09SkbfNpPb3mCMmy539vLb6d0kEwGy2JJ6jVIoD0VnxVJPeeHG
+         Nlhg==
+X-Gm-Message-State: ABy/qLaDMQGWAYUX12chuyTG7+rb6oe0cOSCwK4RgtdyBclr8j2jegdA
+        HYyRo0bxf5d+EBKLMdqvfRFRwxStlN5/mCyBwbs=
+X-Google-Smtp-Source: APBJJlH9JgkV6PLxfAvmProv9EI7zKZRqCSvA3fW+TyrlhKR/oqWJq9RZBKui/jrAuP21xvOz/Goq7zDAi5DI+1NDBA=
+X-Received: by 2002:a17:906:196:b0:994:17e3:2754 with SMTP id
+ 22-20020a170906019600b0099417e32754mr2009930ejb.17.1689081052199; Tue, 11 Jul
+ 2023 06:10:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [PATCH] HID: logitech-hidpp: rework one more time the retries
- attempts
-Content-Language: en-US, de-DE
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bastien Nocera <hadess@hadess.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
- <2023062156-trespass-pandemic-7f4f@gregkh>
- <qbvmv3eexohswyagmllfh3xsxoftwa3wbmsdafmwak2bxlnlft@jz74dijlfxlz>
- <31ce32e018a9fa410e9e1f3e5900621b16a56091.camel@hadess.net>
- <CAO-hwJLFSUJaGK5DAOz30+YyC1hGgHnbeJbc5iQ47jxBcbRSCg@mail.gmail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <CAO-hwJLFSUJaGK5DAOz30+YyC1hGgHnbeJbc5iQ47jxBcbRSCg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689081002;13510ddf;
-X-HE-SMSGID: 1qJD7v-0002JU-9d
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230710215023.679-1-asmaa@nvidia.com> <CAHp75Ve87oHP4P-=xHZgHuWyJJnpuARH+qzXO_vJRhUeovXMWQ@mail.gmail.com>
+ <CH2PR12MB38958A4ABF8397A53D68F41AD731A@CH2PR12MB3895.namprd12.prod.outlook.com>
+In-Reply-To: <CH2PR12MB38958A4ABF8397A53D68F41AD731A@CH2PR12MB3895.namprd12.prod.outlook.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 11 Jul 2023 16:10:16 +0300
+Message-ID: <CAHp75VcJ0x2Bv9afALWsxB3EWWB7YEfo+rzZpKiafdm74z_aWQ@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: mmio: fix calculation of bgpio_bits
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Thompson <davthompson@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.06.23 16:02, Benjamin Tissoires wrote:
-> On Sun, Jun 25, 2023 at 10:30 AM Bastien Nocera <hadess@hadess.net> wrote:
->> On Fri, 2023-06-23 at 10:37 +0200, Benjamin Tissoires wrote:
->>> On Jun 21 2023, Greg KH wrote:
->>>> On Wed, Jun 21, 2023 at 11:42:30AM +0200, Benjamin Tissoires wrote:
->>>>> Make the code looks less like Pascal.
->>>>>
->>>>> Extract the internal code inside a helper function, fix the
->>>>> initialization of the parameters used in the helper function
->>>>> (`hidpp->answer_available` was not reset and `*response` wasn't
->>>>> too),
->>>>> and use a `do {...} while();` loop.
->>>>>
->>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when
->>>>> device is busy")
->>>>> Cc: stable@vger.kernel.org
->>>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->>>>> ---
->>>>> as requested by
->>>>> https://lore.kernel.org/all/CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com/
->>>>> This is a rewrite of that particular piece of code.
->>>>> ---
->>>>>  drivers/hid/hid-logitech-hidpp.c | 102 +++++++++++++++++++++++--
->>>>> --------------
->>>>>  1 file changed, 61 insertions(+), 41 deletions(-)
-> [...]
-> 
-> Some people on the Bz were able to reproduce with multiple reboots.
-> But it's not as urgent as previously, and we were close to the 6.4
-> final when I sent it. I'll make sure this goes into 6.5 and gets
-> proper stable backports FWIW.
+On Tue, Jul 11, 2023 at 3:23=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wro=
+te:
+>
+> > > If the "ngpios" property is specified, bgpio_bits is calculated as th=
+e
+> > > round up value of ngpio. At the moment, the only requirement specifie=
+d
+> > > is that the round up value must be a multiple of 8 but it should also
+> > > be a power of 2 because we provide accessors based on the bank size i=
+n
+> > > bgpio_setup_accessors().
+> >
+> > Is this a fixup for the other patch? If so, then why did you split them=
+ again?
+> >
+> Apologies, I might have misunderstood your previous comment. I thought yo=
+u asked me to split it again so that it is a rebased continuation of the ap=
+proved old patches.
 
-Did that happen? Doesn't look like it from here, but maybe I'm missing
-something. Where there maybe other changes to resolve the remaining
-problems some users encounter sporadically since the urgent fixes went in?
+No, I asked to move the changelog section to be not a part of the
+commit message and asked what happened to the tags, because you
+dropped them.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+> To avoid any further misunderstandings on my part , could you please conf=
+irm the following:
+> 1) I will create one patch combining both
+
+_If_ I understood the patch flow correctly, and it means that one is
+the fix to the other one, then yes, otherwise no, keep them split with
+appropriate Fixes tag added.
+
+> 2) The tag for this one patch will be "[PATCH v2] gpio: mmio: handle "ngp=
+ios" properly in bgpio_init()"
+> And Reviewed-By Andy and Linus.
+
+What do you mean by "tag" in this context? Do you mean "Subject" or
+title? Otherwise it's very confusing.
+For the Rb tag by me, yes, please keep it. As for Linus' one I think
+you should drop it and add a changelog entry to explain why, because
+that tag is only for the "fix" part. Do not forget to Cc Linus.
+
+> 3) I will add in the commit message , a changelog section as shown below:
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+
+It's mandatory according to the Submitting Patches documentation. Read
+it for clarification on how to use and when the tags.
+
+> ---
+> V1->v2:
+> - rebase + combination of the 2 patches.
+
+I believe this needs more entries. Since it's not part of the commit
+message, you may use free wording to explain what exactly had happened
+to the patches, with links, references, etc.
+
+--=20
+With Best Regards,
+Andy Shevchenko
