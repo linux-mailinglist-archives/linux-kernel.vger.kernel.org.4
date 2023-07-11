@@ -2,177 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA37674E9C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0745274E9C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjGKJDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S231896AbjGKJDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjGKJDd (ORCPT
+        with ESMTP id S231827AbjGKJDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:03:33 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B550E94
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:03:31 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 898F7148CBE;
-        Tue, 11 Jul 2023 11:03:28 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1689066208; bh=gsA9dp5k5kL6wVwYiuNLHaFWo2zidgNfMjsDqoPRfvA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lTBkHMaRlvYY4xPel/M5UCaSWW2SpSEVRze8dKTgfvPMmQjjKLQWBbnq/UQmT/PLp
-         soZ+v+Dw+CTEepA07g799v8ScO+hduASLM0Yjiu3042TsoZyXTY5QAKlvZlOuFztnw
-         18Zo87nEx5fPnDo9NL6xeVMqf9WgPD4fE43YjpSfOVyNAS7dp6Qfa1V35r7nY8Tfc7
-         N38JwA/go6jlLM8Cre6j+8YtiQLsv+LbXML9iDs0vDTsx+R/J/ltuUGPmJ9E0MNdZN
-         YTmb0OsxoWAFfBth1siEGkEJMU6UuUaTpcMFuxc+W5gqSoxM7jg3dQWoymWJyFkfX9
-         Zy4tguasNPMiA==
-Date:   Tue, 11 Jul 2023 11:03:25 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Mike Lothian <mike@fireburn.co.uk>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2 0/7] Allow dynamic allocation of software IO TLB
- bounce buffers
-Message-ID: <20230711110325.2521472c@meshulam.tesarici.cz>
-In-Reply-To: <CAHbf0-HY0-u4MwgU39b53hjOM+bWfGmOEYQuvHARjV+6j+O7Kg@mail.gmail.com>
-References: <cover.1681898595.git.petr.tesarik.ext@huawei.com>
-        <20230426141520.0caf4386@meshulam.tesarici.cz>
-        <2023042617-wobble-enlighten-9361@gregkh>
-        <20230426144439.5674f8bc@meshulam.tesarici.cz>
-        <20230509091635.27450bd9@meshulam.tesarici.cz>
-        <2023050949-grueling-verify-a43b@gregkh>
-        <CAHbf0-HY0-u4MwgU39b53hjOM+bWfGmOEYQuvHARjV+6j+O7Kg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        Tue, 11 Jul 2023 05:03:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE4110C3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:03:43 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51e4c868ee4so3961241a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:03:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689066222; x=1691658222;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Lw6Fio6MM8aQyHHH2Gtx5wACdysDo6ZPeKbdUxENhw=;
+        b=msiU/+xMcahUqIkdiyY5SaV0lh5WjlO2rQuLmPZ0badsW7i6rQ5pmTNlIcSdSDBaRG
+         hIugN9XVpR7Rr4jpls+Zi/5PkCozRv2TdIgnr1TEYWsYwPPxWdd5dzV1XhALVT/B7Q0B
+         OJNolJmF2/wfYbO0JDkyGwYOdP2RfQXyM7zbfDyNQsoObj4DT3jTXHsGRGZyquwnTFZl
+         TzWz5LFI6AFePlNH5xSuYsqZfHNtRJvJ2xqdDG3lhEe3mf3qBn9+PYWvrfKxSStXM43Z
+         eOA7Km+2/cV4INV3wzQPEMEUlwPOxw2AKAQR4LFh/nZF/51cI52tDXM5Zd3udfgw9/oF
+         v3eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689066222; x=1691658222;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Lw6Fio6MM8aQyHHH2Gtx5wACdysDo6ZPeKbdUxENhw=;
+        b=YNATsRUFEiNFBwRe4jSGW2Q/MmXYDnqYfs7FWgm0hH+OrG5aJ7X/c8kGo3Ts6zrHZo
+         qCgnEoiWj+Gms5H8z1LZRGz0aM8H/7MxBV1nKNhmPoTbPqxqBhYRgP+5beWQfeeOiX+b
+         dY8spEg2rl+kRrGTgExaFlzdU93s8ibCc0oIHAou4+/rz4K/evUUbappd2v+aD5IkXAw
+         eVc1VIcpoFSnGfyey26JTIe3lOlg3phBvlGhY5f2GLdXuM/jJ8YTfjXu6KfFMDyxFbIn
+         J3M1CGhIBZxVE652ZNhpAXl4+vRY++5xLu9nBdpyQKnj30SKEOeMynavog256zSbB1/h
+         NVcg==
+X-Gm-Message-State: ABy/qLZnwXZTwCLwYM3kaeYmSk3p6IroJsVk1spzaoziiaYG9Atfxn/f
+        4wSFWAN7U5f5EfTM48FuNntODw==
+X-Google-Smtp-Source: APBJJlGQrnIKzKa1cvH6yRytquR4/mHpXJkdOXwxN9nXW/rPbh62x2Xb+7Gbq7H7q618igwYKqIGew==
+X-Received: by 2002:aa7:ccd1:0:b0:51e:12b:b989 with SMTP id y17-20020aa7ccd1000000b0051e012bb989mr13728889edt.20.1689066221712;
+        Tue, 11 Jul 2023 02:03:41 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id y19-20020aa7ccd3000000b0051dd4daf13fsm946680edt.30.2023.07.11.02.03.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 02:03:41 -0700 (PDT)
+Message-ID: <8e5a51cb-c726-1027-1f4c-7870b10bc706@linaro.org>
+Date:   Tue, 11 Jul 2023 11:03:38 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
+ phy
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <cover.1689065318.git.quic_varada@quicinc.com>
+ <77fe66271044a18871e1dfb80bbb481617197d18.1689065318.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <77fe66271044a18871e1dfb80bbb481617197d18.1689065318.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 23:23:45 +0100
-Mike Lothian <mike@fireburn.co.uk> wrote:
+On 11/07/2023 10:51, Varadarajan Narayanan wrote:
+> Document the M31 USB2 phy present in IPQ5332.
+> 
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+> v3:
+> 	Incorporate review comments. Will bring in ipq5018 compatible
+> 	string while posting ipq5018 usb patchset.
+> 
+> v1:
+> 	Rename qcom,m31.yaml -> qcom,ipq5332-usb-hsphy.yaml
+> 	Drop default binding "m31,usb-hsphy"
+> 	Add clock
+> 	Remove 'oneOf' from compatible
+> 	Remove 'qscratch' region from register space as it is not needed
+> 	Remove reset-names
+> 	Fix the example definition
+> ---
+>  .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml       | 49 ++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> new file mode 100644
+> index 0000000..2cfdd73
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-hsphy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: M31 (https://www.m31tech.com) USB PHY
 
-> Hi
->=20
-> I was hoping this might land for 6.5-rc1, is there a new version that
-> might apply against 6.5?
+The URL should rather go to description, not the title. Title is like
+document title.
 
-Yes, there is a v3, which is a complete rewrite based on feedback from
-various people on this mailing list:
+> +
+> +maintainers:
+> +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> +  - Varadarajan Narayanan <quic_varada@quicinc.org>
+> +
+> +description:
+> +  USB M31 PHY found in Qualcomm IPQ5018, IPQ5332 SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,ipq5332-usb-hsphy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    maxItems: 1
 
-https://lore.kernel.org/linux-iommu/cover.1687859323.git.petr.tesarik.ext@h=
-uawei.com/T/
+Drop
 
-Petr T
+> +    contains:
 
-> Cheers
->=20
-> Mike
->=20
-> On Tue, 9 May 2023 at 08:32, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, May 09, 2023 at 09:16:35AM +0200, Petr Tesa=C5=99=C3=ADk wrote:=
- =20
-> > > On Wed, 26 Apr 2023 14:44:39 +0200
-> > > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
-> > > =20
-> > > > Hi Greg,
-> > > >
-> > > > On Wed, 26 Apr 2023 14:26:36 +0200
-> > > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > > =20
-> > > > > On Wed, Apr 26, 2023 at 02:15:20PM +0200, Petr Tesa=C5=99=C3=ADk =
-wrote: =20
-> > > > > > Hi,
-> > > > > >
-> > > > > > On Wed, 19 Apr 2023 12:03:52 +0200
-> > > > > > Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
-> > > > > > =20
-> > > > > > > From: Petr Tesarik <petr.tesarik.ext@huawei.com>
-> > > > > > >
-> > > > > > > The goal of my work is to provide more flexibility in the siz=
-ing of
-> > > > > > > SWIOTLB.
-> > > > > > >
-> > > > > > > The software IO TLB was designed with these assumptions:
-> > > > > > >
-> > > > > > > 1. It would not be used much, especially on 64-bit systems.
-> > > > > > > 2. A small fixed memory area (64 MiB by default) is sufficien=
-t to
-> > > > > > >    handle the few cases which require a bounce buffer.
-> > > > > > > 3. 64 MiB is little enough that it has no impact on the rest =
-of the
-> > > > > > >    system.
-> > > > > > >
-> > > > > > > First, if SEV is active, all DMA must be done through shared
-> > > > > > > unencrypted pages, and SWIOTLB is used to make this happen wi=
-thout
-> > > > > > > changing device drivers. The software IO TLB size is increase=
-d to
-> > > > > > > 6% of total memory in sev_setup_arch(), but that is more of an
-> > > > > > > approximation. The actual requirements may vary depending on =
-the
-> > > > > > > amount of I/O and which drivers are used. These factors may n=
-ot be
-> > > > > > > know at boot time, i.e. when SWIOTLB is allocated.
-> > > > > > >
-> > > > > > > Second, other colleagues have noticed that they can reliably =
-get
-> > > > > > > rid of occasional OOM kills on an Arm embedded device by redu=
-cing
-> > > > > > > the SWIOTLB size. This can be achieved with a kernel paramete=
-r, but
-> > > > > > > determining the right value puts additional burden on pre-rel=
-ease
-> > > > > > > testing, which could be avoided if SWIOTLB is allocated small=
- and
-> > > > > > > grows only when necessary. =20
-> > > > > >
-> > > > > > Now that merging into 6.4 has begun, what about this patch seri=
-es? I'm
-> > > > > > eager to get some feedback (positive or negative) and respin th=
-e next
-> > > > > > version. =20
-> > > > >
-> > > > > It's the merge window, we can't add new things that haven't been =
-in
-> > > > > linux-next already. =20
-> > > >
-> > > > This is understood. I'm not asking for immediate inclusion.
-> > > > =20
-> > > > >   Please resubmit it after -rc1 is out. =20
-> > > >
-> > > > If you can believe that rebasing to -rc1 will be enough, then I will
-> > > > also try to believe I'm lucky. ;-)
-> > > >
-> > > > The kind of feedback I really want to get is e.g. about the extra
-> > > > per-device DMA-specific fields. If they cannot be added to struct
-> > > > device, then I'd rather start discussing an interim solution, becau=
-se
-> > > > getting all existing DMA fields out of that struct will take a lot =
-of
-> > > > time... =20
-> > >
-> > > All right, 6.4-rc1 is out now. The patch series still applies cleanly.
-> > >
-> > > Any comments what must be changed (if anything) to get it in? =20
->  [...] =20
+Drop
+
+> +      items:
+> +        - const: cfg_ahb
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> +    usbphy0: ipq5332-hsphy@7b000 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+Best regards,
+Krzysztof
 
