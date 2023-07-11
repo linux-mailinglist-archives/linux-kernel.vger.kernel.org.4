@@ -2,108 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D682174F14A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6547174F17A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbjGKOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S233436AbjGKOQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjGKOML (ORCPT
+        with ESMTP id S233358AbjGKOP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:12:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0546B0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:12:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 11 Jul 2023 10:15:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A411012A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689084905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1pOGR1OljASy2bUmotj5py8g/E83mf7vWRZig5PbuEs=;
+        b=BOVaF+dKD0Klr4F9aOs3vWa0qTrzpoba56ox87OVWzeZ1CXV5WiWk5V//6zY2sjsQign5r
+        o+ldsS2J9Lp9AbFnnNKq4ddEEMpXZP5mcyDQWAkA4yRKgr0R1MYqH/zFIVKKBLLFFb4SwG
+        SUvuftEqpnxgB5/VVV1ic2wYuddLwAk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-414-RLSu_dQkM8CP6iyDbHG9sg-1; Tue, 11 Jul 2023 10:15:03 -0400
+X-MC-Unique: RLSu_dQkM8CP6iyDbHG9sg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE90614E5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED1CC433C7;
-        Tue, 11 Jul 2023 14:12:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689084729;
-        bh=NRBCd7EYg1Ttg7Sd52hrW/FKaUnozUqBArGH46pm5Hs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dv3ZPcOrttwlRQ7ym+XMaMprZg4jGyXAIcnMCZRSQeRCMr+rPOx+AR2x6FEX+gXnQ
-         JsZ9nzbfIpxOMv7EyoXY5LJgHFl8NMwBFdr6qI/rnUm22VqNc+CWNgEThskgCZR0JZ
-         9XOm7XCRs+H/vlnlGMQ5Vg0k9wAffpQtZ8WSlAYw=
-Date:   Tue, 11 Jul 2023 16:12:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sagi Grimberg <sagi@grimberg.me>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Clemens S." <cspringsguth@gmail.com>,
-        Martin Belanger <martin.belanger@dell.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        John Meneghini <jmeneghi@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVMe <linux-nvme@lists.infradead.org>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        =?utf-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
- (Samsung SM-953 Datacenter SSD)
-Message-ID: <2023071135-opt-choosing-51dd@gregkh>
-References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
- <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
- <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
- <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
- <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
- <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
- <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
- <20230711120609.GB27050@lst.de>
- <23017407-83eb-8fb0-5d91-2c7c4ae02544@grimberg.me>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F9D7108BD88;
+        Tue, 11 Jul 2023 14:12:13 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.17.109])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F118E200B406;
+        Tue, 11 Jul 2023 14:12:12 +0000 (UTC)
+Date:   Tue, 11 Jul 2023 10:12:10 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Benjamin Segall <bsegall@google.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v5 2/2] Sched/fair: Block nohz tick_stop when cfs
+ bandwidth in use
+Message-ID: <20230711141210.GC150804@lorien.usersys.redhat.com>
+References: <20230707195748.2918490-1-pauld@redhat.com>
+ <20230707195748.2918490-3-pauld@redhat.com>
+ <xm26lefnfhkd.fsf@google.com>
+ <20230711131024.GA150804@lorien.usersys.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <23017407-83eb-8fb0-5d91-2c7c4ae02544@grimberg.me>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230711131024.GA150804@lorien.usersys.redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:14:54PM +0300, Sagi Grimberg wrote:
+On Tue, Jul 11, 2023 at 09:10:24AM -0400 Phil Auld wrote:
+> On Mon, Jul 10, 2023 at 04:54:58PM -0700 Benjamin Segall wrote:
+> > Phil Auld <pauld@redhat.com> writes:
+> > 
+> > > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+> > > can easily run well past their quotas before a remote tick does
+> > > accounting.  This leads to long, multi-period stalls before such
+> > > tasks can run again. Currently, when presented with these conflicting
+> > > requirements the scheduler is favoring nohz_full and letting the tick
+> > > be stopped. However, nohz tick stopping is already best-effort, there
+> > > are a number of conditions that can prevent it, whereas cfs runtime
+> > > bandwidth is expected to be enforced.
+> > >
+> > > Make the scheduler favor bandwidth over stopping the tick by setting
+> > > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+> > > runtime limit enabled. We use cfs_b->hierarchical_quota to
+> > > determine if the task requires the tick.
+> > >
+> > > Add check in pick_next_task_fair() as well since that is where
+> > > we have a handle on the task that is actually going to be running.
+> > >
+> > > Add check in sched_can_stop_tick() to cover some edge cases such 
+> > > as nr_running going from 2->1 and the 1 remains the running task.
+> > >
+> > > Add sched_feat HZ_BW (off by default) to control the tick_stop
+> > > behavior.
+> > >
+> > > Signed-off-by: Phil Auld <pauld@redhat.com>
+> > > Cc: Ingo Molnar <mingo@redhat.com>
+> > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > > Cc: Juri Lelli <juri.lelli@redhat.com>
+> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > Cc: Ben Segall <bsegall@google.com>
+> > > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > > ---
+> > >  kernel/sched/core.c     | 12 ++++++++++
+> > >  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
+> > >  kernel/sched/features.h |  2 ++
+> > >  kernel/sched/sched.h    |  1 +
+> > >  4 files changed, 64 insertions(+)
+> > >
+> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > > index 1b214e10c25d..4b8534abdf4f 100644
+> > > --- a/kernel/sched/core.c
+> > > +++ b/kernel/sched/core.c
+> > > @@ -1229,6 +1229,18 @@ bool sched_can_stop_tick(struct rq *rq)
+> > >  	if (rq->nr_running > 1)
+> > >  		return false;
+> > >  
+> > > +	/*
+> > > +	 * If there is one task and it has CFS runtime bandwidth constraints
+> > > +	 * and it's on the cpu now we don't want to stop the tick.
+> > > +	 * This check prevents clearing the bit if a newly enqueued task here is
+> > > +	 * dequeued by migrating while the constrained task continues to run.
+> > > +	 * E.g. going from 2->1 without going through pick_next_task().
+> > > +	 */
+> > > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && task_on_rq_queued(rq->curr)) {
+> > > +		if (cfs_task_bw_constrained(rq->curr))
+> > > +			return false;
+> > > +	}
+> > > +
+> > 
+> > I think we still need the fair_sched_class check with the bit being on
+> > cfs_rq/tg rather than task.
+> > 
 > 
-> > > Well, that "They keep pumping out more and more devices with the same
-> > > breakage" and the "new device" comment from Pankaj below bear the
-> > > question: should we stop trying to play "whack a mole" with all those
-> > > quirk entries and handle devices with duplicate ids just like Windows does?
-> > 
-> > As far as I can tell Windows completely ignores the IDs.  Which, looking
-> > back, I'd love to be able to do as well, but they are already used
-> > by udev for the /dev/disk/by-id/ links.   Those are usually not used
-> > on desktop systems, as they use the file system labels and UUIDs, but
-> > that doesn't work for non-file system uses.
-> > 
-> > And all this has been working really well with the good old enterprise
-> > SSDs, it's just that the cheap consumer devices keep fucking it up.
-> > 
-> > If we'd take it away now we'd break existing users, which puts us between
-> > a rock and a hard place.
+> Is there a way a non-fair_sched_class task will be in a cfs_rq with
+> cfs_rq->runtime_enabled and/or cfs_b->hierarchical_quota set to non
+> RUNTIME_INF?  I suppose if they are stale and it's had its class changed?
 > 
-> Maybe the compromise would be to add a modparam that tells the driver
-> to ignore it altogether (like allow_bogus_identifiers) that would
-> default to false. Then people can just workaround the problem instead
-> of having the back-and-fourth with the vendor?
+> That makes the condition pretty ugly but I can add that back if needed.
 > 
 
-Module parameters do not work on a per-device basis, sorry.  This isn't
-the 1990's anymore, please do not attempt to add new ones :)
+Sigh, yeah. I took that out when I had the bit in the task. I'll put it
+back in...
 
-thanks,
 
-greg k-h
+
+Cheers,
+Phil
+
+> 
+> Thanks,
+> Phil
+> 
+> 
+> 
+> -- 
+> 
+
+-- 
+
