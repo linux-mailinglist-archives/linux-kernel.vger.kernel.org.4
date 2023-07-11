@@ -2,147 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EEC74F395
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E313E74F39E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjGKPfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S232579AbjGKPgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbjGKPfM (ORCPT
+        with ESMTP id S232345AbjGKPf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:35:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50987ED
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:35:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0FC461426
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:35:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0273DC433C7;
-        Tue, 11 Jul 2023 15:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689089710;
-        bh=UXghBE2NE/kW/pRVkn/IvERI1bxXZoJhXe4i/ktt2/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uUePYcj4YswI66LM2cxNpfR8NTSITOssW6XY7LlceoOoQ4i50geInh/FKf09BG3DL
-         uLQuJKsTB1CzCAYUVRqKYrIcz7xpF7PrJ13E5twXvT70sbVRpu9YVosQhScwUP/kyu
-         PKtVVB+GMHbis5hvWfoLOcmfXV1f26L+iGoXg6QD6FhqlngDy2RmQswqObrPdh4NVI
-         nDkjPElO5QsZUUGQQMWk3Y2Ta+Bh7BWK8xJhlE0CPQHmvqJNcwkf87jXLEgaRTwkUO
-         NUFGnnZjlPtviwjdsYXV7ETO7mJL6TTdw4A3giQgzutpOTTJniIEXpZymcOewKWOkn
-         O+DRmo1O/ECuw==
-Date:   Tue, 11 Jul 2023 16:34:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        regressions@leemhuis.info, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 12/32] mm/vmalloc: vmalloc_to_page() use
- pte_offset_kernel()
-Message-ID: <fbb2b76c-bc5c-4d75-b8cd-37479de688d4@sirena.org.uk>
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
- <696386a-84f8-b33c-82e5-f865ed6eb39@google.com>
- <42279f1f-7b82-40dc-8546-86171018729c@sirena.org.uk>
- <901ae88d-ad0c-4e9d-b199-f1566cc62a00@lucifer.local>
- <c2358f37-ebaa-44d1-b443-ff91bdedc00b@sirena.org.uk>
- <977ddee4-35f0-fcd1-2fd-1c3057e7ea2a@google.com>
+        Tue, 11 Jul 2023 11:35:57 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0CB10EB;
+        Tue, 11 Jul 2023 08:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=wp3Gf78q27oropR3P7+eQq1HKA6J74ZGkab9Ggf11MA=; b=Lg
+        9kbFWJWVcnDtumqg6cH7lFcSrdExgg0dnO5XNJ4II1wJYjSXncNoZuySqiXXhK6EY/TDYiQW76ysj
+        RIC7gwd/V5UlVa/wDFAXVeNzx7Nicm7w1Ldc+Yx+6XBsliMzAgd1Y6NTmDE8Lg+DEDHYll1jTFcx9
+        qFn/HvgidsZW6Gs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qJFOm-00135w-Rw; Tue, 11 Jul 2023 17:35:32 +0200
+Date:   Tue, 11 Jul 2023 17:35:32 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vesa =?iso-8859-1?B?SuTkc2tlbORpbmVu?= 
+        <vesa.jaaskelainen@vaisala.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Davis <afd@ti.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] net: phy: dp83822: Add support for line class driver
+ configuration
+Message-ID: <0ef64a05-64a0-4119-9dcc-83e65434cd24@lunn.ch>
+References: <20230710175621.8612-1-vesa.jaaskelainen@vaisala.com>
+ <261cb91c-eb3a-4612-93ad-25e2bc1a7c23@lunn.ch>
+ <87fac0dd-9a97-b188-4887-8c4bb21196d5@vaisala.com>
+ <6cf76d72-4747-46d2-a1f7-d2f1131491f7@lunn.ch>
+ <85e9dfbd-baea-1d73-aaf0-d6c14a1305eb@vaisala.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w4g5Ya+dx+5ErXu8"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <977ddee4-35f0-fcd1-2fd-1c3057e7ea2a@google.com>
-X-Cookie: marriage, n.:
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <85e9dfbd-baea-1d73-aaf0-d6c14a1305eb@vaisala.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 11, 2023 at 10:51:22AM +0300, Vesa Jääskeläinen wrote:
+> Hi Andrew,
+> 
+> On 10.7.2023 22.38, Andrew Lunn wrote:
+> > > Hi Andrew,
+> > > 
+> > > This is needed for configuration in link between DP83822 and Ethernet Switch
+> > > chip.
+> > What switch chip is it?
+> 
+> Microchip's KSZ9897.
 
---w4g5Ya+dx+5ErXu8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+O.K, so nothing special or oddball.
 
-On Mon, Jul 10, 2023 at 09:34:42PM -0700, Hugh Dickins wrote:
+> > Most boards just connect the MACs together and don't have PHYs in the
+> > middle. There are some boards which do have PHYs, but they don't need
+> > any special mode.
+> 
+> In here there is PHY<->PHY line link. My understanding is that in this
+> particular case PHY link works better than *MII links.
 
-> This feels like one of those bugs which depends on the code size in
-> some way (a bit like those bugs we used to have, where a function was
-> mistakenly marked __init, then in some configs its code landed on a
-> page which got freed at startup - I'm not saying this is that at all,
-> just saying it feels weird in that way).
+I've seen PHY<->PHY done when the switch was on a daughter board, and
+there was worries about getting RGMII over the connector etc.
 
-> Yet your bisection converges convincingly, which I wouldn't expect
-> in that case.
+> > So before accepting any patches, we need a better understanding of
+> > that reduced MLT-3 is and why you would want to use it.
+> 
+> OK.
+> 
+> My understanding is that as we have PHY<->PHY link it needs to handle itself
+> in standard way. Thus the MLT-3 full mode is required for communicating with
+> Ethernet switch.
+> 
+> It seems that Texas Instruments has figured out additional power saving
+> mechanism by carefully selecting used magnetics (they have guidelines for
+> that and list of supported ones). Now the thinking might have continued that
+> let's make the power saving mode the default for all.
 
-Yes, it smells like code size or something other than the commit
-itself, I have seen this sort of behaviour before where something nearby
-in history introduced something which was then triggered by whatever the
-bisect points at.
+Do there guidelines for magnetic says anything about what to do when
+using unsupported ones. Like turn reduced MLT-3 off?
 
-> I suppose I should ask you to try reverting this 0d1c81edc61e alone
-> from 6.5-rc1: the consistency of your bisection implies that it will
-> "fix" the issues, and it is a commit which we could drop.  It makes
-> me a little nervous, applying userspace-pagetable validation to kernel
-> pagetables, so I don't want to drop it; and it would really be cargo-
-> culting to drop it without understanding.  But we could drop it.
+> With carefully selected magnetics one most likely gets correct looking
+> signal when measured from the cable and thus the other party then gets
 
-I did look at that, it doesn't revert cleanly by itself.  Your other
-suggestions are all good - I'll poke at them.  My suspicion is that
-there's some longer standing breakage elsewhere and your series (or even
-just this patch) just happens to push into happening reliably, had it
-not been a mm change and a memory related bug I'd probably have just
-discounted the bisect result.
+> I tried to look up what does this class A and class B mean but I am unable
+> to find the reasoning for that.
 
---w4g5Ya+dx+5ErXu8
-Content-Type: application/pgp-signature; name="signature.asc"
+If you look at the oscilloscope screenshots in the support forum, it
+looks like in reduced MLT-3 mode, The TX- and TX+ pins only have two
+states, not three. It relies on the magnetics to combine the two
+signals to produce a three state signal, and handle the bias in each
+signal.
 
------BEGIN PGP SIGNATURE-----
+When in MLT-3 mode, i expect the TX- and TX+ pins do real MLT-3.
 
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmStdqMACgkQJNaLcl1U
-h9B2ygf3WcoveZBcNCDFtF0/hH7JWuCVAeL856Ci/azCtT0y2w6cpUP3VO1xTxDr
-m8YfCM2mWlg/iKZ6yC1FkJvgr1m2ZjGA+Q2awiZUiZt/htJOgDnQ3KMRt8jGvSs3
-ctdg8gdYBz4LK9TOz5LPKX5UsjiDBcebYEWqAkgvy3ZSGdubnQ8WqlEmDXT/dlOL
-3xE4fyDXFPMtZThRYoE0wrN5EwVLJTaE7O/8TpLhPxK2iXbQCgASZhSfe23CCKKF
-k5C2XwR97eTiT/uwJtN2aYy/y+ay7+8Do7JEGu2hMJBm8/X7ZUrLtms8MaKNvTGJ
-83r2M8FrNLXbhVdHNQJ249P5rF99
-=ztfN
------END PGP SIGNATURE-----
+With real MLT-3, you can then do capacitor coupling to other devices
+which conform to 802.3.
 
---w4g5Ya+dx+5ErXu8--
+> Do we have people from Texas Instruments that could share more insights?
+
+Maybe, but don't hold your breath. Since Dan Murphy left TI, TI does
+not really support its own PHYs in mainline.
+
+> In a way this could even be:
+> 
+>   ti,force-standard-mlt-3-signaling;
+
+Maybe. Or ti,disable-proprietary-line-coding
+
+Lets give TI a couple of days to comment.
+
+     Andrew
