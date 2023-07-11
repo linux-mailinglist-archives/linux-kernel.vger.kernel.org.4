@@ -2,119 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66F274F609
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4842474F605
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjGKQs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S230195AbjGKQsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233433AbjGKQsL (ORCPT
+        with ESMTP id S230490AbjGKQrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:48:11 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC7D10F2;
-        Tue, 11 Jul 2023 09:48:10 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BGkARF018906;
-        Tue, 11 Jul 2023 16:48:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=JA8X7Il3lfH0EZNiXLVBlBOW9Ho6VArOtCyCLNslmEA=;
- b=eZ1KWEtyhWkOj0vsNXM9jnECBQupFdmtGSIDTIDY+dSZJw2aTzWyQvGtXPEvc3F49Kyf
- Ylvz3j1qlvuv3w/qaLRcBP3XZN3Lc2x/0a7Y4TWPKxpY23gql4SJnPDQE6rWaKaWXc6x
- wkOhnuCRignC+1y3ktaqJ5QHtMXdpXpnw3P2//ejbtwWEBpazuKe3wyCyf+nEOlBK/O9
- e1mnZwZOHwcYtAu9JvTwXQsZL3TrvIa0jOrObwnWfHSp8Dw4YeJhVi9qcLSkgnTyk4Zs
- jZq/zwhcPeQnxKS0OAnizL7/1n7+26gQ9jh5LBvN7c+jSRBCbiRaFp9BWjZ1McV/ZmTo BQ== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rsassre17-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 16:48:02 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEFVYI019726;
-        Tue, 11 Jul 2023 16:45:04 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3rqmu0r8vg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 16:45:04 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BGj0e558196234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 16:45:01 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8BCC20043;
-        Tue, 11 Jul 2023 16:45:00 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D99520040;
-        Tue, 11 Jul 2023 16:44:59 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.61.188.53])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jul 2023 16:44:59 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     "linux-integrity @ vger . kernel . org" 
-        <linux-integrity@vger.kernel.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH] ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig
-Date:   Tue, 11 Jul 2023 12:44:47 -0400
-Message-Id: <20230711164447.714035-1-nayna@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 11 Jul 2023 12:47:51 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E6E1997
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:47:20 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b698937f85so97543281fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1689094038; x=1691686038;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U2CJtNA/0mITyVD5x12gejKNioPrhHv1tiOXdLtkt0Q=;
+        b=B91IiqS0yBY17d0YOqmYOy0+i0PLZOGSTRs+jHU5f5/gALkqM6fypyaFLlAKCBu0n7
+         1GH/D2VcfG6qY71PYudEVp+MPqmg5Inlu8o6jjZoK+mCyGSAOujouLAJgcmAHpMiZMeH
+         Ai+6hmmuyL70bwuTy+bXvKBWj1w8p0mL6OBY0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689094038; x=1691686038;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U2CJtNA/0mITyVD5x12gejKNioPrhHv1tiOXdLtkt0Q=;
+        b=kmBP96n2mGzhj8eG9y1EkV8B5wJY5Dd0Q0bdMb9LlTeXud+B5+0XxUVNmHHIw3GsgS
+         otvztCgkiuAH1JUaqvKGNrtrodRB6chgUF13BK/WbH5ChwTi7r1+KBBd1S/llQAVZ+Pn
+         XDfEczmaW5Kw++8QhWQeCPlE8FerMrRu9IQnWxSooQRALe6UUOgrRJs461iRfJ9dVOWE
+         i/K5Wq27ihELdIoyqHe0w9NysdjhVKhXkyVVeagU+/prIn1V1QCKsibkhHVwwykE+gG1
+         AukaTg6CWUvv7dtJRlF30xb1pWIEdUTpPjUPo4+VxwjVjUhG/iuOlOLQ3Wh8axl3djFy
+         9atQ==
+X-Gm-Message-State: ABy/qLYvtpREb42eiTfx4enIgx/n+KUwP1Mvx7YP61zdCpZ4dA5FQ0Ww
+        dyVZdUqh/jihMB3OtLWnSytqvGg+dLHsWuV6CtSj2p4Y
+X-Google-Smtp-Source: APBJJlHFCfLho0NqnOO4R/XbbFMSAu6zduCa6uY10kb5Ml/fg99TVjB7r19I4jwU9QQhi808n6vovw==
+X-Received: by 2002:a2e:8007:0:b0:2b3:3e19:a047 with SMTP id j7-20020a2e8007000000b002b33e19a047mr13558136ljg.6.1689094038475;
+        Tue, 11 Jul 2023 09:47:18 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170906370800b009929ab17be0sm1342357ejc.162.2023.07.11.09.47.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 09:47:18 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51d95aed33aso7257263a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:47:18 -0700 (PDT)
+X-Received: by 2002:aa7:d052:0:b0:51e:2a57:1d93 with SMTP id
+ n18-20020aa7d052000000b0051e2a571d93mr13616464edo.16.1689094037813; Tue, 11
+ Jul 2023 09:47:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bDpeO9ZNEw97fHm6cuDx17o7ynZEU7pC
-X-Proofpoint-GUID: bDpeO9ZNEw97fHm6cuDx17o7ynZEU7pC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_09,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 mlxlogscore=690
- adultscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110149
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
+ <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com> <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
+ <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
+ <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com> <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
+ <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info> <20230711120609.GB27050@lst.de>
+In-Reply-To: <20230711120609.GB27050@lst.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 11 Jul 2023 09:47:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whXh9sgLo24RO02JjfD0m3HE5NADRPWoEd+dW6bruFhVA@mail.gmail.com>
+Message-ID: <CAHk-=whXh9sgLo24RO02JjfD0m3HE5NADRPWoEd+dW6bruFhVA@mail.gmail.com>
+Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
+ (Samsung SM-953 Datacenter SSD)
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>,
+        "Clemens S." <cspringsguth@gmail.com>,
+        Martin Belanger <martin.belanger@dell.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVMe <linux-nvme@lists.infradead.org>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        =?UTF-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Time to remove "IMA_TRUSTED_KEYRING".
+On Tue, 11 Jul 2023 at 05:06, Christoph Hellwig <hch@lst.de> wrote:
+>
+> As far as I can tell Windows completely ignores the IDs.  Which, looking
+> back, I'd love to be able to do as well, but they are already used
+> by udev for the /dev/disk/by-id/ links.   Those are usually not used
+> on desktop systems, as they use the file system labels and UUIDs, but
+> that doesn't work for non-file system uses.
 
-Fixes: f4dc37785e9b ("integrity: define '.evm' as a builtin 'trusted' keyring") # v4.5+
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
----
- security/integrity/ima/Kconfig | 12 ------------
- 1 file changed, 12 deletions(-)
+The thing is, the nvme code seems to actively do completely stuipid
+things in this area.
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 60a511c6b583..c17660bf5f34 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -248,18 +248,6 @@ config IMA_APPRAISE_MODSIG
- 	   The modsig keyword can be used in the IMA policy to allow a hook
- 	   to accept such signatures.
- 
--config IMA_TRUSTED_KEYRING
--	bool "Require all keys on the .ima keyring be signed (deprecated)"
--	depends on IMA_APPRAISE && SYSTEM_TRUSTED_KEYRING
--	depends on INTEGRITY_ASYMMETRIC_KEYS
--	select INTEGRITY_TRUSTED_KEYRING
--	default y
--	help
--	   This option requires that all keys added to the .ima
--	   keyring be signed by a key on the system trusted keyring.
--
--	   This option is deprecated in favor of INTEGRITY_TRUSTED_KEYRING
--
- config IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
- 	bool "Permit keys validly signed by a built-in or secondary CA cert (EXPERIMENTAL)"
- 	depends on SYSTEM_TRUSTED_KEYRING
--- 
-2.31.1
+> And all this has been working really well with the good old enterprise
+> SSDs, it's just that the cheap consumer devices keep f*cking it up.
 
+Christoph, deal with reality, not with what you think things should look like.
+
+Anybody who expected unique ID's is frankly completely incompetent.
+People should have *known* not to do this.
+
+ "Those Who Do Not Learn History Are Doomed To Repeat It"
+          - Santayana
+
+and we have NEVER EVER seen devices with reliably unique IDs. Really.
+We've had these uuid's before (ask Greg about USB devices one day, and
+that was *recent*).
+
+We've always known that vendors will fill in a fixed value, and
+somebody still decided to make this a correctness issue?
+
+Christoph, don't blame vendors. Somebody did indeed f*ck up.  But it was you.
+
+> If we'd take it away now we'd break existing users, which puts us between
+> a rock and a hard place.
+
+Well, here's a suggestion: stop making it worse.
+
+For example, we have this completely unacceptable garbage:
+
+        ret = nvme_global_check_duplicate_ids(ctrl->subsys, &info->ids);
+        if (ret) {
+                dev_err(ctrl->device,
+                        "globally duplicate IDs for nsid %d\n", info->nsid);
+                nvme_print_device_info(ctrl);
+                return ret;
+        }
+
+iow, the code even checks for and *notices* that there are duplicate
+IDs, and what does it do? It then errors out.
+
+Then expecting people TO WAIT FOR A NEW KERNEL VERSION when you
+noticed something wrong? What an absolute crock.
+
+So stop blaming anybody else.
+
+I think the code should *default* to "unreliable uuid", and then if
+you're sure it's actually ok, then you use it. Then some rare
+enterprise user with multipathing  - who is going to be very very
+careful about which device to use anyway - can use the "approved
+list".
+
+Or "Oh, I noticed a non-unique UUID, let me generate one for you based
+on physical location".
+
+But this "my disk doesn't work in v6.0 and later because some clown
+added a duplicate check that shouldn't be there" is not a good thing
+to then try to make excuses for.
+
+            Linus
