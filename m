@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94E074F040
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AA474F041
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbjGKNe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
+        id S231791AbjGKNfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjGKNe4 (ORCPT
+        with ESMTP id S230261AbjGKNfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:34:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B45E6F;
-        Tue, 11 Jul 2023 06:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+BmIGfZ8mUxPdweCAo3LBuoEvRT/aOTQDEICBJuQjnQ=; b=LqyzUctD7qNU+lRe3xpcVLzJXL
-        lyynTs8AalGWPmlguziXZ3eYQuuuRmVeRZoDZm4kSNAVdK8tm1Kb7M1fYzHLG/BHfGiobLsfXJQ0G
-        EEqKDLvd33Cbkzrlvtr8plnm2pSMVs87m4F17jLPlzJFGD9my+8zlDwXFqPPW/vKv00ju5QCbOW64
-        J/nFMFi+Uo6dJo7zRaMxErfQduotAqFnvUJ7k33Gn66EOtEaxOitTAABrkID8f9BwOmALB7sqv1es
-        TomKmuBQWf5DUntx2sHabJ7LZBA+/I4qoIVLippGZzqwVTM7gtbaQFNFKWpGSp1iUREYtcrkTez4W
-        jb03/mLg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJDVh-00Fl0B-2f; Tue, 11 Jul 2023 13:34:33 +0000
-Date:   Tue, 11 Jul 2023 14:34:33 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Zehao Zhang <zhangzehao@vivo.com>
-Cc:     linkinjeon@kernel.org, sj1557.seo@samsung.com, rostedt@goodmis.org,
-        mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] exfat: Add ftrace support for exfat and add some
- tracepoints
-Message-ID: <ZK1aaREkOh/0aIj8@casper.infradead.org>
-References: <20230711122208.65020-1-zhangzehao@vivo.com>
+        Tue, 11 Jul 2023 09:35:47 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1FAE69
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:35:45 -0700 (PDT)
+Received: from i53875a50.versanet.de ([83.135.90.80] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qJDWm-0008Hp-AW; Tue, 11 Jul 2023 15:35:40 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Yangtao Li <frank.li@vivo.com>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] nvmem: rockchip-efuse: Use
+ devm_platform_get_and_ioremap_resource()
+Date:   Tue, 11 Jul 2023 15:35:39 +0200
+Message-ID: <7814542.lOV4Wx5bFT@phil>
+In-Reply-To: <20230706040504.34057-5-frank.li@vivo.com>
+References: <20230706040504.34057-1-frank.li@vivo.com>
+ <20230706040504.34057-5-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711122208.65020-1-zhangzehao@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 08:22:08PM +0800, Zehao Zhang wrote:
-> Add ftrace support for exFAT file system,
-> and add some tracepoints:
+Am Donnerstag, 6. Juli 2023, 06:05:01 CEST schrieb Yangtao Li:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Why?  I don't believe these are useful.  Because if you actually had use
-for them, you would have noticed that you're missing 99% of the reads
-issued to the filesystem from the VFS -- through exfat_readahead(),
-which you didn't instrument.
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-So what do you actually want to know, and why can't you get that
-information already?
+
