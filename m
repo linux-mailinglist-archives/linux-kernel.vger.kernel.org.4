@@ -2,49 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBFA74F29F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5075874F2A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbjGKOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S232996AbjGKOtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbjGKOtD (ORCPT
+        with ESMTP id S232759AbjGKOtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:49:03 -0400
+        Tue, 11 Jul 2023 10:49:00 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2F5E4F;
-        Tue, 11 Jul 2023 07:49:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FC710FC;
+        Tue, 11 Jul 2023 07:48:59 -0700 (PDT)
 Received: from i53875a50.versanet.de ([83.135.90.80] helo=phil.lan)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1qJEfX-0000LD-7M; Tue, 11 Jul 2023 16:48:47 +0200
+        id 1qJEfX-0000LD-R0; Tue, 11 Jul 2023 16:48:47 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Christopher Obbard <chris.obbard@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Tianling Shen <cnsztl@gmail.com>,
-        kernel@collabora.com, FUKAUMI Naoki <naoki@radxa.com>,
-        devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Andy Yan <andyshrk@163.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 0/3] Add support for Radxa ROCK 4SE
-Date:   Tue, 11 Jul 2023 16:48:41 +0200
-Message-Id: <168908688810.1964886.2244740186424760492.b4-ty@sntech.de>
+To:     robh+dt@kernel.org, Furkan Kardame <f.kardame@manjaro.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, conor+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org, devicetree@vger.kernel.org, deller@gmx.de,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        dsterba@suse.com
+Subject: Re: [PATCHv4 0/2] Add support for Firefly Station P2 aka rk3568-roc-pc
+Date:   Tue, 11 Jul 2023 16:48:42 +0200
+Message-Id: <168908688812.1964886.18351380238022459812.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230710115025.507439-1-chris.obbard@collabora.com>
-References: <20230710115025.507439-1-chris.obbard@collabora.com>
+In-Reply-To: <20230620184746.55391-1-f.kardame@manjaro.org>
+References: <20230620184746.55391-1-f.kardame@manjaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,27 +46,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 12:50:22 +0100, Christopher Obbard wrote:
-> Add support for the RK3399T-based Radxa ROCK 4SE board. This board offers
-> similar peripherals and form-factor to the ROCK Pi 4B but uses the
-> cost-optimised RK3399T processor (which has different a OPP table but
-> otherwise minimal changes) and some other minor hardware changes between
-> the Rock Pi 4B (described in the devicetree).
+On Tue, 20 Jun 2023 21:47:44 +0300, Furkan Kardame wrote:
+> Patch 1 adds the requisite dt-binding.
+> Patch 2 adds Firefly Station P2 device tree
 > 
-> The first patch moves the RK3399 OPP table from the generic Radxa ROCK
-> Pi 4 dtsi into board-specific devicetree files, in preparation for the
-> ROCK 4SE devicetree file (in later patches).
+> Please review and I hope it is all good this time :)
+> 
+> Furkan Kardame
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: rockchip: Move OPP table from ROCK Pi 4 dtsi
-      commit: fd2762a626461ca4d9d829431a8a7f9f8e6c3395
-[2/3] dt-bindings: arm: rockchip: Add Radxa ROCK 4SE
-      commit: e7afb99e8f52f24514267f5482cd2f274220b360
-[3/3] arm64: dts: rockchip: Add Radxa ROCK 4SE
-      commit: 86a0e14a82ea723c7b7381799f060612dc65cdf3
+[1/2] dt-bindings: arm: rockchip: Add Firefly Station P2
+      commit: a1f814f782c3c7316b42e6fee4022c64da3bdf7c
+[2/2] arm64: dts: rockchip: add dts for Firefly Station P2 aka rk3568-roc-pc
+      commit: 007b4bb47f44ad1f2290b3bebfd1fac3822c9b23
 
 Best regards,
 -- 
