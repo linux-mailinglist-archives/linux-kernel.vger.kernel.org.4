@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC2274E68E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB95974E690
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjGKFxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S230329AbjGKFy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 01:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjGKFxt (ORCPT
+        with ESMTP id S229585AbjGKFy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:53:49 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D8195
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 22:53:47 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso83910651fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 22:53:47 -0700 (PDT)
+        Tue, 11 Jul 2023 01:54:27 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE98195;
+        Mon, 10 Jul 2023 22:54:26 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-55adfa61199so3907808a12.2;
+        Mon, 10 Jul 2023 22:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689054825; x=1691646825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VYgPeMSCL3nNziCu2Z17cxZzWPhKGfRWNw9RgpV/GLs=;
-        b=gVqQHkutiocfEv2pnMd0jHZ+FUNYXoqq69H5hH/mm/zbNFlWIfx5yLSj4m8ZDUrtdw
-         jWaICxwg0Zmd9qOFmhd5A95xrhC1wZoER7C1KyCced8M+FZd4NpvV3zX3OqgRSD3Bt5T
-         IcugLGA7tnyttr+QYK+zRfJnfs8Q5uxSuTFoTtY1NCyFWS60B3/9Lxw4U4gMz5Q0aBBJ
-         LoNpXKrYhOjF57NW7s6u1WM08hN6pBgpU0Gga/V9gueL6Vbw0dpDNU+t5aJoGcighFMm
-         P0UQJ8Or2Ee46FwssADTVTVEk7pxsU3FhnaSoslp4uRvQZB2t0WUuj9MeOOM7IcQPjmT
-         Tw6w==
+        d=gmail.com; s=20221208; t=1689054866; x=1691646866;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=idZkGEwcPYLun83FvCWg1+YIM8kK5l5ERo4f+wG74Mg=;
+        b=HQwHGoa78JiuFxic1UOWoF4nOBLTkWpMPxaXiSl9HqXqhdDq8bAVLKru2unBN83PRe
+         UyOUlDsYnDmajU8wW4W31hACqoY7aTew0iIrjpgaHtXANS6KlbQTgZpJnIm6aW1KYg+S
+         +RsWKdKgEhsFdxXZN+jzwoIbCFIahSnblVmfBsjlJq2ATua4hZCE+f7+j6Kwbiq2FHGQ
+         YPE7LbHZTIf7ob/LTSeceUX8z2128LyTBleXujZoRVTNGGs/L15hIgcOIaxksEZoBxPE
+         v7gUOfYh/dmIO5UY5CiQ26/fg6vQ5r89psWQl+AG/cbIqvKqsIbsK2eb2Rn9aLOkgQRX
+         /uhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689054825; x=1691646825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VYgPeMSCL3nNziCu2Z17cxZzWPhKGfRWNw9RgpV/GLs=;
-        b=iFvuIXsB4j9qu01/mr3JvdB5jtZIi1Oxbtca1UpGEd2wPbuadz0T9xrQTmwTnKaYM0
-         5rUpGmFelP9WvIQsGC9rgVytSip3AnXMLzSLUBsyMuoH7aEItC1gFzAr/VZVTTJvorCG
-         eHr7EOTp6APtBfNmmRt//k/nmu5likU/MkvyOHgrzwbza7TB3aTbYjKCyvs1RMV0O4Dz
-         SU5AMrq1YmtQ6gK6SU/Q16hK7yV+sArrQOMupQYzvfeIdQD6dk03xNlyTbqHHEOy2ZAL
-         tYjKxZhFl1yylGNyixMcsN6xWM/Y6OM1HupBgObfpvOqJTC+H0zwMR1Htf4+TC2jz+VJ
-         iWjw==
-X-Gm-Message-State: ABy/qLbf5WmJrHa/gyb4F9pcFpdsp2ECUXoNGz/EoLLbjPlmTJHiwLhE
-        CpWWnq3R3VhAIQATXUcuTi1UPQ==
-X-Google-Smtp-Source: APBJJlFV9GMTTfMplww67OlM4c38B4zQ3xlLIq0Y2DFMx149QmJv4/QIo8CBE4IQ+dWRG7ueBNzMrg==
-X-Received: by 2002:a2e:7c09:0:b0:2b6:e7b7:a163 with SMTP id x9-20020a2e7c09000000b002b6e7b7a163mr11749149ljc.27.1689054825381;
-        Mon, 10 Jul 2023 22:53:45 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id i13-20020a1709061ccd00b00993017b64a9sm634944ejh.223.2023.07.10.22.53.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 22:53:44 -0700 (PDT)
-Message-ID: <afbab9c3-ae67-1a30-6fc5-e031f9f30286@linaro.org>
-Date:   Tue, 11 Jul 2023 07:53:43 +0200
+        d=1e100.net; s=20221208; t=1689054866; x=1691646866;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=idZkGEwcPYLun83FvCWg1+YIM8kK5l5ERo4f+wG74Mg=;
+        b=UYhCLXJF/BJVmmEIbc4T+3lWJnborvVEABzua4ynsT0/CP6OL24jtavZbRERrO/xW3
+         0mvXa9sxSIGTldVWG8QOYARH6vN8ZZ+XVhj+b3JnHfX3Ym185d74BYK/xXpFgvTAKBh3
+         ARca6DKuFiUr4w8uIbMP4Ngpx6uJJMWdRQr4XutzZJLj8cUho2rXxD3qtJE7NXml8+or
+         ed9pU1CNbWCfhWZddQJttFsmzO0wkgeTlqFzBLF4ncNCss5KoA50h+ocrvHgH8ZH15zt
+         y/cVE5yFmYRPQUtgGxbad5S6AwVqGPNNJLL84b1/79FuRQnPjqQVI3ubcvoCfUO5D/Wj
+         WcxQ==
+X-Gm-Message-State: ABy/qLZ54QA+a+l6zlS9fLNxwFwl2HbORCt3c4SBM7hJ2R5ZLSdtYBqr
+        imQFY3ACMWyWp40fppRTdFidDvne+Yo=
+X-Google-Smtp-Source: APBJJlEJLPtbp4fsWDZRTf3W9Klzf3jvgD67qLUPDgN4/MFBx7XBk2/Aq0a4Ko/5udg1PjsoluxDjg==
+X-Received: by 2002:a17:902:d342:b0:1b5:32f2:5af with SMTP id l2-20020a170902d34200b001b532f205afmr13144327plk.59.1689054866176;
+        Mon, 10 Jul 2023 22:54:26 -0700 (PDT)
+Received: from j293.lan ([2400:4051:ea3:5910:5676:1078:8b85:c18f])
+        by smtp.gmail.com with ESMTPSA id bd5-20020a170902830500b001b8761c739csm878053plb.271.2023.07.10.22.54.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 22:54:25 -0700 (PDT)
+From:   Kazuki Hashimoto <kazukih0205@gmail.com>
+Subject: [PATCH 0/2] s2idle fixes for systems without cpuidle
+Date:   Tue, 11 Jul 2023 14:54:20 +0900
+Message-Id: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: power: Add compatible for sdx75
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
- <1689054169-10800-3-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1689054169-10800-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAIzurGQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDcwNL3eSC0syUnFRdi2RTEzNLcwuLNHNzJaDqgqLUtMwKsEnRsbW1ABb
+ YuWBZAAAA
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hector Martin <marcan@marcan.st>,
+        Kazuki Hashimoto <kazukih0205@gmail.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689054863; l=762;
+ i=kazukih0205@gmail.com; s=20230709; h=from:subject:message-id;
+ bh=j5NYA/cWUwU8zPrqAOAmXhuilLtRqKNLjK9L23BUYFw=;
+ b=jWlB3vckae5Vtnn/+aYOfDXmupSLN1kDF7eO4gCcG/u5EKWpbYNOqTimDReNI0fbI3emDFrn5
+ LBnJETOVREfAQ7lz1NykrjDT0z21TxnjrdRhTZ8YG22ycLuxJ+3tM/X
+X-Developer-Key: i=kazukih0205@gmail.com; a=ed25519;
+ pk=r8m5wVK5lljix+hYnqXRT/GsxNkTADqXGmhdl7kykYY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 07:42, Rohit Agarwal wrote:
-> Add a compatible string that can be used to list PDs for sdx75.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
+Changes in V2:
+Redo implementation following input from Hector Martin
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changes in V3:
+Rewrite commit message following input from Rafael J. Wysocki
+
+---
+Kazuki Hashimoto (2):
+      cpuidle: Don't pass any values to cpuidle_not_available
+      PM: s2idle: Fully prevent the system from entering s2idle when cpuidle isn't supported
+
+ drivers/cpuidle/cpuidle.c |  6 ++++--
+ include/linux/cpuidle.h   |  6 ++----
+ kernel/power/main.c       | 12 +++++++++---
+ kernel/power/suspend.c    |  5 +++++
+ kernel/sched/idle.c       |  2 +-
+ 5 files changed, 21 insertions(+), 10 deletions(-)
+---
+base-commit: 8fc3b8f082cc2f5faa6eae315b938bc5e79c332e
+change-id: 20230709-cpuidle-8c5469788f77
 
 Best regards,
-Krzysztof
+-- 
+Kazuki Hashimoto <kazukih0205@gmail.com>
 
