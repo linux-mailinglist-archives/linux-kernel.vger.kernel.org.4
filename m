@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A8574EB43
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6684474EAD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjGKJ4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S231438AbjGKJjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjGKJ4t (ORCPT
+        with ESMTP id S230222AbjGKJjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:56:49 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4667A1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:56:48 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5707177ff8aso61162887b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689069408; x=1691661408;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVqEtgaoR84mlWb1xo2bD1CrEq4VPJW4ZXsIrXT2SxY=;
-        b=JiS7r4oSjpoYeZAQokPiDZbRIRNXbzoWPZL7NF+5rzbH6mH2Rcy5+beBc9ND3C54Cz
-         Aus5Cg913qXuDxwKJCGdRWmHr05KJU0rJAHeg88AZD7kauK/bKXdTeDKY4hHqsiAXQQL
-         giwWgikoRtreQUO/DBn4FxwrAoqmcTXpHQalZUi4p2Udagcl0C2V8fzJ4YAZqbRHjs39
-         J4t57iEQpS8/MHp0zwe9jwefzUlWJejQ8XzKTLzsg3oq45gSz8Ajf7nQvIF4XLItT28/
-         qIgL6zZDPEwioH0kLhbOCQCI7+NjZMZFYtDBdbaMW78mZpZzOwkCwthKHdajV8J2epzt
-         5zxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689069408; x=1691661408;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVqEtgaoR84mlWb1xo2bD1CrEq4VPJW4ZXsIrXT2SxY=;
-        b=dE808fUW3KNq1mRx1MIHhP0KnUoc6AIUEb/XO4mSOJw0XM0EZFYgEMNKbJscV20UpW
-         m2aw6/mgdYGH43ZwpT5byV2OK2EH7PmbtvrfNMi8s30kT9wv7KRehkL+Jzn3mSAztsPG
-         UOHFdcyD1hMVBWC86GyPi+7V43Hw7BznCx+Ii/XIHTA1V1AufvNjruw37TVAdJyD5Qws
-         Pu/VwQuqv7pRbt9O+wtKf3E6IlNkV/uN46lvSa5wvJGsn2QtYR0/sAIzHvv6JfUc5BQq
-         GGW3eatd2Id6xWVSi5AaccUUkynJQRO8O8eKwfbHb7q9dKWw3Ax4tM2dDnC0CE8xorvX
-         iRCw==
-X-Gm-Message-State: ABy/qLY4wnmtodj8AxEGqVAf6WwjTNCLImAgw6cQr5f1ots6j35fyiur
-        sYrHJ9B2SEK1UWBzUnHSLsENsFhjSjAOVQQ=
-X-Google-Smtp-Source: APBJJlFwdJ2E18U3JX8SbmAFB8eni9sLplKZ6ovLgHTWvsced2a62emZj0SesAoyMkw4Bdoxegyik2qJMVn43mc=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a81:764f:0:b0:57a:141f:b4f5 with SMTP id
- j15-20020a81764f000000b0057a141fb4f5mr139132ywk.7.1689069408101; Tue, 11 Jul
- 2023 02:56:48 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 09:33:03 +0000
-In-Reply-To: <20230711093303.1433770-1-aliceryhl@google.com>
-Mime-Version: 1.0
-References: <20230711093303.1433770-1-aliceryhl@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711093303.1433770-10-aliceryhl@google.com>
-Subject: [PATCH v3 9/9] rust: workqueue: add examples
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     rust-for-linux@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Andreas Hindborg <nmi@metaspace.dk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        Tue, 11 Jul 2023 05:39:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DFC1735
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:38:47 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B9MbqF004488;
+        Tue, 11 Jul 2023 09:38:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=RQUYzWtDk+t8WoyHZeaFpgI9UITjO4qOa7OE8UZvWrQ=;
+ b=n1l+7hFH2JKBxexGTXuc2+t7hXxdwCNWJ0r5VUXMamEyIDYiHZYoIGcBXikghQnty5AQ
+ inNJYzSzw1/Bz/dmXTM47e5l//5jVochRUGfKgXFJM0lYq9xgrTXmurNNmEv1DaJEuF2
+ AY/quWHmN59HU+81jPH6+HnBlJ99t6kwcrqkWaEim3wXOcbRvaJJA/H6AyIKGuVM/7xt
+ t59PoIGQdEiTHv2zp+HoOVhAc7zs6g7mbNd2yPdfmZxG3YGDc6yRHu8YNBcf86+D+M4a
+ /txSwAS9CZG2OyY7xn8elu5f4ABQdByveSOI9Lona8NyxddN8ssUvmNH4Pl478zokNnj TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs4cv0cn5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:38:37 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36B9NqRT009514;
+        Tue, 11 Jul 2023 09:38:37 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs4cv0cmd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:38:37 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36B4eu0t013369;
+        Tue, 11 Jul 2023 09:33:33 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rpye599a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:33:33 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36B9XV798585948
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jul 2023 09:33:31 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A068200CD;
+        Tue, 11 Jul 2023 09:33:31 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4FC87200CF;
+        Tue, 11 Jul 2023 09:33:29 +0000 (GMT)
+Received: from li-c6426e4c-27cf-11b2-a85c-95d65bc0de0e.ibm.com (unknown [9.204.206.66])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 11 Jul 2023 09:33:29 +0000 (GMT)
+Date:   Tue, 11 Jul 2023 15:03:22 +0530
+From:   Gautam Menghani <gautam@linux.ibm.com>
+To:     Jordan Niethe <jniethe5@gmail.com>
+Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arch/powerpc: Remove unnecessary endian conversion code
+ in XICS
+Message-ID: <ZK0h4jR/St1yrOLo@li-c6426e4c-27cf-11b2-a85c-95d65bc0de0e.ibm.com>
+References: <20230630055628.17790-1-gautam@linux.ibm.com>
+ <39920b0f-f261-8417-af7a-eef791ad5726@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39920b0f-f261-8417-af7a-eef791ad5726@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: bRTDZMOsMMfPhUt4gp9wtrL09ncjzmVn
+X-Proofpoint-ORIG-GUID: A-W74D55u-paQv7fWdrrZHMGA4cHDrk7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307110084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,139 +92,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds two examples of how to use the workqueue. The first example
-shows how to use it when you only have one `work_struct` field, and the
-second example shows how to use it when you have multiple `work_struct`
-fields.
+On Thu, Jul 06, 2023 at 05:50:57PM +1000, Jordan Niethe wrote:
+> 
+> 
+> On 30/6/23 3:56 pm, Gautam Menghani wrote:
+> > Remove an unnecessary piece of code that does an endianness conversion but
+> > does not use the result. The following warning was reported by Clang's
+> > static analyzer:
+> > 
+> > arch/powerpc/sysdev/xics/ics-opal.c:114:2: warning: Value stored to
+> > 'server' is never read [deadcode.DeadStores]
+> >          server = be16_to_cpu(oserver);
+> > 
+> > As the result of endianness conversion is never used, delete the line
+> > and fix the warning.
+> > 
+> > Signed-off-by: Gautam Menghani <gautam@linux.ibm.com>
+> 
+> 'server' was used as a parameter to opal_get_xive() in commit 5c7c1e9444d8
+> ("powerpc/powernv: Add OPAL ICS backend") when it was introduced. 'server'
+> was also used in an error message for the call to opal_get_xive().
+> 
+> 'server' was always later set by a call to ics_opal_mangle_server() before
+> being used.
+> 
+> Commit bf8e0f891a32 ("powerpc/powernv: Fix endian issues in OPAL ICS
+> backend") used a new variable 'oserver' as the parameter to opal_get_xive()
+> instead of 'server' for endian correctness. It also removed 'server' from
+> the error message for the call to opal_get_xive().
+> 
+> It was commit bf8e0f891a32 that added the unnecessary conversion and never
+> used the result.
+> 
+> Reviewed-by: Jordan Niethe <jniethe5@gmail.com>
 
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Reviewed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
----
-v2 -> v3:
- * Use LockClassKey in constructors in examples.
- * Add Reviewed-by from Martin, Gary, Andreas, Benno.
+Yes, thanks for the info Jordan. Just to add to this,
+ics_opal_mangle_server() needs input in LE and the 'wanted_server' is
+already LE as xics_get_irq_server() is returning result in LE. So the
+line
 
- rust/kernel/workqueue.rs | 104 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+`server = be16_to_cpu(oserver);'
 
-diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-index 3a3a8b52bfd9..482d3eeae7d8 100644
---- a/rust/kernel/workqueue.rs
-+++ b/rust/kernel/workqueue.rs
-@@ -26,6 +26,110 @@
- //!  * The `WorkItemPointer` trait is implemented for the pointer type that points at a something
- //!    that implements `WorkItem`.
- //!
-+//! ## Example
-+//!
-+//! This example defines a struct that holds an integer and can be scheduled on the workqueue. When
-+//! the struct is executed, it will print the integer. Since there is only one `work_struct` field,
-+//! we do not need to specify ids for the fields.
-+//!
-+//! ```
-+//! use kernel::prelude::*;
-+//! use kernel::sync::Arc;
-+//! use kernel::workqueue::{self, Work, WorkItem};
-+//!
-+//! #[pin_data]
-+//! struct MyStruct {
-+//!     value: i32,
-+//!     #[pin]
-+//!     work: Work<MyStruct>,
-+//! }
-+//!
-+//! impl_has_work! {
-+//!     impl HasWork<Self> for MyStruct { self.work }
-+//! }
-+//!
-+//! impl MyStruct {
-+//!     fn new(value: i32) -> Result<Arc<Self>> {
-+//!         Arc::pin_init(pin_init!(MyStruct {
-+//!             value,
-+//!             work <- Work::new(kernel::static_lock_class!()),
-+//!         }))
-+//!     }
-+//! }
-+//!
-+//! impl WorkItem for MyStruct {
-+//!     type Pointer = Arc<MyStruct>;
-+//!
-+//!     fn run(this: Arc<MyStruct>) {
-+//!         pr_info!("The value is: {}", this.value);
-+//!     }
-+//! }
-+//!
-+//! /// This method will enqueue the struct for execution on the system workqueue, where its value
-+//! /// will be printed.
-+//! fn print_later(val: Arc<MyStruct>) {
-+//!     let _ = workqueue::system().enqueue(val);
-+//! }
-+//! ```
-+//!
-+//! The following example shows how multiple `work_struct` fields can be used:
-+//!
-+//! ```
-+//! use kernel::prelude::*;
-+//! use kernel::sync::Arc;
-+//! use kernel::workqueue::{self, Work, WorkItem};
-+//!
-+//! #[pin_data]
-+//! struct MyStruct {
-+//!     value_1: i32,
-+//!     value_2: i32,
-+//!     #[pin]
-+//!     work_1: Work<MyStruct, 1>,
-+//!     #[pin]
-+//!     work_2: Work<MyStruct, 2>,
-+//! }
-+//!
-+//! impl_has_work! {
-+//!     impl HasWork<Self, 1> for MyStruct { self.work_1 }
-+//!     impl HasWork<Self, 2> for MyStruct { self.work_2 }
-+//! }
-+//!
-+//! impl MyStruct {
-+//!     fn new(value_1: i32, value_2: i32) -> Result<Arc<Self>> {
-+//!         Arc::pin_init(pin_init!(MyStruct {
-+//!             value_1,
-+//!             value_2,
-+//!             work_1 <- Work::new(kernel::static_lock_class!()),
-+//!             work_2 <- Work::new(kernel::static_lock_class!()),
-+//!         }))
-+//!     }
-+//! }
-+//!
-+//! impl WorkItem<1> for MyStruct {
-+//!     type Pointer = Arc<MyStruct>;
-+//!
-+//!     fn run(this: Arc<MyStruct>) {
-+//!         pr_info!("The value is: {}", this.value_1);
-+//!     }
-+//! }
-+//!
-+//! impl WorkItem<2> for MyStruct {
-+//!     type Pointer = Arc<MyStruct>;
-+//!
-+//!     fn run(this: Arc<MyStruct>) {
-+//!         pr_info!("The second value is: {}", this.value_2);
-+//!     }
-+//! }
-+//!
-+//! fn print_1_later(val: Arc<MyStruct>) {
-+//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 1>(val);
-+//! }
-+//!
-+//! fn print_2_later(val: Arc<MyStruct>) {
-+//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 2>(val);
-+//! }
-+//! ```
-+//!
- //! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
- 
- use crate::{bindings, prelude::*, sync::Arc, sync::LockClassKey, types::Opaque};
--- 
-2.41.0.255.g8b1d071c50-goog
+is indeed not required.
 
+Thanks,
+Gautam
+
+> 
+> 
+> > ---
+> >   arch/powerpc/sysdev/xics/ics-opal.c | 1 -
+> >   1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/arch/powerpc/sysdev/xics/ics-opal.c b/arch/powerpc/sysdev/xics/ics-opal.c
+> > index 6cfbb4fac7fb..5fe73dabab79 100644
+> > --- a/arch/powerpc/sysdev/xics/ics-opal.c
+> > +++ b/arch/powerpc/sysdev/xics/ics-opal.c
+> > @@ -111,7 +111,6 @@ static int ics_opal_set_affinity(struct irq_data *d,
+> >   		       __func__, d->irq, hw_irq, rc);
+> >   		return -1;
+> >   	}
+> > -	server = be16_to_cpu(oserver);
+> >   	wanted_server = xics_get_irq_server(d->irq, cpumask, 1);
+> >   	if (wanted_server < 0) {
+> > 
