@@ -2,167 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E80674F0D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A82974F0D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjGKNzp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 09:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S233126AbjGKN4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbjGKNzm (ORCPT
+        with ESMTP id S231888AbjGKN4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:55:42 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8E594;
-        Tue, 11 Jul 2023 06:55:40 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-579ed2829a8so61177867b3.1;
-        Tue, 11 Jul 2023 06:55:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689083740; x=1691675740;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZXQMJc+mkFZtu2vLefW5Re8NpovkJxJKped5EUiUKOE=;
-        b=BtAaeM1r57mlTwANqrQdgSLT/BQzCsFQlocFdyHWa89EhRx/Tske8E/0U75RZXV/s1
-         vMyOFmR/2tI6KuRUXLHUKv4udaytrpPO6K3Fxy7kVfvnnBEFQMP1Ae5MfZuJKVuanSAl
-         0WygyPjzqFgohifL9lHygDSKSTwS6dX8GALt0KV1Jyqo+hEGDwHMIQcAbMEyiApjeDzZ
-         Q+mPxd6jF1+rjlyYvx06uYH7W3okrwsmfAtX0LGSuc/JGrlCBa7B4F2D8QXAgmHfKZz7
-         DC5P65Erc4VsIyW0Zy0MZTg0+mK6947XvoiBOxjgASDtC0xBppxfVYAcDFpeFnr90Z1w
-         Serw==
-X-Gm-Message-State: ABy/qLaFdqm9/3UmzRWN9Mp+o8X9X/Eg2BvChVvN3stetv8wyVdYUq8z
-        dp5K2aHCf1XZkRiXwGUur7aGl961CU8XjA==
-X-Google-Smtp-Source: APBJJlG2SP6QbX+lb4Zp1K7VfQDqff8Wq2bAVPCyWAjRlgmsdN76O/U7mI3WXYO0nzlsMPEK4vnd5w==
-X-Received: by 2002:a0d:d383:0:b0:561:b8a1:e7ef with SMTP id v125-20020a0dd383000000b00561b8a1e7efmr17947283ywd.41.1689083739787;
-        Tue, 11 Jul 2023 06:55:39 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id l10-20020a81d54a000000b0056ffdec590csm569466ywj.41.2023.07.11.06.55.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 06:55:39 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-577497ec6c6so61279067b3.2;
-        Tue, 11 Jul 2023 06:55:39 -0700 (PDT)
-X-Received: by 2002:a81:6e8b:0:b0:570:85b2:e6dd with SMTP id
- j133-20020a816e8b000000b0057085b2e6ddmr17111816ywc.17.1689083738977; Tue, 11
- Jul 2023 06:55:38 -0700 (PDT)
+        Tue, 11 Jul 2023 09:56:08 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834A4BC;
+        Tue, 11 Jul 2023 06:56:07 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qJDqV-0002HE-4j; Tue, 11 Jul 2023 15:56:03 +0200
+Message-ID: <2f53de7c-e9db-6bf5-6e9e-65edadd4d754@leemhuis.info>
+Date:   Tue, 11 Jul 2023 15:56:02 +0200
 MIME-Version: 1.0
-References: <20230511181931.869812-1-tj@kernel.org> <20230511181931.869812-7-tj@kernel.org>
- <ZF6WsSVGX3O1d0pL@slm.duckdns.org>
-In-Reply-To: <ZF6WsSVGX3O1d0pL@slm.duckdns.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Jul 2023 15:55:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
-Message-ID: <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
-Subject: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2 6/7]
- workqueue: Report work funcs that trigger automatic CPU_INTENSIVE mechanism)
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-rtc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] HID: logitech-hidpp: rework one more time the retries
+ attempts
+Content-Language: en-US, de-DE
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
+ <2023062156-trespass-pandemic-7f4f@gregkh>
+ <qbvmv3eexohswyagmllfh3xsxoftwa3wbmsdafmwak2bxlnlft@jz74dijlfxlz>
+ <31ce32e018a9fa410e9e1f3e5900621b16a56091.camel@hadess.net>
+ <CAO-hwJLFSUJaGK5DAOz30+YyC1hGgHnbeJbc5iQ47jxBcbRSCg@mail.gmail.com>
+ <cfa28818-9eaf-0dc9-cb4a-1b3de318e627@leemhuis.info>
+ <CAO-hwJLc0wzv2a3JARkPDW+ZgbnvwggfRHcAJmWsKy_FMA13=g@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAO-hwJLc0wzv2a3JARkPDW+ZgbnvwggfRHcAJmWsKy_FMA13=g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689083767;ef056e90;
+X-HE-SMSGID: 1qJDqV-0002HE-4j
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun,
-
-On Fri, May 12, 2023 at 9:54 PM Tejun Heo <tj@kernel.org> wrote:
-> Workqueue now automatically marks per-cpu work items that hog CPU for too
-> long as CPU_INTENSIVE, which excludes them from concurrency management and
-> prevents stalling other concurrency-managed work items. If a work function
-> keeps running over the thershold, it likely needs to be switched to use an
-> unbound workqueue.
->
-> This patch adds a debug mechanism which tracks the work functions which
-> trigger the automatic CPU_INTENSIVE mechanism and report them using
-> pr_warn() with exponential backoff.
->
-> v2: Drop bouncing through kthread_worker for printing messages. It was to
->     avoid introducing circular locking dependency but wasn't effective as it
->     still had pool lock -> wci_lock -> printk -> pool lock loop. Let's just
->     print directly using printk_deferred().
->
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-
-Thanks for your patch, which is now commit 6363845005202148
-("workqueue: Report work funcs that trigger automatic CPU_INTENSIVE
-mechanism") in v6.5-rc1.
-
-I guess you are interested to know where this triggers.
-I enabled CONFIG_WQ_CPU_INTENSIVE_REPORT=y, and tested
-the result on various machines...
-
-SH/R-Mobile:
-
-  workqueue: genpd_power_off_work_fn hogged CPU for >10000us 4 times,
-consider switching to WQ_UNBOUND
-
-Atmark Techno Armadillo800-EVA with shmob_drm:
-
-  workqueue: drm_fb_helper_damage_work hogged CPU for >10000us 16
-times, consider switching to WQ_UNBOUND
-
-R-Car Gen2:
-
-  workqueue: rtc_timer_do_work hogged CPU for >10000us 4 times,
-consider switching to WQ_UNBOUND
-
-R-Car Gen2/Gen3:
-
-  workqueue: pm_runtime_work hogged CPU for >10000us 4 times, consider
-switching to WQ_UNBOUND
-
-R-Car Gen3:
-
-  workqueue: kfree_rcu_work hogged CPU for >10000us 4 times, consider
-switching to WQ_UNBOUND
-
-OrangeCrab/Linux-on-LiteX-VexRiscV with ht16k33 14-seg display and ssd130xdrmfb:
-
-  workqueue: check_lifetime hogged CPU for >10000us 4 times, consider
-switching to WQ_UNBOUND
-  workqueue: drm_fb_helper_damage_work hogged CPU for >10000us 1024
-times, consider switching to WQ_UNBOUND
-  workqueue: fb_flashcursor hogged CPU for >10000us 128 times,
-consider switching to WQ_UNBOUND
-  workqueue: ht16k33_seg14_update hogged CPU for >10000us 128 times,
-consider switching to WQ_UNBOUND
-  workqueue: mmc_rescan hogged CPU for >10000us 128 times, consider
-switching to WQ_UNBOUND
-
-Atari (ARAnyM):
-
-  workqueue: ata_sff_pio_task hogged CPU for >10000us 64 times,
-consider switching to WQ_UNBOUND
-
-The OrangeCrab is a slow machine, so it's not that surprising to see these
-messages...
-
-Gr{oetje,eeting}s,
-
-                        Geert
 
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+On 11.07.23 15:40, Benjamin Tissoires wrote:
+> On Tue, Jul 11, 2023 at 3:10 PM Linux regression tracking (Thorsten
+> Leemhuis) <regressions@leemhuis.info> wrote:
+>>
+>> On 26.06.23 16:02, Benjamin Tissoires wrote:
+>>> On Sun, Jun 25, 2023 at 10:30 AM Bastien Nocera <hadess@hadess.net> wrote:
+>>>> On Fri, 2023-06-23 at 10:37 +0200, Benjamin Tissoires wrote:
+>>>>> On Jun 21 2023, Greg KH wrote:
+>>>>>> On Wed, Jun 21, 2023 at 11:42:30AM +0200, Benjamin Tissoires wrote:
+>>>>>>> Make the code looks less like Pascal.
+>>>>>>>
+>>>>>>> Extract the internal code inside a helper function, fix the
+>>>>>>> initialization of the parameters used in the helper function
+>>>>>>> (`hidpp->answer_available` was not reset and `*response` wasn't
+>>>>>>> too),
+>>>>>>> and use a `do {...} while();` loop.
+>>>>>>>
+>>>>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when
+>>>>>>> device is busy")
+>>>>>>> Cc: stable@vger.kernel.org
+>>>>>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>>>>>>> ---
+>>>>>>> as requested by
+>>>>>>> https://lore.kernel.org/all/CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com/
+>>>>>>> This is a rewrite of that particular piece of code.
+>>>>>>> ---
+>>>>>>>  drivers/hid/hid-logitech-hidpp.c | 102 +++++++++++++++++++++++--
+>>>>>>> --------------
+>>>>>>>  1 file changed, 61 insertions(+), 41 deletions(-)
+>>> [...]
+>>>
+>>> Some people on the Bz were able to reproduce with multiple reboots.
+>>> But it's not as urgent as previously, and we were close to the 6.4
+>>> final when I sent it. I'll make sure this goes into 6.5 and gets
+>>> proper stable backports FWIW.
+>>
+>> Did that happen? Doesn't look like it from here, but maybe I'm missing
+>> something. Where there maybe other changes to resolve the remaining
+>> problems some users encounter sporadically since the urgent fixes went in?
+> 
+> No, there were no other changes that could have solved this. I guess
+> the randomness of the problem makes it way harder to detect and to
+> reproduce.
+> 
+> I'll send a v2 of that patch with the reviews today or tomorrow and we
+> can probably get it through the current 6.5 cycle.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Great, many thx!
+
+Ciao, Thorsten
