@@ -2,281 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3435C74ED09
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A43B74ED0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjGKLlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S230239AbjGKLmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjGKLln (ORCPT
+        with ESMTP id S230204AbjGKLm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:41:43 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF97139
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:41:41 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so89060881fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689075699; x=1691667699;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=57xf39LMFyEPqtOACU3IizRJa+Kw824nnY9zKo/8ufU=;
-        b=MONDM7ptIpi+qqP7Hj/yQHyIXm3nr0BHWZjy/AFKhQ5Td7u8hHd8dyLXu1QbVxK1eP
-         mJygJ2aQJ5p9G5wukT5T7Zs4LYNHB/hmFjrAudkDD0bvao6OIXTVEt7EO+r78iWwi5sI
-         oyIgU9KLj9l0Sq6EXyIYT/uLo4u68NJMEU5FyBaKPmWjGe54K9It9EGEfRc5fo5QPJsr
-         4uJQRaG65Xhu9DeguT9VsIxx/9KW9GGZOp8/AsrcytygOdbi3QYz2jX9h8vwuPAwO+de
-         Dxx0xoItC2dDG6VK/Op5b3HJrlVt4hkCf2hhGCefd5ooCJPw2LbPlLAgKmjQ0aIprvbI
-         25kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689075699; x=1691667699;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=57xf39LMFyEPqtOACU3IizRJa+Kw824nnY9zKo/8ufU=;
-        b=LmRdhmk27+cCuvsTRk/EYfsnE6bXMoqSFZnwUSa99v7yW6EkZIOQuOXPBJhy5qYqwh
-         ymf+wz5KlygRnek4ZvGpNyC5AckEWVBDaAi2W4tGa/vap8QnM9WFG4/f0CgbJ39nexny
-         uLkhbWRLH/n3BUECXcoYdlZsqfCxR3GiPuL0wmTgQwpckn1fvXaXNk7I48t2t4riHiQB
-         NQYBo4nQbSDlNgvpBB57tUsT41Rp6S/zfM4IwSd5FG7DOB8ltas0Wc2z3yus9mPJJ0Kk
-         R87i8l6Ct4wpnhRnwLzkS4H7lz7QF7KgRIg20KZU9lxJaaS9wUuWBK/ppOzbQomuYGpi
-         pbfQ==
-X-Gm-Message-State: ABy/qLaYAYp809DsqK63HR4kwBNsKSvVlsshNVAq3u1IZeg882O0fkRq
-        OchsbOBFuqA8N2BjJc5Y+c1k3A==
-X-Google-Smtp-Source: APBJJlGDHesLjoxZeJkv+D8H+B4GXtqjM5b4KeMOZ/fQZGyquxYUOV9+W71tJcwxwncFSUBJX/mzbQ==
-X-Received: by 2002:a19:5f1c:0:b0:4f8:67aa:4f03 with SMTP id t28-20020a195f1c000000b004f867aa4f03mr12076741lfb.1.1689075699533;
-        Tue, 11 Jul 2023 04:41:39 -0700 (PDT)
-Received: from [192.168.1.101] (abyl96.neoplus.adsl.tpnet.pl. [83.9.31.96])
-        by smtp.gmail.com with ESMTPSA id w7-20020a05651204c700b004fbb6f558ffsm281385lfq.229.2023.07.11.04.41.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 04:41:39 -0700 (PDT)
-Message-ID: <775764d2-5457-9150-74ca-6e14fa5b2870@linaro.org>
-Date:   Tue, 11 Jul 2023 13:41:37 +0200
+        Tue, 11 Jul 2023 07:42:27 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C20B1A3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L73mcy0Md2qNt/m5THUnP4reYmzK9kp8si4mB9+1g1M=; b=kK50fljVE/YG+D1BO+YSkNPLG9
+        rrrQ2QFDf5X/HZvVpGkAqDblIT8Wf3us5T+ip+4L5N8sgJEgYYR0yn1wr7LJojNe1IZ1+pnJ/aE+b
+        SPkwqaw0wOlPo5wGyt6JS5I7qWAGks7fvUXfYAhntDWXNiODRP4cpTM36MpkYi4JRcop88kbbwfkw
+        HxqeLz/qCkDahhUB0Y4AA42qsTANkb6utzNSrqFZ7Llfw+38jDui+wfG2XtcSlf4ndvq2jEsIwOC1
+        QOcnHgna41F3hwzNp2ysJhEow/pCWH7ha4hsGiu6ZycDL149C4y4IRAD3hiDbCKRYNxXT4M0VLmFm
+        WJ6E23fQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJBku-002NuK-2q;
+        Tue, 11 Jul 2023 11:42:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2091030036B;
+        Tue, 11 Jul 2023 13:42:08 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 08DBF240EBDA8; Tue, 11 Jul 2023 13:42:08 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 13:42:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Vernet <void@manifault.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        gautham.shenoy@amd.com, kprateek.nayak@amd.com, aaron.lu@intel.com,
+        clm@meta.com, tj@kernel.org, roman.gushchin@linux.dev,
+        kernel-team@meta.com
+Subject: Re: [PATCH v2 0/7] sched: Implement shared runqueue in CFS
+Message-ID: <20230711114207.GK3062772@hirez.programming.kicks-ass.net>
+References: <20230710200342.358255-1-void@manifault.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] arm64: dts: qcom: qrb2210-rb1: Add regulators
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230711-topic-rb1_regulator-v1-1-bc4398c35800@linaro.org>
- <CAA8EJpoeAeitC=_pbAxFATfxx8UK-4cAQ=Zr3nKc0jhAdoG5fg@mail.gmail.com>
- <43d290c9-fdec-4832-242e-6732d9f0ea6c@linaro.org>
- <CAA8EJpozgj=MvYo=eHx1a1YD4gkXEvqHvuvp_mUBXfGMjhYWGA@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpozgj=MvYo=eHx1a1YD4gkXEvqHvuvp_mUBXfGMjhYWGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710200342.358255-1-void@manifault.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.07.2023 12:56, Dmitry Baryshkov wrote:
-> On Tue, 11 Jul 2023 at 13:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> On 11.07.2023 12:44, Dmitry Baryshkov wrote:
->>> On Tue, 11 Jul 2023 at 13:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>
->>>> Add and assign RPM regulators coming from PM2250.
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->> [...]
->>
->>>> +               pm2250_l5: l5 {
->>>> +                       /* CSI/DSI */
->>>> +                       regulator-min-microvolts = <1232000>;
->>>> +                       regulator-max-microvolts = <1232000>;
->>>> +                       regulator-allow-set-load;
->>>> +                       regulator-boot-on;
->>>
->>> why?
->>>
->> To answer all of the questions in one go:
->>
->> "it's because the regulator is enabled at boot"
+On Mon, Jul 10, 2023 at 03:03:35PM -0500, David Vernet wrote:
+> Difference between shared_runq and SIS_NODE
+> ===========================================
 > 
-> I was more concerned about the following part:
->       If the bootloader didn't leave it on then OS should turn it on at boot ...
+> In [0] Peter proposed a patch that addresses Tejun's observations that
+> when workqueues are targeted towards a specific LLC on his Zen2 machine
+> with small CCXs, that there would be significant idle time due to
+> select_idle_sibling() not considering anything outside of the current
+> LLC.
 > 
-> Please remind me, are we declaring them as boot-on so that the
-> regulator core can turn them off later if they are unused?
-In the Linux implementation, yes.
+> This patch (SIS_NODE) is essentially the complement to the proposal
+> here. SID_NODE causes waking tasks to look for idle cores in neighboring
+> LLCs on the same die, whereas shared_runq causes cores about to go idle
+> to look for enqueued tasks. That said, in its current form, the two
+> features at are a different scope as SIS_NODE searches for idle cores
+> between LLCs, while shared_runq enqueues tasks within a single LLC.
+> 
+> The patch was since removed in [1], and we compared the results to
+> shared_runq (previously called "swqueue") in [2]. SIS_NODE did not
+> outperform shared_runq on any of the benchmarks, so we elect to not
+> compare against it again for this v2 patch set.
 
-Konrad
-> 
->>
->> Konrad
->>>> +               };
->>>> +
->>>> +               pm2250_l6: l6 {
->>>> +                       /* DRAM PLL */
->>>> +                       regulator-min-microvolts = <928000>;
->>>> +                       regulator-max-microvolts = <928000>;
->>>> +                       regulator-always-on;
->>>> +                       regulator-boot-on;
->>>> +               };
->>>> +
->>>> +               pm2250_l7: l7 {
->>>> +                       /* Wi-Fi CX/MX */
->>>> +                       regulator-min-microvolts = <664000>;
->>>> +                       regulator-max-microvolts = <664000>;
->>>> +               };
->>>> +
->>>> +               /*
->>>> +                * L8 - VDD_LPI_CX
->>>> +                * L9 - VDD_LPI_MX
->>>> +                */
->>>> +
->>>> +               pm2250_l10: l10 {
->>>> +                       /* Wi-Fi RFA */
->>>> +                       regulator-min-microvolts = <1300000>;
->>>> +                       regulator-max-microvolts = <1300000>;
->>>> +               };
->>>> +
->>>> +               pm2250_l11: l11 {
->>>> +                       /* GPS RF1 */
->>>> +                       regulator-min-microvolts = <1000000>;
->>>> +                       regulator-max-microvolts = <1000000>;
->>>> +                       regulator-boot-on;
->>>
->>> Shouldn't it be handled by the modem on its own?
->>>
->>>> +               };
->>>> +
->>>> +               pm2250_l12: l12 {
->>>> +                       /* USB PHYs */
->>>> +                       regulator-min-microvolts = <928000>;
->>>> +                       regulator-max-microvolts = <928000>;
->>>> +                       regulator-allow-set-load;
->>>> +                       regulator-boot-on;
->>>
->>> You guess the question (and further on)
->>>
->>>> +               };
->>>> +
->>>> +               pm2250_l13: l13 {
->>>> +                       /* USB/QFPROM/PLLs */
->>>> +                       regulator-min-microvolts = <1800000>;
->>>> +                       regulator-max-microvolts = <1800000>;
->>>> +                       regulator-allow-set-load;
->>>> +                       regulator-boot-on;
->>>> +               };
->>>> +
->>>> +               pm2250_l14: l14 {
->>>> +                       /* SDHCI1 VQMMC */
->>>> +                       regulator-min-microvolts = <1800000>;
->>>> +                       regulator-max-microvolts = <1800000>;
->>>> +                       regulator-allow-set-load;
->>>> +                       /* Broken hardware, never turn it off! */
->>>> +                       regulator-always-on;
->>>> +               };
->>>> +
->>>> +               pm2250_l15: l15 {
->>>> +                       /* WCD/DSI/BT VDDIO */
->>>> +                       regulator-min-microvolts = <1800000>;
->>>> +                       regulator-max-microvolts = <1800000>;
->>>> +                       regulator-allow-set-load;
->>>> +                       regulator-always-on;
->>>> +                       regulator-boot-on;
->>>> +               };
->>>> +
->>>> +               pm2250_l16: l16 {
->>>> +                       /* GPS RF2 */
->>>> +                       regulator-min-microvolts = <1800000>;
->>>> +                       regulator-max-microvolts = <1800000>;
->>>> +                       regulator-boot-on;
->>>> +               };
->>>> +
->>>> +               pm2250_l17: l17 {
->>>> +                       regulator-min-microvolts = <3000000>;
->>>> +                       regulator-max-microvolts = <3000000>;
->>>> +               };
->>>> +
->>>> +               pm2250_l18: l18 {
->>>> +                       /* VDD_PXn */
->>>> +                       regulator-min-microvolts = <1800000>;
->>>> +                       regulator-max-microvolts = <1800000>;
->>>> +               };
->>>> +
->>>> +               pm2250_l19: l19 {
->>>> +                       /* VDD_PXn */
->>>> +                       regulator-min-microvolts = <1800000>;
->>>> +                       regulator-max-microvolts = <1800000>;
->>>> +               };
->>>> +
->>>> +               pm2250_l20: l20 {
->>>> +                       /* SDHCI1 VMMC */
->>>> +                       regulator-min-microvolts = <2856000>;
->>>> +                       regulator-max-microvolts = <2856000>;
->>>> +                       regulator-allow-set-load;
->>>> +               };
->>>> +
->>>> +               pm2250_l21: l21 {
->>>> +                       /* SDHCI2 VMMC */
->>>> +                       regulator-min-microvolts = <2960000>;
->>>> +                       regulator-max-microvolts = <3300000>;
->>>> +                       regulator-allow-set-load;
->>>> +                       regulator-boot-on;
->>>> +               };
->>>> +
->>>> +               pm2250_l22: l22 {
->>>> +                       /* Wi-Fi */
->>>> +                       regulator-min-microvolts = <3312000>;
->>>> +                       regulator-max-microvolts = <3312000>;
->>>> +               };
->>>> +       };
->>>> +};
->>>> +
->>>>  &sdhc_1 {
->>>> +       vmmc-supply = <&pm2250_l20>;
->>>> +       vqmmc-supply = <&pm2250_l14>;
->>>>         pinctrl-0 = <&sdc1_state_on>;
->>>>         pinctrl-1 = <&sdc1_state_off>;
->>>>         pinctrl-names = "default", "sleep";
->>>> @@ -61,6 +322,8 @@ &sdhc_1 {
->>>>  };
->>>>
->>>>  &sdhc_2 {
->>>> +       vmmc-supply = <&pm2250_l21>;
->>>> +       vqmmc-supply = <&pm2250_l4>;
->>>>         cd-gpios = <&tlmm 88 GPIO_ACTIVE_LOW>;
->>>>         pinctrl-0 = <&sdc2_state_on &sd_det_in_on>;
->>>>         pinctrl-1 = <&sdc2_state_off &sd_det_in_off>;
->>>> @@ -104,6 +367,9 @@ &usb {
->>>>  };
->>>>
->>>>  &usb_hsphy {
->>>> +       vdd-supply = <&pm2250_l12>;
->>>> +       vdda-pll-supply = <&pm2250_l13>;
->>>> +       vdda-phy-dpdm-supply = <&pm2250_l21>;
->>>>         status = "okay";
->>>>  };
->>>>
->>>>
->>>> ---
->>>> base-commit: 8e4b7f2f3d6071665b1dfd70786229c8a5d6c256
->>>> change-id: 20230711-topic-rb1_regulator-44c4ade93246
->>>>
->>>> Best regards,
->>>> --
->>>> Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>
->>>
->>>
-> 
-> 
-> 
+Right, so SIS is search-idle-on-wakeup, while you do
+search-task-on-newidle, and they are indeed complentary actions.
+
+As to SIS_NODE, I really want that to happen, but we need a little more
+work for the Epyc things, they have a few too many CCXs per node :-)
+
+Anyway, the same thing that moticated SIS_NODE should also be relevant
+here, those Zen2 things have only 3/4 cores per LLC, would it not also
+make sense to include multiple of them into the shared runqueue thing?
+
+(My brain is still processing the shared_runq name...)
