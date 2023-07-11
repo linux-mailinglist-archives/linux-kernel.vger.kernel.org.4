@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9E574E7D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC37E74E7DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjGKHXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S230236AbjGKHXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjGKHXA (ORCPT
+        with ESMTP id S230015AbjGKHXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:23:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833E1F4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:22:59 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51e5da802afso1745858a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689060178; x=1691652178;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ldbk7xLpFOB3wCnK+tsupp7O8c/p1x/Bm1IetfW9AlI=;
-        b=hSpwGle+ZQfU776LqBuG5WKZL1ooIzVolRu95jd9gzB9yWUPn5A/Yx5xzlNDZ/bRyd
-         iiNZuHUGzzuy2d5QXEKYrNPaiHuRwIafz3XD3grKJkAnVkknDeIOUoaVTJKv2TxzPKlI
-         ufaUarNX3hv1wjn483bDlima3EpBJtIfKkZQBnsLNytko8B/KRExl0Dw+2Oo2OwBNqXS
-         cC27LtUhqtvOCsx0FiD84u4jx/C14wbAvQCmU9lz/f1Z7PEBq9Hae0FWsUi0mmEZ5plq
-         2lNsKVLY1MLo/lFDoTNlj/uTIkAKGB6JvmeSAfPFlEFCKJTLddXX2I8rU+r2+7tp6UIP
-         Xd/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689060178; x=1691652178;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ldbk7xLpFOB3wCnK+tsupp7O8c/p1x/Bm1IetfW9AlI=;
-        b=HkoffE7L4knV2wlDgOK8a+r1ArTyn78X/h5N39bYA0rt0/0/1FXkLE5AHFwYdiX5AT
-         kETuJSon4RhADfd6/Bv2p7wu8W1NmJZD/eoA7wSDhP8Si4uMTKJn9vMhr4s2T/Hic1/4
-         6SdmRb+iu6FdqUP1pXsBkF7mefuTtporu+tECvMrm7Fl1/Q6NCUtmpXm9zbJMTvjS9tb
-         +4FeuaEMAewX27dIlYgF6/qBq3e0tCd5ihAqU5x9+f9fR3d2LYrDvHRn1Guo9z31Kz2P
-         fyxMIq/DBXLcc/m1JpUB5IMTTA3374xWVA31NCnnH92723Ni+Z3mJ/789PrxBqHhv28D
-         3VzA==
-X-Gm-Message-State: ABy/qLabJqvmcvJSi4oqmQN4AMC233h7oaLC+NQnVgvYqFKb2V08LSQD
-        NsK5CFbn396DnNGRDnZeHfvL9g==
-X-Google-Smtp-Source: APBJJlHHrtoIBf9lB7FASLEu/tEFi/mpCsdZT/vHgd9gteJyCcV0zEsRg5sakkjWN0uH61N/AGw6YQ==
-X-Received: by 2002:a17:906:d965:b0:992:6064:f32b with SMTP id rp5-20020a170906d96500b009926064f32bmr14606261ejb.46.1689060177838;
-        Tue, 11 Jul 2023 00:22:57 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id t23-20020a1709066bd700b00992025654c1sm752588ejs.179.2023.07.11.00.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 00:22:57 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH] fix Input: bcm-keypad - Correct dev_err_probe() error
-Date:   Tue, 11 Jul 2023 09:22:54 +0200
-Message-Id: <20230711072254.43273-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 11 Jul 2023 03:23:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A911AC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689060192; x=1720596192;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=Y0/zOB9UbBv1wCcPDfqbK7qzMXd4kMqleyT13B7lePQ=;
+  b=ftRdaoklpMOhCyMDTAaraVfWcvKFpg3dzpzQrlRINQwA/qF9aZMAdl/3
+   ItGXtvYPD0jfJtsdbgJiHdvpO44K+8a5KzRl3geLcK1DB0hi5Sq8HgdHz
+   Eyc7o2gzUn2YnT/eB6uZ5sQRBDlMjry/VZKTR+JSXLjMCqcLDvuNpPHVG
+   g/a3jtnqZ6kJ2TTPJXhIDIurjSXhAmBhNiytF1WBsO0XqchBoVq2gMWC5
+   Z5icjI08TCwYkgAJIbn8CVFXMZ97EMkKH+OCbXZpNnwCb762UivLpilGF
+   r13bwmhvNOiR1d7lIQsojkcpHuuvaH5HTji1QU37eUWOh/TDbJXUhESP6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="395333215"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="395333215"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 00:23:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="811093001"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="811093001"
+Received: from sneaga-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.52.179])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 00:23:07 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?utf-8?Q?N=C3=ADcolas_F=2E_R?= =?utf-8?Q?=2E_A=2E_Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH RESEND] drm/bridge: anx7625: Use common macros for DP
+ power sequencing commands
+In-Reply-To: <CAGXv+5HPaJf_M0nAgaGsUZ3mG=BFhTkS-ASbMwjL4K8CRkxChA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230710090929.1873646-1-wenst@chromium.org>
+ <87edlgjbvg.fsf@intel.com>
+ <CAGXv+5HPaJf_M0nAgaGsUZ3mG=BFhTkS-ASbMwjL4K8CRkxChA@mail.gmail.com>
+Date:   Tue, 11 Jul 2023 10:23:05 +0300
+Message-ID: <87lefmj4iu.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pass proper PTR_ERR as dev_err_probe() argument.
+On Tue, 11 Jul 2023, Chen-Yu Tsai <wenst@chromium.org> wrote:
+> On Mon, Jul 10, 2023 at 6:32=E2=80=AFPM Jani Nikula <jani.nikula@linux.in=
+tel.com> wrote:
+>>
+>> On Mon, 10 Jul 2023, Chen-Yu Tsai <wenst@chromium.org> wrote:
+>> > The DRM DP code has macros for the DP power sequencing commands. Use
+>> > them in the anx7625 driver instead of raw numbers.
+>> >
+>> > Fixes: 548b512e144f ("drm/bridge: anx7625: send DPCD command to downst=
+ream")
+>> > Fixes: 27f26359de9b ("drm/bridge: anx7625: Set downstream sink into no=
+rmal status")
+>> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>> > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>> > ---
+>> > Collected tags and rebased on v6.5-rc1.
+>> >
+>> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+>> >  1 file changed, 4 insertions(+), 4 deletions(-)
+>> >
+>> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/d=
+rm/bridge/analogix/anx7625.c
+>> > index 8b985efdc086..9db3784cb554 100644
+>> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+>> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+>> > @@ -931,8 +931,8 @@ static void anx7625_dp_start(struct anx7625_data *=
+ctx)
+>> >
+>> >       dev_dbg(dev, "set downstream sink into normal\n");
+>> >       /* Downstream sink enter into normal mode */
+>> > -     data =3D 1;
+>> > -     ret =3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1,=
+ &data);
+>> > +     data =3D DP_SET_POWER_D0;
+>> > +     ret =3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER=
+, 1, &data);
+>>
+>> So you have code to implement the drm dp aux abstractions, why aren't
+>> you using drm_dp_dpcd_writeb() and friends here?
+>
+> I didn't write the original code. Nor do I do much DP stuff. IIRC someone
+> pointed out to me these had proper macros, so I converted them.
+>
+> Would you accept a follow-up patch to convert the AUX transfers to the
+> DRM abstractions?
 
-Fixes: a2c795b696b2 ("Input: bcm-keypad - simplify with dev_err_probe()")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/r/202306261505.wTjCXRIO-lkp@intel.com/
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/input/keyboard/bcm-keypad.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I believe they would be welcome, but I'm personally not familiar with
+the driver in question.
 
-diff --git a/drivers/input/keyboard/bcm-keypad.c b/drivers/input/keyboard/bcm-keypad.c
-index 05b09066df84..bcc480ff7c3b 100644
---- a/drivers/input/keyboard/bcm-keypad.c
-+++ b/drivers/input/keyboard/bcm-keypad.c
-@@ -367,7 +367,7 @@ static int bcm_kp_probe(struct platform_device *pdev)
- 	/* Enable clock */
- 	kp->clk = devm_clk_get_optional(&pdev->dev, "peri_clk");
- 	if (IS_ERR(kp->clk)) {
--		return dev_err_probe(&pdev->dev, error, "Failed to get clock\n");
-+		return dev_err_probe(&pdev->dev, PTR_ERR(kp->clk), "Failed to get clock\n");
- 	} else if (!kp->clk) {
- 		dev_dbg(&pdev->dev, "No clock specified. Assuming it's enabled\n");
- 	} else {
--- 
-2.34.1
+BR,
+Jani.
 
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
