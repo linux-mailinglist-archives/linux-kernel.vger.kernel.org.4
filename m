@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F391374E2CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A093E74E2D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjGKAxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        id S230377AbjGKAyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjGKAxL (ORCPT
+        with ESMTP id S230385AbjGKAyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:53:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F4DCE;
-        Mon, 10 Jul 2023 17:53:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Mon, 10 Jul 2023 20:54:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7921BC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689036801;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yXHDaaTzSJPadcWtu/mPoLh+iNZCEntncKhGlBrnF84=;
+        b=UDmyZA1riD9TVEob7aFX+tTv+/mo83ePft6gGGOAvwp/xN+/DnmW2ykO8n2/Mzd6wKNrsr
+        JCAhjwqs6IiXli6P4bHsQ7bYj/Syq7FaR11Q4gosggYrHMH5NbY3qTdUlvpCtsWRO1nGOK
+        SnxGXQtYgEkgbTfA2Wtt8Sm+VcTTq3c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-68-DGbuhrNnNe6H7hBfy_gx5A-1; Mon, 10 Jul 2023 20:53:20 -0400
+X-MC-Unique: DGbuhrNnNe6H7hBfy_gx5A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 090186123C;
-        Tue, 11 Jul 2023 00:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B11C433C8;
-        Tue, 11 Jul 2023 00:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689036788;
-        bh=36iFSagVZnDEhRLnp1kYHWCZ0Za33YWo3s47Z2TBxdY=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=uKvWtMjBIhC/DsrCDw9gTGexl/Ruhp+0MpQBRVbRCnGbuR4L7E69la8SYi5y81Py3
-         bTPouArMwK1w7nn/VOnIPhQgZLCwq/60Vcfv+WdWlOZHsNMyOGd3POaH41GELfwrWG
-         Ndmj43x6HZ8vnThLGLbAwqQmZkQwxkGCi0vvTv+oZOm8FsELw57ogocHZogXVf5fTK
-         ZhshH8ka0IV8qdoCX101OTrxEiNnH77XHRTs/sPDTayFRA5mZ91hitoHW8h7uOa7MD
-         AXkK1rDPv8dgKqOs4pJzqi2J2ZoCe1zkgbjgvSqQEAbxw1h0v1bZmwA7MJOzAV3NKK
-         ffTeQnaqrF+tA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 11 Jul 2023 03:53:04 +0300
-Message-Id: <CTYXKJ1LRUK2.2PJ6ECEL6ISHP@suppilovahvero>
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for Lenovo L590 devices
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Florian Bezdeka" <florian@bezdeka.de>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>
-Cc:     "Hans de Goede" <hdegoede@redhat.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d@bezdeka.de>
-In-Reply-To: <20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d@bezdeka.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E094B384CC49;
+        Tue, 11 Jul 2023 00:53:19 +0000 (UTC)
+Received: from [10.22.18.171] (unknown [10.22.18.171])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E8F09200A7CA;
+        Tue, 11 Jul 2023 00:53:18 +0000 (UTC)
+Message-ID: <a429e60a-fc4f-60b0-3978-71596fed9542@redhat.com>
+Date:   Mon, 10 Jul 2023 20:53:18 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 8/9] cgroup/cpuset: Documentation update for partition
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+References: <20230627143508.1576882-1-longman@redhat.com>
+ <20230627143508.1576882-9-longman@redhat.com>
+ <ZKx4ZJowRhRtjZxB@slm.duckdns.org>
+ <6d5aee58-f558-868c-76e0-0b58f8332110@redhat.com>
+ <ZKyljsbJgLNpsBLI@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZKyljsbJgLNpsBLI@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Jun 20, 2023 at 2:11 PM EEST, Florian Bezdeka wrote:
-> The Lenovo L590 suffers from an irq storm issue like the T490, T490s
-> and P360 Tiny, so add an entry for it to tpm_tis_dmi_table and force
-> polling.
+On 7/10/23 20:42, Tejun Heo wrote:
+> Hello,
 >
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2214069#c0
-> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Signed-off-by: Florian Bezdeka <florian@bezdeka.de>
-> ---
->  drivers/char/tpm/tpm_tis.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 7db3593941ea..2771abb5628f 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -138,6 +138,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[=
-] =3D {
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
->  		},
->  	},
-> +	{
-> +		.callback =3D tpm_tis_disable_irq,
-> +		.ident =3D "ThinkPad L590",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
-> +		},
-> +	},
->  	{
->  		.callback =3D tpm_tis_disable_irq,
->  		.ident =3D "UPX-TGL",
->
-> ---
-> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-> change-id: 20230620-flo-lenovo-l590-tpm-fix-4aeb6aa25667
->
-> Best regards,
-> --=20
-> Florian Bezdeka <florian@bezdeka.de>
+> On Mon, Jul 10, 2023 at 08:21:43PM -0400, Waiman Long wrote:
+>>> Wouldn't a partition root's cpus.exclusive always contain all of the CPUs in
+>>> its cpus? Would it make sense for cpus.exclusive to be different from .cpus?
+>> In auto-filled case, it should be the same as cpuset.cpus. I will clarify
+>> that in the documentation. Thanks for catching that.
+> When the user writes something to the file, what would it mena if the
+> content differs from the cgroup's cpuset.cpus?
 
-Thanks, applied.
+For local partition, it doesn't make sense to have a 
+cpust.cpus.exclusive that is not the same as cpuset.cpus as it 
+artificially reduce the set of CPUs that can be used in a partition. In 
+the case of a remote partition, the ancestor cgroups of a remote 
+partition should have cpuset.cpus.exclusive smaller than cpuset.cpus so 
+that when the remote partition is enabled, there are still CPUs left to 
+be used by those cgroups. In essence, the cpuset.cpus.exclusive 
+represents the CPUs that may not be usable anymore if they are taken by 
+a remote partition downstream.
 
-BR, Jarkko
+Cheers,
+Longman
+
