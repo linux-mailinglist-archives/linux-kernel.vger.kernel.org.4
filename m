@@ -2,90 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1074974F9FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DD574FA14
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjGKVqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S231706AbjGKVsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjGKVqc (ORCPT
+        with ESMTP id S231628AbjGKVsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:46:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2516C10C7;
-        Tue, 11 Jul 2023 14:46:31 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-668704a5b5bso5513880b3a.0;
-        Tue, 11 Jul 2023 14:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689111990; x=1691703990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kyzlh81U6Ju2jWhDiLjgeqy7+sksvV31PzhzVl8MBhQ=;
-        b=aPy0SNz9dz6HANDuditq55E3EjWQCri+A9re2o5i05xDNLrJFWA3izghbC7A0uVoJX
-         QXALQHOutvp97mrZej0leDFB9kp4fGa85LoQzCdj+tc3cLv8A4jq4qxl8mtrGA4KRm1I
-         kZPJXtt6NQJLOZ+QnPOuM4vJLWnGnmOMb6SyFhJ+htPUt3j7eGUQAiCWFv/6KBkW3zqJ
-         TSuapNB3+JMMaZ32q/jC9za6PUB4IoZEonxcNSv0qFTuFGXVfGDQGXDQjK/lapCVElIf
-         NZN2Y0E5H6oI5UHwpiITD7sDl1DcXH9Ei8bQ2+2j3rs5OlXpTtdihDw6hMW1tCJ0l0KT
-         00rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689111990; x=1691703990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kyzlh81U6Ju2jWhDiLjgeqy7+sksvV31PzhzVl8MBhQ=;
-        b=K+ysjPGEPhA+EDLn+z8pOcLTIdGDPwBxHw9SR8OlzKMDtFfRrcZ5NAfAPzdsQVYFXK
-         4NFtZEfBlmMOLdAiM7NdBlkGqcXT0tYVbp+6/t5TqSWP2qQ0tKQSUmVJ4JA5A+PnrN/j
-         +rxDjREc27UoyC8QK7L8VKoEiwTAiGjdRL0x4xOp1IRXrqD9N0vs6Qwgbb3s0YjboMXA
-         fcTU6i+Ha0tj4tSyys9Vsv5qywRnUhCHRt+ZVDqozB9ASTlQfle8O+TFozNtLZ78ouyO
-         NzyejtiGWmLWRMQIwh/OD2CAVlYYzauPqtoUSeIp9nHNmIq2tKumlJYqkk94T2vzXDHW
-         CL2w==
-X-Gm-Message-State: ABy/qLaVUfbGZ30AQ8GnHWOdEdb7211axm/SIhJrvIt1bk66ugw0wWme
-        47/wHr+9t+qgnXsYuh3Pbhg=
-X-Google-Smtp-Source: APBJJlFG4Jo/7savB2RiSA2npOJ/H7omJxLgnggtODSMG6vmeyq4mrXDj1WvnrDRCkWkBjeLA0iWcg==
-X-Received: by 2002:a05:6a00:1704:b0:682:2fea:39f0 with SMTP id h4-20020a056a00170400b006822fea39f0mr19836512pfc.5.1689111990437;
-        Tue, 11 Jul 2023 14:46:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:9374])
-        by smtp.gmail.com with ESMTPSA id e26-20020a62aa1a000000b0065438394fa4sm2223493pff.90.2023.07.11.14.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 14:46:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 11 Jul 2023 11:46:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     hannes@cmpxchg.org, sfr@canb.auug.org.au, lizefan.x@bytedance.com,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] cgroup: put cgroup_tryget_css() inside
- CONFIG_CGROUP_SCHED
-Message-ID: <ZK3NtKHk_w7XoAVZ@slm.duckdns.org>
-References: <20230711023820.3854596-1-linmiaohe@huawei.com>
+        Tue, 11 Jul 2023 17:48:35 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD701711;
+        Tue, 11 Jul 2023 14:48:33 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BLaSHl000918;
+        Tue, 11 Jul 2023 21:48:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=s+8TfXAPCloCWHz1QvUN7+u6RvdaswZz73hLREaiTmQ=;
+ b=CjejtFsIyBRcB4ikaPk3c+KhifFEbluhn9RXSi/Vw/K6aqGtOKnaKMHVzVeZFkEd2SZW
+ LlPk6hpcOALbFTZ/P5Ui4MGyZX3IuOCrTE/SlVATeMqbWv8I/1AFHUVTKFGaIiMBacHV
+ h0EWwP2LRAlFwdwEC92+6fxk2tfshFBO3qx05fw/s/Fm19V68UzUqmnaNRLeDspTjuhQ
+ cHkFT7FtF7CQGW7rffjifhIXNxf8p66dZrimJRf8RpoQhcxrac8jRbOXaynt3Afw8wbR
+ P2p2HeNjMc8TYr7p29oCOakqPDMhtWMfM2p0vVHHzCFOTuIqBErKIKNzrx7XV+8skMqW ng== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rseewr3t3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 21:48:10 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BLm8IX015461
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 21:48:08 GMT
+Received: from [10.71.109.168] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 14:48:08 -0700
+Message-ID: <87f5f56e-aa91-da87-b549-0f3a044d54b6@quicinc.com>
+Date:   Tue, 11 Jul 2023 14:47:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711023820.3854596-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [Freedreno] [PATCH RFC v4 1/7] drm: Introduce solid fill DRM
+ plane property
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <sebastian.wick@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Sean Paul" <sean@poorly.run>, <dri-devel@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        <quic_abhinavk@quicinc.com>, "Maxime Ripard" <mripard@kernel.org>,
+        <linux-kernel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <contact@emersion.fr>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <wayland-devel@lists.freedesktop.org>,
+        David Airlie <airlied@gmail.com>,
+        <ville.syrjala@linux.intel.com>
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+ <20230404-solid-fill-v4-1-f4ec0caa742d@quicinc.com>
+ <20230630112700.53d79343@eldfell>
+ <d29645bd-4f60-be6c-9f34-ef6ffc343f44@quicinc.com>
+ <20230711104245.2be648a9@eldfell>
+Content-Language: en-US
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <20230711104245.2be648a9@eldfell>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7UdpqfyocigKM69Se47s2GREpMXNsjYK
+X-Proofpoint-ORIG-GUID: 7UdpqfyocigKM69Se47s2GREpMXNsjYK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 mlxscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
+ spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307110198
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 10:38:20AM +0800, Miaohe Lin wrote:
-> Put cgroup_tryget_css() inside CONFIG_CGROUP_SCHED to fix the warning
-> of 'cgroup_tryget_css' defined but not used [-Wunused-function] when
-> CONFIG_CGROUP_SCHED is disabled.
+
+
+On 7/11/2023 12:42 AM, Pekka Paalanen wrote:
+> On Mon, 10 Jul 2023 16:12:06 -0700
+> Jessica Zhang <quic_jesszhan@quicinc.com> wrote:
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> On 6/30/2023 1:27 AM, Pekka Paalanen wrote:
+>>> On Thu, 29 Jun 2023 17:25:00 -0700
+>>> Jessica Zhang <quic_jesszhan@quicinc.com> wrote:
+>>>    
+>>>> Document and add support for solid_fill property to drm_plane. In
+>>>> addition, add support for setting and getting the values for solid_fill.
+>>>>
+>>>> To enable solid fill planes, userspace must assign a property blob to
+>>>> the "solid_fill" plane property containing the following information:
+>>>>
+>>>> struct drm_solid_fill_info {
+>>>> 	u8 version;
+>>>> 	u32 r, g, b;
+>>>> };
+>>>>
+>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>>
+>>> Hi Jessica,
+>>>
+>>> I've left some general UAPI related comments here.
+>>>    
+>>>> ---
+>>>>    drivers/gpu/drm/drm_atomic_state_helper.c |  9 +++++
+>>>>    drivers/gpu/drm/drm_atomic_uapi.c         | 55 +++++++++++++++++++++++++++++++
+>>>>    drivers/gpu/drm/drm_blend.c               | 33 +++++++++++++++++++
+>>>>    include/drm/drm_blend.h                   |  1 +
+>>>>    include/drm/drm_plane.h                   | 43 ++++++++++++++++++++++++
+>>>>    5 files changed, 141 insertions(+)
+> 
+> ...
+> 
+>>>> diff --git a/include/drm/drm_blend.h b/include/drm/drm_blend.h
+>>>> index 88bdfec3bd88..0338a860b9c8 100644
+>>>> --- a/include/drm/drm_blend.h
+>>>> +++ b/include/drm/drm_blend.h
+>>>> @@ -58,4 +58,5 @@ int drm_atomic_normalize_zpos(struct drm_device *dev,
+>>>>    			      struct drm_atomic_state *state);
+>>>>    int drm_plane_create_blend_mode_property(struct drm_plane *plane,
+>>>>    					 unsigned int supported_modes);
+>>>> +int drm_plane_create_solid_fill_property(struct drm_plane *plane);
+>>>>    #endif
+>>>> diff --git a/include/drm/drm_plane.h b/include/drm/drm_plane.h
+>>>> index 51291983ea44..f6ab313cb83e 100644
+>>>> --- a/include/drm/drm_plane.h
+>>>> +++ b/include/drm/drm_plane.h
+>>>> @@ -40,6 +40,25 @@ enum drm_scaling_filter {
+>>>>    	DRM_SCALING_FILTER_NEAREST_NEIGHBOR,
+>>>>    };
+>>>>    
+>>>> +/**
+>>>> + * struct drm_solid_fill_info - User info for solid fill planes
+>>>> + */
+>>>> +struct drm_solid_fill_info {
+>>>> +	__u8 version;
+>>>> +	__u32 r, g, b;
+>>>> +};
+>>>
+>>> Shouldn't UAPI structs be in UAPI headers?
+>>
+>> Acked, will move this to uapi/drm_mode.h
+>>
+>>>
+>>> Shouldn't UAPI structs use explicit padding to not leave any gaps when
+>>> it's unavoidable? And the kernel to check that the gaps are indeed
+>>> zeroed?
+>>
+>> I don't believe so... From my understanding, padding will be taken care
+>> of by the compiler by default. Looking at the drm_mode_modeinfo UAPI
+>> struct [1], it also doesn't seem to do explicit padding. And the
+>> corresponding set_property() code doesn't seem check the gaps either.
+>>
+>> That being said, it's possible that I'm missing something here, so
+>> please let me know if that's the case.
+>>
+>> [1]
+>> https://elixir.bootlin.com/linux/v6.5-rc1/source/include/uapi/drm/drm_mode.h#L242
+> 
+> I suspect that drm_mode_modeinfo predates the lessons learnt about
+> "botching up ioctls" by many years:
+> https://www.kernel.org/doc/Documentation/ioctl/botching-up-ioctls.rst
+> 
+> drm_mode_modeinfo goes all the way back to
+> 
+> commit f453ba0460742ad027ae0c4c7d61e62817b3e7ef
+> Date:   Fri Nov 7 14:05:41 2008 -0800
+> 
+>      DRM: add mode setting support
+> 
+> and
+> 
+> commit e0c8463a8b00b467611607df0ff369d062528875
+> Date:   Fri Dec 19 14:50:50 2008 +1000
+> 
+>      drm: sanitise drm modesetting API + remove unused hotplug
+> 
+> and it got the proper types later in
+> 
+> commit 1d7f83d5ad6c30b385ba549c1c3a287cc872b7ae
+> Date:   Thu Feb 26 00:51:42 2009 +0100
+> 
+>      make drm headers use strict integer types
+> 
+> 
+> My personal feeling is that if you cannot avoid padding in a struct,
+> convert it into explicit fields anyway and require them to be zero.
+> That way if you ever need to extend or modify the struct, you already
+> have an "unused" field that old userspace guarantees to be zero, so you
+> can re-purpose it when it's not zero.
+> 
+> A struct for blob contents is maybe needing slightly less forward
+> planning than ioctl struct, because KMS properties are cheap compared
+> to ioctl numbers, I believe.
+> 
+> Maybe eliminating compiler induced padding in structs is not strictly
+> necessary, but it seems like a good idea to me, because compilers are
+> allowed to leave the padding bits undefined. If a struct was filled in
+> by the kernel and delivered to userspace, undefined padding could even
+> be a security leak, theoretically.
+> 
+> Anyway, don't take my word for it. Maybe kernel devs have a different
+> style.
 
-Applied to cgroup/for-6.6.
+Ah, got it. Thanks for the info! Looking over more recent 
+implementations of blob properties, I do see that there's a precedent 
+for explicit padding [1].
 
-Thanks.
+I think I could also just make `version` a __u32 instead. Either way, 
+that seems to be how other structs declare `version`.
 
--- 
-tejun
+Thanks,
+
+Jessica Zhang
+
+[1] 
+https://elixir.bootlin.com/linux/latest/source/include/uapi/drm/virtgpu_drm.h#L178
+
+> 
+> 
+> Thanks,
+> pq
+> 
+>>>
+>>> It also needs more UAPI doc, like a link to the property doc that uses
+>>> this and an explanation of what the values mean.
+>>
+>> Acked.
+>>
+>> Thanks,
+>>
+>> Jessica Zhang
+>>
+>>>
+>>>
+>>> Thanks,
+>>> pq
+>>>    
+>>>> +
+>>>> +/**
+>>>> + * struct solid_fill_property - RGB values for solid fill plane
+>>>> + *
+>>>> + * Note: This is the V1 for this feature
+>>>> + */
+>>>> +struct drm_solid_fill {
+>>>> +	uint32_t r;
+>>>> +	uint32_t g;
+>>>> +	uint32_t b;
+>>>> +};
+>>>> +
+>>>>    /**
+>>>>     * struct drm_plane_state - mutable plane state
+>>>>     *
+>>>> @@ -116,6 +135,23 @@ struct drm_plane_state {
+>>>>    	/** @src_h: height of visible portion of plane (in 16.16) */
+>>>>    	uint32_t src_h, src_w;
+>>>>    
+>>>> +	/**
+>>>> +	 * @solid_fill_blob:
+>>>> +	 *
+>>>> +	 * Blob containing relevant information for a solid fill plane
+>>>> +	 * including pixel format and data. See
+>>>> +	 * drm_plane_create_solid_fill_property() for more details.
+>>>> +	 */
+>>>> +	struct drm_property_blob *solid_fill_blob;
+>>>> +
+>>>> +	/**
+>>>> +	 * @solid_fill:
+>>>> +	 *
+>>>> +	 * Pixel data for solid fill planes. See
+>>>> +	 * drm_plane_create_solid_fill_property() for more details.
+>>>> +	 */
+>>>> +	struct drm_solid_fill solid_fill;
+>>>> +
+>>>>    	/**
+>>>>    	 * @alpha:
+>>>>    	 * Opacity of the plane with 0 as completely transparent and 0xffff as
+>>>> @@ -699,6 +735,13 @@ struct drm_plane {
+>>>>    	 */
+>>>>    	struct drm_plane_state *state;
+>>>>    
+>>>> +	/*
+>>>> +	 * @solid_fill_property:
+>>>> +	 * Optional solid_fill property for this plane. See
+>>>> +	 * drm_plane_create_solid_fill_property().
+>>>> +	 */
+>>>> +	struct drm_property *solid_fill_property;
+>>>> +
+>>>>    	/**
+>>>>    	 * @alpha_property:
+>>>>    	 * Optional alpha property for this plane. See
+>>>>   
+>>>    
+> 
