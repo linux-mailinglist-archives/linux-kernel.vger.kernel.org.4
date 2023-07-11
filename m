@@ -2,132 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BD174FBBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901DA74FBBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjGKXLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 19:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S230394AbjGKXMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 19:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGKXLm (ORCPT
+        with ESMTP id S229505AbjGKXMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 19:11:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA39CF;
-        Tue, 11 Jul 2023 16:11:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 11 Jul 2023 19:12:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDDD134;
+        Tue, 11 Jul 2023 16:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689117158;
+        bh=iktfRfulltKZV6uBdwfsXmUTIlG7AOOCY9pGGvEfaII=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WPe4EqYDdwrcqvHzILo6WImR49EMQP6bhs+of1EvaB2bMpokeIfQw8ij1EJLmjxvk
+         2d1RX9R6WKXawohqVvL2afWqCFwhz3FYNP/KoNLUAxUPcamIop1qcmVInmBeyHx7AZ
+         OxSJMteLLegNdpjb5wUKm9JWPdyCESEf4Geor03LmRUwNk8cLep6lx2tMWSWvLw/pm
+         fDRyE84oZ8hw2vsE+HEIpTumo7+VfsdpfZYLVqE23KwnMpLGKq0JRpKgZDbLfLSvz2
+         4oud7yquvIyERDB2699GwFkcBucp9M06JR2T2gmqvKzOOF2pBIn3QJ+zkb4wDser6i
+         7C05yNUoV9QDw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA5D06163E;
-        Tue, 11 Jul 2023 23:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F464C433C7;
-        Tue, 11 Jul 2023 23:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689117100;
-        bh=KIRd8DUSyWk0AEQuhquMChREFws8OSd5E3EodjVZs84=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vijf9kHawoUsAHCRdUShMMlww1WeNa5kLeyDy0vtDHn0UjBXtNB8CR0H3FUIrFBNe
-         mniSZT6qLl4SVqtfIxZYqoEOvqi/XfOd6mS/ybTEDklNwFaDCgxdsNpzoUo8dhJvwT
-         WgQ+1gs3sJDvs6yKrJbCfMr6j4RiW1DFsNpx+8DAtmzFcYzVy3GbLtOrfqNja0jF5I
-         UHDS583jjfRisY18i3bzpE8eFM4I7bT944Werl1J2EwM18JsHLE4LboOpgje3x4H22
-         3/xoHmBUqCBtM6ZefMrE6ywlWiuBdcqlSE7aYnqNrCWgRyiDpSr/FNebscYSboQbPH
-         EpryJqUsX/ehw==
-Date:   Tue, 11 Jul 2023 17:12:31 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] smb: client: Fix -Wstringop-overflow issues
-Message-ID: <ZK3h3+dHBGONHt+S@work>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0xVG1zVnz4wy7;
+        Wed, 12 Jul 2023 09:12:38 +1000 (AEST)
+Date:   Wed, 12 Jul 2023 09:12:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20230712091237.65a6ab94@canb.auug.org.au>
+In-Reply-To: <20221026121428.5181969a@canb.auug.org.au>
+References: <20221026121428.5181969a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/GPM36BL2F9wwE+aLZqpDwI6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pSMB->hdr.Protocol is an array of size 4 bytes, hence when the compiler
-analyzes this line of code
+--Sig_/GPM36BL2F9wwE+aLZqpDwI6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-	parm_data = ((char *) &pSMB->hdr.Protocol) + offset;
+Hi all,
 
-it legitimately complains about the fact that offset points outside the
-bounds of the array. Notice that the compiler gives priority to the object
-as an array, rather than merely the address of one more byte in a structure
-to wich offset should be added (which seems to be the actual intention of
-the original implementation).
+On Wed, 26 Oct 2022 12:14:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the amdgpu tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> drivers/gpu/drm/amd/display/dc/dc.h:1289: warning: Function parameter or =
+member 'plane_states' not described in 'dc_validation_set'
+>=20
+> Introduced by commit
+>=20
+>   f6ae69f49fcf ("drm/amd/display: Include surface of unaffected streams")
 
-Fix this by explicitly instructing the compiler to treat the code as a
-sequence of bytes in struct smb_com_transaction2_spi_req, and not as an
-array accessed through pointer notation.
+I am still getting this warning (presumably now from Linus' tree).
 
-Notice that ((char *)pSMB) + sizeof(pSMB->hdr.smb_buf_length) points to
-the same address as ((char *) &pSMB->hdr.Protocol), therefore this results
-in no differences in binary output.
+--=20
+Cheers,
+Stephen Rothwell
 
-Fixes the following -Wstringop-overflow warnings when built s390
-architecture with defconfig (GCC 13):
-  CC [M]  fs/smb/client/cifssmb.o
-In function 'cifs_init_ace',
-    inlined from 'posix_acl_to_cifs' at fs/smb/client/cifssmb.c:3046:3,
-    inlined from 'cifs_do_set_acl' at fs/smb/client/cifssmb.c:3191:15:
-fs/smb/client/cifssmb.c:2987:31: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
- 2987 |         cifs_ace->cifs_e_perm = local_ace->e_perm;
-      |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-In file included from fs/smb/client/cifssmb.c:27:
-fs/smb/client/cifspdu.h: In function 'cifs_do_set_acl':
-fs/smb/client/cifspdu.h:384:14: note: at offset [7, 11] into destination object 'Protocol' of size 4
-  384 |         __u8 Protocol[4];
-      |              ^~~~~~~~
-In function 'cifs_init_ace',
-    inlined from 'posix_acl_to_cifs' at fs/smb/client/cifssmb.c:3046:3,
-    inlined from 'cifs_do_set_acl' at fs/smb/client/cifssmb.c:3191:15:
-fs/smb/client/cifssmb.c:2988:30: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
- 2988 |         cifs_ace->cifs_e_tag =  local_ace->e_tag;
-      |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-fs/smb/client/cifspdu.h: In function 'cifs_do_set_acl':
-fs/smb/client/cifspdu.h:384:14: note: at offset [6, 10] into destination object 'Protocol' of size 4
-  384 |         __u8 Protocol[4];
-      |              ^~~~~~~~
+--Sig_/GPM36BL2F9wwE+aLZqpDwI6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-This helps with the ongoing efforts to globally enable
--Wstringop-overflow.
+-----BEGIN PGP SIGNATURE-----
 
-Link: https://github.com/KSPP/linux/issues/310
-Fixes: dc1af4c4b472 ("cifs: implement set acl method")
-Cc: stable@vger.kernel.org
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- fs/smb/client/cifssmb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSt4eUACgkQAVBC80lX
+0GxCJAgAnTGLw1Z6otYM44lOkLPndufjLjXPCu5ZlSDXW3p9ypkmo1EvDB8fwICR
+CoErkDfCfViwLxsFoJ6eniHqoGp5qEzjrD+utK1GvWO9itny3GjgxWYD2euuj15A
+6h8uG7LtfWqvWAs1VEddd5AeWD8AejyF/k2g3G27rv06YcqbzdKVjY+zi5xnan7J
+HzK3pmz0CWOhr5ZLeGln4HhoUuOBR5QAVn3GE2QPDSaqkoUaRJNhdB22C5lF37Yp
+/4nit3B7AH9WCHTnVClfLQKUwTQnBbyp1wBk3j1b+sV3b8HjzNZWFDJgb4GMQYxj
+88n8l1Tc4TWZkRxuWiAtfzIxRE8hUA==
+=QvFg
+-----END PGP SIGNATURE-----
 
-diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-index 19f7385abeec..9dee267f1893 100644
---- a/fs/smb/client/cifssmb.c
-+++ b/fs/smb/client/cifssmb.c
-@@ -3184,7 +3184,7 @@ int cifs_do_set_acl(const unsigned int xid, struct cifs_tcon *tcon,
- 	param_offset = offsetof(struct smb_com_transaction2_spi_req,
- 				InformationLevel) - 4;
- 	offset = param_offset + params;
--	parm_data = ((char *) &pSMB->hdr.Protocol) + offset;
-+	parm_data = ((char *)pSMB) + sizeof(pSMB->hdr.smb_buf_length) + offset;
- 	pSMB->ParameterOffset = cpu_to_le16(param_offset);
- 
- 	/* convert to on the wire format for POSIX ACL */
--- 
-2.34.1
-
+--Sig_/GPM36BL2F9wwE+aLZqpDwI6--
