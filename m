@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C654C74EC75
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AEA74EC76
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjGKLNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S231676AbjGKLOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjGKLN2 (ORCPT
+        with ESMTP id S231654AbjGKLOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:13:28 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F889B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:13:26 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc244d307so63353905e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689074005; x=1691666005;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dLCSxIig1E6lDTEDhD9ibzAe8m3WEahllr3ouLgYn1c=;
-        b=nzLVIA+PTb3SSi7DlWsGUsWL0rkRaezLG67wZ9+BrJp3AN5vFhk9E0dU6Vk52JEQKR
-         2vLUlE/D2AteRhGj4dkHYehNCRxLhFq+LUlYcCZRPHvbm7eEpmU7fLT2U9Csc3sEues6
-         t05grkaVvaeeg8n1TVm5MNd9z8nH1MAqcyU2CaWLXISalkxxjV7Xe5gxUKR9QmNOlkk+
-         h+XoqvVHH6LnqoYvxTnbG9LNgn0+TDx0w9g8VedeMKOc+HEFDuU9xw36PM00it1+SSCA
-         n5zaeQuoXryACKo6BTsqMOjcASK3ca8qDzOvq31ASaP592CcVNBYtvPlMOA4eKVY6img
-         jBuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689074005; x=1691666005;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dLCSxIig1E6lDTEDhD9ibzAe8m3WEahllr3ouLgYn1c=;
-        b=VSbGlWbyDIvkU0iHGXwVx/ZlrelWEtRSKdCOcCk1IzCnfj2JPKDaMxGU8xuV7oKprh
-         ZI6uxfn1T/p2p489S0sN1/uKZVN6J3MXkg3PT75z96N2bDIaHqC6aGEJWO0PBtU9wJu6
-         f2Y/04ReFeiVuHCIBnACA4dJHVXjfZ50x3yzVtpT+gLPzw8c/fSoGmpsZ+tlCyiUjFEt
-         W6Imtq3/J/GyZTg+kUtD4advpsfG6Ok+olEgGkFFg99IN5YeIzlT7iQD1KiB/RDjdtDD
-         NW69uFmL7Cn3CgzXNXt3ioXIqjs5QN125fRJAjkZuPVqInk/iGOmioBkaeoubBVcp2ih
-         D6iQ==
-X-Gm-Message-State: ABy/qLY940d6WRb3weUlcK5vlD+L3fXrhb+3l+v0SDc+sw0JA4yLK0lu
-        V+7Rw0KaiB4OjRsNtS/SoIdzWQ==
-X-Google-Smtp-Source: APBJJlHUs43WSGSKNzoDZD3KQlU5rLMuF/7dsLdNmMbgfPJIjEa2I2xQi/A5h+V8aI33ZuQwpwX8Uw==
-X-Received: by 2002:a1c:f706:0:b0:3fb:b637:22a7 with SMTP id v6-20020a1cf706000000b003fbb63722a7mr16506974wmh.4.1689074004968;
-        Tue, 11 Jul 2023 04:13:24 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05600c225300b003fbb0c01d4bsm2259571wmm.16.2023.07.11.04.13.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 04:13:23 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 14:13:19 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Su Hui <suhui@nfschina.com>
-Cc:     airlied@redhat.com, kraxel@redhat.com, gurchetansingh@chromium.org,
-        olvaffe@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] drm/virtio: remove some redundant code
-Message-ID: <7f67ed65-647a-44d7-a262-d3f1f48d90b9@kadam.mountain>
-References: <20230711090030.692551-1-suhui@nfschina.com>
+        Tue, 11 Jul 2023 07:14:17 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2726998
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:14:15 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B4EF6240005;
+        Tue, 11 Jul 2023 11:14:10 +0000 (UTC)
+Message-ID: <a7bb09c9-870a-d8f2-23c3-7f6fd2c68e2b@ghiti.fr>
+Date:   Tue, 11 Jul 2023 13:14:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711090030.692551-1-suhui@nfschina.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] riscv: correct pt_level name via pgtable_l5/4_enabled
+Content-Language: en-US
+To:     Song Shuai <suagrfillet@gmail.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, alexghiti@rivosinc.com,
+        bjorn@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230711105202.842408-1-suagrfillet@gmail.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230711105202.842408-1-suagrfillet@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 05:00:31PM +0800, Su Hui wrote:
-> virtio_gpu_get_vbuf always be successful,
-> so remove the error judgment.
-> 
+Hi Song,
 
-No, just ignore the static checker false positive in this case.  The
-intent of the code is clear that if it did have an error it should
-return an error pointer.
 
-regards,
-dan carpenter
+On 11/07/2023 12:52, Song Shuai wrote:
+> The pt_level uses CONFIG_PGTABLE_LEVELS to display page table names.
+> But if downgrading page mode from kernel cmdline in 64BIT, it will
+> give a wrong name.
+>
+> Like, using no4lvl for sv39, ptdump named the 1G-mapping as "PUD"
+> that should be "PGD":
+>
+> 0xffffffd840000000-0xffffffd900000000    0x00000000c0000000         3G PUD     D A G . . W R V
+>
+> So select "P4D/PUD" or "PGD" via pgtable_l5/4_enabled to correct it.
+>
+> Fixes: 26e7aacb83df ("riscv: Allow to downgrade paging mode from the command line")
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> ---
+>   arch/riscv/mm/ptdump.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+>
+> diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
+> index 20a9f991a6d7..cfdd327981ee 100644
+> --- a/arch/riscv/mm/ptdump.c
+> +++ b/arch/riscv/mm/ptdump.c
+> @@ -384,6 +384,11 @@ static int __init ptdump_init(void)
+>   
+>   	kernel_ptd_info.base_addr = KERN_VIRT_START;
+>   
+> +#ifdef CONFIG_64BIT
+> +	pg_level[1].name = pgtable_l5_enabled ? "P4D" : "PGD";
+> +	pg_level[2].name = pgtable_l4_enabled ? "PUD" : "PGD";
+> +#endif
+
+
+You don't need the #ifdef here as pgtable_lX_enabled are always declared.
+
+
+> +
+>   	for (i = 0; i < ARRAY_SIZE(pg_level); i++)
+>   		for (j = 0; j < ARRAY_SIZE(pte_bits); j++)
+>   			pg_level[i].mask |= pte_bits[j].mask;
+
+
+The Fixes tag is wrong to me, if satp mode is restricted by the hardware 
+itself (not from the command line), the same problem happens. Maybe that 
+should be the sv48 introduction patch? Or the sv57? It will be more 
+cumbersome to backport with the sv48 introduction though as this patch 
+won't apply as-is.
+
+Otherwise, you can add:
+
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Thanks,
+
+Alex
 
