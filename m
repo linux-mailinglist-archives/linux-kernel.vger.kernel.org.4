@@ -2,109 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B3074E723
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731EF74E72B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbjGKGWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
+        id S229514AbjGKGWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjGKGWT (ORCPT
+        with ESMTP id S229990AbjGKGWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:22:19 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40370E49
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:18 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6b98ac328so80376791fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689056536; x=1691648536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BMq0CBBNFPwdDt7sKE2WVUIr1xaLmnE621Tq72fmvlo=;
-        b=KXF34s2LK1/OBl5Xe01l2pf5fI3j98hJjahYb83FRznicW3TYbQ+Fg5ZH8uGXsascY
-         okgUTLfxUfg7EkXx0Y0V8GOaZt3yOlIlumpIymQe3NUZ6XaqZyBk+v8uKV8nOtob2rBB
-         fE+px6vx4Sn9sYo+lebROfn9chilOiaYLkLX9a018rpqmuiGDjRtbcEnyL9fAifRGPu4
-         Sas6ELlvW8K36b7aIiINkkC5jzsC/k3hxC4FmgPITxFV+pnDhKX92KQbsbZrfENT2hUl
-         O0cODNDWq0hWV0xcuJCFuqd0hjN9aM8QJrj+hMISrXLBdbC6ns3RooHaOAbDknIfxULa
-         VDlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689056536; x=1691648536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BMq0CBBNFPwdDt7sKE2WVUIr1xaLmnE621Tq72fmvlo=;
-        b=jmS/bvr2YU4OxpNLqDLHx6yOjepIc5ycY5cqC31XuRzk6e+SFrnepRUN3HAIXe4qHW
-         lMckPifIxLrjqEYpG9KdSH7rV2A1/N7lMizqSVo7N4hpYplLg4zfiiBckFMODLfKMiSD
-         1WRl2zwsC0yaOKvewLIVA2ZBBi8thZQrsQIuu39Q/Bw3kJImL0YQVe4SFNRuOIoNg60t
-         YXTg09Ap5QNa55fXtCdQCjWT55m2rwk24v9CiiuQcqGXZu1pxbaThCQIeiOY3f+4f4if
-         7witKIGKv+XGUxycFN/PmxT7SW9RSOlVMijtjpP0mk+ifCA+5iK/zEB5F5TcqHqPFKfs
-         AVpA==
-X-Gm-Message-State: ABy/qLbpHTe1tTHm8mqwXTQxjQxWebm984ghOEoeLjwI45VREGt6NTBr
-        E3YguQUiI9G+7Q5cIMGvAaU5ng==
-X-Google-Smtp-Source: APBJJlFoMATq7vPBc/lWMvWA0+x1/ZhvVIc58N6ncv9I3EHgD/yjZVhuA/8Dad8k448XRfwAGDUJow==
-X-Received: by 2002:a2e:2414:0:b0:2b6:9b01:d40d with SMTP id k20-20020a2e2414000000b002b69b01d40dmr11762664ljk.30.1689056536556;
-        Mon, 10 Jul 2023 23:22:16 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id y24-20020a17090629d800b0098822e05539sm680198eje.191.2023.07.10.23.22.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 23:22:16 -0700 (PDT)
-Message-ID: <5e46383b-9ebd-23bf-6d20-2ce8e7afc1ad@linaro.org>
-Date:   Tue, 11 Jul 2023 08:22:14 +0200
+        Tue, 11 Jul 2023 02:22:43 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C79AE51;
+        Mon, 10 Jul 2023 23:22:42 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6Fvpb016852;
+        Tue, 11 Jul 2023 06:22:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9th3Yn9+UmkvDmdmjhff8pvOb+OMrDIo2KZKn7m0G2A=;
+ b=N+lXOHrnu0Gh7DFOxWm8zi2Wk8CvkKdvpBC98PRflbk2eCZSuuxmIJkFJNu5bunJzNA2
+ CRh4Oucw0d9XM1HkfbasayevaUxBNtphOFjb6TfSZn7zRYlVfMF+W+mziMYiVGE6U371
+ skYca2TMWS6g47cwNXVBJMW7VO0/O1J6qN81iBpSl6GaFJfMe7j/UNhVyFkBfGXmxosO
+ bGTXskBvs9MgiAZsBRXAjQcYj1vmI6L0DjJuIBg16x1rq0kWh6jlP+nqUC/QM60eSiMk
+ Y1z/dY2XdbAL5Lu8KZfWO58Z8f/8hhlXRu3z4SScq04EUp3esIG/Qsa1dPNfoqL6Vzpb Yg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs1mnr0gp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 06:22:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B6Mbii019094
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 06:22:37 GMT
+Received: from [10.214.27.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 23:22:34 -0700
+Message-ID: <fc054877-52c6-9e61-8572-3068c53a86de@quicinc.com>
+Date:   Tue, 11 Jul 2023 11:52:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: power: Add compatible for sdx75
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Add PMX75 compatible
 Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
- <1689054169-10800-3-git-send-email-quic_rohiagar@quicinc.com>
- <afbab9c3-ae67-1a30-6fc5-e031f9f30286@linaro.org>
- <0060bd2f-3884-ba12-08a6-ae7975d22e65@linaro.org>
- <3f1c7089-87ad-ffc2-4978-d7a8664c462f@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3f1c7089-87ad-ffc2-4978-d7a8664c462f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1689054415-11281-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1689054415-11281-2-git-send-email-quic_rohiagar@quicinc.com>
+ <8eb986f2-3268-65cd-9210-ef1fca4f8259@linaro.org>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <8eb986f2-3268-65cd-9210-ef1fca4f8259@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hxXpgoypPTEAbrga6xhN49GTxiiWPo4v
+X-Proofpoint-GUID: hxXpgoypPTEAbrga6xhN49GTxiiWPo4v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_03,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110054
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 08:20, Rohit Agarwal wrote:
-> 
-> On 7/11/2023 11:25 AM, Krzysztof Kozlowski wrote:
->> On 11/07/2023 07:53, Krzysztof Kozlowski wrote:
->>> On 11/07/2023 07:42, Rohit Agarwal wrote:
->>>> Add a compatible string that can be used to list PDs for sdx75.
->>>>
->>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>>> ---
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->> Ah, I forgot: you miss device name in subject prefixes. You do not add
->> here sdx75 to all power bindings, do you? This applies to all your
->> patches and commits.
-> Do you mean I need to update the subject as this?
-> 
-> dt-bindings: power: sdx75: Add compatible for sdx75
 
-No, the device binding is qcom,rpmpd.
+On 7/11/2023 11:35 AM, Krzysztof Kozlowski wrote:
+> On 11/07/2023 07:46, Rohit Agarwal wrote:
+>> Add PMX75 compatibles for PMIC found in SDX75 platform.
+>> While at it, update the entry for SDX65 as well.
+> Everything is an update...
+>
+>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>> ---
+>>   .../bindings/regulator/qcom,rpmh-regulator.yaml    | 22 +++++++++++++++++++++-
+>>   1 file changed, 21 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+>> index b949850..72b533c 100644
+>> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+>> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+>> @@ -53,6 +53,7 @@ description: |
+>>         For PMR735A, smps1 - smps3, ldo1 - ldo7
+>>         For PMX55, smps1 - smps7, ldo1 - ldo16
+>>         For PMX65, smps1 - smps8, ldo1 - ldo21
+>> +      For PMX75, smps1 - smps10, ldo1 - ldo21
+>>   
+>>   properties:
+>>     compatible:
+>> @@ -84,6 +85,7 @@ properties:
+>>         - qcom,pmr735a-rpmh-regulators
+>>         - qcom,pmx55-rpmh-regulators
+>>         - qcom,pmx65-rpmh-regulators
+>> +      - qcom,pmx75-rpmh-regulators
+>>   
+>>     qcom,pmic-id:
+>>       description: |
+>> @@ -424,10 +426,28 @@ allOf:
+>>           vdd-l11-l13-supply: true
+>>         patternProperties:
+>>           "^vdd-l[1347]-supply$": true
+>> -        "^vdd-l1[0245789]-supply$": true
+>> +        "^vdd-l1[024579]-supply$": true
+> Why? Does not look related at all.
+This update is because sdx65 does not have vdd-l18-supply separately and 
+its
+already part of vdd-l2-l18-supply property mentioned in the properties 
+field.
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
-
-Best regards,
-Krzysztof
-
+Thanks,
+Rohit.
+>
+> Best regards,
+> Krzysztof
+>
