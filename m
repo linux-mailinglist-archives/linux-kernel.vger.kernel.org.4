@@ -2,111 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01CF74F909
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B6C74F92B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjGKUae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S230394AbjGKUe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjGKUab (ORCPT
+        with ESMTP id S229693AbjGKUeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:30:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30AE10C7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:30:30 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJK03-0002td-Rm; Tue, 11 Jul 2023 22:30:19 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJK02-00DjLv-Qr; Tue, 11 Jul 2023 22:30:18 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJK02-0048Gc-1l; Tue, 11 Jul 2023 22:30:18 +0200
-Date:   Tue, 11 Jul 2023 22:30:17 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     claudiu.beznea@microchip.com, thierry.reding@gmail.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pwm: atmel: Enable clk when pwm already enabled in
- bootloader
-Message-ID: <20230711203017.cdfe2nrjx7lt25tm@pengutronix.de>
-References: <20230711200905.6464-1-aarongt.shen@gmail.com>
+        Tue, 11 Jul 2023 16:34:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729ECB7;
+        Tue, 11 Jul 2023 13:34:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07195615F6;
+        Tue, 11 Jul 2023 20:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AAEC433C7;
+        Tue, 11 Jul 2023 20:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689107662;
+        bh=Tvmu/JdqsFHoqwxn8e5DiBMwjsswLbqpvPrbdWqX3mU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KT2GetEFtYlkaoWB9SkIWERR/pM6252wtR3+uYa5U8hU6Z72yd0jGdfKEHGRCUPDg
+         cV6CxM61kiS9aR8QbLm1lVOKFqo7tiDLKsmIyqsbhxa0VksU16jxRrop0XkHgITqSP
+         EFW3qqHEOocqEyXqP1oLbP2Pw7wZbnpXltb/judIGIutmoF5JzbncOkM51LN3SO7bm
+         E6tbNJFPipV38BWXPsj0vvodOwB6lnCc+5okEl9j4wKGIrXJaVLbiLW7Ru/TvHo4J8
+         Gr9Nye/bZVAOskwP2AUf4LN5Tsox+cB+wfVMSPjU9nO5urg3uBLRwuMcGC+sSUCrVw
+         seVSCxPh1GKNg==
+Date:   Tue, 11 Jul 2023 13:34:20 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <20230711133420.5df88f02@kernel.org>
+In-Reply-To: <ZK2k9YQiXTtcGhp0@ziepe.ca>
+References: <ZKxDZfVAbVHgNgIM@ziepe.ca>
+        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+        <ZKyZBbKEpmkFkpWV@ziepe.ca>
+        <20230711042708.GA18658@lst.de>
+        <20230710215906.49514550@kernel.org>
+        <20230711050445.GA19323@lst.de>
+        <ZK1FbjG+VP/zxfO1@ziepe.ca>
+        <20230711090047.37d7fe06@kernel.org>
+        <ZK2Gh2qGxlpZexCM@ziepe.ca>
+        <20230711100636.63b0a88a@kernel.org>
+        <ZK2k9YQiXTtcGhp0@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6nr4yzoa4725uv5d"
-Content-Disposition: inline
-In-Reply-To: <20230711200905.6464-1-aarongt.shen@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 11 Jul 2023 15:52:37 -0300 Jason Gunthorpe wrote:
+> > Now we're getting into our favorite argument and completely
+> > sidetracking the conversation, aren't we? :) And as usual 
+> > our ability to present facts is limited by various NDAs..  
+> 
+> Yes, well, maybe I should stop taking the bait everytime you write
+> "proprietary" :)
+> 
+> > > We also have the roce support in the switch from all major
+> > > switch vendors.  
+> > 
+> > By which you mean all major switch vendors should support basic RoCE
+> > requirements. But most vendors will try to put special features into
+> > their switches trying to make the full NIC + switch solution as sticky
+> > as possible.  
+> 
+> Yep. At the high end open standards based ethernet has also notably
+> "failed" as well. Every switch vendor now offers their own proprietary
+> ecosystem on a whole bunch of different axis. They all present
+> "ethernet" toward the host but the host often needs to work in a
+> special way to really take full advantage of the proprietary fabric
+> behaviors.
 
---6nr4yzoa4725uv5d
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm not familiar with "high end open standards based on ethernet", would
+those be some RDMA / storage things? For TCP/IP networks pretty much
+the only things that matter in a switch are bandwidth, size of buffers,
+power... Implementation stuff.
 
-Hello,
+> > Last I checked every generation of HW from even a single vendor came out
+> > with a new congestion control algorithm and add-ons.   
+> 
+> Probably, but I don't really view this as an IB or roce issue.
+> 
+> Back in the day, there was "data center ethernet" which was a
+> standardization effort to try and tame some of these problems. roce
+> was imagined as an important workload over DCE, but the effort was
+> ethernet focused and generic. Sadly DCE and successor standard based
+> congestion mangement approaches did not work, or were "standardized"
+> in a way that had a big hole that needed to be filled with proprietary
+> algorithms. Eventualy the interest in standardization seems to have
+> waned and several of the big network operators seem to be valuing
+> their unique congestion management as a proprietary element. From a
+> vendor perspective this is has turned into an interop train
+> wreck. Sigh.
+> 
+> roce is just highly sensitive to loss - which is managed in ethernet
+> through congestion management. This is why you see roce and congestion
+> management so tightly linked, and perhaps in some deployments becomes
+> the motivating reason to look at congestion management.
 
-On Wed, Jul 12, 2023 at 04:09:05AM +0800, Guiting Shen wrote:
-> +static int atmel_pwm_enable_clk_if_on(struct atmel_pwm_chip *atmel_pwm)
-> +{
-> +	unsigned int i;
-> +	int err;
-> +	u32 sr;
-> +
-> +	sr =3D atmel_pwm_readl(atmel_pwm, PWM_SR);
-> +	if (!sr)
-> +		return 0;
-> +
-> +	for (i =3D 0; i < atmel_pwm->chip.npwm; i++) {
-> +		if (!(sr & (1 << i)))
-> +			continue;
-> +
-> +		err =3D clk_enable(atmel_pwm->clk);
-> +		if (err) {
-> +			dev_err(atmel_pwm->chip.dev,
-> +				"failed to enable clock: %pe\n", ERR_PTR(err));
+A lot of "standardization" efforts are just attempts to prove to 
+a buyers that an ecosystem exists.
 
-Here you leak possibly a few enables. While it's not likely that the
-(say) third enable goes wrong, it's also not that hard to handle?!
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6nr4yzoa4725uv5d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmStu9gACgkQj4D7WH0S
-/k5IAAf/WJCmZ2JlQoyLBuFHPMvT2efkik3JJQWbRGTjdYi/JPgG77RRVGlhtDyN
-acKyLmayDKCL9MHg15iRhsh7Us6DWRK3CVadsXtK+sz29fT0j7W20v3QC4oyL3TM
-8z/egwginBculUG6gDYrE+q9YJ4CDHfXjSzhvV3y5zV9IHbWasNikd3UlNDRdbAj
-Smfbmj6Hb4MBAp2YAbkXBHvDa5KgvjxwoqEq9yZs7DD7RNeDsys8VFsnhP0uRlcQ
-t/RYBW0/py3rpEtFvAFQwXdb98MdyXhDOQJyxac4D2WV9vHAVTLicdh6OAER81/A
-1E3SfVrdKwiYaJ5H5+Vaew2hPLmDdA==
-=ZOFM
------END PGP SIGNATURE-----
-
---6nr4yzoa4725uv5d--
+Open source the firmware. Let people actually hack on it and when
+the users bring their own algorithms de facto standardization will
+happen. Short of that it's all smoke and mirrors.
