@@ -2,145 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E739C74EF4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB76A74EF5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjGKMtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S231855AbjGKMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbjGKMtW (ORCPT
+        with ESMTP id S229637AbjGKMuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:49:22 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FCD98;
-        Tue, 11 Jul 2023 05:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689079761; x=1720615761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OYszt38IqNikveaxxJtUvxsFTPNnv5LlXD+DX90BkWs=;
-  b=h6LD2uoeBepZ/ia2hLQyLMO1plgbpHOmm/4YGJYKWstai0T3NM3wCNpc
-   PwHL1I8A0zR2yxJo8OJZ7OM+tv7sOIePOkW95vd9it9Yr83ZX0McQ23C7
-   7uvRan3jA4UzqBfHbSXNBRPEgu2Xziqv9IeM0f/zm+dMVCjEwjztlTI/b
-   a7l5Ck0eodtIh18C63Oo1z/NqLfusmJOCatgsruU5NZdpbqerdtsV5L4i
-   zKautqKKuIt+i2/LbDIxQ1L1CrrAd8UygphxF6MJk6MZE1EbuqRRRfRHK
-   uuRJih4ayw8jSP/G7ck3TeWuL5MimvgPQ0zgmO29SPxcXp+Ss0oyZ2B6R
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="354470000"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="354470000"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:49:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="721078284"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="721078284"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 11 Jul 2023 05:49:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJCng-001qlR-32;
-        Tue, 11 Jul 2023 15:49:04 +0300
-Date:   Tue, 11 Jul 2023 15:49:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 13/15] spi: Rename SPI_MASTER_GPIO_SS to
- SPI_CONTROLLER_GPIO_SS
-Message-ID: <ZK1PwMAz8OjsHgsE@smile.fi.intel.com>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-14-andriy.shevchenko@linux.intel.com>
- <tvm772o6uqndgyjvycv27qouqq76crpre5tyqcnanaautqjjwn@pydiwhjzhbgd>
+        Tue, 11 Jul 2023 08:50:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AE098;
+        Tue, 11 Jul 2023 05:50:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A8FC614C8;
+        Tue, 11 Jul 2023 12:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36E0C433C8;
+        Tue, 11 Jul 2023 12:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689079809;
+        bh=dNf0h22e3NNw5WnIyQMA79RXwcCjXd4yUaNvlYSmEks=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cNjPPHJCjkBuTo31uxO23EaD7iBmnxEZwpJnZPbX4Xt0szcj8ZgyO+hFXrziDLnmJ
+         WJfKsnZYW2NOQL3/ej8bLyiHu3o1cYgHqGtMbPw/xU5DUyrh9wH/uRCTzT6nteqM17
+         ih0fj7MI3xs3DsWKDpGWHK/svwtx6ndwsmveTHwe5/53fRS3olzp6tBliGqf9sdGX9
+         kN9/UPhMXhRiCAx1fAJd0t7sk9E2Jrj7YEssyG4k1JXRDx+YpYchn3i5vwcM7u3hPP
+         uyPhDJtpjTnpxvOXge4E7SaouWn3esU19tKAKmZoLjNyYWqbKP+E5Cdjp80IatCv7m
+         LrjabKUWygppA==
+Date:   Tue, 11 Jul 2023 14:49:50 +0200
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, Palmer Dabbelt <palmer@sifive.com>,
+        James.Bottomley@hansenpartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        dhowells@redhat.com, fenghua.yu@intel.com, firoz.khan@linaro.org,
+        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
+        kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, paul.burton@mips.com, paulus@samba.org,
+        peterz@infradead.org, ralf@linux-mips.org, rth@twiddle.net,
+        schwidefsky@de.ibm.com, sparclinux@vger.kernel.org,
+        stefan@agner.ch, tglx@linutronix.de, tony.luck@intel.com,
+        tycho@tycho.ws, will@kernel.org, x86@kernel.org,
+        ysato@users.sourceforge.jp
+Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
+Message-ID: <ZK1P7kkjTvSU8M++@example.org>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+ <ZK1K1BOf43JOJWMx@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tvm772o6uqndgyjvycv27qouqq76crpre5tyqcnanaautqjjwn@pydiwhjzhbgd>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZK1K1BOf43JOJWMx@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:30:19PM +0300, Serge Semin wrote:
-> On Mon, Jul 10, 2023 at 06:49:30PM +0300, Andy Shevchenko wrote:
-> > Rename SPI_MASTER_GPIO_SS to SPI_CONTROLLER_GPIO_SS and
-> > convert the users to SPI_CONTROLLER_GPIO_SS to follow
+On Tue, Jul 11, 2023 at 01:28:04PM +0100, Matthew Wilcox wrote:
+> On Tue, Jul 11, 2023 at 01:25:43PM +0200, Alexey Gladkov wrote:
+> > -static int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+> > +static int do_fchmodat4(int dfd, const char __user *filename, umode_t mode, int lookup_flags)
 > 
-> * I'm not an expert in English, but imo the next would look a
-> * bit more readable:
-> * convert s/the users to SPI_CONTROLLER_GPIO_SS/the code to using SPI_CONTROLLER_GPIO_SS
+> This function can still be called do_fchmodat(); we don't need to
+> version internal functions.
 
-> > the new naming shema.
-> 
-> s/shema/schema
-
-Right, thank you!
-
-...
-
-> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-
-Thank you for the review!
+Yes. I tried not to change too much when adopting a patch. In the new
+version, I will return the old name. Thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Rgrds, legion
 
