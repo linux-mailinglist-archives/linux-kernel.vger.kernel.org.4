@@ -2,138 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A83E74F674
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C999474F667
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbjGKRFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 13:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S231328AbjGKRFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjGKRFs (ORCPT
+        with ESMTP id S230204AbjGKRFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:05:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4134B10F1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:05:47 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qJGni-0003hd-JI; Tue, 11 Jul 2023 19:05:22 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 822D71EDE3F;
-        Tue, 11 Jul 2023 17:05:20 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 19:05:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     linux-can@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] can: mcp251xfd: Always stop on BUS_OFF and call
- netif_stop_queue
-Message-ID: <20230711-refusing-derby-9a9d4d255d30-mkl@pengutronix.de>
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.c7fafffb-93a7-4f4c-9c1e-df959c3ed3bb@emailsignatures365.codetwo.com>
- <20230711152647.28673-1-mike.looijmans@topic.nl>
+        Tue, 11 Jul 2023 13:05:37 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41460B7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:05:36 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-57d24970042so6317877b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689095135; x=1691687135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=egt2ow1fWfYS8Gw95Yl0UW2LZk+PQZpFZ+iHkx63nEU=;
+        b=ecuxrJucUhDGppYS/qb0NC3IHv/38+Hvtpuhc9jQb3nZB3pq0gP7fi6JvuTEalDYTt
+         rSIk5nkzXuyFzlPXFlekWycYD0Z+BzSgopxWgQo9E/6lG7VkxAIz6xUr8Kk2zc7wIkrp
+         N1zxq9PI6ERSfBZFkSFm70vq50/bDRsuV6rmTHg0Nqdm4divdscl+t+FACP5CuAk/DOq
+         irtWCuMXtFjCUX+TLeOVjiNawUzNd1RF41x0S7QtJmM+bUagol2k7o5bUrJDohv2INmp
+         5rHbDonugyo6XIyYRNeZx86NAJ7YurTV9jgFQ/YmGJB7RgPFimMNfSQFJ6ODczlwBiTJ
+         xPjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689095135; x=1691687135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=egt2ow1fWfYS8Gw95Yl0UW2LZk+PQZpFZ+iHkx63nEU=;
+        b=OBJnCnYWcPHU449mVhO4V42HiOZCODugthkUlB8XhHPNNgznohWdXeEDK6Sm60XZ5n
+         LDduETjcKt3KfoB3yywfF4VFpGbh9YcSS1IfIxNRJvSD7N8d+WVtAXx+kGPphwZuEMAg
+         lwJZYLLbHy66WkdqINQ2oGE9h90QR1q8ekNU/hKInMQoeWy6RBZ+gdVZIAn0nX8AwiEg
+         YsK3MQcdq9stgNfBNces7DYMzYXaxsfLBxSt5bOeteePaUvRWPvdyLxn84Jt/6gzJOO/
+         N9H13DnSX8vGTNp64+Rlnym5cKeo2I9fdnp+p1oKDbMtCJKVDz6E0azsXfbLQJwaLQzK
+         yKaA==
+X-Gm-Message-State: ABy/qLYip1o+Q4ncGnNyeFYFcI/XCzv0c8C/Givz+WNeUecH4pV+J2XT
+        AxKfNe+Psh7gwJ9YVIZex9gQlYpYGTe6fVmnz+uv8w==
+X-Google-Smtp-Source: APBJJlGwX8m5ob2cXU4K9uII5megnsCGiF69LmucGrIx/ZEsclmQh1ho0vxb69t4Dee/wTcKhM3uTHiF2TUVEIRDfoc=
+X-Received: by 2002:a81:730b:0:b0:56c:fd16:330f with SMTP id
+ o11-20020a81730b000000b0056cfd16330fmr14511958ywc.12.1689095135312; Tue, 11
+ Jul 2023 10:05:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xjdidpnmyunubgfu"
-Content-Disposition: inline
-In-Reply-To: <20230711152647.28673-1-mike.looijmans@topic.nl>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230707201904.953262-1-jiaqiyan@google.com> <20230707201904.953262-3-jiaqiyan@google.com>
+ <6682284d-7ad3-9b59-687d-899f4d08d911@huawei.com> <CACw3F50k9WJr7WgHS-dRxJRfuXPbq2adUBLeFcKRjmm2D6qf-g@mail.gmail.com>
+In-Reply-To: <CACw3F50k9WJr7WgHS-dRxJRfuXPbq2adUBLeFcKRjmm2D6qf-g@mail.gmail.com>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Tue, 11 Jul 2023 10:05:21 -0700
+Message-ID: <CACw3F52Pj+SeB+dD2Cjkr-bX-OZkmCpL1s6SO1aHDvaD37YZBg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
+ is raw HWPOISON
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        naoya.horiguchi@nec.com, songmuchun@bytedance.com,
+        shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 10, 2023 at 8:16=E2=80=AFAM Jiaqi Yan <jiaqiyan@google.com> wro=
+te:
+>
+> On Fri, Jul 7, 2023 at 7:57=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> =
+wrote:
+> >
+> > On 2023/7/8 4:19, Jiaqi Yan wrote:
+> > > Add the functionality, is_raw_hwp_subpage, to tell if a subpage of a
+> > > hugetlb folio is a raw HWPOISON page. This functionality relies on
+> > > RawHwpUnreliable to be not set; otherwise hugepage's raw HWPOISON lis=
+t
+> > > becomes meaningless.
+> > >
+> > > is_raw_hwp_subpage needs to hold hugetlb_lock in order to synchronize
+> > > with __get_huge_page_for_hwpoison, who iterates and inserts an entry =
+to
+> > > raw_hwp_list. llist itself doesn't ensure insertion is synchornized w=
+ith
+> > > the iterating used by __is_raw_hwp_list. Caller can minimize the
+> > > overhead of lock cycles by first checking if folio / head page's
+> > > HWPOISON flag is set.
+> > >
+> > > Exports this functionality to be immediately used in the read operati=
+on
+> > > for hugetlbfs.
+> > >
+> > > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > > Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> > > ---
+> > >  include/linux/hugetlb.h | 19 +++++++++++++++++++
+> > >  include/linux/mm.h      |  7 +++++++
+> > >  mm/hugetlb.c            | 10 ++++++++++
+> > >  mm/memory-failure.c     | 34 ++++++++++++++++++++++++----------
+> > >  4 files changed, 60 insertions(+), 10 deletions(-)
+> > > ...
+> > > -static inline struct llist_head *raw_hwp_list_head(struct folio *fol=
+io)
+> > > +bool __is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
+> > >  {
+> > > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
+> > > +     struct llist_head *raw_hwp_head;
+> > > +     struct raw_hwp_page *p, *tmp;
+> > > +     bool ret =3D false;
+> > > +
+> > > +     if (!folio_test_hwpoison(folio))
+> > > +             return false;
+> > > +
+> > > +     /*
+> > > +      * When RawHwpUnreliable is set, kernel lost track of which sub=
+pages
+> > > +      * are HWPOISON. So return as if ALL subpages are HWPOISONed.
+> > > +      */
+> > > +     if (folio_test_hugetlb_raw_hwp_unreliable(folio))
+> > > +             return true;
+> > > +
+> > > +     raw_hwp_head =3D raw_hwp_list_head(folio);
+> > > +     llist_for_each_entry_safe(p, tmp, raw_hwp_head->first, node) {
+> >
+> > Since we don't free the raw_hwp_list, does llist_for_each_entry works s=
+ame as llist_for_each_entry_safe?
 
---xjdidpnmyunubgfu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry I missed this comment. Yes they are the same but
+llist_for_each_entry doesn't need "tmp". I will switch to
+llist_for_each_entry in v4.
 
-On 11.07.2023 17:26:47, Mike Looijmans wrote:
-> When there's an error attempting to store the BER counter, don't abort
-> but continue shutting down the chip as required.
+>
+> >
+> > > +             if (subpage =3D=3D p->page) {
+> > > +                     ret =3D true;
+> > > +                     break;
+> > > +             }
+> > > +     }
+> > > +
+> > > +     return ret;
+> > >  }
+> >
+> > It seems there's a race between __is_raw_hwp_subpage and unpoison_memor=
+y:
+> >   unpoison_memory               __is_raw_hwp_subpage
+> >                                   if (!folio_test_hwpoison(folio)) -- h=
+wpoison is set
+> >     folio_free_raw_hwp            llist_for_each_entry_safe raw_hwp_lis=
+t
+> >       llist_del_all                 ..
+> >     folio_test_clear_hwpoison
+> >
+>
+> Thanks Miaohe for raising this concern.
+>
+> > But __is_raw_hwp_subpage is used in hugetlbfs, unpoison_memory couldn't=
+ reach here because there's a
+> > folio_mapping =3D=3D NULL check before folio_free_raw_hwp.
+>
+> I agree. But in near future I do want to make __is_raw_hwp_subpage
+> work for shared-mapping hugetlb, so it would be nice to work with
+> unpoison_memory. It doesn't seem to me that holding mf_mutex in
+> __is_raw_hwp_subpage is nice or even absolutely correct. Let me think
+> if I can come up with something in v4.
 
-If you refer to an error by __mcp251xfd_get_berr_counter(), it's not a
-store error, but a failure of regmap_read(priv->map_reg,
-MCP251XFD_REG_TREC, &trec). By default the SPI transfers are CRC enabled
-and no/wrong data from the chip will be detected and return an error
-here (after 3 retires). In out of memory conditions or other kernel
-errors might be possible here, too.
+At my 2nd thought, if __is_raw_hwp_subpage simply takes mf_mutex
+before llist_for_each_entry, it will introduce a deadlock:
 
-Have you seen a problem here? But as we shut down the chip here anyways,
-we can ignore the error here.
+unpoison_memory                       __is_raw_hwp_subpage
+  held mf_mutex                         held hugetlb_lock
+  get_hwpoison_hugetlb_folio            attempts mf_mutex
+    attempts hugetlb lock
 
-> After disabling communications, also stop the TX queue with a call to
-> netif_stop_queue.
+Not for this patch series, but for future, is it a good idea to make
+mf_mutex available to hugetlb code? Then enforce the order of locking
+to be mf_mutex first, hugetlb_lock second? I believe this is the
+current locking pattern / order for try_memory_failure_hugetlb.
 
-can_bus_off() will call netif_carrier_off(), isn't this sufficient? Have
-you enabled automatic restart in case of bus off? I think the netdev
-watchdog will kick you, if the interface has a stooped queue for too
-long (IIRC 5 seconds).
 
-> When the interface restarts, mcp251xfd_set_mode will
-> call netif_wake_queue and resume.
->=20
-> This fixes a hangup in either send() or poll() from userspace. To
-> reproduce: I ran "cansequence can0 -p" to flood the system with packets.
-> While running that, I shorted the CAN signals, causing a bus error.
-> Usually communications would resume after the CAN bus restarted, but
-> sometimes the system got stuck and refused to send any more packets.
-> The sending process would be in either poll() or send(), waiting for
-> the queue to resume. To "unstuck" the process from send() it was
-> sufficient to send any packet on the can interface from another
-> process. To get it out of the poll() hang, only bringing the can
-> interface down (and up) would work.
->=20
-> After adding the netif_stop_queue call, I was unable to reproduce the
-> problem.
-
-The newly added netif_stop_queue() will cause the netif_wake_queue() in
-the mcp251xfd_set_mode() to actually wake the queue. If you observe a
-problem, I think it's a general problem, so all drivers would be
-effected.
-
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---xjdidpnmyunubgfu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSti8sACgkQvlAcSiqK
-BOhbsgf/ZDCk6kV2bkTAL5hEAJ20qEpn5KsjPtSV3Hg4n07RaxlTSKFbjesUBJYZ
-lGLGnIBxPQZE2g4z4pMKkBaG1E3xq1GJ04gEAefbg6u2Q7h5xvsZ8RLtnuT0ODsE
-WB7UJd9yAFKC+nlyRwErZdacem0Zni18rm482p5WPQbxItgO+VM9InLOxZxBaEjG
-HP7l2VKIxy/7QHm/UNrMZshFZjLAgH1uKnYkhpczxD2AI22XrM69SJZvODGsTqiz
-u0/mWRfTpHA7jbH3RrgX1nz5Ne7vxnx9HAey9QMpV4knF3osLFHGnk5AG0mnw8cu
-3at2k9pIKa9H/qE5hEF2liMqw+x7LQ==
-=e62K
------END PGP SIGNATURE-----
-
---xjdidpnmyunubgfu--
+>
+> >
+> > Anyway, this patch looks good to me.
+> >
+> > Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> > Thanks.
+> >
