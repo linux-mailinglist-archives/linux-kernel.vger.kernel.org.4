@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70DC74E709
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D07E74E70D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjGKGQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S231345AbjGKGSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjGKGQ1 (ORCPT
+        with ESMTP id S229947AbjGKGSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:16:27 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EE7E5;
-        Mon, 10 Jul 2023 23:16:26 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36B6G6Ln054514;
-        Tue, 11 Jul 2023 01:16:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1689056166;
-        bh=sRk4a0Olo7w6uKJ2VgPRT1BGt4wDfKLVnOht3tbdLjQ=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=ZuvfgS9pWGXUjxFwgGk7y6qW6PJGEjN+6ThWM0H5gdAu5Y1rbEbtAwM+kADerPPN1
-         AGSCpnwiAs/LJ16DcCvIJhoAe2rmczETbIhV1LrT0x0P0R+cFqouC0elcMH8pIFWJm
-         qScRq+MYz3lnMDyczV8tBHt6PqhhiDdWliQFhfMU=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36B6G6ob027188
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Jul 2023 01:16:06 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
- Jul 2023 01:16:06 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 11 Jul 2023 01:16:05 -0500
-Received: from [172.24.19.15] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36B6G2DQ008888;
-        Tue, 11 Jul 2023 01:16:02 -0500
-Message-ID: <ac95ffd2-50c6-f715-5c37-f658bacf4ca4@ti.com>
-Date:   Tue, 11 Jul 2023 11:46:01 +0530
+        Tue, 11 Jul 2023 02:18:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A7FE49;
+        Mon, 10 Jul 2023 23:18:09 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6DNIK017537;
+        Tue, 11 Jul 2023 06:18:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Yu5PYkkZq/zPAyE4/tuEknipkkUnyHrF4Eyseb37DiY=;
+ b=ZVZ2A8jllFrY/qRsiDSxjH91xiFi3QLZMJ1FUAmiyepyrQ0QnQ/yUkVypPYXct1XPPWr
+ yT9Tfm6uegZRInz/v6tRhwomqZoC9jeYd0QXMPkf/aSZ27As472G/TrkGkkVpQ5h3DXV
+ WkQqYGgIwErQ26muVNRqLqtROpb+JNJ2a2IBNMBfzWX4IZ0YK+47wY7EXdEwwTywhxA2
+ ObVcQWtqhvtIAVyoIhzVbuoSxp1kHcs9YiO1frAG877OJdZYymFLqXSalSKicMzEzyfO
+ 2h3wvwmE6mcoiXmdZze6Qqzyabam5SQOQzUaWWNknKD+Bc6CCksi/+2xiwdtZNn8rxEa OQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs1hw80jv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 06:18:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B6I5EJ029534
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 06:18:05 GMT
+Received: from [10.214.27.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 23:18:01 -0700
+Message-ID: <8a3124ce-a11d-2491-eaee-1695cec70b17@quicinc.com>
+Date:   Tue, 11 Jul 2023 11:47:58 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] PCI: j721e: Allow async probe
-To:     Li Chen <me@linux.beauty>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1892e291fa4.1219137911620526.2248312811348305435@linux.beauty>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: power: rpmhpd: Add Generic RPMh PD
+ indexes
 Content-Language: en-US
-From:   "Verma, Achal" <a-verma1@ti.com>
-In-Reply-To: <1892e291fa4.1219137911620526.2248312811348305435@linux.beauty>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1689054169-10800-2-git-send-email-quic_rohiagar@quicinc.com>
+ <2040226e-9b45-b409-3edd-a5b86d86daa8@linaro.org>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <2040226e-9b45-b409-3edd-a5b86d86daa8@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0NxUbBDYfjOae5YsaAz11IyWNGl5S77j
+X-Proofpoint-ORIG-GUID: 0NxUbBDYfjOae5YsaAz11IyWNGl5S77j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_02,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 adultscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1015 mlxlogscore=910 mlxscore=0 phishscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110054
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,39 +86,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 7/11/2023 11:22 AM, Krzysztof Kozlowski wrote:
+> On 11/07/2023 07:42, Rohit Agarwal wrote:
+>> Add Generic RPMh Power Domain indexes that can be used
+>> for all the Qualcomm SoC henceforth.
+>>
+>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   include/dt-bindings/power/qcom-rpmhpd.h | 30 ++++++++++++++++++++++++++++++
+>>   1 file changed, 30 insertions(+)
+>>   create mode 100644 include/dt-bindings/power/qcom-rpmhpd.h
+>>
+>> diff --git a/include/dt-bindings/power/qcom-rpmhpd.h b/include/dt-bindings/power/qcom-rpmhpd.h
+>> new file mode 100644
+>> index 0000000..4da2e04
+>> --- /dev/null
+>> +++ b/include/dt-bindings/power/qcom-rpmhpd.h
+> Filename based on compatible.
+This is not specific for SDX75. These are generic ones that should be 
+used for all other targets.
+Konrad suggested in v1 to avoid target specific prefixes everytime and 
+to create a new generic
+dt-bindings that can be reused.
+>> @@ -0,0 +1,30 @@
+>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>> +/*
+>> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#ifndef _DT_BINDINGS_POWER_QCOM_RPMHPD_H
+>> +#define _DT_BINDINGS_POWER_QCOM_RPMHPD_H
+>> +
+>> +/* Generic RPMH Power Domain Indexes */
+>> +#define CX               0
+> These are very generic names, usually not used in global headers. Please
+> use some reasonable prefix.
+This was based on the suggestion from Konrad in v2 to drop the RPMHPD 
+prefix and we can go only with names like CX, etc.
 
-On 7/7/2023 7:53 AM, Li Chen wrote:
-> From: Li Chen <lchen@ambarella.com>
-> 
-> I observed that on Ambarella SoC, which also utilizes
-> the Cadence controller, the boot time increases by 1
-> second when no endpoints (including switch) are connected
-> to PCIe. This increase is caused by cdns_pcie_host_wait_for_link.
-> 
-> Enabling async probe can eliminate this boot time increase.
-> 
-> I guess j721e also has this issue.
-I have tested this along with:
-https://lore.kernel.org 
-/all/1892e2ae15f.f7e5dc061620757.4339091752690983066@linux.beauty/
-
-But I couldn't find second patch in this series.
-> 
-> Signed-off-by: Li Chen <lchen@ambarella.com>
-Tested-by: Achal Verma <a-verma1@ti.com>
-> ---
->   drivers/pci/controller/cadence/pci-j721e.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-> index e70213c9060a..660c13bdb606 100644
-> --- a/drivers/pci/controller/cadence/pci-j721e.c
-> +++ b/drivers/pci/controller/cadence/pci-j721e.c
-> @@ -561,6 +561,7 @@ static struct platform_driver j721e_pcie_driver = {
->   		.name	= "j721e-pcie",
->   		.of_match_table = of_j721e_pcie_match,
->   		.suppress_bind_attrs = true,
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->   	},
->   };
->   builtin_platform_driver(j721e_pcie_driver);
+Thanks,
+Rohit.
+>
+>
+> Best regards,
+> Krzysztof
+>
