@@ -2,94 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C8B74EF86
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC9774EF88
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjGKM4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S230058AbjGKM5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGKM4J (ORCPT
+        with ESMTP id S229458AbjGKM5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:56:09 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE106120
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r9i6weXtCQBIcpKSCSUwr85Jp5moQkqAZtJtqfjaqy0=; b=Adup15vWkIxKZXzhNA9pSTKVa5
-        Ld1dmFFs5pUEF4yW7ZoNV5oxJCw2TWlnhMqq0uV9jSoDJqOpj8p+Kp5sgu62H6pBhX3T8XhkuyRzs
-        Q6GsiOAlAH/C/xj5vDLskBqYAtyzQePFZri/SOG7HyhofEAHYyJhnqlVytjX+HNJ+qihWEL8aNg/y
-        9odb8F2lK+9mYNM555PNZJb6odZlXLKGMxSsy8IJ3L1/c7MQ4W9JxmeWxb1hO5uUy7sIVbxZ26+f9
-        LvkBPeiYW0MDJnb7LWeoKqupfVthXWMNkwXOHl9bzsGCv13ePGZ97OSKpoLUQymAB4LurR0pYBEhT
-        dOTJU9QQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJCuM-002OpK-1Z;
-        Tue, 11 Jul 2023 12:55:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7FBA130014A;
-        Tue, 11 Jul 2023 14:55:57 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3A99A243A2FA5; Tue, 11 Jul 2023 14:55:57 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 14:55:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bruno Goncalves <bgoncalv@redhat.com>
-Cc:     arjan@linux.intel.com, rafael.j.wysocki@intel.com, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [6.5.0-rc1] unchecked MSR access error: RDMSR from 0xe2 at rIP:
- 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_icpu)
-Message-ID: <20230711125557.GM3062772@hirez.programming.kicks-ass.net>
-References: <CA+QYu4qSBdhEgFURu+ouAf2d_JNPbZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com>
- <20230711112421.GI3062772@hirez.programming.kicks-ass.net>
- <CA+QYu4qzJgiiU1qsjtWb9OU3=C=hb_c-Ag5Y4c=Xp_ObfGH=hg@mail.gmail.com>
+        Tue, 11 Jul 2023 08:57:09 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C2018D;
+        Tue, 11 Jul 2023 05:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689080229; x=1720616229;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Jid2RuYbICnO2j6tUDkfKrrrf977lWFjcHoNG9Lge9A=;
+  b=LQ5R8esKkntAkN2Y3MlQm0X86HPt3NmNGUsNBsFK142RZ/RgrwmGuMmq
+   qV6nX3UOcZ8K7cm/GNOIfFDc2binvcbKQsdkQJhQ2z4FMipjrerLGfhga
+   N8Lanu0QunDaZ22v5XegZbra2huOFDJVJg6XjLMXUCG00IDKpqJTRmHhj
+   mRK0+USgsQMyTksih70PNNVD8tVnMMcWmOK4d7Nc77aMkJjkN70nz31Mk
+   2HUlZkk0QX4qaNUt+81xVaP7gnMH61iwNbfZ9tAJQGnmmRshF5+0gzzkU
+   5vUNVpqPQWjsn+aTN5f/PX8eqQIcmTRF4ietH2yfCgQ45sp9F/JAHpNpd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367187322"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="367187322"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:57:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="834666447"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="834666447"
+Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Jul 2023 05:57:05 -0700
+From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Subject: [PATCH 00/13] PCI: Define Intel PCI IDs and use them in drivers
+Date:   Tue, 11 Jul 2023 14:57:13 +0200
+Message-Id: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+QYu4qzJgiiU1qsjtWb9OU3=C=hb_c-Ag5Y4c=Xp_ObfGH=hg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:25:51PM +0200, Bruno Goncalves wrote:
+PCI IDs for Intel HDA are duplicated across quite a few drivers, due to
+various configurations and historical reasons. Currently almost all uses
+of HDA PCI IDs have corresponding comment telling which platform it is.
+Additionally there are some inconsistencies between drivers about which
+ID corresponds to which device.
 
-> R640 2x  Intel(R) Xeon(R) Silver 4116 CPU @ 2.10GHz
+Simplify things, by adding PCI IDs to global header and make use of them
+in drivers. This allows for removal of comments by having IDs themselves
+being self explanatory. Additionally it allows for removal of existing
+inconsistencies by having one source of truth.
 
-Gawd, I hate our naming :/ Google tells me that is a skylake.
+Changes from RFC:
+ - Sort Intel PCI IDs before adding new ones
+ - Fix ordering of new PCI IDs (Andy)
+ - Define all used Intel IDs (Andy)
+ - Add macros for controller type detection (Andy/Bjorn)
+ - Add set of patches changing to use above macro (Andy/Bjorn)
+ - Use PCI_DEVICE_DATA for Intel IDs in sound/pci/hda/hda_intel.c (Andy)
+ - Commit message wording (Andy)
+ - Remove unnecessary tabs (Andy)
 
-> and start the VM with:
-> 
-> -accel kvm -cpu
-> Skylake-Server-IBRS,ss=on,vmx=on,pdcm=on,hypervisor=on,tsc-adjust=on,clflushopt=on,umip=on,pku=on,md-clear=on,stibp=on,arch-capabilities=on,ssbd=on,xsaves=on,ibpb=on,ibrs=on,amd-stibp=on,amd-ssbd=on,rsba=on,skip-l1dfl-vmentry=on,pschange-mc-no=on
+Amadeusz Sławiński (13):
+  PCI: Sort Intel PCI IDs by number
+  PCI: Add Intel Audio DSP devices to pci_ids.h
+  ALSA: hda: Add controller matching macros
+  ALSA: hda: Use global PCI match macro
+  ALSA: hda/i915:  Use global PCI match macro
+  ASoC: Intel: Skylake: Use global PCI match macro
+  ALSA: intel-dsp-config: Convert to PCI device IDs defines
+  ALSA: hda: Convert to PCI device IDs defines
+  ASoC: Intel: avs: Convert to PCI device IDs defines
+  ASoC: Intel: avs: Convert to PCI device IDs defines
+  ASoC: Intel: Skylake: Convert to PCI device IDs defines
+  ASoC: SOF: Intel: Convert to PCI device IDs defines
+  ASoC: Intel: sst: Convert to PCI device IDs defines
 
-You tell it to be a skylake
+ include/linux/pci_ids.h                | 104 +++++--
+ include/sound/hda_codec.h              |   3 -
+ include/sound/hdaudio.h                |  27 ++
+ sound/hda/hdac_i915.c                  |   7 +-
+ sound/hda/intel-dsp-config.c           | 119 ++++----
+ sound/pci/hda/hda_intel.c              | 373 ++++++++++---------------
+ sound/soc/intel/atom/sst/sst.c         |   3 +-
+ sound/soc/intel/atom/sst/sst.h         |   1 -
+ sound/soc/intel/atom/sst/sst_pci.c     |   4 +-
+ sound/soc/intel/avs/board_selection.c  |  10 +-
+ sound/soc/intel/avs/core.c             |  16 +-
+ sound/soc/intel/skylake/skl-messages.c |  16 +-
+ sound/soc/intel/skylake/skl-pcm.c      |   3 +-
+ sound/soc/intel/skylake/skl.c          |  36 +--
+ sound/soc/sof/intel/pci-apl.c          |   9 +-
+ sound/soc/sof/intel/pci-cnl.c          |  15 +-
+ sound/soc/sof/intel/pci-icl.c          |  12 +-
+ sound/soc/sof/intel/pci-mtl.c          |   3 +-
+ sound/soc/sof/intel/pci-skl.c          |   6 +-
+ sound/soc/sof/intel/pci-tgl.c          |  45 +--
+ sound/soc/sof/intel/pci-tng.c          |   3 +-
+ 21 files changed, 384 insertions(+), 431 deletions(-)
 
-> The decoded call trace:
+-- 
+2.34.1
 
-> /builds/4626306068/workdir/drivers/idle/intel_idle.c:1820
-
-And that's skx_idle_state_table_update() reading
-MSR_PKG_CST_CONFIG_CONTROL and that code has been around since 2021.
-
-So things are somewhat consistent. But I find it weird that intel_idle
-gets selected for a guest, I'm not exactly sure what's up with that.
-
-Oohh, this vm-guest mode is new :/ But it doesn't make sense, that
-commit babbles something about waking CPUs from idle to do TLB
-invalidate, but that shouldn't be the case, that's what we have
-kvm_flush_tlb_multi() for, it should avoid the IPI and flush on
-vcpu-enter.
-
-Arjan, what is the actual problem you're trying to solve any why hide
-this in intel_idle ?
