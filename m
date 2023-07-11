@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B756574F7FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F045874F7FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjGKS0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 14:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S232198AbjGKS0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 14:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjGKSZ7 (ORCPT
+        with ESMTP id S231790AbjGKS0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:25:59 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3478A7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:25:58 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3141c3a7547so6237231f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:25:58 -0700 (PDT)
+        Tue, 11 Jul 2023 14:26:21 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB360A7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:26:20 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso66566865e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689099957; x=1691691957;
+        d=gmail.com; s=20221208; t=1689099979; x=1691691979;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pcA9zAZcv8H6F59O2yL/w1UsRzgAVue6pYP3PRyEN9Q=;
-        b=bg7auqVXWeD/637tUroyB0q8jyytfqMQ02OIG990Kv8DY8eYOAMmSmJ9D6y4X4zOxY
-         OE8Yr1SxH+CYjv4PafmryaU9ziO+P6fh700g025fnN+RLwjBz8D1nL4c7o2zRly3ici4
-         mCNk8WYYnP3MJVOrAuuDYWWZ2VlYR2pzPzSzScnVSq43s0OoybytqwnQCnRD2Fdp4TIi
-         Hu8qkGOJiqenfyN9yprrTf9IStWGG7opj5+trPJItJ61AkEf0rV96XwKfJqJZNUtGtlo
-         f/+ebbcMZmdsvWNxzJWtyCpwH0sbPM5E3gKaoXvI1DPuw1mGHtFeGdvdz6XzdDUyz+Hh
-         qNRA==
+        bh=wlSVz2JK2QfkUY0e2bO341IdHytAGDY8Oy/1arX04Ks=;
+        b=Du4yrT1OOMvuNNcTOYTMkOYQldDuwK7MDHA5+YhI60s8yycZT83WcHqIY+gnPmrUuX
+         u3WG+SMRBLq7Mu2ASaiKqhgJtNtaUGXsKTSkGgAQ4BT69a2uAi2zRh2ECNm2MGiXqE9i
+         qN8UdMgXuZdLymoKCZu2wUZYsYhGOUX66kAYKYmkfcwdIDYWoVctkeB+vK5uoTQB40dO
+         YstqAzy+YnFj+E3Y1sELlIuOnggqRzQbKGxESNW9IQokRA0aKFgvUeZCCH+u0tUf5RXC
+         CKTT06i5EWIDhJPryjee3z0MJF3syi4u2Jxls9Z7W6/gw9eyfF22koy7JtFpt3a8jRzy
+         laZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689099957; x=1691691957;
+        d=1e100.net; s=20221208; t=1689099979; x=1691691979;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pcA9zAZcv8H6F59O2yL/w1UsRzgAVue6pYP3PRyEN9Q=;
-        b=BLBL0rS6MWfNxgP3BAEzwOKq6JoVe2KpYWTfDE2jHjV6HqxDFqgIFfKtThkkc+3InD
-         +/d3oR7MC3d548Cfn3N6ioarijcKjjID5CoShG8dm1lIrS1/QCRosQ5mZ3dKjhCBSYC8
-         yu28KtzssevFaGLrw+HHgqedHGEctkTfnuGnx09NYXX8mhvJyGO5DHokBfaM0QIs6CrL
-         xVC2oSx2GAl014jRjeY1DQL9Qut00usPoJA5ivc+BxdPin9epr1a6hL+lFfw71Vp625x
-         +McequerI5b8HUlDEmutKeybDMuKVX3dHFqdugC1Tkd/VpyMQhYf74eFqb75QDzZNv3t
-         Y6Og==
-X-Gm-Message-State: ABy/qLYt57Ayr2Lwkm4tcwac/NE5EuxX+NI/cHLb3Xsd3cfxLV0Lib/u
-        63AWppXb7aKyuhj500VEIBg=
-X-Google-Smtp-Source: APBJJlFVSzM/6yF41kx+JCmUQnPCxQ1HuMA/ja/T8CsCKHgbXdd4Sga+3LTsDZ649EZut433azkWJw==
-X-Received: by 2002:a5d:568f:0:b0:314:5376:f0d6 with SMTP id f15-20020a5d568f000000b003145376f0d6mr14001158wrv.52.1689099957068;
-        Tue, 11 Jul 2023 11:25:57 -0700 (PDT)
+        bh=wlSVz2JK2QfkUY0e2bO341IdHytAGDY8Oy/1arX04Ks=;
+        b=j6EI5iQ0krfvTAEEoHrT+/eP1PJ1Su1g7XndCRZbzvFdvGyaxEJ/8xpFVoMdMqEVcn
+         s+gMMp4c49DPqNznSfjQr0+KRwMH5rNIFcc0uYhlG1ZV3norm/tH9MYMVY2XI/s9p23y
+         pfm43xR547LDGaRRKWOO8tx0qwIk/lnzfpqfcxwBVd75OaMNtiDBAiKuVc091Eik2/9i
+         sH8L5aMRrexZ0IbgoIUk6Tnhx9XzK5HzoVaXtLlSZvlQ1q6TvJB8MVF756hWb1b7ilvs
+         NCwP6U7yCzVz4qGsAja6pV6kLv4jV+5B7lvGFIsOcRx+qhEC4hL09HYCrRtDYVgROX66
+         Oy4w==
+X-Gm-Message-State: ABy/qLb9wmGoz9WrJsSMPaEZ2HqZMOjyPnk9XpI90hzZ6j6orR0q2i38
+        HJmhmIt6G4zxTwNM/3eB7oA=
+X-Google-Smtp-Source: APBJJlHGY9WABdLgL+mZBFQl3gX7vI50KHydxcPqI8YnC8fb8cuWDIjPwjgg79jMhCdErxfFuuiV4g==
+X-Received: by 2002:a05:600c:b45:b0:3f7:b1df:26d with SMTP id k5-20020a05600c0b4500b003f7b1df026dmr17826544wmr.38.1689099979101;
+        Tue, 11 Jul 2023 11:26:19 -0700 (PDT)
 Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id k3-20020a5d66c3000000b00314398e4dd4sm2888343wrw.54.2023.07.11.11.25.56
+        by smtp.gmail.com with ESMTPSA id q21-20020a7bce95000000b003fc06169abdsm3214211wmj.2.2023.07.11.11.26.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 11:25:56 -0700 (PDT)
+        Tue, 11 Jul 2023 11:26:18 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
         Yangtao Li <frank.li@vivo.com>
 Cc:     Yangtao Li <frank.li@vivo.com>,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] bus: sunxi-rsb: Convert to devm_platform_ioremap_resource()
-Date:   Tue, 11 Jul 2023 20:25:55 +0200
-Message-ID: <21938707.EfDdHjke4D@jernej-laptop>
-In-Reply-To: <20230706072042.31296-1-frank.li@vivo.com>
-References: <20230706072042.31296-1-frank.li@vivo.com>
+Subject: Re: [PATCH 1/8] nvmem: sunxi_sid: Convert to devm_platform_ioremap_resource()
+Date:   Tue, 11 Jul 2023 20:26:17 +0200
+Message-ID: <3747576.kQq0lBPeGt@jernej-laptop>
+In-Reply-To: <20230706040504.34057-1-frank.li@vivo.com>
+References: <20230706040504.34057-1-frank.li@vivo.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
@@ -74,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 06. julij 2023 ob 09:20:36 CEST je Yangtao Li napisal(a):
+Dne =C4=8Detrtek, 06. julij 2023 ob 06:04:57 CEST je Yangtao Li napisal(a):
 > Use devm_platform_ioremap_resource() to simplify code.
 >=20
 > Signed-off-by: Yangtao Li <frank.li@vivo.com>
@@ -85,32 +87,32 @@ Best regards,
 Jernej
 
 > ---
->  drivers/bus/sunxi-rsb.c | 4 +---
+>  drivers/nvmem/sunxi_sid.c | 4 +---
 >  1 file changed, 1 insertion(+), 3 deletions(-)
 >=20
-> diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-> index 696c0aefb0ca..2aefd5dde3c9 100644
-> --- a/drivers/bus/sunxi-rsb.c
-> +++ b/drivers/bus/sunxi-rsb.c
-> @@ -746,7 +746,6 @@ static int sunxi_rsb_probe(struct platform_device *pd=
-ev)
-> {
+> diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
+> index a970f1741cc6..6bfe02ab169a 100644
+> --- a/drivers/nvmem/sunxi_sid.c
+> +++ b/drivers/nvmem/sunxi_sid.c
+> @@ -125,7 +125,6 @@ static int sun8i_sid_read_by_reg(void *context, unsig=
+ned
+> int offset, static int sunxi_sid_probe(struct platform_device *pdev)
+>  {
 >  	struct device *dev =3D &pdev->dev;
->  	struct device_node *np =3D dev->of_node;
-> -	struct resource *r;
->  	struct sunxi_rsb *rsb;
->  	u32 clk_freq =3D 3000000;
->  	int irq, ret;
-> @@ -766,8 +765,7 @@ static int sunxi_rsb_probe(struct platform_device *pd=
+> -	struct resource *res;
+>  	struct nvmem_config *nvmem_cfg;
+>  	struct nvmem_device *nvmem;
+>  	struct sunxi_sid *sid;
+> @@ -142,8 +141,7 @@ static int sunxi_sid_probe(struct platform_device *pd=
 ev)
-> rsb->dev =3D dev;
->  	rsb->clk_freq =3D clk_freq;
->  	platform_set_drvdata(pdev, rsb);
-> -	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	rsb->regs =3D devm_ioremap_resource(dev, r);
-> +	rsb->regs =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(rsb->regs))
->  		return PTR_ERR(rsb->regs);
+> return -EINVAL;
+>  	sid->value_offset =3D cfg->value_offset;
+>=20
+> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	sid->base =3D devm_ioremap_resource(dev, res);
+> +	sid->base =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(sid->base))
+>  		return PTR_ERR(sid->base);
 
 
 
