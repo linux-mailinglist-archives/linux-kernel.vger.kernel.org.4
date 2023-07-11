@@ -2,87 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E89674E7BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDE774E7C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjGKHMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S229804AbjGKHQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjGKHMG (ORCPT
+        with ESMTP id S230408AbjGKHQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:12:06 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05717CE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:12:04 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 36B7BrF7030670;
-        Tue, 11 Jul 2023 09:11:53 +0200
-Date:   Tue, 11 Jul 2023 09:11:53 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     linux-kernel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>
-Subject: Re: [PATCH] tools/nolibc: completely remove optional environ support
-Message-ID: <ZK0AudpEIDHEdm74@1wt.eu>
-References: <20230710-nolibc-environ-v1-1-173831573af6@weissschuh.net>
- <ZKxDP3YrIdKxWaIN@1wt.eu>
- <804671ba-3884-4700-b367-2f84dace89f4@t-8ch.de>
+        Tue, 11 Jul 2023 03:16:02 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3DAA9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:15:34 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6726d5d92afso4130047b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1689059734; x=1691651734;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d4BQ4wTcz2ZUTX5UO6CgJKEdU05ydslf2Dnv0DUxPe8=;
+        b=Nqfdvl7rXarXx+hZfpG6gu3DaOZtr8ERFL/iz/q+5ZOnwjRv2vO+lUgGYjkeEV1D7D
+         rhCygc/2UeqXwLAY4Bq8PfD6tza1+OYAHTIvvKnneJ44witfk2s2atQUuGRBkisCnQTH
+         8K0ljpxZCGkrM9G5vrTTz0edHZPJLBirz1zxAYT6+DXmMcISelmzr/TeaBrvDz6Pyq0A
+         19XGHWmQroCxVK8FPf4WR5clZJ1iu/TWwug0tZpNgQNX9r0zg2D5nVFpG6pJzGLv5ECX
+         /jbeXHLPp8f2R3bYfnjrRhQepi/qlRXK5iV4ws/eu0oWFPsqXo5OaFKr3gKNPUiVuS/A
+         Uplg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689059734; x=1691651734;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d4BQ4wTcz2ZUTX5UO6CgJKEdU05ydslf2Dnv0DUxPe8=;
+        b=IsGWflGHn9Ww+Eub/i0LvPvD5oA+jnSxlczPPvJx5/f490KCCKGBccqG1Y9M0IiTIk
+         l3CLmUBA4G4uIVyeA6tDt+ggukKMKeXOp7rzEVRVcXV93LbLkiTq9uMOuKrxrKfqnsXT
+         iwmlf3ktCfn6EWWzIUQZXEVWn3LPxA4esuiISZCOnrL3LJVUmJN+9TLH9dLrujgjF/Jv
+         A2nr71R5Ms9aVQ432ps7fnRXt6EYUd2sor534KZlAD8b52jEuIVhn898dTb+2yR+dkn0
+         Ybw2ziM33o7jj07UruCnQ1gb+N3XNfgsdb5s3+PhomOivUFCqi0IdSb71bQxnVw+hnIJ
+         sHMQ==
+X-Gm-Message-State: ABy/qLZSJglc4OyrqCCo41O8Szlc5R7Gxdy/FXeLGgSRwvf7jJLehbUR
+        Rkt+Thzh6TTiJAQhMnY8zc4ALA==
+X-Google-Smtp-Source: APBJJlF2jvPM9/iA5YdftgyiGiVvbJOJoIELEmWsn9DVn+t41v1OItFyJxn0J8NH4eG7HU45wkS+RQ==
+X-Received: by 2002:a17:90a:d80d:b0:263:161c:9e9c with SMTP id a13-20020a17090ad80d00b00263161c9e9cmr26706553pjv.12.1689059733720;
+        Tue, 11 Jul 2023 00:15:33 -0700 (PDT)
+Received: from [10.3.208.155] ([61.213.176.14])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090a890b00b00263987a50fcsm7319231pjn.22.2023.07.11.00.15.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 00:15:33 -0700 (PDT)
+Message-ID: <5a2d4d3f-9d9d-0ce9-c5a0-fb9bd64b9f48@bytedance.com>
+Date:   Tue, 11 Jul 2023 15:15:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <804671ba-3884-4700-b367-2f84dace89f4@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH 5/5] docs: fuse: improve FUSE consistency explanation
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     me@jcix.top
+References: <20230711043405.66256-1-zhangjiachen.jaycee@bytedance.com>
+ <20230711043405.66256-6-zhangjiachen.jaycee@bytedance.com>
+ <36b37893-c297-dab0-df2d-eeacfa1e06c0@infradead.org>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+In-Reply-To: <36b37893-c297-dab0-df2d-eeacfa1e06c0@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 07:51:53PM +0200, Thomas Weißschuh wrote:
-> On 2023-07-10 19:43:27+0200, Willy Tarreau wrote:
-> > Hi Thomas,
-> > 
-> > On Mon, Jul 10, 2023 at 07:22:53PM +0200, Thomas Weißschuh wrote:
-> > > In commit 52e423f5b93e ("tools/nolibc: export environ as a weak symbol on i386")
-> > > and friends the asm startup logic was extended to directly populate the
-> > > "environ" array.
-> > > 
-> > > This makes it impossible for "environ" to be dropped by the linker.
-> > > Therefore also drop the other logic to handle non-present "environ".
-> > 
-> > Hmmm OK but at least I'd like that we continue to reference it from
-> > nolibc-test to make sure it's still visible. Maybe we could just check
-> > that it's always equal to envp ? If we drop its reference from there,
-> > sooner or later someone will find it interesting to rename it and some
-> > programs referencing it will break.
+
+On 2023/7/11 12:42, Randy Dunlap wrote:
+> Hi--
 > 
-> Easy enough to test for. I'll send a v2.
-
-Thanks!
-
-> > > Note:
-> > > 
-> > > Given that nowadays both _auxv and environ are mandatory symbols imposed
-> > > by nolibc of pointer size does it make sense to keep the code to make
-> > > int-sized errno optional?
-> > 
-> > While it indeed used to be related to having a data segment or not
-> > initially, it still has an impact on our ability to completely drop
-> > the errno setting code from all syscalls. Given the SET_ERRNO() macro
-> > now I guess it's very cheap to keep it, don't you think ?
+> On 7/10/23 21:34, Jiachen Zhang wrote:
+>> Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+>> ---
+>>   Documentation/filesystems/fuse-io.rst | 32 +++++++++++++++++++++++++--
+>>   1 file changed, 30 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/filesystems/fuse-io.rst b/Documentation/filesystems/fuse-io.rst
+>> index 255a368fe534..cdd292dd2e9c 100644
+>> --- a/Documentation/filesystems/fuse-io.rst
+>> +++ b/Documentation/filesystems/fuse-io.rst
 > 
-> SET_ERRNO irks me a tiny bit :-)
+>> @@ -24,7 +31,8 @@ after any writes to the file.  All mmap modes are supported.
+>>   The cached mode has two sub modes controlling how writes are handled.  The
+>>   write-through mode is the default and is supported on all kernels.  The
+>>   writeback-cache mode may be selected by the FUSE_WRITEBACK_CACHE flag in the
+>> -FUSE_INIT reply.
+>> +FUSE_INIT reply. In either modes, if the FOPEN_KEEP_CACHE flag is not set in
+> 
+>                         either mode,
+> 
+>> +the FUSE_OPEN, cached pages of the file will be invalidated immediatedly.
+> 
+>                                                                 immediately.
+> 
+>>   
+>>   In write-through mode each write is immediately sent to userspace as one or more
+>>   WRITE requests, as well as updating any cached pages (and caching previously
+>> @@ -38,7 +46,27 @@ reclaim on memory pressure) or explicitly (invoked by close(2), fsync(2) and
+>>   when the last ref to the file is being released on munmap(2)).  This mode
+>>   assumes that all changes to the filesystem go through the FUSE kernel module
+>>   (size and atime/ctime/mtime attributes are kept up-to-date by the kernel), so
+>> -it's generally not suitable for network filesystems.  If a partial page is
+>> +it's generally not suitable for network filesystems (you can consider the
+>> +writeback-cache-v2 mode mentioned latter for them).  If a partial page is
+> 
+>                                       later
+> 
+>>   written, then the page needs to be first read from userspace.  This means, that
+>>   even for files opened for O_WRONLY it is possible that READ requests will be
+>>   generated by the kernel.
+> 
+> 
 
-To be honest, it's the same for me. but it's cheap. And when you rebuild
-a binary without it you can observe significant savings that can be
-important for those who are space-constrained.
 
-> But it's easy enough to keep, let's do so.
-> Just wanted to have brought it up.
+Thanks, Randy. I will fix them in the next version.
 
-Yes, you're totally right to raise this, thank you!
-
-Willy
+Jiachen
