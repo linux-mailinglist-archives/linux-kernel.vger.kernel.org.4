@@ -2,83 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB78774EEDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718CC74EEE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjGKMaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S231608AbjGKMam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjGKM3y (ORCPT
+        with ESMTP id S231811AbjGKMaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:29:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6471919A8;
-        Tue, 11 Jul 2023 05:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Hu/F5cIunoMaT6a9kqfbZcMI7NNurFOLxchc3V/T840=; b=Gyep6a1gLgAdGC/Vi+oGeCj6t2
-        IKyL5/1RD8Tt4FNIzAW4j/atfGUaAPjhcTyA3GXH97IiwjxIU7Y/8B0fe9w8Muqivjaw/yL4bo5D4
-        5ZB6Z3jktax9ZhaYYlnpZ/6Oq2ASsc4zeolrABZ2MM6Kdwl61InYH3P9Iq/clR9bEshpkcTPgt83a
-        HcgfknEVHsZHsbDQUQVwhK7+voDCXknT2H10c2k4CU3PIKN/myEz2CoJrRiGA1cFSqntUv8vLlRLZ
-        MsgcNgtIOxR6kAkYIn3W2vzZiImwsqNNg3I5cIwMsUw6LmokGgjjMBQXCL8w1O5cla/0aNYRbdjkx
-        RH8+Ud9g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJCTM-00FiF8-9q; Tue, 11 Jul 2023 12:28:04 +0000
-Date:   Tue, 11 Jul 2023 13:28:04 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, Palmer Dabbelt <palmer@sifive.com>,
-        James.Bottomley@hansenpartnership.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
-        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
-        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
-        dhowells@redhat.com, fenghua.yu@intel.com, firoz.khan@linaro.org,
-        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
-        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
-        kim.phillips@arm.com, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
-        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
-        namhyung@kernel.org, paul.burton@mips.com, paulus@samba.org,
-        peterz@infradead.org, ralf@linux-mips.org, rth@twiddle.net,
-        schwidefsky@de.ibm.com, sparclinux@vger.kernel.org,
-        stefan@agner.ch, tglx@linutronix.de, tony.luck@intel.com,
-        tycho@tycho.ws, will@kernel.org, x86@kernel.org,
-        ysato@users.sourceforge.jp
-Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
-Message-ID: <ZK1K1BOf43JOJWMx@casper.infradead.org>
-References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
- <cover.1689074739.git.legion@kernel.org>
- <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
+        Tue, 11 Jul 2023 08:30:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4370C10F2;
+        Tue, 11 Jul 2023 05:29:59 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BAsvv4022341;
+        Tue, 11 Jul 2023 12:28:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=emn48To5pQ5Ek7KHLwCYOmyk4sO8oXyn8or5/pFjdk0=;
+ b=VjBdkBwJT7m1SRGxXL8YOEoR3HXAu8rQrjA1+LZOdUM8zmRyRJc/U9Y1u6uDIHgd/HI6
+ kOIQFpYCpwlVs0uBrLgalkadPwhFveeAmjoCyYt37K3+4nju33buRsQ/UPA47SugTVBW
+ BVYm4HfvcjwlYmkIndsfWGTFZ8+B9+BkGUB7OHLdtsR4tvkEiQulcoFn7bGuYaS50oAw
+ XPpqARGWJpDfZYWg3ehm4Lq89UfgSgPEqK3pto6+Y4xRzzi+D986mTsW1tK9IjrqJ4cb
+ S2G0RcA2phHmBNDJk6etPTqMgMbp/j4Eij/gwEWLyeA8CqiW53GEEdV9ROoi78brVn13 +g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs5rd86kv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 12:28:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BCSBTC014881
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 12:28:11 GMT
+Received: from [10.201.206.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 05:28:07 -0700
+Message-ID: <9e8fc471-5ca7-bacb-92c4-ae46e74c3e7c@quicinc.com>
+Date:   Tue, 11 Jul 2023 17:58:04 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 2/2] rpmsg: glink: change intent work queue type
+Content-Language: en-US
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mathieu.poirier@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_varada@quicinc.com>
+References: <20230607121731.26958-1-quic_mmanikan@quicinc.com>
+ <20230607121731.26958-3-quic_mmanikan@quicinc.com>
+In-Reply-To: <20230607121731.26958-3-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rY8DPGTq42ZjigbldVKQmbFnc9MD-9q_
+X-Proofpoint-ORIG-GUID: rY8DPGTq42ZjigbldVKQmbFnc9MD-9q_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ spamscore=0 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
+ clxscore=1015 suspectscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110112
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 01:25:43PM +0200, Alexey Gladkov wrote:
-> -static int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
-> +static int do_fchmodat4(int dfd, const char __user *filename, umode_t mode, int lookup_flags)
 
-This function can still be called do_fchmodat(); we don't need to
-version internal functions.
 
+On 6/7/2023 5:47 PM, Manikanta Mylavarapu wrote:
+> QDSP6 will clear heap memory once it's received
+> RX_DONE event from APPS. Under heavy cpu load
+> intent worker thread not able to get cpu slot
+> because it's bound to kernel global work queue.
+> Due to this QDSP6 firmware faces OOM and it leads
+> to Q6 crash. Changing intent work queue type to
+> UNBOUND workqueue ensures intent worker thread
+> will be executed as early as possible.
+> 
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>   drivers/rpmsg/qcom_glink_native.c | 13 ++++++++++++-
+>   1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index 6f9a439e5046..c3e076bb863f 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -140,6 +140,7 @@ enum {
+>    * @liids:	idr of all local intents
+>    * @riids:	idr of all remote intents
+>    * @intent_work: worker responsible for transmitting rx_done packets
+> + * @intent_wq:	work queue of intent_work
+>    * @done_intents: list of intents that needs to be announced rx_done
+>    * @buf:	receive buffer, for gathering fragments
+>    * @buf_offset:	write offset in @buf
+> @@ -169,6 +170,7 @@ struct glink_channel {
+>   	struct idr liids;
+>   	struct idr riids;
+>   	struct work_struct intent_work;
+> +	struct workqueue_struct *intent_wq;
+>   	struct list_head done_intents;
+>   
+>   	struct glink_core_rx_intent *buf;
+> @@ -231,6 +233,14 @@ static struct glink_channel *qcom_glink_alloc_channel(struct qcom_glink *glink,
+>   	INIT_LIST_HEAD(&channel->done_intents);
+>   	INIT_WORK(&channel->intent_work, qcom_glink_rx_done_work);
+>   
+> +	channel->intent_wq = alloc_workqueue("intent_wq", WQ_UNBOUND, 1);
+> +	if (!channel->intent_wq) {
+> +		pr_err("failed to create %s channel intent work queue\n",
+> +		       channel->name);
+> +		kfree(channel);
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +
+>   	idr_init(&channel->liids);
+>   	idr_init(&channel->riids);
+>   	kref_init(&channel->refcount);
+> @@ -270,6 +280,7 @@ static void qcom_glink_channel_release(struct kref *ref)
+>   	idr_destroy(&channel->riids);
+>   	spin_unlock_irqrestore(&channel->intent_lock, flags);
+>   
+> +	destroy_workqueue(channel->intent_wq);
+>   	kfree(channel->name);
+>   	kfree(channel);
+>   }
+> @@ -573,7 +584,7 @@ static void qcom_glink_rx_done(struct qcom_glink *glink,
+>   	list_add_tail(&intent->node, &channel->done_intents);
+>   	spin_unlock(&channel->intent_lock);
+>   
+> -	schedule_work(&channel->intent_work);
+> +	queue_work(channel->intent_wq, &channel->intent_work);
+>   }
+>   
+>   /**
+
+Gentle reminder for review!
+
+Thanks,
+Manikanta.
