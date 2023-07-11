@@ -2,164 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701CA74F861
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6F374F865
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 21:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjGKT24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 15:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S231308AbjGKTbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 15:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjGKT2z (ORCPT
+        with ESMTP id S229766AbjGKTbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:28:55 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72BA110C2;
-        Tue, 11 Jul 2023 12:28:53 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36BJShiT006359;
-        Tue, 11 Jul 2023 21:28:43 +0200
-Date:   Tue, 11 Jul 2023 21:28:43 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v2 01/12] tools/nolibc: rename arch-<ARCH>.h to
- <ARCH>/arch.h
-Message-ID: <20230711192843.GC31402@1wt.eu>
-References: <ZK0HouRo8g6jqkTi@1wt.eu>
- <20230711163830.10271-1-falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711163830.10271-1-falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Jul 2023 15:31:07 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8D110D2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:31:06 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-573a92296c7so54651507b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689103865; x=1691695865;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=U6UtC5qxREeMlW4N6rEKWdfK56uVbGJixzS0408EvGQ=;
+        b=JAO7tXHxZBA2nKd7nzuamifXfMXgClVtvaaNVU0vsLgoy1VeK6MqhrgR02u7zvvbVE
+         eClROfwfgF/G/wL36/zsNw7oS2dtkj24wClLNHdzQu9W4gmOi9axyDskNIuY1NFovM46
+         4zWzIRh2Pt8uvtRfgGTywTE0ekKAbGLIQ1AdeZ2iGCIkUSbwmfpmPHptKpAkXJ4VKn7v
+         IrkQ8Kwo5CZhfqYa0olRJT2AOTNerP/sPOPXJt/n9eJCj610qWKreO7ePvbVyAposaWO
+         0DHu/CfuaJv6hyLk0eNU2iJYlNx6wwhEc96lpcSl7zYIQ/mzJuLCTjhWfAZqa3+57tbs
+         5SVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689103865; x=1691695865;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U6UtC5qxREeMlW4N6rEKWdfK56uVbGJixzS0408EvGQ=;
+        b=j5+o/H5ylYWUrON/9OWbNACq1po5JrwJYPyHcTfRmidVl4rIzrH6jKD1snEEfrz/q2
+         LMynk2mXegZ5y08TWuRpktbFiXy7JlW87bI9CK/+5KEtl4hQlc5Bm5bJq1VSH+c8/Ywf
+         SRKUB5BVsVcPOm026tkRAWIPDfCCX9KW7WtW+m3FD2UI0il3xZAStM3UOnd4NPDV4cEf
+         qlScHEurNE0CKnUweoNYlFVwQspmNDWH1zm33qr1DKuzOa9C4tNzoERnlCAc38oW55Bj
+         uC81TDvnYq+iHkHn9HvVKf8/ttRKv/jnavLuk+uae+i1YamiyyZGg+EbVB71Ww1w2La5
+         2COw==
+X-Gm-Message-State: ABy/qLZTVJY86GELod8L7wlrRn/HG2F0q9hzEMBOky/1UdGa0nXcLYdZ
+        zAsx3MM8PFE5l0g0XRB24jr4LdTxLblfiMMwYQj5nytBZngysUQweZMdEjBQWh6LEUqRFoq8cgj
+        UnA18mqa41PWlbmwgimpHDuiGfvAqNTM=
+X-Google-Smtp-Source: APBJJlFQi8/UiqCI1XXHpJ7mu1phqF/Ck5Vpr35Qy58kS59pfVKf7Xw7pcIsRSj+tuVh+5+fAx6GfQR7kX3mXNZi4XCfNA==
+X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:8944:7c0b:5d4e:f65b])
+ (user=isaacmanjarres job=sendgmr) by 2002:a5b:905:0:b0:c5d:2380:23d6 with
+ SMTP id a5-20020a5b0905000000b00c5d238023d6mr105717ybq.7.1689103865297; Tue,
+ 11 Jul 2023 12:31:05 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 12:30:58 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230711193059.2480971-1-isaacmanjarres@google.com>
+Subject: [PATCH v1] regmap-irq: Fix out-of-bounds access when allocating
+ config buffers
+From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Saravana Kannan <saravanak@google.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        John Stultz <jstultz@google.com>, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        kernel-team@android.com,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-ccpol: medium
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+When allocating the 2D array for handling IRQ type registers in
+regmap_add_irq_chip_fwnode(), the intent is to allocate a matrix
+with num_config_bases rows and num_config_regs columns.
 
-On Wed, Jul 12, 2023 at 12:38:30AM +0800, Zhangjin Wu wrote:
-> > > >   both sys.h and crt.h are not a sub modules of arch.h (although they
-> > > >   have minimal arch specific code), so, like sys.h, crt.h should be
-> > > >   included in the top-level headers, not in arch.h,
-> > 
-> > Why ? Keep in mind that these are only include files, to in the end,
-> > *all* of them are included. The ordering is the only thing that really
-> > matters.
-> >
-> 
-> Yeah, I know this. The only thing confused me is the relationship among
-> crt.h, sys.h and arch.h, the include position should better reflects
-> their relationship, currently, we have mixed two "divide" methods
-> together, one is arch and non-arch, another is the parallel
-> functions/features.
-> 
-> so, the only left question is where should we include crt.h in? Firstly,
-> I put it like sys.h (In my mind, it should be), If you two both agree to
-> put it in arch-<ARCH.h>, I will renew this series with it, this is
-> definitely a lighter way than the reorg method, I don't persist ;-)
+This is currently handled by allocating a buffer to hold a pointer for
+each row (i.e. num_config_bases). After that, the logic attempts to
+allocate the memory required to hold the register configuration for
+each row. However, instead of doing this allocation for each row
+(i.e. num_config_bases allocations), the logic erroneously does this
+allocation num_config_regs number of times.
 
-Then let's start this way. And if later we find a better organization
-*and* a good reason to change it, we can do it. Please also keep in mind
-that constantly renaming/moving inflicts extra pain to the stable team
-when backporting fixes if any. That's another reason for not moving code
-around often.
+This scenario can lead to out-of-bounds accesses when num_config_regs
+is greater than num_config_bases. Fix this by updating the terminating
+condition of the loop that allocates the memory for holding the register
+configuration to allocate memory only for each row in the matrix.
 
-> > > In musl crt_arch.h seems to be used in different ways. So it makes sense
-> > > to split it from syscall_arch.h. In nolibc there is no such distinction.
-> > > And everything will end up in a global namespace anyways.
-> > 
-> > Exactly. Musl is musl and nolibc is nolibc. Musl is a regular libc in that
-> > it provides a .so that is built from many .c files. As such it's desirable
-> > to split along certain edges. nolibc contains no single C file. It's only
-> > meant to be included as-is in the user's C file. This changes a lot of
-> > things, even in terms of splitting. Also keep in mind that musl is a
-> > general-purpose libc, and that some distros are entirely built on it.
-> > nolibc doesn't have such goal nor expectation, the first user was a
-> > preinit code I wrote long ago, and the second one is rcutorture which
-> > contains a while() loop around gettimeofday() IIRC. We must not just
-> > blindly imitate other components' choices because they work, when we're
-> > dealing with different constraints. If ours are acceptable, no need to
-> > complicate everything.
-> >
-> 
-> Willy, I know the difference between musl and nolibc, the musl code
-> referenced here is only used to clear my confusion about "the
-> relationship among crt.h, sys.h and arch.h" I mentiond above.
+Amit Pundir reported a crash that was occurring on his db845c device
+due to memory corruption (see "Closes" tag for Amit's report). The KASAN
+report below helped narrow it down to this issue:
 
-OK, but even so, our includes are "private" and do not necessarily need
-to be organized like other projects. That doesn't mean that good ideas
-from other ones should not help us decide, of course, I just mean that
-it's normal to see differences.
+[   14.033877][    T1] ==================================================================
+[   14.042507][    T1] BUG: KASAN: invalid-access in regmap_add_irq_chip_fwnode+0x594/0x1364
+[   14.050796][    T1] Write of size 8 at addr 06ffff8081021850 by task init/1
+[   14.057841][    T1] Pointer tag: [06], memory tag: [fe]
+[   14.063124][    T1]
+[   14.065349][    T1] CPU: 2 PID: 1 Comm: init Tainted: G        W   E      6.4.0-mainline-g6a4b67fef3e2 #1
+[   14.075014][    T1] Hardware name: Thundercomm Dragonboard 845c (DT)
+[   14.081432][    T1] Call trace:
+[   14.084618][    T1]  dump_backtrace+0xe8/0x108
+[   14.089144][    T1]  show_stack+0x18/0x30
+[   14.093215][    T1]  dump_stack_lvl+0x50/0x6c
+[   14.097642][    T1]  print_report+0x178/0x4c0
+[   14.102070][    T1]  kasan_report+0xd4/0x12c
+[   14.106407][    T1]  kasan_tag_mismatch+0x28/0x40
+[   14.111178][    T1]  __hwasan_tag_mismatch+0x2c/0x5c
+[   14.116222][    T1]  regmap_add_irq_chip_fwnode+0x594/0x1364
+[   14.121961][    T1]  devm_regmap_add_irq_chip+0xb8/0x144
+[   14.127346][    T1]  wcd934x_slim_status+0x210/0x28c [wcd934x]
+[   14.133307][    T1]  slim_device_alloc_laddr+0x1ac/0x1ec [slimbus]
+[   14.139669][    T1]  slim_device_probe+0x80/0x124 [slimbus]
+[   14.145394][    T1]  really_probe+0x250/0x4d8
+[   14.149826][    T1]  __driver_probe_device+0x104/0x1ac
+[   14.155041][    T1]  driver_probe_device+0x80/0x218
+[   14.159990][    T1]  __driver_attach+0x19c/0x2e4
+[   14.164678][    T1]  bus_for_each_dev+0x158/0x1b4
+[   14.169454][    T1]  driver_attach+0x34/0x44
+[   14.173790][    T1]  bus_add_driver+0x1fc/0x328
+[   14.178390][    T1]  driver_register+0xdc/0x1b4
+[   14.182995][    T1]  __slim_driver_register+0x6c/0x84 [slimbus]
+[   14.189068][    T1]  init_module+0x20/0xfe4 [wcd934x]
+[   14.194219][    T1]  do_one_initcall+0x110/0x418
+[   14.198916][    T1]  do_init_module+0x124/0x30c
+[   14.203521][    T1]  load_module+0x1938/0x1ab0
+[   14.208034][    T1]  __arm64_sys_finit_module+0x110/0x138
+[   14.213509][    T1]  invoke_syscall+0x70/0x170
+[   14.218015][    T1]  el0_svc_common+0xf0/0x138
+[   14.222523][    T1]  do_el0_svc+0x40/0xb8
+[   14.226596][    T1]  el0_svc+0x2c/0x78
+[   14.230405][    T1]  el0t_64_sync_handler+0x68/0xb4
+[   14.235354][    T1]  el0t_64_sync+0x19c/0x1a0
+[   14.239778][    T1]
+[   14.242004][    T1] The buggy address belongs to the object at ffffff8081021850
+[   14.242004][    T1]  which belongs to the cache kmalloc-8 of size 8
+[   14.255669][    T1] The buggy address is located 0 bytes inside of
+[   14.255669][    T1]  8-byte region [ffffff8081021850, ffffff8081021858)
+[   14.255685][    T1]
+[   14.255689][    T1] The buggy address belongs to the physical page:
+[   14.255699][    T1] page:0000000080887a30 refcount:1 mapcount:0 mapping:0000000000000000 index:0x85ffff8081021ee0 pfn:0x101021
+[   14.275062][    T1] flags: 0x4000000000000200(slab|zone=1|kasantag=0x0)
+[   14.275078][    T1] page_type: 0xffffffff()
+[   14.275091][    T1] raw: 4000000000000200 49ffff8080002200 dead000000000122 0000000000000000
+[   14.275103][    T1] raw: 85ffff8081021ee0 00000000810000ea 00000001ffffffff 0000000000000000
+[   14.275110][    T1] page dumped because: kasan: bad access detected
+[   14.275116][    T1]
+[   14.275119][    T1] Memory state around the buggy address:
+[   14.275125][    T1]  ffffff8081021600: fe fe fe 9a fe fe 5b 3c fe fe c9 fe b4 3f fe 54
+[   14.275133][    T1]  ffffff8081021700: fe fe ad 6b fe fe fe 87 fe fe 39 c9 fe 03 fe ea
+[   14.275143][    T1] >ffffff8081021800: fe fe e1 fe 06 fe fe 21 fe fe e7 fe de fe fe 70
+[   14.275149][    T1]                                   ^
+[   14.371674][    T1]  ffffff8081021900: d7 fe fe 87 fe a0 fe fe fe 80 e0 f0 05 fe fe fe
+[   14.379667][    T1]  ffffff8081021a00: 94 fe 31 fe fe e5 c8 00 d0 fe a1 fe fe e2 e5 fe
+[   14.387664][    T1] ==================================================================
 
-> BTW, I do think nolibc have more using scenes, I like it very much and
-> have used it in my own "Linux Lab" open source project [1] to let it
-> work as the minimal rootfs to speed up kernel features learning and
-> development, I do like the 'kernel-only deployments' feature behind
-> nolibc [2], although there is something like "Unikernel Linux" [3], but
-> that differs from a normal Linux system and is more complicated ;-)
-> 
-> I'm even imaging using it with a pure-header shell and a pure-header gui
-> to let them further work together as a tiny rtos ;-)
+Fixes: faa87ce9196d ("regmap-irq: Introduce config registers for irq types")
+Reported-by: Amit Pundir <amit.pundir@linaro.org>
+Closes: https://lore.kernel.org/all/CAMi1Hd04mu6JojT3y6wyN2YeVkPR5R3qnkKJ8iR8if_YByCn4w@mail.gmail.com/
+Tested-by: John Stultz <jstultz@google.com>
+Cc: stable@vger.kernel.org # v6.0+
+Cc: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc: Saravana Kannan <saravanak@google.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+---
+ drivers/base/regmap/regmap-irq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not denying the possibilities for other use cases. I still have
-somewhere a small 1MB kernel image+rootfs that is sufficient to SSH into
-remotely or download and flash a firmware image over tftp/http/serial,
-so I see pretty well how this can be useful, and suspect this could
-eventually happen again. But doing incremental changes that don't seem
-to go in a particular direction is not much helpful and complicates
-participation from everyone.
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index ced0dcf86e0b..45fd13ef13fc 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -717,7 +717,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 		if (!d->config_buf)
+ 			goto err_alloc;
+ 
+-		for (i = 0; i < chip->num_config_regs; i++) {
++		for (i = 0; i < chip->num_config_bases; i++) {
+ 			d->config_buf[i] = kcalloc(chip->num_config_regs,
+ 						   sizeof(**d->config_buf),
+ 						   GFP_KERNEL);
+-- 
+2.41.0.255.g8b1d071c50-goog
 
-However of course, if someone comes and say "I'd like to use it in this
-or that environment but for this I need all that", it's easier to follow
-and try to steer in a direction that adapts smoothly to all users' needs.
-Another point, please also remember that we moved it into the kernel to
-help those who need to adjust their tests easily contribute the missing
-calls (like you did for a number of things). But I tend to think that as
-long as it's in the kernel, the activity should remain related to the
-kernel usage. If you have bigger plans for a much larger project, the
-kernel's process will slow you down and you'll experience some rejection
-for breaking certain principles, so in this case such work would better
-be done outside (after re-updating the original repo that I left rot for
-a while).
-
-> > > The arch-specific code in nolibc in mainline is currentl ~200 lines per
-> > > arch. With this series in general it will be even less.
-> > > If at some point there are many more architectures it may make sense to
-> > > introduce an arch/ directory then.
-> > 
-> > And even then I'm not convinced because the number of archs will remain
-> > low anyway.
-> >
-> 
-> We have 8 now, the maximum may be 'ls -d arch/*/ | wc -l', it is 22
-> currently ;-)
-
-Yes but I'm not convinced that all of them will be ported there, for
-various reasons ranging from lack of interest or lack of use cases, to
-lack of maintainer time.
-
-> > > > Like musl, if required, another top-level arch/ may be required to put
-> > > > all of the <ARCH>/ directories together to clean up the top-level nolibc
-> > > > directory.
-> > > 
-> > > At the moment in mainline there are 26 files in nolibc.
-> > > That does not seem excessive, in fact it looks to be less than most
-> > > other kernel directories.
-> > 
-> > Indeed :-)  Note that it started with a single one!
-> 
-> Yeah, I learned the history, but I do think we will have more, as the
-> requirements become more and more ;-)
-
-Sure, but it grew fast thanks to being easy to understand and locate
-stuff. This should be seen as a feature I guess.
-
-Cheers,
-Willy
