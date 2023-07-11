@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB3174F6A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD1174F6A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 19:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjGKRLQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 13:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S230447AbjGKRMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 13:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjGKRLO (ORCPT
+        with ESMTP id S229655AbjGKRMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 13:11:14 -0400
-Received: from 7.mo575.mail-out.ovh.net (7.mo575.mail-out.ovh.net [46.105.63.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AA610EA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 10:11:10 -0700 (PDT)
-Received: from director6.ghost.mail-out.ovh.net (unknown [10.108.20.179])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 0775F27100
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 17:11:09 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-bkgm2 (unknown [10.110.171.164])
-        by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id A740F1FDBC;
-        Tue, 11 Jul 2023 17:11:08 +0000 (UTC)
-Received: from courmont.net ([37.59.142.97])
-        by ghost-submission-6684bf9d7b-bkgm2 with ESMTPSA
-        id ZjJqGCyNrWRlpgEA9KjMjw
-        (envelope-from <remi@remlab.net>); Tue, 11 Jul 2023 17:11:08 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-97G00266ae0be0-e4c4-4064-a372-6bb5d03d63ba,
-                    BD5993DD31A8D185A8BDB9FDB50A3FED214DC06B) smtp.auth=postmaster@courmont.net
-X-OVh-ClientIp: 87.92.194.88
-From:   =?ISO-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 01/12] riscv: Add support for kernel mode vector
-Date:   Tue, 11 Jul 2023 20:11:07 +0300
-Message-ID: <6573575.5kvhTvEP53@basile.remlab.net>
-Organization: Remlab
-In-Reply-To: <20230711153743.1970625-2-heiko@sntech.de>
-References: <20230711153743.1970625-1-heiko@sntech.de>
- <20230711153743.1970625-2-heiko@sntech.de>
+        Tue, 11 Jul 2023 13:12:48 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44427F9;
+        Tue, 11 Jul 2023 10:12:45 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A5B140003;
+        Tue, 11 Jul 2023 17:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689095563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=RAr2OWJj8jpQoBytEBqzyQoKRhzKGkXqx6/ZMK1HS0k=;
+        b=HckTFNcHkqzpgFZDA9ef8m9G2KTnT4auHqxlE96yi487vHm+7lR74cOhx3vu2tcac33VEK
+        e6wuCl8TifiLh9R9nMU4LRCaTsGrCkqw22LRi4b+EoIVuf9BkXW9MgQqyAQGv8V2WzfHsi
+        ROHJsW+j+ogr6kEOorW8nlGWqOtF+OY2UpcunEnevJwXAcuow4+fuEr/jXjVFpl9o1ZtCC
+        VsMHzW2VitwnCtkTtgw9jIbK+ueo/a9Ub5DfvPIQ2/7hp6nee/qqVRRQN3TWz0n13+8GDs
+        ATSglIlcvf7lP4b9MZh4uhmsDrxJ6kNGbgF4NRXmGDPGkbfqChyWCru5n52UdQ==
+Date:   Tue, 11 Jul 2023 19:12:41 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Michael Tretter <m.tretter@pengutronix.de>
+Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Stateless Encoding uAPI Discussion and Proposal
+Message-ID: <ZK2NiQd1KnraAr20@aptenodytes>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Ovh-Tracer-Id: 10172505658820401627
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdduudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkfhojghfggfgtgesthhqredttddtjeenucfhrhhomheptformhhiucffvghnihhsqdevohhurhhmohhnthcuoehrvghmihesrhgvmhhlrggsrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhfegfeefvdefueetleefffduuedvjeefheduueekieeltdetueetueeugfevffenucffohhmrghinheprhgvmhhlrggsrdhnvghtnecukfhppeduvdejrddtrddtrddupdekjedrledvrdduleegrdekkedpfeejrdehledrudegvddrleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgvmhhisehrvghmlhgrsgdrnhgvtheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeehpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cHA3IpzXREBvds8Z"
+Content-Disposition: inline
+X-GND-Sasl: paul.kocialkowski@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,224 +56,240 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Hi,
 
-Le tiistaina 11. heinäkuuta 2023, 18.37.32 EEST Heiko Stuebner a écrit :
-> From: Greentime Hu <greentime.hu@sifive.com>
-> 
-> Add kernel_rvv_begin() and kernel_rvv_end() function declarations
-> and corresponding definitions in kernel_mode_vector.c
-> 
-> These are needed to wrap uses of vector in kernel mode.
-> 
-> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> ---
->  arch/riscv/include/asm/vector.h        |  17 ++++
->  arch/riscv/kernel/Makefile             |   1 +
->  arch/riscv/kernel/kernel_mode_vector.c | 132 +++++++++++++++++++++++++
->  3 files changed, 150 insertions(+)
->  create mode 100644 arch/riscv/kernel/kernel_mode_vector.c
-> 
-> diff --git a/arch/riscv/include/asm/vector.h
-> b/arch/riscv/include/asm/vector.h index 3d78930cab51..ac2c23045eec 100644
-> --- a/arch/riscv/include/asm/vector.h
-> +++ b/arch/riscv/include/asm/vector.h
-> @@ -196,6 +196,23 @@ static inline void __switch_to_vector(struct
-> task_struct *prev, void riscv_v_vstate_ctrl_init(struct task_struct *tsk);
->  bool riscv_v_vstate_ctrl_user_allowed(void);
-> 
-> +static inline void riscv_v_flush_cpu_state(void)
-> +{
-> +	asm volatile (
-> +		".option push\n\t"
-> +		".option arch, +v\n\t"
-> +		"vsetvli	t0, x0, e8, m8, ta, ma\n\t"
-> +		"vmv.v.i	v0, 0\n\t"
-> +		"vmv.v.i	v8, 0\n\t"
-> +		"vmv.v.i	v16, 0\n\t"
-> +		"vmv.v.i	v24, 0\n\t"
-> +		".option pop\n\t"
-> +		: : : "t0");
+--cHA3IpzXREBvds8Z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Why bother with zeroing out the vectors before kernel use? That sounds like it 
-will only hide bugs in kernel code - implicitly assuming that everything is 
-initially zero. Ditto initialising the vector configuration; if you really want 
-to have a fixed initial value rather than "leak" whatever user set, better use 
-an invalid configuration (vill=1), IMO.
+Hi everyone!
 
-> +}
-> +
-> +void kernel_rvv_begin(void);
-> +void kernel_rvv_end(void);
-> +
->  #else /* ! CONFIG_RISCV_ISA_V  */
-> 
->  struct pt_regs;
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 506cc4a9a45a..3f4435746af7 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -61,6 +61,7 @@ obj-$(CONFIG_MMU) += vdso.o vdso/
->  obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
->  obj-$(CONFIG_FPU)		+= fpu.o
->  obj-$(CONFIG_RISCV_ISA_V)	+= vector.o
-> +obj-$(CONFIG_RISCV_ISA_V)	+= kernel_mode_vector.o
->  obj-$(CONFIG_SMP)		+= smpboot.o
->  obj-$(CONFIG_SMP)		+= smp.o
->  obj-$(CONFIG_SMP)		+= cpu_ops.o
-> diff --git a/arch/riscv/kernel/kernel_mode_vector.c
-> b/arch/riscv/kernel/kernel_mode_vector.c new file mode 100644
-> index 000000000000..2d704190c054
-> --- /dev/null
-> +++ b/arch/riscv/kernel/kernel_mode_vector.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2012 ARM Ltd.
-> + * Author: Catalin Marinas <catalin.marinas@arm.com>
-> + * Copyright (C) 2017 Linaro Ltd. <ard.biesheuvel@linaro.org>
-> + * Copyright (C) 2021 SiFive
-> + */
-> +#include <linux/compiler.h>
-> +#include <linux/irqflags.h>
-> +#include <linux/percpu.h>
-> +#include <linux/preempt.h>
-> +#include <linux/types.h>
-> +
-> +#include <asm/vector.h>
-> +#include <asm/switch_to.h>
-> +
-> +DECLARE_PER_CPU(bool, vector_context_busy);
-> +DEFINE_PER_CPU(bool, vector_context_busy);
-> +
-> +/*
-> + * may_use_vector - whether it is allowable at this time to issue vector
-> + *                instructions or access the vector register file
-> + *
-> + * Callers must not assume that the result remains true beyond the next
-> + * preempt_enable() or return from softirq context.
-> + */
-> +static __must_check inline bool may_use_vector(void)
-> +{
-> +	/*
-> +	 * vector_context_busy is only set while preemption is disabled,
-> +	 * and is clear whenever preemption is enabled. Since
-> +	 * this_cpu_read() is atomic w.r.t. preemption, vector_context_busy
-> +	 * cannot change under our feet -- if it's set we cannot be
-> +	 * migrated, and if it's clear we cannot be migrated to a CPU
-> +	 * where it is set.
-> +	 */
-> +	return !in_irq() && !irqs_disabled() && !in_nmi() &&
-> +	       !this_cpu_read(vector_context_busy);
-> +}
-> +
-> +/*
-> + * Claim ownership of the CPU vector context for use by the calling
-> context. + *
-> + * The caller may freely manipulate the vector context metadata until
-> + * put_cpu_vector_context() is called.
-> + */
-> +static void get_cpu_vector_context(void)
-> +{
-> +	bool busy;
-> +
-> +	preempt_disable();
-> +	busy = __this_cpu_xchg(vector_context_busy, true);
-> +
-> +	WARN_ON(busy);
-> +}
-> +
-> +/*
-> + * Release the CPU vector context.
-> + *
-> + * Must be called from a context in which get_cpu_vector_context() was
-> + * previously called, with no call to put_cpu_vector_context() in the
-> + * meantime.
-> + */
-> +static void put_cpu_vector_context(void)
-> +{
-> +	bool busy = __this_cpu_xchg(vector_context_busy, false);
-> +
-> +	WARN_ON(!busy);
-> +	preempt_enable();
-> +}
-> +
-> +/*
-> + * kernel_rvv_begin(): obtain the CPU vector registers for use by the
-> calling + * context
-> + *
-> + * Must not be called unless may_use_vector() returns true.
-> + * Task context in the vector registers is saved back to memory as
-> necessary. + *
-> + * A matching call to kernel_rvv_end() must be made before returning from
-> the + * calling context.
-> + *
-> + * The caller may freely use the vector registers until kernel_rvv_end() is
-> + * called.
-> + */
-> +void kernel_rvv_begin(void)
-> +{
-> +	if (WARN_ON(!has_vector()))
-> +		return;
-> +
-> +	WARN_ON(!may_use_vector());
-> +
-> +	/* Acquire kernel mode vector */
-> +	get_cpu_vector_context();
-> +
-> +	/* Save vector state, if any */
-> +	riscv_v_vstate_save(current, task_pt_regs(current));
-> +
-> +	/* Enable vector */
-> +	riscv_v_enable();
-> +
-> +	/* Invalidate vector regs */
-> +	riscv_v_flush_cpu_state();
-> +}
-> +EXPORT_SYMBOL_GPL(kernel_rvv_begin);
-> +
-> +/*
-> + * kernel_rvv_end(): give the CPU vector registers back to the current task
-> + *
-> + * Must be called from a context in which kernel_rvv_begin() was previously
-> + * called, with no call to kernel_rvv_end() in the meantime.
-> + *
-> + * The caller must not use the vector registers after this function is
-> called, + * unless kernel_rvv_begin() is called again in the meantime.
-> + */
-> +void kernel_rvv_end(void)
-> +{
-> +	if (WARN_ON(!has_vector()))
-> +		return;
-> +
-> +	/* Invalidate vector regs */
-> +	riscv_v_flush_cpu_state();
-> +
-> +	/* Restore vector state, if any */
-> +	riscv_v_vstate_restore(current, task_pt_regs(current));
+After various discussions following Andrzej's talk at EOSS, feedback from t=
+he
+Media Summit (which I could not attend unfortunately) and various direct
+discussions, I have compiled some thoughts and ideas about stateless encode=
+rs
+support with various proposals. This is the result of a few years of intere=
+st
+in the topic, after working on a PoC for the Hantro H1 using the hantro dri=
+ver,
+which turned out to have numerous design issues.
 
-I thought that the kernel was already nuking user vectors on every system 
-call, since the RVV spec says so.
+I am now working on a H.264 encoder driver for Allwinner platforms (current=
+ly
+focusing on the V3/V3s), which already provides some usable bitstream and w=
+ill
+be published soon.
 
-Are you trying to use vectors from interrupts? Otherwise, isn't this flush & 
-restore superfluous?
+This is a very long email where I've tried to split things into distinct to=
+pics
+and explain a few concepts to make sure everyone is on the same page.
 
-> +
-> +	/* disable vector */
-> +	riscv_v_disable();
-> +
-> +	/* release kernel mode vector */
-> +	put_cpu_vector_context();
-> +}
-> +EXPORT_SYMBOL_GPL(kernel_rvv_end);
+# Bitstream Headers
 
+Stateless encoders typically do not generate all the bitstream headers and
+sometimes no header at all (e.g. Allwinner encoder does not even produce sl=
+ice
+headers). There's often some hardware block that makes bit-level writing to=
+ the
+destination buffer easier (deals with alignment, etc).
 
--- 
-雷米‧德尼-库尔蒙
-http://www.remlab.net/
+The values of the bitstream headers must be in line with how the compressed
+data bitstream is generated and generally follow the codec specification.
+Some encoders might allow configuring all the fields found in the headers,
+others may only allow configuring a few or have specific constraints regard=
+ing
+which values are allowed.
 
+As a result, we cannot expect that any given encoder is able to produce fra=
+mes
+for any set of headers. Reporting related constraints and limitations (beyo=
+nd
+profile/level) seems quite difficult and error-prone.
 
+So it seems that keeping header generation in-kernel only (close to where t=
+he
+hardware is actually configured) is the safest approach.
 
+# Codec Features
+
+Codecs have many variable features that can be enabled or not and specific
+configuration fields that can take various values. There is usually some
+top-level indication of profile/level that restricts what can be used.
+
+This is a very similar situation to stateful encoding, where codec-specific
+controls are used to report and set profile/level and configure these aspec=
+ts.
+A particularly nice thing about it is that we can reuse these existing cont=
+rols
+and add new ones in the future for features that are not yet covered.
+
+This approach feels more flexible than designing new structures with a sele=
+cted
+set of parameters (that could match the existing controls) for each codec.
+
+# Reference and Reconstruction Management
+
+With stateless encoding, we need to tell the hardware which frames need to =
+be
+used as references for encoding the current frame and make sure we have the
+these references available as decoded frames in memory.
+
+Regardless of references, stateless encoders typically need some memory spa=
+ce to
+write the decoded (known as reconstructed) frame while it's being encoded.
+
+One question here is how many slots for decoded pictures should be allocated
+by the driver when starting to stream. There is usually a maximum number of
+reference frames that can be used at a time, although perhaps there is a use
+case to keeping more around and alternative between them for future referen=
+ces.
+
+Another question is how the driver should keep track of which frame will be=
+ used
+as a reference in the future and which one can be evicted from the pool of
+decoded pictures if it's not going to be used anymore.
+
+A restrictive approach would be to let the driver alone manage that, simila=
+rly
+to how stateful encoders behave. However it might provide extra flexibility
+(and memory gain) to allow userspace to configure the maximum number of pos=
+sible
+reference frames. In that case it becomes necessary to indicate if a given
+frame will be used as a reference in the future (maybe using a buffer flag)
+and to indicate which previous reference frames (probably to be identified =
+with
+the matching output buffer's timestamp) should be used for the current enco=
+de.
+This could be done with a new dedicated control (as a variable-sized array =
+of
+timestamps). Note that userspace would have to update it for every frame or=
+ the
+reference frames will remain the same for future encodes.
+
+The driver will then make sure to keep the reconstructed buffer around, in =
+one
+of the slots. When there's no slot left, the driver will drop the oldest
+reference it has (maybe with a bounce buffer to still allow it to be used a=
+s a
+reference for the current encode).
+
+With this behavior defined in the uAPI spec, userspace will also be able to
+keep track of which previous frame is no longer allowed as a reference.
+
+# Frame Types
+
+Stateless encoder drivers will typically instruct the hardware to encode ei=
+ther
+an intra-coded or an inter-coded frame. While a stream composed only of a s=
+ingle
+intra-coded frame followed by only inter-coded frames is possible, it's
+generally not desirable as it is not very robust against data loss and makes
+seeking difficult.
+
+As a result, the frame type is usually decided based on a given GOP size
+(the frequency at which a new intra-coded frame is produced) while intra-co=
+ded
+frames can be explicitly requested upon request. Stateful encoders implement
+these through dedicated controls:
+- V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME
+- V4L2_CID_MPEG_VIDEO_GOP_SIZE
+- V4L2_CID_MPEG_VIDEO_H264_I_PERIOD
+
+It seems that reusing them would be possible, which would let the driver de=
+cide
+of the particular frame type.
+
+However it makes the reference frame management a bit trickier since refere=
+nce
+frames might be requested from userspace for a frame that ends up being
+intra-coded. We can either allow this and silently ignore the info or expect
+that userspace keeps track of the GOP index and not send references on the =
+first
+frame.
+
+In some codecs, there's also a notion of barrier key-frames (IDR frames in
+H.264) that strictly forbid using any past reference beyond the frame.
+There seems to be an assumption that the GOP start uses this kind of frame
+(and not any intra-coded frame), while the force key frame control does not
+particularly specify it.
+
+In that case we should flush the list of references and userspace should no
+longer provide references to them for future frames. This puts a requiremen=
+t on
+userspace to keep track of GOP start in order to know when to flush its
+reference list. It could also check if V4L2_BUF_FLAG_KEYFRAME is set, but t=
+his
+could also indicate a general intra-coded frame that is not a barrier.
+
+So another possibility would be for userspace to explicitly indicate which
+frame type to use (in a codec-specific way) and act accordingly, leaving any
+notion of GOP up to userspace. I feel like this might be the easiest approa=
+ch
+while giving an extra degree of control to userspace.
+
+# Rate Control
+
+Another important feature of encoders is the ability to control the amount =
+of
+data produced following different rate control strategies. Stateful encoders
+typically do this in-firmware and expose controls for selecting the strategy
+and associated targets.
+
+It seems desirable to support both automatic and manual rate-control to
+userspace.
+
+Automatic control would be implemented kernel-side (with algos possibly sha=
+red
+across drivers) and reuse existing stateful controls. The advantage is
+simplicity (userspace does not need to carry its own rate-control
+implementation) and to ensure that there is a built-in mechanism for common
+strategies available for every driver (no mandatory dependency on a proprie=
+tary
+userspace stack). There may also be extra statistics or controls available =
+to
+the driver that allow finer-grain control.
+
+Manual control allows userspace to get creative and requires the ability to=
+ set
+the quantization parameter (QP) directly for each frame (controls are alrea=
+dy
+as many stateful encoders also support it).
+
+# Regions of Interest
+
+Regions of interest (ROIs) allow specifying sub-regions of the frame that s=
+hould
+be prioritized for quality. Stateless encoders typically support a limited
+number and allow setting specific QP values for these regions.
+
+While the QP value should be used directly in manual rate-control, we proba=
+bly
+want to have some "level of importance" setting for kernel-side rate-contro=
+l,
+along with the dimensions/position of each ROI. This could be expressed with
+a new structure containing all these elements and presented as a variable-s=
+ized
+array control with as many elements as the hardware can support.
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--cHA3IpzXREBvds8Z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmStjYkACgkQ3cLmz3+f
+v9Fn0Qf+PTjAI9+hdMSo2NPRIjYvaAx/BFE9xM6iU1yEacB0J3BWycFUZYakwD7r
+m3pD9NH7bePTCrQtz7FfHArHUw93SmeuiLlAduWQxs+6PRfDZuKmFINl7DXiNGmu
+W1+zSmUNLgFpTGDiPx2TJWVHQprtOdWN45A7yFytbKQ8adm20lRPQ2hxiLB3ky0B
+sZXdahPXJBGvFX4P9Nt6FlWtlvTPbEySw3eNtW0I/M/3tQuWoCzld8wzCrRYxcbi
+jYR0CH3ihl6EkTsRW6N492sphGsMe3NP4qmUD8PZ0AarAjG62qp9vXPxjTXvEWCB
+Kx9tTmyUZmYBZAT6M2uKcbhqvY4pNQ==
+=ldoN
+-----END PGP SIGNATURE-----
+
+--cHA3IpzXREBvds8Z--
