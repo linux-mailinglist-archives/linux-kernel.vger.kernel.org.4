@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707D774F9AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31A574F9AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjGKVV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S231445AbjGKVVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGKVVZ (ORCPT
+        with ESMTP id S229975AbjGKVV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:21:25 -0400
+        Tue, 11 Jul 2023 17:21:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5986F133;
-        Tue, 11 Jul 2023 14:21:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0837C170C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:21:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E79A061625;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99C5D6160E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD261C433CB;
         Tue, 11 Jul 2023 21:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 516FDC433C9;
-        Tue, 11 Jul 2023 21:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689110483;
-        bh=YPSY5HUnEvTGUfr7w/tBIIh9m9ceIEnrSFhq7uRjKcY=;
+        s=k20201202; t=1689110485;
+        bh=3xkkuBXZf9xavOpTtJVeO/yJn1c+bcauJGizthRoAKY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jRIvjX4IGsggKxoSXRCirgRqmZ+47AGWe5Vqd4Uc+mv3ipYCU9NUkLnjHTiG4XV7x
-         ivwAlabtQ50xEFzWz+YiffrTxoYqn2EJtRgcbiePFNi7WBmM3sMlqFJYC6yJzetkPS
-         r6UOvlCxOTAWdcE0GCHOtfcyn6/g9b9e9x/VxzLu2box23nW196Rvng/QyWHkO5wJP
-         ijUW1EtoHnTjeVvSTdeYTNP2p2H1qpfjxZFVi/d3Q7hhNHaJzSGnlhMawAvuPMHnJh
-         aI/aUzHBilSvPB8JmsmAWnhm0W0MHdhvdWPSDurYGE+Chxujgr/zHba1tZyKX+pvB9
-         jyv8urmbl9nmw==
+        b=mNKdnOMRvt4fPbSCYrPHdLIVQJQSEtpamgqmoZUnhfGiPkh9pfX+vBzJra9dYviO7
+         IiQE6v4lnz0Ez8NPeCi9oI6PHZOBn1mnVm3d8eGrAB1gF47oxlsZyUCGuolBHOFaWU
+         iA+sLxyjz4WcZux+dNSYDifkkjUyFd0Z14miWn7InMfwYn8m81lVDR/X8cgC2p3X+H
+         D10bx+nMP8V5asohryc7vciU/+Or9GhziksX2VaTkx/wCZ5n0ufIGhuCBMr8l7L0QB
+         OFYrRq/ccXS4tJ7/c6KfYshtFTVpVwzInpDmgKFjWThaDzy8oiJcJv9EJsjwfU0hcz
+         ygWrs00o5vs7Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        cychiang@chromium.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Rohit kumar <quic_rohkumar@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230707074337.3120530-1-quic_rohkumar@quicinc.com>
-References: <20230707074337.3120530-1-quic_rohkumar@quicinc.com>
-Subject: Re: [PATCH v2] ASoC: dt-bindings: Update maintainer email id
-Message-Id: <168911048005.530041.1862565252407998007.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 22:21:20 +0100
+To:     tiwai@suse.com, Syed.SabaKareem@amd.com, Vijendar.Mukunda@amd.com,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230708025208.54272-1-mario.limonciello@amd.com>
+References: <20230708025208.54272-1-mario.limonciello@amd.com>
+Subject: Re: [PATCH] ASoC: amd: ps: Fix extraneous error messages
+Message-Id: <168911048356.530041.349357901498684259.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 22:21:23 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -62,10 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jul 2023 13:13:36 +0530, Rohit kumar wrote:
-> Updated my mail id to latest quicinc id.
+On Fri, 07 Jul 2023 21:52:08 -0500, Mario Limonciello wrote:
+> On Pink Sardine machines that don't have SdW controllers in use, the property
+> `mipi-sdw-manager-list` won't exist.  There is no point in showing an error
+> to a user when this situation is encountered.
 > 
+> Furthermore if the machine doesn't have a DMIC connected to the ACP, there
+> may be no platform devices created either.
 > 
+> [...]
 
 Applied to
 
@@ -73,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: Update maintainer email id
-      commit: a1ff5802da3806e916de100130a7850b3f80c377
+[1/1] ASoC: amd: ps: Fix extraneous error messages
+      commit: cd710900ed2b96b1fbc26d711d562581afc385e2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
