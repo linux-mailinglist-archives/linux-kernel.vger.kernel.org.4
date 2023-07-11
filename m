@@ -2,116 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C9F74F372
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FB674F374
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjGKPa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S232052AbjGKPau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjGKPaZ (ORCPT
+        with ESMTP id S232243AbjGKPar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:30:25 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E0D136;
-        Tue, 11 Jul 2023 08:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689089424; x=1720625424;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WtKHEzd9TLb1fy9g0AvI3P/4wH5wHUCXn6+ARbR9U1s=;
-  b=hBr5izgDJD/+xQBRT3DHHo56zIVWGr+PwRKeYslY6byoAX8dVJKP/IlP
-   XY2wrXphIylhXd4071LpUGpDRQMvcVoheqR2xYz/VGZeg1ocw+At12Ode
-   PTC74t9K5YYezReTYPdi0oDkc/r4Djo/4nZ5gRCaOUN1m4d3t/zLJe6Xq
-   ptVaXtDqdCnfmUoyRk80WfAin8VYCXMblITX/1QZeF3sZhL4mF4qsSzh9
-   LDYiFacjAfODc99/FRomUQEFDlayLL1LDWMqsytLRRHjVZhB0ff9c6TOl
-   QyJW3PUvicDt5m4ta+3WiJMbTZ535Wn09jYYEWE781W+LtuVQ9dAC9WKE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="428346794"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="428346794"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 08:30:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="698462660"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="698462660"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 11 Jul 2023 08:30:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJFJX-001swf-0G;
-        Tue, 11 Jul 2023 18:30:07 +0300
-Date:   Tue, 11 Jul 2023 18:30:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 04/15] spi: Replace open coded
- spi_controller_xfer_timeout()
-Message-ID: <ZK11flZf/1grJ1Bd@smile.fi.intel.com>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
- <cfaffa00-4b61-4d81-8675-70295844513b@sirena.org.uk>
- <ZK02efTYxV3czigr@smile.fi.intel.com>
- <5959b123-09e3-474b-9ab0-68d71cfdd9a2@sirena.org.uk>
+        Tue, 11 Jul 2023 11:30:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 640AC10DF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:30:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D996D1FB;
+        Tue, 11 Jul 2023 08:31:27 -0700 (PDT)
+Received: from [10.1.37.54] (C02Z41KALVDN.cambridge.arm.com [10.1.37.54])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 341713F740;
+        Tue, 11 Jul 2023 08:30:45 -0700 (PDT)
+Message-ID: <6fa76b99-24b3-9410-66c4-d765ef8f4c52@arm.com>
+Date:   Tue, 11 Jul 2023 16:30:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5959b123-09e3-474b-9ab0-68d71cfdd9a2@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v4 18/49] mlock: Convert mlock to vma iterator
+To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        maple-tree@lists.infradead.org
+References: <20230120162650.984577-1-Liam.Howlett@oracle.com>
+ <20230120162650.984577-19-Liam.Howlett@oracle.com>
+ <50341ca1-d582-b33a-e3d0-acb08a65166f@arm.com>
+ <20230711152734.hith252qxjbnz4bt@revolver>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230711152734.hith252qxjbnz4bt@revolver>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,33 +48,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:14:54PM +0100, Mark Brown wrote:
-> On Tue, Jul 11, 2023 at 02:01:13PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 10, 2023 at 06:30:32PM +0100, Mark Brown wrote:
-> > > On Mon, Jul 10, 2023 at 06:49:21PM +0300, Andy Shevchenko wrote:
+On 11/07/2023 16:27, Liam R. Howlett wrote:
+> * Ryan Roberts <ryan.roberts@arm.com> [230711 10:09]:
+>> On 20/01/2023 16:26, Liam R. Howlett wrote:
+>>> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+>>>
+>>> Use the vma iterator so that the iterator can be invalidated or updated
+>>> to avoid each caller doing so.
+>>
+>> Hi,
 > 
-> > > > + * Assume speed to be 100 kHz if it's not defined at the time of invocation.
 > 
-> > > You didn't mention this bit in the changelog, and I'm not 100% convinced
-> > > it was the best idea in the first place.  It's going to result in some
-> > > very big timeouts if it goes off, and we really should be doing
-> > > validation much earlier in the process.
+> Hello!
 > 
-> > Okay, let's drop this change.
+>>
+>> I've bisected 2 mm selftest regressions back to this patch, so hoping someone can help debug and fix? The failures are reproducible on x86_64 and arm64.
 > 
-> Like I say we *should* be fine with the refactoring without this, or at
-> least if it's an issue we should improve the validation.
+> Thanks!  That is a big help.  Where did you start your bisection?  I
+> assume 6.4?
 
-For the speeds < 1000 Hz, this change will lead to the div by 0 crash.
-It seems that the current code which this one removes is better than
-the spi_controller_xfer_timeout() provides.
+Yes, I'm working to get all the mm selftests running (and ideally passing!) on
+arm64. I working on v6.4 and it was broken there. I went arbitrarily back to
+v5.10 and it was working there, so bisected between them.
 
-If anything, the spi_controller_xfer_timeout() should be improved first.
-So, for now I drop this for sure. Maybe in the future we can come back
-to it.
+> 
+>>
+>>
+>> mlock-random-test:
+>>
+>> $ ./run_kselftest.sh -t mm:mlock-random-test
+>> TAP version 13
+>> 1..1
+>> # selftests: mm: mlock-random-test
+>> mlock() failure at |0xaaaaaaab52d0(131072)| mlock:|0xaaaaaaacc65d(26551)|
+>> not ok 1 selftests: mm: mlock-random-test # exit=255
+>>
+>> This mallocs a buffer then loops 100 times, trying to mlock random parts of it. After this patch, the test fails after a variable number of iterations; mlock() returns ENOMEM. If I explicitly munlock at the end of each loop, it works.
+>>
+>>
+>> mlock2-tests:
+>>
+>> $ ./run_kselftest.sh -t mm:mlock2-tests
+>> TAP version 13
+>> 1..1
+>> # selftests: mm: mlock2-tests
+>> munlock(): Cannot allocate memory
+>> munlock(): Cannot allocate memory
+>> not ok 1 selftests: mm: mlock2-tests # exit=2
+>>
+>> Here, a 3 page buffer is mlock2()ed, then the middle page is munlocked. Finally the whole 3 page range is munlocked, and after this patch it fails with ENOMEM. If I modify the test to split the final munlock into 2, one for the first page and one for the last, the test passes.
+>>
+>>
+>> Immediately prior to this patch (2286a6914c77 "mm: change mprotect_fixup to vma iterator"), both tests pass.
+>>
+>> From a quick scan of the man page, I don't think it explicitly says that its ok to call mlock/munlock on already locked/unlocked pages, but it's certainly a change of behavior and the tests notice, so I'm guessing this wasn't intentional?
+>>
+>> I'm not familiar with this code so it's not obvious to me exactly what the problem is, but I'm hoping someone can help debug?
+> 
+> I think I see the issue and I'm working on a fix. I appreciate the
+> analysis and report, it really helps narrow things down.
 
--- 
-With Best Regards,
-Andy Shevchenko
+You're welcome!
 
+> 
+> Regards,
+> Liam
 
