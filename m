@@ -2,130 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24EF74E46C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F62974E46A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjGKCoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 22:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S230121AbjGKCnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 22:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjGKCoA (ORCPT
+        with ESMTP id S229831AbjGKCnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 22:44:00 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2E141A7;
-        Mon, 10 Jul 2023 19:43:57 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8AxCPLJwaxkPVsDAA--.9828S3;
-        Tue, 11 Jul 2023 10:43:21 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF83Iwaxk0BEoAA--.45833S3;
-        Tue, 11 Jul 2023 10:43:20 +0800 (CST)
-Message-ID: <860524f1-db36-05e1-0437-b13976a5a594@loongson.cn>
-Date:   Tue, 11 Jul 2023 10:43:20 +0800
+        Mon, 10 Jul 2023 22:43:52 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CD6188
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 19:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689043431; x=1720579431;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=upCvkfXEz663AS6MYxFBimuj/g5n8nrt9QG6bA5tcMw=;
+  b=g5oQiqapLt0caldkYNKd8lYx1USiSQgolZEmKcKXXa9mhWZMTQspWcG8
+   WZXmEGhvjgHCuM8mQSSyL1jwxjqtSQKUwadxv20IiBHUk8G2GW7ZG8mcO
+   AxFwslzbl71QsH+co3i6NsBQhR1JA0ULNpa/gU3r9Ci7lbeP5iejqVt3S
+   009ROkXGrSkmVBLvqxXH+QwcKe1pJ/+mfzW/9Di9X0AgSB++Q4RfikTmK
+   vDPzfKnB401hUeP3LRdOsPzZv7G2ZP2/+GzscWznOzUxZ2URuCJlG3sQr
+   Nkc5Vg064SHKhIqxwbRR3iBCYzyuJE4MshPN5+Iz7LWIXUzGJTVNa0M2K
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="428203566"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="428203566"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 19:43:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="865596218"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="865596218"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.35]) ([10.252.187.35])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 19:43:47 -0700
+Message-ID: <6e88db76-6903-cb7b-b608-811a97986592@linux.intel.com>
+Date:   Tue, 11 Jul 2023 10:43:43 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/2] irqchip/loongson-eiointc: Fix return value
- checking of eiointc_index
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Cc:     baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Michael Shavit <mshavit@google.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 5/6] iommu: Support mm PASID 1:1 with sva domain
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230706022849.1272591-1-maobibo@loongson.cn>
- <20230706022849.1272591-2-maobibo@loongson.cn>
- <CAAhV-H4uQEDPRb0Kj8aqth9U7-7fa50Cj8=Off4+wk+CFhM1HQ@mail.gmail.com>
-From:   bibo mao <maobibo@loongson.cn>
-In-Reply-To: <CAAhV-H4uQEDPRb0Kj8aqth9U7-7fa50Cj8=Off4+wk+CFhM1HQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxF83Iwaxk0BEoAA--.45833S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CrWrGr1kGF17uw13XFykXrc_yoW8WFW5pF
-        WUAFWq9r15Wa47Casxta1rJFyYvwsxt3yDtayxJFW7XFZ8Gw1DGr4Fy3Z0krn2kr43CF10
-        gF45XF4UC3WYywcCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
-        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
-        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU
-        7_MaUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Tina Zhang <tina.zhang@intel.com>
+References: <20230707013441.365583-1-tina.zhang@intel.com>
+ <20230707013441.365583-6-tina.zhang@intel.com> <ZKw/xS7wOoRvNfnH@ziepe.ca>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZKw/xS7wOoRvNfnH@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Huacai,
+On 2023/7/11 1:28, Jason Gunthorpe wrote:
+>> @@ -88,31 +98,41 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm
+>>   		goto out_unlock;
+>>   	}
+>>   
+>> -	if (domain) {
+>> -		domain->users++;
+>> -		goto out;
+>> +	if (unlikely(domain)) {
+>> +		/* Re-attach the device to the same domain? */
+>> +		if (domain == sva_domain) {
+>> +			goto out;
+>> +		} else {
+>> +			/* Didn't get detached from the previous domain? */
+>> +			ret = -EBUSY;
+>> +			goto out_unlock;
+>> +		}
+>>   	}
+> And if we do all of this we should just get rid of the horrible
+> iommu_get_domain_for_dev_pasid() entirely.
 
-Thanks for reviewing my patch.
-I reply inline.
+At the core level, we have no idea about whether an sva domain allocated
+for one device is compatible with another device. Hence, we should loop
+the sva domains in the list and if the attach interface feeds back
+-EINVAL's (not compatible), we should allocate a new domain for the
+attached device and put it in the list if the new attachment is
+successful.
 
-在 2023/7/11 09:59, Huacai Chen 写道:
-> On Thu, Jul 6, 2023 at 10:28 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> return value of function eiointc_index is int, however it is
-> 'return' -> 'Return'.
-Will do.
+Perhaps I'm too worried?
 
-> 
->> converted uint32_t when used. This causes logic problem when
->> checking return value. There is eioi initial problem on qemu
-> 'eioi' -> 'eiointc'.
-Will do in next version.
-
-Regards
-Bibo Mao
-> 
-> Huacai
-> 
->> virt-machine where there is only one eioi node and more than 4
->> vcpus, external device intr can only be routed to vcpu 0-3.
-> 
->>
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> ---
->>  drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
->>  1 file changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
->> index 92d8aa28bdf5..1c5a5b59f199 100644
->> --- a/drivers/irqchip/irq-loongson-eiointc.c
->> +++ b/drivers/irqchip/irq-loongson-eiointc.c
->> @@ -144,12 +144,14 @@ static int eiointc_router_init(unsigned int cpu)
->>         int i, bit;
->>         uint32_t data;
->>         uint32_t node = cpu_to_eio_node(cpu);
->> -       uint32_t index = eiointc_index(node);
->> +       int index = eiointc_index(node);
->>
->> -       if (index < 0) {
->> -               pr_err("Error: invalid nodemap!\n");
->> -               return -1;
->> -       }
->> +       /*
->> +        * qemu virt-machine has only one eio intc and more than four cpus
->> +        * irq from eio can only be routed to cpu 0-3 on virt machine
->> +        */
->> +       if (index < 0)
->> +               return 0;
->>
->>         if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
->>                 eiointc_enable();
->> --
->> 2.27.0
->>
-
+Best regards,
+baolu
