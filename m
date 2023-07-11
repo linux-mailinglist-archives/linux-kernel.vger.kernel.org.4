@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007FA74ED2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0059E74ED2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjGKLsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S230464AbjGKLsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjGKLrw (ORCPT
+        with ESMTP id S229987AbjGKLs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:47:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71AD136;
-        Tue, 11 Jul 2023 04:47:51 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4R0fDf5Rx4ztR7x;
-        Tue, 11 Jul 2023 19:44:50 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 11 Jul
- 2023 19:47:48 +0800
-Subject: Re: [PATCH v5 RFC 2/6] page_pool: unify frag_count handling in
- page_pool_is_last_frag()
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Liang Chen <liangchen.linux@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-References: <20230629120226.14854-1-linyunsheng@huawei.com>
- <20230629120226.14854-3-linyunsheng@huawei.com>
- <e201644d-c9bd-52d9-9d26-a18bc4def21f@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <c9be2d69-450e-5e01-5884-0516a56f4c7c@huawei.com>
-Date:   Tue, 11 Jul 2023 19:47:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Tue, 11 Jul 2023 07:48:29 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C61810E;
+        Tue, 11 Jul 2023 04:48:28 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51e6113437cso1426930a12.2;
+        Tue, 11 Jul 2023 04:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689076107; x=1691668107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Cy1faYBjU+oiNv+mEI1JhoJuRWFnOpAxBy8BKOfb6Y=;
+        b=XOB1ozW4MPG56pfPy9tXjW2N2vo8eLy6XkcbnrRw8ZvkS/T/EvMX6W7lZs7YnrznUo
+         sRzstRISZW4il2kkRjCLo5k5hnI0YCaVACXUQFZXP0ZqcUOvxT3u333zm2A/TuDmAnwz
+         aXg1LLaGRqqFt3GmM9Dl5Zw9bzgn8NJxGECl4cN0OhtnHgj+6QChCxlkepxrviVK/nk8
+         Bh/quw+KAq+2dJTLKazthOpBBgZSXDSqNNEYDalNypOQYrTaJr85kKKEpY2FGyN/t3cS
+         6aWhpxoDyyUQp/YTz3iKsKt/0soTXxyzpl6ENhVNnYuWkJGqt1NhCwhy7GX8wSVrx3h9
+         4jsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689076107; x=1691668107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Cy1faYBjU+oiNv+mEI1JhoJuRWFnOpAxBy8BKOfb6Y=;
+        b=WeGRkr/7QCJarv2PxfWLdWTPkTW2elkpxmCoI1v6hfaUl4UhSqnopSDhca2Eb3DvF7
+         iW754LqIzt71QPKUUDQ2bi2bZ57aD6OtmoYS28Sjk+q0JChFB63TiOwBAHlzMg6WnR8Y
+         rXPaSSPv8T3T8XP92Yi/p7bnyETMFHEL3e85idijFPB9lW6vYHK6I5ERWt1LdHj1BLVq
+         mvwyE3rUX5GzW7CYYzQpEYiXsmLOKb95Y8Mv5sFNY2ylQaz0jrCW2FDQ2iO0ASuvSzDl
+         TMCHBnfvE5FH01Kd2ut6h6tb/kb8sG5sAHFgRADMb/E7h2OPv4L9iemeRa9Tjeiea0pt
+         4Z9g==
+X-Gm-Message-State: ABy/qLbxyHHab5vZgO52Dcveaztw6BWuCFiL6DsNVnwKgvceQoejBj7Z
+        OXEvW3QNbPgczjqCZlfLpvQ7Fu1IFU0=
+X-Google-Smtp-Source: APBJJlEhY7DcL5cvXqOY4Rtmkh4B7YIxRwZc/XlJiBs8hYkXyDHXFlR+mPsQFgFtDT5y4dGKYk9pFg==
+X-Received: by 2002:aa7:cd71:0:b0:51d:e486:4348 with SMTP id ca17-20020aa7cd71000000b0051de4864348mr12437544edb.22.1689076106521;
+        Tue, 11 Jul 2023 04:48:26 -0700 (PDT)
+Received: from localhost (2a02-a210-0fc1-bf80-3ee9-f7ff-fec5-cf4c.cable.dynamic.v6.ziggo.nl. [2a02:a210:fc1:bf80:3ee9:f7ff:fec5:cf4c])
+        by smtp.gmail.com with ESMTPSA id s15-20020aa7cb0f000000b0051e3cda6d49sm1121146edt.90.2023.07.11.04.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 04:48:25 -0700 (PDT)
+From:   Azat Khuzhin <a3at.mail@gmail.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Azat Khuzhin <a3at.mail@gmail.com>, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH] Fix writing maj:min to /sys/power/resume (fixes hiberation with systemd)
+Date:   Tue, 11 Jul 2023 13:48:12 +0200
+Message-ID: <20230711114821.1273-1-a3at.mail@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-In-Reply-To: <e201644d-c9bd-52d9-9d26-a18bc4def21f@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/10 22:39, Alexander Lobakin wrote:
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Thu, 29 Jun 2023 20:02:22 +0800
-> 
->> Currently when page_pool_create() is called with
->> PP_FLAG_PAGE_FRAG flag, page_pool_alloc_pages() is only
->> allowed to be called under the below constraints:
->> 1. page_pool_fragment_page() need to be called to setup
->>    page->pp_frag_count immediately.
->> 2. page_pool_defrag_page() often need to be called to drain
->>    the page->pp_frag_count when there is no more user will
->>    be holding on to that page.
-> 
-> [...]
-> 
->> @@ -352,12 +377,10 @@ static inline bool page_pool_is_last_frag(struct page_pool *pool,
->>  {
->>  	/* We assume we are the last frag user that is still holding
->>  	 * on to the page if:
->> -	 * 1. Fragments aren't enabled.
->> -	 * 2. We are running in 32-bit arch with 64-bit DMA.
->> -	 * 3. page_pool_defrag_page() indicate we are the last user.
->> +	 * 1. We are running in 32-bit arch with 64-bit DMA.
->> +	 * 2. page_pool_defrag_page() indicate we are the last user.
->>  	 */
->> -	return !(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
->> -	       PAGE_POOL_DMA_USE_PP_FRAG_COUNT ||
->> +	return PAGE_POOL_DMA_USE_PP_FRAG_COUNT ||
->>  	       (page_pool_defrag_page(page, 1) == 0);
-> 
-> Just noticed while developing: after this change, the first function
-> argument, i.e. @pool, is not needed anymore and can be removed.
+resume_store() first calls lookup_bdev() and after tries to handle
+maj:min, but it does not reset the error before, hence if you will write
+maj:min you will get ENOENT:
 
-Yes, thanks.
+    # echo 259:2 >| /sys/power/resume
+    bash: echo: write error: No such file or directory
 
-> 
+This also should fix hiberation via systemd, since it uses this way.
+
+Fixes: 1e8c813b083c4 ("PM: hibernate: don't use early_lookup_bdev in resume_store")
+Cc: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Azat Khuzhin <a3at.mail@gmail.com>
+---
+ kernel/power/hibernate.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index f62e89d0d906..e1b4bfa938dd 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -1179,6 +1179,7 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 		unsigned maj, min, offset;
+ 		char *p, dummy;
+ 
++		error = 0;
+ 		if (sscanf(name, "%u:%u%c", &maj, &min, &dummy) == 2 ||
+ 		    sscanf(name, "%u:%u:%u:%c", &maj, &min, &offset,
+ 				&dummy) == 3) {
+-- 
+2.41.0
 
