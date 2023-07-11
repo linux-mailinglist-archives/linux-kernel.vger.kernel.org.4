@@ -2,56 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0404C74E623
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E503074E629
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjGKE4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 00:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S230119AbjGKE7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 00:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjGKE4I (ORCPT
+        with ESMTP id S229583AbjGKE7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:56:08 -0400
+        Tue, 11 Jul 2023 00:59:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77023FB;
-        Mon, 10 Jul 2023 21:56:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6C1FB;
+        Mon, 10 Jul 2023 21:59:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15BFB61305;
-        Tue, 11 Jul 2023 04:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92838C433C8;
-        Tue, 11 Jul 2023 04:56:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 437196130B;
+        Tue, 11 Jul 2023 04:59:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F237CC433C7;
+        Tue, 11 Jul 2023 04:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689051366;
-        bh=chk4w71SLL7ARWSfWIOfGyVEKHJpKgqbRxpzOCYROjE=;
+        s=k20201202; t=1689051549;
+        bh=AlR0iPOgoKsKvFSvb1vV3TApDy+DT+0ogO2Yh+Wcku8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iHNxonMGPpYnEeoXRFGMUQX+9las/kq+zqzQrdMcsS++d2/3fHlc6RKnLv2U0L7mh
-         IXWxymf9y3mnyKHFbAwaf+z9uoJSKWmzJZXRH+E7xNoAvLpKLegreg3eGjN8qotS6M
-         L6MAQGuGpfr1PFV/0tKG2dvk4IkCHAkc6M/4JdomCIajGNjQSW0OGeoupruUsWmeUn
-         3vUXZGXbVUUYjDPc2wBMCs7qKCRt+TTIZOcG0bSfQ5Ol/GtNsHLl4IYaJlxseRG3fi
-         8/ov8nkewivTx73J9CcijwNwFePae72xlGFLnEGOZz2zst5r0bsDweqp7LhBqnXaE8
-         5wfxf9uS3qapw==
-Date:   Tue, 11 Jul 2023 13:56:03 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 4/4] tracing/probes: Fix to record 0-length data_loc
- in fetch_store_string*() if fails
-Message-Id: <20230711135603.5c3724a57f1c064c672d99e1@kernel.org>
-In-Reply-To: <20230710233400.5aaf024e@gandalf.local.home>
-References: <168904147563.2908673.18054267804278861545.stgit@mhiramat.roam.corp.google.com>
-        <168904151104.2908673.8401909922292791503.stgit@mhiramat.roam.corp.google.com>
-        <20230710233400.5aaf024e@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        b=njdD/4DeJKfeTDojWA0Tg1eTORxGZbCgaxTa2/UtYp4xgiyGyFEGk14pSiHp6opa8
+         VVcsh/wK3lSkMhbfQJnZ2+ZKtunW9YFlbXrt6vfpZB/ihXCpE73cjkPTAAJRmMoXoH
+         NP1qwYCAceYIfMGoIvREeoiPNT2uTZ/fx9Hq9ZDljyRr5nBdbY1++JtsUBTKF+SK3z
+         TY01Zg3KRgh4LTmsN3HJ0tagmi7SdC3ap8JIH8cXOYqNFDnABfqko8GUdqwlGz6q1G
+         G1qIcD9bPPstlPGhQY/mcYFjB2Feo0mHnEX0/FMvhOg7qH/M0284Ia8X5ds5ElKnri
+         bnwfGwXdbRE2g==
+Date:   Mon, 10 Jul 2023 21:59:06 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <20230710215906.49514550@kernel.org>
+In-Reply-To: <20230711042708.GA18658@lst.de>
+References: <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
+        <20230619110705.106ec599@kernel.org>
+        <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+        <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+        <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+        <ZKNA9Pkg2vMJjHds@ziepe.ca>
+        <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+        <ZKxDZfVAbVHgNgIM@ziepe.ca>
+        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+        <ZKyZBbKEpmkFkpWV@ziepe.ca>
+        <20230711042708.GA18658@lst.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,73 +98,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 23:34:00 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, 11 Jul 2023 06:27:08 +0200 Christoph Hellwig wrote:
+> Not going to comment on the rest of this as it seems bat shit crazy
+> hacks for out of tree junk.  Why is anyone even wasting time on this?
 
-> On Tue, 11 Jul 2023 11:11:51 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > --- a/kernel/trace/trace_probe_tmpl.h
-> > +++ b/kernel/trace/trace_probe_tmpl.h
-> > @@ -267,9 +267,7 @@ store_trace_args(void *data, struct trace_probe *tp, void *rec,
-> >  		if (unlikely(arg->dynamic))
-> >  			*dl = make_data_loc(maxlen, dyndata - base);
-> >  		ret = process_fetch_insn(arg->code, rec, dl, base);
-> > -		if (unlikely(ret < 0 && arg->dynamic)) {
-> > -			*dl = make_data_loc(0, dyndata - base);
-> > -		} else {
-> > +		if (unlikely(ret > 0 && arg->dynamic)) {
-> 
-> To match the current code, that should be:
-> 
-> 		if (likely(ret >= 0 || !arg->dynamic)) {
-> 
-> But I'm guessing that the original code was buggy, as the else block should
-> only have been processed if arg->dynamic was set?
+Noob question - how does RDMA integrate with the out of tree junk?
+AFAIU it's possible to run the "in-tree" RDMA stack and get "GPU
+direct".
 
-Good point, yes, that's right. Since dyndata and maxlen is only used when
-arg->dynamic == true, we don't have to care about that.
-
-> That is, it should have been:
-> 
-> 	if (arg->dynamic) {
-> 		if (unlikely(ret < 0)) {
-> 			*dl = make_data_loc(0, dyndata - base);
-> 		} else {
->   			dyndata += ret;
->   			maxlen -= ret;
->   		}
-> 	}
-> 
-> 
-> I guess you only want to update if arg->dynamic is true (even though that
-> wasn't the case before :-/) But in any case, I think you want likely() and
-> not unlikely().
-> 
-> 		if (arg->dynamic && likely(ret > 0)) {
-> 
-> That is, if we only want to updated this if the arg is dynamic.
-
-Indeed.
-
-> 
-> And I don't think that the arg->dynamic() should have likely/unlikely
-> around it, as that's determined by user space, and the kernel should not be
-> adding assumptions about what user space wants.
-
-OK.
-
-Let me fix that with a new patch because it is another bug.
-
-Thanks,
-
-> 
-> -- Steve
-> 
-> >  			dyndata += ret;
-> >  			maxlen -= ret;
-> >  		}
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Both Jonathan in the past (Meta) and now Mina (Google) are trying 
+to move the needle and at least feed the GPUs over TCP, instead of
+patented, proprietary and closed RDMA transports.
