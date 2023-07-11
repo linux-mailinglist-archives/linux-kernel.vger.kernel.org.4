@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F41D74E832
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F15B74E833
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjGKHiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        id S230281AbjGKHkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbjGKHiO (ORCPT
+        with ESMTP id S229724AbjGKHkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:38:14 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7801A8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:38:13 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-986d8332f50so658020466b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689061091; x=1691653091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rx8H9As3YW36H58C24CHOAt5gVbFUaVPwH/qkPeltgA=;
-        b=Otb6Q+H12C1MG49c1/HOyW7wiMJN3PdzI8R2HXi0dC2zkhD+hwgITRq0B3rbrnBlHC
-         aBguDm3mJMekGZR5U2fHR8L9oIy/FrejZFLiprGMiJimOuqgz7o5hxLzrWJ/NEg2TrVx
-         T+UOFANp8SygESr+6KxyAi/j8Jg4TdCKZLvBZ2HmFuF4fcHsYicldL+agjgh8xw9M8D7
-         qtwNsz+Ol/NtMPVER8P4T3FCvcnPW8BDSZlAbA1gLtFrXRUeEuZcqR/nHT04z+rJ7Vjg
-         80RFfX1WC7zdNktLvePWMPfvGQ/dmNTWzNB4nvcI0uAOabloFWZpsUd/RX1iZWAskreD
-         bTaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689061091; x=1691653091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rx8H9As3YW36H58C24CHOAt5gVbFUaVPwH/qkPeltgA=;
-        b=jN5To1OdIiPlyGfe6EhA4KHqs7kLrNqf+81yPdRYu7BcSTnV3BlBrgxv8CRXAwdvS2
-         iKvBj6+mZe4qgMCuK30TAzukVdv9BzaEOVjVgDY+ZCcoMAxznQo8nXPsI6Upsg7xMGFs
-         +iSl7V8jY4nb0q4wVI2exuERDk3mfUK0gLhVHBLocl841YwIw9yBYSfPGUnRynp7AeBA
-         sjWmwwFFHOWIQU7Hw0ecyXUtLb9C0n8Hd4CwwnAgExwASHN0/c+Oo8k5HB7LXfXC74TP
-         /9eKOqOxiOv7EmhhHJp2XfcgP+GnfLmJjZWQhtha9Z3qhEbMGB4tGBJOp06Nno6UqNg2
-         OJ0A==
-X-Gm-Message-State: ABy/qLb4dZ5Ceca9vRmWz+xKcoQzaSUhYEvebWVEuwk66VlEI8oqNaAW
-        lAuMm7PhbiYSqEoZM2rQYEhS3g==
-X-Google-Smtp-Source: APBJJlHyHjzHC8e0SOfh0h8Lzjgp0m0GgKV0prF8oQ5UrvplNd05w6cHvPGuBAcUiYE9+jsR6bE1Hg==
-X-Received: by 2002:a17:906:f2ca:b0:96f:d345:d0f7 with SMTP id gz10-20020a170906f2ca00b0096fd345d0f7mr12103193ejb.62.1689061091717;
-        Tue, 11 Jul 2023 00:38:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id ov4-20020a170906fc0400b00992b50fbbe9sm786810ejb.90.2023.07.11.00.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 00:38:11 -0700 (PDT)
-Message-ID: <c3149d29-1ec2-0123-1784-f7da6c43a6c5@linaro.org>
-Date:   Tue, 11 Jul 2023 09:38:09 +0200
+        Tue, 11 Jul 2023 03:40:08 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3097E1A4;
+        Tue, 11 Jul 2023 00:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=Jvs47pnLFbOZN+azKq1C5wj2WCQusgiaHr3c6gc02MA=; b=TpKJPkSbUuCRkZ5xDjO8ka1TrN
+        vG6Gfqk1XHRrSmiWuno8oVr93rlUi4n94wEe9hVDazeG9JY1DlTiz72QvjH3kh/dhh3zsUx4HcZ2U
+        Hj8IC/7NNEDJXXtIAtW6OZ37fv+T5E6v9sRoI0epkQmgZdORzqWn5QiROxqN1/0/orQxMTOQbGEpa
+        6gC82FusuIfdoR1+0Fwp+vZt8ap5DEZNyFcx5MGQUpjP1o3Z3X3NXYDWEIMQd2hWbiZohtj398blq
+        yHA//54Bl2ycuwdbP8Idz6fMVqyE9lu/2mKQwhuzPjgAinfopG5GjHsAVGHxsKDMFVXRWAmG+pGtb
+        vl0CcZOA==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qJ7yP-0007pp-CJ; Tue, 11 Jul 2023 09:39:49 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qJ7yO-000Xjb-L2; Tue, 11 Jul 2023 09:39:48 +0200
+Subject: Re: [PATCH v2] samples/bpf: Fix compilation failure for samples/bpf
+ on LoongArch Fedora
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Haoran Jiang <jianghaoran@kylinos.cn>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kernel@xen0n.name, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        loongarch@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, sdf@google.com, song@kernel.org,
+        trix@redhat.com, yangtiezhu@loongson.cn, yhs@fb.com
+References: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
+ <20230710052750.259595-1-jianghaoran@kylinos.cn>
+ <CAAhV-H7orsUHDZuwcTUeWYbizcWRG4k_BPy53W7PT_MQ_2SXgw@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7ecc42aa-4a0f-77f7-a2ad-236270137b6e@iogearbox.net>
+Date:   Tue, 11 Jul 2023 09:39:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 11/18] soc: samsung: Move power-domain driver to the genpd
- dir
+In-Reply-To: <CAAhV-H7orsUHDZuwcTUeWYbizcWRG4k_BPy53W7PT_MQ_2SXgw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-12-ulf.hansson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230707140434.723349-12-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26965/Mon Jul 10 09:29:40 2023)
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2023 16:04, Ulf Hansson wrote:
+On 7/10/23 7:54 AM, Huacai Chen wrote:
+> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> On Mon, Jul 10, 2023 at 1:34 PM Haoran Jiang <jianghaoran@kylinos.cn> wrote:
+>>
+>> When building the latest samples/bpf on LoongArch Fedora
+>>
+>>       make M=samples/bpf
+>>
+>> There are compilation errors as follows:
+>>
+>> In file included from ./linux/samples/bpf/sockex2_kern.c:2:
+>> In file included from ./include/uapi/linux/in.h:25:
+>> In file included from ./include/linux/socket.h:8:
+>> In file included from ./include/linux/uio.h:9:
+>> In file included from ./include/linux/thread_info.h:60:
+>> In file included from ./arch/loongarch/include/asm/thread_info.h:15:
+>> In file included from ./arch/loongarch/include/asm/processor.h:13:
+>> In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
+>> ./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
+>>           ^~~~~~~~~~~~~~~
+>> 1 error generated.
+>>
+>> larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
+>> and the header file location is specified at compile time.
+>>
+>> Test on LoongArch Fedora:
+>> https://github.com/fedora-remix-loongarch/releases-info
+>>
+>> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+>>
+>> ---
+>> v2:
+>> use LoongArch instead of Loongarch in the title and commit message.
+>> ---
+>>   samples/bpf/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+>> index 615f24ebc49c..b301796a3862 100644
+>> --- a/samples/bpf/Makefile
+>> +++ b/samples/bpf/Makefile
+>> @@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
+>>          @echo "  CLANG-bpf " $@
+>>          $(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
+>>                  -I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
+>> -               -I$(LIBBPF_INCLUDE) \
+>> +               -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
 
-You miss here some commit msg shortly explaining the rationale behind this.
+There's still one location in XDP_SAMPLE_CFLAGS, do we need the $(CLANG_SYS_INCLUDES)
+there as well?
 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: <linux-samsung-soc@vger.kernel.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Let me know if you prefer me to take it via Samsung SoC.
-
-Best regards,
-Krzysztof
+>>                  -D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
+>>                  -D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
+>>                  -Wno-gnu-variable-sized-type-not-at-end \
+>> --
+>> 2.27.0
+>>
+>>
 
