@@ -2,140 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3478274EFB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081C074EF93
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjGKNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S232445AbjGKM6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbjGKM75 (ORCPT
+        with ESMTP id S231190AbjGKM61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:59:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E1D268D;
-        Tue, 11 Jul 2023 05:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689080373; x=1720616373;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rbfp/ATGi8YL1NhYsnv9rDVDnh7mPVl04cteWEUCpLs=;
-  b=hS0luW66oOJeOaMJ9bw2WHW7JVOAKv6vHHJyjPerp6g/VO0M59wu42/P
-   Zp2MI3h69QE3M97UDhOQ0BjIVBWksA9nNbtvym5FqNOxTOuanQCgb2afE
-   BWPwWCTFIeiepW/+5ri8pFvXLg580TtaLMI5gv9uSp5BTR67+/KBW35K/
-   78hg9mSpWHx68Nk8dU84H12yrjoiG1jvyK74mH2fAswYyuFSiB2MJeRDA
-   EgI9UwlC7vlNWAc4vMva84vwMjdSjHDI1kcPwmFR/gI/dnDADZZ9ibD4n
-   C2j32Je9pFNBD4L7jrgsyzaXciPaB0p36qZ8beFii9oItc606WThb2F3n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367187580"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="367187580"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:57:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="834666843"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="834666843"
-Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Jul 2023 05:57:41 -0700
-From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Subject: [PATCH 13/13] ASoC: Intel: sst: Convert to PCI device IDs defines
-Date:   Tue, 11 Jul 2023 14:57:26 +0200
-Message-Id: <20230711125726.3509391-14-amadeuszx.slawinski@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+        Tue, 11 Jul 2023 08:58:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B600E69;
+        Tue, 11 Jul 2023 05:58:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB568614D4;
+        Tue, 11 Jul 2023 12:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E816FC433C8;
+        Tue, 11 Jul 2023 12:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689080269;
+        bh=7oED2ssqzJahdIRFuzndkoETQuTxFWg0yCYG9eYOpIQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TT2HG2cwmze98fWDZWbplLZohFFXhBNYgpZ5uYCDqx6BivasskTkS/cSOJlbvdF25
+         N5aDuRDTVW+g1eNmtsGUSIbNxmJiJ21aaPzpnb4RqFmZPJs/T/ngRCiSZqafi8am46
+         vflDGIjHi8QcUfghb+hdDMp+DVd+0p3D3OdpX0rTh+mO6bccblMB4RtGIvRe6QroOF
+         WweIeMfezo4UoWD3ZEGFCqJypCrdNmSBo2SLrw7QV6ZPesPKD3/Md7xh7/KG0Zf7uW
+         LjhE6l4R8kd5U44ubxF7VUingUmExEim7RA1hyY0aw+/un7d/jKeqDhqktX9kEqyIE
+         V91AlNCW3l/cQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DE8EA40516; Tue, 11 Jul 2023 09:57:45 -0300 (-03)
+Date:   Tue, 11 Jul 2023 09:57:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Georg =?iso-8859-1?Q?M=FCller?= <georgmueller@gmx.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        regressions@lists.linux.dev,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf probe: read DWARF files from the correct CU
+Message-ID: <ZK1RyVue7OMXzVl4@kernel.org>
+References: <5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.net>
+ <20230615200147.664346-3-georgmueller@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230615200147.664346-3-georgmueller@gmx.net>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use PCI device IDs from pci_ids.h header.
+Em Thu, Jun 15, 2023 at 10:01:37PM +0200, Georg Müller escreveu:
+> After switching from dwarf_decl_file() to die_get_decl_file(), it is not
+> possible to add probes for certain functions of certain binaries:
+> 
+>  $ perf probe -x /usr/lib/systemd/systemd-logind match_unit_removed
+>  A function DIE doesn't have decl_line. Maybe broken DWARF?
+>  A function DIE doesn't have decl_line. Maybe broken DWARF?
+>  Probe point 'match_unit_removed' not found.
+>     Error: Failed to add events.
+> 
+> The problem is that die_get_decl_file() uses the wrong CU to search for
+> the file. elfutils commit e1db5cdc9f has some good explanation for this:
+> 
+>     dwarf_decl_file uses dwarf_attr_integrate to get the DW_AT_decl_file
+>     attribute. This means the attribute might come from a different DIE
+>     in a different CU. If so, we need to use the CU associated with the
+>     attribute, not the original DIE, to resolve the file name.
+> 
+> This patch uses the same source of information as elfutils: use attribute
+> DW_AT_decl_file and use this CU to search for the file.
 
-Signed-off-by: Amadeusz SÅ‚awiÅ„ski <amadeuszx.slawinski@linux.intel.com>
----
- sound/soc/intel/atom/sst/sst.c     | 3 ++-
- sound/soc/intel/atom/sst/sst.h     | 1 -
- sound/soc/intel/atom/sst/sst_pci.c | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Thanks, applied to the perf-tools branch, that will be submitted for
+Linux v6.5.
 
-diff --git a/sound/soc/intel/atom/sst/sst.c b/sound/soc/intel/atom/sst/sst.c
-index a0d29510d2bc..f582e0737778 100644
---- a/sound/soc/intel/atom/sst/sst.c
-+++ b/sound/soc/intel/atom/sst/sst.c
-@@ -16,6 +16,7 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/firmware.h>
-+#include <linux/pci.h>
- #include <linux/pm_runtime.h>
- #include <linux/pm_qos.h>
- #include <linux/async.h>
-@@ -174,7 +175,7 @@ int sst_driver_ops(struct intel_sst_drv *sst)
- {
+- Arnaldo
  
- 	switch (sst->dev_id) {
--	case SST_MRFLD_PCI_ID:
-+	case PCI_DEVICE_ID_INTEL_ADSP_TNG:
- 	case SST_BYT_ACPI_ID:
- 	case SST_CHV_ACPI_ID:
- 		sst->tstamp = SST_TIME_STAMP_MRFLD;
-diff --git a/sound/soc/intel/atom/sst/sst.h b/sound/soc/intel/atom/sst/sst.h
-index 4d37d39fd8f4..6670aaf9aca4 100644
---- a/sound/soc/intel/atom/sst/sst.h
-+++ b/sound/soc/intel/atom/sst/sst.h
-@@ -20,7 +20,6 @@
- 
- /* driver names */
- #define SST_DRV_NAME "intel_sst_driver"
--#define SST_MRFLD_PCI_ID 0x119A
- #define SST_BYT_ACPI_ID	0x80860F28
- #define SST_CHV_ACPI_ID	0x808622A8
- 
-diff --git a/sound/soc/intel/atom/sst/sst_pci.c b/sound/soc/intel/atom/sst/sst_pci.c
-index 4058b4f80a0c..9098076d6c72 100644
---- a/sound/soc/intel/atom/sst/sst_pci.c
-+++ b/sound/soc/intel/atom/sst/sst_pci.c
-@@ -32,7 +32,7 @@ static int sst_platform_get_resources(struct intel_sst_drv *ctx)
- 
- 	/* map registers */
- 	/* DDR base */
--	if (ctx->dev_id == SST_MRFLD_PCI_ID) {
-+	if (ctx->dev_id == PCI_DEVICE_ID_INTEL_ADSP_TNG) {
- 		ctx->ddr_base = pci_resource_start(pci, 0);
- 		/* check that the relocated IMR base matches with FW Binary */
- 		ddr_base = relocate_imr_addr_mrfld(ctx->ddr_base);
-@@ -173,7 +173,7 @@ static void intel_sst_remove(struct pci_dev *pci)
- 
- /* PCI Routines */
- static const struct pci_device_id intel_sst_ids[] = {
--	{ PCI_VDEVICE(INTEL, SST_MRFLD_PCI_ID), 0},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADSP_TNG), 0},
- 	{ 0, }
- };
- 
+> Fixes: dc9a5d2ccd5c ("perf probe: Fix to get declared file name from clang DWARF5")
+> Signed-off-by: Georg Müller <georgmueller@gmx.net>
+> Link: https://lore.kernel.org/r/5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.net/
+> ---
+>  tools/perf/util/dwarf-aux.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
+> index b07414409771..137b3ed9897b 100644
+> --- a/tools/perf/util/dwarf-aux.c
+> +++ b/tools/perf/util/dwarf-aux.c
+> @@ -478,8 +478,10 @@ static const char *die_get_file_name(Dwarf_Die *dw_die, int idx)
+>  {
+>  	Dwarf_Die cu_die;
+>  	Dwarf_Files *files;
+> +	Dwarf_Attribute attr_mem;
+> 
+> -	if (idx < 0 || !dwarf_diecu(dw_die, &cu_die, NULL, NULL) ||
+> +	if (idx < 0 || !dwarf_attr_integrate(dw_die, DW_AT_decl_file, &attr_mem) ||
+> +	    !dwarf_cu_die(attr_mem.cu, &cu_die, NULL, NULL, NULL, NULL, NULL, NULL) ||
+>  	    dwarf_getsrcfiles(&cu_die, &files, NULL) != 0)
+>  		return NULL;
+> 
+> --
+> 2.41.0
+> 
+
 -- 
-2.34.1
 
+- Arnaldo
