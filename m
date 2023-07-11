@@ -2,121 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EAB74F9B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF46074F9BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjGKVXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S230013AbjGKV3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjGKVXQ (ORCPT
+        with ESMTP id S229928AbjGKV3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:23:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E339111B;
-        Tue, 11 Jul 2023 14:23:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689110595; x=1720646595;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E8txDx+ewvXOdcJsIlylcjGRaNR3TVVS13z+5E2/IfM=;
-  b=HBiQSY0QpX1Zhukj6/Bv6GXoJ1ajhmqF02cY8BoYi8O0Ywt2PNDBEHC2
-   DdM3yQlRwjL+KwKRYvdnOexaujJWum9a6jRKKTo1pRMxG2kEH+i3uRonQ
-   Yu+B4TQcczt9HDkmPJT3Qwq1avaBC7L5dtX3MHM1OxnU6+VbaADoUaYDr
-   hvDBpxTSoeJB0obr66hDGBsdRkRETeHRA/IfiMGQx1OvsYxEyiU/wa6tN
-   KCZ1IUddmVE7rKEsuZiTwNKbdnd+aM2JHWi6y7leLAGTFGEztHjjor+67
-   ZxDBB020hZG3JHO7bDt5LpM/gj30j0+VCoK9lYl15krDaXEDzbgwVbWId
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="344339360"
-X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="344339360"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:23:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="791358549"
-X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="791358549"
-Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:23:15 -0700
-Date:   Tue, 11 Jul 2023 14:23:14 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Peter Newman <peternewman@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Babu Moger <babu.moger@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v2 0/7] x86/resctrl: Add support for Sub-NUMA cluster
- (SNC) systems
-Message-ID: <ZK3IQj6+eVAeaNY1@agluck-desk3>
-References: <20230621174006.42533-1-tony.luck@intel.com>
- <TYAPR01MB6330B9B17686EF426D2C3F308B25A@TYAPR01MB6330.jpnprd01.prod.outlook.com>
- <SJ1PR11MB608331B7F85320DD4CD93448FC25A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <30b63f35-1839-6870-d81b-1e8bff88dc70@intel.com>
+        Tue, 11 Jul 2023 17:29:21 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095DE77
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:29:20 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1b059dd7c0cso5730857fac.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689110959; x=1691702959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i3g/sYes99jSs40Z6x0waupDib1SvpDaNQo/lAgOIN8=;
+        b=NsrhT3+Ll7flWv31+mVfvL2CJi6PPiyztffKniMwPkiIPxd8n1z21jnqQ7T40Vqtos
+         y8hPl93hUIm3jjeDUFm18iygCSALICo1EOLi4qgT60kyRSXwnBqYwk+cag3ZUU07zqST
+         UpsrongFVzB/JVF8yBLAsnZSWZtYUH6F5x+lysgRhwrEaJ0ahvLOH5WYULISMLXPYugW
+         bwcnmLcv6QPeEalrgfKCvRDfAAh9D6Rp+DOH2X0xqtvNxsIldWqGyQC7jxKK5buulsAV
+         MarTK5eACf7ZgCiPKgHj/CwzL0KHQXWWrNjTiV+1VRnnNAjYBenPSiXTMjWfdtse4M+n
+         azzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689110959; x=1691702959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i3g/sYes99jSs40Z6x0waupDib1SvpDaNQo/lAgOIN8=;
+        b=EEyv3ZAaoSi3ghYSyJrTwrxCzHidc24e5QYzV+vJJxmmv2cPfkDgxVS8iCzpX7acU3
+         4wdD3+KgGjv2RbcCPY9f4C3W4+qatVVZ+07KUpDUya1JgDzhJZ/vzjF/i8pSxKyOPADy
+         ZbXNP5yGonRYo91YpdbAo1f/rEXhYDIHB97FGsSBAjNPdGVs3QbLioLFHEW34T4xBi13
+         erNpjTpQdinWOk5lwlfeyg8xqFg8OltC2ZtrKD4Dy3ARrtLE+30TcKyAlljoeMaMKQRe
+         2EezC2INAh1nZb7941801w8JU+CVG1Bz5YsbPC8LBGx22v8QzqlFEh1kmgLAZSs5fn2q
+         C8zQ==
+X-Gm-Message-State: ABy/qLboe2WmPnS1cA8HvWfjDOWuXyO0T5AQGkJDlqlh7nDgMs+Z5MRZ
+        VoWAYsi9JUdGQDIHBFuh5Aw=
+X-Google-Smtp-Source: APBJJlGK0zbcSHw9K20hYnRB8aALJMh64GuD8KNS+gOo8I353uIxeGV3RO9luKO3QrO8ilUxjoILcA==
+X-Received: by 2002:a05:6870:c186:b0:1b4:60b3:98c8 with SMTP id h6-20020a056870c18600b001b460b398c8mr16196462oad.1.1689110958733;
+        Tue, 11 Jul 2023 14:29:18 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:9374])
+        by smtp.gmail.com with ESMTPSA id n88-20020a17090a2ce100b0025e9519f9e7sm2472242pjd.15.2023.07.11.14.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 14:29:18 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 11 Jul 2023 11:29:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Z qiang <qiang.zhang1211@gmail.com>
+Cc:     syzbot <syzbot+087b7effddeec0697c66@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in kthread_bind_mask
+Message-ID: <ZK3JrFCT3EsS2mxG@slm.duckdns.org>
+References: <0000000000005ca92705d877448c@google.com>
+ <ZKx8+B3gI9/1g5A3@google.com>
+ <CALm+0cUurycz1=pt85sChA2dpzhk3KNLmTo5vfSb_uObOxQPRQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <30b63f35-1839-6870-d81b-1e8bff88dc70@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALm+0cUurycz1=pt85sChA2dpzhk3KNLmTo5vfSb_uObOxQPRQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 01:50:02PM -0700, Reinette Chatre wrote:
-> Hi Tony,
-> > This is expected. When SNC is enabled, CAT still supports the same number of
-> > bits in the allocation cache mask. But each bit represents half as much cache.
-> > 
-> > Think of the cache as a 2-D matrix with the cache-ways (bits in the CAT mask)
-> > as the columns, and the rows are the hashed index of the physical address.
-> > When SNC is turned on the hash function for physical addresses from one
-> > of the SNC number nodes will only pick half of those rows (and the other
-> > SNC node gets the other half of the rows).
+Hello,
+
+On Tue, Jul 11, 2023 at 12:01:48PM +0800, Z qiang wrote:
+> Full email path here:
+> https://lore.kernel.org/all/0000000000005ca92705d877448c@google.com/T/
+> https://syzkaller.appspot.com/bug?extid=087b7effddeec0697c66
 > 
-> If a test is expected to fail in a particular scenario then I think
-> the test failure should be communicated as a "pass". If not this will 
-> reduce confidence in accuracy of tests. Even so, from the description
-> it sounds as though this test can be made more accurate to indeed pass
-> in the scenario when SNC is enabled?
+> 
+> static void __kthread_bind_mask(struct task_struct *p, const struct
+> cpumask *mask, unsigned int state)
+> {
+>         unsigned long flags;
+> 
+>         if (!wait_task_inactive(p, state)) {
+>                 WARN_ON(1);      <--------------------------trigger warning
+>                 return;
+>         }
+> ....
+> }
+> 
+> Inconsistent task state trigger WARN_ON().
 
-Hi Reinette,
+The usage looks correct to me. The rescuer kthread was just created
+successfully and did complete(done) in kthread() and then should be either
+about to sleep or already sleeping in the subsequent
+schedule_preempt_disabled(). Either there's something buggy in
+wait_task_inactive() or task state transition itself, or there's something
+else which somehow ends up waking up the newly created task? My hunch is the
+latter but it's impossible to tell from the available information.
 
-Yes. This could be done. The resctrl tests would need to determine
-if SNC mode is enabled. But I think that is possible by comparing
-output of sysfs files. E.g. with SNC disabled the lists of cpus for a node
-and a CPU on that node will match like this:
+It'd be really great if syzbot can find a repro.
 
-$ cat /sys/devices/system/node/node0/cpulist
-0-35,72-107
-$ cat /sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_list
-0-35,72-107
+Thanks.
 
-but with SNC enabled, the CPUs sharing a cache will be divided across
-two or four nodes.
-
-It looks like the existing tests may print a warning. I see
-this code in:
-
-tools/testing/selftests/resctrl/resctrl_tests.c
-
-123         res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
-124         ksft_test_result(!res, "CMT: test\n");
-125         if ((get_vendor() == ARCH_INTEL) && res)
-126                 ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-
-but at first glance that warning doesn't appear to try and
-check if SNC was the actual problem.
-
--Tony
+-- 
+tejun
