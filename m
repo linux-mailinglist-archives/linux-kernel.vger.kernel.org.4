@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0A374EB05
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B41474EB0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjGKJoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S231258AbjGKJo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjGKJoS (ORCPT
+        with ESMTP id S230490AbjGKJo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:44:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D6E100
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:43:37 -0700 (PDT)
+        Tue, 11 Jul 2023 05:44:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DCB91
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689068616;
+        s=mimecast20190719; t=1689068656;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Od1/19kFhHmX9rdsBJAf2fw/H3xJi3JwZ125IHGO3Ho=;
-        b=bUXf+Me8/RDa0ZsFb7p47JqDM0ZwhDji3S69fCs2+OWVRgzHPaPslkfG4Q8qGZ5DzA5hZe
-        vCFYwfqtIaKYR4g2bZGUD43z21zNdIWD1mIbizjXIHs7UBxk+ap1DNlyr321a7ROmSIQa1
-        kLckmop2sYvxMXZbPSZBg9eyyBpTxZg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=3vCRTvkn5ZH82riXGsCDdYpG1boSEt6dLfoCx9K6sPw=;
+        b=EROn+Pod54b50qE+NoOtZwUX2pCd2JmqmiWBtTMuQX/j8ueJyM/KUWJEZYEcvJETwGJ/o9
+        wQWuivuX9n/9srpg6H9xdIquVLV4tOZGbsjW0H9VP8vqSbZyYTmwSN+OODWbAe1C37IWes
+        FljOeP1t3TesaL+4CWMobABdDODe4BY=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-618-fud4YQYaNnSv4THIa1RaCQ-1; Tue, 11 Jul 2023 05:43:35 -0400
-X-MC-Unique: fud4YQYaNnSv4THIa1RaCQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-978a991c3f5so369419966b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:43:35 -0700 (PDT)
+ us-mta-231-N7Usya3fN5eQg0Gpih1yQw-1; Tue, 11 Jul 2023 05:44:11 -0400
+X-MC-Unique: N7Usya3fN5eQg0Gpih1yQw-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-992e684089aso318023466b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:44:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689068613; x=1691660613;
+        d=1e100.net; s=20221208; t=1689068647; x=1691660647;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Od1/19kFhHmX9rdsBJAf2fw/H3xJi3JwZ125IHGO3Ho=;
-        b=cWEHP1tFWpoZ/m+nl83gDc8LgbSeF/nIuvzxU9xBiOvBewvAUs1jYojZ/WlVzoGasx
-         DinDNDc8sxHTLvMnyn32KQSTimPHGJQ0PRJ+CT8K2z3ehOef3pf1rNfjkZCuvHtqIqIm
-         0uN7n2vlNtS4Gqfc7oe4109UU4cu2b++kiAzCQ/ZQgAHw/OD4Bn+t/n69mcDXIRhb0wn
-         fBLjjdoBd2F0+oKDsXhvMsyp6xRhNNgfSNBKPfidmkZm/3CYsEF9LfleD35GNoo//n8A
-         205tnm8mt0eFt+EfGDYoEglI5Z9mQNED3xhMCCVg/6g7Pd6AuZSP03zy1/eB+V6DhF1c
-         bOxw==
-X-Gm-Message-State: ABy/qLal6g5MaBqKaMUlPRwDDhAy8FqocYuEbK/Jpbiqs3trpUKzbode
-        TiMVssg52SQZnPA39tO+OC+QTCMKvCycotDhVMWun9Jxpi2hXM28CC4r0tyRj6BJGwB9HHWYOqx
-        DRSem1JhBbAYMPSJ1v8kZKxAGIPFJ77YL
-X-Received: by 2002:a17:906:89a1:b0:992:9756:6a22 with SMTP id gg33-20020a17090689a100b0099297566a22mr13153274ejc.48.1689068613673;
-        Tue, 11 Jul 2023 02:43:33 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGMqb4E+QCCQyWkhsASzNp0G+JFQtsiQCik8JuUn+PF7LBYxukV6D1AZlMYmFRkVD/IFqP7BQ==
-X-Received: by 2002:a17:906:89a1:b0:992:9756:6a22 with SMTP id gg33-20020a17090689a100b0099297566a22mr13153264ejc.48.1689068613415;
-        Tue, 11 Jul 2023 02:43:33 -0700 (PDT)
+        bh=3vCRTvkn5ZH82riXGsCDdYpG1boSEt6dLfoCx9K6sPw=;
+        b=OnKjXN5e8HNF+ODx6UKc8ukjMA3GgPh1SkRW10kVDfA/xQCczP0zJfp5O5ZwsZbQXp
+         S9imkviZOpACPk3NBra02C0Jqj7C06b5rEfkS0KSuoJmuDA64WH5cBfXWrS0s8msj6aK
+         t2Q15DvMbpgt68gYBuh4ar64A1512YZGXf/2gdW4xVqozQ9kcaUhc0z+miLy9GdvQUjp
+         OCD5WQlvwhQxVjF2pTenporoOCvxWRR6f0jXSADCE4rgWild7U355Fja9W1XTGEI5vVm
+         Qs+fZXvx3tkRIvyoiVrlpcVGNNBvY/9S8frH8dGR1E9YXz7yV5UfLlQnlTsBuVkbQXiz
+         0wOA==
+X-Gm-Message-State: ABy/qLY48sRBD6n/c0GsEdy6kQotpvs6rlBVZrbXCwkuCRUR7vr1vZzr
+        prkNx/UEhUR/ADEQBjWvrHL4d1obrgdgFoiL3GsdC0E8pSdwRCYCkwZRvtIFV+8FJF2qL2VO/IO
+        /0Jh9DFdTzbFyyCGNrzkdF9Gt
+X-Received: by 2002:a17:906:4ad2:b0:988:a986:b11c with SMTP id u18-20020a1709064ad200b00988a986b11cmr13936700ejt.29.1689068647556;
+        Tue, 11 Jul 2023 02:44:07 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHetqx7htc1mmoAuyViXDXDIXvhQ3Mn8NXqdjkDdtzjYr7mDuO0xLjRYit8bbVWHcG1AyfWDA==
+X-Received: by 2002:a17:906:4ad2:b0:988:a986:b11c with SMTP id u18-20020a1709064ad200b00988a986b11cmr13936690ejt.29.1689068647369;
+        Tue, 11 Jul 2023 02:44:07 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id ox10-20020a170907100a00b00991dfb5dfbbsm935652ejb.67.2023.07.11.02.43.32
+        by smtp.gmail.com with ESMTPSA id z26-20020a1709064e1a00b009937dbabbd5sm908730eju.220.2023.07.11.02.44.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 02:43:32 -0700 (PDT)
-Message-ID: <c93f102d-d169-a693-95ed-6754e2f1a939@redhat.com>
-Date:   Tue, 11 Jul 2023 11:43:32 +0200
+        Tue, 11 Jul 2023 02:44:06 -0700 (PDT)
+Message-ID: <d9c9d8d0-3b1f-8f8e-5fbf-84448c3a20e5@redhat.com>
+Date:   Tue, 11 Jul 2023 11:44:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH] platform/x86/intel/tpmi: Prevent overflow for cap_offset
+Subject: Re: [PATCH] platform/x86: int3472/discrete: set variable
+ skl_int3472_regulator_second_sensor storage-class-specifier to static
 Content-Language: en-US, nl
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+To:     Tom Rix <trix@redhat.com>, djrscally@gmail.com,
         markgross@kernel.org
 Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230622195717.3125088-1-srinivas.pandruvada@linux.intel.com>
+References: <20230702134419.3438361-1-trix@redhat.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230622195717.3125088-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230702134419.3438361-1-trix@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,20 +85,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 6/22/23 21:57, Srinivas Pandruvada wrote:
-> cap_offset is a u16 field, so multiplying with TPMI_CAP_OFFSET_UNIT
-> (which is equal to 1024) to covert to bytes will cause overflow. This
-> will be a problem once more TPMI features are added.
+On 7/2/23 15:44, Tom Rix wrote:
+> smatch reports
+> drivers/platform/x86/intel/int3472/clk_and_regulator.c:263:28: warning: symbol
+>   'skl_int3472_regulator_second_sensor' was not declared. Should it be static?
 > 
-> This field is not used except for calculating pfs->vsec_offset. So, leave
-> cap_offset field unchanged and multiply with TPMI_CAP_OFFSET_UNIT while
-> calculating pfs->vsec_offset.
+> This variable is only used in its defining file, so it should be static.
 > 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
-> Rebased on top of
-> https://kernel.googlesource.com/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
-> review-hans 
+>  drivers/platform/x86/intel/int3472/clk_and_regulator.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/int3472/clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+> index 61aeca804ba2..ef4b3141efcd 100644
+> --- a/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+> +++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+> @@ -260,7 +260,7 @@ static_assert(ARRAY_SIZE(skl_int3472_regulator_map_supplies) ==
+>   * This DMI table contains the name of the second sensor. This is used to add
+>   * entries for the second sensor to the supply_map.
+>   */
+> -const struct dmi_system_id skl_int3472_regulator_second_sensor[] = {
+> +static const struct dmi_system_id skl_int3472_regulator_second_sensor[] = {
+>  	{
+>  		/* Lenovo Miix 510-12IKB */
+>  		.matches = {
+
 
 Thank you for your patch, I've applied this patch to my fixes
 branch:
@@ -115,23 +128,4 @@ Hans
 
 
 
-> 
->  drivers/platform/x86/intel/tpmi.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
-> index 9c606ee2030c..d1fd6e69401c 100644
-> --- a/drivers/platform/x86/intel/tpmi.c
-> +++ b/drivers/platform/x86/intel/tpmi.c
-> @@ -356,9 +356,7 @@ static int intel_vsec_tpmi_init(struct auxiliary_device *auxdev)
->  		if (!pfs_start)
->  			pfs_start = res_start;
->  
-> -		pfs->pfs_header.cap_offset *= TPMI_CAP_OFFSET_UNIT;
-> -
-> -		pfs->vsec_offset = pfs_start + pfs->pfs_header.cap_offset;
-> +		pfs->vsec_offset = pfs_start + pfs->pfs_header.cap_offset * TPMI_CAP_OFFSET_UNIT;
->  
->  		/*
->  		 * Process TPMI_INFO to get PCI device to CPU package ID.
 
