@@ -2,125 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421AA74F7D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163B774F7D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjGKSLb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 14:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S231944AbjGKSOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 14:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjGKSL1 (ORCPT
+        with ESMTP id S231267AbjGKSOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:11:27 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C59510C4;
-        Tue, 11 Jul 2023 11:11:26 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-315abbd2e64so36844f8f.1;
-        Tue, 11 Jul 2023 11:11:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689099084; x=1691691084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f4pTgOl4kr3INqK7GWkbIOwJ2OoYx4wbuRsCFl9wKjs=;
-        b=htTbK3XefIdus0P7WtgHWhPEJIfUbRpTe0/SyQmIBj605sjxi1EzR8mN/xWHxy5rfR
-         vaFSgr6bBlw8tpNEFXfzvqmdvMYWykDcgAR9Xnw2xTu5YrXmdxiqdTHto4joI1UmOmmi
-         q/mRbiuMhyGdnB982ANvt4cE6+jHuGm2JUbaDgaP+8hhsgg5dO4LPnbRmP7MaL50llR0
-         pzZQD2k+as+XklGqGaXb5Rs5J2aFaru6JSRJd8jTsBqFVUG4KyK8Z9vw45rXo1PMbea4
-         cIAh4sTntCoeMoH1AYj38UjU/Du7sA0iygbQew8CqWMcw4pcWWb1K7JHP2n/8zdpAZsr
-         qvPw==
-X-Gm-Message-State: ABy/qLZT2a7Tk9jJ0YrUlEQeOcNArym65PUfOLezt5VoKD+lYaOw9042
-        P4A3WbwTkwt0f7c5USX/cyZhwKn0A5+5HuFPbxycXs/u
-X-Google-Smtp-Source: APBJJlEpIbhOmBRe04QMC23MNIw+WBjJ+zUQzleUvz2/emIfuqZAIyavt4IFyil/DoaEJVlJ5GR56IAvM/jAmmYh2Vs=
-X-Received: by 2002:a5d:4c85:0:b0:314:1d7f:9e9 with SMTP id
- z5-20020a5d4c85000000b003141d7f09e9mr16305627wrs.0.1689099084284; Tue, 11 Jul
- 2023 11:11:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
-In-Reply-To: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Jul 2023 20:11:13 +0200
-Message-ID: <CAJZ5v0gw3PALtEQLc1W6ZFO6j19SCjVhjsNV6R4knbn83s+-5g@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: QoS: Restore support for default value on
- frequency QoS
-To:     Chungkai Yang <Chung-kai.Yang@mediatek.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ccj.yeh@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 11 Jul 2023 14:14:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB3A10EF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:14:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8CA2615B6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6EDC433C8;
+        Tue, 11 Jul 2023 18:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689099246;
+        bh=9S8J3VKaZ0Io3ymX6rlCeO115cDVsBl3I+MixVwjVOc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=suEIAtuAi7rjnwnzLbuBfF6d+AVvQm7FsMfU9GsxjXpjcuD+diEyetYagJ+1nEN1E
+         rVWCalVQKwT9h9NyxOR7eS0F7CVVvMpNt1znxP8PESdF4a53AkG+55l7e15skb16V3
+         1FL17nb6C4DN2QmHPBBVEM+7MCtpAMBdMm4lxdDR9YRI6Hvwze9SSMwK7uaZzFAu97
+         +WszlNMZeZghU4bf0cpzNU5c91/38eCmGs+p4VFhiSPTet/MorFGCwGyzqLbazX9xl
+         6pLTtnfIk8rjy8t5L7caT8G/3UIKJaSF2CdfZ5JTMZSQ4kA3L07n5r4Uj4ZkhbRHgv
+         gc1Xt4xrmb/Zg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qJHsB-00CDUd-Qn;
+        Tue, 11 Jul 2023 19:14:03 +0100
+Date:   Tue, 11 Jul 2023 19:14:02 +0100
+Message-ID: <86a5w2wc2d.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Shanker Donthineni <sdonthineni@nvidia.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Oops on /proc/interrupt access with 6.5-rc1
+In-Reply-To: <ZK16bmOPqe4Ev1Hb@hovoldconsulting.com>
+References: <ZK16bmOPqe4Ev1Hb@hovoldconsulting.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: johan@kernel.org, tglx@linutronix.de, sdonthineni@nvidia.com, konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 10:59 AM Chungkai Yang
-<Chung-kai.Yang@mediatek.com> wrote:
->
-> PM_QOS_DEFAULT_VALUE case is not covered.
->
-> Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
-> non-negative") makes sure CPU freq is non-negative to avoid negative
-> value converting to unsigned data type. However, when the value is
-> PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
-> c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
-> cpufreq_policy_alloc is executed, for this case handling.
->
-> Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
-> fix this problem.
->
-> Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
->
-> ---
-> V2 -> V3: Added helper function to avoid duplicating the value check.
-> V1 -> V2: Checked both freq_qos_add/update_request.
->
-> Link: https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
-> Link: https://lore.kernel.org/lkml/20230627071727.16646-1-Chung-kai.Yang@mediatek.com/
-> Link: https://lore.kernel.org/lkml/CAJZ5v0gxNOWhC58PHeUhW_tgf6d1fGJVZ1x91zkDdht11yUv-A@mail.gmail.com/
-> ---
->  kernel/power/qos.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index af51ed6d45ef..782d3b41c1f3 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -426,6 +426,11 @@ late_initcall(cpu_latency_qos_init);
->
->  /* Definitions related to the frequency QoS below. */
->
-> +static inline bool freq_qos_value_invalid(s32 value)
-> +{
-> +       return value < 0 && value != PM_QOS_DEFAULT_VALUE;
-> +}
-> +
->  /**
->   * freq_constraints_init - Initialize frequency QoS constraints.
->   * @qos: Frequency QoS constraints to initialize.
-> @@ -531,7 +536,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
->  {
->         int ret;
->
-> -       if (IS_ERR_OR_NULL(qos) || !req || value < 0)
-> +       if (IS_ERR_OR_NULL(qos) || !req || freq_qos_value_invalid(value))
->                 return -EINVAL;
->
->         if (WARN(freq_qos_request_active(req),
-> @@ -563,7 +568,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
->   */
->  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
->  {
-> -       if (!req || new_value < 0)
-> +       if (!req || freq_qos_value_invalid(new_value))
->                 return -EINVAL;
->
->         if (WARN(!freq_qos_request_active(req),
-> --
+On Tue, 11 Jul 2023 16:51:10 +0100,
+Johan Hovold <johan@kernel.org> wrote:
+> 
+> Hi,
+> 
+> Konrad reported on IRC that he hit a segfault and hang when watch:ing
+> /proc/interrupts with 6.5-rc1.
+> 
+> I tried simply catting it and hit the below oops immediately with my
+> X13s (aarch64).
+> 
+> Commit 721255b9826b ("genirq: Use a maple tree for interrupt descriptor
+> management") stood out when skimming the log, and Marc soon suggested
+> the same possible culprit on IRC.
+> 
+> I have not been able to reproduce it with the maple tree patch reverted,
+> but I hit it again after adding it back. Did not trigger immediately
+> after boot though, I had had the machine idling for a few minutes in
+> between.
+> 
+> Marc asked for a dump so figured I'd CC the list as well.
 
-Applied as 6.5-rc material, thanks!
+Thanks for that. I've been trying to reproduce this locally, but
+failed so far. I'll try a different part of the zoo to see if I get
+more luck.
+
+I wonder if you have a driver that periodically allocates an interrupt
+and then frees it...
+
+[...]
+
+> [ 2546.693932] Unable to handle kernel paging request at virtual address ffff80008106bb19
+
+The VA seems legitimate, and not unusual for a string.
+
+> [ 2546.695148] Mem abort info:
+> [ 2546.695562]   ESR = 0x0000000096000007
+> [ 2546.695976]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [ 2546.696394]   SET = 0, FnV = 0
+> [ 2546.696807]   EA = 0, S1PTW = 0
+> [ 2546.697220]   FSC = 0x07: level 3 translation fault
+> [ 2546.697642] Data abort info:
+> [ 2546.698066]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
+> [ 2546.698494]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+
+This is a read, but we don't have any valid syndrome information.
+
+Could you try and enable KASAN?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
