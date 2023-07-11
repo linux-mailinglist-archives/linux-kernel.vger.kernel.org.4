@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C4B74E590
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C387374E58B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjGKDzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 23:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S230476AbjGKDzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 23:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbjGKDzY (ORCPT
+        with ESMTP id S230457AbjGKDzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 23:55:24 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC7CE4D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:55:05 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b8b318c5a7so38828905ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:55:05 -0700 (PDT)
+        Mon, 10 Jul 2023 23:55:10 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F0EE57
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:55:08 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-560b7ac3cbfso3764694eaf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1689047704; x=1691639704;
+        d=bytedance.com; s=google; t=1689047707; x=1691639707;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fTNORhAMfZiekvn/WZoJTK6LhdTh4U3lAjASoHlporQ=;
-        b=Rxbx43isig3S+GFU16br5sALnoQtHUSEfGe8cb+ol6pqYx3UiUAaexdoL7DR65ZV81
-         3BODyot5ZjoWbtgXrORsNGEWWtJ8jdaf2v8QLo99182QN4+QD5t7R2T05RsHZ+/W79Zv
-         TwWyCEEUja+pliatca1lfjHTT5nZ6/CwqIIW8MyHzRJ/10vt2Kw7wPEfjwzbDzjkbW8L
-         oRk3casJ7rRn20xOrC09xX6p1x+1YVSWI1WJNd8e+wU6yNu5GRbwhqi7LWhFFPDyuAWz
-         +6A0BSCS9J/6Mu2Ku/InixWET9G+pAzYMPbE3oiCwyI7VkhzmRHkrRpGcj64xjJvPZ0Q
-         BbmQ==
+        bh=8nUv2eBUflOVJLrJw9mH1jkiLbgnM6ws75Pkn4jd+6E=;
+        b=ba93/ClplBNkeT536iWxDiRxrvDKLuk5KzbRIGlkNS/wjSUDSw0YG2fdY+wocAKY5f
+         QIcaK5gsT/UKH1/j1gmInqnQydQtLdFwMoEaVF8Y0JynNst6O2va9pZ58iQ78jbDHz4R
+         ndraKp96OKm6JzDpx9nPiOKqPRN6160Rbdcb2ka3yKuAnldcB1vGQArUyhhiXyJmqeu2
+         DFn5VI06R0dhs/J0QOYB+u8lmCI5Mtr0NqjaEOG+OIxk4KMQHM16azCfVmq9ldF6/EYQ
+         M/n4PHfRcWMdYBEYL/VcaBdPlvczwae5dmhcz/2jNwPFqIr4m2+KUs+sIdqrqveJOrb2
+         UMtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689047704; x=1691639704;
+        d=1e100.net; s=20221208; t=1689047707; x=1691639707;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fTNORhAMfZiekvn/WZoJTK6LhdTh4U3lAjASoHlporQ=;
-        b=CqXT+dOr2SBMPew24VIEQbhcacscxKJf4P5WIp+bzD3N4DvxqqDzYQOcJUQ+R4mJaB
-         LuP5qCQTgbN3UI+JWYN54zvQMDTYis7PlW62Pv/bIwCaou4+JxE050eSUuNDkcGxSheP
-         EV2E3DQvfa5TI8v+uXvJkQTrkBBzWuIY466EHyVyF3wvIzLqoNL2cmRptzUoAsf6fQSg
-         oLkYyqgrGWenOLmqoFYE9YM6nBwheN8Y1ddOt7au+ZVF/8REbaGjH3n/nj4qDZLhnHW+
-         j1Vh6Rk1xQPK4W/E+9f3bxN5eFgFyNOTYhZMUCq1BN4beptiW+D5Dwp4ADUG3JllFJG6
-         4NKQ==
-X-Gm-Message-State: ABy/qLZ7x6BZBaRVmslDIFaSL+4z3RjFcSSK3aXb3UXtRLYBAYazzcwh
-        BCrpYoQIdABCSOxGqntJ3iSyOQ==
-X-Google-Smtp-Source: APBJJlHl4mfJ9Y+/M0jhzcC8s4QeCj9XHWKUmY872oNAImgfWhir2FpEPfZ6WWSLjO/pMZSofQvtWA==
-X-Received: by 2002:a17:903:26d3:b0:1b8:a88c:4dc6 with SMTP id jg19-20020a17090326d300b001b8a88c4dc6mr14392136plb.45.1689047704708;
-        Mon, 10 Jul 2023 20:55:04 -0700 (PDT)
+        bh=8nUv2eBUflOVJLrJw9mH1jkiLbgnM6ws75Pkn4jd+6E=;
+        b=IH0XITFDDkGKoYhBniSbzmMVczUwm5DyGLvU9LP7Wo7/4cKXI/xNDystSx3md24gxS
+         IyvqA5TKAaZctE4kqVvotysps18pvAPVV6FmxrQQxFGq/OCHDY2ljriBdg5wJucSLva1
+         8cIj7EE6wnTZUWYh+OROGJ18SksifLdUHzPNvlRgtB7OULme7FOwf2BV15Twf7cPQVuV
+         Xet42VN/iTfxP5shU1PRfmsc0L9AteEg4CyEeTftsZ9hksER+pk8fo+MyRieQlwZutcY
+         u/iMfaPc+5M9lEKKzE/5/ADITGADMByryqDjQrnil7896Z3dB73ugVVfiL8CRJVIn4gG
+         RpeQ==
+X-Gm-Message-State: ABy/qLYnguV8GhT90EtZMa+cIHrhDmRLOgsO29Sb9cvOkg1XEh7UGjZ5
+        yMxNaMoGLVIGVwF9ZlMrmJLAlw==
+X-Google-Smtp-Source: APBJJlFQdZ5ouen7AkuwOFPVNmD1rUP/WKxjeZ5E1cKkHpCB9W7ANQJv0/FGjEcF/RHwquL0uQTEFg==
+X-Received: by 2002:a05:6358:c0f:b0:135:4dcf:9a2a with SMTP id f15-20020a0563580c0f00b001354dcf9a2amr10478949rwj.7.1689047707525;
+        Mon, 10 Jul 2023 20:55:07 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170903228f00b001b872c17535sm688329plh.13.2023.07.10.20.55.02
+        by smtp.gmail.com with ESMTPSA id b15-20020a170903228f00b001b872c17535sm688329plh.13.2023.07.10.20.55.05
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 10 Jul 2023 20:55:04 -0700 (PDT)
+        Mon, 10 Jul 2023 20:55:07 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH v2 2/8] maple_tree: don't use MAPLE_ARANGE64_META_MAX to indicate no gap
-Date:   Tue, 11 Jul 2023 11:54:38 +0800
-Message-Id: <20230711035444.526-3-zhangpeng.00@bytedance.com>
+Subject: [PATCH v2 3/8] maple_tree: make mas_validate_gaps() to check metadata
+Date:   Tue, 11 Jul 2023 11:54:39 +0800
+Message-Id: <20230711035444.526-4-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230711035444.526-1-zhangpeng.00@bytedance.com>
 References: <20230711035444.526-1-zhangpeng.00@bytedance.com>
@@ -73,87 +73,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not use a special offset to indicate that there is no gap. When there
-is no gap, offset can point to any valid slots because its gap is 0.
+Make mas_validate_gaps() check whether the offset in the metadata points
+to the largest gap. By the way, simplify this function.
+
+Add the verification that gaps beyond the node limit are zero.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 ---
- include/linux/maple_tree.h |  2 --
- lib/maple_tree.c           | 13 ++-----------
- 2 files changed, 2 insertions(+), 13 deletions(-)
+ lib/maple_tree.c | 78 ++++++++++++++++++++++++++----------------------
+ 1 file changed, 42 insertions(+), 36 deletions(-)
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index e18ecbefc7f7..4e004d86c780 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -29,14 +29,12 @@
- #define MAPLE_NODE_SLOTS	31	/* 256 bytes including ->parent */
- #define MAPLE_RANGE64_SLOTS	16	/* 256 bytes */
- #define MAPLE_ARANGE64_SLOTS	10	/* 240 bytes */
--#define MAPLE_ARANGE64_META_MAX	15	/* Out of range for metadata */
- #define MAPLE_ALLOC_SLOTS	(MAPLE_NODE_SLOTS - 1)
- #else
- /* 32bit sizes */
- #define MAPLE_NODE_SLOTS	63	/* 256 bytes including ->parent */
- #define MAPLE_RANGE64_SLOTS	32	/* 256 bytes */
- #define MAPLE_ARANGE64_SLOTS	21	/* 240 bytes */
--#define MAPLE_ARANGE64_META_MAX	31	/* Out of range for metadata */
- #define MAPLE_ALLOC_SLOTS	(MAPLE_NODE_SLOTS - 2)
- #endif /* defined(CONFIG_64BIT) || defined(BUILD_VDSO32_64) */
- 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index f55e59bd9122..6a8982146338 100644
+index 6a8982146338..a5776fab1875 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -1610,8 +1610,6 @@ ma_max_gap(struct maple_node *node, unsigned long *gaps, enum maple_type mt,
-  * mas_max_gap() - find the largest gap in a non-leaf node and set the slot.
-  * @mas: The maple state.
-  *
-- * If the metadata gap is set to MAPLE_ARANGE64_META_MAX, there is no gap.
-- *
-  * Return: The gap value.
-  */
- static inline unsigned long mas_max_gap(struct ma_state *mas)
-@@ -1628,9 +1626,6 @@ static inline unsigned long mas_max_gap(struct ma_state *mas)
- 	node = mas_mn(mas);
- 	MAS_BUG_ON(mas, mt != maple_arange_64);
- 	offset = ma_meta_gap(node, mt);
--	if (offset == MAPLE_ARANGE64_META_MAX)
--		return 0;
--
- 	gaps = ma_gaps(node, mt);
- 	return gaps[offset];
- }
-@@ -1662,10 +1657,7 @@ static inline void mas_parent_gap(struct ma_state *mas, unsigned char offset,
- ascend:
- 	MAS_BUG_ON(mas, pmt != maple_arange_64);
- 	meta_offset = ma_meta_gap(pnode, pmt);
--	if (meta_offset == MAPLE_ARANGE64_META_MAX)
--		meta_gap = 0;
--	else
--		meta_gap = pgaps[meta_offset];
-+	meta_gap = pgaps[meta_offset];
+@@ -6983,15 +6983,16 @@ EXPORT_SYMBOL_GPL(mt_dump);
+ static void mas_validate_gaps(struct ma_state *mas)
+ {
+ 	struct maple_enode *mte = mas->node;
+-	struct maple_node *p_mn;
++	struct maple_node *p_mn, *node = mte_to_node(mte);
++	enum maple_type mt = mte_node_type(mas->node);
+ 	unsigned long gap = 0, max_gap = 0;
+ 	unsigned long p_end, p_start = mas->min;
+-	unsigned char p_slot;
++	unsigned char p_slot, offset;
+ 	unsigned long *gaps = NULL;
+-	unsigned long *pivots = ma_pivots(mte_to_node(mte), mte_node_type(mte));
+-	int i;
++	unsigned long *pivots = ma_pivots(node, mt);
++	unsigned int i;
  
- 	pgaps[offset] = new;
- 
-@@ -1678,7 +1670,6 @@ static inline void mas_parent_gap(struct ma_state *mas, unsigned char offset,
- 
- 		ma_set_meta_gap(pnode, pmt, offset);
- 	} else if (new < meta_gap) {
--		meta_offset = 15;
- 		new = ma_max_gap(pnode, pgaps, pmt, &meta_offset);
- 		ma_set_meta_gap(pnode, pmt, meta_offset);
+-	if (ma_is_dense(mte_node_type(mte))) {
++	if (ma_is_dense(mt)) {
+ 		for (i = 0; i < mt_slot_count(mte); i++) {
+ 			if (mas_get_slot(mas, i)) {
+ 				if (gap > max_gap)
+@@ -7004,52 +7005,59 @@ static void mas_validate_gaps(struct ma_state *mas)
+ 		goto counted;
  	}
-@@ -2076,7 +2067,7 @@ static inline void mab_mas_cp(struct maple_big_node *b_node,
- 	end = j - 1;
- 	if (likely(!ma_is_leaf(mt) && mt_is_alloc(mas->tree))) {
- 		unsigned long max_gap = 0;
--		unsigned char offset = 15;
-+		unsigned char offset = 0;
  
- 		gaps = ma_gaps(node, mt);
- 		do {
+-	gaps = ma_gaps(mte_to_node(mte), mte_node_type(mte));
++	gaps = ma_gaps(node, mt);
+ 	for (i = 0; i < mt_slot_count(mte); i++) {
+-		p_end = mas_logical_pivot(mas, pivots, i, mte_node_type(mte));
++		p_end = mas_logical_pivot(mas, pivots, i, mt);
+ 
+ 		if (!gaps) {
+-			if (mas_get_slot(mas, i)) {
+-				gap = 0;
+-				goto not_empty;
+-			}
+-
+-			gap += p_end - p_start + 1;
++			if (!mas_get_slot(mas, i))
++				gap = p_end - p_start + 1;
+ 		} else {
+ 			void *entry = mas_get_slot(mas, i);
+ 
+ 			gap = gaps[i];
+-			if (!entry) {
+-				if (gap != p_end - p_start + 1) {
+-					pr_err("%p[%u] -> %p %lu != %lu - %lu + 1\n",
+-						mas_mn(mas), i,
+-						mas_get_slot(mas, i), gap,
+-						p_end, p_start);
+-					mt_dump(mas->tree, mt_dump_hex);
+-
+-					MT_BUG_ON(mas->tree,
+-						gap != p_end - p_start + 1);
+-				}
+-			} else {
+-				if (gap > p_end - p_start + 1) {
+-					pr_err("%p[%u] %lu >= %lu - %lu + 1 (%lu)\n",
+-					mas_mn(mas), i, gap, p_end, p_start,
+-					p_end - p_start + 1);
+-					MT_BUG_ON(mas->tree,
+-						gap > p_end - p_start + 1);
+-				}
++			MT_BUG_ON(mas->tree, !entry);
++
++			if (gap > p_end - p_start + 1) {
++				pr_err("%p[%u] %lu >= %lu - %lu + 1 (%lu)\n",
++				       mas_mn(mas), i, gap, p_end, p_start,
++				       p_end - p_start + 1);
++				MT_BUG_ON(mas->tree, gap > p_end - p_start + 1);
+ 			}
+ 		}
+ 
+ 		if (gap > max_gap)
+ 			max_gap = gap;
+-not_empty:
++
+ 		p_start = p_end + 1;
+ 		if (p_end >= mas->max)
+ 			break;
+ 	}
+ 
+ counted:
++	if (mt == maple_arange_64) {
++		offset = ma_meta_gap(node, mt);
++		if (offset > i) {
++			pr_err("gap offset %p[%u] is invalid\n", node, offset);
++			MT_BUG_ON(mas->tree, 1);
++		}
++
++		if (gaps[offset] != max_gap) {
++			pr_err("gap %p[%u] is not the largest gap %lu\n",
++			       node, offset, max_gap);
++			MT_BUG_ON(mas->tree, 1);
++		}
++
++		MT_BUG_ON(mas->tree, !gaps);
++		for (i++ ; i < mt_slot_count(mte); i++) {
++			if (gaps[i] != 0) {
++				pr_err("gap %p[%u] beyond node limit != 0\n",
++				       node, i);
++				MT_BUG_ON(mas->tree, 1);
++			}
++		}
++	}
++
+ 	if (mte_is_root(mte))
+ 		return;
+ 
+@@ -7059,10 +7067,8 @@ static void mas_validate_gaps(struct ma_state *mas)
+ 	if (ma_gaps(p_mn, mas_parent_type(mas, mte))[p_slot] != max_gap) {
+ 		pr_err("gap %p[%u] != %lu\n", p_mn, p_slot, max_gap);
+ 		mt_dump(mas->tree, mt_dump_hex);
++		MT_BUG_ON(mas->tree, 1);
+ 	}
+-
+-	MT_BUG_ON(mas->tree,
+-		  ma_gaps(p_mn, mas_parent_type(mas, mte))[p_slot] != max_gap);
+ }
+ 
+ static void mas_validate_parent_slot(struct ma_state *mas)
 -- 
 2.20.1
 
