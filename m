@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9093574E697
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AF174E69B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjGKFzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S230289AbjGKFzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 01:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjGKFz0 (ORCPT
+        with ESMTP id S229845AbjGKFze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:55:26 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70604E4D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 22:55:04 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R0VSv4fc8zBHXhj
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:54:55 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689054895; x=1691646896; bh=aOK/vrvHGfxYdmaAFZxDnwb5Czx
-        72k5Aa/iRkuEQeqU=; b=iTEWhZ6tMGIEqDb4mhgQ29Lun6USjSVBcIOwBvbgExI
-        WvhUHZTQThMy1zg3m69nCieYDRJoRr0nyYvi0liW/gxApwjhhidQ7y/UMgybYiJ4
-        vHqIYWA2HmDm/XzxqdQLRgBvJJOzrHH+I8WujuVurblPT7FiqioNE0TD0GPhGB78
-        r68MkmmEswb9oErbwnxooA9B8fr1RHEGQLPZwfhkxZB66696Ik1rHeoOTrBTL8gR
-        cFrAoPZVRvplcIkX7KM5bqDPRohUtWcPmBZNdH7teLy/S5SY0uvi9RXsRHkaaWlt
-        IE68cihlAti/VaGVhHxcHoZgiQqx4onSeMEQSrcuJ1w==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id flqgRdcjKQ4y for <linux-kernel@vger.kernel.org>;
-        Tue, 11 Jul 2023 13:54:55 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R0VSv1lnQzBHXgj;
-        Tue, 11 Jul 2023 13:54:55 +0800 (CST)
+        Tue, 11 Jul 2023 01:55:34 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262501AC;
+        Mon, 10 Jul 2023 22:55:32 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36B5tMl2041466;
+        Tue, 11 Jul 2023 00:55:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1689054922;
+        bh=yykvZgnCoI6gaQWerwj2eoEr1FlZ4CXV/wzlrynEAUE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=up0SHfiWxC95aybfKVAspgZmAog3rl042L+UD4fS8WE2k/V4Xd/e3j07Ds57fdY8Z
+         bMGWrAgw0OrH746pdE/MfJMWW0QUO8XQCRpAQqLrypFLADJTAaqfdR70lDE2QLrr3E
+         LMqfhtnitfhzwf04QjSh14mJpcS6j1eWGwfndbxw=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36B5tM6u091944
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Jul 2023 00:55:22 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
+ Jul 2023 00:55:21 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 11 Jul 2023 00:55:22 -0500
+Received: from [10.24.68.113] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36B5tImQ058676;
+        Tue, 11 Jul 2023 00:55:19 -0500
+Message-ID: <ecbb6d34-e024-f6c6-5921-ba7bc6fe2e5e@ti.com>
+Date:   Tue, 11 Jul 2023 11:25:18 +0530
 MIME-Version: 1.0
-Date:   Tue, 11 Jul 2023 13:54:55 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau/flcn/cmdq: Move assignment outside if condition
-In-Reply-To: <20230711055304.79441-1-xujianghui@cdjrlc.com>
-References: <20230711055304.79441-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <f5b217c2420c2948bd402e8e36e391a3@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: ti-serdes-mux: Add defines for SERDES4 in
+ J784S4 SoC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <peda@axentia.se>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <s-vadapalli@ti.com>
+References: <20230710102712.155195-1-j-choudhary@ti.com>
+ <d136d58d-9582-3833-861f-086b64c1ad36@linaro.org>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <d136d58d-9582-3833-861f-086b64c1ad36@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following checkpatch errors:
+Hello Krzysztof,
 
-ERROR: do not use assignment in if condition
+On 10/07/23 17:11, Krzysztof Kozlowski wrote:
+> On 10/07/2023 12:27, Jayesh Choudhary wrote:
+>> SERDES4 has 4 lanes. Add lane definitions for it.
+>>
+>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>> ---
+>>   include/dt-bindings/mux/ti-serdes.h | 20 ++++++++++++++++++++
+> 
+> Where are the users of this binding constants? IOW, why do you need to
+> add these?
+> 
+> I don't see users of existing constants either...
+> 
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/nouveau/nvkm/falcon/cmdq.c | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
+These constants are propagated in the idle-state property for the
+mux-controller node (named serdes_ln_ctrl) usually in the final
+board dts files and occasionally in the main dtsi files for TI SoCs.
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/falcon/cmdq.c 
-b/drivers/gpu/drm/nouveau/nvkm/falcon/cmdq.c
-index 211ebe7afac6..a8beb55097a6 100644
---- a/drivers/gpu/drm/nouveau/nvkm/falcon/cmdq.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/falcon/cmdq.c
-@@ -203,7 +203,8 @@ nvkm_falcon_cmdq_new(struct nvkm_falcon_qmgr *qmgr, 
-const char *name,
-  {
-      struct nvkm_falcon_cmdq *cmdq = *pcmdq;
-
--    if (!(cmdq = *pcmdq = kzalloc(sizeof(*cmdq), GFP_KERNEL)))
-+    cmdq = *pcmdq = kzalloc(sizeof(*cmdq), GFP_KERNEL);
-+    if (!cmdq)
-          return -ENOMEM;
-
-      cmdq->qmgr = qmgr;
+-Jayesh
