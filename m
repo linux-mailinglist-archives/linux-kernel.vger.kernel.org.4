@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EB374EA59
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3EC74EA5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjGKJZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S232226AbjGKJZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjGKJZD (ORCPT
+        with ESMTP id S231618AbjGKJZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:25:03 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6C57F1BD2;
-        Tue, 11 Jul 2023 02:20:52 -0700 (PDT)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id BFBE76062ABFD;
-        Tue, 11 Jul 2023 17:20:29 +0800 (CST)
-Message-ID: <c9b37dac-7f13-210b-23f7-57ece0f7d1c6@nfschina.com>
-Date:   Tue, 11 Jul 2023 17:20:28 +0800
+        Tue, 11 Jul 2023 05:25:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EA111AC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:21:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7897B2B;
+        Tue, 11 Jul 2023 02:21:44 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.47.87])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 61B123F67D;
+        Tue, 11 Jul 2023 02:21:00 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64/mm: Directly use ID_AA64MMFR2_EL1_VARange_MASK
+Date:   Tue, 11 Jul 2023 14:50:55 +0530
+Message-Id: <20230711092055.245756-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Intel-wired-lan] [PATCH net-next v2 00/10] Remove unnecessary
- (void*) conversions
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        irusskikh@marvell.com, rmody@marvell.com, skalluru@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, yisen.zhuang@huawei.com,
-        salil.mehta@huawei.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, steve.glendinning@shawell.net,
-        iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
-        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, mostrows@earthlink.net, xeb@mail.ru,
-        qiang.zhao@nxp.com, uttenthaler@ems-wuensche.com,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linuxppc-dev@lists.ozlabs.org
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 16:53, Paul Menzel wrote:
-> Dear Su,
->
->
-> Thank you for your patch.
->
-> Am 10.07.23 um 08:38 schrieb Su Hui:
->> From: wuych <yunchuan@nfschina.com>
->
-> Can you please write the full name correctly? Maybe Yun Chuan?
->
->     git config --global user.name "Yun Chuan"
->     git commit --amend --author="Yun Chuan <yunchuan@nfschina.com>"
+Tools generated register fields have in place mask macros which can be used
+directly instead of shifting the older right end sided masks.
 
-Dear Paul Menzel,
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v6.5-rc1
 
-Thanks for your reminder!
-I have already changed this  to my full name "Wu Yunchuan".
-Should I resend all these patches to change the author name?
-> I only got the cover letter by the way.
-> s
-Maybe the network met some problems.
-I will send this patchset to you separately.
+ arch/arm64/kernel/head.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Wu Yunchuan
+diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+index 757a0de07f91..7b236994f0e1 100644
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -113,7 +113,7 @@ SYM_CODE_START(primary_entry)
+ 	 */
+ #if VA_BITS > 48
+ 	mrs_s	x0, SYS_ID_AA64MMFR2_EL1
+-	tst	x0, #0xf << ID_AA64MMFR2_EL1_VARange_SHIFT
++	tst	x0, ID_AA64MMFR2_EL1_VARange_MASK
+ 	mov	x0, #VA_BITS
+ 	mov	x25, #VA_BITS_MIN
+ 	csel	x25, x25, x0, eq
+@@ -756,7 +756,7 @@ SYM_FUNC_START(__cpu_secondary_check52bitva)
+ 	b.ne	2f
+ 
+ 	mrs_s	x0, SYS_ID_AA64MMFR2_EL1
+-	and	x0, x0, #(0xf << ID_AA64MMFR2_EL1_VARange_SHIFT)
++	and	x0, x0, ID_AA64MMFR2_EL1_VARange_MASK
+ 	cbnz	x0, 2f
+ 
+ 	update_early_cpu_boot_status \
+-- 
+2.30.2
 
->
-> Kind regards,
->
-> Paul
->
