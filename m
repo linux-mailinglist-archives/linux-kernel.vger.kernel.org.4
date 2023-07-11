@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9387774E733
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E84074E785
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjGKGXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S230314AbjGKGrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbjGKGXb (ORCPT
+        with ESMTP id S229469AbjGKGra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:23:31 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428E010E3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:23:28 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so12609119a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:23:28 -0700 (PDT)
+        Tue, 11 Jul 2023 02:47:30 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7391B134
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:47:28 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fbaef9871cso8127563e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:47:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689056607; x=1691648607;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ds4YDY9bzqXKtiOPGD6t4IhnN/cwNEFXlrWZqOw7IxM=;
-        b=iXs38U+gNmaUFaRgwet8MxWdG3goixhRBHKp46WScCOAfu4JgXfCOEBAYlRJF/7hjw
-         LteYkx8oDl8+cwnoM9bRtZU8H4bpsrC2g9exXubo6pfQ+NjdwIsL2efhM5a1hOnUdDRd
-         ahkM6oUuXWAcXlJFesBUMD771v9imOrFxNnL1zEYc/ui/oLoAYDZoy028QSd/IfONI7f
-         bbH7t4VvxLqyM9Acxcl1NSRVIo39wJ+r1UYzGVF2uGMXUQeId6d32/dY7qGFClwFOc4P
-         BsGC6NjKq+TwG9EJ+9YE4Ms9gRt2IvpGa9vt5Q4SVyvFDhP5ioQu0ssAXRyb9rKZgG8H
-         WtAg==
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1689058047; x=1691650047;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=ADRu1k94Szm9V0evY8U5mOQEsmaGQsPDAea7XrGLJeI=;
+        b=FFxn8NDbk1lxoec1Wakuv80G8tu8rb2Dtr9C84hZPr9TRy5ITcpxR1IYx1jC3HaM+h
+         Kkj9lZr6D35Wzxo8fKA1jlL45BCp2upcrX/sZx4eGjzI7Z4hFUtekH6k/lSc/YfU5SR0
+         RIHdrOZaW55YLsHy7XjpuUv+ce0tVhZUNf9l3hYhTk8qWjFxOP1vvWLpecllmXqa7WEB
+         CZ52wuPGSRsWNH4GT+luUbWOHqQWN7sQNNiKNteyxY1po17tCWKtRm+pZ0hmV1ZZoH93
+         9h5+4J9oncrBEr7UeAiVeQ64cgONZYt8Wr2cVDqHTrSqgW44rsfdMvLQnysoryNzIwcZ
+         Avrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689056607; x=1691648607;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ds4YDY9bzqXKtiOPGD6t4IhnN/cwNEFXlrWZqOw7IxM=;
-        b=YkZnlbgwL6aoqQjP0D/CVb2/SFDGmgLJ76GIyX2ZpJetIiSN+rMprPqhiyK1LEFHOT
-         +leA9X67h2vJ3goEZHHeQzfmIOKj3NGHoRFzqX6Bt9GG1I0QZuplkcJWv2IvINoekJDd
-         /w8vj89xkQ5ehbWRBmLXit9pu65XEMo5HyRi/m3l/m+lGmwqU1YQUzvfUID3QTxA1LDH
-         sV/Osh9chZ/VcSoppxmAjh2LF8DKxWDj0tkC6SjnFKl2V6TCKYYr+/zwGNX+7K36tfYE
-         jb58uuij+WpaHMzhVJFioLgiqRiEyufR4oiayPYbjJaAsk8qOfTaczrRDN3LgYA0IHqx
-         BATg==
-X-Gm-Message-State: ABy/qLYf+91IhUYUkcononrUdEZ+2Hil5uuqt3057UO8DsU9BueXo1+i
-        aTR2lL+946l7phpIbnWYi70HUQ==
-X-Google-Smtp-Source: APBJJlGKSwD7Yf1spLBNs3o3iJw2BaYaSdqFnawQzbvU0JTFJRHjhfoPqFLGoDqboNr2MwAToLlnyg==
-X-Received: by 2002:a17:906:1041:b0:992:8d96:4de3 with SMTP id j1-20020a170906104100b009928d964de3mr21166193ejj.24.1689056606678;
-        Mon, 10 Jul 2023 23:23:26 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id hb7-20020a170906b88700b009925cbafeaasm687544ejb.100.2023.07.10.23.23.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 23:23:26 -0700 (PDT)
-Message-ID: <f27a692e-460c-9a9b-0afc-ad9a71ab4262@linaro.org>
-Date:   Tue, 11 Jul 2023 08:23:24 +0200
+        d=1e100.net; s=20221208; t=1689058047; x=1691650047;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ADRu1k94Szm9V0evY8U5mOQEsmaGQsPDAea7XrGLJeI=;
+        b=YyHcc0wf3461Ys9UFkOTSgdPNQIxxfx0kmKYDl8OlgUxAHRleyEinLeiFZS6J1d5sv
+         BI3MhV5M+CHjDJUGYCBx2LmSjJKuUQC9Ou1gWJkPNCrtAEihWvBfcUh2AC8G+eB0nI7X
+         5wL4BAktRk9s0iRpAeedSYbS47Od7/A1k8psjy+ri2YedPCnqJ+1hqbvSnRR4VLu2C+R
+         1Qt7fXvldrJ4q6sVOziiDfB4wKNyxszCdVQAUaVShE8b7p0O8hDwzB+MX6BIDs4sKIzI
+         1kyfmoKeHjLSkG2WPBbK7rUFk0tt0V1p6aorTqK3YTSvNUiRJd/R79UCHjsIIZBwys/J
+         sCrA==
+X-Gm-Message-State: ABy/qLY5rsdfWazc4B8BaxXoO5ss22RVxDUlokdVGymsDDpXzKEwpFD4
+        mGAy1KMloimkKHdmetVwN1niYsnQDKSMsvqea30=
+X-Google-Smtp-Source: APBJJlHxhvIChcTAwsEU9f19qUxlQmDyBugZNnIlEsKQig5XHaBQ9lHr0WXdhjrIG6brgbIIGeXmbA==
+X-Received: by 2002:ac2:4f06:0:b0:4f6:2a02:fc1a with SMTP id k6-20020ac24f06000000b004f62a02fc1amr12549137lfr.17.1689058046058;
+        Mon, 10 Jul 2023 23:47:26 -0700 (PDT)
+Received: from localhost ([185.108.254.55])
+        by smtp.gmail.com with ESMTPSA id u22-20020ac243d6000000b004fbbf9e58bbsm192834lfl.126.2023.07.10.23.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 23:47:25 -0700 (PDT)
+References: <20230706130930.64283-1-nmi@metaspace.dk>
+ <20230706130930.64283-2-nmi@metaspace.dk>
+ <51b660f3-8145-d35e-87b4-d9ac0623606d@kernel.org>
+ <ZKdjVxMT/sVUA5BV@ovpn-8-34.pek2.redhat.com>
+ <ZKuqt6QAXic3wuRX@infradead.org>
+ <ZKvO+81b9fAx2L/r@ovpn-8-31.pek2.redhat.com>
+ <ZKvQPAN9OkS3dZ4d@infradead.org>
+User-agent: mu4e 1.10.4; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        gost.dev@samsung.com, Jens Axboe <axboe@kernel.dk>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>
+Subject: Re: [PATCH v6 1/3] ublk: add opcode offsets for DRV_IN/DRV_OUT
+Date:   Tue, 11 Jul 2023 08:23:40 +0200
+In-reply-to: <ZKvQPAN9OkS3dZ4d@infradead.org>
+Message-ID: <87a5w3ymff.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Add PMX75 compatible
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1689054415-11281-1-git-send-email-quic_rohiagar@quicinc.com>
- <1689054415-11281-2-git-send-email-quic_rohiagar@quicinc.com>
- <8eb986f2-3268-65cd-9210-ef1fca4f8259@linaro.org>
- <fc054877-52c6-9e61-8572-3068c53a86de@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fc054877-52c6-9e61-8572-3068c53a86de@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 08:22, Rohit Agarwal wrote:
-> 
-> On 7/11/2023 11:35 AM, Krzysztof Kozlowski wrote:
->> On 11/07/2023 07:46, Rohit Agarwal wrote:
->>> Add PMX75 compatibles for PMIC found in SDX75 platform.
->>> While at it, update the entry for SDX65 as well.
->> Everything is an update...
->>
->>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>> ---
->>>   .../bindings/regulator/qcom,rpmh-regulator.yaml    | 22 +++++++++++++++++++++-
->>>   1 file changed, 21 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->>> index b949850..72b533c 100644
->>> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->>> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->>> @@ -53,6 +53,7 @@ description: |
->>>         For PMR735A, smps1 - smps3, ldo1 - ldo7
->>>         For PMX55, smps1 - smps7, ldo1 - ldo16
->>>         For PMX65, smps1 - smps8, ldo1 - ldo21
->>> +      For PMX75, smps1 - smps10, ldo1 - ldo21
->>>   
->>>   properties:
->>>     compatible:
->>> @@ -84,6 +85,7 @@ properties:
->>>         - qcom,pmr735a-rpmh-regulators
->>>         - qcom,pmx55-rpmh-regulators
->>>         - qcom,pmx65-rpmh-regulators
->>> +      - qcom,pmx75-rpmh-regulators
->>>   
->>>     qcom,pmic-id:
->>>       description: |
->>> @@ -424,10 +426,28 @@ allOf:
->>>           vdd-l11-l13-supply: true
->>>         patternProperties:
->>>           "^vdd-l[1347]-supply$": true
->>> -        "^vdd-l1[0245789]-supply$": true
->>> +        "^vdd-l1[024579]-supply$": true
->> Why? Does not look related at all.
-> This update is because sdx65 does not have vdd-l18-supply separately and 
-> its
-> already part of vdd-l2-l18-supply property mentioned in the properties 
-> field.
 
-Which was not explained in commit msg and is anyway not related. It's a
-separate commit.
+Christoph Hellwig <hch@infradead.org> writes:
+
+> On Mon, Jul 10, 2023 at 05:27:23PM +0800, Ming Lei wrote:
+>> Yes, that is exactly what we are doing.
+>> 
+>> The added macros of UBLK_IO_OP_DRV_IN_START[END] are just for supporting
+>> more ublk passthrough commands, and the motivation is for running
+>> check(such as buffer direction) in two sides easily.
+>> 
+>> However, I think it is just fine to delay to add it until introducing
+>> the 2nd ublk pt command.
+>
+> The concept of a passthrough command just doesn't make sense for an
+> on the wire protocol.  It is a linux concept that distinguished between
+> the Linux synthetic command like REQ_OP_READ/WRITE/DISCARD etc that are
+> well defined and can be used by file systems and other consumers, and
+> ways to pass through arbitrary blobs only known by the driver.
+
+Yet most on-the-wire protocols for actual hardware does support this
+some way or another. But I agree that for ublk it is probably not
+needed. It would probably be easier to talk to the ublk daemon through
+other means than passthrough in the block layer.
+
+>
+> Anything in a wire protocol needs to be very well defined in that
+> protocol completely indpendent of what Linux concept it maps to.
+> Especially as the Linux concepts can change, and fairly frequently do.
+
+I somewhat agree in the sense that for consistency, we should either
+move zone management commands to the DRV_OUT range OR move report_zones
+out of this special range and just next to the zone management
+operations. I like the latter option better, and I would love to see the
+block layer do the same at some point. It feels backwards that
+report_zones get special treatment all over the place.
 
 Best regards,
-Krzysztof
-
+Andreas
