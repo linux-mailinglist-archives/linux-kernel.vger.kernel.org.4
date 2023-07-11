@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D358174E374
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA2674E373
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjGKBc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
+        id S230344AbjGKBdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjGKBcw (ORCPT
+        with ESMTP id S230133AbjGKBdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:32:52 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16427E1;
-        Mon, 10 Jul 2023 18:32:52 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-682a5465e9eso783651b3a.1;
-        Mon, 10 Jul 2023 18:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689039171; x=1691631171;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4mZl1Y9YHRHZRxB2AgpQIwspSSAT36JhGWtaQr0C5zk=;
-        b=ORPjCFvSenYCY96eSBT3Lb+fHoeLz5RxH+MrnS5b8QRje+4nlRZJYHVnyXnae8CNTn
-         ytX+J7gdtvUwRzHAfgLtAgAA9Drdzn5PCjgbtIF96v8QZs5a4xHoYYx8WpBWQ34ZUHTc
-         OQa0W0ppiu7SXiKx7fchmi8v5W9Ms17wO5pHt43/NgIgUDgaJgl+xuRLMTXJwpaz0DfS
-         Q+cO7UYMYDr5Q4kfu9UqRRHGxSJq14lFmFej1RQquZWaeNseOD5PpZYvaqTJ0ka5A0eZ
-         lSGgC+w68RbLlJrMDOMPoQIY8bmG/u08+Zkzq+5v3F8up7d2RSVcrqGMv1ZhW4ZImXus
-         odyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689039171; x=1691631171;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4mZl1Y9YHRHZRxB2AgpQIwspSSAT36JhGWtaQr0C5zk=;
-        b=byAj2HN6pNdRSDZ5U4tVYPZEznXoMiMu9myAr4OY6Xba4qMkRoe6skcCwPoirjmlVs
-         JN0ixj43WQkEkuyK1t2AF1kMGk0Oh8bu2CROuuTsTZ9tFQByPDngXqGwsdafM2h2VfBV
-         1fAs7i7oy0DQQftA/aIjh6+pYhgMIDtqMHppuprIgkRlu+xQZGHxlT03GUy60rb8W6w5
-         gH/o2ubjeZZ2iwf0RDcGOdiUy5+Xg80sUrYTITvu2hUWEYtGapQ9KenuCoFcKdIoTZCv
-         nW13FKjucWlhcA9R7a7qmojQQcpJd7ZsGLf/6wwmUhmVxZyNQgTVKYpGsUMTphIXXHcP
-         qOuw==
-X-Gm-Message-State: ABy/qLbbR3o3uXI8pYt96hU0Mkvp2v0a3PPuZG4nS9MQe1OI6RL3za9a
-        rEIU/TZolmkiFEmfI33LMcI=
-X-Google-Smtp-Source: APBJJlEGaYXJ5KHiZsA8LKfZ2cmcSR5WIWjv2TGSMfH74oHT48AWQyVZa6UpAh9EZCWTtRzQUvvYZw==
-X-Received: by 2002:aa7:911a:0:b0:67f:ff0a:1bbb with SMTP id 26-20020aa7911a000000b0067fff0a1bbbmr14347641pfh.1.1689039171267;
-        Mon, 10 Jul 2023 18:32:51 -0700 (PDT)
-Received: from localhost.localdomain (sfosm0151r356001-v22.wiline.com. [67.207.106.98])
-        by smtp.gmail.com with ESMTPSA id d190-20020a6336c7000000b005533b6cb3a6sm341815pga.16.2023.07.10.18.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 18:32:50 -0700 (PDT)
-From:   Suhrid Subramaniam <suhridsubramaniam@gmail.com>
-X-Google-Original-From: Suhrid Subramaniam <suhrid.subramaniam@mediatek.com>
-To:     mchehab@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     suhrid.subramaniam@mediatek.com, suhridsubramaniam@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: v4l2: Fix documentation for 12-bit packed Bayer
-Date:   Mon, 10 Jul 2023 18:31:40 -0700
-Message-ID: <20230711013140.54080-1-suhrid.subramaniam@mediatek.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 10 Jul 2023 21:33:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3EDE3;
+        Mon, 10 Jul 2023 18:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0248C612AC;
+        Tue, 11 Jul 2023 01:33:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6FDC433C7;
+        Tue, 11 Jul 2023 01:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689039189;
+        bh=QDRQnHoafNPtNndmmJCDWbHEn5BC5mW3Cf6B9Yi5nl8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=l8YVL43Fe8WkS6hWTx2bCObBHxOUXiVmbo5XicQGBS+PjHV6Lo2azCINCXtGiXKDa
+         y5aoJ+mlPz6Ar8RSzrA3Na96HB9HijQCsCAEPS0dIMBdT26HJ96jM/+ghOzscwmXc1
+         n2zjXqIiPtktTjUO90LIM+SlUBz2xE8Kq7qz5byNveFSme2/TiwKWlQ11tFlptm0fX
+         EhDoZOaAGG5lII2TNWKgE+Qmznz+4DanrLE0y9FvIEm/t0VUvexenmMM83bxiN34zr
+         rr62LTaB4MjT2fNEv+1pj0Y3mPkI2iilPM2hgzBPHDJvzxYIWS2WihwNfD49BqMg4Q
+         glb+i/SGPeLzQ==
+Date:   Tue, 11 Jul 2023 10:33:03 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, ndesaulniers@google.com
+Subject: Re: [RFC PATCH 0/2] x86: kprobes: Fix CFI_CLANG related issues
+Message-Id: <20230711103303.287af608cc47dcf70d709070@kernel.org>
+In-Reply-To: <20230710155703.GA4021842@dev-arch.thelio-3990X>
+References: <168899125356.80889.17967397360941194229.stgit@devnote2>
+        <20230710155703.GA4021842@dev-arch.thelio-3990X>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,34 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix documentation for R13 and R33 low bits.
+On Mon, 10 Jul 2023 08:57:03 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Signed-off-by: Suhrid Subramaniam <suhrid.subramaniam@mediatek.com>
----
- Documentation/userspace-api/media/v4l/pixfmt-srggb12p.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On Mon, Jul 10, 2023 at 09:14:13PM +0900, Masami Hiramatsu (Google) wrote:
+> > I just build tested, since I could not boot the kernel with CFI_CLANG=y.
+> > Would anyone know something about this error?
+> > 
+> > [    0.141030] MMIO Stale Data: Unknown: No mitigations
+> > [    0.153511] SMP alternatives: Using kCFI
+> > [    0.164593] Freeing SMP alternatives memory: 36K
+> > [    0.165053] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b
+> > [    0.166028] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.2-00002-g12b1b2fca8ef #126
+> > [    0.166028] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> > [    0.166028] Call Trace:
+> > [    0.166028]  <TASK>
+> > [    0.166028]  dump_stack_lvl+0x6e/0xb0
+> > [    0.166028]  panic+0x146/0x2f0
+> > [    0.166028]  ? start_kernel+0x472/0x48b
+> > [    0.166028]  __stack_chk_fail+0x14/0x20
+> > [    0.166028]  start_kernel+0x472/0x48b
+> > [    0.166028]  x86_64_start_reservations+0x24/0x30
+> > [    0.166028]  x86_64_start_kernel+0xa6/0xbb
+> > [    0.166028]  secondary_startup_64_no_verify+0x106/0x11b
+> > [    0.166028]  </TASK>
+> > [    0.166028] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b ]---
+> 
+> This looks like https://github.com/ClangBuiltLinux/linux/issues/1815 to
+> me. What version of LLVM are you using? This was fixed in 16.0.4. Commit
+> 514ca14ed544 ("start_kernel: Add __no_stack_protector function
+> attribute") should resolve it on the Linux side, it looks like that is
+> in 6.5-rc1. Not sure if we should backport it or just let people upgrade
+> their toolchains on older releases.
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-srggb12p.rst b/Documentation/userspace-api/media/v4l/pixfmt-srggb12p.rst
-index b6e79e2f8ce4..7c3810ff783c 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-srggb12p.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-srggb12p.rst
-@@ -60,7 +60,7 @@ Each cell is one byte.
-           G\ :sub:`10low`\ (bits 3--0)
-        -  G\ :sub:`12high`
-        -  R\ :sub:`13high`
--       -  R\ :sub:`13low`\ (bits 3--2)
-+       -  R\ :sub:`13low`\ (bits 7--4)
- 
-           G\ :sub:`12low`\ (bits 3--0)
-     -  -  start + 12:
-@@ -82,6 +82,6 @@ Each cell is one byte.
-           G\ :sub:`30low`\ (bits 3--0)
-        -  G\ :sub:`32high`
-        -  R\ :sub:`33high`
--       -  R\ :sub:`33low`\ (bits 3--2)
-+       -  R\ :sub:`33low`\ (bits 7--4)
- 
-           G\ :sub:`32low`\ (bits 3--0)
+Thanks for the info. I confirmed that the commit fixed the boot issue.
+So I think it should be backported to the stable tree.
+
+Thanks!
+
+> 
+> Cheers,
+> Nathan
+
+
 -- 
-2.41.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
