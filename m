@@ -2,147 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4596274EDBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50EA74EDC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjGKMLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S230124AbjGKMMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjGKMLG (ORCPT
+        with ESMTP id S229786AbjGKML7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:11:06 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2065.outbound.protection.outlook.com [40.107.22.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7994B199A;
-        Tue, 11 Jul 2023 05:10:45 -0700 (PDT)
+        Tue, 11 Jul 2023 08:11:59 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::60e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04224E5C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:11:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AZ/6yluBcCTRCCSUE2ybu3EvDw7RpTzOL1Vq0CMeyEDA4Gsy+QtI4NSIozeg+B7PFQsJo72uoHseLb7S0adTF7V3flTH81SK4pY4He+1EX7jvGejijeDhJUY8NyAL+zN55zZlh0FcNEnMZ7E+9OhL+itITCd9HdWIBzNVuOmzwRMY/uFSqjwAq63iHF/vzZsZpFkSap4X4crgHYPQ656bJF5yDm4Qtp4ZyxzHUfAeA90CuZdGYVQp2fqDpD3s/ePv+TJ6bV54kuF3YGJcrTxhxvYkE9sOuyyw2p2HxuABjrpUXJYi0empylEWcrqtar5TITl5j4rA+lXuCo6nRV9VQ==
+ b=ZYHJVUPFlqQkrQ+woeCl94pmbCexJRBOMqORFjqDoNowRyrEsuKf17Kmr2M+IJe12V4JtTmcaQJi+4JqLFsCENrTw60GhX5Z049lr0YkIVLrjfamZ5FFKdp7Qtti6FpkXnoZxNIKj5yxVt7eHZFy1htAfnv29ICA31TfA4W21UtQZCMJvtNAJWA/0eJd0ob5XpDhpj/clu9lcLxoTH3poweyzVdJMZjwJ/6M2HAl3/Qtm1Lk+xTHnH9GDo+xayT2hk3e3/vDwr8qm0MPHaE7MBAr7Mb9M2SYPl0t2+l9TsLHjWZD9vL5DUXnR94cEoImDz4YnEWCIb8Y05SEOR8y6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s5eR0aH52igag3fy26IyIL97T02paCXN9wSwNlqwJaw=;
- b=Sbsb/t0+cF7mfnu+BAebhEOQAOewHHduH11m0RS+lPLNqVBYFmdT/c55pEQONqc5ETR0XN4Mb0UJdMrZgmjr8QPc7kWh+9947zMqFesbazJ/+7D4miRtiCpCvsCgc/rgMjQEn8C80VUsL/yfjmLfI3Na9L3TX6UntkaufJhKoOzwLwOozYRZHSBwN0wToXcr7IR3sW5oAOBpVCcdcD76wipNmymNGAfdm5rqIHQ/muiwAKnPtL/lKTWVyHfh2YNdR/p9umREOB0RXt0HZ7mK4dnVJEfo8YmX4+pWHd17H6Bbp441WJ6CUDojQflKKS4Gf2WMFFiUKhUdf72LBzMNLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
+ bh=qLrNFMCxVRX0O8KvLO/ex4aoiBGVy2dkSXzIsPr6KF4=;
+ b=OJ7bf0xpA9LM6t8/UNKgk4JigHD+WmT2Au5VoWa/I/UtPAQbVQwuoG+sF0Tls3rRcTGZiXPj+aUAe/IP4gUAC2Pp+/q3ml7nYDkAJlEv8YizWh5VKNYzv41gcNz5srbKxmM/2up9XYTJ9X3SIL+kfHbT6zBLvO9vElJvAPdBtTbTQLfIjxgbKPysf+O4psbmtBNSuytTp5+cm7Gmd1EaEZfuHH4rf6/yELnSUWbrhGw+jI2yx9udhgxrRf4mD9jR9iCHF8zLsF10hWw7DEPT2qptV8F/51X3t+EQqZC+DzxYYHVB7vUiB/krGeu1/ZTseL5beKMNsoaFKOmG8kwGtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s5eR0aH52igag3fy26IyIL97T02paCXN9wSwNlqwJaw=;
- b=WijPPNlnaCaDGPVdAEQ1FcKQ0cg0TwGYQuGpWC807z4OGJNWu/36+bbamwLI+7J8/QPZsmofF1+F7X0LMDSxy+ZW/Tu9Dgnl7GY68zlivZl0cTTLRQfU3Xvv6Jxu14H6eMipddL9gXuqhVpN7yri2Owiy9iigN8g+VAwVqwsQY2DJSR6uxjYMcA4qLJJWgVN0re0lQoiPvv7jql3Yw5hg/4PH4M002YBYSvSlHNlHtODGDZj7xz8xf6VAUmp4orK1ml+s5IbcHL6QddaDEdgeEGs3NnJg85+a8x1OGAqoygz+C+45Po6txvTyY3igRb72n0J3n6UmHfXEPapoQbFeQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by DU0PR10MB6653.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:403::13) with
+ bh=qLrNFMCxVRX0O8KvLO/ex4aoiBGVy2dkSXzIsPr6KF4=;
+ b=UJlAe7bpje+D70PDjON7pOKK04r0faVxffd/iHW/QsJe8rCAgeglt0IRjyZ3EZ0E0wrMkvKVPYw6VgvpLJEuyyfOP3tqiLBlK7J/zgB1cAaAaW95zoqcwBCOjtw4BV3Vdh8xnH6rHENCyDEGgSQtL7XubXiRO7qvvFApwMEPTkA=
+Received: from MW4P221CA0003.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::8) by
+ LV8PR12MB9232.namprd12.prod.outlook.com (2603:10b6:408:182::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Tue, 11 Jul
- 2023 12:10:30 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29%6]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
- 12:10:30 +0000
-Date:   Tue, 11 Jul 2023 14:10:19 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     Tobias Schaffner <tobias.schaffner@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH 0/2] platform/x86: simatic-ipc: add another model and
- hwmon module loading
-Message-ID: <20230711141019.05ea532a@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20230711120842.30044-1-henning.schild@siemens.com>
-References: <20230711120842.30044-1-henning.schild@siemens.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0044.namprd03.prod.outlook.com
- (2603:10b6:610:b3::19) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32; Tue, 11 Jul
+ 2023 12:11:47 +0000
+Received: from CO1NAM11FT020.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b:cafe::fd) by MW4P221CA0003.outlook.office365.com
+ (2603:10b6:303:8b::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32 via Frontend
+ Transport; Tue, 11 Jul 2023 12:11:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT020.mail.protection.outlook.com (10.13.174.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6588.20 via Frontend Transport; Tue, 11 Jul 2023 12:11:47 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 11 Jul
+ 2023 07:11:43 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Tue, 11 Jul
+ 2023 05:11:42 -0700
+Received: from xhdipdslab59.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
+ Transport; Tue, 11 Jul 2023 07:11:40 -0500
+From:   Abhijit Gangurde <abhijit.gangurde@amd.com>
+To:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>
+CC:     <Nipun.Gupta@amd.com>, <nikhil.agarwal@amd.com>,
+        <puneet.gupta@amd.com>, <git@amd.com>, <michal.simek@amd.com>,
+        Abhijit Gangurde <abhijit.gangurde@amd.com>
+Subject: [PATCH 0/4] cdx: provide sysfs interface for cdx device resources
+Date:   Tue, 11 Jul 2023 17:40:23 +0530
+Message-ID: <20230711121027.936487-1-abhijit.gangurde@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|DU0PR10MB6653:EE_
-X-MS-Office365-Filtering-Correlation-Id: b68c6115-7db9-4453-0d33-08db8207d223
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT020:EE_|LV8PR12MB9232:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68fe6947-6f45-4d98-2f40-08db8207ffed
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 14EgqBnPNSr4lVVlEGnkLHGs7KvBqLRBa1jEK2Mt0ddX1OvwPIZF2WSuqLmZsqW+7brkQ/o0PeKAvj60npq4aEzvRW6kSwykVovY37FRCqL8yHZ6Rp4AXuRP4sP1sXg/1dPAYMyzcCa/96rQERQKJcP1Q5agVrS5LPagbK6mm5NdgPxwCJGFr4ICNRyHdsHkzVM9YXjR8B8d4be4XvT3d0mkPmNCwwX3dUgZlQO4oP8gX9XXZ0oH/Aw7skAlhpMBO45nQOfvNwHoB2hwgQbw5MmOD0dlO6vMydq5VYuenfvJlflitaL8OTMZGW2QwC8KoXvcW2YR92fAKzy4p42Oefzxc74kMsg2Vvm0KKxMGhc+KTtX5CJsZvcEsVhR5TOpJD/N/qUEN1GYvFMl3qAmQfTu4poARZ+0b66+erT8McFaXxxbA2/zVWpaanEAsIblP3j6MH6/XXWW1rnu3wgqE2o9JvxQzf8Hs9dgSv+Iq/kpGzb8Nxn/XWO+OHNXlUKS7+uOqo+izJPmvxRKeTzLav2L5KGdJPZ936fMhfBndLRmv5aY/xIbUmiBNW74naxj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199021)(38100700002)(82960400001)(86362001)(6666004)(6486002)(110136005)(54906003)(66946007)(107886003)(1076003)(6506007)(186003)(9686003)(6512007)(44832011)(5660300002)(2906002)(66476007)(478600001)(4326008)(66556008)(8936002)(8676002)(83380400001)(4744005)(316002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fKMGLW0m9DlRA/MagRael9yjBjdqsp5Nl//3DC9WrnaRBAT/EjZfSDmrf4p2?=
- =?us-ascii?Q?KQ+Ii/SJMfVoR4kLcARtPZTBtIT5ufiKRH+bG7d4iI4mZbvg8o+TgzMDpo4t?=
- =?us-ascii?Q?mp8RhgVNTMUk43E9WBbSAVXJEYCVBa+yAo5U+xEsVArVYSsP/BCJi1d0lH9l?=
- =?us-ascii?Q?R+aNjqc2IvETZ0fqWNw5NC8HfmO3Z9O3cRaxoNjGl/S60Buf8AQ43kR5un9H?=
- =?us-ascii?Q?c0JWMmFQ75FF/jh2HEKrVkVjphiB77u7iccDiQnbRDxbraz6495cZWtO+cnN?=
- =?us-ascii?Q?RHf0f2W9iuM4lGVK9WtM69oCLuiSFzh2E5DpVlR3N1S9KCC58sNswMTpsLZ+?=
- =?us-ascii?Q?tZ4k+hmiAAnR8UEPSUE3aOVK793NFzaeJYQecEi7w+c2Gygut42Go9MQrT4u?=
- =?us-ascii?Q?Fahwj+KMZ2wBy8kkphlJsLTW+6yhDv8Xu0Gb120qAuK24rIcedohLFfwVOAO?=
- =?us-ascii?Q?yGy8ShcRtjIv6fjINzHGCaoH5OKh+WPzB4xfcjaZInmALGkaWxkLVtaU1ERx?=
- =?us-ascii?Q?v51Dt/UnN/gU+NI7lmciO2n9mOUM5kd50paRGXq0hUtBFQQBWyYF3RflMKUT?=
- =?us-ascii?Q?hVKkjV1bCuok6bdwHVBKbdNImWqF8SJWIT8Qf4NNC6MwK4OokI6eQ9Qsh7/H?=
- =?us-ascii?Q?NQ//U5Y/5/kUpPE/3lOD9YprgQhgbNqpa/2PIoWNAiJ6Y+0nWQZ/BhgAqRkh?=
- =?us-ascii?Q?IHe1IBnv0js41yoD1f6n6eyVMZpC1yqGNLd8Ansml18uECX+HY0NS64fZHtE?=
- =?us-ascii?Q?1Fx9UMRBE2canShFA/j6Zgl/fGQ7j308QsFyj7Xj5W57d532CgQfsIYOdGjF?=
- =?us-ascii?Q?lhi3SumHK+giwlY/0ZORUPCzy2HqftSJiQ6uVHY9AxDx2Skyra5TK4p+dPb6?=
- =?us-ascii?Q?GB+nKQfvieRhC7kPYWG4OEqe8Vzi4Y5U9BOV4we8rD3dJdj9+V1lLHY0G5Na?=
- =?us-ascii?Q?zXFcQRl1aZxjJtrav6uxBRYAh6MTOXv+Rf8TuKfL+1FbqOpU0YrbNBwLWPH2?=
- =?us-ascii?Q?3GUqouM1eDI38T47b7wu5rJ7ktc5crqeNXqACXaRvzpgfck4fnmzEk1E+/gD?=
- =?us-ascii?Q?FqzGHEOjPUulWTMxozR9N5ehyKGGMg+XlM3vjA30ZKNZYCsmUK563NaXOeZR?=
- =?us-ascii?Q?O5xU5Pn95oRWjQnhpxoIkVEDSaB8Okx+TxjjyPEAaV9BmZoMC3vPepnUa43O?=
- =?us-ascii?Q?ETSm7v5K1g2+8RzEuMEbI5jUbSp7Mb+XEIKWSBTGzjwZFQYhsI9ZQjXzsEtL?=
- =?us-ascii?Q?p0+NpZzLasGK3frvKuns5YIPEVZBkQlthr2SXjO/Af9Iw+w5GHljsVXmvARG?=
- =?us-ascii?Q?/AbhUidj61Cg0Y+tevGvlWYEjByzljKltuQ7b2IV6lIqlq6JnZ8XRZoHH8vW?=
- =?us-ascii?Q?6MPMYAWF8w1ItMa7aONTyxIbRpl9EPuk3oX9x3eDCQJ76Q3hGTrV+T80IbWS?=
- =?us-ascii?Q?M2OVq/nkFb+T3gOk1SO2WZ7hWqs8M0NtRPEcnTAkzUOtOYdcu4TzUt8yHZUv?=
- =?us-ascii?Q?uMbpxm6eG0Cctz1V1cISUoATHarj4Ibjn6PouAEKZmPhH+cPI+C5W+l6gfxU?=
- =?us-ascii?Q?rLm7XEvzBrO8sIqW2zZ/d+jAzVyo9lYqDWqO7w2YnKLKzql6feRbJdyanoTr?=
- =?us-ascii?Q?Or7H2WQxXL/6PAol2bFkGOe0nWadDhvOZSY5mTD9MCedLIQm4QdRvRHBPG5l?=
- =?us-ascii?Q?YZ/fiw=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b68c6115-7db9-4453-0d33-08db8207d223
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 12:10:30.7877
+X-Microsoft-Antispam-Message-Info: vkNBpTDnQE3wkfZhEhjFiDHiFLzHGmeA6OV68uygoEN3jlfwbSyj+QFbY+e0BLMHoX/B6vblphC6zMEUEmP/h0Bw/H1+2iBzFbYO6MVdQv05YBP4J8BeX5fzsB7NwRt2MDO7ztzN8dneFZExL7rsSQP+vmSAp2MX466ihw6L7Z+Aap+SdbDQslhp6lKCFNXIf5SUdPLEA1XjSTAiQhxaMmlZ/FVD4MABrwOjnGDJ+ghyeS7sRyh5RsKucPts59BMStlQqWDcMryNzCxppmxga0Bd6psHunYfycN8qhjt2FsxYHVuGiyAGz20yrV2QZYpbKJZsqGJsgEPuXTR1ev2up4BiKddGcMFMplmXgaOTEgiUiz5eLb2DZDjz2OLSXMhocO+/eDFNSym++J6pmyLai1QhCGMbXz39BzUHek1WeYmR1EKsjE61eA20lzjZr1avCdKTKXlb8+FCtEXDDTo36IW9JxyeLDx3Dywm/Q6AReW80neo1tEtfg3hKHxq6+ghBPfbn1KDHU/+AfPkB7/g1m+eynNgyNRGi57Ifpddlwuu6L7FHN+QwbZKEBA8w/yc4QXVKb8ozapAb5vpOmLbBCskVSTHhMfEU9w/wpax0B17kfdpHoXSR01CkdqRvQn0TCCAZonEcfLBv5zJQ/92nriL/GfEEbp5FyaekvLO7ktHUL0Boe3pBpqomehNuq+PX8MSLk2d5vxGQsicFViAthsAE7XHb7mx+K22comviCXrbjz+yxCz35uMFvKv6Yv5Puoe9wrpana1gddGEDGmg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199021)(36840700001)(40470700004)(46966006)(336012)(82310400005)(316002)(6666004)(44832011)(110136005)(4744005)(81166007)(54906003)(4326008)(40480700001)(478600001)(40460700003)(2906002)(36756003)(356005)(70586007)(70206006)(82740400003)(426003)(2616005)(83380400001)(186003)(36860700001)(5660300002)(8676002)(8936002)(47076005)(41300700001)(86362001)(1076003)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 12:11:47.1610
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7UQLq3fUXu/bYzHyvs0fnutp499B/++PiRTZqQBoRkmknXTwzxaHvUJS7klyfH9FBwSCO0EBJ5AdzPXgSYg8sHWmrsNxR6fBhz9I03fyhPQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6653
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68fe6947-6f45-4d98-2f40-08db8207ffed
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT020.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9232
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Tue, 11 Jul 2023 14:08:40 +0200
-schrieb Henning Schild <henning.schild@siemens.com>:
+This patch series provides sysfs interface to
+ - enable and disable of cdx bus
+ - reset_all for all the devices on cdx bus
+ - resource files for cdx device
+ - subsystem, class and revision for cdx device
 
-> The second patch loads modules for hwmon support, should they be
-> available. That will save users the need to detect and manually load
-> those modules after a machine has been clearly identified by its
-> Siemens Simatic IPC station id.
-> 
-> The first patch just adds a device that is pretty similar to another
-> one we already had here.
+Abhijit Gangurde (4):
+  cdx: add support for bus enable and disable
+  cdx: add sysfs for reset_all
+  cdx: create sysfs resource files
+  cdx: add sysfs for subsystem, class and revision
 
-Note that this is based on
-"platform/x86: add CMOS battery monitoring for simatic  IPCs"
+ Documentation/ABI/testing/sysfs-bus-cdx |  82 +++++++++
+ drivers/cdx/cdx.c                       | 223 +++++++++++++++++++++++-
+ drivers/cdx/cdx.h                       |   8 +
+ drivers/cdx/controller/cdx_controller.c |  27 +++
+ drivers/cdx/controller/mc_cdx_pcol.h    |  54 ++++++
+ drivers/cdx/controller/mcdi_functions.c |  31 ++++
+ drivers/cdx/controller/mcdi_functions.h |  16 ++
+ include/linux/cdx/cdx_bus.h             |  43 ++++-
+ include/linux/mod_devicetable.h         |  10 ++
+ scripts/mod/devicetable-offsets.c       |   4 +
+ scripts/mod/file2alias.c                |   8 +
+ 11 files changed, 502 insertions(+), 4 deletions(-)
 
-Henning
-
-> Henning Schild (2):
->   platform/x86: simatic-ipc: add another model
->   platform/x86: simatic-ipc: add auto-loading of hwmon modules
-> 
->  drivers/platform/x86/simatic-ipc.c            | 19
-> +++++++++++++++++++ include/linux/platform_data/x86/simatic-ipc.h |
-> 1 + 2 files changed, 20 insertions(+)
-> 
+-- 
+2.25.1
 
