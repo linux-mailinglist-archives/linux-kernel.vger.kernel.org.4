@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E5974EB32
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B345074EB3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjGKJzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S232072AbjGKJ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjGKJzL (ORCPT
+        with ESMTP id S231618AbjGKJ4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:55:11 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA87A1;
-        Tue, 11 Jul 2023 02:55:09 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B7mZns018506;
-        Tue, 11 Jul 2023 11:54:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=DdmwbcwKjdUOujh3dcjygwnoj2wjLr34qkQHdcWvyA8=;
- b=uFTS/by5O6AZ4wmuDrELGNEuEVirQHvqHkLLuMrvZUq/e2+GgD2Ququ4MouK7c20mS3D
- IadAR81PQdYWPswoOCpEzesJfJIW9ua1qJb4rIfCJGv1sm9A9A25qveIAPujxTVwImr8
- 5del0PYNYVIF8CadxOBuILKB0JNJxI3+IsVQX8GyUm+65Hex/1drJn8irGrCqYmz7TSv
- YzDmqrSniEeKlj09EJI3Hm58wPkElus7JrFS4iggJg/lMjbzQpvJ0ousq+jxlk3Do9Of
- eL8IOZeSb7xNNVoR32hpT2jjT423enamy0MV3fQxL6v1tEvDcDf4J+PT5F2i1OLYmFGe vw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rs311s1gf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 11:54:49 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B6896100057;
-        Tue, 11 Jul 2023 11:54:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AB76E21515D;
-        Tue, 11 Jul 2023 11:54:48 +0200 (CEST)
-Received: from [10.201.21.122] (10.201.21.122) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 11 Jul
- 2023 11:54:48 +0200
-Message-ID: <eb735953-bfa3-4dd7-6ab0-184de050c7de@foss.st.com>
-Date:   Tue, 11 Jul 2023 11:54:47 +0200
+        Tue, 11 Jul 2023 05:56:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE96A1;
+        Tue, 11 Jul 2023 02:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689069361; x=1720605361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M/f+ykgD0/00bi7s9VfR+ZWCB9q02eWktKsVZC95AV4=;
+  b=YW9rZdgQxBi7gWLadRP6qG8+TjxfpZbX2QtUtKxk948Z+ajbXQytarDf
+   +DTMZuEc4pygVCwl4sAMRGzQkOrpbyNpZcwXMjIrDIRjAZbrnR17Tl9no
+   U29yBgVQT0xAKxgaDFY8AaonJE0Z2qgb+dkOSssH+RbW/3zAMkqOVLXhu
+   qLaPTNykJ3VfTo/vytgIg3zMLhtehUSNr0buYZOn6ouCJr2OcdtkZgx2F
+   S257R7u94ZI8m8vAWAXn9pV22lVYiCWLFsbDdbWHfmgUPc7j3cZriE9pw
+   DmKm5juLZjo2KNUNZOyP1uwnL+EMCO4PRtaKNBbdeKX6jFghvyub6Jouj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="368075976"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="368075976"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 02:56:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="715126919"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="715126919"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 02:55:58 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJA69-0004hd-1f;
+        Tue, 11 Jul 2023 09:55:57 +0000
+Date:   Tue, 11 Jul 2023 17:55:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Luke D. Jones" <luke@ljones.dev>, hdegoede@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, corentin.chary@gmail.com,
+        acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: Re: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU
+ tunables for ROG
+Message-ID: <202307111702.ErlUZY2B-lkp@intel.com>
+References: <20230630053552.976579-9-luke@ljones.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] ARM: dts: stm32: re-add CAN support on stm32f746
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230704173317.590190-1-dario.binacchi@amarulasolutions.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230704173317.590190-1-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.122]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630053552.976579-9-luke@ljones.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,45 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario
+Hi Luke,
 
-On 7/4/23 19:33, Dario Binacchi wrote:
-> The revert commit 36a6418bb1259 ("Revert "ARM: dts: stm32: add CAN support
-> on stm32f746"") prevented parsing errors due to the lack of CAN3 binding.
-> 
-> Now that the binding definition for CAN3 is available in the mainline
-> thanks to commit 8f3ef556f8e1a ("dt-bindings: mfd: stm32f7: Add binding
-> definition for CAN3"), we can re-add the CAN support and make the driver
-> usable again.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-> 
+kernel test robot noticed the following build warnings:
 
-...
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.5-rc1 next-20230711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +		};
-> +
-> +		can2: can@40006800 {
-> +			compatible = "st,stm32f4-bxcan";
-> +			reg = <0x40006800 0x200>;
-> +			iterrupts = <63>, <64>, <65>, <66>;
+url:    https://github.com/intel-lab-lkp/linux/commits/Luke-D-Jones/platform-x86-asus-wmi-add-support-for-showing-charger-mode/20230630-133937
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230630053552.976579-9-luke%40ljones.dev
+patch subject: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
+reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111702.ErlUZY2B-lkp@intel.com/reproduce)
 
-I modified this (bad) line and applied the patch on stm32-next.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307111702.ErlUZY2B-lkp@intel.com/
 
-br
-Alex
+All warnings (new ones prefixed by >>):
 
+>> Documentation/ABI/testing/sysfs-platform-asus-wmi:131: WARNING: Unexpected indentation.
 
-> +			interrupt-names = "tx", "rx0", "rx1", "sce";
-> +			resets = <&rcc STM32F7_APB1_RESET(CAN2)>;
-> +			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN2)>;
-> +			st,can-secondary;
-> +			st,gcan = <&gcan1>;
-> +			status = "disabled";
-> +		};
-> +
->   		cec: cec@40006c00 {
->   			compatible = "st,stm32-cec";
->   			reg = <0x40006C00 0x400>;
+vim +131 Documentation/ABI/testing/sysfs-platform-asus-wmi
 
+ > 131	Date:		Jun 2023
+   132	KernelVersion:	6.5
+   133	Contact:	"Luke Jones" <luke@ljones.dev>
+   134	Description:
+   135			Set the Package Power Target total of CPU: PL1 on Intel, SPL on AMD.
+   136			Shown on Intel+Nvidia or AMD+Nvidia based systems.
+   137				* min=5, max=250
+   138	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
