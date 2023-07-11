@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B3A74FBA3
+	by mail.lfdr.de (Postfix) with ESMTP id 76F1674FBA4
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjGKXBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 19:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S232056AbjGKXBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 19:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjGKXBi (ORCPT
+        with ESMTP id S231742AbjGKXBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 19:01:38 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A24FE60
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:01:37 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57059e6f9c7so2307857b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:01:37 -0700 (PDT)
+        Tue, 11 Jul 2023 19:01:40 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F4710D8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:01:39 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b8a4571c1aso64623065ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689116496; x=1691708496;
+        d=google.com; s=20221208; t=1689116498; x=1691708498;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=wQ6W4kIntv9wFXwEtPmIvIpacLwVSVo7NJzU3VtiE1w=;
-        b=3ORxn9Vhd4WXF0g7JDL6HBWL9k07DS8mYs9fn0OJUVMYO7awAduaCjkyXa3c4zcUWP
-         CiMyMGWKk7gpHnFuYLbMUK9kvuawoMxaIU5xCb4PbrzBwNxGeIU03YPFn53IH9fPrqeX
-         4FmTRkGhTHmOdCaZo/KIiAYJHZJ7xAvzMNbMTF2zTxH+n26utIZyh9RcbGfVY0YuOUAY
-         y1agF/SkbXq6mvekFU03VqWiBTZiO0EljkyR/3Myi3Flrjtcedmj8KWUU1JHb75p6S/R
-         VDL1tRai9UtK+iTVKTCqi+bXRmThYcXrJnJmqF9LyRxNIYLV4jA/f3UBqV+05g/WhPYh
-         3mJw==
+        bh=UMgWqyV1osh/Eb0aP0u4bhUqRrnmL/HIe/0o+d3Tstg=;
+        b=ZjSlV+P+WjR6ipP1RlWNPxFrwdcht0OxmLKa0QLn3xaLeCwtB9UDH/7OWOaXSa1z1+
+         e2Xp3FRdI2MWx37ejpgHg8bgTtmoMYn4siDuMjw83SChlUw9YLK/9sO4njF70fv1cBBN
+         0VDi+v5aqplRYzKmOv5koReQ1cr5yZJ/6qo31Jrb6tT3f3Q3npKiGZNGkE29jcxFW4iS
+         Tv/jkowMfOnaNQdgZQCVAO6/XIDOIM/d2JLTw6PD01ywwtTBefmUWejntl+JNTuU0uXW
+         19H67WBVIO5m3ryNK9unbbDJgSJcn40VHQ/GW1DoqjAjEfRv8j+KkQcj6nbnVMLcta6Y
+         SgHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689116496; x=1691708496;
+        d=1e100.net; s=20221208; t=1689116498; x=1691708498;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wQ6W4kIntv9wFXwEtPmIvIpacLwVSVo7NJzU3VtiE1w=;
-        b=JvEWcqBN1NOWgWEVaSfuEcPDYtY7Xnn5OJxYDnKtcxfAL7kFlcN5S1ztdESz7brogf
-         WZR6iCS82BIXWN3LpOr8mpKcJC+1uwyt+FvoKc1k6t2Yx2onoqR7f59E+9TtUShA9Ab8
-         P56v0EiDoTEC78oCO3JNKBuhdKu0tI8ocLuwL33u2uUX2SUevrBg8djkoxowhXNisSDo
-         Mmw2WWpjBqpN+LdXxV+1wXIGXVV7wRkTuaiU0fBX37FjNx2u9vUC+uLUNmANFer3U0Ft
-         GLCrj3719dpQf8gDU6A+wT9zVkPooUcgRbgJZfnLj5kky0U6CuPpA55QGpBjJLHkCBCS
-         sF0g==
-X-Gm-Message-State: ABy/qLbYE7Ru9IrYpzmv9UggOWLpE+j6jQf0kVT8opo2MxlihvqVbmVG
-        txTkVRFT35wFz9YXEx6jYNLlcsm83ks=
-X-Google-Smtp-Source: APBJJlHY1zUMZmD84o0W3pNWXRl+ifCASv/QArdWkFNwOfiiRusxKodO28LqgUUoEWUMxCkFV3iHUrKcU5w=
+        bh=UMgWqyV1osh/Eb0aP0u4bhUqRrnmL/HIe/0o+d3Tstg=;
+        b=IsjFdGWKP6SGb1MLTJV09qqmn+I1lcAkWSywDHHnj1NOu+dCtzGtQBZIeKnhyNy7Pg
+         UblkzVnaX9n/Qu9QM/7pljeMkR01jktsbZA4+zOG45Nd6tnKJmbzG8Zr+YkIJtL9JDus
+         41O+wg80V9lnBv7naiFgF7HZz+2D9l1lGsMU38W5zO2qOl0pjL3vbX0y08XkKhkU0uWa
+         hQuzg9+VaSdOcw9I6gtgP/mvacIBKc8mu3TwbvLdLdymM52/Muwv9rGOjXng1HW7rbz0
+         C7TBxE4Owf6YBSVDRIB3FgMf940Cje4OmIUr46QopQ+ARfi/EgFQqmbbXvHYhUK9Fgqn
+         agYQ==
+X-Gm-Message-State: ABy/qLYVr8QemvxDY7O8ZxxBjwN2yfNZCtwKL7CSlbgTW/k3VoeqerLp
+        lt1vAsI0clPO2W293HKDZWcAwLPRDoo=
+X-Google-Smtp-Source: APBJJlHIsJhSGesygyR2pvIXL2h+l2QVdYqlNq2kM9qsrLj2xYFk6PgbKKr53V9ZXQsNbOblHHioGHN/RSI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:af18:0:b0:576:e268:903d with SMTP id
- n24-20020a81af18000000b00576e268903dmr3211ywh.2.1689116496718; Tue, 11 Jul
- 2023 16:01:36 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:da92:b0:1b8:95a2:38ab with SMTP id
+ j18-20020a170902da9200b001b895a238abmr13020184plx.8.1689116498492; Tue, 11
+ Jul 2023 16:01:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 11 Jul 2023 16:01:25 -0700
+Date:   Tue, 11 Jul 2023 16:01:26 -0700
 In-Reply-To: <20230711230131.648752-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230711230131.648752-1-seanjc@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711230131.648752-2-seanjc@google.com>
-Subject: [PATCH 1/7] KVM: Grab a reference to KVM for VM and vCPU stats file descriptors
+Message-ID: <20230711230131.648752-3-seanjc@google.com>
+Subject: [PATCH 2/7] KVM: selftests: Use pread() to read binary stats header
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -63,93 +63,60 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sean Christopherson <seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Grab a reference to KVM prior to installing VM and vCPU stats file
-descriptors to ensure the underlying VM and vCPU objects are not freed
-until the last reference to any and all stats fds are dropped.
+Use pread() with an explicit offset when reading the header and the header
+name for a binary stats fd so that the common helper and the binary stats
+test don't subtly rely on the file effectively being untouched, e.g. to
+allow multiple reads of the header, name, etc.
 
-Note, the stats paths manually invoke fd_install() and so don't need to
-grab a reference before creating the file.
-
-Fixes: ce55c049459c ("KVM: stats: Support binary stats retrieval for a VCPU")
-Fixes: fcfe1baeddbf ("KVM: stats: Support binary stats retrieval for a VM")
-Reported-by: Zheng Zhang <zheng.zhang@email.ucr.edu>
-Closes: https://lore.kernel.org/all/CAC_GQSr3xzZaeZt85k_RCBd5kfiOve8qXo7a81Cq53LuVQ5r=Q@mail.gmail.com
-Cc: stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/kvm_main.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/kvm/include/kvm_util_base.h | 6 ++++--
+ tools/testing/selftests/kvm/kvm_binary_stats_test.c | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index b838c8f71349..312a8d9184fe 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4032,8 +4032,17 @@ static ssize_t kvm_vcpu_stats_read(struct file *file, char __user *user_buffer,
- 			sizeof(vcpu->stat), user_buffer, size, offset);
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 07732a157ccd..eb1ff597bcca 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -362,8 +362,10 @@ static inline void read_stats_header(int stats_fd, struct kvm_stats_header *head
+ {
+ 	ssize_t ret;
+ 
+-	ret = read(stats_fd, header, sizeof(*header));
+-	TEST_ASSERT(ret == sizeof(*header), "Read stats header");
++	ret = pread(stats_fd, header, sizeof(*header), 0);
++	TEST_ASSERT(ret == sizeof(*header),
++		    "Failed to read '%lu' header bytes, ret = '%ld'",
++		    sizeof(*header), ret);
  }
  
-+static int kvm_vcpu_stats_release(struct inode *inode, struct file *file)
-+{
-+	struct kvm_vcpu *vcpu = file->private_data;
-+
-+	kvm_put_kvm(vcpu->kvm);
-+	return 0;
-+}
-+
- static const struct file_operations kvm_vcpu_stats_fops = {
- 	.read = kvm_vcpu_stats_read,
-+	.release = kvm_vcpu_stats_release,
- 	.llseek = noop_llseek,
- };
+ struct kvm_stats_desc *read_stats_descriptors(int stats_fd,
+diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+index a7001e29dc06..eae99d0e8377 100644
+--- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
++++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+@@ -43,8 +43,10 @@ static void stats_test(int stats_fd)
+ 	id = malloc(header.name_size);
+ 	TEST_ASSERT(id, "Allocate memory for id string");
  
-@@ -4054,6 +4063,9 @@ static int kvm_vcpu_ioctl_get_stats_fd(struct kvm_vcpu *vcpu)
- 		put_unused_fd(fd);
- 		return PTR_ERR(file);
- 	}
-+
-+	kvm_get_kvm(vcpu->kvm);
-+
- 	file->f_mode |= FMODE_PREAD;
- 	fd_install(fd, file);
+-	ret = read(stats_fd, id, header.name_size);
+-	TEST_ASSERT(ret == header.name_size, "Read id string");
++	ret = pread(stats_fd, id, header.name_size, sizeof(header));
++	TEST_ASSERT(ret == header.name_size,
++		    "Expected header size '%u', read '%lu' bytes",
++		    header.name_size, ret);
  
-@@ -4698,8 +4710,17 @@ static ssize_t kvm_vm_stats_read(struct file *file, char __user *user_buffer,
- 				sizeof(kvm->stat), user_buffer, size, offset);
- }
- 
-+static int kvm_vm_stats_release(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = file->private_data;
-+
-+	kvm_put_kvm(kvm);
-+	return 0;
-+}
-+
- static const struct file_operations kvm_vm_stats_fops = {
- 	.read = kvm_vm_stats_read,
-+	.release = kvm_vm_stats_release,
- 	.llseek = noop_llseek,
- };
- 
-@@ -4718,6 +4739,9 @@ static int kvm_vm_ioctl_get_stats_fd(struct kvm *kvm)
- 		put_unused_fd(fd);
- 		return PTR_ERR(file);
- 	}
-+
-+	kvm_get_kvm(kvm);
-+
- 	file->f_mode |= FMODE_PREAD;
- 	fd_install(fd, file);
- 
+ 	/* Check id string, that should start with "kvm" */
+ 	TEST_ASSERT(!strncmp(id, "kvm", 3) && strlen(id) < header.name_size,
 -- 
 2.41.0.255.g8b1d071c50-goog
 
