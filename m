@@ -2,93 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B83C74E8AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2738174E8B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjGKIId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S229845AbjGKING (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjGKIIb (ORCPT
+        with ESMTP id S229635AbjGKINE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:08:31 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03F8E42
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:08:27 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6f943383eso84926231fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689062906; x=1691654906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BLmUFGwfTl5d7peQc8oEF/elxy8zWH/3ORhscxEFK0U=;
-        b=nP9WabHlPMdbcSp3oTyWhNsqaQ3pso0XT1u2sNdEPHVCN8ltcL8+aU1Lq2OjjjzUex
-         mftFkHm1QWxy569qxjCmA4u9u/nA94kCNPjuS1bZTrfZE8HWlhR0nHMcyQTJfsTLJ1R4
-         M6y2+qBgIYsSqE7uHcGuspKwombVYW3M8kookglR7giL7HKkaiuWjNsNAFGKzGWJ3Iqa
-         /At/j9wwt+b3tYt/o0vV6stLKtfVZAwfPvKWIgXIFrPyrPP0FvyhNCakIGD44SI9l+T5
-         eHQp3hloDJicm1+Z2B8fiSDYNQymTW+dgpjzPePrXRNOM/NW4fWRVVid9SWypGVXl7W7
-         ZSyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689062906; x=1691654906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BLmUFGwfTl5d7peQc8oEF/elxy8zWH/3ORhscxEFK0U=;
-        b=A0kk2kzbFPWnr4ng2tsJzK8GYXUNOy5dls+jbE+wAJMeuDRgPpF4RrDbBhNIA1kDfw
-         5efQQfvT9TbMH6AfJmyBWxWoJ58ZULMuj7sPAOrd/+m2WTTcbGfqbMnorKABOZuilBrQ
-         hXagxpDFayfAqYWyLxGyQ+GhPXzletmcgdTW8Vw2YjNXY6JJ2yV/cLk0Rfc5YgIZ4nxa
-         oLmB9OtlLL+V3Ul/FL02d+XUa4eeDibAA5xiHcLnrUhzejLWvGvc45BlMv3rcY2A2l7D
-         tsMkqRuYHH3NdgHhft9sIcmTU4ErHg8UXug+Sm06SwwzWlUuskD02jqXZ90zKAg8ygOs
-         0sbg==
-X-Gm-Message-State: ABy/qLb06m+SINlVdoRAZ0oJ2+57lCSBU/T7PfES/0e6mUanJSZ5O2Hn
-        a11G71nao1bbgHfoR9ObZroESdc3+FJvfcMfe6A=
-X-Google-Smtp-Source: APBJJlFvNSih/UoRx5M5PvuXG3f58K6EnCrhbCUgcPvh/ZYh56IVMWdbMf/5tWqUFjG8Hw04r981Jg==
-X-Received: by 2002:a2e:8450:0:b0:2b6:d137:b5a1 with SMTP id u16-20020a2e8450000000b002b6d137b5a1mr13371003ljh.43.1689062906382;
-        Tue, 11 Jul 2023 01:08:26 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id ss25-20020a170907039900b0098921e1b064sm798375ejb.181.2023.07.11.01.08.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 01:08:25 -0700 (PDT)
-Message-ID: <03542d9a-42fd-94d5-2895-9fe5f2ed3345@linaro.org>
-Date:   Tue, 11 Jul 2023 10:08:24 +0200
+        Tue, 11 Jul 2023 04:13:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F378FE3;
+        Tue, 11 Jul 2023 01:13:02 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6971C660700A;
+        Tue, 11 Jul 2023 09:12:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689063180;
+        bh=2+yn6FDwMd8voKMx1WPt05JiOyMTQxbLsZaEtvbtNN4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Fx8WIExUEuJPaY5MFu8knfLP/k0C26AMfNb/AvH/Fmm0WSmwyzjbdouviC0vRIt5c
+         MKvJLE8w0cLrlZEwxmbFWfOjjLGUQZgFi0o1pLWqgdMYxBGlFBGIjiNaupLZ6FnB33
+         j1HPiXlommzYaYv6ce4cvKcTdjN1ewdnVTlkRjRRehst4X7XEwQxnR9ySh21JtPk6b
+         7KLhT/OtiV9F5v6WVi5j7pxhtZflk0tkK/vKZu9Q314nRK+CtbZPcevQ7M0A64UCcq
+         2GUJjcluoW7Hk+VgSk0dx0uk8kgwhRiKCYyXOMoe3dlhEE5DcTiXTswvygvLYV31mr
+         rt/T478FT4VDw==
+Message-ID: <f0b9e2e4-b2c0-4336-0ec4-5afd9f1b6c72@collabora.com>
+Date:   Tue, 11 Jul 2023 10:12:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 2/3] regulator: dt-bindings: qcom,rpmh: Add PMX75
- compatible
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 01/15] spi: Remove unneeded OF node NULL checks
 Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1689062414-3654-1-git-send-email-quic_rohiagar@quicinc.com>
- <1689062414-3654-3-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1689062414-3654-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-2-andriy.shevchenko@linux.intel.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230710154932.68377-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2023 10:00, Rohit Agarwal wrote:
-> Add PMX75 compatibles for PMIC found in SDX75 platform.
+Il 10/07/23 17:49, Andy Shevchenko ha scritto:
+> In the couple of places the NULL check of OF node is implied by the call
+> that takes it as a parameter. Drop the respective duplicate checks.
 > 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Validated against spi-mt65xx, spi-mt7621, spi-mtk-nor, spi-mtk-snfi;
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> # 
+MediaTek
+
 > ---
+>   drivers/spi/spi.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 9291b2a0e887..8f3282a71c63 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -2399,9 +2399,6 @@ static void of_register_spi_devices(struct spi_controller *ctlr)
+>   	struct spi_device *spi;
+>   	struct device_node *nc;
+>   
+> -	if (!ctlr->dev.of_node)
+> -		return;
+> -
+>   	for_each_available_child_of_node(ctlr->dev.of_node, nc) {
+>   		if (of_node_test_and_set_flag(nc, OF_POPULATED))
+>   			continue;
+> @@ -3134,7 +3131,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+>   		if (WARN(id < 0, "couldn't get idr"))
+>   			return id == -ENOSPC ? -EBUSY : id;
+>   		ctlr->bus_num = id;
+> -	} else if (ctlr->dev.of_node) {
+> +	} else {
+>   		/* Allocate dynamic bus number using Linux idr */
+>   		id = of_alias_get_id(ctlr->dev.of_node, "spi");
+>   		if (id >= 0) {
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
 
