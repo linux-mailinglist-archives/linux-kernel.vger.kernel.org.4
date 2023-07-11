@@ -2,130 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692A874F249
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C1B74F241
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjGKOcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S233661AbjGKO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjGKOcB (ORCPT
+        with ESMTP id S234052AbjGKO20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:32:01 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C8EF4;
-        Tue, 11 Jul 2023 07:31:56 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEVkNw005194;
-        Tue, 11 Jul 2023 14:31:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=9ZAVi6KiU/ro/z+p6FjNut0qxPvIL3XbeOtGZatE0Io=;
- b=SZQLnI57GBZIxjTJMUb8Nfoe8TwYYannXVn6Qs4T2T9VetR0+sVdnnPXBQVQfKH7lhFo
- LRqmLH6oGTkQHBE7BzScclxFRiG0PgGS5MTkS5hhfa4kSsg/T4q2dsD1yYI9teTFwjCA
- n7V1RU8x/sIsXEs0baPWXTx/OEAKj9iJgRaOc4k/Yk75Y4/dRwpVIdFt7wbkPisfY4c0
- vuEQmE5QXVdFI+KZ5yAh6zZQu62eIKZwdsZLtLIFwTjIHFCjFX/BROASSND9PkcNtuQE
- wKVgTYhpL2T0KPQgH3OkxV8qx6E3b2kkvx2AnMaR7C+7Bz2CxAScq+6JBISukZqcat1S PA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs8wur081-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 14:31:55 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36BAl28h009204;
-        Tue, 11 Jul 2023 14:31:52 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3rpye51c8m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 14:31:52 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BEVmNp15794878
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 14:31:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D65420040;
-        Tue, 11 Jul 2023 14:31:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8A6220049;
-        Tue, 11 Jul 2023 14:31:47 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jul 2023 14:31:47 +0000 (GMT)
-Date:   Tue, 11 Jul 2023 16:31:46 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <philmd@linaro.org>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, frankja@linux.ibm.com,
-        mhartmay@linux.ibm.com, nsg@linux.ibm.com, borntraeger@de.ibm.com,
-        nrb@linux.ibm.com
-Subject: Re: [PATCH v2 2/2] KVM: s390: pv: fix index value of replaced ASCE
-Message-ID: <20230711163146.557e9d75@p-imbrenda>
-In-Reply-To: <dba58cf1-59ed-f1f3-fdbe-59d213f0a7b5@linaro.org>
-References: <20230705111937.33472-1-imbrenda@linux.ibm.com>
-        <20230705111937.33472-3-imbrenda@linux.ibm.com>
-        <dba58cf1-59ed-f1f3-fdbe-59d213f0a7b5@linaro.org>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Tue, 11 Jul 2023 10:28:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334B51BC0;
+        Tue, 11 Jul 2023 07:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689085678; x=1720621678;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Hd7KPTyRP0JRvFe990SYWoGyr6006I4GxCYcQVy1VCM=;
+  b=cUg4trA+t3NH/Vpxr1ucFyIePfFQzhzGQ8YdMlE4ZJ51QBXvU2LvrGGC
+   tREYZlZkCts73Gte83Ry6Z0Ip5I/kzMqGwkhvDkZ2JHnzVgMhR4UK3WRu
+   FjCFsCFSgHTUKzsRwmBQLc5dYx+JWRWt7EoXid73lC+9I/TEYom/dUHAM
+   K+o9m0rdjbFhDTkqQyBnHZXu6Jlt1cqLcUGPrdKtOkZanOFOZ6LkKsY9K
+   UXNuxliUy/DRUil0hp9Tr3LnbtF6k8WTBFeZ1lckhusQUYWh5fCbl8loD
+   NdEbxxXymT871Px0Hwp8mtXrkTn8hdWrip2+tFVSd5EZlhDhiRq9gwKWT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367212620"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="367212620"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:27:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="750774534"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="750774534"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 07:27:31 -0700
+Date:   Tue, 11 Jul 2023 07:32:28 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        dmaengine@vger.kernel.org, vkoul@kernel.org,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>, rex.zhang@intel.com,
+        xiaochen.shen@intel.com, narayan.ranganathan@intel.com,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v8 2/7] iommu: Move global PASID allocation from SVA to
+ core
+Message-ID: <20230711073228.7c4977f8@jacob-builder>
+In-Reply-To: <08830c11-5528-0c42-0bc3-89c3796611fe@linux.intel.com>
+References: <20230602182212.150825-1-jacob.jun.pan@linux.intel.com>
+        <20230602182212.150825-3-jacob.jun.pan@linux.intel.com>
+        <08830c11-5528-0c42-0bc3-89c3796611fe@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZBw8A1FRQ1_ZGYCeZHiP55nMwpdpnDNq
-X-Proofpoint-ORIG-GUID: ZBw8A1FRQ1_ZGYCeZHiP55nMwpdpnDNq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- suspectscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=971
- impostorscore=0 mlxscore=0 clxscore=1011 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110131
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 16:12:54 +0200
-Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org> wrote:
+Hi Baolu,
 
-> On 5/7/23 13:19, Claudio Imbrenda wrote:
-> > The index field of the struct page corresponding to a guest ASCE should
-> > be 0. When replacing the ASCE in s390_replace_asce(), the index of the
-> > new ASCE should also be set to 0.
-> >=20
-> > Having the wrong index might lead to the wrong addresses being passed
-> > around when notifying pte invalidations, and eventually to validity
-> > intercepts (VM crash) if the prefix gets unmapped and the notifier gets
-> > called with the wrong address. =20
->=20
-> Can that also happen in crst_table_alloc()?
+On Sat, 10 Jun 2023 20:13:03 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
 
-no. ->index is only used for gmap page tables (guest mapping), from
-the root to pmd tables. the last level (ptes) is shared between guest
-mapping and QEMU address space. i.e. the ptes are the ones from QEMU.
+> On 6/3/23 2:22 AM, Jacob Pan wrote:
+> > +ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
+> > +{
+> > +	int ret;
+> > +	ioasid_t max;
+> > +
+> > +	max = dev->iommu->max_pasids;
+> > +	/*
+> > +	 * max_pasids is set up by vendor driver based on number of
+> > PASID bits
+> > +	 * supported but the IDA allocation is inclusive.
+> > +	 */
+> > +	ret = ida_alloc_range(&iommu_global_pasid_ida,
+> > IOMMU_FIRST_GLOBAL_PASID, max - 1, GFP_KERNEL);
+> > +	if (ret < 0)
+> > +		return IOMMU_PASID_INVALID;
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid_dev);  
+> 
+> "dev->iommu->max_pasids == 0" indicates no pasid support on the device.
+> The code should return IOMMU_PASID_INVALID explicitly. Perhaps we can
+> make this function like this:
+> 
+> ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
+> {
+>          int ret;
+> 
+>          if (!dev->iommu->max_pasids)
+>                  return IOMMU_PASID_INVALID;
+> 
+>          /*
+>           * max_pasids is set up by vendor driver based on number of 
+> PASID bits
+>           * supported but the IDA allocation is inclusive.
+>           */
+>          ret = ida_alloc_range(&iommu_global_pasid_ida, 
+> IOMMU_FIRST_GLOBAL_PASID,
+>                                dev->iommu->max_pasids - 1, GFP_KERNEL);
+> 
+>          return ret < 0 ? IOMMU_PASID_INVALID : ret;
+> }
+> EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid_dev);
+> 
+good catch, sorry i missed this. let me send an updated version.
 
-the last level of page tables is not expected to have ->index set
-(since that one actually belongs to QEMU and not to the guest mapping)
+> Other change in this series looks good to me.
+> 
+> I hope I can queue this series including above change as part of my VT-d
+> update for v6.5 to Joerg if no objection.
+> 
+> Let's try to re-enable this key feature of Intel idxd driver in v6.5.
+> 
+> Best regards,
+> baolu
 
-guest page tables (all levels, except ptes) are allocated with
-gmap_alloc_table(), which correctly sets ->index
 
-the top level of a guest mapping is allocated in gmap_alloc(), which
-also correctly sets ->index to 0.
+Thanks,
 
->=20
-> > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> > ---
-> >   arch/s390/mm/gmap.c | 1 +
-> >   1 file changed, 1 insertion(+) =20
->=20
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-
-thank you!
-=20
-
+Jacob
