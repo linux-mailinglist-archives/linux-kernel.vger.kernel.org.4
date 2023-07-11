@@ -2,56 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E73574ED84
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895DE74ED8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjGKMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
+        id S229659AbjGKMFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjGKMB6 (ORCPT
+        with ESMTP id S229548AbjGKMFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:01:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73CA410C4;
-        Tue, 11 Jul 2023 05:01:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 360B62B;
-        Tue, 11 Jul 2023 05:02:28 -0700 (PDT)
-Received: from [10.163.47.87] (unknown [10.163.47.87])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECD223F67D;
-        Tue, 11 Jul 2023 05:01:39 -0700 (PDT)
-Message-ID: <e111d9ac-c4f6-c541-313b-7a3a6acfb5d2@arm.com>
-Date:   Tue, 11 Jul 2023 17:31:37 +0530
+        Tue, 11 Jul 2023 08:05:07 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2639E12F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:05:05 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-634ddd17647so38408546d6.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:05:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689077104; x=1691669104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sDj/nUPhv/hb6kVZTAGV+ec/xse6Mtcau18exq4wFfg=;
+        b=mJnWqKwDMLasfvZIgnnLjeZubYFEXhgQUriyniboKusYls6+C/mL95Tb4P3ahgb2ly
+         UfehINYtKiyzWMJO7IBeL7aNkUVN35SC7VJSVhsw9KFV+q6daoC6BFGPiFkn9FxJajzq
+         DGaYAQI13Yu06T7GpFqdzzv2PTbbTGLptVEHwLsBhHqorONeJqwlaEcsfs34Zcq3U9NW
+         XheotZD5oo/pIyPuubqGr9ReOeVNnM5310WYJjx2KhOphWoCWgsJm7SEkfyGIZEM39en
+         /F4Qgy6k5T17Cq8QWsHYSMwY4649dC6Iii0F1d1VtBiEHgup1B7AOz6IJUhmKOxeJZFa
+         AZsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689077104; x=1691669104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sDj/nUPhv/hb6kVZTAGV+ec/xse6Mtcau18exq4wFfg=;
+        b=AeIVAmFUOuG4XfPKFO/KPUYCfZXOYUDQsbaJj7JSajpGGCh1upulCHL26RtGyP3ekj
+         8nNgnHS9MjLQ6eBV7/CzoAEl+pJcs42mJJHIB+WjEFSgySgsUj6n9c7XcpWCRNjWFFN6
+         h+sZvGhi76/dCt442UVklKHsgbfWPHOvUNyUR0hdYFDAY4CNrfqM5/+ha0nM8lb3D/kJ
+         I8JVBvWeYW1zhLkOI2Wya7pNHyO2K0jlNYRa+KAAH4dd1sGegZlEtpqDvuqHpdzb+qiL
+         iDliM/Amv1X8k5dEyVzbnDPr+3O4MrkCyD+NG/9Blfep43UXkakYHk5WJB6bGOOHEq6W
+         YOBA==
+X-Gm-Message-State: ABy/qLYo3VqKnNT8eZRmV5ItneXCEBeSDqGon3udPDX8e+9eVg2Fs0Rq
+        K/NDAxg3hh4qYLeOZ/U30FmK7w==
+X-Google-Smtp-Source: APBJJlHlMSiZUq+WY356by/kwiQKIEq734XHbryNHy9OPRb10YQGqsssS7qFeOD/eSjn/EPBX8tRnQ==
+X-Received: by 2002:a0c:a98d:0:b0:635:e209:178c with SMTP id a13-20020a0ca98d000000b00635e209178cmr12615604qvb.10.1689077104237;
+        Tue, 11 Jul 2023 05:05:04 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id q17-20020a0ce211000000b006362d4eeb6esm956869qvl.144.2023.07.11.05.05.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 05:05:03 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qJC74-0008zp-Q7;
+        Tue, 11 Jul 2023 09:05:02 -0300
+Date:   Tue, 11 Jul 2023 09:05:02 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZK1FbjG+VP/zxfO1@ziepe.ca>
+References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+ <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <ZKNA9Pkg2vMJjHds@ziepe.ca>
+ <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+ <ZKxDZfVAbVHgNgIM@ziepe.ca>
+ <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+ <ZKyZBbKEpmkFkpWV@ziepe.ca>
+ <20230711042708.GA18658@lst.de>
+ <20230710215906.49514550@kernel.org>
+ <20230711050445.GA19323@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/4] arm_pmu: Add PERF_PMU_CAP_EXTENDED_HW_TYPE capability
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, irogers@google.com
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230710122138.1450930-1-james.clark@arm.com>
- <20230710122138.1450930-2-james.clark@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230710122138.1450930-2-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711050445.GA19323@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,50 +117,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 11, 2023 at 07:04:45AM +0200, Christoph Hellwig wrote:
+> On Mon, Jul 10, 2023 at 09:59:06PM -0700, Jakub Kicinski wrote:
+> > On Tue, 11 Jul 2023 06:27:08 +0200 Christoph Hellwig wrote:
+> > > Not going to comment on the rest of this as it seems bat shit crazy
+> > > hacks for out of tree junk.  Why is anyone even wasting time on this?
+> > 
+> > Noob question - how does RDMA integrate with the out of tree junk?
+> > AFAIU it's possible to run the "in-tree" RDMA stack and get "GPU
+> > direct".
+> 
+> I don't care and it has absolutel no business being discussed here.
+> 
+> FYI at leat iWarp is a totally open standard.
 
+So is Infiniband, Jakub has a unique definition of "proprietary".
 
-On 7/10/23 17:51, James Clark wrote:
-> This capability gives us the ability to open PERF_TYPE_HARDWARE and
-> PERF_TYPE_HW_CACHE events on a specific PMU for free. All the
-> implementation is contained in the Perf core and tool code so no change
-> to the Arm PMU driver is needed.
-> 
-> The following basic use case now results in Perf opening the event on
-> all PMUs rather than picking only one in an unpredictable way:
-> 
->   $ perf stat -e cycles -- taskset --cpu-list 0,1 stress -c 2
-> 
->    Performance counter stats for 'taskset --cpu-list 0,1 stress -c 2':
-> 
->          963279620      armv8_cortex_a57/cycles/                (99.19%)
->          752745657      armv8_cortex_a53/cycles/                (94.80%)
-> 
-> Fixes: 55bcf6ef314a ("perf: Extend PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE")
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/perf/arm_pmu.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 277e29fbd504..d8844a9461a2 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -875,8 +875,13 @@ struct arm_pmu *armpmu_alloc(void)
->  		 * configuration (e.g. big.LITTLE). This is not an uncore PMU,
->  		 * and we have taken ctx sharing into account (e.g. with our
->  		 * pmu::filter callback and pmu::event_init group validation).
-> +		 *
-> +		 * PERF_PMU_CAP_EXTENDED_HW_TYPE is required to open the legacy
+RDMA works with the AMD and Intel intree drivers using DMABUF without
+requiring struct pages using the DRM hacky scatterlist approach.
 
-s/legacy/generic ? These hardware events are still around.
-
-> +		 * PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events on a
-> +		 * specific PMU.
->  		 */
-> -		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS,
-> +		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS |
-> +				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
->  	};
->  
->  	pmu->attr_groups[ARMPMU_ATTR_GROUP_COMMON] =
+Jason
