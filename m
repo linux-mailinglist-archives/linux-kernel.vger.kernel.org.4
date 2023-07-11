@@ -2,106 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1660F74E29B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EF874E29F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjGKAhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S230038AbjGKAjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGKAhQ (ORCPT
+        with ESMTP id S229538AbjGKAjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:37:16 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFDF1AC;
-        Mon, 10 Jul 2023 17:37:15 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so83371081fa.1;
-        Mon, 10 Jul 2023 17:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689035833; x=1691627833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7KzZR+3uBAAfoyD64XhpmvukCNRgSrEvKBzVHoKvA4I=;
-        b=QePSPYmXWBGIDNUBrGBf5dNhcMIgQXxeSLRtxqxBcsVcRzTIUh7r+RU+SJgk/tmHGt
-         8ZoLhHoWtRH2tgqNmUgQy9A9InN93Do8kb5ER210aYcrZTmWOPm1pr37GIYVQbHF3lYv
-         1teYgsn0Cnt2EHvRiPl/ffYISmv8S38q1G11FpdRLRiAGt/z7PZvttauDbVQ89la54m2
-         BeVbhy/8N+QbNSyslcBmQkJq8cVVmQErH/APZuyYtuoXn1RKtKaZeYSV1eMo4RMTNbwL
-         LjsuLhXCSyfJkcf9PU9AO/cNxgPkvnsuRMwjmZm7oqPnj1d+OrAPeHX3fvKFc7FoMYUg
-         P7qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689035833; x=1691627833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7KzZR+3uBAAfoyD64XhpmvukCNRgSrEvKBzVHoKvA4I=;
-        b=JMAwWM0idH6i0ZzOIhcnZ4rbp0xXR03rqDiApdpo4q9/MV11w3pGX2QaZdhxdys/du
-         B9Z0Rf9kNe+uVWXIAjT53dXi4GxtIEI7I5PjgWlIj++072BFbDdwljxMzQk15Th40I0F
-         EIoB8CkQqUWzLbBCF8Mk4a3HPM6l+kD5kp22v4PaiDnI+p8x9aRYPZwlMFCGUMvPgzwJ
-         tI8Q9Sp85UD1pkD0u9PHtYVWPac/AulrzcLmEHy6Ft/WS1xQq1N7L5isJZ2aPZVS/ljf
-         h2aym/zG6bt7sxMajnXmqq+zfeHE1vq8fPxPNWS4SETj/VnktrvUlacLtfbhsuUau0kd
-         LReQ==
-X-Gm-Message-State: ABy/qLYEODthPWn62gmZxSXKOpa6DXzNT6mmxlsIl6GWBSFKF7MrvK6d
-        GHjhAp01UkfGwZ1hqBxOr20mPry3+aPmh+s6iRY=
-X-Google-Smtp-Source: APBJJlEnq2pY54DPq3uUhu9mvqZQeE6rwDrv5wtxw4z6ZOom5E9R2u1iJKyFPEgekhQxSbs17e6NVE2XcwInUAgpuG0=
-X-Received: by 2002:a2e:964e:0:b0:2b6:fa3f:9233 with SMTP id
- z14-20020a2e964e000000b002b6fa3f9233mr7975582ljh.46.1689035833423; Mon, 10
- Jul 2023 17:37:13 -0700 (PDT)
+        Mon, 10 Jul 2023 20:39:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B051B0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689035941; x=1720571941;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=iNxYXPFDNTfrRIvXLSOf/pg6gRvftGW6JFV+5PL445k=;
+  b=P9NV1mcfNRRYFVvJ4ttvh3m09BlDdpvBW08nvVAMMFITt4Py+crQteUP
+   N7CIDljMhuYwm1O3/vIKE2XvDwXA6gp6z7PH8tFiEOYrS7QD3GTQIDzk7
+   8jLJgLnAlit3YO/29EpWViVuQTRpWHJYAFwc+l3i5mC/3kYV25wayCxk4
+   s5uappp4e9BTAmuAobQPwMsRwMy0SqBdoctYzAwL9pHhqrj6tdexTiMdr
+   ZIQKWeblVsABPhJFxpgbY3t+I/LvYn/6GHEburZH7qr6uqbugLteedYrx
+   t7FYUeKIJWBB+t06atgUqPEzS97E1nD8KoM1AZqXeOWZlYmG+63yoUv0O
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="367989478"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="367989478"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 17:39:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="894979488"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="894979488"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 17:38:58 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     <akpm@linux-foundation.org>, <mgorman@techsingularity.net>,
+        <vbabka@suse.cz>, <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] mm: compaction: skip the memory hole rapidly when
+ isolating free pages
+References: <b21cd8e2e32b9a1d9bc9e43ebf8acaf35e87f8df.1688715750.git.baolin.wang@linux.alibaba.com>
+        <d2ba7e41ee566309b594311207ffca736375fc16.1688715750.git.baolin.wang@linux.alibaba.com>
+        <87pm50fg88.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <36747b09-8141-019f-85dd-59f3d4623ec1@linux.alibaba.com>
+Date:   Tue, 11 Jul 2023 08:37:10 +0800
+In-Reply-To: <36747b09-8141-019f-85dd-59f3d4623ec1@linux.alibaba.com> (Baolin
+        Wang's message of "Mon, 10 Jul 2023 17:26:51 +0800")
+Message-ID: <87zg43e11l.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-References: <cover.1688748455.git.dxu@dxuuu.xyz> <13720a4b7a18b2409357a82eebe57ef388ab9cf1.1688748455.git.dxu@dxuuu.xyz>
-In-Reply-To: <13720a4b7a18b2409357a82eebe57ef388ab9cf1.1688748455.git.dxu@dxuuu.xyz>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 10 Jul 2023 17:37:01 -0700
-Message-ID: <CAADnVQLaepgpoH4qjbhAmq-+JLiAXyJ=4nXgbu6NSkZmpF9ghg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 6/6] bpf: selftests: Add defrag selftests
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        netfilter-devel <netfilter-devel@vger.kernel.org>,
-        David Ahern <dsahern@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 9:51=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> These selftests tests 2 major scenarios: the BPF based defragmentation
-> can successfully be done and that packet pointers are invalidated after
-> calls to the kfunc. The logic is similar for both ipv4 and ipv6.
->
-> In the first scenario, we create a UDP client and UDP echo server. The
-> the server side is fairly straightforward: we attach the prog and simply
-> echo back the message.
->
-> The on the client side, we send fragmented packets to and expect the
-> reassembled message back from the server.
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-The patches look good, but new tests are failing on arm64.
+> On 7/10/2023 2:11 PM, Huang, Ying wrote:
+>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+>> 
+>>> On my machine with below memory layout, and I can see it will take more
+>>> time to skip the larger memory hole (range: 0x100000000 - 0x1800000000)
+>>> when isolating free pages. So adding a new helper to skip the memory
+>>> hole rapidly, which can reduce the time consumed from about 70us to less
+>>> than 1us.
+>>>
+>>> [    0.000000] Zone ranges:
+>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+>>> [    0.000000]   DMA32    empty
+>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+>> The memory hole is at the beginning of zone NORMAL?  If so, should
+>> zone
+>
+> No, the memory hole range is 0x1000000000 - 0x1800000000, and the
+> normal zone is start from 0x100000000.
+>
+> I'm sorry I made a typo in the commit message, which confuses you. The
+> memory hole range should be: 0x1000000000 - 0x1800000000. I updated
+> the commit message to the following and addressed David's comment:
 
-test_bpf_ip_check_defrag_ok:FAIL:server recvfrom unexpected server
-recvfrom: actual -1 < expected 0
+Got it!  Thanks for explanation!
 
-see BPF CI.
-Feels like a timing issue, but pls take a look.
+> "
+> Just like commit 9721fd82351d ("mm: compaction: skip memory hole rapidly
+> when isolating migratable pages"), I can see it will also take more
+> time to skip the larger memory hole (range: 0x1000000000 - 0x1800000000)
+> when isolating free pages on my machine with below memory layout. So
+> like commit 9721fd82351d, adding a new helper to skip the memory hole
+> rapidly, which can reduce the time consumed from about 70us to less
+> than 1us.
+
+LGTM.
+
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+> "
+>
+>> NORMAL start at 0x1800000000?  And, the free pages will not be scanned
+>> there?  Or my understanding were wrong. >
+>>> [    0.000000] Movable zone start for each node
+>>> [    0.000000] Early memory node ranges
+>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>>>
+>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>> ---
+>>>   mm/compaction.c | 30 +++++++++++++++++++++++++++++-
+>>>   1 file changed, 29 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/mm/compaction.c b/mm/compaction.c
+>>> index 43358efdbdc2..9641e2131901 100644
+>>> --- a/mm/compaction.c
+>>> +++ b/mm/compaction.c
+>>> @@ -249,11 +249,31 @@ static unsigned long skip_offline_sections(unsigned long start_pfn)
+>>>     	return 0;
+>>>   }
+>>> +
+>>> +static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
+>>> +{
+>>> +	unsigned long start_nr = pfn_to_section_nr(start_pfn);
+>>> +
+>>> +	if (!start_nr || online_section_nr(start_nr))
+>>> +		return 0;
+>>> +
+>>> +	while (start_nr-- > 0) {
+>>> +		if (online_section_nr(start_nr))
+>>> +			return section_nr_to_pfn(start_nr) + PAGES_PER_SECTION - 1;
+>>> +	}
+>>> +
+>>> +	return 0;
+>>> +}
+>>>   #else
+>>>   static unsigned long skip_offline_sections(unsigned long start_pfn)
+>>>   {
+>>>   	return 0;
+>>>   }
+>>> +
+>>> +static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
+>>> +{
+>>> +	return 0;
+>>> +}
+>>>   #endif
+>>>     /*
+>>> @@ -1668,8 +1688,16 @@ static void isolate_freepages(struct compact_control *cc)
+>>>     		page = pageblock_pfn_to_page(block_start_pfn,
+>>> block_end_pfn,
+>>>   									zone);
+>>> -		if (!page)
+>>> +		if (!page) {
+>>> +			unsigned long next_pfn;
+>>> +
+>>> +			next_pfn = skip_offline_sections_reverse(block_start_pfn);
+>>> +			if (next_pfn)
+>>> +				block_start_pfn = max(pageblock_start_pfn(next_pfn),
+>>> +						      low_pfn);
+>>> +
+>>>   			continue;
+>>> +		}
+>>>     		/* Check the block is suitable for migration */
+>>>   		if (!suitable_migration_target(cc, page))
