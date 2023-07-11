@@ -2,148 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2324874E25F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E7374E26C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjGKAAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S230406AbjGKAEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjGKAAP (ORCPT
+        with ESMTP id S229883AbjGKAEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:00:15 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C45C1A7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:00:14 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-346258cf060so27735ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:00:14 -0700 (PDT)
+        Mon, 10 Jul 2023 20:04:05 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D021A8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:04:03 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so80767851fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:04:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689033614; x=1691625614;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzjqKyy3RJozxwYzvwQHf7u8DmmIJyuitJSCSOORBzg=;
-        b=FskCZG8NomIVXpbo5BJcg8DNkZ4gYsvg1bKtVjoYvTUzWtnnFCRrLL/WrSthQXdxhA
-         LwGzokwy1AECgtb/oK4pAJSYcSTar8aGCV/R01dEbRsoyamafl9xJYaMeeMoybR38O/a
-         Mpx0IXl4fGwFz0K2f+tzwKc06eScCnoNY15kSqkVBbWJ+MtQyGOQmYKO8YLgcsvI6QNz
-         1kWnmy1O+aJzdcDd54YAQJBMQ2zi8so2qmbIa5ikdnMdQGe9UluBlv89/5/dv6fMSeO5
-         d8BJE76Wb9SRis3zaj0DAVAtbtGKSTPHVvYg68yYRbvaFNq900uUXCN2332bXkkTAOmG
-         j4Jw==
+        d=linaro.org; s=google; t=1689033842; x=1691625842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V/dX5K/ss3x0ciVNd3aGlR4JXcHpqL/PpCCOLWFx+LU=;
+        b=bff2RHeCIczRdsZbNq2tUaXQiFpucPzuUmWWOXPGQ4SAr6olSBCt7WL2nUpZzrF1gt
+         gSZ5+lUbOASJpXJ7IOfH4AFidBOgj6GWWYBt11VauuiijYUhlF5WfrY7wSo/OxxeDNc6
+         xRVL5RXhcVFwIlByLXbXlxUmm92OXePSiiOIzo0nWCKvww3YXP09N1ZkyvNCI3s99k+3
+         /iqXTuI7JeiDVN9e2Rm3Y9BqzR9g1BEeGNtqi/XqjG2y4FYwQ5WxL7Mz5lw931ZCyU0+
+         qkrWyozbhuySBBMS+nsM3Ok7XruduIOm5IOquzTEVTlFWfgtVtMKTxf0GbIrdCeaw08k
+         nfKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689033614; x=1691625614;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bzjqKyy3RJozxwYzvwQHf7u8DmmIJyuitJSCSOORBzg=;
-        b=i2ljAtnLZJYUW5EzdeWgNwssDIN4bHgZOqeJBNWNHORbrZNNoJjW2OV+OAFi/Ng6xE
-         TMifT/Ge4GWuoKiuaFt129fJi69wYMKGHwjvLDLd7j31iZaeRnpg4kOolOGf06FWqhpK
-         x/pqV+pYVOTjO/MYietYZMw0epgmuwMc/TL5sbuYgkzigMM0pXZIXetXZNVkXnmrdHP7
-         33Xn1D94ZYrse9FdSaY3FWxgysvLcQyrm49qh6SWVYk7nVtwuA0koCA7hFjiVO0DZxaj
-         FSnPdW/2xJdmG+BhWKVe+yoGPtSxjCU+4LJJMXz7KTTebJKTeDfhAnuo4zhPS6FaeVO/
-         5Oiw==
-X-Gm-Message-State: ABy/qLZTZ3DSq4KcRKta0Y6diG8rrfqcm+ya+/Vg8RW5ZwFe4CaNa4sk
-        49BzuIYe5JiyJ/lX+L8q1Mhyvw==
-X-Google-Smtp-Source: APBJJlFlSqWv8QWWG9+dmVP5iYH+CAIh/AyRcMmGjrQXYHMZ4/UO+Ro9uzHGJsZq0C8Rx8J1t8FBxg==
-X-Received: by 2002:a05:6e02:1542:b0:346:3e9:427f with SMTP id j2-20020a056e02154200b0034603e9427fmr54987ilu.7.1689033613762;
-        Mon, 10 Jul 2023 17:00:13 -0700 (PDT)
-Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
-        by smtp.gmail.com with ESMTPSA id n10-20020a63b44a000000b0054fb537ca5dsm200309pgu.92.2023.07.10.17.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 17:00:13 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 1/2] sched, cgroup: Restore meaning to
- hierarchical_quota
-References: <20230707195748.2918490-1-pauld@redhat.com>
-        <20230707195748.2918490-2-pauld@redhat.com>
-Date:   Mon, 10 Jul 2023 17:00:11 -0700
-In-Reply-To: <20230707195748.2918490-2-pauld@redhat.com> (Phil Auld's message
-        of "Fri, 7 Jul 2023 15:57:47 -0400")
-Message-ID: <xm26h6qbfhbo.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        d=1e100.net; s=20221208; t=1689033842; x=1691625842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V/dX5K/ss3x0ciVNd3aGlR4JXcHpqL/PpCCOLWFx+LU=;
+        b=Ja0AsVAece8YqDANDkn7ROPozF2Ym/EIVzy8V1tunk5dNiUzK14/w3MWHnWUYKbMo2
+         yTmu3II8VT8djHjQt9hsSYXcLVfXYlwlKVvnmPDCP5/e8WH61jIqZSagvNIpQLjQEvPt
+         zO0Hr+fTfLltmeWLkvQ7bM4aCuoBD1IBpSqgSihYmKM/SeedqsfZy8UQuNa7Bs9fYqV3
+         +xqVhhpvNDvltxmClsxVc4O6te0xHc8Y3CH4RqHr26WQdjbweL0Njl6ZNBQoaV/NWftA
+         jBeUtCqc0sXzuW3wnL/SJSJxXaCiXaZj6INj9qes82DF7DqfuFC6kagQV+dUmKVFBWCl
+         5taA==
+X-Gm-Message-State: ABy/qLb48np88Znpu4tbROktiovOl5FsnPleCVv5Q7cjXerMTCJ3wMmE
+        N2i1ERAu9FbwZPb79CbqjnZZh1yXqOrp8CuYGk4=
+X-Google-Smtp-Source: APBJJlEuKphZX/mQW/8zaQsAfg/oLoPfdo42uJwdfWTi2a1CBy9Un701xs1VX++nJ0yk9il+OIo1vw==
+X-Received: by 2002:a2e:8eca:0:b0:2b6:a827:164f with SMTP id e10-20020a2e8eca000000b002b6a827164fmr11447647ljl.10.1689033841931;
+        Mon, 10 Jul 2023 17:04:01 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id n24-20020a2e86d8000000b002b6cde9f325sm173232ljj.105.2023.07.10.17.04.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 17:04:01 -0700 (PDT)
+Message-ID: <25c12da7-e79d-af19-fbc9-47ebf7041406@linaro.org>
+Date:   Tue, 11 Jul 2023 03:04:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] drm/msm/dsi: Enable BURST_MODE for command mode for
+ DSI 6G v1.3+
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     quic_abhinavk@quicinc.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230608-b4-add-burst-mode-v2-1-2ff468457d46@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230608-b4-add-burst-mode-v2-1-2ff468457d46@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Phil Auld <pauld@redhat.com> writes:
+On 27/06/2023 23:31, Jessica Zhang wrote:
+> During a frame transfer in command mode, there could be frequent
+> LP11 <-> HS transitions when multiple DCS commands are sent mid-frame or
+> if the DSI controller is running on slow clock and is throttled. To
+> minimize frame latency due to these transitions, it is recommended to
+> send the frame in a single burst.
+> 
+> This feature is supported for DSI 6G 1.3 and above, thus enable burst
+> mode if supported.
+> 
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+> Changes in v2:
+> - Moved MDP_CTRL2 register setting to dsi_ctrl_config() (Dmitry/Marijn)
+> - Read previous value of MDP_CTRL2 register before writing to it
+>    (Dmitry)
+> - Link to v1: https://lore.kernel.org/r/20230608-b4-add-burst-mode-v1-1-55dfbcfada55@quicinc.com
+> ---
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
 
-> In cgroupv2 cfs_b->hierarchical_quota is set to -1 for all task
-> groups due to the previous fix simply taking the min.  It should
-> reflect a limit imposed at that level or by an ancestor. Even
-> though cgroupv2 does not require child quota to be less than or
-> equal to that of its ancestors the task group will still be
-> constrained by such a quota so this should be shown here. Cgroupv1
-> continues to set this correctly.
->
-> In both cases, add initialization when a new task group is created
-> based on the current parent's value (or RUNTIME_INF in the case of
-> root_task_group). Otherwise, the field is wrong until a quota is
-> changed after creation and __cfs_schedulable() is called.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Reviewed-by: Ben Segall <bsegall@google.com>
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 3f6dfb4f9d5a..cdb404885f3c 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -752,6 +752,13 @@ static void dsi_ctrl_enable(struct msm_dsi_host *msm_host,
+>   		/* Always insert DCS command */
+>   		data |= DSI_CMD_CFG1_INSERT_DCS_COMMAND;
+>   		dsi_write(msm_host, REG_DSI_CMD_CFG1, data);
+> +
+> +		if (msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
+> +				msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V1_3) {
 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index a68d1276bab0..1b214e10c25d 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -11038,11 +11038,14 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
->  
->  		/*
->  		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
-> -		 * always take the min.  On cgroup1, only inherit when no
-> -		 * limit is set:
-> +		 * always take the non-RUNTIME_INF min.  On cgroup1, only
-> +		 * inherit when no limit is set:
->  		 */
->  		if (cgroup_subsys_on_dfl(cpu_cgrp_subsys)) {
-> -			quota = min(quota, parent_quota);
-> +			if (quota == RUNTIME_INF)
-> +				quota = parent_quota;
-> +			else if (parent_quota != RUNTIME_INF)
-> +				quota = min(quota, parent_quota);
->  		} else {
->  			if (quota == RUNTIME_INF)
->  				quota = parent_quota;
+Nit: please intent in future to the same level (vim: "set cino=(0").
 
-I suppose you could also set RUNTIME_INF to be a positive value or
-better yet just compare at unsigned, but it's not like config needs to
-be fast, so no need to mess with that.
+> +			data = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
+> +			data |= DSI_CMD_MODE_MDP_CTRL2_BURST_MODE;
+> +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, data);
+> +		}
+>   	}
+>   
+>   	dsi_write(msm_host, REG_DSI_CMD_DMA_CTRL,
+> 
+> ---
+> base-commit: a0364260213c96f6817f7e85cdce293cb743460f
+> change-id: 20230608-b4-add-burst-mode-a5bb144069fa
+> 
+> Best regards,
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 373ff5f55884..92381f9ecf37 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6005,13 +6005,14 @@ static enum hrtimer_restart sched_cfs_period_timer(struct hrtimer *timer)
->  	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
->  }
->  
-> -void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
-> +void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent)
->  {
->  	raw_spin_lock_init(&cfs_b->lock);
->  	cfs_b->runtime = 0;
->  	cfs_b->quota = RUNTIME_INF;
->  	cfs_b->period = ns_to_ktime(default_cfs_period());
->  	cfs_b->burst = 0;
-> +	cfs_b->hierarchical_quota = ((parent) ? parent->hierarchical_quota : RUNTIME_INF);
+-- 
+With best wishes
+Dmitry
 
-Minor style nit: don't need any of these parens here.
