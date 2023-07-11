@@ -2,159 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE0B74E6AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D085274E6B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjGKGA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S230237AbjGKGBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjGKGAo (ORCPT
+        with ESMTP id S230308AbjGKGBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:00:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C033D195;
-        Mon, 10 Jul 2023 23:00:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0EB3520455;
-        Tue, 11 Jul 2023 06:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689055222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N+md8tCCcb/XcgwK2O8x/Jn0J6p717ThkC2lo0+nTZw=;
-        b=UAFlabp9xOyAThJZecIPdU+uOM8qe7NMyksdL8t5Exrkbn/qCfI0YNPhtwnq8uY8Z2FrQ5
-        5wAWNfwGTvVQNjpeEyVL1o0i4YkC5jFPQJ6z63ZL8aKppiNMSTdcve27QYlWvBgO3+ybGS
-        VCbQ7Zm6HIQ1jG8+UAS484Gfeky7wiA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689055222;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N+md8tCCcb/XcgwK2O8x/Jn0J6p717ThkC2lo0+nTZw=;
-        b=M2SLNyPdAc+LORyma9dDAKNWsOUZYDeh8/97Zt1KJ8SVcYz7B2RGh2sjxflV4Kk2E2hI1c
-        KR9YvZIfwDWeecCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B7EA81391C;
-        Tue, 11 Jul 2023 06:00:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jun1K/XvrGTuBAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 11 Jul 2023 06:00:21 +0000
-Message-ID: <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
-Date:   Tue, 11 Jul 2023 08:00:20 +0200
+        Tue, 11 Jul 2023 02:01:12 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE73E4B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:01:08 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b8a6ca994eso4688379a34.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689055268; x=1691647268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kP2Qn64jJ8vkju5gUnFLPppk/VOAK+fecMr3ry9BHWE=;
+        b=jFqQrHVm4ADc4ms2fN447ZE1LEYqCrYggX8571mB2EXc0a9usoDIXpGo6hDohKMgyF
+         YMOeKoKd+rsGjUq3ji8SQFVEhXJxi4MeaoH+nAKAfizkFLfxTXIAX+xrek/oZ0LWWWfR
+         B2cGKDbrAcK34mvMGHsdg73km/566rbPSSQFTjhdUish+SwJ4zVH/xQQIumfjg+NsGrX
+         zurYXwT4eKVOpKgTIECucu3wwcqE9ZBNMWG67Ooo6B2vWc6Z8z4Rp41z0cyaOSzqL3ne
+         HxIOcv/26QTSgv0Ljte0nTI/gIKcNUKYZe1xLYtTSfoSZIENh3FiSf3M4jh0WTpFhZWr
+         eLTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689055268; x=1691647268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kP2Qn64jJ8vkju5gUnFLPppk/VOAK+fecMr3ry9BHWE=;
+        b=DnrwIPS1YTtPpuc8INNnV81jsJ5bpje5eAaI9Bh5zH8BR8geGk86D7diCXTtg7+L3/
+         6seiMsvkgFtA96SsgGNVy/DURi8/cZ5ifmHl+D9gQ0u6t/OC0hvLU45yEFHeqY7Jj01U
+         QDFTkmBZPiqF5tT/PoULaHp/WgLwFy9l9qHWHQsDsnDOjwfE3U9SCCNW8l0RwauKxUHv
+         zEQ7mK8UD7W9ocS9zTe6ToaHDnjwWtbSHZLDVJzIBV+MvPrf9QsalBdLTEeqDGOzTNlD
+         Re23ys+X7BS5irY/1uynt8GzqBNPRDekZA08/44gkmfH0Us8FdPx/doxtpXMqoSBI130
+         VW5A==
+X-Gm-Message-State: ABy/qLayXIKcuz3KJrTPcSwC7QPqSK6tmZkW7VWYa0Lni+mcMEwWVKAN
+        X2qcBHA0zp/PpnJStr3UexamKb9/0kthW6QGiEk=
+X-Google-Smtp-Source: APBJJlHRSt1CS4ZNrXn86/Rkb0QRE4QmBMGeSdPZEPvWtIoRG0nciNIsyAS3LkcL1bMDsvA4h3Ijag==
+X-Received: by 2002:a9d:744b:0:b0:6b8:8269:aa3e with SMTP id p11-20020a9d744b000000b006b88269aa3emr14739905otk.14.1689055267769;
+        Mon, 10 Jul 2023 23:01:07 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id x13-20020a17090aa38d00b00263d7c5323dsm885421pjp.49.2023.07.10.23.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 23:01:07 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 11:31:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: Build regressions/improvements in v6.5-rc1 (cpufreq/sparc*)
+Message-ID: <20230711060103.al3qpticc53qy4mp@vireshk-i7>
+References: <CAHk-=wj8sPDVoWgaceAs1AiwZrHV8mtC3vQNGbeV6-RypJi6aw@mail.gmail.com>
+ <20230710100012.2625532-1-geert@linux-m68k.org>
+ <b464f2b4-d2bc-11e0-bb2e-45ff43934bf6@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] of: Preserve "of-display" device name for compatibility
-To:     Rob Herring <robh@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Michal Suchanek <msuchanek@suse.de>
-Cc:     devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Cyril Brulebois <cyril@debamax.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230710174007.2291013-1-robh@kernel.org>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230710174007.2291013-1-robh@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------EJlFeu4ajUbibragQamf4Zcq"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b464f2b4-d2bc-11e0-bb2e-45ff43934bf6@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------EJlFeu4ajUbibragQamf4Zcq
-Content-Type: multipart/mixed; boundary="------------rrE1gd9xgtDN66LPMEindtwb";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Herring <robh@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
- Michal Suchanek <msuchanek@suse.de>
-Cc: devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
- Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, Cyril Brulebois <cyril@debamax.com>,
- dri-devel@lists.freedesktop.org
-Message-ID: <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
-Subject: Re: [PATCH] of: Preserve "of-display" device name for compatibility
-References: <20230710174007.2291013-1-robh@kernel.org>
-In-Reply-To: <20230710174007.2291013-1-robh@kernel.org>
+On 10-07-23, 22:33, Randy Dunlap wrote:
+> Hi--
+> 
+> On 7/10/23 03:00, Geert Uytterhoeven wrote:
+> > Below is the list of build error/warning regressions/improvements in
+> > v6.5-rc1[1] compared to v6.4[2].
+> > 
+> > Summarized:
+> >   - build errors: +3/-4
+> >   - build warnings: +36/-18
+> > 
+> > Note that there may be false regressions, as some logs are incomplete.
+> > Still, they're build errors/warnings.
+> > 
+> > Happy fixing! ;-)
+> > 
+> > Thanks to the linux-next team for providing the build service.
+> > 
+> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5/ (all 162 configs)
+> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6995e2de6891c724bfeb2db33d7b87775f913ad1/ (160 out of 162 configs)
+> > 
+> > 
+> > *** WARNINGS ***
+> > 
+> > 36 warning regressions:
+> 
+> >   + modpost: WARNING: modpost: drivers/cpufreq/sparc-us2e-cpufreq: section mismatch in reference: cpufreq_us2e_driver+0x20 (section: .data) -> us2e_freq_cpu_init (section: .init.text):  => N/A
+> >   + modpost: WARNING: modpost: drivers/cpufreq/sparc-us3-cpufreq: section mismatch in reference: cpufreq_us3_driver+0x20 (section: .data) -> us3_freq_cpu_init (section: .init.text):  => N/A
+> 
+> The way that I read this is that these __init functions (us2e_freq_cpu_init and us3_freq_cpu_init)
+> should not be marked as __init since they can be called at any time by exercising the CPU hotplug
+> code path.
 
---------------rrE1gd9xgtDN66LPMEindtwb
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I have prepared a patch for this, waiting for some builds to finish
+before sending it.
 
-DQoNCkFtIDEwLjA3LjIzIHVtIDE5OjQwIHNjaHJpZWIgUm9iIEhlcnJpbmc6DQo+IFNpbmNl
-IGNvbW1pdCAyNDFkMmZiNTZhMTggKCJvZjogTWFrZSBPRiBmcmFtZWJ1ZmZlciBkZXZpY2Ug
-bmFtZXMgdW5pcXVlIiksDQo+IGFzIHNwb3R0ZWQgYnkgRnLDqWTDqXJpYyBCb25uYXJkLCB0
-aGUgaGlzdG9yaWNhbCAib2YtZGlzcGxheSIgZGV2aWNlIGlzDQo+IGdvbmU6IHRoZSB1cGRh
-dGVkIGxvZ2ljIGNyZWF0ZXMgIm9mLWRpc3BsYXkuMCIgaW5zdGVhZCwgdGhlbiBhcyBtYW55
-DQo+ICJvZi1kaXNwbGF5Lk4iIGFzIHJlcXVpcmVkLg0KPiANCj4gVGhpcyBtZWFucyB0aGF0
-IG9mZmIgbm8gbG9uZ2VyIGZpbmRzIHRoZSBleHBlY3RlZCBkZXZpY2UsIHdoaWNoIHByZXZl
-bnRzDQo+IHRoZSBEZWJpYW4gSW5zdGFsbGVyIGZyb20gc2V0dGluZyB1cCBpdHMgaW50ZXJm
-YWNlLCBhdCBsZWFzdCBvbiBwcGM2NGVsLg0KPiANCj4gRml4IHRoaXMgYnkga2VlcGluZyAi
-b2YtZGlzcGxheSIgZm9yIHRoZSBmaXJzdCBkZXZpY2UgYW5kICJvZi1kaXNwbGF5Lk4iDQo+
-IGZvciBzdWJzZXF1ZW50IGRldmljZXMuDQo+IA0KPiBMaW5rOiBodHRwczovL2J1Z3ppbGxh
-Lmtlcm5lbC5vcmcvc2hvd19idWcuY2dpP2lkPTIxNzMyOA0KPiBMaW5rOiBodHRwczovL2J1
-Z3MuZGViaWFuLm9yZy8xMDMzMDU4DQo+IEZpeGVzOiAyNDFkMmZiNTZhMTggKCJvZjogTWFr
-ZSBPRiBmcmFtZWJ1ZmZlciBkZXZpY2UgbmFtZXMgdW5pcXVlIikNCj4gQ2M6IHN0YWJsZUB2
-Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IEN5cmlsIEJydWxlYm9pcyA8Y3lyaWxAZGViYW1heC5j
-b20+DQo+IENjOiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4g
-Q2M6IEhlbGdlIERlbGxlciA8ZGVsbGVyQGdteC5kZT4NCj4gU2lnbmVkLW9mZi1ieTogUm9i
-IEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJt
-YW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvb2YvcGxh
-dGZvcm0uYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL29mL3BsYXRmb3JtLmMg
-Yi9kcml2ZXJzL29mL3BsYXRmb3JtLmMNCj4gaW5kZXggMDUxZTI5YjdhZDJiLi4wYzM0NzVl
-N2QyZmYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvb2YvcGxhdGZvcm0uYw0KPiArKysgYi9k
-cml2ZXJzL29mL3BsYXRmb3JtLmMNCj4gQEAgLTU1Miw3ICs1NTIsNyBAQCBzdGF0aWMgaW50
-IF9faW5pdCBvZl9wbGF0Zm9ybV9kZWZhdWx0X3BvcHVsYXRlX2luaXQodm9pZCkNCj4gICAJ
-CQlpZiAoIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgsb3BlbmVkIiwgTlVMTCkgfHwN
-Cj4gICAJCQkgICAgIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgsYm9vdC1kaXNwbGF5
-IiwgTlVMTCkpDQo+ICAgCQkJCWNvbnRpbnVlOw0KPiAtCQkJZGV2ID0gb2ZfcGxhdGZvcm1f
-ZGV2aWNlX2NyZWF0ZShub2RlLCAib2YtZGlzcGxheS4wIiwgTlVMTCk7DQo+ICsJCQlkZXYg
-PSBvZl9wbGF0Zm9ybV9kZXZpY2VfY3JlYXRlKG5vZGUsICJvZi1kaXNwbGF5IiwgTlVMTCk7
-DQo+ICAgCQkJb2Zfbm9kZV9wdXQobm9kZSk7DQo+ICAgCQkJaWYgKFdBUk5fT04oIWRldikp
-DQo+ICAgCQkJCXJldHVybiAtRU5PTUVNOw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
-cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
-YW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55
-DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGll
-biBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+-- 
+viresh
 
---------------rrE1gd9xgtDN66LPMEindtwb--
+Subject: [PATCH] cpufreq: sparc: Don't mark cpufreq callbacks with __init
 
---------------EJlFeu4ajUbibragQamf4Zcq
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+These callbacks can be called again by the cpufreq core after the driver
+is initialized and must be kept around. We currently get section
+mismatch build warnings.
 
------BEGIN PGP SIGNATURE-----
+Don't mark them with __init.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSs7/QFAwAAAAAACgkQlh/E3EQov+By
-PA/9EW57Zs5sk3iddg/7LyeGpSXcv35PnNZUpqCm6rBQ/bmDziTNKi2cPDvg/qC50cEwuH4RSJsH
-MfKrUOVg7vxOwYKnTf3caz264mGVlI1xFwf9GiVeURyw5SnCVguOL5yObxfCveZtNWqyIkE+3NG0
-aHzLnkjhNxoW6Pv69DyLxrIjMxAXQduWwG6+3Otajh8KFqC+3KeOJzyLqb/q/3kOknw5KhFlV/4E
-QHCpBQ4Il3w2wazFi+53ePGgZyqwJOB/BLTyozq7f/2DBa5mXruqtUUT7j/IwI84eqYGWxXaIVPb
-T0IfjhBXdoBAUpgtB4jT0paoWFhcKK7zq7I3MbyiIMT/7V8wuYfaI4rOC5AlpDYeJ7uPCQuB7Fgo
-88xX9+2/rleh6zwYM+Y+rec90gkKS/AuUOPVfrPMi38Y0MpvX9/JY4eSEAkYzLxZ2ikbKScdg9c3
-GktsZ3kEDo28Y6ZfRfk9lOfdl+xQHM22pd3pIBdy/cyR7y7Q2uCV9kkta6dHA8dUjANJONevcsW5
-hda2NQYx4pzkFvJd+rPVfVEvdgqYvrfz+2jWmfJgM97O6coJqof3jd52Sob0yH2cRoGtV5T0AYMZ
-us9FLSraDImc+FXkMqq5PHLbvKEGetHcpc+9uxeLST7AJ60KO3dpHzJd2W5gDFBHTFSMsQfdyhm7
-eSI=
-=KYfa
------END PGP SIGNATURE-----
+Fixes: dcfce7c2cee4 ("cpufreq: sparc: Don't allocate cpufreq_driver dynamically")
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
 
---------------EJlFeu4ajUbibragQamf4Zcq--
+ drivers/cpufreq/sparc-us2e-cpufreq.c | 2 +-
+ drivers/cpufreq/sparc-us3-cpufreq.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
+index d3510cfdb3eb..2783d3d55fce 100644
+--- a/drivers/cpufreq/sparc-us2e-cpufreq.c
++++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
+@@ -269,7 +269,7 @@ static int us2e_freq_target(struct cpufreq_policy *policy, unsigned int index)
+ 	return smp_call_function_single(cpu, __us2e_freq_target, &index, 1);
+ }
+ 
+-static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
++static int us2e_freq_cpu_init(struct cpufreq_policy *policy)
+ {
+ 	unsigned int cpu = policy->cpu;
+ 	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
+diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
+index 91d1ed558136..6c3657679a88 100644
+--- a/drivers/cpufreq/sparc-us3-cpufreq.c
++++ b/drivers/cpufreq/sparc-us3-cpufreq.c
+@@ -117,7 +117,7 @@ static int us3_freq_target(struct cpufreq_policy *policy, unsigned int index)
+ 	return smp_call_function_single(cpu, update_safari_cfg, &new_bits, 1);
+ }
+ 
+-static int __init us3_freq_cpu_init(struct cpufreq_policy *policy)
++static int us3_freq_cpu_init(struct cpufreq_policy *policy)
+ {
+ 	unsigned int cpu = policy->cpu;
+ 	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
