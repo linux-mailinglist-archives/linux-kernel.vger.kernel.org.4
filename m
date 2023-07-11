@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2621974E3F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60E174E3F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjGKCLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 22:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S231571AbjGKCL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 22:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjGKCLl (ORCPT
+        with ESMTP id S231503AbjGKCLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 22:11:41 -0400
+        Mon, 10 Jul 2023 22:11:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64AF1B8;
-        Mon, 10 Jul 2023 19:11:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AA7E47;
+        Mon, 10 Jul 2023 19:11:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2598D61143;
-        Tue, 11 Jul 2023 02:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3FBC433C7;
-        Tue, 11 Jul 2023 02:11:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C672612D8;
+        Tue, 11 Jul 2023 02:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40BD8C433C7;
+        Tue, 11 Jul 2023 02:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689041496;
-        bh=AdroxX5P9OziwCjJV/WVhJbrj4bvgg6m7fGwBk22czA=;
+        s=k20201202; t=1689041505;
+        bh=dyGyLJr8vd+bW4LxAKW9oZijQiFuiaTQ8/8k42bABvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LS4AZJplDnDayCGJge+ulo91nFVzhLWCK+OVYOp6KEvdYeMgIPAIGZj7Rr2oXHf7e
-         LrM3oqwHxdnma4Owrc4QvoL8qzsdF2j7kuBGX3un+bDNXRuvOzw5oLVu/D7SemlfN3
-         1IOFCmtcWnwLo1WCpJNHG7kafoAqGN7Tez659foxUn1DCcwo6KAX8GGV0kzGNPnjt0
-         7tBlsytl1ddqvtWU1/uYCU+L2s9ezpHETaz0Ddt/UuUbwVLjPWjO8sm9tztmh+uJ0Z
-         fOX+d5a2fzQeGqMxU3OdfL53avUIMVkK0o6irrYsSVXimweeUlz0DFvAims+f/zs6C
-         UsV8mZDNa+Xrw==
+        b=DeRKMbFR46yWLVqZlbFemJTwHS3Vm0RrRZ1idmE/FkP0AHbmelEGghaBFLF+C4iH/
+         lG8osBDSPZhcH6IphWUijV2duyUI+cN3fi4Y2bV8kZW3mU/pcAB5524f5GSlVjXwpG
+         NJ24pNB+oXEMj5lxoXP8wleqKp+9NKAck6RGgSTG44+MhRqy4SG2ZfOLe1x7j8g9xV
+         ZAFlQOwJ5kZsyFYCfg5PRqNROPeL6Pn3g2VXoUl9izSbzMbbNTtHYa6q0EwO/ilIzu
+         YcIKJFJI9BmXlpbhUZ6y7NbczqbHleCI6+HeQ5dK8XLY29q8L4gaMICYJBxph7w1GC
+         U4ITF8dF1NJSA==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
         linux-trace-kernel@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v4 2/4] tracing/probes: Fix not to count error code to total length
-Date:   Tue, 11 Jul 2023 11:11:33 +0900
-Message-ID:  <168904149337.2908673.1200969484356641870.stgit@mhiramat.roam.corp.google.com>
+Subject: [PATCH v4 3/4] Revert "tracing: Add "(fault)" name injection to kernel probes"
+Date:   Tue, 11 Jul 2023 11:11:42 +0900
+Message-ID:  <168904150193.2908673.2202766623358215003.stgit@mhiramat.roam.corp.google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 In-Reply-To:  <168904147563.2908673.18054267804278861545.stgit@mhiramat.roam.corp.google.com>
 References:  <168904147563.2908673.18054267804278861545.stgit@mhiramat.roam.corp.google.com>
@@ -61,35 +61,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix not to count the error code (which is minus value) to the total
-used length of array, because it can mess up the return code of
-process_fetch_insn_bottom(). Also clear the 'ret' value because it
-will be used for calculating next data_loc entry.
+This reverts commit 2e9906f84fc7c99388bb7123ade167250d50f1c0.
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/all/8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain/
-Fixes: 9b960a38835f ("tracing: probeevent: Unify fetch_insn processing common part")
+It was turned out that commit 2e9906f84fc7 ("tracing: Add "(fault)"
+name injection to kernel probes") did not work correctly and probe
+events still show just '(fault)' (instead of '"(fault)"'). Also,
+current '(fault)' is more explicit that it faulted.
+
+This also moves FAULT_STRING macro to trace.h so that synthetic
+event can keep using it, and uses it in trace_probe.c too.
+
+Link: https://lore.kernel.org/all/20230706230642.3793a593@rorschach.local.home/
+
 Cc: stable@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tom Zanussi <zanussi@kernel.org>
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changes in v2:
- - Check and clear ret only for the array argument.
+ Changes in v3:
+  - Move FAULT_STRING macro to trace.h so that synthetic event can keep using it.
+  - Use FAULT_STRING in trace_probe.c.
 ---
- kernel/trace/trace_probe_tmpl.h |    2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace.h              |    2 ++
+ kernel/trace/trace_probe.c        |    2 +-
+ kernel/trace/trace_probe_kernel.h |   31 ++++++-------------------------
+ 3 files changed, 9 insertions(+), 26 deletions(-)
 
-diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
-index 4735c5cb76fa..ed9d57c6b041 100644
---- a/kernel/trace/trace_probe_tmpl.h
-+++ b/kernel/trace/trace_probe_tmpl.h
-@@ -204,6 +204,8 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
- array:
- 	/* the last stage: Loop on array */
- 	if (code->op == FETCH_OP_LP_ARRAY) {
-+		if (ret < 0)
-+			ret = 0;
- 		total += ret;
- 		if (++i < code->param) {
- 			code = s3;
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 79bdefe9261b..eee1f3ca4749 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -113,6 +113,8 @@ enum trace_type {
+ #define MEM_FAIL(condition, fmt, ...)					\
+ 	DO_ONCE_LITE_IF(condition, pr_err, "ERROR: " fmt, ##__VA_ARGS__)
+ 
++#define FAULT_STRING "(fault)"
++
+ #define HIST_STACKTRACE_DEPTH	16
+ #define HIST_STACKTRACE_SIZE	(HIST_STACKTRACE_DEPTH * sizeof(unsigned long))
+ #define HIST_STACKTRACE_SKIP	5
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index 2d2616678295..591399ddcee5 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -65,7 +65,7 @@ int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, void *data, void *ent)
+ 	int len = *(u32 *)data >> 16;
+ 
+ 	if (!len)
+-		trace_seq_puts(s, "(fault)");
++		trace_seq_puts(s, FAULT_STRING);
+ 	else
+ 		trace_seq_printf(s, "\"%s\"",
+ 				 (const char *)get_loc_data(data, ent));
+diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
+index c4e1d4c03a85..6deae2ce34f8 100644
+--- a/kernel/trace/trace_probe_kernel.h
++++ b/kernel/trace/trace_probe_kernel.h
+@@ -2,8 +2,6 @@
+ #ifndef __TRACE_PROBE_KERNEL_H_
+ #define __TRACE_PROBE_KERNEL_H_
+ 
+-#define FAULT_STRING "(fault)"
+-
+ /*
+  * This depends on trace_probe.h, but can not include it due to
+  * the way trace_probe_tmpl.h is used by trace_kprobe.c and trace_eprobe.c.
+@@ -15,16 +13,8 @@ static nokprobe_inline int
+ fetch_store_strlen_user(unsigned long addr)
+ {
+ 	const void __user *uaddr =  (__force const void __user *)addr;
+-	int ret;
+ 
+-	ret = strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
+-	/*
+-	 * strnlen_user_nofault returns zero on fault, insert the
+-	 * FAULT_STRING when that occurs.
+-	 */
+-	if (ret <= 0)
+-		return strlen(FAULT_STRING) + 1;
+-	return ret;
++	return strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
+ }
+ 
+ /* Return the length of string -- including null terminal byte */
+@@ -44,18 +34,7 @@ fetch_store_strlen(unsigned long addr)
+ 		len++;
+ 	} while (c && ret == 0 && len < MAX_STRING_SIZE);
+ 
+-	/* For faults, return enough to hold the FAULT_STRING */
+-	return (ret < 0) ? strlen(FAULT_STRING) + 1 : len;
+-}
+-
+-static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void *base, int len)
+-{
+-	if (ret >= 0) {
+-		*(u32 *)dest = make_data_loc(ret, __dest - base);
+-	} else {
+-		strscpy(__dest, FAULT_STRING, len);
+-		ret = strlen(__dest) + 1;
+-	}
++	return (ret < 0) ? ret : len;
+ }
+ 
+ /*
+@@ -76,7 +55,8 @@ fetch_store_string_user(unsigned long addr, void *dest, void *base)
+ 	__dest = get_loc_data(dest, base);
+ 
+ 	ret = strncpy_from_user_nofault(__dest, uaddr, maxlen);
+-	set_data_loc(ret, dest, __dest, base, maxlen);
++	if (ret >= 0)
++		*(u32 *)dest = make_data_loc(ret, __dest - base);
+ 
+ 	return ret;
+ }
+@@ -107,7 +87,8 @@ fetch_store_string(unsigned long addr, void *dest, void *base)
+ 	 * probing.
+ 	 */
+ 	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
+-	set_data_loc(ret, dest, __dest, base, maxlen);
++	if (ret >= 0)
++		*(u32 *)dest = make_data_loc(ret, __dest - base);
+ 
+ 	return ret;
+ }
 
