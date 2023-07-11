@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7883F74F56E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F7774F573
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjGKQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S232989AbjGKQcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbjGKQc7 (ORCPT
+        with ESMTP id S232429AbjGKQcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:32:59 -0400
-Received: from out-43.mta0.migadu.com (out-43.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017791BC0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:32:45 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689093163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QoMhwjFigAbTHq+HcB9GYpyFfpHDzGgLNmwruJkUmC8=;
-        b=mjzopN32gkDIHH2DKeXPU4Uhh5gf5z6r2DVtvgerWF+e+HZlmhuYpklBE1idXQeZo+0qP6
-        kmmBiis6yM0xkO0eQgkG3GzLPBwQlnlpbqo8JYOMgGxYMoHSFvkTp+dFbaI/Dx0l2tA5er
-        DVLQ6sEcNFPLD8VVKk9IBe1o8Q3fX7c=
-From:   Sui Jingfeng <sui.jingfeng@linux.dev>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jocelyn Falempe <jfalempe@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Helge Deller <deller@gmx.de>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Likun Gao <Likun.Gao@amd.com>
-Subject: [PATCH v3 5/9] drm/amdgpu: Implement the is_primary_gpu callback of vga_client_register()
-Date:   Wed, 12 Jul 2023 00:31:51 +0800
-Message-Id: <20230711163155.791522-6-sui.jingfeng@linux.dev>
-In-Reply-To: <20230711163155.791522-1-sui.jingfeng@linux.dev>
-References: <20230711163155.791522-1-sui.jingfeng@linux.dev>
+        Tue, 11 Jul 2023 12:32:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EC2173A;
+        Tue, 11 Jul 2023 09:32:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D065F6155E;
+        Tue, 11 Jul 2023 16:32:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058E9C433C9;
+        Tue, 11 Jul 2023 16:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689093146;
+        bh=/yz1VNIx8w5vnZQUrnW46zn2dCf4xJSJ/w4OLb6WBAk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Yg4EUjxEPD06/Bn6reOhE6TdmtCBNfXmQqLeCVeuc3B4GVfMn6aCEif09HCeYn0Uz
+         Uh06QjoXyuXz76Qh5WxlMsRGgkCEP7GU/xz19BFKHWMX9QP3c0f6H0pfTBv/CMzFNR
+         Gce9NhJ0EAOEBKlWz+3t/42M+JkZEBcqbImWn7g+k7QPFZpUzXnG2Z1YmAU3XT7xgc
+         etgVuONKYWYaRKo7d3AavNFlRtsW7kOs9f5RUjTcfpugo5ljkNFTIaY6eHMNaVhk9c
+         uHeshfY+jsKSE6st5tdcIBLc4raTCwWlwmHFJSEDn5De4UwjLIv6N+Hw3CwjBc6UeH
+         ZQDhJ2SfdHm6Q==
+Date:   Tue, 11 Jul 2023 09:32:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <20230711093224.1bf30ed5@kernel.org>
+In-Reply-To: <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
+References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+        <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+        <ZKNA9Pkg2vMJjHds@ziepe.ca>
+        <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+        <ZKxDZfVAbVHgNgIM@ziepe.ca>
+        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+        <ZKyZBbKEpmkFkpWV@ziepe.ca>
+        <20230711042708.GA18658@lst.de>
+        <20230710215906.49514550@kernel.org>
+        <20230711050445.GA19323@lst.de>
+        <ZK1FbjG+VP/zxfO1@ziepe.ca>
+        <20230711090047.37d7fe06@kernel.org>
+        <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+On Tue, 11 Jul 2023 10:20:58 -0600 David Ahern wrote:
+> On 7/11/23 10:00 AM, Jakub Kicinski wrote:
+> >> RDMA works with the AMD and Intel intree drivers using DMABUF without
+> >> requiring struct pages using the DRM hacky scatterlist approach.  
+> > I see, thanks. We need pages primarily for refcounting. Avoiding all
+> > the infamous problems with memory pins. Oh well.  
+> 
+> io_uring for example already manages the page pinning. An skb flag was
+> added for ZC Tx API to avoid refcounting in the core networking layer.
 
-[why]
+Right, we can refcount in similar fashion. Still tracking explicitly
+when buffers are handed over to the NIC.
 
-The vga_is_firmware_default() function defined in drivers/pci/vgaarb.c is
-arch-dependent, it's a dummy on non-x86 architectures. This made VGAARB
-lost an important condition for the arbitration on non-x86 platform. The
-rules about which GPU is (or should be) the primary display device get used
-by userspace are obscure on non-x86 platform, let's made the things clear.
+> Any reason not to allow an alternative representation for skb frags than
+> struct page?
 
-[how]
-
-The device that owns the firmware framebuffer should be the default boot
-device. This patch adds an arch-independent function to implement this
-rule. The vgaarb subsystem will call back to amdgpu_is_primary_gpu() when
-drm/amdgpu is bound to an AMDGPU device successfully.
-
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Christian Konig <christian.koenig@amd.com>
-Cc: Pan Xinhui <Xinhui.Pan@amd.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Hawking Zhang <Hawking.Zhang@amd.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Lijo Lazar <lijo.lazar@amd.com>
-Cc: YiPeng Chai <YiPeng.Chai@amd.com>
-Cc: Bokun Zhang <Bokun.Zhang@amd.com>
-CC: Likun Gao <Likun.Gao@amd.com>
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index d98f0801ac77..b638eff58636 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -3690,6 +3690,15 @@ static void amdgpu_device_set_mcbp(struct amdgpu_device *adev)
- 		DRM_INFO("MCBP is enabled\n");
- }
- 
-+static bool amdgpu_is_primary_gpu(struct pci_dev *pdev)
-+{
-+	struct drm_device *dev = pci_get_drvdata(pdev);
-+	struct amdgpu_device *adev = drm_to_adev(dev);
-+	struct amdgpu_gmc *gmc = &adev->gmc;
-+
-+	return drm_aperture_contain_firmware_fb(gmc->aper_base, gmc->aper_size);
-+}
-+
- /**
-  * amdgpu_device_init - initialize the driver
-  *
-@@ -4103,7 +4112,8 @@ int amdgpu_device_init(struct amdgpu_device *adev,
- 	/* this will fail for cards that aren't VGA class devices, just
- 	 * ignore it */
- 	if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
--		vga_client_register(adev->pdev, amdgpu_device_vga_set_decode, NULL);
-+		vga_client_register(adev->pdev, amdgpu_device_vga_set_decode,
-+				    amdgpu_is_primary_gpu);
- 
- 	px = amdgpu_device_supports_px(ddev);
- 
--- 
-2.25.1
-
+I don't think there's a hard technical reason. We can make it work.
