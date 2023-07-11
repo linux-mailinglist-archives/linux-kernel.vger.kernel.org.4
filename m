@@ -2,57 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516D874F015
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A15E74F01D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbjGKN3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S232208AbjGKN3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjGKN3G (ORCPT
+        with ESMTP id S232186AbjGKN3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:29:06 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F91318D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689082145; x=1720618145;
-  h=date:from:to:cc:subject:message-id;
-  bh=iokCTEQcwbJtCojQ9o5dPAUn0ODR9XAw/msNZeUzKM4=;
-  b=mxH4ZVLEaRlh6VSWgZQhGvaic5YelaihTT/Xt/IY1b5APPJQ7uaST8RF
-   Yid3uYLAlWDNzmBv+1JMDXYmbrkbkhxXbhbqvrMzoVLqhow0ftCuJ81XV
-   yjQJoV1w1opuDZ25s0rImoxO9bquTvDN9Yba18zp0yGJQfsjBbXK2cRQI
-   LeZ0427L1caPpp3vQMs2e3nKyXTVvy/5mG2noA9XOXG2UrRAcfvRpW2tz
-   j5NwO64ivxCh1PyLF4tXi6wvMK+ZW3piuEbiD0wlRRV1pcAqM2YzsnfgV
-   wk9pyuKaM55KYR+BwhjcHW9tIIWFzoTgLe43R7owUZigZtv4yaDWChYaf
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="344215037"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="344215037"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 06:29:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="715167818"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="715167818"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 06:29:03 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qJDQM-0004pJ-2Z;
-        Tue, 11 Jul 2023 13:29:02 +0000
-Date:   Tue, 11 Jul 2023 21:28:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- c7148d72837a4266a203c99d021543764526ce6d
-Message-ID: <202307112120.lk6kfLwR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        Tue, 11 Jul 2023 09:29:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9D318D;
+        Tue, 11 Jul 2023 06:29:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78FF36607010;
+        Tue, 11 Jul 2023 14:29:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689082168;
+        bh=A6Rhy91tdjux/U1OjfY+XN+em6idN9fFsp4Gj75jj3Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Bj0EFZpAy7nFby7CUTs+PEwT8vs+La8bzX9UYqF73oazR63yx2IHPPA2JHUd1crN7
+         u7PAxyRka3DqmNvhZ5M72I2mvt/zbjiS0yMalOlSuWvlx/bfnSvODSAi5oU/MRyGf3
+         aGWBbXbtkrs/c69s3IIJc3n9NU+l9N7Vq3udf22WAzHRfo+NjJu3NVNgqg/mGODjal
+         U+8BVvc+3X5TXjQn5d75fL8W+WXl0I2H6Avc6DBiihqQZ7faWNiWwtdS1K6qIpx6e4
+         KBce2lFKpLIa/z0lFI7YUxCPDHlYxhSB5sfm0e4oNH095a1OsDfr7jPiRj41PQODwj
+         CMKuG2rPGicFQ==
+Message-ID: <82a48b1c-b070-ba45-04f8-2f2bf645d893@collabora.com>
+Date:   Tue, 11 Jul 2023 15:29:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 04/15] spi: Replace open coded
+ spi_controller_xfer_timeout()
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
+ <83c4b75a-06d7-9fca-ffa0-f2e6a6ae7aed@collabora.com>
+ <e3688ce5-616a-4399-a4e3-c410a09f6a45@sirena.org.uk>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <e3688ce5-616a-4399-a4e3-c410a09f6a45@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,174 +109,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: c7148d72837a4266a203c99d021543764526ce6d  rcu: Use WRITE_ONCE() for assignments to ->next for rculist_nulls
+Il 11/07/23 15:05, Mark Brown ha scritto:
+> On Tue, Jul 11, 2023 at 10:28:13AM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 10/07/23 17:49, Andy Shevchenko ha scritto:
+> 
+>>> +		ms = spi_controller_xfer_timeout(ctlr, xfer);
+> 
+>> I agree on using helpers, but the logic is slightly changing here: yes it is
+>> unlikely (and also probably useless) to get ms == UINT_MAX, but the helper is
+>> limiting the maximum timeout value to 500mS, which may not work for some slow
+>> controllers/devices.
+> 
+> The helper is limiting the *minimum* timeout value to 500ms - it's using
+> max() not min().  The idea is the other way around, that for a very fast
+> transfer we don't want to end up with such a short timeout that it false
+> triggers due to scheduling issues.
 
-elapsed time: 725m
-
-configs tested: 155
-configs skipped: 6
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r014-20230710   gcc  
-arc                  randconfig-r023-20230710   gcc  
-arc                  randconfig-r031-20230710   gcc  
-arc                  randconfig-r043-20230711   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   milbeaut_m10v_defconfig   clang
-arm                         nhk8815_defconfig   gcc  
-arm                  randconfig-r002-20230710   clang
-arm                  randconfig-r024-20230710   gcc  
-arm                  randconfig-r025-20230710   gcc  
-arm                  randconfig-r046-20230711   clang
-arm                         s5pv210_defconfig   clang
-arm                           stm32_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r014-20230710   clang
-arm64                randconfig-r034-20230710   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r005-20230710   gcc  
-hexagon              randconfig-r016-20230710   clang
-hexagon              randconfig-r041-20230711   clang
-hexagon              randconfig-r045-20230710   clang
-hexagon              randconfig-r045-20230711   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230710   gcc  
-i386         buildonly-randconfig-r004-20230711   clang
-i386         buildonly-randconfig-r005-20230710   gcc  
-i386         buildonly-randconfig-r005-20230711   clang
-i386         buildonly-randconfig-r006-20230710   gcc  
-i386         buildonly-randconfig-r006-20230711   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230710   gcc  
-i386                 randconfig-i001-20230711   clang
-i386                 randconfig-i002-20230710   gcc  
-i386                 randconfig-i002-20230711   clang
-i386                 randconfig-i003-20230710   gcc  
-i386                 randconfig-i003-20230711   clang
-i386                 randconfig-i004-20230710   gcc  
-i386                 randconfig-i004-20230711   clang
-i386                 randconfig-i005-20230710   gcc  
-i386                 randconfig-i005-20230711   clang
-i386                 randconfig-i006-20230710   gcc  
-i386                 randconfig-i006-20230711   clang
-i386                 randconfig-i011-20230710   clang
-i386                 randconfig-i011-20230711   gcc  
-i386                 randconfig-i012-20230710   clang
-i386                 randconfig-i012-20230711   gcc  
-i386                 randconfig-i013-20230710   clang
-i386                 randconfig-i013-20230711   gcc  
-i386                 randconfig-i014-20230710   clang
-i386                 randconfig-i014-20230711   gcc  
-i386                 randconfig-i015-20230710   clang
-i386                 randconfig-i015-20230711   gcc  
-i386                 randconfig-i016-20230710   clang
-i386                 randconfig-i016-20230711   gcc  
-i386                 randconfig-r024-20230710   clang
-i386                 randconfig-r031-20230710   gcc  
-i386                 randconfig-r032-20230710   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r006-20230710   gcc  
-loongarch            randconfig-r035-20230710   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5307c3_defconfig   gcc  
-microblaze           randconfig-r004-20230710   gcc  
-microblaze           randconfig-r015-20230710   gcc  
-microblaze           randconfig-r035-20230710   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath25_defconfig   clang
-mips                 randconfig-r021-20230710   gcc  
-nios2                               defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r012-20230710   gcc  
-parisc               randconfig-r025-20230710   gcc  
-parisc               randconfig-r026-20230710   gcc  
-parisc               randconfig-r032-20230710   gcc  
-parisc               randconfig-r034-20230710   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                       ppc64_defconfig   gcc  
-powerpc              randconfig-r001-20230710   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r013-20230710   clang
-riscv                randconfig-r026-20230710   clang
-riscv                randconfig-r042-20230711   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r033-20230710   gcc  
-s390                 randconfig-r036-20230710   gcc  
-s390                 randconfig-r044-20230710   clang
-s390                 randconfig-r044-20230711   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r011-20230710   gcc  
-sh                             sh03_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r003-20230710   gcc  
-sparc64              randconfig-r013-20230710   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r022-20230710   gcc  
-um                   randconfig-r025-20230711   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230710   gcc  
-x86_64       buildonly-randconfig-r001-20230711   clang
-x86_64       buildonly-randconfig-r002-20230710   gcc  
-x86_64       buildonly-randconfig-r002-20230711   clang
-x86_64       buildonly-randconfig-r003-20230710   gcc  
-x86_64       buildonly-randconfig-r003-20230711   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230710   clang
-x86_64               randconfig-x001-20230711   gcc  
-x86_64               randconfig-x002-20230710   clang
-x86_64               randconfig-x002-20230711   gcc  
-x86_64               randconfig-x003-20230710   clang
-x86_64               randconfig-x003-20230711   gcc  
-x86_64               randconfig-x004-20230710   clang
-x86_64               randconfig-x004-20230711   gcc  
-x86_64               randconfig-x005-20230710   clang
-x86_64               randconfig-x005-20230711   gcc  
-x86_64               randconfig-x006-20230710   clang
-x86_64               randconfig-x006-20230711   gcc  
-x86_64               randconfig-x011-20230710   gcc  
-x86_64               randconfig-x012-20230710   gcc  
-x86_64               randconfig-x013-20230710   gcc  
-x86_64               randconfig-x014-20230710   gcc  
-x86_64               randconfig-x015-20230710   gcc  
-x86_64               randconfig-x016-20230710   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa               randconfig-r033-20230710   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+After reading the code again, yeah, I've totally misread it the first time. Argh!
+Thanks! :-)
