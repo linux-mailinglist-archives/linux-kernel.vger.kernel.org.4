@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B484674E793
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D6374E795
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjGKG5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S230375AbjGKG53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGKG5H (ORCPT
+        with ESMTP id S230148AbjGKG52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:57:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117B0188
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:57:07 -0700 (PDT)
+        Tue, 11 Jul 2023 02:57:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D10B1A8;
+        Mon, 10 Jul 2023 23:57:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99CCE61329
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440CBC433C8;
-        Tue, 11 Jul 2023 06:57:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF0E76132C;
+        Tue, 11 Jul 2023 06:57:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA20C433C8;
+        Tue, 11 Jul 2023 06:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689058626;
-        bh=E7aOphHfxIvPiM7w+nvQL4QDcpx4xw+fA9HR0KeNyPM=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=WPqcmstoqnpoSua2xZYMl8b/Foa3vObKoL/CfIEEGmdcjP41UxX8YjSUGden4yoa1
-         OuRcJDjjSw+OVzeef0RSM+OQevEEfQh7nZkMqdh5QryzRfEuA9tsADGad1qgLNb85r
-         h2iKYhakcg93jeHbTh5KDuhWnpv8wMjaBJjgPm0BrEuM0V3XCKhCNbirIffDf8HKAS
-         ngmp+PADfCp/0hCKBJ9wEOeLqSPoV04XR6W6Hk5NgZ7bYNINvoogurVXLFBk7N3m0t
-         ++g5BEc+Nid+wSpUr147Y1YWBvhVfZIU7HLHOws9jiSrZBcp+zg+q1IObiEavc3nPk
-         iU21U0XNChTRA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Atheros 11K <ath11k@lists.infradead.org>
-Subject: Re: Fwd: ath11k: QCN9074: ce desc not available for wmi command
-References: <1326a6e4-758d-3344-d90c-8a126748b034@gmail.com>
-        <6a0c3aa0-86a8-8c06-81df-2d7085946cf5@leemhuis.info>
-Date:   Tue, 11 Jul 2023 09:57:02 +0300
-In-Reply-To: <6a0c3aa0-86a8-8c06-81df-2d7085946cf5@leemhuis.info> (Linux
-        regression tracking's message of "Mon, 26 Jun 2023 14:49:32 +0200")
-Message-ID: <87o7kj7x6p.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        s=k20201202; t=1689058646;
+        bh=XbueLfbh+xpb2riKkcfsNl0zXNJkp7eCcVQSRNk/hHc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tDUnRYYQgv3S4zJf/g5HmzTmuA9OY72vHb9Zq968WcO8YETf+o/zoT6TUAuWVSEXy
+         xWSCsYTcvxoMRjz3mRujltcJX2Bz/ioEnU+zugbAYHW1/eTBWStfEQZR5f4FUuz/Sg
+         ImADdSIECbyQZV9dXQFCcvxGSpoMXvbg2KUGfU5ozV6SZcvG394mJLSliBQS3399mg
+         5tEM4FnUKA9PDfp3es8crk82z158wd2vqaWbYOpqgRdBnygnSoBjgs+UCcnz24JMlx
+         jUr7vHakZVLkRNN3QIRlN/DdLAfd5IcoBdivycNGOGZtKNhMZWR6MHRvbNErVTStt1
+         w4n8j79CuvjzA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qJ7JL-00C29S-Cl;
+        Tue, 11 Jul 2023 07:57:23 +0100
+Date:   Tue, 11 Jul 2023 07:57:23 +0100
+Message-ID: <86lefnvsto.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+Cc:     <will@kernel.org>, <corbet@lwn.net>, <catalin.marinas@arm.com>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+In-Reply-To: <6e07ad52-2629-346e-6217-ec07777ebc5b@quicinc.com>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+        <875y6s8bwb.wl-maz@kernel.org>
+        <32f442e3-3d5c-4cec-9791-0da039f88287@quicinc.com>
+        <874jmc8654.wl-maz@kernel.org>
+        <6e07ad52-2629-346e-6217-ec07777ebc5b@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_aiquny@quicinc.com, will@kernel.org, corbet@lwn.net, catalin.marinas@arm.com, quic_pkondeti@quicinc.com, quic_kaushalk@quicinc.com, quic_satyap@quicinc.com, quic_shashim@quicinc.com, quic_songxue@quicinc.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -63,26 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Linux regression tracking (Thorsten Leemhuis)"
-<regressions@leemhuis.info> writes:
+On Tue, 11 Jul 2023 04:30:44 +0100,
+"Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+> 
+> On 7/10/2023 5:31 PM, Marc Zyngier wrote:
+> > On Mon, 10 Jul 2023 09:19:54 +0100,
+> > "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+> >> 
+> >> On 7/10/2023 3:27 PM, Marc Zyngier wrote:
+> >>> On Mon, 10 Jul 2023 06:59:55 +0100,
+> >>> Maria Yu <quic_aiquny@quicinc.com> wrote:
+> >>>> 
+> >>>> In order to be able to disable lse_atomic even if cpu
+> >>>> support it, most likely because of memory controller
+> >>>> cannot deal with the lse atomic instructions, use a
+> >>>> new idreg override to deal with it.
+> >>> 
+> >>> In general, the idreg overrides are *not* there to paper over HW bugs.
+> >>> They are there to force the kernel to use or disable a feature for
+> >>> performance reason or to guide the *enabling* of a feature, but not
+> >>> because the HW is broken.
+> >>> 
+> >>> The broken status of a HW platform must also be documented so that we
+> >>> know what to expect when we look at, for example, a bad case of memory
+> >>> corruption (something I'd expect to see on a system that only
+> >>> partially implements atomic memory operations).
+> >>> 
+> >> 
+> >> good idea. A noc error would be happened if the lse atomic instruction
+> >> happened during a memory controller doesn't support lse atomic
+> >> instructions.
+> >> I can put the information in next patchset comment message. Pls feel
+> >> free to let know if there is other place to have this kind of
+> >> information with.
+> > 
+> > For a start, Documentation/arch/arm64/silicon-errata.rst should
+> > contain an entry for the actual erratum, and a description of the
+> > symptoms of the issue (you're mentioning a "noc error": how is that
+> > reported to the CPU?).
+> 
+> This is not a cpu's errata as my understanding. It is the DDR
+> subsystem which don't have the LSE atomic feature supported.
 
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
->
-> Hmmm, there afaics was no real progress and not even a single reply from
-> a developer (neither here or in bugzilla) since the issue was reported
-> ~10 days ago. :-/
->
-> Manikanta, did you maybe just miss that this is caused by change of
-> yours (and thus is something you should look into)?
+CPU or not doesn't matter. We also track system errata.
 
-No reply from Manikanta so I think I'll just revert the commit. I have
-assigned bug #217536 to me now.
+> > 
+> > The workaround should also be detected at runtime -- we cannot rely on
+> > the user to provide a command-line argument to disable an essential
+> > feature that anyone has taken for granted for most of a decade...
+> 
+> We are also seeking help from DDR Subsystem POC to see whether it is
+> possible to detect the LSE atomic feature support or not at runtime.
 
-The wireless trees are closed for July but my plan is that I submit the
-revert directly to net tree.
+Keying it off a DT compatible (or something similar) would work.
+
+> In my opinion, LSE atomic is a system level feature instead of a cpu
+> only feature. So currently solution we is that even if cpu support lse
+> atomic, but it still needed to be disabled if the cpu working with a
+> lse atomic not support by current system's DDR subsystem.
+
+In the absence of a detection mechanism for anything past the CPU,
+this is a moot point. At this stage, this is a bit like saying
+"writing to memory is a system thing, not only a CPU feature".
+
+And this also breaks KVM if these CPUs don't have FWB, as a guest can
+always map a piece of memory as non-cacheable, and trigger the issue
+you describe in your reply to Will, even if you hide the atomics on
+the host.
+
+	M.
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Without deviation from the norm, progress is not possible.
