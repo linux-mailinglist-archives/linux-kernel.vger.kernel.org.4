@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7679274E763
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F2474E767
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbjGKGd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        id S230248AbjGKGeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjGKGdz (ORCPT
+        with ESMTP id S230447AbjGKGeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:33:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B0012F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:33:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7826132E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:33:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABDCC433C7;
-        Tue, 11 Jul 2023 06:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689057233;
-        bh=acU76Y6k1QN2XPJ4c01Abf7FhYW/VoN5gp3/z0pL7I4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BVKsrX0gYKSG/0sv5oXX9VH941YTcpvKPUXuxW/wrnzQXs4L0JtwHeS4ZPStVcq6b
-         zkjHWxf7uvzsp0FOys/nLc1hH3LANzfo9LktDNJM3QmRYPhU/hA1IyB8QLaPZJW1Zm
-         8eEqqTBn5MiZqZ1LnWGQUftZo3FfmXXyBMar1OxcVP71I0ZJqa4+q1ZUIX7QnUG4kB
-         o5DdIwZsd8xk66vtoqyQy/zn1aIN6W+yOLfD2lLAZ8zkmNx+gjpaAaJFlL5nY9KIgd
-         DQjPeFTxkA86B2nZebXGOe2woTcKoOuoNxF7M21zOZrZQ5KLe9mGPK3G1faImw9SWp
-         Bf/F4smByyWaA==
-Date:   Tue, 11 Jul 2023 09:33:48 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
- in netlink_update_socket_mc()
-Message-ID: <20230711063348.GB41919@unreal>
-References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
+        Tue, 11 Jul 2023 02:34:09 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C33E77
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:34:04 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51e278e344bso6400043a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689057243; x=1691649243;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PGCWjcfxiQ3gZrIHV8xXlPXazSWRuwdZd5KsYoVmkEw=;
+        b=lW9wrsgS0xuRn0BldBSAtCkAG/xvrcHnt+KSEnhWxn+0HYb3hgW6ZAmsIvwZ687tDl
+         qIGNN5urQiizOTKAsGr+auLd3ybzyrvBi7vxmQ2BDTU1mCaIM4TSWt2fiSvkEQAPjjcJ
+         Cm8WBtHlGhC8/iaJGzdwsRL69t2JwM97wdaPemFeN76PWo7tEzd54ztpwZS8EB6A3007
+         7ExKB1TE2ZxGO6GnUXjCf2fVkcaVerEx77rmUbCNwBEsob1wbtOBBUS20Y+XN/ou/ikn
+         xKp2a00Kryymi8VliXxevhIM95/XPO8szIpsd+DFCBN20XhUaMdbblTTT5TJjAyjaBoC
+         mn+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689057243; x=1691649243;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PGCWjcfxiQ3gZrIHV8xXlPXazSWRuwdZd5KsYoVmkEw=;
+        b=Zvy2ZHA/rxqfpc+3QprFMpoD+DpVh0uRgCAcz/C16ipFYPULrraKh4aOQ2hwi2SBgd
+         DGf5Fj5N1qExq5wtY6R8mR9uIKe8jA2ty6H4kUXDsZLKCaQmAh9FJfFnXAG5Xhv8ZxEr
+         EfgQj9Z696UBGTMWeGnfT8mNWJrHcja7sivAyldNKVnv+1YyM8mZaoC+XFRAEcCiTI2F
+         q1ur/OTBaPvNnZtXH/6HH6qltoKWUK2QqS4ks4q2xa85IkopMO+CamVHiP1/1BWbEIwt
+         7a28wIhxFd1c/q7s6wsKS8uTGFkHLTO+3X9hrPk8gOFNQzUU8jIK4B1eKpg3cJo3GbAy
+         PINQ==
+X-Gm-Message-State: ABy/qLb30u602IK78C+KPHrtV7UFnUWacwWarjwa6CsXiDJX6xgRrY6M
+        VwS0Vtj1Bw1EE3rgqrnIlITyDQ==
+X-Google-Smtp-Source: APBJJlGMPmsubyu2deM1+C9ib+4PQJBqlAYcGORczvM0biVnkBNQzxbsN7w/J1dpCR5dkJNjot+GgQ==
+X-Received: by 2002:a17:906:1092:b0:993:fba5:cdfa with SMTP id u18-20020a170906109200b00993fba5cdfamr7290749eju.26.1689057243370;
+        Mon, 10 Jul 2023 23:34:03 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id r11-20020a1709067fcb00b009929d998abcsm686124ejs.209.2023.07.10.23.34.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 23:34:02 -0700 (PDT)
+Message-ID: <31eb0ecb-858d-6913-fae1-d88a7f203efb@linaro.org>
+Date:   Tue, 11 Jul 2023 08:34:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: power: rpmhpd: Add Generic RPMh PD
+ indexes
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1689054169-10800-2-git-send-email-quic_rohiagar@quicinc.com>
+ <2040226e-9b45-b409-3edd-a5b86d86daa8@linaro.org>
+ <8a3124ce-a11d-2491-eaee-1695cec70b17@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8a3124ce-a11d-2491-eaee-1695cec70b17@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
-> The bit operations take boolean parameter and return also boolean
-> (in test_bit()-like cases). Don't threat booleans as integers when
-> it's not needed.
+On 11/07/2023 08:17, Rohit Agarwal wrote:
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  net/netlink/af_netlink.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> index 383631873748..d81e7a43944c 100644
-> --- a/net/netlink/af_netlink.c
-> +++ b/net/netlink/af_netlink.c
-> @@ -1623,9 +1623,10 @@ EXPORT_SYMBOL(netlink_set_err);
->  /* must be called with netlink table grabbed */
->  static void netlink_update_socket_mc(struct netlink_sock *nlk,
->  				     unsigned int group,
-> -				     int is_new)
-> +				     bool new)
->  {
-> -	int old, new = !!is_new, subscriptions;
-> +	int subscriptions;
-> +	bool old;
->  
->  	old = test_bit(group - 1, nlk->groups);
->  	subscriptions = nlk->subscriptions - old + new;
+> On 7/11/2023 11:22 AM, Krzysztof Kozlowski wrote:
+>> On 11/07/2023 07:42, Rohit Agarwal wrote:
+>>> Add Generic RPMh Power Domain indexes that can be used
+>>> for all the Qualcomm SoC henceforth.
+>>>
+>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>   include/dt-bindings/power/qcom-rpmhpd.h | 30 ++++++++++++++++++++++++++++++
+>>>   1 file changed, 30 insertions(+)
+>>>   create mode 100644 include/dt-bindings/power/qcom-rpmhpd.h
+>>>
+>>> diff --git a/include/dt-bindings/power/qcom-rpmhpd.h b/include/dt-bindings/power/qcom-rpmhpd.h
+>>> new file mode 100644
+>>> index 0000000..4da2e04
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/power/qcom-rpmhpd.h
+>> Filename based on compatible.
+> This is not specific for SDX75. These are generic ones that should be 
+> used for all other targets.
 
-So what is the outcome of "int - bool + bool" in the line above?
+qcom,rpmhpd.h
 
-> @@ -2152,7 +2153,7 @@ void __netlink_clear_multicast_users(struct sock *ksk, unsigned int group)
->  	struct netlink_table *tbl = &nl_table[ksk->sk_protocol];
->  
->  	sk_for_each_bound(sk, &tbl->mc_list)
-> -		netlink_update_socket_mc(nlk_sk(sk), group, 0);
-> +		netlink_update_socket_mc(nlk_sk(sk), group, false);
->  }
->  
->  struct nlmsghdr *
-> -- 
-> 2.40.0.1.gaa8946217a0b
-> 
-> 
+Best regards,
+Krzysztof
+
