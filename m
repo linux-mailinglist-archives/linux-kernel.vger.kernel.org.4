@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3023C74F523
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5A074F525
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjGKQ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S231575AbjGKQ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjGKQ0l (ORCPT
+        with ESMTP id S229917AbjGKQ10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:26:41 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4072AB8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:26:40 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666ecb21f86so5299353b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:26:40 -0700 (PDT)
+        Tue, 11 Jul 2023 12:27:26 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB24CA;
+        Tue, 11 Jul 2023 09:27:25 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1b06777596cso5085271fac.2;
+        Tue, 11 Jul 2023 09:27:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689092800; x=1691684800;
+        d=gmail.com; s=20221208; t=1689092845; x=1691684845;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FnogQ7HLpRF5+op/EYR0WRYtuefnaYhu4nhQsCtg9DI=;
-        b=nYXGo198BbM03RIP7UU0985bq/mKFrMAZ8QCvoEU4vxnvQjVmDh6w8bxrebH1kiVMq
-         PQcNyVMFfAV1nbaAlu8bOMRieTT7CGsuiLLQeHGEWH64OnH1dNkXSKZy2yAPeY5wfUYx
-         lhkX6B3dh8M7Ad8XpfWKjutJ7uQK7QnTyvDzA=
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oljS3CL+A9NlQFaPM8t1XUxGkq5OOWrkjTs5IXV2lUY=;
+        b=AC9SHZY7OqY2h6kRrnt94oFO6cvpIzP/1SdJ12umUwa91WhJK8Vwig9/387HPtHja8
+         UwTq8lGvCofB7HACCWP7TOb7Cgh9D0UCVh2FgWDdXASLosEJdIMfRutFXA1zl7xlBxOi
+         ndzY3LHfeqpM5isEWbRVhVaHO8teQcSMFqFb1ABOeOHMYi3JEFkVi29sm/JrJ5OL44Wo
+         CfpiIZOyL867EI5TFSZK6paBOj87XWzZfW1Fa11sXHSG2AHYXA8xwWdScSfJ/5MT7qr2
+         l3kL49DxGtu7E7S3oaKvIObmKGZhVSFoX49cZdiTtemXujU9WzVbtLZjJsKjY1giqzyP
+         pPHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689092800; x=1691684800;
+        d=1e100.net; s=20221208; t=1689092845; x=1691684845;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FnogQ7HLpRF5+op/EYR0WRYtuefnaYhu4nhQsCtg9DI=;
-        b=iu1sdCOVXR1TKHjQkK4hPJR5IxDnwKN9DzNUaGw+quhySKiKX7lOSD0T6L671vC5Gb
-         Vw+q6T/sFfE5Pp10ZJ+tfcrrnXwMLsNLOyGF2WComcy1puwGtKMOPxfLFY7Qb8LgvgLM
-         DgwPzqRMoiRVT7HoymqcKCb8YEa0hFxh3h5plmc4DogxY93lPNkhpAc7Igbr3RhvBDiO
-         gD4anP8Ji4Gm7IaykNVY3tJAs1vdJG+0DicbX8XKHVEqrysUZZ8bpjp7pwBcSzC+7vew
-         +B5BK3vX9hnAq4qhraOdbFHIjY8F/1ZAESvgBSOFkdbIoxVdgWA8OkIYE9/6QDdrxivK
-         gEaQ==
-X-Gm-Message-State: ABy/qLYSmeibzEZeknHdpODo10DamEHyb4/mTMFZBkqP5ihoF1Q/9TO+
-        YvulZQndZXj6mfB4G/dTpGPkow==
-X-Google-Smtp-Source: APBJJlHPT8zxb8dffvFxjIXVZsxroWt6k1sP9UuWClw8e3VLZG1MIqrloCoxrh09rhTflME/mNoIww==
-X-Received: by 2002:a05:6a20:60b:b0:122:92d0:452a with SMTP id 11-20020a056a20060b00b0012292d0452amr16544394pzl.37.1689092799583;
-        Tue, 11 Jul 2023 09:26:39 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d20-20020aa78154000000b0066f37665a6asm1916962pfn.117.2023.07.11.09.26.39
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oljS3CL+A9NlQFaPM8t1XUxGkq5OOWrkjTs5IXV2lUY=;
+        b=Ijsj6X47N/IXaIlnF0IK2xutmuF38/wCigm8gBB35N+UyvMivUtsYbVV4woF4RO82o
+         Mbr0OfS3gtlUqLWU/FRKRfUwvAVl2uIoboK+O7/DBqIaOZ4+hz4xZCgQIZFplKS/CuQF
+         dEXuqFzvScYtzFHx8Kgpj6yXn7vGfWWxt1vle3/tYgNgCpe+85Xet8pC4T5olSA28igf
+         /h+0U8ajXubPeVIhCGgVe+M7xpPKdDs/IM04PxBFz2/0aasLR1gTVU3pWHM6hKtIXnCo
+         6OqoxHrQaQ9AAbjfVIVxVi+RaiArHQsstsoNexmEl+0wd2+55T65NfJ1/Dlov1fMTj/I
+         pZ1Q==
+X-Gm-Message-State: ABy/qLZFUmW1h7JDztHNEWzR1Ph8bi3NLpqBoYRhcySq+5Hg3aLi+Yay
+        Xys0HudCDt2SBhotl+L7KpI=
+X-Google-Smtp-Source: APBJJlHNVeZOBOzJuy/jYVc5k/hN6t75kg0q2tbRSr6JY3djdH+35anpSWDOWPN9mLD3cuPNzd4TEg==
+X-Received: by 2002:a05:6870:73c8:b0:1ad:4c06:15c with SMTP id a8-20020a05687073c800b001ad4c06015cmr15690310oan.18.1689092844838;
+        Tue, 11 Jul 2023 09:27:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a188-20020a0df1c5000000b0056d4b5cde00sm646581ywf.118.2023.07.11.09.27.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 09:26:39 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 09:26:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Zheng Zhang <zheng.zhang@email.ucr.edu>,
-        linux-hardening@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [BUG]: bad usercopy in kvm_stats_read in mm/usercopy.c
-Message-ID: <202307110925.CBAF286C0A@keescook>
-References: <CAC_GQSr3xzZaeZt85k_RCBd5kfiOve8qXo7a81Cq53LuVQ5r=Q@mail.gmail.com>
- <20230710133427.fb599ef486c7b764d9ca2cc3@linux-foundation.org>
- <ZK2ABPwCke32Kh0q@google.com>
+        Tue, 11 Jul 2023 09:27:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 11 Jul 2023 09:27:22 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+Subject: Re: [PATCH 6.3 000/424] 6.3.13-rc4 review
+Message-ID: <ab657651-92f8-47fe-a8a0-099b76481743@roeck-us.net>
+References: <20230710142227.965586663@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZK2ABPwCke32Kh0q@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230710142227.965586663@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 09:15:00AM -0700, Sean Christopherson wrote:
-> On Mon, Jul 10, 2023, Andrew Morton wrote:
-> > On Sun, 9 Jul 2023 14:32:09 -0700 Zheng Zhang <zheng.zhang@email.ucr.edu> wrote:
-> > 
-> > > Kees, Andrew, and  to whom it may concern:
-> > > 
-> > > Hello! We have found a bug in the Linux kernel version 6.2.0 by syzkaller
-> > > with our own templates. It also produces a POC.
-> > > Attached is the report, log, and reproducers generated by syzkaller
-> > > Please let me know if there is any additional information that I can
-> > > provide to help debug this issue.
-> > > Thanks!
-> > 
-> > Let's cc the kvm mailing list.
-> > 
-> > Original email is at
-> > https://lkml.kernel.org/r/CAC_GQSr3xzZaeZt85k_RCBd5kfiOve8qXo7a81Cq53LuVQ5r=Q@mail.gmail.com
+On Mon, Jul 10, 2023 at 04:23:32PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.13 release.
+> There are 424 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Yeaaaah.  We failed kernel programming 101.  KVM installs file descriptors to
-> let userspace read VM and vCPU stats, but doesn't grab a reference to the VM to
-> ensure the VM and its vCPUs are kept alive until the stats fds are closed.  I'll
-> send a patch.
+> Responses should be made by Wed, 12 Jul 2023 14:21:05 +0000.
+> Anything received after that time might be too late.
+> 
 
-Thanks! Another victory for hardened usercopy. :)
+Build results:
+	total: 157 pass: 157 fail: 0
+Qemu test results:
+	total: 520 pass: 520 fail: 0
 
--- 
-Kees Cook
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
