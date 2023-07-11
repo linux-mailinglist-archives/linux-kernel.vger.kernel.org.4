@@ -2,336 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB9F74E5AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F404874E598
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjGKEDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 00:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S231131AbjGKD5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 23:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjGKEDG (ORCPT
+        with ESMTP id S231446AbjGKD4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:03:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3EA12A;
-        Mon, 10 Jul 2023 21:03:03 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1689047765t5k8nm7u
-Received: from localhost.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 11 Jul 2023 11:56:03 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 2KxaQ4e4DJSXxVMIxm62BmR5CWYTSe93SBnDRQVYkAlWUBSaFPutv7mx8ZzZ2
-        Hzk/NredcNyAJ7A09rVV3lTjtSlmMTRLhsF+VgtcLtkwB+DMW6K3iTD+nOybmDsw98GXOXv
-        BR90S3FYEK9pkqFrsMhTnw1oYBq49WqwQYWdfOgO5dQjn1b9+yqBWFXl1BCqmjmuNxmpnG/
-        tVq3d28llynZ+UUp7AkDdi2/l9bFtAlVd9M7Vd0NRqSBAyQtHglOZbvFTGcPqiYo1BLlN2F
-        /IqclF+jq2rrhbIR3cFUwyJy2bkYoTgKedueY/o3+NWt0bvVNMMaYKxaSfUITqmAJOIAM+h
-        AYkO+5biuJbSBn8uW9kWEN6+62Amnz0gqm9CTZ1ietLviGOF762qiyxzvl91Q==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8635562446704093046
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 00/22] selftests/nolibc: add minimal kernel config support
-Date:   Tue, 11 Jul 2023 11:55:08 +0800
-Message-Id: <20230711035508.7273-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687706332.git.falcon@tinylab.org>
-References: <cover.1687706332.git.falcon@tinylab.org>
+        Mon, 10 Jul 2023 23:56:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D86E173C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689047730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I51Q3nKKNCTWEmMYUHL5yUr4E1b6ZzzA1zlm0zArZHo=;
+        b=NktYc3ri/Dy6INM6p66UKgNN1rCeprS9+lXShs9PGxZupu1m+xC3u+ktJVeHi2bBIQpdse
+        GDu2c/ewIE8ZQIo5LsoQHUY6bvA0HsDHb7SIgTZTOJTJA1++ITutdMdhQYYGGhW6KZie5q
+        sr6ImHRkGIYes2/51yLZp8ne/plngyo=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-lpiBa0RINvOXGdDDhQkUdw-1; Mon, 10 Jul 2023 23:55:27 -0400
+X-MC-Unique: lpiBa0RINvOXGdDDhQkUdw-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6355b301c9dso42211526d6.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:55:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689047727; x=1691639727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I51Q3nKKNCTWEmMYUHL5yUr4E1b6ZzzA1zlm0zArZHo=;
+        b=Wz0fMFIQkBDrVizIcbIGdaZPJzRfVQxo+rfnxZPi6My0mpa2kDyX2IXrJr4/5U/U7m
+         0rHeQs15vmnkO52MxPz1NSCfgQeaCr8TV++IuEVorKjIDS+L05Ic0STYe5p1PFs0aFWl
+         NpW/m2NSFCmmGuKUO4TBUhOSBZXLsXrBdV+XtLFs8ajKGeTlGxR0AKvZmZx/Uvwo5uuW
+         MxFvfDqnEw65STxYkFLdOsN0VIQEuP9bKGKcaBdZp32XNao8bbuWbdjTc79NhO42RtIX
+         ZSSO2BDfB4P5Pw6NXaKp01cV8xiPp48kkzZQ8SjZJOgv5tNgyGWB+7i5ijmcoXlLspey
+         bfeA==
+X-Gm-Message-State: ABy/qLZwe7iJLCsYyPD/0LRYqM0LOaYwqKbK6CSEW2y13aeU9F4ZumNP
+        hqJjmx83aYEIUakdsJqtEeSo+4ktg/A3cBHTvcojcecT1tI3Tm+S8ACV1shctMVBz3OusELXM84
+        zUVbyyHIg8PViSpCNuqeTrtIHvSj2A9hafDkE5GUo
+X-Received: by 2002:a0c:8d45:0:b0:62f:ec76:f5b7 with SMTP id s5-20020a0c8d45000000b0062fec76f5b7mr11891458qvb.55.1689047726713;
+        Mon, 10 Jul 2023 20:55:26 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHTZhew2EUuIm724AKpM7YWVbIe48FZcuO2pasYKl7L1r04MF0dNfYfUrZnlan7BYQ6w00L0ejYouJH3uMuKwg=
+X-Received: by 2002:a0c:8d45:0:b0:62f:ec76:f5b7 with SMTP id
+ s5-20020a0c8d45000000b0062fec76f5b7mr11891446qvb.55.1689047726501; Mon, 10
+ Jul 2023 20:55:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230708020259.1343736-1-ming.lei@redhat.com> <20230708020259.1343736-3-ming.lei@redhat.com>
+ <20230710064109.GB24519@lst.de> <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+In-Reply-To: <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+From:   Pingfan Liu <piliu@redhat.com>
+Date:   Tue, 11 Jul 2023 11:55:15 +0800
+Message-ID: <CAF+s44RuqswbosY9kMDx35crviQnxOeuvgNsuE75Bb0Y2Jg2uw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] nvme-pci: use blk_mq_max_nr_hw_queues() to calculate
+ io queues
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        Wen Xiong <wenxiong@linux.ibm.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy and Thomas
+On Mon, Jul 10, 2023 at 5:16=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrot=
+e:
+>
+> On Mon, Jul 10, 2023 at 08:41:09AM +0200, Christoph Hellwig wrote:
+> > On Sat, Jul 08, 2023 at 10:02:59AM +0800, Ming Lei wrote:
+> > > Take blk-mq's knowledge into account for calculating io queues.
+> > >
+> > > Fix wrong queue mapping in case of kdump kernel.
+> > >
+> > > On arm and ppc64, 'maxcpus=3D1' is passed to kdump command line, see
+> > > `Documentation/admin-guide/kdump/kdump.rst`, so num_possible_cpus()
+> > > still returns all CPUs.
+> >
+> > That's simply broken.  Please fix the arch code to make sure
+> > it does not return a bogus num_possible_cpus value for these
+>
 
-I'm planning to renew this patchset, so, require more discuss.
+In fact, num_possible_cpus is not broken.
 
-The main goal of this minimal kernel config support here is faster build
-and therefore faster test for the run target, but this old patchset is
-not enough, especially for the 'mrproper' operation during every config:
+Quote from admin-guide/kernel-parameters.txt
+       maxcpus=3D        [SMP] Maximum number of processors that an SMP ker=
+nel
+                       will bring up during bootup.  maxcpus=3Dn : n >=3D 0=
+ limits
+                       the kernel to bring up 'n' processors. Surely after
+                       bootup you can bring up the other plugged cpu
+by executing
+                       "echo 1 > /sys/devices/system/cpu/cpuX/online".
+So maxcpus
+                       only takes effect during system bootup.
+                       While n=3D0 is a special case, it is equivalent to "=
+nosmp",
+                       which also disables the IO APIC.
 
-    defconfig:
-     	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-     
-    +tinyconfig:
-    +	$(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper tinyconfig prepare
-    +
+Here, as it explained, maxcpus only affects the bootup, later, extra
+cpus can be online.
 
-In order to avoid this 'mrproper', one solution is create an arch
-specicifc output directory for all of the kernel targets to avoid they
-share the same build output (by default, it is the same as the source
-code directory and therefore pollute the source code tree), it is
-required for both tools/nolibc and selftests/nolibc:
+> That is documented in Documentation/admin-guide/kdump/kdump.rst.
+>
+> On arm and ppc64, 'maxcpus=3D1' is passed for kdump kernel, and "maxcpu=
+=3D1"
 
-    // tools/nolibc
+On aarch64 and x86, nr_cpus=3D1 is used, while on ppc64, due to the
+implementation, nr_cpus=3D1 can not be supported.
 
-    headers_standalone: headers
-    	$(Q)$(MAKE) -C $(srctree) headers
-    	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
-    
-
-    // selftests/nolibc
-
-    defconfig:
-    	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-    
-    kernel: initramfs
-    	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-    
-    # run the tests after building the kernel
-    run: kernel
-    	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-    	$(Q)$(REPORT) $(CURDIR)/run.out
-
-
-The "O" variable could be used to pass an arch specific output for every
-arch:
-
-    # OUTPUT is only set when run from the main makefile, otherwise
-    # it defaults to this nolibc directory.
-    OUTPUT ?= $(CURDIR)/
-
-    # Architecture specific directory
-    ARCH_OUTPUT ?= $(CURDIR)/build/$(ARCH)/
-
-
-With "O":
-
-    // tools/nolibc
-
-    KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
-    MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH)
-
-    headers_standalone: headers
-    	$(Q)$(MAKE_KERNEL) headers
-    	$(Q)$(MAKE_KERNEL) headers_install INSTALL_HDR_PATH=$(ARCH_OUTPUT)sysroot
-    
-
-    // selftests/nolibc
-    RUN_OUT         = $(ARCH_OUTPUT)run.out
-    ...
-    NOLIBC_INITRAMFS  = $(ARCH_OUTPUT)initramfs/
-    ...
-    KERNEL_BUILD   ?= $(ARCH_OUTPUT)linux/
-    MAKE_KERNEL     = $(MAKE) -C "$(srctree)" O="$(KERNEL_BUILD)" ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
-    KERNEL_IMAGE    = $(KERNEL_BUILD)$(IMAGE)
-    KERNEL_CONFIG   = $(KERNEL_BUILD).config
-
-    defconfig:
-    	$(Q)$(MAKE_KERNEL) $(DEFCONFIG) prepare
-    
-    kernel: initramfs
-    	$(Q)$(MAKE_KERNEL) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(NOLIBC_INITRAMFS)
-    
-    # run the tests after building the kernel
-    run: kernel
-    	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS) > "$(RUN_OUT)"
-    	$(Q)$(REPORT) $(RUN_OUT)
-
-And further, the output of the other targets should be put in the
-$(ARCH_OUTPUT) directory too, include the sysroot, nolibc-test, initramfs,
-run.out and even libc-test, the whole Makefile of selftests/nolibc will be
-touched.
-
-I have prepared and verified such a solution locally, before send the patches,
-welcome your suggestions.
-
-My local patchset now provides such features:
-
-  - Allow build everything for a target arch in the arch specific directory
-  
-  - Allow clean everything of a target arch
-  
-  - Allow trigger a config target automatically for the run target, use the new
-    tinyconfig by default, be able to choose defconfig as before
-  
-  - Allow configure additional config options for both defconfig and tinyconfig
-  
-  - Allow configure the default CROSS_COMPILE by default, only the ARCH variable is required
-  
-  - Allow download the missing cross toolchains automatically (from mirrrors.edge.kernel.org)
-  
-  - Allow download the missing bios automatically
-  
-  - Allow download and build musl automatically
-  
-  - Allow run tests for all of the supported architectures automatically with one command
-    with minimal preparation, may be only the installation of qemu-user and qemu-system
-
-With the new patchset, it is able to rebuild and rerun everything in several
-minutes, it may make people very happy to develop nolibc itself and also make
-people to work on linux with nolibc, especially for developing and testing a
-new kernel feature ;-)
-
-Without this reorg of the output directory, it is very hard to verify this
-tinyconfig support patchset itself, it always require 'mrproper' to clean the
-whole build while config and test another ARCH (because the source code tree is
-polluted). for one ARCH, it is not that time-costed, but for all, it waste too
-much time. That means, without the arch specific output support, our minimal
-config support is really not that helpful, it also breaks the possibility to
-share the already built binaries for rebuild after a reconfig.
-
-If it is hard to make decision on this description, I'm ok to send the whole
-new patchset for more discussion.
-
-The change is 'huge' and the review work may be 'huge' too ;-)
 
 Thanks,
-Zhangjin
 
-> Willy, Thomas
-> 
-> We just sent the 'selftests/nolibc: allow run with minimal kernel
-> config' series [1], Here is the 'minimal' kernel config support, with
-> both of them, it is possible to run nolibc-test for all architectures
-> with oneline command and in less than ~30 minutes - 1 hour (not fullly
-> measured yet):
-> 
->     // run with tiny config + qemu-system
->     // Note: rv32 and loongarch require to download the bios at first
->     $ time make run-tiny-all QUIET_RUN=1
-> 
->     // run with default config + qemu-system
->     $ time make run-default-all QUIET_RUN=1
-> 
->     // run with qemu-user
->     $ time make run-user-all QUIET_RUN=1
-> 
-> Besides the 'tinyconfig' suggestion from Thomas, this patch also merge
-> the generic part of my local powerpc porting (the extconfig to add
-> additional console support).
-> 
-> This is applied after the test report patchset [2] and the rv32 compile
-> patchset [3], because all of them touched the same Makefile.
-> 
-> Even without the 'selftests/nolibc: allow run with minimal kernel
-> config' series [1], all of the tests can pass except the /proc/self/net
-> related ones (We haven't enable CONFIG_NET in this patchset), the
-> chmod_net one will be removed by Thomas from this patchset [4] for the
-> wrong chmodable attribute issue of /proc/self/net, the link_cross one
-> can be simply fixed up by using another /proc/self interface (like
-> /proc/self/cmdline), which will be covered in our revision of the [1]
-> series.
-> 
-> Beside the core 'minimal' config support, some generic patch are added
-> together to avoid patch conflicts.
-> 
-> * selftests/nolibc: add test for -include /path/to/nolibc.h
-> 
->   Add a test switch to allow run nolibc-test with nolibc.h
-> 
-> * selftests/nolibc: print result to the screen too
-> 
->   Let the run targets print results by default, allow disable by
->   QUIET_RUN=1
-> 
-> * selftests/nolibc: allow use x86_64 toolchain for i386
-> 
->   Allow use x86_64 toolchains for i386
-> 
-> * selftests/nolibc: add menuconfig target for manual config
-> 
->   a new 'menuconfig' target added for development and debugging
-> 
-> * selftests/nolibc: add tinyconfig target
-> 
->   a new 'tinyconfig' compare to 'defconfig', smaller and faster, but not
->   enough for boot and print, require following 'extconfig' target
-> 
-> * selftests/nolibc: allow customize extra kernel config options
-> 
->   a new 'extconfig' allows to add extra config options for 'defconfig'
->   and 'tinyconfig'
-> 
-> * selftests/nolibc: add common extra config options
->   selftests/nolibc: add power reset control support
->   selftests/nolibc: add procfs, shmem and tmpfs
-> 
->   Add common extra configs, the 3rd one (procfs, shmem and tmpfs) can be
->   completely reverted after [1] series, but as discuss with Thomas,
->   procfs may be still a hard requirement.
-> 
-> * selftests/nolibc: add extra configs for i386
->   selftests/nolibc: add extra configs for x86_64
->   selftests/nolibc: add extra configs for arm64
->   selftests/nolibc: add extra configs for arm
->   selftests/nolibc: add extra configs for mips
->   selftests/nolibc: add extra configs for riscv32
->   selftests/nolibc: add extra configs for riscv64
->   selftests/nolibc: add extra configs for s390x
->   selftests/nolibc: add extra configs for loongarch
-> 
->   Add architecture specific extra configs to let kernel boot and
->   nolibc-test print. The rv32 added here is only for test, it should not
->   be merged before the missing 64bit syscalls are added (still wait for
->   the merging of the __sysret and -ENOSYS patches).
-> 
-> * selftests/nolibc: config default CROSS_COMPILE
->   selftests/nolibc: add run-tiny and run-default
-> 
->   both run-tiny and run-default are added to do config and run together,
->   this easier test a log.
-> 
-> * selftests/nolibc: allow run tests on all targets
->   selftests/nolibc: detect bios existing to avoid hang
-> 
->   Further allow do run-user, run-tiny and run-default for all
->   architectures at once, the -all suffix is added to do so.
-> 
-> Since some generic patches are still in review, before sending the left
-> rv32 patches, I'm will send more generic patches later, the coming one
-> is arch-xxx.h cleanup, and then, the 32bit powerpc porting support.
-> 
-> For the compile speedup, the next step may be add architecture specific
-> 'O' support, which may allow us rerun across architectures without
-> mrproper, for a single architecture development, this 'minimal' config
-> should be enough ;-)
-> 
-> Thanks.
-> 
-> Best regards,
-> Zhangjin
-> ---
-> [1]: https://lore.kernel.org/lkml/cover.1687344643.git.falcon@tinylab.org/
-> [2]: https://lore.kernel.org/lkml/cover.1687156559.git.falcon@tinylab.org/
-> [3]: https://lore.kernel.org/linux-riscv/cover.1687176996.git.falcon@tinylab.org/
-> [4]: https://lore.kernel.org/lkml/20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net/
-> 
-> Zhangjin Wu (22):
->   selftests/nolibc: add test for -include /path/to/nolibc.h
->   selftests/nolibc: print result to the screen too
->   selftests/nolibc: allow use x86_64 toolchain for i386
->   selftests/nolibc: add menuconfig target for manual config
->   selftests/nolibc: add tinyconfig target
->   selftests/nolibc: allow customize extra kernel config options
->   selftests/nolibc: add common extra config options
->   selftests/nolibc: add power reset control support
->   selftests/nolibc: add procfs, shmem and tmpfs
->   selftests/nolibc: add extra configs for i386
->   selftests/nolibc: add extra configs for x86_64
->   selftests/nolibc: add extra configs for arm64
->   selftests/nolibc: add extra configs for arm
->   selftests/nolibc: add extra configs for mips
->   selftests/nolibc: add extra configs for riscv32
->   selftests/nolibc: add extra configs for riscv64
->   selftests/nolibc: add extra configs for s390x
->   selftests/nolibc: add extra configs for loongarch
->   selftests/nolibc: config default CROSS_COMPILE
->   selftests/nolibc: add run-tiny and run-default
->   selftests/nolibc: allow run tests on all targets
->   selftests/nolibc: detect bios existing to avoid hang
-> 
->  tools/testing/selftests/nolibc/Makefile | 125 ++++++++++++++++++++++--
->  1 file changed, 119 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.25.1
+Pingfan
+
+> simply keep one of CPU cores as online, and others as offline.
+>
+> So Cc our arch(arm & ppc64) & kdump guys wrt. passing 'maxcpus=3D1' for
+> kdump kernel.
+>
+> > setups, otherwise you'll have to paper over it in all kind of
+> > drivers.
+>
+> The issue is only triggered for drivers which use managed irq &
+> multiple hw queues.
+>
+>
+> Thanks,
+> Ming
+>
+>
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+>
+
