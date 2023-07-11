@@ -2,173 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7EF74E71F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1329F74E728
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjGKGVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S231266AbjGKGWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjGKGV2 (ORCPT
+        with ESMTP id S231368AbjGKGWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:21:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD54E4B;
-        Mon, 10 Jul 2023 23:21:26 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R0Vzd5N9WzMqVh;
-        Tue, 11 Jul 2023 14:18:05 +0800 (CST)
-Received: from [10.67.110.218] (10.67.110.218) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 11 Jul 2023 14:21:22 +0800
-Message-ID: <d18f553b-079f-e0a8-4127-ae55e8cd0e42@huawei.com>
-Date:   Tue, 11 Jul 2023 14:21:21 +0800
+        Tue, 11 Jul 2023 02:22:39 -0400
+Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEBEE51
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:38 -0700 (PDT)
+Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-1b3ca17f2a6so4368769fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689056557; x=1691648557;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oAOhq9P07eLDplhtLTT1tcsIlFj5k7H1L3tXJlOgLCo=;
+        b=d/u6KhCWa+HbTlst+lD44hjx/uPE6mkYk8t/U1cgZQ+rG8uR0vspAyOXTJytNDgvLu
+         MKkpktIPWohmTYwzXkUYnCPq9FhZePT1kmmrcT2gnKLqlv2V9Xq92sAeI2OaW38wT/BT
+         qCCcNEiv9xmMr8ANRmAwl8Li/Eqd/xvnolI9r64CY2cF9Rtsnc2zu7mE/7MvlMnXnz5J
+         CMLUKgQJ/0H0z/OeOj3P9EEDixuEf/yupESXVfYvVJ1AXgTb+pqRAAvLjQNlEHplPnZa
+         g3pPbSzasjHeQW1LmR/V2+J4sbYSnJW0+riWcIurE0vuIx8JLtXgYbkbRQNuoeGx8wDy
+         B5gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689056557; x=1691648557;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oAOhq9P07eLDplhtLTT1tcsIlFj5k7H1L3tXJlOgLCo=;
+        b=MVhe7EPNp+U+xKOUfYRCmDtpvoauw5fUusxmKyeukovcJY18RxhlGQkusm0aVKazYS
+         jWz3q2bEwxdT66f2l/Nco3Bjv1kPNiGz7tc1sBrchhuTi2h5Xll2nocBeJoo0ARwCY0j
+         NK7L3LZ5xaPlAikFcojBFvyEA2gZrNOg7m5XNmnptCwY1nl8jxjVD+LznQ9mZ8d69h/p
+         Jtmp4LcgAalAcF0kGXkYXiUfVSzG0+OHEEY3qp43OvEOTKXa3P4oxKywNxCN1s3SvCPW
+         o6d/Uemh8QOa42YCXXbRZ+TM8nwhxiwDCMBl291kgJKSQJTZDN7sJYJWXXMrp7Y0we5U
+         jCdQ==
+X-Gm-Message-State: ABy/qLZXjLtbEFTsRBeKr1qJBD+QeMPQf8aBLpOcXyNI7xjFoiFJtERv
+        g93Ak8i6LTW0kr2RCETcXIY=
+X-Google-Smtp-Source: APBJJlFhEu3/+l2Bh3HqICI1LhF877BOhGd5qBNEfGuzvLWsezxC7hd4093W8ajADVsZYNQII5ZQ7w==
+X-Received: by 2002:a05:6870:b48e:b0:1aa:f3:5b3b with SMTP id y14-20020a056870b48e00b001aa00f35b3bmr16428956oap.17.1689056557536;
+        Mon, 10 Jul 2023 23:22:37 -0700 (PDT)
+Received: from localhost ([212.107.28.55])
+        by smtp.gmail.com with ESMTPSA id t3-20020a17090ae50300b0025edb720cc1sm968558pjy.22.2023.07.10.23.22.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 23:22:37 -0700 (PDT)
+From:   Celeste Liu <coelacanthushex@gmail.com>
+X-Google-Original-From: Celeste Liu <CoelacanthusHex@gmail.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Celeste Liu <CoelacanthusHex@gmail.com>,
+        Felix Yan <felixonmars@archlinux.org>,
+        Ruizhe Pan <c141028@gmail.com>,
+        Shiqi Zhang <shiqi@isrc.iscas.ac.cn>
+Subject: [PATCH] riscv: entry: set a0 prior to syscall_handler
+Date:   Tue, 11 Jul 2023 14:21:47 +0800
+Message-ID: <20230711062202.3542367-1-CoelacanthusHex@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] ftrace: Fix possible warning on checking all pages used
- in ftrace_process_locs()
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-References: <20230710212958.274126-1-zhengyejian1@huawei.com>
- <20230710104625.421c851a@gandalf.local.home>
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <20230710104625.421c851a@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.218]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/10 22:46, Steven Rostedt wrote:
-> On Tue, 11 Jul 2023 05:29:58 +0800
-> Zheng Yejian <zhengyejian1@huawei.com> wrote:
-> 
->> As comments in ftrace_process_locs(), there may be NULL pointers in
->> mcount_loc section:
->>   > Some architecture linkers will pad between
->>   > the different mcount_loc sections of different
->>   > object files to satisfy alignments.
->>   > Skip any NULL pointers.
->>
->> After 20e5227e9f55 ("ftrace: allow NULL pointers in mcount_loc"),
->> NULL pointers will be accounted when allocating ftrace pages but
->> skipped before adding into ftrace pages, this may result in some
->> pages not being used. Then after 706c81f87f84 ("ftrace: Remove extra
->> helper functions"), warning may occur at:
->>    WARN_ON(pg->next);
->>
->> So we may need to skip NULL pointers before allocating ftrace pages.
->>
->> Fixes: 706c81f87f84 ("ftrace: Remove extra helper functions")
->> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
->> ---
->>   kernel/trace/ftrace.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
->> index 3740aca79fe7..5b474165df31 100644
->> --- a/kernel/trace/ftrace.c
->> +++ b/kernel/trace/ftrace.c
->> @@ -6485,6 +6485,16 @@ static int ftrace_process_locs(struct module *mod,
->>   	if (!count)
->>   		return 0;
->>   
->> +	p = start;
->> +	while (p < end) {
->> +		/*
->> +		 * Refer to conments below, there may be NULL pointers,
->> +		 * skip them before allocating pages
->> +		 */
->> +		addr = ftrace_call_adjust(*p++);
->> +		if (!addr)
->> +			count--;
->> +	}
-> 
-> My main concern about this is the added overhead during boot to process
-> this. There's 10s of thousands of functions, so this loop will be 10s of
-> thousands. I also don't like that this is an unconditional loop (meaning it
-> executes even when it is unnecessary to do so).
-> 
+When we test seccomp with 6.4 kernel, we found errno has wrong value.
+If we deny NETLINK_AUDIT with EAFNOSUPPORT, after f0bddf50586d, we will
+get ENOSYS. We got same result with 9c2598d43510 ("riscv: entry: Save a0
+prior syscall_enter_from_user_mode()").
 
-Agreed! The added overhead probably superfluousin in most cases.
+Compared with x86 and loongarch's implementation of this part of the
+function, we think that regs->a0 = -ENOSYS should be advanced before
+syscall_handler to fix this problem. We have written the following patch,
+which can fix this problem after testing. But we don't know enough about
+this part of the code to explain the root cause. Hope someone can find
+a reasonable explanation. And we'd like to reword this commit message
+according to the explanation in v2
 
-> 
->>   	/*
->>   	 * Sorting mcount in vmlinux at build time depend on
->>   	 * CONFIG_BUILDTIME_MCOUNT_SORT, while mcount loc in
-> 
-> How about something like this?
-> 
-> -- Steve
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index b24c573934af..acd033371721 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6474,6 +6474,7 @@ static int ftrace_process_locs(struct module *mod,
->   	struct ftrace_page *start_pg;
->   	struct ftrace_page *pg;
->   	struct dyn_ftrace *rec;
-> +	unsigned long skipped = 0;
->   	unsigned long count;
->   	unsigned long *p;
->   	unsigned long addr;
-> @@ -6536,8 +6537,10 @@ static int ftrace_process_locs(struct module *mod,
->   		 * object files to satisfy alignments.
->   		 * Skip any NULL pointers.
->   		 */
-> -		if (!addr)
-> +		if (!addr) {
-> +			skipped++;
->   			continue;
-> +		}
->   
->   		end_offset = (pg->index+1) * sizeof(pg->records[0]);
->   		if (end_offset > PAGE_SIZE << pg->order) {
-> @@ -6551,12 +6554,24 @@ static int ftrace_process_locs(struct module *mod,
->   		rec->ip = addr;
->   	}
->   
-> -	/* We should have used all pages */
-> -	WARN_ON(pg->next);
-> -
->   	/* Assign the last page to ftrace_pages */
->   	ftrace_pages = pg;
->   
-> +	/* We should have used all pages unless we skipped some */
-> +	if (pg->next) {
-> +		WARN_ON(!skipped);
-> +		while (ftrace_pages->next) {
-> +			pg = ftrace_pages->next;
-> +			ftrace_pages->next = pg->next;
-> +			if (pg->records) {
-> +				free_pages((unsigned long)pg->records, pg->order);
-> +				ftrace_number_of_pages -= 1 << pg->order;
-> +			}
-> +			kfree(pg);
-> +			ftrace_number_of_groups--;
-> +		}
+Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
+Reported-by: Felix Yan <felixonmars@archlinux.org>
+Co-developed-by: Ruizhe Pan <c141028@gmail.com>
+Signed-off-by: Ruizhe Pan <c141028@gmail.com>
+Co-developed-by: Shiqi Zhang <shiqi@isrc.iscas.ac.cn>
+Signed-off-by: Shiqi Zhang <shiqi@isrc.iscas.ac.cn>
+Signed-off-by: Celeste Liu <CoelacanthusHex@gmail.com>
+Tested-by: Felix Yan <felixonmars@archlinux.org>
+---
+ arch/riscv/kernel/traps.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Do we only need to free the pages that not being used?
-
-> +	}
-> +
->   	/*
->   	 * We only need to disable interrupts on start up
->   	 * because we are modifying code that an interrupt
-> 
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index f910dfccbf5d2..ccadb5ffd063c 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -301,6 +301,7 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
+ 
+ 		regs->epc += 4;
+ 		regs->orig_a0 = regs->a0;
++		regs->a0 = -ENOSYS;
+ 
+ 		riscv_v_vstate_discard(regs);
+ 
+@@ -308,8 +309,6 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
+ 
+ 		if (syscall < NR_syscalls)
+ 			syscall_handler(regs, syscall);
+-		else
+-			regs->a0 = -ENOSYS;
+ 
+ 		syscall_exit_to_user_mode(regs);
+ 	} else {
+-- 
+2.41.0
 
