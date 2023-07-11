@@ -2,132 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF2874FBCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCFA74FBCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjGKXWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 19:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S230446AbjGKXWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 19:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGKXWB (ORCPT
+        with ESMTP id S230431AbjGKXW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 19:22:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D84EE7A;
-        Tue, 11 Jul 2023 16:22:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19E126163E;
-        Tue, 11 Jul 2023 23:22:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CDFC433C7;
-        Tue, 11 Jul 2023 23:21:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689117719;
-        bh=vQ/4FdUHpBmumWCKBTUpKBXwITOJ+uIM73ZXp1cmBn8=;
-        h=From:Date:Subject:To:Cc:From;
-        b=dOM1gzieroZhHlRsVkSok1ytXauiUv+UAJU/RiccbGv5XoFilqAYUK2tM3FkMJCuD
-         5qdzm7t6SsDkjpn4hhWerb5+QP5FguYTfOtUk38EgIJ7R0FPqg7kS66oMRDSBOI/5C
-         9N8CjAoey0YDYGCLLrqHGJpteXZmW92VmAfxE3D3Xw/HuZd/2v06ICwzF/bzfG9yzH
-         93RrDrzvb42dIVIVntgGakx6/EMEqsfEA242uKdTVw0L887nlVQrui/BQW6aCegexF
-         FtHUOR3Fm/bRZSNY1R/5xLeuonM3btKEeCESO2/spNWnP26mdpLO8CLWWse5vbC0LV
-         BAV8O+AOM6aeA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 12 Jul 2023 00:21:52 +0100
-Subject: [PATCH] regmap: Provide user selectable option to enable regmap
+        Tue, 11 Jul 2023 19:22:26 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7496B10CF;
+        Tue, 11 Jul 2023 16:22:21 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BMdaqe002776;
+        Tue, 11 Jul 2023 23:22:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=f1BUqZ3xIVMTMJEEHdT4a6sIUyD+vVkXUJlyDl7GIE8=;
+ b=Ru/q0vQ4Y0bVjeHJY99QZ8wntB35cX/mEotjSgTqtcO9+6AawmGydyXUr3+Zprj/2ycK
+ pjuweEOnFAMm/NTgzyPBCNnsu40++tBIdtX/ArlLxp9ZR9GoRrYGiqXW57hENeImYWvL
+ dhGDGBxxIk9n0CD93Zxf91O47XZfH2IM0PcBBhpqeHufkqRabU+2l5ZM5f0ZkboqICVc
+ lK7RGfTPQQYGW0SjwYTfxkEkudrUO1WSO1bhr4R3g6gCdVWqUaqBgnUs2A4476IiHEBw
+ edGXcawOKUZyEGrJc0gm2UiJ3oNoWrFxMJBb+yf283zMYzH5OgqQa0+t3QJ3p9Vs1wJ6 wQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rse45g940-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 23:22:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BNMDon024505
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 23:22:13 GMT
+Received: from [10.110.62.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 16:22:13 -0700
+Message-ID: <761d77bf-7ce0-d182-41d2-ab4a7691fef5@quicinc.com>
+Date:   Tue, 11 Jul 2023 16:22:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230712-regmap-kunit-enable-v1-1-13e296bd0204@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAA/krWQC/x3MQQqEMBAF0atIr6chUSEyV5FZRPPVRidKoiJI7
- m5w+RZVN0UEQaRvcVPAKVFWn6E/BfWT9SNYXDaVqqyUUZoDxr/deD687AxvuwVsVWN0A2Ocqym
- XW8Ag13ttfyk9W3Xd32UAAAA=
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2171; i=broonie@kernel.org;
- h=from:subject:message-id; bh=vQ/4FdUHpBmumWCKBTUpKBXwITOJ+uIM73ZXp1cmBn8=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkreQTBvI4v3u5njYjQ9DpJsBF9tFfTI4IadbuR
- bCPGkQE7WyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZK3kEwAKCRAk1otyXVSH
- 0EMNB/wMOcU4nHjg1HsZAwVtRWvb6xLgfL8JnIvFaet+hHaaCWX+qBMqW0HdDdO5EsFlVNQFXWQ
- myqH25zoWQAej64c59fa+kxajJsbtioWW2svwaN+mRhhQxX5c0s+lNsIhLUX41zzSZobl9sxAE+
- hgsr5JNwQCegWAAENiPq7Jev+r9DYWlMd9bTGxGzmG7fYLMjyR+6VDvqGm3pUR7T7PJir3uuQsd
- HUW/BvSpWrq1JSUPsG1QtWG1G6duAWbxy/Nq5VTOBkJecZ4OSJw6eCSYROD0368qZEjpEDkd7HW
- XtblmFSCaz2CymyVPkzguPov5+XjOnVhXH/k1pxSquT49aIz
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Content-Language: en-US
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
+ <20230711174320.24058-4-quic_eserrao@quicinc.com>
+ <20230711220748.vmnvwwcu5nhrvyvi@synopsys.com>
+ <af332749-fdd7-e744-16f1-21f972161589@quicinc.com>
+In-Reply-To: <af332749-fdd7-e744-16f1-21f972161589@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Jp47U_7MfDHxaJ9yM6BMJ3agxxrnEl_B
+X-Proofpoint-ORIG-GUID: Jp47U_7MfDHxaJ9yM6BMJ3agxxrnEl_B
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110213
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since apparently enabling all the KUnit tests shouldn't enable any new
-subsystems it is hard to enable the regmap KUnit tests in normal KUnit
-testing scenarios that don't enable any drivers.  Add a Kconfig option
-to help with this and include it in the KUnit all tests config.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/base/regmap/Kconfig                  | 12 +++++++++++-
- tools/testing/kunit/configs/all_tests.config |  2 ++
- 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/regmap/Kconfig b/drivers/base/regmap/Kconfig
-index 0db2021f7477..b1affac70d5d 100644
---- a/drivers/base/regmap/Kconfig
-+++ b/drivers/base/regmap/Kconfig
-@@ -4,7 +4,7 @@
- # subsystems should select the appropriate symbols.
- 
- config REGMAP
--	bool "Register Map support" if KUNIT_ALL_TESTS
-+	bool
- 	default y if (REGMAP_I2C || REGMAP_SPI || REGMAP_SPMI || REGMAP_W1 || REGMAP_AC97 || REGMAP_MMIO || REGMAP_IRQ || REGMAP_SOUNDWIRE || REGMAP_SOUNDWIRE_MBQ || REGMAP_SCCB || REGMAP_I3C || REGMAP_SPI_AVMM || REGMAP_MDIO || REGMAP_FSI)
- 	select IRQ_DOMAIN if REGMAP_IRQ
- 	select MDIO_BUS if REGMAP_MDIO
-@@ -23,6 +23,16 @@ config REGMAP_KUNIT
- 	default KUNIT_ALL_TESTS
- 	select REGMAP_RAM
- 
-+config REGMAP_BUILD
-+	bool "Enable regmap build"
-+	depends on KUNIT
-+	select REGMAP
-+	help
-+	  This option exists purely to allow the regmap KUnit tests to
-+	  be enabled without having to enable some driver that uses
-+	  regmap due to unfortunate issues with how KUnit tests are
-+	  normally enabled.
-+
- config REGMAP_AC97
- 	tristate
- 
-diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-index 0393940c706a..873f3e06ccad 100644
---- a/tools/testing/kunit/configs/all_tests.config
-+++ b/tools/testing/kunit/configs/all_tests.config
-@@ -33,5 +33,7 @@ CONFIG_DAMON_PADDR=y
- CONFIG_DEBUG_FS=y
- CONFIG_DAMON_DBGFS=y
- 
-+CONFIG_REGMAP_BUILD=y
-+
- CONFIG_SECURITY=y
- CONFIG_SECURITY_APPARMOR=y
+On 7/11/2023 3:51 PM, Elson Serrao wrote:
+> 
+> 
+> On 7/11/2023 3:07 PM, Thinh Nguyen wrote:
+>> On Tue, Jul 11, 2023, Elson Roy Serrao wrote:
+>>> The current implementation blocks the runtime pm operations when cable
+>>> is connected. This would block platforms from entering system wide 
+>>> suspend
+>>> during bus suspend scenario. Modify the runtime pm ops to handle bus
+>>> suspend case for such platforms where the controller low power mode
+>>> entry/exit is handled by the glue driver. This enablement is controlled
+>>> through a dt property and platforms capable of detecting bus resume can
+>>> benefit from this feature. Also modify the remote wakeup operations to
+>>> trigger runtime resume before sending wakeup signal.
+>>>
+>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>>> ---
+>>>   drivers/usb/dwc3/core.c   | 26 ++++++++++++++++++++++---
+>>>   drivers/usb/dwc3/core.h   |  3 +++
+>>>   drivers/usb/dwc3/gadget.c | 40 ++++++++++++++++++++++++++++++++-------
+>>>   3 files changed, 59 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>> index f6689b731718..898c0f68e190 100644
+>>> --- a/drivers/usb/dwc3/core.c
+>>> +++ b/drivers/usb/dwc3/core.c
+>>> @@ -1534,6 +1534,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>>       dwc->dis_split_quirk = device_property_read_bool(dev,
+>>>                   "snps,dis-split-quirk");
+>>> +    dwc->allow_rtsusp_on_u3 = device_property_read_bool(dev,
+>>> +                "snps,allow-rtsusp-on-u3");
+>>> +
+>>>       dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+>>>       dwc->tx_de_emphasis = tx_de_emphasis;
+>>> @@ -1984,11 +1987,21 @@ static int dwc3_suspend_common(struct dwc3 
+>>> *dwc, pm_message_t msg)
+>>>   {
+>>>       unsigned long    flags;
+>>>       u32 reg;
+>>> +    int link_state;
+>>>       switch (dwc->current_dr_role) {
+>>>       case DWC3_GCTL_PRTCAP_DEVICE:
+>>>           if (pm_runtime_suspended(dwc->dev))
+>>>               break;
+>>> +
+>>> +        if (dwc->connected) {
+>>> +            link_state = dwc3_gadget_get_link_state(dwc);
+>>> +            /* bus suspend case */
+>>> +            if (dwc->allow_rtsusp_on_u3 &&
+>>> +                link_state == DWC3_LINK_STATE_U3)
+>>> +                break;
+>>> +            return -EBUSY;
+>>> +        }
+>>>           dwc3_gadget_suspend(dwc);
+>>>           synchronize_irq(dwc->irq_gadget);
+>>>           dwc3_core_exit(dwc);
+>>> @@ -2045,6 +2058,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, 
+>>> pm_message_t msg)
+>>>       switch (dwc->current_dr_role) {
+>>>       case DWC3_GCTL_PRTCAP_DEVICE:
+>>> +        /* bus resume case */
+>>> +        if (dwc->connected)
+>>> +            break;
+>>>           ret = dwc3_core_init_for_resume(dwc);
+>>>           if (ret)
+>>>               return ret;
+>>> @@ -2123,9 +2139,6 @@ static int dwc3_runtime_suspend(struct device 
+>>> *dev)
+>>>       struct dwc3     *dwc = dev_get_drvdata(dev);
+>>>       int        ret;
+>>> -    if (dwc3_runtime_checks(dwc))
+>>> -        return -EBUSY;
+>>> -
+>>>       ret = dwc3_suspend_common(dwc, PMSG_AUTO_SUSPEND);
+>>>       if (ret)
+>>>           return ret;
+>>> @@ -2160,9 +2173,15 @@ static int dwc3_runtime_resume(struct device 
+>>> *dev)
+>>>   static int dwc3_runtime_idle(struct device *dev)
+>>>   {
+>>>       struct dwc3     *dwc = dev_get_drvdata(dev);
+>>> +    int        link_state;
+>>>       switch (dwc->current_dr_role) {
+>>>       case DWC3_GCTL_PRTCAP_DEVICE:
+>>> +        link_state = dwc3_gadget_get_link_state(dwc);
+>>> +        /* for bus suspend case return success */
+>>> +        if (dwc->allow_rtsusp_on_u3 && dwc->connected &&
+>>> +            link_state == DWC3_LINK_STATE_U3)
+>>> +            goto autosuspend;
+>>>           if (dwc3_runtime_checks(dwc))
+>>>               return -EBUSY;
+>>>           break;
+>>> @@ -2172,6 +2191,7 @@ static int dwc3_runtime_idle(struct device *dev)
+>>>           break;
+>>>       }
+>>> +autosuspend:
+>>>       pm_runtime_mark_last_busy(dev);
+>>>       pm_runtime_autosuspend(dev);
+>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>>> index 8b1295e4dcdd..33b2ccbbd963 100644
+>>> --- a/drivers/usb/dwc3/core.h
+>>> +++ b/drivers/usb/dwc3/core.h
+>>> @@ -1127,6 +1127,8 @@ struct dwc3_scratchpad_array {
+>>>    * @num_ep_resized: carries the current number endpoints which have 
+>>> had its tx
+>>>    *            fifo resized.
+>>>    * @debug_root: root debugfs directory for this device to put its 
+>>> files in.
+>>> + * @allow_rtsusp_on_u3: true if dwc3 runtime suspend is allowed 
+>>> during bus
+>>> + *            suspend scenario.
+>>>    */
+>>>   struct dwc3 {
+>>>       struct work_struct    drd_work;
+>>> @@ -1343,6 +1345,7 @@ struct dwc3 {
+>>>       int            last_fifo_depth;
+>>>       int            num_ep_resized;
+>>>       struct dentry        *debug_root;
+>>> +    bool            allow_rtsusp_on_u3;
+>>>   };
+>>>   #define INCRX_BURST_MODE 0
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index 5fd067151fbf..0797cffa2d48 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -2401,15 +2401,21 @@ static int dwc3_gadget_wakeup(struct 
+>>> usb_gadget *g)
+>>>           return -EINVAL;
+>>>       }
+>>> -    spin_lock_irqsave(&dwc->lock, flags);
+>>>       if (!dwc->gadget->wakeup_armed) {
+>>>           dev_err(dwc->dev, "not armed for remote wakeup\n");
+>>> -        spin_unlock_irqrestore(&dwc->lock, flags);
+>>>           return -EINVAL;
+>>>       }
+>>> -    ret = __dwc3_gadget_wakeup(dwc, true);
+>>> +    ret = pm_runtime_resume_and_get(dwc->dev);
+>>> +    if (ret < 0) {
+>>> +        pm_runtime_set_suspended(dwc->dev);
+>>> +        return ret;
+>>> +    }
+>>> +
+>>> +    spin_lock_irqsave(&dwc->lock, flags);
+>>> +    ret = __dwc3_gadget_wakeup(dwc, true);
+>>>       spin_unlock_irqrestore(&dwc->lock, flags);
+>>> +    pm_runtime_put_noidle(dwc->dev);
+>>>       return ret;
+>>>   }
+>>> @@ -2428,6 +2434,12 @@ static int dwc3_gadget_func_wakeup(struct 
+>>> usb_gadget *g, int intf_id)
+>>>           return -EINVAL;
+>>>       }
+>>> +    ret = pm_runtime_resume_and_get(dwc->dev);
+>>> +    if (ret < 0) {
+>>> +        pm_runtime_set_suspended(dwc->dev);
+>>> +        return ret;
+>>> +    }
+>>> +
+>>>       spin_lock_irqsave(&dwc->lock, flags);
+>>>       /*
+>>>        * If the link is in U3, signal for remote wakeup and wait for the
+>>> @@ -2438,6 +2450,7 @@ static int dwc3_gadget_func_wakeup(struct 
+>>> usb_gadget *g, int intf_id)
+>>>           ret = __dwc3_gadget_wakeup(dwc, false);
+>>>           if (ret) {
+>>>               spin_unlock_irqrestore(&dwc->lock, flags);
+>>> +            pm_runtime_put_noidle(dwc->dev);
+>>>               return -EINVAL;
+>>>           }
+>>>           dwc3_resume_gadget(dwc);
+>>> @@ -2452,6 +2465,7 @@ static int dwc3_gadget_func_wakeup(struct 
+>>> usb_gadget *g, int intf_id)
+>>>           dev_err(dwc->dev, "function remote wakeup failed, 
+>>> ret:%d\n", ret);
+>>>       spin_unlock_irqrestore(&dwc->lock, flags);
+>>> +    pm_runtime_put_noidle(dwc->dev);
+>>>       return ret;
+>>>   }
+>>> @@ -2732,21 +2746,23 @@ static int dwc3_gadget_pullup(struct 
+>>> usb_gadget *g, int is_on)
+>>>       /*
+>>>        * Avoid issuing a runtime resume if the device is already in the
+>>>        * suspended state during gadget disconnect.  DWC3 gadget was 
+>>> already
+>>> -     * halted/stopped during runtime suspend.
+>>> +     * halted/stopped during runtime suspend except for bus suspend 
+>>> case
+>>> +     * where we would have skipped the controller halt.
+>>>        */
+>>>       if (!is_on) {
+>>>           pm_runtime_barrier(dwc->dev);
+>>> -        if (pm_runtime_suspended(dwc->dev))
+>>> +        if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
+>>>               return 0;
+>>>       }
+>>>       /*
+>>>        * Check the return value for successful resume, or error.  For a
+>>>        * successful resume, the DWC3 runtime PM resume routine will 
+>>> handle
+>>> -     * the run stop sequence, so avoid duplicate operations here.
+>>> +     * the run stop sequence except for bus resume case, so avoid
+>>> +     * duplicate operations here.
+>>>        */
+>>>       ret = pm_runtime_get_sync(dwc->dev);
+>>> -    if (!ret || ret < 0) {
+>>> +    if ((!ret && !dwc->connected) || ret < 0) {
+>>>           pm_runtime_put(dwc->dev);
+>>>           if (ret < 0)
+>>>               pm_runtime_set_suspended(dwc->dev);
+>>> @@ -4331,6 +4347,8 @@ static void 
+>>> dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
+>>>       }
+>>>       dwc->link_state = next;
+>>> +    pm_runtime_mark_last_busy(dwc->dev);
+>>> +    pm_request_autosuspend(dwc->dev);
+>>>   }
+>>>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+>>> @@ -4718,7 +4736,15 @@ void dwc3_gadget_process_pending_events(struct 
+>>> dwc3 *dwc)
+>>>   {
+>>>       if (dwc->pending_events) {
+>>>           dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
+>>> +        pm_runtime_put(dwc->dev);
+>>>           dwc->pending_events = false;
+>>>           enable_irq(dwc->irq_gadget);
+>>> +        /*
+>>> +         * We have only stored the pending events as part
+>>> +         * of dwc3_interrupt() above, but those events are
+>>> +         * not yet handled. So explicitly invoke the
+>>> +         * interrupt handler for handling those events.
+>>> +         */
+>>> +        dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
+>>
+>> Why do we have to do this? If there are events, the threaded interrupt
+>> should be woken up.
+>>
+> 
+> dwc3_thread_interrupt will be woken up only if dwc3_interrupt() handler 
+> is invoked by the interrupt framework when the return value of 
+> IRQ_WAKE_THREAD is handled. But while processing the pending events the 
+> interrupt framework is not involved. We explicitly invoke the 
+> dwc3_interrupt() above within the dwc3 driver. So the 
+> dwc3_thread_interrupt() has to be explicitly invoked as well for 
+> processing those pending events.
+> 
 
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230701-regmap-kunit-enable-a08718e77dd4
+Perhaps we can make it more optimal by checking the return value like below?
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+{
+         irqreturn_t ret;
+
+         if (dwc->pending_events) {
+                 ret = dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
+                 pm_runtime_put(dwc->dev);
+                 dwc->pending_events = false;
+                 enable_irq(dwc->irq_gadget);
+                 /*
+                  * We have only stored the pending events as part
+                  * of dwc3_interrupt() above, but those events are
+                  * not yet handled. So explicitly invoke the
+                  * interrupt handler for handling those events.
+                  */
+                 if (ret == IRQ_WAKE_THREAD)
+                         dwc3_thread_interrupt(dwc->irq_gadget, 
+dwc->ev_buf);
+         }
+}
+
 
