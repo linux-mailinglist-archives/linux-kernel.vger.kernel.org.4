@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF91C74FAF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C1074FAF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 00:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjGKWcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 18:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S231202AbjGKWfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 18:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjGKWcE (ORCPT
+        with ESMTP id S229931AbjGKWfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 18:32:04 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A921A3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:32:03 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b88f151d8eso72855ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689114723; x=1691706723;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=leT/dmHN5ogjVjMKIS2IvCyaGv4tZ/MjdUNv3TIsuVc=;
-        b=VxuPsBfSuE2OMcc29zoAaGLA5c9bUziPP6fynRsOyX0sjBNU+jQ49oL8VDUV5rnmNf
-         KSqXMxl0aO/I3FPNSR6lYMxG8M6Fo2OMnzOznPIhoC+ZJcIkNqYRPp8aFl9uD+HZvteE
-         iGARbOR1v/DSeOnE+STnfqUwGbXg9H0Nq0cKSnYWgHu2s+Sjy5rD2E8bmK0y6VQ81lk7
-         ZFzCKzrFP59/mXZPH8lTKc3/LfSXAVOoXnU1sV/wlrvRAgorxyuAGUWppxT1m5PiSrCt
-         J1lHBYi1YIS8EKsXts2vop5NpIePmUxF6RovCkBqz0Z02S8IbczR2aUAK8dyFTZblNju
-         6dtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689114723; x=1691706723;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=leT/dmHN5ogjVjMKIS2IvCyaGv4tZ/MjdUNv3TIsuVc=;
-        b=S9tmG2+mFAmIhAzCa6uNBael/megmCLYIX37DLYEVFI1by4n/iWuHSld7X7txDSx97
-         gz/+N0UXB7cYtP3zaX9FcP7DBc80b91FfDSgYjYgF1iItcrBYyLxA9uXFMPnh1U2qvDi
-         ENwniXAVmAsyNVK+EY8/yeAasOCRDheuvmYkMIFnFnmTOEr+HuVtyXM2PG5gMmvtAbcd
-         mqpuz2eL/pYzfUm1PPB7PHgXAHf793IIt+EqtFZffr5aDzqbYmSHdeUXs17xdn0Gx4pv
-         Xm/2KXNL83iIItT3MDCI6dXo8vbvnBFWKp2/Q/2KIH33CqdHluzVDmWb35GTthjjqgUY
-         +Vmg==
-X-Gm-Message-State: ABy/qLZ6BUnnbcl5Ny5MuML5LAAzZH+Xr5bi76nRu/Qylv06mFxyuQdZ
-        8KxXpKodHM3RsuyT/HapDJQQIw==
-X-Google-Smtp-Source: APBJJlHEOIM4pRuXNjatx8qUgzwx3oFRUQNp6z68zKQ81/UC1tpGkJtZYVoZe6IvFeUZpc20mYkuwA==
-X-Received: by 2002:a17:903:11d0:b0:1b5:b90:1190 with SMTP id q16-20020a17090311d000b001b50b901190mr94063plh.28.1689114723201;
-        Tue, 11 Jul 2023 15:32:03 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:8944:7c0b:5d4e:f65b])
-        by smtp.gmail.com with ESMTPSA id ij12-20020a170902ab4c00b001b84cd8814bsm2488045plb.65.2023.07.11.15.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 15:32:02 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 15:31:58 -0700
-From:   Isaac Manjarres <isaacmanjarres@google.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        John Stultz <jstultz@google.com>, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kernel-team@android.com,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] regmap-irq: Fix out-of-bounds access when allocating
- config buffers
-Message-ID: <ZK3YXpzlxhwMGiuj@google.com>
-References: <20230711193059.2480971-1-isaacmanjarres@google.com>
- <8e5fba54-9ec7-45a7-8dd6-6ea63d853907@sirena.org.uk>
- <ZK3TiuPZr0A8iaNN@google.com>
- <fde7ae5c-fbda-4c73-84c0-2f8f9750fce1@sirena.org.uk>
+        Tue, 11 Jul 2023 18:35:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94A21A3;
+        Tue, 11 Jul 2023 15:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689114903;
+        bh=NeXn+ybZp/Kp0tyVls+58Athw9u+en3RKeIIRyLD3R0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FI+L2Z6V/Vmew4kop28pVWVXfwpOaaW/fWvyZuTolHoy6t30ilMlxaeMInTspSUzw
+         ehEdtlQjbkYUkcOC/oRsgNWA/Ns6lFvqwpxwHlCOstAeAAPdYhj5E6wjtc1z5Zd3Bp
+         y2kmEkbrx7m6Re3Q4570IhbQ6ATerSGX9kUtfuiyQkslyjCw/+sbp+ciL0Nh0xD2qA
+         a/sduFpofzOa2ijgTHR+HTjcpTYfoa3slaG3vmhKmGXtHvhpNS9qCcu0+0FygY2N2x
+         Xd43wTD8Uf3vcaiOFZDu2Y8iP7DUY4vUBoun5nbBs8kyw5VMGiB4okRBgmbd5ch0lI
+         fJ3KJqydwv4Jg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0wfv40qcz4wy7;
+        Wed, 12 Jul 2023 08:35:02 +1000 (AEST)
+Date:   Wed, 12 Jul 2023 08:35:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Saket Dumbre <saket.dumbre@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the pm tree
+Message-ID: <20230712083501.60b2968b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fde7ae5c-fbda-4c73-84c0-2f8f9750fce1@sirena.org.uk>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+2zh/w.H886DPBX=O1Sfdp3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 11:24:59PM +0100, Mark Brown wrote:
-> On Tue, Jul 11, 2023 at 03:11:22PM -0700, Isaac Manjarres wrote:
-> > On Tue, Jul 11, 2023 at 08:50:08PM +0100, Mark Brown wrote:
-> 
-> > > Please think hard before including complete backtraces in upstream
-> > > reports, they are very large and contain almost no useful information
-> > > relative to their size so often obscure the relevant content in your
-> > > message. If part of the backtrace is usefully illustrative (it often is
-> > > for search engines if nothing else) then it's usually better to pull out
-> > > the relevant sections.
-> 
-> > Thanks for your feedback. I'll go ahead and send out a new version of
-> > the patch with a trimmed down commit message.
-> 
-> It's OK, I did some local edits myself.
+--Sig_/+2zh/w.H886DPBX=O1Sfdp3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Mark!
+Hi all,
 
---Isaac
+Commit
+
+  ed9aa118e4e1 ("ACPICA: Add support for _DSC as per ACPI 6.5")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+2zh/w.H886DPBX=O1Sfdp3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSt2RUACgkQAVBC80lX
+0GxBugf/XgDSh5QIP+Hv8Su6cNHnhlQp+z47MMzfJdE6qZ/KHIPrY/IVkoCya2FS
+NSiV12hyvEBFqny0QqTJDGKHXH3pdzTrLmVtX8Q54Zfn6//BWFjduoEtN3J/Ss2Y
+XXeTMrAV3LnI5YQUFT0kJlaGR/08/taUvAsVzWHQPJ5J5Oai1Ub22dSAtGkIS5Qz
+hC4jn9Dm9ww/Iwp5TQ7me8z3EsczSCMHlTbqADLFjBRpwLhc1EgMUvWiNqFdAT/u
+Vpg8TRDPULsRNCiNhTANkEylMinwEKxitbHRe8AyidtgXjlm3K0robOIkAq2wGUI
+81S2xbo/IsSLrG2NzoaD7GgOyzVfMg==
+=r2pi
+-----END PGP SIGNATURE-----
+
+--Sig_/+2zh/w.H886DPBX=O1Sfdp3--
