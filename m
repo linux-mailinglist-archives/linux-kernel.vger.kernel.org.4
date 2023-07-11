@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313CA74F284
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3F274F286
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbjGKOmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S232445AbjGKOne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbjGKOmu (ORCPT
+        with ESMTP id S232209AbjGKOmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:42:50 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EFFE5C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:48 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-993c2d9e496so307847366b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:47 -0700 (PDT)
+        Tue, 11 Jul 2023 10:42:54 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FB71705
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:50 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-51e28d316d0so3133264a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689086566; x=1691678566;
+        d=google.com; s=20221208; t=1689086569; x=1691678569;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3xF8MGaf3YIHiv8WE5XhXRUvL32mDr7FE1dMJNOszw=;
-        b=DvP+jrk46uTfGe7TUiSjFQbV4quCN50oC/cj4Iah8dP9C7YRx5hHurdOWznLVf1BNp
-         123cV8auoCUeKcZj3eB3hLXdnASM97T2P8BLEB0/8QOP7PonDoIzLDhTYs1DXMY665jt
-         vK+9gCbuIhZLNsZiZIIfYOq+a+9sTxXYG44+fcvySWIMUvGFRNRnH7RNhLTQyG+7x7z3
-         voxjpWRiXAVdpnyhmKBFJfnPliIms6dLpBScd5SF77wpPclRYi8XXu69Sfgt7zjyX1Xv
-         RDHUFpm8JcilFbez/OAAoolkzroT850nOid31k5E0Iuq55xzxWBRnh5c3JK9vZqcnWY/
-         OyWg==
+        bh=6gUN4hkfqv1qmZBEmgq0ujJ8OMQMxN9ipJDwtCO0z/w=;
+        b=CAwfWmewCn9RQzJFbpwX7fQzBPNijsKbBxf0NpnX//OUHqpcXYTX58dvgmw+cedZtQ
+         kYFFkiKFQDvPqurwCulWWdk5H3FN+xg8wfay44pQXF5LaPtdDiIh3T6yIXQxR4h0dtSh
+         hzdIUndQiFP8V3aKKcuU/n7uIxNeyyIMLbdHruTyoLW3o81XFHFlnQYjW2QreYRkQ6ag
+         EAilAzhTWbrzbEft+6iZHU4TLY/OKccx5LWQtWV1Gkmzk63yDCQxYtBNu2iswSfHGXow
+         CWo8K360qoL45xBx8tvfISZhoes0u9OrLaAzVmZcdT8cEwnpa9m/W7bPLxf+M1kZi+Rl
+         nSaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086566; x=1691678566;
+        d=1e100.net; s=20221208; t=1689086569; x=1691678569;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3xF8MGaf3YIHiv8WE5XhXRUvL32mDr7FE1dMJNOszw=;
-        b=dwsUvjUkok3Yzso5JhpVm7BogqGsZy1iYspQuxQ5gd6xCyYlfiiJkF6tMp7XXjhuZR
-         o5XNayxC32Pa65xWPk2ph46BhQwUbT3yQzS9329BxPECd/Fp89c7zxFKDMbBHoPDlrbE
-         eC+HS517G+TDqDe0jnpA34tk7xDDc8mIiId7eLvrhmw5YUp0FPY1ooA8E2MnOHFH1GeK
-         l1ssyZS4FFARx+2GzgnM3nw0N8VKLRD5Th8MKqMIA66wOE5zd6mQfQ4Z3CP/kRFV/x0C
-         0ZU3JF12E+gipVfFhvliywRM4vIpFbp71ll2/l/XQ/3ad3WHYxiQ3HVhMmzRKRVWougZ
-         bcFQ==
-X-Gm-Message-State: ABy/qLYp4yuf5DzaztxncmzWGNzONfCFrkC3SPuwWT6se/TUBpMu5HO8
-        RalaQ+j/qGlRBD9qjkseM/pXdlnIB/o=
-X-Google-Smtp-Source: APBJJlF5J0B0mrJEZzH3jzCK9Av8km9eAZ0kcqQUunnkC9yIVlWbuQTK053e9sPBEYiVnXCTkE+L6YnaE6s=
+        bh=6gUN4hkfqv1qmZBEmgq0ujJ8OMQMxN9ipJDwtCO0z/w=;
+        b=RJfNJZMMaA3E6ogzgu57P9kmIl4c5RmyMGfpmdecPrTZnqaBzNXGcRX/YeROYQi+cV
+         uLidMMod44S7roH49UB+0Vfrz7sMOYcU/51wf3ikbmgK1q1tlJ4nrwA1Vx6KsnZZn3/a
+         Ra0q1kZZJcQdiab8hCoh+U40hdQcrWa47QnT7WgUjyE/woA4nblzwPRVNrwNZLXB7xWu
+         wZacsnXFzIRjsEODNTMR1HNyrqyuvQguCiZdGVgwMmZYMU+67gS9xzOzB+808HKOHv9s
+         0f9Rvij/dOxPtsZ2i2YPwniZwO6ekP9DocEh800CcxsDKLn9Nddmu8bhfYyXmuM8Mr+i
+         hPmQ==
+X-Gm-Message-State: ABy/qLYJ9LLYZ6ZsKvVyLkGGTaCM/TWRNH4pd1wokDgwpS9H/mKxpm7u
+        QooHOmmV7xJFGpoO3sVlf7qbC22OqM8=
+X-Google-Smtp-Source: APBJJlFJ++vJxm+UgzMRNU0YCHZdMkerA2PInbG8ZSHPdSyYj9007l5/5vC3PGGHCEqDwMKzW9y2JYZ9V/I=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:564d:3aaa:6b5f:4419])
- (user=glider job=sendgmr) by 2002:a17:906:5dd8:b0:98e:1b9a:c3e1 with SMTP id
- p24-20020a1709065dd800b0098e1b9ac3e1mr51167ejv.13.1689086566597; Tue, 11 Jul
- 2023 07:42:46 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:42:31 +0200
+ (user=glider job=sendgmr) by 2002:a50:8ac3:0:b0:51a:38e8:5f8b with SMTP id
+ k3-20020a508ac3000000b0051a38e85f8bmr88669edk.4.1689086569124; Tue, 11 Jul
+ 2023 07:42:49 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:42:32 +0200
 In-Reply-To: <20230711144233.3129207-1-glider@google.com>
 Mime-Version: 1.0
 References: <20230711144233.3129207-1-glider@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711144233.3129207-4-glider@google.com>
-Subject: [Resend v1 3/5] arm64: mte: implement CONFIG_ARM64_MTE_COMP
+Message-ID: <20230711144233.3129207-5-glider@google.com>
+Subject: [Resend v1 4/5] arm64: mte: add a test for MTE tags compression
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com, catalin.marinas@arm.com, will@kernel.org,
         pcc@google.com, andreyknvl@gmail.com
@@ -69,528 +69,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The config implements the EA0 algorithm suggested by Evgenii Stepanov
-to compress the memory tags for ARM MTE during swapping.
+Ensure that tag sequences containing alternating values are compressed
+to buffers of expected size and correctly decompressed afterwards.
 
-The algorithm is based on RLE and specifically targets 128-byte buffers
-of tags corresponding to a single page. In the common case a buffer
-can be compressed into 63 bits, making it possible to store it without
-additional memory allocation.
-
-Suggested-by: Evgenii Stepanov <eugenis@google.com>
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- arch/arm64/Kconfig               |  10 +
- arch/arm64/include/asm/mtecomp.h |  60 +++++
- arch/arm64/mm/Makefile           |   1 +
- arch/arm64/mm/mtecomp.c          | 398 +++++++++++++++++++++++++++++++
- 4 files changed, 469 insertions(+)
- create mode 100644 arch/arm64/include/asm/mtecomp.h
- create mode 100644 arch/arm64/mm/mtecomp.c
+ arch/arm64/Kconfig           |  10 ++
+ arch/arm64/mm/Makefile       |   1 +
+ arch/arm64/mm/test_mtecomp.c | 175 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 186 insertions(+)
+ create mode 100644 arch/arm64/mm/test_mtecomp.c
 
 diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 343e1e1cae10a..b25b584a0a9cb 100644
+index b25b584a0a9cb..31fc50208b383 100644
 --- a/arch/arm64/Kconfig
 +++ b/arch/arm64/Kconfig
-@@ -2065,6 +2065,16 @@ config ARM64_EPAN
- 	  if the cpu does not implement the feature.
- endmenu # "ARMv8.7 architectural features"
+@@ -2075,6 +2075,16 @@ config ARM64_MTE_COMP
+ 	  128-byte tag buffers corresponding to 4K pages can be compressed using
+ 	  the EA0 algorithm to save heap memory.
  
-+config ARM64_MTE_COMP
-+	bool "Tag compression for ARM64 MTE"
-+	default y
-+	depends on ARM64_MTE
++config ARM64_MTE_COMP_KUNIT_TEST
++	tristate "Test tag compression for ARM64 MTE" if !KUNIT_ALL_TESTS
++	default KUNIT_ALL_TESTS
++	depends on KUNIT && ARM64_MTE_COMP
 +	help
-+	  Enable tag compression support for ARM64 MTE.
++	  Test EA0 compression algorithm enabled by CONFIG_ARM64_MTE_COMP.
 +
-+	  128-byte tag buffers corresponding to 4K pages can be compressed using
-+	  the EA0 algorithm to save heap memory.
++	  Ensure that tag sequences containing alternating values are compressed
++	  to buffers of expected size and correctly decompressed afterwards.
 +
  config ARM64_SVE
  	bool "ARM Scalable Vector Extension support"
  	default y
-diff --git a/arch/arm64/include/asm/mtecomp.h b/arch/arm64/include/asm/mtecomp.h
-new file mode 100644
-index 0000000000000..65a3730cc50d9
---- /dev/null
-+++ b/arch/arm64/include/asm/mtecomp.h
-@@ -0,0 +1,60 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __ASM_MTECOMP_H
-+#define __ASM_MTECOMP_H
-+
-+#include <linux/types.h>
-+
-+/*
-+ * ea0_compress() - compress the given tag array.
-+ * @tags: 128-byte array to read the tags from.
-+ *
-+ * Compresses the tags and returns a 64-bit opaque handle pointing to the
-+ * tag storage. May allocate memory, which is freed by @ea0_release_handle().
-+ */
-+u64 ea0_compress(u8 *tags);
-+
-+/*
-+ * ea0_decompress() - decompress the tag array addressed by the handle.
-+ * @handle: handle returned by @ea0_decompress()
-+ * @tags: 128-byte array to write the tags to.
-+ *
-+ * Reads the compressed data and writes it into the user-supplied tag array.
-+ * Returns true on success, false on error.
-+ */
-+bool ea0_decompress(u64 handle, u8 *tags);
-+
-+/*
-+ * ea0_release_handle() - release the handle returned by ea0_compress().
-+ * @handle: handle returned by ea0_compress().
-+ */
-+void ea0_release_handle(u64 handle);
-+
-+/* Functions below are exported for testing purposes. */
-+
-+/*
-+ * ea0_storage_size() - calculate the memory occupied by compressed tags.
-+ * @handle: storage handle returned by ea0_compress.
-+ */
-+int ea0_storage_size(u64 handle);
-+
-+/*
-+ * ea0_tags_to_ranges() - break @tags into arrays of tag ranges.
-+ * @tags: 128-byte array containing 256 MTE tags.
-+ * @out_tags: u8 array to store the tag of every range.
-+ * @out_sizes: u16 array to store the size of every range.
-+ * @out_len: length of @out_tags and @out_sizes (output parameter, initially
-+ *           equal to lengths of out_tags[] and out_sizes[]).
-+ */
-+void ea0_tags_to_ranges(u8 *tags, u8 *out_tags, short *out_sizes, int *out_len);
-+
-+/*
-+ * ea0_ranges_to_tags() - fill @tags using given tag ranges.
-+ * @r_tags: u8[256] containing the tag of every range.
-+ * @r_sizes: u16[256] containing the size of every range.
-+ * @r_len: length of @r_tags and @r_sizes.
-+ * @tags: 128-byte array to write the tags to.
-+ */
-+void ea0_ranges_to_tags(u8 *r_tags, short *r_sizes, int r_len, u8 *tags);
-+
-+#endif // __ASM_MTECOMP_H
 diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
-index dbd1bc95967d0..46778f6dd83c2 100644
+index 46778f6dd83c2..170dc62b010b9 100644
 --- a/arch/arm64/mm/Makefile
 +++ b/arch/arm64/mm/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_TRANS_TABLE)	+= trans_pgd.o
- obj-$(CONFIG_TRANS_TABLE)	+= trans_pgd-asm.o
+@@ -11,6 +11,7 @@ obj-$(CONFIG_TRANS_TABLE)	+= trans_pgd-asm.o
  obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
  obj-$(CONFIG_ARM64_MTE)		+= mteswap.o
-+obj-$(CONFIG_ARM64_MTE_COMP)	+= mtecomp.o
+ obj-$(CONFIG_ARM64_MTE_COMP)	+= mtecomp.o
++obj-$(CONFIG_ARM64_MTE_COMP_KUNIT_TEST) += test_mtecomp.o
  KASAN_SANITIZE_physaddr.o	+= n
  
  obj-$(CONFIG_KASAN)		+= kasan_init.o
-diff --git a/arch/arm64/mm/mtecomp.c b/arch/arm64/mm/mtecomp.c
+diff --git a/arch/arm64/mm/test_mtecomp.c b/arch/arm64/mm/test_mtecomp.c
 new file mode 100644
-index 0000000000000..01f7d22665b49
+index 0000000000000..67bef6f28dac4
 --- /dev/null
-+++ b/arch/arm64/mm/mtecomp.c
-@@ -0,0 +1,398 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
++++ b/arch/arm64/mm/test_mtecomp.c
+@@ -0,0 +1,175 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * MTE tag compression algorithm.
-+ * Proposed by Evgenii Stepanov <eugenis@google.com>
++ * Test cases for EA0, the compression algorithm for MTE tags.
 + */
 +
-+/*
-+ * EA0 stands for "Evgenii's Algorithm 0", as the initial proposal contained two
-+ * compression algorithms.
-+ *
-+ * The algorithm attempts to compress a 128-byte (MTE_GRANULES_PER_PAGE / 2)
-+ * array of tags into a smaller byte sequence that can be stored in a
-+ * 16-, 32-, or 64-byte buffer. A special case is storing the tags inline in
-+ * an 8-byte pointer.
-+ *
-+ * We encapsulate tag storage memory management in this module, because it is
-+ * tightly coupled with the pointer representation.
-+ *   ea0_compress(*tags) takes a 128-byte buffer and returns an opaque value
-+ *     that can be stored in Xarray
-+ *   ea_decompress(*ptr, *tags) takes the opaque value and loads the tags into
-+ *     the provided 128-byte buffer.
-+ *
-+ *
-+ *
-+ * The compression algorithm works as follows.
-+ *
-+ * 1. The input array of 128 bytes is transformed into tag ranges (two arrays:
-+ *    @r_tags containing tag values and @r_sizes containing range lengths) by
-+ *    ea0_tags_to_ranges(). Note that @r_sizes sums up to 256.
-+ *
-+ * 2. Depending on the number N of ranges, the following storage class is picked:
-+ *            N <= 6:  8 bytes (inline case, no allocation required);
-+ *       6 < N <= 11: 16 bytes
-+ *      11 < N <= 23: 32 bytes
-+ *      23 < N <= 46: 64 bytes
-+ *      46 < N:       128 bytes (no compression will be performed)
-+ *
-+ * 3. The number of the largest element of @r_sizes is stored in @largest_idx.
-+ *    The element itself is thrown away from @r_sizes, because it can be
-+ *    reconstructed from the sum of the remaining elements. Note that now none
-+ *    of the remaining @r_sizes elements is greater than 127.
-+ *
-+ * 4. For the inline case, the following values are stored in the 8-byte handle:
-+ *       largest_idx : i4
-+ *      r_tags[0..5] : i4 x 6
-+ *     r_sizes[0..4] : i7 x 5
-+ *    (if N is less than 6, @r_tags and @r_sizes are padded up with zero values)
-+ *
-+ *    Because @largest_idx is <= 5, bit 63 of the handle is always 0 (so it can
-+ *    be stored in the Xarray), and bits 62..60 cannot all be 1, so it can be
-+ *    distinguished from a kernel pointer.
-+ *
-+ * 5. For the out-of-line case, the storage is allocated from one of the
-+ *    "mte-tags-{16,32,64,128}" kmem caches. The resulting pointer is aligned
-+ *    on 8 bytes, so its bits 2..0 can be used to store the size class:
-+ *     - 0 for 128 bytes
-+ *     - 1 for 16
-+ *     - 2 for 32
-+ *     - 4 for 64.
-+ *    Bit 63 of the pointer is zeroed out, so that it can be stored in Xarray.
-+ *
-+ * 6. The data layout in the allocated storage is as follows:
-+ *         largest_idx : i6
-+ *        r_tags[0..N] : i4 x N
-+ *     r_sizes[0..N-1] : i7 x (N-1)
-+ *
-+ *
-+ *
-+ * The decompression algorithm performs the steps below.
-+ *
-+ * 1. Decide if data is stored inline (bits 62..60 of the handle != 0b111) or
-+ *    out-of line.
-+ *
-+ * 2. For the inline case, treat the handle itself as the input buffer.
-+ *
-+ * 3. For the out-of-line case, look at bits 2..0 of the handle to understand
-+ *    the input buffer length. To obtain the pointer to the input buffer, unset
-+ *    bits 2..0 of the handle and set bit 63.
-+ *
-+ * 4. If the input buffer is 128 byte long, copy its contents to the output
-+ *    buffer.
-+ *
-+ * 5. Otherwise, read @largest_idx, @r_tags and @r_sizes from the input buffer.
-+ *    Calculate the removed largest element of @r_sizes:
-+ *      largest = 256 - sum(r_sizes)
-+ *    and insert it into @r_sizes at position @largest_idx.
-+ *
-+ * 6. While @r_sizes[i] > 0, add a 4-bit value @r_tags[i] to the output buffer
-+ *    @r_sizes[i] times.
-+ */
-+
-+#include <linux/bitqueue.h>
-+#include <linux/gfp.h>
-+#include <linux/module.h>
 +#include <asm/mtecomp.h>
++#include <kunit/test.h>
 +#include <linux/slab.h>
-+#include <linux/swab.h>
-+#include <linux/string.h>
 +#include <linux/types.h>
 +
-+/* The handle must fit into an Xarray value. */
-+#define HANDLE_MASK ~(BIT_ULL(63))
-+
-+/* Out-of-line handles have 0b111 in bits 62..60. */
-+#define NOINLINE_MASK (BIT_ULL(62) | BIT_ULL(61) | BIT_ULL(60))
-+
-+/* Cache index is stored in the lowest pointer bits. */
-+#define CACHE_ID_MASK (BIT_ULL(2) | BIT_ULL(1) | BIT_ULL(0))
-+
-+/* Four separate caches to store out-of-line data. */
-+#define NUM_CACHES 4
-+static struct kmem_cache *mtecomp_caches[NUM_CACHES];
-+
-+/* Translate allocation size into mtecomp_caches[] index. */
-+static int ea0_size_to_cache_id(int len)
++/*
++ * Test that ea0_tags_to_ranges() produces a single range for a zero-filled tag
++ * buffer.
++ */
++static void test_tags_to_ranges_zero(struct kunit *test)
 +{
-+	switch (len) {
-+	case 16:
-+		return 1;
-+	case 32:
-+		return 2;
-+	case 64:
-+		return 3;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+/* Translate mtecomp_caches[] index into allocation size. */
-+static int ea0_cache_id_to_size(int id)
-+{
-+	switch (id) {
-+	case 1:
-+		return 16;
-+	case 2:
-+		return 32;
-+	case 3:
-+		return 64;
-+	default:
-+		return 128;
-+	}
-+}
-+
-+/* Transform tags into tag ranges. */
-+void ea0_tags_to_ranges(u8 *tags, u8 *out_tags, short *out_sizes, int *out_len)
-+{
-+	u8 prev_tag = 0xff;
-+	int cur_idx = -1;
-+	u8 cur_tag;
-+	int i;
-+
-+	memset(out_tags, 0, *out_len * sizeof(*out_tags));
-+	memset(out_sizes, 0, *out_len * sizeof(*out_sizes));
-+	for (i = 0; i < MTE_GRANULES_PER_PAGE; i++) {
-+		cur_tag = tags[i / 2];
-+		if (i % 2)
-+			cur_tag = cur_tag % 16;
-+		else
-+			cur_tag = cur_tag / 16;
-+		if (cur_tag == prev_tag) {
-+			out_sizes[cur_idx]++;
-+		} else {
-+			cur_idx++;
-+			prev_tag = cur_tag;
-+			out_tags[cur_idx] = prev_tag;
-+			out_sizes[cur_idx] = 1;
-+		}
-+	}
-+	*out_len = cur_idx + 1;
-+}
-+
-+/* Transform tag ranges back into tags. */
-+void ea0_ranges_to_tags(u8 *r_tags, short *r_sizes, int r_len, u8 *tags)
-+{
-+	struct bitq iter;
-+	int i, j;
-+
-+	bitq_init(&iter, tags, 128);
-+	for (i = 0; i < r_len; i++) {
-+		for (j = 0; j < r_sizes[i]; j++)
-+			bitq_enqueue(&iter, r_tags[i], 4);
-+	}
-+}
-+
-+/* Translate @num_ranges into the allocation size needed to hold them. */
-+static int ea0_alloc_size(int num_ranges)
-+{
-+	if (num_ranges <= 6)
-+		return 8;
-+	if (num_ranges <= 11)
-+		return 16;
-+	if (num_ranges <= 23)
-+		return 32;
-+	if (num_ranges <= 46)
-+		return 64;
-+	return 128;
-+}
-+
-+/* Translate allocation size into maximum number of ranges that it can hold. */
-+static int ea0_size_to_ranges(int size)
-+{
-+	switch (size) {
-+	case 8:
-+		return 6;
-+	case 16:
-+		return 11;
-+	case 32:
-+		return 23;
-+	case 64:
-+		return 46;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+/* Is the data stored inline in the handle itself? */
-+static bool ea0_is_inline(u64 handle)
-+{
-+	return (handle & NOINLINE_MASK) != NOINLINE_MASK;
-+}
-+
-+/* Get the size of the buffer backing @handle. */
-+int ea0_storage_size(u64 handle)
-+{
-+	if (ea0_is_inline(handle))
-+		return 8;
-+	return ea0_cache_id_to_size(handle & CACHE_ID_MASK);
-+}
-+EXPORT_SYMBOL(ea0_storage_size);
-+
-+/* Compress ranges into the buffer of the given length. */
-+void ea0_compress_to_buf(int len, u8 *tags, short *sizes, u8 *buf, int buflen)
-+{
-+	int largest_idx = -1, i;
-+	short largest = 0;
-+	struct bitq iter;
-+
-+	bitq_init(&iter, buf, buflen);
-+	for (i = 0; i < len; i++) {
-+		if (i == len)
-+			break;
-+		if (sizes[i] > largest) {
-+			largest = sizes[i];
-+			largest_idx = i;
-+		}
-+	}
-+	if (len <= 6)
-+		/* Inline case, @buflen <= 8. */
-+		bitq_enqueue(&iter, largest_idx, 4);
-+	else
-+		bitq_enqueue(&iter, largest_idx, 6);
-+	for (i = 0; i < len; i++)
-+		bitq_enqueue(&iter, tags[i], 4);
-+	for (i = len; i < ea0_size_to_ranges(buflen); i++)
-+		bitq_enqueue(&iter, 0, 4);
-+	for (i = 0; i < len; i++) {
-+		if (i == largest_idx)
-+			continue;
-+		bitq_enqueue(&iter, sizes[i], 7);
-+	}
-+}
-+
-+/* Compress the data inline. */
-+static u64 ea0_compress_inline(int len, u8 *tags, short *sizes)
-+{
-+	u64 result;
-+
-+	ea0_compress_to_buf(len, tags, sizes, (u8 *)&result, sizeof(result));
-+	result = be64_to_cpu(result);
-+	return result;
-+}
-+
-+/* Compress @tags and return a handle. */
-+u64 ea0_compress(u8 *tags)
-+{
-+	int alloc_size, cache_id;
-+	struct kmem_cache *cache;
++	u8 tags[128], dtags[128];
 +	short r_sizes[256];
++	int r_len = 256;
 +	u8 r_tags[256];
-+	int r_len = ARRAY_SIZE(r_tags);
-+	u8 *storage;
 +
++	memset(tags, 0, 128);
 +	ea0_tags_to_ranges(tags, r_tags, r_sizes, &r_len);
-+	alloc_size = ea0_alloc_size(r_len);
-+	if (alloc_size == 8)
-+		return ea0_compress_inline(r_len, r_tags, r_sizes);
-+	cache_id = ea0_size_to_cache_id(alloc_size);
-+	cache = mtecomp_caches[cache_id];
-+	storage = kmem_cache_alloc(cache, GFP_KERNEL);
-+	if (alloc_size < 128) {
-+		ea0_compress_to_buf(r_len, r_tags, r_sizes, storage,
-+				    alloc_size);
-+		return ((u64)storage | cache_id) & HANDLE_MASK;
-+	}
-+	memcpy(storage, tags, alloc_size);
-+	return (u64)storage & HANDLE_MASK;
++	KUNIT_EXPECT_EQ(test, r_len, 1);
++	KUNIT_EXPECT_EQ(test, r_tags[0], 0);
++	KUNIT_EXPECT_EQ(test, r_sizes[0], 256);
++	ea0_ranges_to_tags(r_tags, r_sizes, r_len, dtags);
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Decompress the contents of the given buffer into @tags. */
-+static bool ea0_decompress_from_buf(u8 *buf, int buflen, u8 *tags)
++/*
++ * Test that a small number of different tags is correctly transformed into
++ * ranges.
++ */
++static void test_tags_to_ranges_simple(struct kunit *test)
 +{
-+	int bits, largest_idx, i, r_len = ea0_size_to_ranges(buflen);
-+	short r_sizes[46], sum = 0;
-+	u8 r_tags[46];
-+	struct bitq iter;
-+	u8 val;
++	u8 tags[128], dtags[128];
++	const u8 ex_tags[] = { 0xa, 0x0, 0xa, 0xb, 0x0 };
++	const short ex_sizes[] = { 1, 2, 2, 1, 250 };
++	short r_sizes[256];
++	int r_len = 256;
++	u8 r_tags[256];
 +
-+	bitq_init_full(&iter, buf, buflen);
-+	bits = bitq_dequeue(&iter, &val, (buflen == 8) ? 4 : 6);
-+	if (bits == -1)
-+		return false;
-+	largest_idx = val;
-+	for (i = 0; i < r_len; i++) {
-+		bits = bitq_dequeue(&iter, &val, 4);
-+		if (bits == -1)
-+			return false;
-+		r_tags[i] = val;
-+	}
-+	for (i = 0; i < r_len; i++) {
-+		if (i == largest_idx)
-+			continue;
-+		bits = bitq_dequeue(&iter, &val, 7);
-+		if (bits == -1)
-+			return false;
-+		if (!val) {
-+			r_len = i;
-+			break;
-+		}
-+		r_sizes[i] = val;
-+		sum += val;
-+	}
-+	if (sum >= 256)
-+		return false;
-+	r_sizes[largest_idx] = 256 - sum;
-+	ea0_ranges_to_tags(r_tags, r_sizes, r_len, tags);
-+	return true;
++	memset(tags, 0, 128);
++	tags[0] = 0xa0;
++	tags[1] = 0x0a;
++	tags[2] = 0xab;
++	ea0_tags_to_ranges(tags, r_tags, r_sizes, &r_len);
++	KUNIT_EXPECT_EQ(test, r_len, 5);
++	KUNIT_EXPECT_EQ(test, memcmp(r_tags, ex_tags, sizeof(ex_tags)), 0);
++	KUNIT_EXPECT_EQ(test, memcmp(r_sizes, ex_sizes, sizeof(ex_sizes)), 0);
++	ea0_ranges_to_tags(r_tags, r_sizes, r_len, dtags);
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Get pointer to the out-of-line storage from a handle. */
-+static void *ea0_storage(u64 handle)
++/* Test that repeated 0xa0 byte produces 256 ranges of length 1. */
++static void test_tags_to_ranges_repeated(struct kunit *test)
 +{
-+	if (ea0_is_inline(handle))
-+		return NULL;
-+	return (void *)((handle & (~CACHE_ID_MASK)) | BIT_ULL(63));
++	u8 tags[128], dtags[128];
++	short r_sizes[256];
++	int r_len = 256;
++	u8 r_tags[256];
++
++	memset(tags, 0xa0, 128);
++	ea0_tags_to_ranges(tags, r_tags, r_sizes, &r_len);
++	KUNIT_EXPECT_EQ(test, r_len, 256);
++	ea0_ranges_to_tags(r_tags, r_sizes, r_len, dtags);
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Decompress tags from the buffer referenced by @handle. */
-+bool ea0_decompress(u64 handle, u8 *tags)
++/* Test that a zero-filled array is compressed into inline storage. */
++static void test_compress_zero(struct kunit *test)
 +{
-+	u8 *storage = ea0_storage(handle);
-+	int size = ea0_storage_size(handle);
++	u8 tags[128], dtags[128];
++	u64 handle;
 +
-+	if (size == 128) {
-+		memcpy(tags, storage, size);
-+		return true;
-+	}
-+	if (size == 8) {
-+		handle = cpu_to_be64(handle);
-+		return ea0_decompress_from_buf((u8 *)&handle, sizeof(handle),
-+					       tags);
-+	}
-+	return ea0_decompress_from_buf(storage, size, tags);
++	memset(tags, 0, 128);
++	handle = ea0_compress(tags);
++	KUNIT_EXPECT_EQ(test, handle & BIT_ULL(63), 0);
++	/* Tags are stored inline. */
++	KUNIT_EXPECT_EQ(test, ea0_storage_size(handle), 8);
++	KUNIT_EXPECT_TRUE(test, ea0_decompress(handle, dtags));
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
-+EXPORT_SYMBOL(ea0_decompress);
 +
-+/* Release the memory referenced by @handle. */
-+void ea0_release_handle(u64 handle)
++/*
++ * Test that a very small number of tag ranges ends up compressed into 8 bytes.
++ */
++static void test_compress_simple(struct kunit *test)
 +{
-+	void *storage = ea0_storage(handle);
-+	int size = ea0_storage_size(handle);
-+	struct kmem_cache *c;
++	u8 tags[128], dtags[128];
++	u64 handle;
 +
-+	if (!handle || !storage)
-+		return;
++	memset(tags, 0, 128);
++	tags[0] = 0xa0;
++	tags[1] = 0x0a;
++	tags[2] = 0xab;
 +
-+	c = mtecomp_caches[ea0_size_to_cache_id(size)];
-+	kmem_cache_free(c, storage);
++	handle = ea0_compress(tags);
++	KUNIT_EXPECT_EQ(test, handle & BIT_ULL(63), 0);
++	/* Tags are stored inline. */
++	KUNIT_EXPECT_EQ(test, ea0_storage_size(handle), 8);
++	KUNIT_EXPECT_TRUE(test, ea0_decompress(handle, dtags));
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
-+EXPORT_SYMBOL(ea0_release_handle);
 +
-+/* Set up mtecomp_caches[]. */
-+static int mtecomp_init(void)
++/*
++ * Generate a buffer that will contain @nranges of tag ranges, test that it
++ * compresses into @exp_size bytes and decompresses into the original tag
++ * sequence.
++ */
++static void compress_range_helper(struct kunit *test, int nranges, int exp_size)
 +{
-+	char name[16];
-+	int size;
++	u8 tags[128], dtags[128];
++	u64 handle;
 +	int i;
 +
-+	for (i = 0; i < NUM_CACHES; i++) {
-+		size = ea0_cache_id_to_size(i);
-+		snprintf(name, ARRAY_SIZE(name), "mte-tags-%d", size);
-+		mtecomp_caches[i] =
-+			kmem_cache_create(name, size, size, 0, NULL);
++	memset(tags, 0, 128);
++
++	if (nranges > 1) {
++		nranges--;
++		for (i = 0; i < nranges / 2; i++)
++			tags[i] = 0xab;
++		if (nranges % 2)
++			tags[nranges / 2] = 0xa0;
 +	}
-+	return 0;
++
++	handle = ea0_compress(tags);
++	KUNIT_EXPECT_EQ(test, handle & BIT_ULL(63), 0);
++	KUNIT_EXPECT_EQ(test, ea0_storage_size(handle), exp_size);
++	KUNIT_EXPECT_TRUE(test, ea0_decompress(handle, dtags));
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+module_init(mtecomp_init);
++/*
++ * Test that every number of tag ranges is correctly compressed and
++ * decompressed.
++ */
++static void test_compress_ranges(struct kunit *test)
++{
++	int i, exp_size;
++
++	for (i = 1; i <= 256; i++) {
++		if (i < 7)
++			exp_size = 8;
++		else if (i < 12)
++			exp_size = 16;
++		else if (i < 24)
++			exp_size = 32;
++		else if (i < 47)
++			exp_size = 64;
++		else
++			exp_size = 128;
++		compress_range_helper(test, i, exp_size);
++	}
++}
++
++static struct kunit_case mtecomp_test_cases[] = {
++	KUNIT_CASE(test_tags_to_ranges_zero),
++	KUNIT_CASE(test_tags_to_ranges_simple),
++	KUNIT_CASE(test_tags_to_ranges_repeated),
++	KUNIT_CASE(test_compress_zero),
++	KUNIT_CASE(test_compress_simple),
++	KUNIT_CASE(test_compress_ranges),
++	{}
++};
++
++static struct kunit_suite mtecomp_test_suite = {
++	.name = "mtecomp",
++	.test_cases = mtecomp_test_cases,
++};
++kunit_test_suites(&mtecomp_test_suite);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Alexander Potapenko <glider@google.com>");
 -- 
 2.41.0.255.g8b1d071c50-goog
 
