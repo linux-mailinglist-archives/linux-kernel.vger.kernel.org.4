@@ -2,120 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB7474EEB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE95874EF00
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjGKMXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S232159AbjGKMeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjGKMWs (ORCPT
+        with ESMTP id S231819AbjGKMeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:22:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940341717
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:21:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FC4F614BA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 12:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EF4C433C7;
-        Tue, 11 Jul 2023 12:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689078016;
-        bh=ESrFukL6Avmq96Qu5Z0oVFoi45CucnlANyNQFqVS/EI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l0woitDjv2729w2lKE8MkSDWhI9pE3s5StDUzTavbZivo5Oyc5vZwwAUIfxPu3Juz
-         0P7vfULY6rAu7A4YI/aCthk+ruMFZURj9z0a6HJQ/81tSA46wsiaiddONLZKKmaCR4
-         9+2b84FyJcP3VMxTaU8qVaKGPyBX/Kn4GwLZBuRzMDuUXQGbO115qE1M/AYZLGmajz
-         WcUPq7qEzXmtGmHPsm37f3u0KgU8MJQ8W7Xdsv1Q/bqdXHPxh1Cz9DhsIqhx6BDxtX
-         4PdxfsZ8kqPQmS/eJo2eYK6I4wNmbVq3ai2TcCpauITpYOutNeAobWuJoB+VyS/nHJ
-         hrjIJPdP7q2cg==
-Date:   Tue, 11 Jul 2023 15:20:12 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
- in netlink_update_socket_mc()
-Message-ID: <20230711122012.GR41919@unreal>
-References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
- <20230711063348.GB41919@unreal>
- <2a2d55f167a06782eb9dfa6988ec96c2eedb7fba.camel@redhat.com>
- <ZK002l0AojjdJptC@smile.fi.intel.com>
+        Tue, 11 Jul 2023 08:34:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4654B170E;
+        Tue, 11 Jul 2023 05:33:41 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BAXh14011465;
+        Tue, 11 Jul 2023 12:21:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ZRBfs040BRdum9oeYUADEjrb3k2RsXmk2ekeVRNex5U=;
+ b=fmaaLA/Y15vS3FmafkMEDMr2lhs30LxK7WthotSIKLC6hCE+X7HmgkvVGHkJ1FZVBMo8
+ foIIuW1q3NeQJDP16Cos3yLjIqo0Xdo0qtrtcqBtJKb/HYgRHDZEJLcUDo3nDdVt3Asx
+ KGvfgdXB+wRcyxtrVMSwVnOjX8jZYXnV354lI/keWUtOGDJb80Midobi8xV5uzXzXfp7
+ QdyOHlel6+xfntYhj/dkjv9ZGwItxlXduHJ8o24Ro3ojj1svweHD/7bPGOvteau3f/14
+ +XhTygvoojZAWx9fyN9BMEJY3NUI8qr/Wr1IDTpoBPfz7E6+9sVNpU/+/GMHUYZJZfHp 9g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs4qp09pe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 12:21:15 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BCLDmM012255
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 12:21:13 GMT
+Received: from [10.201.206.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 05:20:39 -0700
+Message-ID: <91faf4d4-ff42-24cb-126c-cdb046d34c1e@quicinc.com>
+Date:   Tue, 11 Jul 2023 17:50:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZK002l0AojjdJptC@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 1/2] rpmsg: glink: change rx work queue type
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mathieu.poirier@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_varada@quicinc.com>
+References: <20230607121731.26958-1-quic_mmanikan@quicinc.com>
+ <20230607121731.26958-2-quic_mmanikan@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20230607121731.26958-2-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: p1D8xkLtOkWWWmbhArSdaeiOmhH7dT6S
+X-Proofpoint-GUID: p1D8xkLtOkWWWmbhArSdaeiOmhH7dT6S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ phishscore=0 impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110111
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 01:54:18PM +0300, Andy Shevchenko wrote:
-> On Tue, Jul 11, 2023 at 12:21:12PM +0200, Paolo Abeni wrote:
-> > On Tue, 2023-07-11 at 09:33 +0300, Leon Romanovsky wrote:
-> > > On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
-> > > > The bit operations take boolean parameter and return also boolean
-> > > > (in test_bit()-like cases). Don't threat booleans as integers when
-> > > > it's not needed.
-> > > > 
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > ---
-> > > >  net/netlink/af_netlink.c | 7 ++++---
-> > > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > > > 
-> > > > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> > > > index 383631873748..d81e7a43944c 100644
-> > > > --- a/net/netlink/af_netlink.c
-> > > > +++ b/net/netlink/af_netlink.c
-> > > > @@ -1623,9 +1623,10 @@ EXPORT_SYMBOL(netlink_set_err);
-> > > >  /* must be called with netlink table grabbed */
-> > > >  static void netlink_update_socket_mc(struct netlink_sock *nlk,
-> > > >  				     unsigned int group,
-> > > > -				     int is_new)
-> > > > +				     bool new)
-> > > >  {
-> > > > -	int old, new = !!is_new, subscriptions;
-> > > > +	int subscriptions;
-> > > > +	bool old;
-> > > >  
-> > > >  	old = test_bit(group - 1, nlk->groups);
-> > > >  	subscriptions = nlk->subscriptions - old + new;
-> > > 
-> > > So what is the outcome of "int - bool + bool" in the line above?
-> 
-> The same as with int - int [0 .. 1] + int [0 .. 1].
 
-No, it is not. bool is defined as _Bool C99 type, so strictly speaking
-you are mixing types int - _Bool + _Bool.
 
-Thanks
+On 6/7/2023 5:47 PM, Manikanta Mylavarapu wrote:
+> In case of heavy cpu load, rx worker thread
+> not able to get cpu slot because it's bound
+> to kernel global work queue.
+> 
+> Glink client drivers will return timeout
+> error if they didn't receive response
+> within stipulated duration. Changing rx
+> work queue type to UNBOUND workqueue
+> ensures rx worker thread will be executed
+> as early as possible.
+> 
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>   drivers/rpmsg/qcom_glink_native.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index 1beb40a1d3df..6f9a439e5046 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -81,6 +81,7 @@ struct glink_core_rx_intent {
+>    * @rx_pipe:	pipe object for receive FIFO
+>    * @tx_pipe:	pipe object for transmit FIFO
+>    * @rx_work:	worker for handling received control messages
+> + * @rx_wq:	work queue of rx_work
+>    * @rx_lock:	protects the @rx_queue
+>    * @rx_queue:	queue of received control messages to be processed in @rx_work
+>    * @tx_lock:	synchronizes operations on the tx fifo
+> @@ -100,6 +101,7 @@ struct qcom_glink {
+>   	struct qcom_glink_pipe *tx_pipe;
+>   
+>   	struct work_struct rx_work;
+> +	struct workqueue_struct *rx_wq;
+>   	spinlock_t rx_lock;
+>   	struct list_head rx_queue;
+>   
+> @@ -822,7 +824,7 @@ static int qcom_glink_rx_defer(struct qcom_glink *glink, size_t extra)
+>   	list_add_tail(&dcmd->node, &glink->rx_queue);
+>   	spin_unlock(&glink->rx_lock);
+>   
+> -	schedule_work(&glink->rx_work);
+> +	queue_work(glink->rx_wq, &glink->rx_work);
+>   	qcom_glink_rx_advance(glink, sizeof(dcmd->msg) + extra);
+>   
+>   	return 0;
+> @@ -1665,6 +1667,8 @@ static void qcom_glink_cancel_rx_work(struct qcom_glink *glink)
+>   	/* cancel any pending deferred rx_work */
+>   	cancel_work_sync(&glink->rx_work);
+>   
+> +	destroy_workqueue(glink->rx_wq);
+> +
+>   	list_for_each_entry_safe(dcmd, tmp, &glink->rx_queue, node)
+>   		kfree(dcmd);
+>   }
+> @@ -1750,6 +1754,10 @@ struct qcom_glink *qcom_glink_native_probe(struct device *dev,
+>   	INIT_WORK(&glink->rx_work, qcom_glink_work);
+>   	init_waitqueue_head(&glink->tx_avail_notify);
+>   
+> +	glink->rx_wq = alloc_workqueue("glink_rx_wq", WQ_UNBOUND, 1);
+> +	if (!glink->rx_wq)
+> +		return ERR_PTR(-ENOMEM);
+> +
+>   	spin_lock_init(&glink->idr_lock);
+>   	idr_init(&glink->lcids);
+>   	idr_init(&glink->rcids);
 
-> 
-> Note, the code _already_ uses boolean as integers.
-> 
-> > FTR, I agree with Leon, the old code is more readable to me/I don't see
-> > a practical gain with this change.
-> 
-> This change does not change the status quo. The code uses booleans as integers
-> already (in the callers).
-> 
-> As I mentioned earlier, the purity of the code (converting booleans to integers
-> beforehand) adds unneeded churn and with this change code becomes cleaner at
-> least for the (existing) callers.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+
+Gentle reminder for review!
+
+Thanks,
+Manikanta.
