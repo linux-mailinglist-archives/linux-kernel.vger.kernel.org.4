@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352DE74F9AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9A174F9AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjGKVVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S230482AbjGKVW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjGKVV2 (ORCPT
+        with ESMTP id S231463AbjGKVWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:21:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2427B133;
-        Tue, 11 Jul 2023 14:21:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD27F6160E;
-        Tue, 11 Jul 2023 21:21:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F7A1C433C7;
-        Tue, 11 Jul 2023 21:21:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689110487;
-        bh=6Ah7bT014+0EnYhqIBI4z9U9khMOfEK4P7UjUPWCSxU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CsB5o/cj4RYIp4U7s5184O6v2lgE1SjlMobgfQJrlU0f+U7X1uYbfw16uCX10JyPa
-         g2AjVuf+P02lxL7Ba0tfPbxIzzbW1jG4BtFFX1oiF6Y0qjMer7eKpO3OJk2UiZSxfp
-         xTioBe/+6hDAml8RQ94yNjBMJp+CKdamWHIhmB645xYBbxpi94Ws8T+Yo3y6XSkvqZ
-         LfN0b4p8RSk8/WhX68UPsRFSoR3CdOFKJY7cWo7LnICjCxfF+NGkz/55IZnvTtNiGS
-         UV2NVOajHThFAXvZz7A7uEhzHd+m/AJ4ZOcx15w2/lQByutD6j88ZQzJ0262Pa5LOP
-         T4U87uMo2U0eQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230707221725.1071292-1-robh@kernel.org>
-References: <20230707221725.1071292-1-robh@kernel.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: audio-graph-card2: Drop incomplete
- example
-Message-Id: <168911048524.530041.17659227550480230737.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 22:21:25 +0100
+        Tue, 11 Jul 2023 17:22:20 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D86D173C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:22:10 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-682b1768a0bso1344370b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689110530; x=1691702530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gA3l1yhuKOFSCNrc4pLJH2sIkbUZixeTWwlssXNtbNw=;
+        b=a51Yb+l2+T+BEYpdjBPQAGmZ4P1Os4bcoMbvwS1VflIi9CZ+pw9FXCG+hhUUui8yYr
+         rE7BGgLFALSet+fLPFVwOeuLXGOg0qW5Jl1cwQUwBcyCtk8qb1teTuP9ebjgonBl7zvV
+         +XRxxunDFNk/GMI5ry1KGp3srr+8TvTvTHLcpSHRN8Jf7gKUougtGZe8Kdel982ymZ1k
+         F/2Yw4To9rP+1CwK1ouNjPsNyGrNhZloSyj0p6w3F17Y/cCTSQzLUzzEzE5oVfdEQc3l
+         cNAN+zk08fFQBEm+MW361Nn6ydH4TGYb2R7a1EmGvxwdJ1XDnIJEAthXjpBj7yC3llc+
+         1daQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689110530; x=1691702530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gA3l1yhuKOFSCNrc4pLJH2sIkbUZixeTWwlssXNtbNw=;
+        b=XDnquiVV7SoW9OfbetrLB01H/KCS2VlUmKs2ZNFTh9FUpgUHBuJRrCgOYpNyyO7CTl
+         KzTxe9gNzSWhKadf5eCgf0xeK+KR6TN/I7xeXyf3C9EbCPOkRf5GxX3sFHQpBRiPBOPZ
+         xembd2pXWfAAXgkVxIPqS21VGBHpTvApLo947SRCzxSn9mzko4aH4Xt9vS85kuqPZf/Z
+         Q+7UscPkJHtjs/KvIRV8lNfzO+rNApa36Gc9H3FHZ5WopcaGWmroloZaRzwcSu3tgbou
+         4v/5ZLGWRDufkAdz0zmkJcgsUxNs0iExvwvyAVC5/Rl8M/NyoE0KuzMxNDzb1ZhlFaKV
+         4ZZA==
+X-Gm-Message-State: ABy/qLaLt2usukMe26wV0JnDDN3HQ9Bwz2zxH+00VwtVdRLWAr9SSL+G
+        4aYe/lGvdOycXhgRUu0toSZf7w==
+X-Google-Smtp-Source: APBJJlFVfxfkuXNd5u2rO+Y6efYLXZMTgIkaHOTtf3/LXtk9M0ngHOLb+o3MMkbyvcpHedshSbiJOw==
+X-Received: by 2002:a05:6a21:32a3:b0:132:4913:b651 with SMTP id yt35-20020a056a2132a300b001324913b651mr4312798pzb.3.1689110530093;
+        Tue, 11 Jul 2023 14:22:10 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id n18-20020a638f12000000b00548d361c137sm2015321pgd.61.2023.07.11.14.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 14:22:09 -0700 (PDT)
+Message-ID: <048cfbce-5238-2580-2d53-2ca740e72d79@kernel.dk>
+Date:   Tue, 11 Jul 2023 15:22:08 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 5/5] io_uring: add IORING_OP_WAITID support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Brauner <brauner@kernel.org>
+References: <20230711204352.214086-1-axboe@kernel.dk>
+ <20230711204352.214086-6-axboe@kernel.dk>
+ <8431d207-5e52-4f8c-a12d-276836174bad@app.fastmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <8431d207-5e52-4f8c-a12d-276836174bad@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jul 2023 16:17:25 -0600, Rob Herring wrote:
-> The example in audio-graph-card2 binding is incomplete, uses
-> undocumented compatibles strings, and doesn't follow typical .dts
-> formatting. Rather than try to fix with what would probably be a lengthy
-> example, just drop the example.
+On 7/11/23 3:11?PM, Arnd Bergmann wrote:
+> On Tue, Jul 11, 2023, at 22:43, Jens Axboe wrote:
+>> This adds support for an async version of waitid(2), in a fully async
+>> version. If an event isn't immediately available, wait for a callback
+>> to trigger a retry.
+>>
+>> The format of the sqe is as follows:
+>>
+>> sqe->len		The 'which', the idtype being queried/waited for.
+>> sqe->fd			The 'pid' (or id) being waited for.
+>> sqe->file_index		The 'options' being set.
+>> sqe->addr2		A pointer to siginfo_t, if any, being filled in.
+>>
+>> buf_index, add3, and waitid_flags are reserved/unused for now.
+>> waitid_flags will be used for options for this request type. One
+>> interesting use case may be to add multi-shot support, so that the
+>> request stays armed and posts a notification every time a monitored
+>> process state change occurs.
+>>
+>> Note that this does not support rusage, on Arnd's recommendation.
+>>
+>> See the waitid(2) man page for details on the arguments.
+>>
+>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
 > 
+> Does this require argument conversion for compat tasks?
 > 
+> Even without the rusage argument, I think the siginfo
+> remains incompatible with 32-bit tasks, unfortunately.
 
-Applied to
+Hmm yes good point, if compat_siginfo and siginfo are different, then it
+does need handling for that. Would be a trivial addition, I'll make that
+change. Thanks Arnd!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: dt-bindings: audio-graph-card2: Drop incomplete example
-      commit: c65b21f8aeac86768d387a86dfcbec5980480b6a
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Jens Axboe
 
