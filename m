@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C025D74E5DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A667774E5DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 06:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjGKE3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 00:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S229990AbjGKEdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 00:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjGKE3Q (ORCPT
+        with ESMTP id S229450AbjGKEdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 00:29:16 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9617E51;
-        Mon, 10 Jul 2023 21:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=tEziXguEN5L4lHowsECMtwVynpESmDBqF0VPw7VUfqE=; b=YkXh957pJcOHQt+u8K6tk3Ljmc
-        Uel26+f3o4MAGeqSoiMmqdx33ija6wyJqY+o48U45RtSIC6KY8WCu6BnhwjNcnMq+Pg1lb1Rox5DK
-        1LIlaU32Gf2i4QP7IEitaitwLgYzTXScUk5tZH+VVH6jLLbbku62BYRdzPGIfTFPCD6INsPmYieoY
-        BRdb0mxKRJe84OiAh+ZsSFH7KqQk8A9aeOpCKQn8gS7TSi9RObndD/lnx0YYJCHuWsVi4cp9iYLUm
-        eURCGgA06IjmschhQp6LwA6LiZXL8c4FvG1LLwTGy6Y+InIdPRXwR5mEN2esqnnyBBwE9bkmMkhZO
-        pp5OYp2A==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJ4zy-00Dcnq-2D;
-        Tue, 11 Jul 2023 04:29:14 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH 2/2] kconfig: gconfig: correct program name in help text
-Date:   Mon, 10 Jul 2023 21:29:13 -0700
-Message-ID: <20230711042913.21977-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.41.0
+        Tue, 11 Jul 2023 00:33:33 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89190;
+        Mon, 10 Jul 2023 21:33:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689050008; x=1720586008;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ewu6VMUcTeikFWa5CFXvONYk/FtXbAlUf+kOjZwvfOY=;
+  b=UV23SOtnNIFp7KX5Vn9iJ+NBOQKU6dwU/TBrq9e6rWtSQ0BZPiJKGu+T
+   Nde3eJa8fcGmObpU+F9+3+RNbHZHPiMNQ8JuRFQ2j61H6KNKmZ7dDZ1GS
+   aPgXVXC58Xjb8PNDL0YFCd0wL3Yd+jbqTN/ORsjtmzDEyktXsC01vg71c
+   wXaVak3RgRrAX+utlaAjc4MIM0NYNBAA+9catu22zzB+5o0kILylyOnlE
+   eQqSVYNO3OrCemQWHx5W6k10+2TbmcNDC8H5spBDA9EBe2WoATQnrnTtY
+   Co1ZdOJditS/tztsnAPase/CNWYEuvdW4Yqx/3QkOMi51KMYr3S0lsWyb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="354380703"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="354380703"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 21:32:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="865627539"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="865627539"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Jul 2023 21:32:41 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJ53I-0004Jh-36;
+        Tue, 11 Jul 2023 04:32:40 +0000
+Date:   Tue, 11 Jul 2023 12:32:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>, ray.huang@amd.com,
+        rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Perry Yuan <perry.yuan@amd.com>
+Subject: Re: [PATCH] cpufreq: amd-pstate: Add sysfs file for base frequency
+Message-ID: <202307111214.8H56UUiU-lkp@intel.com>
+References: <20230629135454.177421-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629135454.177421-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change "gkc" to "gconfig" in 3 places since it is called "gconfig" and
-not "gkc". Add a period at the end of one sentence.
+Hi Mario,
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org
----
- scripts/kconfig/gconf.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff -- a/scripts/kconfig/gconf.c b/scripts/kconfig/gconf.c
---- a/scripts/kconfig/gconf.c
-+++ b/scripts/kconfig/gconf.c
-@@ -636,7 +636,7 @@ void on_introduction1_activate(GtkMenuIt
- {
- 	GtkWidget *dialog;
- 	const gchar *intro_text =
--	    "Welcome to gkc, the GTK+ graphical configuration tool\n"
-+	    "Welcome to gconfig, the GTK+ graphical configuration tool.\n"
- 	    "For each option, a blank box indicates the feature is disabled, a\n"
- 	    "check indicates it is enabled, and a dot indicates that it is to\n"
- 	    "be compiled as a module.  Clicking on the box will cycle through the three states.\n"
-@@ -664,7 +664,7 @@ void on_about1_activate(GtkMenuItem * me
- {
- 	GtkWidget *dialog;
- 	const gchar *about_text =
--	    "gkc is copyright (c) 2002 Romain Lievin <roms@lpg.ticalc.org>.\n"
-+	    "gconfig is copyright (c) 2002 Romain Lievin <roms@lpg.ticalc.org>.\n"
- 	      "Based on the source code from Roman Zippel.\n";
- 
- 	dialog = gtk_message_dialog_new(GTK_WINDOW(main_wnd),
-@@ -682,7 +682,7 @@ void on_license1_activate(GtkMenuItem *
- {
- 	GtkWidget *dialog;
- 	const gchar *license_text =
--	    "gkc is released under the terms of the GNU GPL v2.\n"
-+	    "gconfig is released under the terms of the GNU GPL v2.\n"
- 	      "For more information, please see the source code or\n"
- 	      "visit http://www.fsf.org/licenses/licenses.html\n";
- 
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.5-rc1 next-20230711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/cpufreq-amd-pstate-Add-sysfs-file-for-base-frequency/20230630-203900
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230629135454.177421-1-mario.limonciello%40amd.com
+patch subject: [PATCH] cpufreq: amd-pstate: Add sysfs file for base frequency
+reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111214.8H56UUiU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307111214.8H56UUiU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/admin-guide/pm/amd-pstate.rst:286: WARNING: Block quote ends without a blank line; unexpected unindent.
+
+vim +286 Documentation/admin-guide/pm/amd-pstate.rst
+
+   283	
+   284	``base_frequency``
+   285		Shows the base frequency of the CPU. Frequencies above this will be in the
+ > 286	  ``boost`` range. This attribute is read-only.
+   287	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
