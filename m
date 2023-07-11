@@ -2,141 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA4574F505
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AC674F508
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjGKQVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S230013AbjGKQWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbjGKQVj (ORCPT
+        with ESMTP id S231416AbjGKQWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:21:39 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22B610F6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:21:37 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-55b22f82ac8so4480928a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:21:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689092497; x=1691684497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FRd6MSnrDwuyQ7znWMqv6yCTnL1/DCJOC7bU8PD4YHA=;
-        b=gpWbxLEJAvmtMRm+FhOebdn8dZhw/8ODnpNfzpB0MQM3pSJXTeWlGHA4rduGWhj+cX
-         Ro43D8BRredizt+GPW75K5Q3Y+Dr3QH6caOSAfHsa+RWAxkbmzOtytqAsA0nIQKnhMse
-         Bhf/WZN5knflEGP6D2uaxg9geafaqTw2FfFRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689092497; x=1691684497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FRd6MSnrDwuyQ7znWMqv6yCTnL1/DCJOC7bU8PD4YHA=;
-        b=iIFUwKP720enEKNjmEJ+B61AVJQ+WMr3dB3LC5xSBWEStRG63MuXU3+KQf6fSL0Kdq
-         bw0vuHi7fTyWLxcWPr5fx6DytqbijIcfH6cVM74UwTZS3mjCUSHhiGdiZd6mhzpLGxLo
-         ksWu+O/1CY0CoVhbE7K9GtoIgF4Mr32Ta4AiNoMInSyroKTdq3niI3zTYIO0mHH/zaTr
-         HjdYk0I1aWcXaQvCJOHKtHjF6/d7lBblSCIiHrcCHa+XGmqDbVPBqem9OeglHxJnplOX
-         HTqUxmickqiTsDRiC0qvK2KabE/q9PDzToRIz4OXMVh7jpMOLM4DOAjF4FwD8NNIrGpx
-         LKxg==
-X-Gm-Message-State: ABy/qLajr9MtU7tKoMWqEn40ZV4PGV1wZOlu2MxHY4weD0SDeXoheRzq
-        pvMJFTn4zZe0kqQfLx9Eu0b5lg==
-X-Google-Smtp-Source: APBJJlGmfygMjusEhLAateZabdJC+NgJo425Y8P55gtNUAQan1lVCm6MeEIhr+Us9T17E8ZvkbTgag==
-X-Received: by 2002:a17:90b:1d02:b0:263:114c:52fc with SMTP id on2-20020a17090b1d0200b00263114c52fcmr23830843pjb.12.1689092497290;
-        Tue, 11 Jul 2023 09:21:37 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id dw16-20020a17090b095000b00260cce91d20sm2026175pjb.33.2023.07.11.09.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 09:21:36 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 09:21:36 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Matteo Rizzo <matteorizzo@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm/slub: remove freelist_dereference()
-Message-ID: <202307110917.DEED145F0@keescook>
-References: <20230711134623.12695-3-vbabka@suse.cz>
- <20230711134623.12695-4-vbabka@suse.cz>
+        Tue, 11 Jul 2023 12:22:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14E910FD;
+        Tue, 11 Jul 2023 09:22:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60E516155B;
+        Tue, 11 Jul 2023 16:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FB7C433C7;
+        Tue, 11 Jul 2023 16:22:09 +0000 (UTC)
+Date:   Tue, 11 Jul 2023 12:22:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 5/5] tracing/probes: Fix to record 0-length data_loc
+ in fetch_store_string*() if fails
+Message-ID: <20230711122206.531a6504@gandalf.local.home>
+In-Reply-To: <168908496683.123124.4761206188794205601.stgit@devnote2>
+References: <168908491977.123124.16583481716284477889.stgit@devnote2>
+        <168908496683.123124.4761206188794205601.stgit@devnote2>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711134623.12695-4-vbabka@suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 03:46:25PM +0200, Vlastimil Babka wrote:
-> freelist_dereference() is a one-liner only used from get_freepointer().
-> Remove it and make get_freepointer() call freelist_ptr_decode()
-> directly to make the code easier to follow.
+On Tue, 11 Jul 2023 23:16:07 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> Fix to record 0-length data to data_loc in fetch_store_string*() if it fails
+> to get the string data.
+> Currently those expect that the data_loc is updated by store_trace_args() if
+> it returns the error code. However, that does not work correctly if the
+> argument is an array of strings. In that case, store_trace_args() only clears
+> the first entry of the array (which may have no error) and leaves other
+> entries. So it should be cleared by fetch_store_string*() itself.
+> Also, 'dyndata' and 'maxlen' in store_trace_args() should be updated
+> only if it is used (ret > 0 and argument is a dynamic data.)
+> 
+> Fixes: 40b53b771806 ("tracing: probeevent: Add array type support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > ---
->  mm/slub.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 07edad305512..c4556a5dab4b 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -397,18 +397,14 @@ static inline void *freelist_ptr_decode(const struct kmem_cache *s,
->  	return decoded;
->  }
->  
-> -/* Returns the freelist pointer recorded at location ptr_addr. */
-> -static inline void *freelist_dereference(const struct kmem_cache *s,
-> -					 void *ptr_addr)
-> -{
-> -	return freelist_ptr_decode(s, *(freeptr_t *)(ptr_addr),
-> -			    (unsigned long)ptr_addr);
-> -}
-> -
->  static inline void *get_freepointer(struct kmem_cache *s, void *object)
->  {
-> -	object = kasan_reset_tag(object);
-> -	return freelist_dereference(s, (freeptr_t *)(object + s->offset));
-> +	unsigned long ptr_addr;
-> +	freeptr_t p;
-> +
-> +	ptr_addr = ((unsigned long)kasan_reset_tag(object)) + s->offset;
-> +	p = *(freeptr_t *)(ptr_addr);
-> +	return freelist_ptr_decode(s, p, ptr_addr);
->  }
->  
->  #ifndef CONFIG_SLUB_TINY
-> -- 
-> 2.41.0
+>  Changes in v4:
+>   - Simplify the updating data_loc code with set_data_loc().
+>  Changes in v5:
+>   - Move out arg->dynamic check from unlikely() and use likely().
+> ---
+>  kernel/trace/trace_probe_kernel.h |   13 +++++++++----
+>  kernel/trace/trace_probe_tmpl.h   |   10 +++-------
+>  kernel/trace/trace_uprobe.c       |    3 ++-
+>  3 files changed, 14 insertions(+), 12 deletions(-)
 > 
 
-I like reducing the complexity here, but I find dropping the "object"
-reassignment makes this a bit harder to read. What about:
 
-	object = kasan_reset_tag(object);
-	unsigned long ptr_addr = (unsigned long)object + s->offset;
-	freeptr_t p = *(freeptr_t *)(ptr_addr);
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-	return freelist_ptr_decode(s, p, ptr_addr);
+-- Steve
 
-?
-
-They're the same result, so either way:
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
