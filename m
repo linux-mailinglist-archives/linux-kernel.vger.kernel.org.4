@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8256574F283
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783A674F285
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjGKOmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S232143AbjGKOmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbjGKOmm (ORCPT
+        with ESMTP id S231978AbjGKOmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:42:42 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47210BC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:41 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57320c10635so63070157b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:41 -0700 (PDT)
+        Tue, 11 Jul 2023 10:42:47 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7EAE60
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:45 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-51dd16f823bso3920404a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689086560; x=1691678560;
+        d=google.com; s=20221208; t=1689086563; x=1691678563;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dufumGN0X5SXjxYpittS7pKflaiJdPliu9At6Sap++c=;
-        b=dLRkccixklYYXR2WU6Ln/pjVdN3Qd9Ec+IRQSqKyylEED1pH7A8wD4Qv2myKG/RfLD
-         Jmz7qFSWO5vQZdgvSSTVF0jfpbFG+iIWCuI73GkGjsLdmmFtHeaEXarEarzKRxLo3Bbu
-         Oa7iNom8QaPEKsXkrFwKbZwche58tepyDYMn2uuFlCkTDLEMqryEOghFXXF/Xr3QtaQA
-         O9v+M21PEGqtdr36HSBveJlshivuqQkleC6reypNk8f7QOeE59/oCbcDig3awR0KcPbJ
-         GOVy7GA+6yaCuScu0UfAVfJfq/ycqEaCCA0f2JkINq5xfGn+SvqCQktRwaRosZt61X7s
-         6FDw==
+        bh=i17FLoNCi12ib3F8C35t83wNdppeBZG3dj7HY/hu0Qg=;
+        b=JVxA60rxbQakJABYgGrtZoU/wRUB7v5l4kceDuaI7uXWajFkbhwwj93aPZdEJ1/hT5
+         MtH233z9IrqWyrX1H7MbpiDkLuLhWNBS1E3tERMBFGpRoahhe7Aa5q12gcs0ms/s3rCE
+         Ep0Ri9uZeBFsw2dC++Wco60/2TnxU5djoKJy9VosD6b4EYFGaGJndhEVF1USkrrH9vwt
+         /d0H9S/0equRVn66mlwE7bFdmzyK2jbM80X2+I0sdFWcUmNRVgTmL887gfDSLApbj0Do
+         WBeorBaG6JIjhl3t4mnJ/Te8IilTOA3CXIhOICvmw+v6SzqsMaKAQltxqK7saUWNzQ1D
+         ZvPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086560; x=1691678560;
+        d=1e100.net; s=20221208; t=1689086563; x=1691678563;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dufumGN0X5SXjxYpittS7pKflaiJdPliu9At6Sap++c=;
-        b=jbWyCw0gm32sqLV6q/bag/3DoyNaCVJ+AZYIhuaszxJRoD2vSYV8ZPFQkNSHyF/lI8
-         xro4BC/7qmbeEn9zq4fpGbki1QX4qj57HfBkOdoAZmVBaAjnXAPZvKJWGeuGRepo0RZX
-         HKZVUHaEFVMQuflCHzeJhZskqVYooBGEe6cPYii/bdZzKyXSHzai7+UBIANfFXJs5/Za
-         YgRHAONUplBj1qvz+Bk9hMxkOG9+dnySc2lmsDk8IpmTip2GZqgToLQuZ8z4J6HwhDAC
-         D/OkKx5D3mhL3SSSxq48ovqHMrREMmy03hQBdvx0aiYVfS9fESAi94JbVepHWoKLSUj0
-         SWgQ==
-X-Gm-Message-State: ABy/qLYBzpOS1bHdtInqcmRYFHusUvds/IsIskfA2RFrkhjdZ1ZpVKDP
-        nwEP0llwQVQC3TKX8dfr6y9b78APywA=
-X-Google-Smtp-Source: APBJJlFIZz3CqK9sHFiNkuXlFYUZxhErF6A+cY/vC/nVCEfDRQwrtiXHgvzlHG6TlEhbEb3LNYtF3wh57Bs=
+        bh=i17FLoNCi12ib3F8C35t83wNdppeBZG3dj7HY/hu0Qg=;
+        b=NLEqpOkChzJ+Trf1JbqO9lsNvS6b8EB0QNYbraKEkxRxg4XqceghBAuqjkfsUHePCS
+         Zae2g107HiMeMPve/W1ajKVt03bQs4rQ9V64Q1cVc3WqnbPBvyIkwk/ImmO0DMVnhpo0
+         w9ZswROiEGgzVOntCkaQjaMLxdiQ9MFVLIqq92L3lUJgWb1XPfDReFohrbHd9MK1D5lg
+         INFU30uE2ii91VHoaf8Am+bpUbnzO1Rr8mcLLQUtmUSVaRQp5U2BLUMMxLRyqM2GCXzc
+         f752K7jNIffDgusZ2jGVBPSt5K1VZmIoGCCyGvWjSW0nYeopfQcmd+qBykw/c7XEsp4F
+         ONcA==
+X-Gm-Message-State: ABy/qLbO3TsVqr9exWdvGcdjZCgsESQpXyqCvrfWYa8fDm140d73dKtA
+        sJv/N2Kp8bJVmZRFgYiFRk1jAbNwlqI=
+X-Google-Smtp-Source: APBJJlH9M+PjPEY2zg5brX8xWgckR1Xl6SupLw0UVEZg3dJxdi/uYjWCNvcxW5CYg6D+PGhizpkvx5q3Gfw=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:564d:3aaa:6b5f:4419])
- (user=glider job=sendgmr) by 2002:a05:690c:705:b0:565:a42c:79fe with SMTP id
- bs5-20020a05690c070500b00565a42c79femr126547ywb.1.1689086560587; Tue, 11 Jul
- 2023 07:42:40 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:42:29 +0200
+ (user=glider job=sendgmr) by 2002:a50:d681:0:b0:51a:60b6:f4e6 with SMTP id
+ r1-20020a50d681000000b0051a60b6f4e6mr92152edi.5.1689086563460; Tue, 11 Jul
+ 2023 07:42:43 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:42:30 +0200
 In-Reply-To: <20230711144233.3129207-1-glider@google.com>
 Mime-Version: 1.0
 References: <20230711144233.3129207-1-glider@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711144233.3129207-2-glider@google.com>
-Subject: [Resend v1 1/5] linux/bitqueue.h: add the bit queue implementation
+Message-ID: <20230711144233.3129207-3-glider@google.com>
+Subject: [Resend v1 2/5] linux/bitqueue.h: add a KUnit test for bitqueue.h
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com, catalin.marinas@arm.com, will@kernel.org,
         pcc@google.com, andreyknvl@gmail.com
@@ -60,176 +60,306 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         eugenis@google.com, yury.norov@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct bitq represents a bit queue with external storage.
-
-Its purpose is to easily pack sub-byte values, which can be used, for
-example, to implement RLE algorithms.
+Add tests checking that struct bitq correctly handles sub-byte values.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- include/linux/bitqueue.h | 144 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
- create mode 100644 include/linux/bitqueue.h
+ lib/Kconfig.debug   |   8 ++
+ lib/Makefile        |   1 +
+ lib/test_bitqueue.c | 244 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 253 insertions(+)
+ create mode 100644 lib/test_bitqueue.c
 
-diff --git a/include/linux/bitqueue.h b/include/linux/bitqueue.h
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ce51d4dc6803e..a6598b2c250d5 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2678,6 +2678,14 @@ config SIPHASH_KUNIT_TEST
+ 	  This is intended to help people writing architecture-specific
+ 	  optimized versions.  If unsure, say N.
+ 
++config BITQUEUE_KUNIT_TEST
++	tristate "Test <linux/bitqueue.h>" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test the kernel's bit queue implementation
++	  (<linux/bitqueue.h>).
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 876fcdeae34ec..7efb6aba31cf9 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -394,6 +394,7 @@ CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
+ obj-$(CONFIG_STRSCPY_KUNIT_TEST) += strscpy_kunit.o
+ obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
++obj-$(CONFIG_BITQUEUE_KUNIT_TEST) += test_bitqueue.o
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+diff --git a/lib/test_bitqueue.c b/lib/test_bitqueue.c
 new file mode 100644
-index 0000000000000..c4393f703c697
+index 0000000000000..aec04b3a5f068
 --- /dev/null
-+++ b/include/linux/bitqueue.h
-@@ -0,0 +1,144 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/lib/test_bitqueue.c
+@@ -0,0 +1,244 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A simple bit queue which supports enqueueing/dequeueing of sub-byte values.
-+ *
-+ * This can be used to pack complex bitfields into byte arrays.
++ * Test cases for struct bitq, a simple bit queue.
 + */
-+#ifndef _LINUX_BITQUEUE_H
-+#define _LINUX_BITQUEUE_H
 +
-+#include <linux/string.h>
-+#include <linux/types.h>
++#include <kunit/test.h>
++#include <linux/bitqueue.h>
++#include <linux/slab.h>
 +
-+/**
-+ * struct bitq - represents a bit queue with external storage.
-+ * @data:	data buffer used by the queue.
-+ * @size:	size of @data in bytes.
-+ * @bit_pos:	current bit position.
++/* Set up a bit queue containing @size bytes. */
++static void bitq_setup(struct bitq *it, size_t size)
++{
++	u8 *data = kmalloc(size, GFP_KERNEL);
++
++	bitq_init(it, data, size);
++}
++
++/* Tear down the bit queue. */
++static void bitq_teardown(struct bitq *it)
++{
++	kfree(it->data);
++	memset(it, 0, sizeof(*it));
++}
++
++/* Test that nothing can be popped from an empty queue. */
++static void test_empty(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++
++	/* Allocate a two-byte queue. */
++	bitq_setup(&it, 2);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), -1);
++	bitq_teardown(&it);
++}
++
++/* Test that simple byte-granular enqueue/dequeue operations work. */
++static void test_basic_enqueue_dequeue(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++
++	/* Allocate a two-byte queue. */
++	bitq_setup(&it, 2);
++	/* Enqueue two 8-bit values. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xaa, 8), 8);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xbb, 8), 8);
++	/* Cannot enqueue the third byte. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 1, 8), -1);
++	/* Dequeue two bytes. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0xaa);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0xbb);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), -1);
++	bitq_teardown(&it);
++}
++
++/* Test that values shorter than 8 bits can be enqueued and dequeued. */
++static void test_shorter_than_byte(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++
++	/* Allocate a two-byte queue. */
++	bitq_setup(&it, 2);
++	/* Enqueue two 0b101 values. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b101, 3), 3);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b101, 3), 3);
++	/* The first byte of the queue is now 0b10110100. */
++
++	/* Now dequeue three 2-bit values: 0b10, 0b11, 0b01. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 2), 2);
++	KUNIT_EXPECT_EQ(test, val, 0b10);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 2), 2);
++	KUNIT_EXPECT_EQ(test, val, 0b11);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 2), 2);
++	KUNIT_EXPECT_EQ(test, val, 0b01);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
++	bitq_teardown(&it);
++}
++
++/* Test that bits are carried over correctly if they do not fit. */
++static void test_carryover(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++	int i;
++
++	/* Allocate a three-byte queue. */
++	bitq_setup(&it, 3);
++	/* Enqueue 0b100 seven times. */
++	for (i = 0; i < 7; i++)
++		KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b100, 3), 3);
++	/* Now dequeue three 7-bit values: 0b1001001, 0b0010010, 0b0100100. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 7), 7);
++	KUNIT_EXPECT_EQ(test, val, 0b1001001);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 7), 7);
++	KUNIT_EXPECT_EQ(test, val, 0b0010010);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 7), 7);
++	KUNIT_EXPECT_EQ(test, val, 0b0100100);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
++	bitq_teardown(&it);
++}
++
++/*
++ * Test case extracted from the EA0 tag compression algorithm, where
++ * carried over bits were accidentally written into the previous byte.
 + */
-+struct bitq {
-+	u8 *data;
-+	int size, bit_pos;
++static void test_carryover_ea0(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++
++	/* Allocate a three-byte queue. */
++	bitq_setup(&it, 3);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b100, 3), 3);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b1010, 4), 4);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b0000, 4), 4);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b1010, 4), 4);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b1011, 4), 4);
++
++	/* Now dequeue two byte values: 0b10010100, 0b00010101. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0b10010100);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0b00010101);
++	/* And the remaining 0b011. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 3), 3);
++	KUNIT_EXPECT_EQ(test, val, 0b011);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
++	bitq_teardown(&it);
++}
++
++/* Test that upper bits of the pushed value are discarded. */
++static void test_trim_upper_bits(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++
++	/* Allocate a two-byte queue. */
++	bitq_setup(&it, 2);
++	/* Enqueue two values that do not fit into 4 bits. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xab, 4), 4);
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xab, 4), 4);
++	/* The first byte of the queue is now 0xbb. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0xbb);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
++	bitq_teardown(&it);
++}
++
++/* Another test for discarding the upper bits. */
++static void test_trim_upper_bits2(struct kunit *test)
++{
++	struct bitq it;
++	u8 val = 0;
++
++	/* Allocate a two-byte queue. */
++	bitq_setup(&it, 2);
++	/* Push seven zero bits. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0, 7), 7);
++	/* Push a single 1 bit, but pass a bigger value to bitq_enqueue(). */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xff, 1), 1);
++	/* The first byte of the queue is now 0x01. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0x01);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
++	bitq_teardown(&it);
++}
++
++/* Test that a NULL value can be used as output of bitq_dequeue() */
++static void test_dequeue_to_null(struct kunit *test)
++{
++	struct bitq it;
++
++	/* Allocate a two-byte queue. */
++	bitq_setup(&it, 2);
++	/* Enqueue a byte value. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xab, 8), 8);
++	/* Dequeue the byte, but discard its value. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, NULL, 8), 8);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, NULL, 1), -1);
++	bitq_teardown(&it);
++}
++
++/* Test that bitq_init_full works. */
++static void test_init_full(struct kunit *test)
++{
++	struct bitq it;
++	u8 data[2] = { 0xaa, 0xbb };
++	u8 val = 0;
++
++	/* Initialize a queue with the contents of @data */
++	bitq_init_full(&it, data, 2);
++	/* Cannot enqueue anything else. */
++	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 1, 8), -1);
++	/* Dequeue two bytes. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0xaa);
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
++	KUNIT_EXPECT_EQ(test, val, 0xbb);
++
++	/* Queue is empty. */
++	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, NULL, 1), -1);
++}
++
++static struct kunit_case bitq_test_cases[] = {
++	KUNIT_CASE(test_empty),
++	KUNIT_CASE(test_basic_enqueue_dequeue),
++	KUNIT_CASE(test_shorter_than_byte),
++	KUNIT_CASE(test_carryover),
++	KUNIT_CASE(test_carryover_ea0),
++	KUNIT_CASE(test_trim_upper_bits),
++	KUNIT_CASE(test_trim_upper_bits2),
++	KUNIT_CASE(test_dequeue_to_null),
++	KUNIT_CASE(test_init_full),
++	{}
 +};
 +
-+/**
-+ * bitq_init - initialize an empty bit queue.
-+ * @q:		struct bitq to be initialized.
-+ * @data:	external data buffer to use.
-+ * @size:	capacity in bytes.
-+ *
-+ * Return:	0 in the case of success, -1 if either of the pointers is NULL.
-+ */
-+static inline int bitq_init(struct bitq *q, u8 *data, int size)
-+{
-+	if (!q || !data)
-+		return -1;
-+	q->data = data;
-+	q->size = size;
-+	memset(data, 0, size);
-+	q->bit_pos = 0;
-+	return 0;
-+}
++static struct kunit_suite bitq_test_suite = {
++	.name = "bitq",
++	.test_cases = bitq_test_cases,
++};
++kunit_test_suites(&bitq_test_suite);
 +
-+/**
-+ * bitq_init_full - make a bit queue from an initialized byte array.
-+ * @q:		struct bitq to be initialized.
-+ * @data:	external data buffer to use.
-+ * @size:	capacity in bytes.
-+ *
-+ * Return:	0 in the case of success, -1 if either of the pointers is NULL.
-+ */
-+static inline int bitq_init_full(struct bitq *q, u8 *data, int size)
-+{
-+	if (!q || !data)
-+		return -1;
-+	q->data = data;
-+	q->size = size;
-+	q->bit_pos = q->size * 8;
-+	return 0;
-+}
-+
-+/**
-+ * bitq_enqueue - push up to 8 bits to the end of the queue.
-+ * @q:		struct bitq.
-+ * @value:	byte containing the value to be pushed.
-+ * @bits:	number of bits (1 to 8) to push.
-+ *
-+ * Return:	number of bits pushed, or -1 in the case of an error.
-+ */
-+static inline int bitq_enqueue(struct bitq *q, u8 value, int bits)
-+{
-+	int byte_pos, left_in_byte, max_pos;
-+	u8 hi, lo;
-+
-+	if (!q || (bits < 1) || (bits > 8))
-+		return -1;
-+
-+	max_pos = q->size * 8;
-+	if ((max_pos - q->bit_pos) < bits)
-+		return -1;
-+
-+	left_in_byte = 8 - (q->bit_pos % 8);
-+	byte_pos = q->bit_pos / 8;
-+	/* Clamp @value. */
-+	value %= (1 << bits);
-+	if (left_in_byte >= bits) {
-+		/* @value fits into the current byte. */
-+		value <<= (left_in_byte - bits);
-+		q->data[byte_pos] |= value;
-+	} else {
-+		/*
-+		 * @value needs to be split between the current and the
-+		 * following bytes.
-+		 */
-+		hi = value >> (bits - left_in_byte);
-+		q->data[byte_pos] |= hi;
-+		byte_pos++;
-+		lo = value << (8 - (bits - left_in_byte));
-+		q->data[byte_pos] |= lo;
-+	}
-+	q->bit_pos += bits;
-+	return bits;
-+}
-+
-+/**
-+ * bitq_dequeue - pop up to 8 bits from the beginning of the queue.
-+ * @q:		struct bitq.
-+ * @value:	u8* to store the popped value (can be NULL).
-+ * @bits:	number of bits (1 to 8) to pop.
-+ *
-+ * Return:	number of bits popped, or -1 in the case of an error.
-+ */
-+
-+#include <linux/printk.h>
-+static inline int bitq_dequeue(struct bitq *q, u8 *value, int bits)
-+{
-+	int rem_bits = 8 - bits, i;
-+	u8 output;
-+
-+	/* Invalid arguments. */
-+	if (!q || (bits < 1) || (bits > 8))
-+		return -1;
-+	/* Not enough space to insert @bits. */
-+	if (q->bit_pos < bits)
-+		return -1;
-+	/* Take the first @bits bits from the first byte. */
-+	output = q->data[0];
-+	output >>= rem_bits;
-+	if (value)
-+		*value = output;
-+
-+	/*
-+	 * Shift every byte in the queue to the left by @bits, carrying over to
-+	 * the previous byte.
-+	 */
-+	for (i = 0; i < q->size - 1; i++) {
-+		q->data[i] = (q->data[i] << bits) |
-+			     (q->data[i + 1] >> rem_bits);
-+	}
-+	q->data[q->size - 1] <<= bits;
-+	q->bit_pos -= bits;
-+	return bits;
-+}
-+
-+#endif // _LINUX_BITQUEUE_H
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Alexander Potapenko <glider@google.com>");
 -- 
 2.41.0.255.g8b1d071c50-goog
 
