@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4223274E66B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6436274E66E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 07:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjGKFnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 01:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S229588AbjGKFnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 01:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjGKFnH (ORCPT
+        with ESMTP id S230121AbjGKFnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 01:43:07 -0400
+        Tue, 11 Jul 2023 01:43:08 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031DD195;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352171A2;
         Mon, 10 Jul 2023 22:43:07 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B5gR8A021415;
-        Tue, 11 Jul 2023 05:43:03 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B5a64V010606;
+        Tue, 11 Jul 2023 05:43:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=SmF8gFWZK/ulLhm//87qgNEIyb7zdCSCY6H1RlByBWY=;
- b=dxp6xGKFOy5Ux7v5Z+wIBpLiva6QFsLlF7U2RjevJ/l1sEYm0rSNaUU9muyAwGvnY/KS
- Wks3Eu31mEmRIuhuSBsnLkS+vIcPh+NwExonH/RLcWzwCXx10vBNEoUkVa2HOn2JhvNL
- DbDfdc3RT3LMHNmJkp8OmYk5PXHoFLvj675hGeP0RHR5Fxu104mYveip6lxgzg9pQtOh
- 7J0lf3bhJ6HR5bPTWzK6aRM/6bjfBf6oh75mpl5atpllqSu/dUNMZB0thSTnIgWWkiAH
- tdXAZLWgqjErO2y7rOYiJ6GpnA5WnqkoBDTHjV9yRj6EdsBoFXH1bk43cfHY4FeDfwWV wQ== 
+ bh=Tl0v3TsoYZRBRpDWOVQUWsFmwzWG2heuYeQ80xohfiE=;
+ b=k+mraXiOeAHpcoAGnWG6h/w0NYWJmY6xhv/rqLic5mU+0TgQ9dbUVrRruL6gROiZK61K
+ JZoL3s5nnDPSMqkZDhHIG5NdJPSMY5uqsDcZtG9lRPfuRormmbfGxfNkK9eIgKyFdCwd
+ 5QSsWFoqpuIg/w+0PBzheRyMzK4KN8eioYW5Hy9g+SITOTKpLaYsr7+dj+1t71w8uAZz
+ H5TgMR2bwwJetASbrmFNuusmx151HPXFhMjPbVfI7TS3HWqd20/z/cZhoBCYMiHZ12rZ
+ T8+KRz8XdH8eYdHGYuFDmpqrGqLWBb/+NDoalk3g+EEqOLp4kjYS0ySJup1YBKpLCTlv 8w== 
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs15nr01t-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0vqr0xa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 11 Jul 2023 05:43:03 +0000
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36B5gx2D005033;
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36B5gxXu005174;
         Tue, 11 Jul 2023 05:42:59 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rq0vm2h7n-1
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rq0vm2h7u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
         Tue, 11 Jul 2023 05:42:59 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36B5gxxs004995;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36B5gx9P005044;
         Tue, 11 Jul 2023 05:42:59 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 36B5gwcS004967;
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 36B5gx9W005020;
         Tue, 11 Jul 2023 05:42:59 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id 54ADC5040; Tue, 11 Jul 2023 11:12:58 +0530 (+0530)
+        id C3BD45045; Tue, 11 Jul 2023 11:12:58 +0530 (+0530)
 From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
 To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -52,9 +52,9 @@ To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH v3 1/3] dt-bindings: power: rpmhpd: Add Generic RPMh PD indexes
-Date:   Tue, 11 Jul 2023 11:12:47 +0530
-Message-Id: <1689054169-10800-2-git-send-email-quic_rohiagar@quicinc.com>
+Subject: [PATCH v3 2/3] dt-bindings: power: Add compatible for sdx75
+Date:   Tue, 11 Jul 2023 11:12:48 +0530
+Message-Id: <1689054169-10800-3-git-send-email-quic_rohiagar@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
 References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
@@ -62,15 +62,15 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: h4n6sN0oks_VIK-FImTDgfBI74YE_T-Q
-X-Proofpoint-ORIG-GUID: h4n6sN0oks_VIK-FImTDgfBI74YE_T-Q
+X-Proofpoint-GUID: R3ITF10L8Xnj5ixYP3w1pgEqQLelHs7h
+X-Proofpoint-ORIG-GUID: R3ITF10L8Xnj5ixYP3w1pgEqQLelHs7h
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-11_02,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 phishscore=0 mlxlogscore=511 bulkscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=585 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2307110050
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -82,52 +82,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Generic RPMh Power Domain indexes that can be used
-for all the Qualcomm SoC henceforth.
+Add a compatible string that can be used to list PDs for sdx75.
 
 Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- include/dt-bindings/power/qcom-rpmhpd.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 include/dt-bindings/power/qcom-rpmhpd.h
+ Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/dt-bindings/power/qcom-rpmhpd.h b/include/dt-bindings/power/qcom-rpmhpd.h
-new file mode 100644
-index 0000000..4da2e04
---- /dev/null
-+++ b/include/dt-bindings/power/qcom-rpmhpd.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _DT_BINDINGS_POWER_QCOM_RPMHPD_H
-+#define _DT_BINDINGS_POWER_QCOM_RPMHPD_H
-+
-+/* Generic RPMH Power Domain Indexes */
-+#define CX               0
-+#define MX               1
-+#define CX_AO            2
-+#define MX_AO            3
-+#define GFX              4
-+#define MSS              5
-+#define EBI              6
-+#define LCX              7
-+#define LMX              8
-+#define MMCX             9
-+#define MMCX_AO          10
-+#define MXC              11
-+#define MXC_AO           12
-+#define NSP              13
-+#define NSP0             14
-+#define NSP1             15
-+#define QPHY             16
-+#define DDR              17
-+#define XO               18
-+
-+#endif
+diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+index f9c211a..9b03c41 100644
+--- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
++++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+@@ -41,6 +41,7 @@ properties:
+       - qcom,sdm845-rpmhpd
+       - qcom,sdx55-rpmhpd
+       - qcom,sdx65-rpmhpd
++      - qcom,sdx75-rpmhpd
+       - qcom,sm6115-rpmpd
+       - qcom,sm6125-rpmpd
+       - qcom,sm6350-rpmhpd
 -- 
 2.7.4
 
