@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72E574ED74
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8609E74ED7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjGKL7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S230175AbjGKMBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjGKL67 (ORCPT
+        with ESMTP id S229583AbjGKMBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:58:59 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662B410C4;
-        Tue, 11 Jul 2023 04:58:57 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4R0fXr087Mz4f41Rq;
-        Tue, 11 Jul 2023 19:58:52 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP1 (Coremail) with SMTP id cCh0CgBX6DL7Q61kp17yMw--.23183S2;
-        Tue, 11 Jul 2023 19:58:52 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>, Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf] bpf: cpumap: Fix memory leak in cpu_map_update_elem
-Date:   Tue, 11 Jul 2023 19:58:48 +0800
-Message-Id: <20230711115848.2701559-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jul 2023 08:01:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789B6E67;
+        Tue, 11 Jul 2023 05:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yL09riI3y2n7lRul4VrDuI7HTYzktNv07GtSRsYL7t0=; b=Omnd3pZ13VQdAteE+/Wl+iFWbD
+        4excywY3qxL8o1WqTyXY4FDWTEtJTLxouePME3G33IwRJvYNzGCznkmODhlCqy2NlQzfACxdeDjPm
+        07Uo/JYMEoa+udinX5d+QvhXwp5ebyRLZrqicaS6oLQXD7tET3mXxm+zvYFEIuip4bh2nJYiINHgG
+        URa3jcgXMEQ+axzow1RWPz0KkfgG8/4Eiz4OxCUHhGLmLXHq7lY9V0DegC/FTt1OxWzXKhBBMcFgb
+        wolUm0m8RtdJcv1I8sScDud3bM9sUWEoB2A203kC0akCTyMQPJ54c4Rg/AbdSwtteQhqxG+pzRocn
+        FUt+NvjA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJC3P-00Eoef-0m;
+        Tue, 11 Jul 2023 12:01:15 +0000
+Date:   Tue, 11 Jul 2023 05:01:15 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        gost.dev@samsung.com, Jens Axboe <axboe@kernel.dk>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>
+Subject: Re: [PATCH v6 1/3] ublk: add opcode offsets for DRV_IN/DRV_OUT
+Message-ID: <ZK1Ei0hHlbQE/bI8@infradead.org>
+References: <51b660f3-8145-d35e-87b4-d9ac0623606d@kernel.org>
+ <ZKdjVxMT/sVUA5BV@ovpn-8-34.pek2.redhat.com>
+ <ZKuqt6QAXic3wuRX@infradead.org>
+ <ZKvO+81b9fAx2L/r@ovpn-8-31.pek2.redhat.com>
+ <ZKvQPAN9OkS3dZ4d@infradead.org>
+ <87a5w3ymff.fsf@metaspace.dk>
+ <ZK0RKkXFaQSotxVl@infradead.org>
+ <875y6qzufc.fsf@metaspace.dk>
+ <ZK0gcj4j/sRWx2Pl@infradead.org>
+ <871qhezr4d.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBX6DL7Q61kp17yMw--.23183S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw4fuF43Cw1kWw43Gr18Grg_yoW7Jw1UpF
-        WrJr1UGr40qw4Du3y8t3WrJr10vr1kua4UJ34fG3yFyF1DG3WDXFy8GFWxJrZxurs5ury7
-        Xwsrt3yqg3ykJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        fUOmhFUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871qhezr4d.fsf@metaspace.dk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,129 +69,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+On Tue, Jul 11, 2023 at 12:15:18PM +0200, Andreas Hindborg (Samsung) wrote:
+> And yet they are somewhat similar, in the sense that they allow the user
+> of a protocol to express semantics that is not captured in the
+> established protocol. Uring command passthrough -> request passthrough
+> -> vendor specific commands. They sort of map well in terms of what they
+> allow the user to achieve. Or did I misunderstand something completely?
 
-Syzkaller reported a memory leak as follows:
+Well, there is a relationship, but it's one way.
 
-BUG: memory leak
-unreferenced object 0xff110001198ef748 (size 192):
-  comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
-  hex dump (first 32 bytes):
-    00 00 00 00 4a 19 00 00 80 ad e3 e4 fe ff c0 00  ....J...........
-    00 b2 d3 0c 01 00 11 ff 28 f5 8e 19 01 00 11 ff  ........(.......
-  backtrace:
-    [<ffffffffadd28087>] __cpu_map_entry_alloc+0xf7/0xb00
-    [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
-    [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
-    [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
-    [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
-    [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
-    [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+Vendor specific command are basically always going to be used through
+a passthrough interface, because they aren't standardized.
 
-BUG: memory leak
-unreferenced object 0xff110001198ef528 (size 192):
-  comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffadd281f0>] __cpu_map_entry_alloc+0x260/0xb00
-    [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
-    [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
-    [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
-    [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
-    [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
-    [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
-
-BUG: memory leak
-unreferenced object 0xff1100010fd93d68 (size 8):
-  comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
-  hex dump (first 8 bytes):
-    00 00 00 00 00 00 00 00                          ........
-  backtrace:
-    [<ffffffffade5db3e>] kvmalloc_node+0x11e/0x170
-    [<ffffffffadd28280>] __cpu_map_entry_alloc+0x2f0/0xb00
-    [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
-    [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
-    [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
-    [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
-    [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
-    [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
-
-In the cpu_map_update_elem flow, when kthread_stop is called before
-calling the threadfn of rcpu->kthread, since the KTHREAD_SHOULD_STOP bit
-of kthread has been set by kthread_stop, the threadfn of rcpu->kthread
-will never be executed, and rcpu->refcnt will never be 0, which will
-lead to the allocated rcpu, rcpu->queue and rcpu->queue->queue cannot be
-released.
-
-Calling kthread_stop before executing kthread's threadfn will return
--EINTR. We can complete the release of memory resources in this state.
-
-Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CPUMAP")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- kernel/bpf/cpumap.c | 40 ++++++++++++++++++++++++----------------
- 1 file changed, 24 insertions(+), 16 deletions(-)
-
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 8a33e8747a0e..6ae02be7a48e 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -122,22 +122,6 @@ static void get_cpu_map_entry(struct bpf_cpu_map_entry *rcpu)
- 	atomic_inc(&rcpu->refcnt);
- }
- 
--/* called from workqueue, to workaround syscall using preempt_disable */
--static void cpu_map_kthread_stop(struct work_struct *work)
--{
--	struct bpf_cpu_map_entry *rcpu;
--
--	rcpu = container_of(work, struct bpf_cpu_map_entry, kthread_stop_wq);
--
--	/* Wait for flush in __cpu_map_entry_free(), via full RCU barrier,
--	 * as it waits until all in-flight call_rcu() callbacks complete.
--	 */
--	rcu_barrier();
--
--	/* kthread_stop will wake_up_process and wait for it to complete */
--	kthread_stop(rcpu->kthread);
--}
--
- static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
- {
- 	/* The tear-down procedure should have made sure that queue is
-@@ -165,6 +149,30 @@ static void put_cpu_map_entry(struct bpf_cpu_map_entry *rcpu)
- 	}
- }
- 
-+/* called from workqueue, to workaround syscall using preempt_disable */
-+static void cpu_map_kthread_stop(struct work_struct *work)
-+{
-+	struct bpf_cpu_map_entry *rcpu;
-+	int err;
-+
-+	rcpu = container_of(work, struct bpf_cpu_map_entry, kthread_stop_wq);
-+
-+	/* Wait for flush in __cpu_map_entry_free(), via full RCU barrier,
-+	 * as it waits until all in-flight call_rcu() callbacks complete.
-+	 */
-+	rcu_barrier();
-+
-+	/* kthread_stop will wake_up_process and wait for it to complete */
-+	err = kthread_stop(rcpu->kthread);
-+	if (err) {
-+		/* kthread_stop may be called before cpu_map_kthread_run
-+		 * is executed, so we need to release the memory related
-+		 * to rcpu.
-+		 */
-+		put_cpu_map_entry(rcpu);
-+	}
-+}
-+
- static void cpu_map_bpf_prog_run_skb(struct bpf_cpu_map_entry *rcpu,
- 				     struct list_head *listp,
- 				     struct xdp_cpumap_stats *stats)
--- 
-2.25.1
-
+But most commands used through a passthrough interface are normal
+standardized commands, just either used in a way not supported by
+the normal Linux interface or just in creative ways.
