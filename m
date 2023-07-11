@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F22874F179
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC01874F17D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbjGKOQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        id S231573AbjGKOQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjGKOPy (ORCPT
+        with ESMTP id S233358AbjGKOQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:15:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6C8170A;
-        Tue, 11 Jul 2023 07:15:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D15646150C;
-        Tue, 11 Jul 2023 14:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEF1C433C8;
-        Tue, 11 Jul 2023 14:15:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689084952;
-        bh=5Y9sWGJd4HJzLogg+iWU8edbrK9/5rH7d1aurm3YzgM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aReD0A+1tRpSeAhG5xZHxoEfgPqj/cIAjHv5Z4zOwhd3S7Z4wLSHzDiwKz3dWmVPB
-         olT6rBr8eKo6yrOVIN/QlfyLwLhToLP9rNvm0gIdSpX9aPA+9Yv/6SL/7J4uqSsMjC
-         zHrhLLgcGapkXdRl+Ga4UB03d368RaOzFaoU+ILQhCICSDUW3gzAxhTD7Lfo+Kuvxt
-         jOoJdydJtXRmH/EoxUaPd5caAnHcUz2ElaFcA6ig8tiPnq09t6IiIXQSMuljQ9RAXQ
-         rXpVzluE6t3+fiwKXb4yON3bOY56bvM08Pj3bzk8blEgezzi7N3HgIcOYDgMs6nFk8
-         LWHO/woKPxf4A==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v5 3/5] tracing/probes: Fix to update dynamic data counter if fetcharg uses it
-Date:   Tue, 11 Jul 2023 23:15:48 +0900
-Message-Id: <168908494781.123124.8160245359962103684.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <168908491977.123124.16583481716284477889.stgit@devnote2>
-References: <168908491977.123124.16583481716284477889.stgit@devnote2>
-User-Agent: StGit/0.19
+        Tue, 11 Jul 2023 10:16:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B805410CA;
+        Tue, 11 Jul 2023 07:15:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB2991FB;
+        Tue, 11 Jul 2023 07:16:41 -0700 (PDT)
+Received: from [10.57.30.34] (unknown [10.57.30.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD5193F740;
+        Tue, 11 Jul 2023 07:15:56 -0700 (PDT)
+Message-ID: <6143e1cd-4db7-d980-a189-b9b06f99d7c4@arm.com>
+Date:   Tue, 11 Jul 2023 15:15:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/4] perf: Remove unused PERF_PMU_CAP_HETEROGENEOUS_CPUS
+ capability
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, irogers@google.com
+References: <20230710122138.1450930-1-james.clark@arm.com>
+ <20230710122138.1450930-5-james.clark@arm.com>
+ <96a3d12a-71d8-1779-28a3-316e1838292e@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <96a3d12a-71d8-1779-28a3-316e1838292e@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix to update dynamic data counter ('dyndata') and max length ('maxlen')
-only if the fetcharg uses the dynamic data. Also get out arg->dynamic
-from unlikely(). This makes dynamic data address wrong if
-process_fetch_insn() returns error on !arg->dynamic case.
 
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Link: https://lore.kernel.org/all/20230710233400.5aaf024e@gandalf.local.home/
-Fixes: 9178412ddf5a ("tracing: probeevent: Return consumed bytes of dynamic area")
-Cc: stable@vger.kernel.org
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- kernel/trace/trace_probe_tmpl.h |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+On 11/07/2023 13:10, Anshuman Khandual wrote:
+> 
+> 
+> On 7/10/23 17:51, James Clark wrote:
+>> Since commit bd2756811766 ("perf: Rewrite core context handling") the
+>> relationship between perf_event_context and PMUs has changed so that
+>> the error scenario that PERF_PMU_CAP_HETEROGENEOUS_CPUS originally
+>> silenced no longer exists.
+>>
+>> Remove the capability to avoid confusion that it actually influences
+>> any perf core behavior. This change should be a no-op.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  include/linux/perf_event.h | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+>> index d5628a7b5eaa..3f4d941fd6c5 100644
+>> --- a/include/linux/perf_event.h
+>> +++ b/include/linux/perf_event.h
+>> @@ -288,7 +288,7 @@ struct perf_event_pmu_context;
+>>  #define PERF_PMU_CAP_EXTENDED_REGS		0x0008
+>>  #define PERF_PMU_CAP_EXCLUSIVE			0x0010
+>>  #define PERF_PMU_CAP_ITRACE			0x0020
+>> -#define PERF_PMU_CAP_HETEROGENEOUS_CPUS		0x0040
+>> +/* Unused					0x0040 */
+> 
+> Small nit, "Unused" marking might not be required here.
+> 
 
-diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
-index ed9d57c6b041..185da001f4c3 100644
---- a/kernel/trace/trace_probe_tmpl.h
-+++ b/kernel/trace/trace_probe_tmpl.h
-@@ -267,11 +267,13 @@ store_trace_args(void *data, struct trace_probe *tp, void *rec,
- 		if (unlikely(arg->dynamic))
- 			*dl = make_data_loc(maxlen, dyndata - base);
- 		ret = process_fetch_insn(arg->code, rec, dl, base);
--		if (unlikely(ret < 0 && arg->dynamic)) {
--			*dl = make_data_loc(0, dyndata - base);
--		} else {
--			dyndata += ret;
--			maxlen -= ret;
-+		if (arg->dynamic) {
-+			if (unlikely(ret < 0)) {
-+				*dl = make_data_loc(0, dyndata - base);
-+			} else {
-+				dyndata += ret;
-+				maxlen -= ret;
-+			}
- 		}
- 	}
- }
+But then it would be very easy to miss that there is a free bit if I
+don't leave the comment. Is it really better without it?
 
+I could shift all the following ones down by one bit, but it would be a
+lot of work to make sure that nobody has hard coded some check for one
+of the bits instead of using the define somewhere.
+
+>>  #define PERF_PMU_CAP_NO_EXCLUDE			0x0080
+>>  #define PERF_PMU_CAP_AUX_OUTPUT			0x0100
+>>  #define PERF_PMU_CAP_EXTENDED_HW_TYPE		0x0200
