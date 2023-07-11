@@ -2,173 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E9374EEC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD8B74EEC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbjGKM1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S232330AbjGKM3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbjGKM12 (ORCPT
+        with ESMTP id S230398AbjGKM1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:27:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0865D19A5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689078310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xjRw+jQ/3UZ/6JfODln6k9FlUepnlRP0EJXqY57Twrc=;
-        b=Oz7OEKID9EKDZu0wLi4EaVcmE7aHJ6BnjqH4MdJXbqZ9OzfaD6L+w6h998TZRjkf6g4ykR
-        z1GpyRkiR3MpffqR8zPyd2MqRmliBBhkeUfIg82cAX29ICHg0OoY3dz3d2r3If98rGeZ3X
-        rtnZpQE/Zx9AHH0rpCbvnWAguSt5A9w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-DjRfQEp2MkKWQq81olGQ2A-1; Tue, 11 Jul 2023 08:25:04 -0400
-X-MC-Unique: DjRfQEp2MkKWQq81olGQ2A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E8DA101146C;
-        Tue, 11 Jul 2023 12:25:04 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 96DBB200AD6E;
-        Tue, 11 Jul 2023 12:24:53 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, James.Bottomley@HansenPartnership.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        axboe@kernel.dk, benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        bp@alien8.de, catalin.marinas@arm.com, christian@brauner.io,
-        dalias@libc.org, davem@davemloft.net, deepa.kernel@gmail.com,
-        deller@gmx.de, dhowells@redhat.com, fenghua.yu@intel.com,
-        geert@linux-m68k.org, glebfm@altlinux.org, gor@linux.ibm.com,
-        hare@suse.com, hpa@zytor.com, ink@jurassic.park.msu.ru,
-        jhogan@kernel.org, kim.phillips@arm.com, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
-        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
-        namhyung@kernel.org, paul.burton@mips.com, paulus@samba.org,
-        peterz@infradead.org, ralf@linux-mips.org, rth@twiddle.net,
-        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
-        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
-        x86@kernel.org, ysato@users.sourceforge.jp
-Subject: Re: [PATCH v3 0/5] Add a new fchmodat4() syscall
-References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
-        <cover.1689074739.git.legion@kernel.org>
-Date:   Tue, 11 Jul 2023 14:24:51 +0200
-In-Reply-To: <cover.1689074739.git.legion@kernel.org> (Alexey Gladkov's
-        message of "Tue, 11 Jul 2023 13:25:41 +0200")
-Message-ID: <87lefmbppo.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Tue, 11 Jul 2023 08:27:43 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A61198B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:27:21 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b6b98ac328so86099481fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689078348; x=1691670348;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=808cWVgdSJtz5Dx4aZ53MdaH6Vo53NudM0hKAzBS+gA=;
+        b=NWOE0UlOKuwDy0QCKfAc4e3idVdnKINl1aCWDJOemRtNdmuPq4E2L9oATJGRT43RfF
+         aQ3yVgOlOM2r+eqo+IVUZ+ryxfHg/sMu9uvvG8xLYXykD0gFVyoZAxCjnRoEA8TKwbL0
+         NapBAVjL+ignJANMOGe0dk75CbdPpViciVJ+uNcuU9NjSjWtMDdCvEG/p5Q5BZbNnFK0
+         7pvLmqeeeW1uGGzkUki8ZmA1F0tTrSLrz9vYUTonhZv+2zGgMSlsFH503YgU+GyhRPXq
+         3ZmqV+v4/95UjrKZGbmiTM9JJiYSHbxTizUeLQijVkzhkxiT6H6DQRoMQU1lLIAJ/dz9
+         Q8ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689078348; x=1691670348;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=808cWVgdSJtz5Dx4aZ53MdaH6Vo53NudM0hKAzBS+gA=;
+        b=DXFSkLNsJq5bnSBmr8wLQjWt1GwTP9ejQVcVYLjGSwE5oC9ihaXGXnMUBGeBWtavJb
+         /6Svi2FUdNQ3kMK0y14sMB1Vs3htCDOtv51/jiZEzDwyeFQhOM5xvqBIrb1raJhRf8bw
+         JlKmju6IyMZxe/eyehaq+oLP7xx3X90hnPbChPUJ3RN0evSzmv/Kj8aBtVz2pJ2mWCRz
+         EHohyCq/T4b7Q2ogHiaHDAKJgMPmnH+hKEEs3UO35b05UwFLy8Apn0jIn9Z12YbBsj2W
+         Oc4/YWKTs6Xq/cGI8W/z4S6sa7s2AdQzgNhYykDZvFj2EFlgK6mwFiBWoVuKj0u90x47
+         5w/A==
+X-Gm-Message-State: ABy/qLZcDQHrEZgyJqCyUtduqAN8syZ3VR2XwYk3oc3Re38T5215Hk41
+        2z+OA4ccjF/zwjlIl5q+hyQwAw7WTAV4rqYL39h1dw==
+X-Google-Smtp-Source: APBJJlHM7ZpG2kwuJtbfFitGyyFdNrjDc+3x9k+Fj32plpJVwQPrm41SKtcOMRcHWpDyhAxbtC4Pow==
+X-Received: by 2002:a2e:6e0e:0:b0:2b6:eb5a:d377 with SMTP id j14-20020a2e6e0e000000b002b6eb5ad377mr12663043ljc.5.1689078348096;
+        Tue, 11 Jul 2023 05:25:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyl96.neoplus.adsl.tpnet.pl. [83.9.31.96])
+        by smtp.gmail.com with ESMTPSA id y21-20020a2e95d5000000b002b6d4a63cfdsm439953ljh.42.2023.07.11.05.25.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 05:25:47 -0700 (PDT)
+Message-ID: <e7be0a03-c980-589a-8b1a-947c467b0bc8@linaro.org>
+Date:   Tue, 11 Jul 2023 14:25:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4 00/17] Venus QoL / maintainability fixes
+Content-Language: en-US
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        stable@vger.kernel.org
+References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Alexey Gladkov:
+On 30.05.2023 14:30, Konrad Dybcio wrote:
+> v3 -> v4:
+> - Rebase on Stanimir's venus-for-next-v6.5
+> - Collapse 2 identical if-statements in "Sanitize venus_boot_core()
+>   per-VPU-version"
+> - Reword "Assign registers based on VPU version"
+> - Check for IS_IRIS2_1() instead of wrongly checking for core->use_tz,
+>   update commit msg in "media: venus: firmware: Correct IS_V6() checks"
+> - Access correct struct fields in "Use newly-introduced
+>   hfi_buffer_requirements accessors", drop Bryan's r-b
+Stan,
 
-> This patch set adds fchmodat4(), a new syscall. The actual
-> implementation is super simple: essentially it's just the same as
-> fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
-> I've attempted to make this match "man 2 fchmodat" as closely as
-> possible, which says EINVAL is returned for invalid flags (as opposed to
-> ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
-> I have a sketch of a glibc patch that I haven't even compiled yet, but
-> seems fairly straight-forward:
->
->     diff --git a/sysdeps/unix/sysv/linux/fchmodat.c b/sysdeps/unix/sysv/linux/fchmodat.c
->     index 6d9cbc1ce9e0..b1beab76d56c 100644
->     --- a/sysdeps/unix/sysv/linux/fchmodat.c
->     +++ b/sysdeps/unix/sysv/linux/fchmodat.c
->     @@ -29,12 +29,36 @@
->      int
->      fchmodat (int fd, const char *file, mode_t mode, int flag)
->      {
->     -  if (flag & ~AT_SYMLINK_NOFOLLOW)
->     -    return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
->     -#ifndef __NR_lchmod		/* Linux so far has no lchmod syscall.  */
->     +  /* There are four paths through this code:
->     +      - The flags are zero.  In this case it's fine to call fchmodat.
->     +      - The flags are non-zero and glibc doesn't have access to
->     +	__NR_fchmodat4.  In this case all we can do is emulate the error codes
->     +	defined by the glibc interface from userspace.
->     +      - The flags are non-zero, glibc has __NR_fchmodat4, and the kernel has
->     +	fchmodat4.  This is the simplest case, as the fchmodat4 syscall exactly
->     +	matches glibc's library interface so it can be called directly.
->     +      - The flags are non-zero, glibc has __NR_fchmodat4, but the kernel does
+could you please pick this up?
 
-If you define __NR_fchmodat4 on all architectures, we can use these
-constants directly in glibc.  We no longer depend on the UAPI
-definitions of those constants, to cut down the number of code variants,
-and to make glibc's system call profile independent of the kernel header
-version at build time.
-
-Your version is based on 2.31, more recent versions have some reasonable
-emulation for fchmodat based on /proc/self/fd.  I even wrote a comment
-describing the same buggy behavior that you witnessed:
-
-+      /* Some Linux versions with some file systems can actually
-+        change symbolic link permissions via /proc, but this is not
-+        intentional, and it gives inconsistent results (e.g., error
-+        return despite mode change).  The expected behavior is that
-+        symbolic link modes cannot be changed at all, and this check
-+        enforces that.  */
-+      if (S_ISLNK (st.st_mode))
-+       {
-+         __close_nocancel (pathfd);
-+         __set_errno (EOPNOTSUPP);
-+         return -1;
-+       }
-
-I think there was some kernel discussion about that behavior before, but
-apparently, it hasn't led to fixes.
-
-I wonder if it makes sense to add a similar error return to the system
-call implementation?
-
->     +	not.  In this case we must respect the error codes defined by the glibc
->     +	interface instead of returning ENOSYS.
->     +    The intent here is to ensure that the kernel is called at most once per
->     +    library call, and that the error types defined by glibc are always
->     +    respected.  */
->     +
->     +#ifdef __NR_fchmodat4
->     +  long result;
->     +#endif
->     +
->     +  if (flag == 0)
->     +    return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
->     +
->     +#ifdef __NR_fchmodat4
->     +  result = INLINE_SYSCALL (fchmodat4, 4, fd, file, mode, flag);
->     +  if (result == 0 || errno != ENOSYS)
->     +    return result;
->     +#endif
-
-The last if condition is the recommended approach, but in the past, it
-broke container host compatibility pretty badly due to seccomp filters
-that return EPERM instead of ENOSYS.  I guess we'll learn soon enough if
-that's been fixed by now. 8-P
-
-Thanks,
-Florian
-
+Konrad
+> 
+> v3: https://lore.kernel.org/r/20230228-topic-venus-v3-0-6092ae43b58f@linaro.org
+> 
+> v2 -> v3:
+> - Rephrase "Write to VIDC_CTRL_INIT after unmasking interrupts" commit msg
+> - Drop "Remap bufreq fields on HFI6XX"
+> - Rephrase "Introduce VPU version distinction" commit msg
+> - Better explain "Leave a clue for homegrown porters"
+> - Drop incorrect fixes tags/rephrase version check alternations
+> - Drop AR50L/IRIS1 from if-conditions, they'll be introduced separately
+> - pick up tags
+> - rebase on next-20230517 (no effective changes)
+> 
+> v2: https://lore.kernel.org/r/20230228-topic-venus-v2-0-d95d14949c79@linaro.org
+> 
+> v1 -> v2:
+> - Move "Write to VIDC_CTRL_INIT after unmasking interrupts" up and add
+>   a Fixes tag & Cc stable
+> - Reword the comment in "Correct IS_V6() checks"
+> - Move up "media: venus: Remap bufreq fields on HFI6XX", add Fixes and
+>   Cc stable
+> - Use better English in "Use newly-introduced hfi_buffer_requirements
+>   accessors" commit message
+> - Mention "Restrict writing SCIACMDARG3 to Venus V1/V2" doesn't seem to
+>   regress SM8250 in the commit message
+> - Pick up tags (note: I capitalized the R in Dikshita's 'reviewed-by'
+>   and removed one occurrence of random '**' to make sure review tools
+>   like b4 don't go crazy)
+> - Handle AR50_LITE in "Assign registers based on VPU version"
+> - Drop /* VPUn */ comments, they're invalid as explained by Vikash
+> - Take a different approach to the sys_idle problem in patch 1
+> 
+> v1: https://lore.kernel.org/r/20230228-topic-venus-v1-0-58c2c88384e9@linaro.org
+> 
+> Currently upstream assumes all (well, almost all - see 7280 or CrOS
+> specific checks) Venus implementations using the same version of the
+> Hardware Firmware Interface can be treated the same way. This is
+> however not the case.
+> 
+> This series tries to introduce the groundwork to start differentiating
+> them based on the VPU (Video Processing Unit) hardware type, fixes a
+> couple of issues that were an effect of that generalized assumption
+> and lays the foundation for supporting 8150 (IRIS1) and SM6115/QCM2290
+> (AR50 Lite), which will hopefully come soon.
+> 
+> Tested on 8250, but pretty please test it on your boards too!
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Konrad Dybcio (17):
+>       media: venus: hfi_venus: Only consider sys_idle_indicator on V1
+>       media: venus: hfi_venus: Write to VIDC_CTRL_INIT after unmasking interrupts
+>       media: venus: Introduce VPU version distinction
+>       media: venus: Add vpu_version to most SoCs
+>       media: venus: firmware: Leave a clue about obtaining CP VARs
+>       media: venus: hfi_venus: Sanitize venus_boot_core() per-VPU-version
+>       media: venus: core: Assign registers based on VPU version
+>       media: venus: hfi_venus: Sanitize venus_halt_axi() per-VPU-version
+>       media: venus: hfi_venus: Sanitize venus_isr() per-VPU-version
+>       media: venus: hfi_venus: Sanitize venus_cpu_and_video_core_idle() per-VPU-version
+>       media: venus: hfi_venus: Sanitize venus_cpu_idle_and_pc_ready() per-VPU-version
+>       media: venus: firmware: Sanitize per-VPU-version
+>       media: venus: hfi_platform: Check vpu_version instead of device compatible
+>       media: venus: vdec: Sanitize vdec_set_work_route() per-VPU-version
+>       media: venus: Introduce accessors for remapped hfi_buffer_reqs members
+>       media: venus: Use newly-introduced hfi_buffer_requirements accessors
+>       media: venus: hfi_venus: Restrict writing SCIACMDARG3 to Venus V1/V2
+> 
+>  drivers/media/platform/qcom/venus/core.c           |  7 ++-
+>  drivers/media/platform/qcom/venus/core.h           | 15 ++++++
+>  drivers/media/platform/qcom/venus/firmware.c       | 18 +++++--
+>  drivers/media/platform/qcom/venus/helpers.c        |  7 +--
+>  drivers/media/platform/qcom/venus/hfi_helper.h     | 61 +++++++++++++++++++---
+>  drivers/media/platform/qcom/venus/hfi_msgs.c       |  2 +-
+>  .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   | 22 ++++----
+>  drivers/media/platform/qcom/venus/hfi_platform.c   |  2 +-
+>  drivers/media/platform/qcom/venus/hfi_venus.c      | 42 +++++++--------
+>  drivers/media/platform/qcom/venus/vdec.c           | 10 ++--
+>  drivers/media/platform/qcom/venus/vdec_ctrls.c     |  2 +-
+>  drivers/media/platform/qcom/venus/venc.c           |  4 +-
+>  drivers/media/platform/qcom/venus/venc_ctrls.c     |  2 +-
+>  13 files changed, 133 insertions(+), 61 deletions(-)
+> ---
+> base-commit: 9f9f8ca6f012d25428f8605cb36369a449db8508
+> change-id: 20230228-topic-venus-70ea3bc76688
+> 
+> Best regards,
