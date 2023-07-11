@@ -2,162 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD2F74F4A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BE774F4AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjGKQPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:15:34 -0400
+        id S231651AbjGKQQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:16:03 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjGKQPW (ORCPT
+        with ESMTP id S231834AbjGKQP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:15:22 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB041704
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:15:18 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99313a34b2dso686341566b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:15:18 -0700 (PDT)
+        Tue, 11 Jul 2023 12:15:56 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B239B10F6;
+        Tue, 11 Jul 2023 09:15:53 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so11886910a12.0;
+        Tue, 11 Jul 2023 09:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1689092117; x=1691684117;
+        d=gmail.com; s=20221208; t=1689092152; x=1691684152;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b0cPI8Zq0PeegUi44hkwFDNWJ9aJ3HVoZc/kLcQkpf4=;
-        b=UuD8b+Afj9oDvXQEwsLdh6bNZbU5rx8jYmvqtU7VORiVL9R/oX7NzGZJhYCqpd7LRU
-         RMZ4psdDy39BM26u+YM9UyVJUIITTEdeBE2HshuXlY/5/T7uCwIReB1KUeS0+OUTdO3f
-         XJS6BuPYccXg3zKRC0EW8rvRtEyUPmRDMuuZ4FYziBxY3OqPYakIwzuSvT/lx1n+yr+0
-         AAuLAY2175VPPwnLh1YxdFYVZ1aqt83GSGkH33DBYkTMFSaj47/Ij13OsDIo2rh3q6K2
-         rM3xeYRk7MzMvAt33Kd+/8lYusal4Y05a0KOr4nfVX2fDwQFBhkaR7RoNFSyyEoZZxXF
-         owKQ==
+        bh=+3YNvBazbMQlNenlLt7Z8u6jmQ7PpLqo2Es7F9N7uLc=;
+        b=m6wv+eZCBxEQXr8Ozexh8K+SxK/QKGuR6+iDyfzVSoR4HB0ekoJN8PAFacAcLZHTzM
+         gI9bLUwRKfSr47ck4O6Cm06ExIp5FywzJPfDkKdtbCTMpMZDRTKdyINAdTAzckwIWFHv
+         ne2WbmkCM7pxZQ8/WwVCvuEqAWBNIRW2s0X1HDkUyHzCYhf38/Q+uedwNWtsrOtcbOKp
+         R5+4wYehC97hw1fsdl/FFoR7lPM1ta9idisqtyyezymqeaWDOKReuWkMYRmWiHryUGuF
+         5lpvi1yYsqqIgBuSgIa6v1wlFs2sboFBUxIFH0SHnuWZoF00Twt0WZuj6hWzOwhgTcDi
+         JGTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689092117; x=1691684117;
+        d=1e100.net; s=20221208; t=1689092152; x=1691684152;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b0cPI8Zq0PeegUi44hkwFDNWJ9aJ3HVoZc/kLcQkpf4=;
-        b=cri1/+zF+tBJzcjKJd/ZcR2QgWQZ+YbT6TqRxka0AT/SCYKMuDRgCPq34vnMiG5RqC
-         QQFAFeh3bEkezMA8zyMKiGibHLRI26oKcQikvrj2pNvcSIps4d1rZC00VeJW/JYHuu/V
-         8Hw/BB0HO39miW9nFO68UPGsZ90H2/kgBBfeNQSm5LnqG6NITKNIsaIOuW2Gul6rkxs1
-         BLZ6TTcPRf5/EFs92cNlYjvXSQKpzXL3zCAzZdsoieVkY4v09SWl9ss8ifetNp4d+4Fq
-         U+K2t2FN5uuCXtN+TGLNlsLuvij7CRW1yz9tjFAuuuVJB3fLJd5ll050zM64y37yZONS
-         uLDQ==
-X-Gm-Message-State: ABy/qLaQccLWCXqbrRijJxBvTGcdh+IBKVbOZ+2VCAMrqcQiwQhIO/Le
-        NPOPgNc+xkQyzY8umomxBQ/RWNxXJT5K9q0wkMZTWw==
-X-Google-Smtp-Source: APBJJlGXOjWPnshsxM3cflnDdAoKzmU0dGcvL7PnEhcWaR8Lg6sC3dcHMdy6YJfU/8Us0J91zcM6RceD9a9eOwGczcY=
-X-Received: by 2002:a17:906:21a:b0:994:1ef9:91dc with SMTP id
- 26-20020a170906021a00b009941ef991dcmr1792295ejd.15.1689092117275; Tue, 11 Jul
- 2023 09:15:17 -0700 (PDT)
+        bh=+3YNvBazbMQlNenlLt7Z8u6jmQ7PpLqo2Es7F9N7uLc=;
+        b=Egnj+c+8ijI3mbuhGHatwPEAgEHrHzbWCzG9GZ259h6ajA2lkaAngO7PL5K7O/VL+q
+         IFbzHa6nlUAXfpGTBOYdwzXmzUjemFhY2QLDypMw/BOHT5y0W5uiekikRKtzCkLBDmQ6
+         VvjRQdBvGCg5PZTav4hYf3iu9PoP6VO+5TCSayl7YOLzCJvrH5WioS08Q4nuGp/85k0M
+         gMb7+LcyD6SSGWKsgGjgh5iP4uX0L6x/2NUSz0jF/flfbT9V0b/yBkp0ZFFfxWTGV+a8
+         nwjDgqyLbEwXPMSgo/Pa+OXuhWSV4Z9UZvL20mCo2SP4pw6FIY7I3TwXx1HY9FhqC/93
+         O5Dw==
+X-Gm-Message-State: ABy/qLbJ5eU3qjABt1y5H7CMjPD4oiQgae57kyM8qa5rk2Rf/OFy+4WZ
+        0pQvJAsvxumKlnDloEgwa7bSYaftMh13/qqlFNbd7AMxoKI=
+X-Google-Smtp-Source: APBJJlHSXqPqdNg9nnoASTSEuBu/eCf9o59OGyGq528wv1PX0B78LaXDuF8U+4qcWEHulEjmRsjBiA1XAwwxF4iGXYs=
+X-Received: by 2002:a05:6402:520c:b0:51e:538c:1e19 with SMTP id
+ s12-20020a056402520c00b0051e538c1e19mr14034219edd.15.1689092151844; Tue, 11
+ Jul 2023 09:15:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230613-so-reuseport-v5-0-f6686a0dbce0@isovalent.com> <20230613-so-reuseport-v5-6-f6686a0dbce0@isovalent.com>
-In-Reply-To: <20230613-so-reuseport-v5-6-f6686a0dbce0@isovalent.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Tue, 11 Jul 2023 17:15:06 +0100
-Message-ID: <CAN+4W8gs84r+PVWgMbic29Opj2EviNMh7AzcP=BR3CLvYHiQWg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 6/7] bpf, net: Support SO_REUSEPORT sockets
- with bpf_sk_assign
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Joe Stringer <joe@cilium.io>
+References: <20230711151248.4750-1-asmaa@nvidia.com>
+In-Reply-To: <20230711151248.4750-1-asmaa@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 11 Jul 2023 19:15:15 +0300
+Message-ID: <CAHp75Vczih4F9G_UN7GNU8Th+OS=_GLbO51QxJJ+uFHTH_JbkA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] gpio: mmio: handle "ngpios" properly in bgpio_init()
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davthompson@nvidia.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 2:46=E2=80=AFPM Lorenz Bauer <lmb@isovalent.com> wro=
+On Tue, Jul 11, 2023 at 6:13=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wro=
 te:
 >
-> +static inline
-> +struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int =
-doff,
-> +                             const struct in6_addr *saddr, const __be16 =
-sport,
-> +                             const struct in6_addr *daddr, const __be16 =
-dport,
-> +                             bool *refcounted, inet6_ehashfn_t *ehashfn)
-> +{
-> +       struct sock *sk, *reuse_sk;
-> +       bool prefetched;
-> +
-> +       sk =3D skb_steal_sock(skb, refcounted, &prefetched);
-> +       if (!sk)
-> +               return NULL;
-> +
-> +       if (!prefetched)
-> +               return sk;
-> +
-> +       if (sk->sk_protocol =3D=3D IPPROTO_TCP) {
-> +               if (sk->sk_state !=3D TCP_LISTEN)
-> +                       return sk;
-> +       } else if (sk->sk_protocol =3D=3D IPPROTO_UDP) {
-> +               if (sk->sk_state !=3D TCP_CLOSE)
-> +                       return sk;
-> +       } else {
-> +               return sk;
-> +       }
-> +
-> +       reuse_sk =3D inet6_lookup_reuseport(net, sk, skb, doff,
-> +                                         saddr, sport, daddr, ntohs(dpor=
-t),
-> +                                         ehashfn);
-> +       if (!reuse_sk)
-> +               return sk;
-> +
-> +       /* We've chosen a new reuseport sock which is never refcounted. T=
-his
-> +        * implies that sk also isn't refcounted.
-> +        */
-> +       WARN_ON_ONCE(*refcounted);
-> +
-> +       return reuse_sk;
-> +}
+> bgpio_init() uses "sz" argument to populate ngpio, which is not
+> accurate. Instead, read the "ngpios" property from the DT and if it
+> doesn't exist, use the "sz" argument. With this change, drivers no
+> longer need to overwrite the ngpio variable after calling bgpio_init().
+>
+> If the "ngpios" property is specified, bgpio_bits is calculated
+> as the round up value of ngpio. At the moment, the only requirement
+> specified is that the round up value must be a multiple of 8 but
+> it should also be a power of 2 because we provide accessors based
+> on the bank size in bgpio_setup_accessors().
+>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> ---
+> The following 2 patches were approved in March 2023 but didn't make
+> it into the tree:
+> [PATCH v4] gpio: mmio: handle "ngpios" properly in bgpio_init()
+> [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
+>
+> They needed a rebase and were combined into a single patch since
+> "gpio: mmio: fix calculation of bgpio_bits" fixes a bug in
+> "gpio: mmio: handle "ngpios" properly in bgpio_init()"
 
-Hi Kuniyuki,
+And hence Linus' tag had been dropped.
 
-Continuing the conversation from v5 of the patch set, you wrote:
+LGTM now, thank you for pursuing this!
+I hope Linus can review it again and Bart will be okay with the result
+to be applied.
 
-In inet6?_steal_sock(), we call inet6?_lookup_reuseport() only for
-sk that was a TCP listener or UDP non-connected socket until just before
-the sk_state checks.  Then, we know *refcounted should be false for such
-sockets even before inet6?_lookup_reuseport().
+> v1->v2:
+> - Added the tags
+> - Updated the changelog
 
-This makes sense for me in the TCP listener case. I understand UDP
-less, so I'll have to rely on your input. I tried to convince myself
-that all UDP sockets in TCP_CLOSE have SOCK_RCU_FREE set. However, the
-only place I see sock_set_flag(sk, SOCK_RCU_FREE) in the UDP case is
-in udp_lib_get_port(). That in turn seems to be called during bind.
-So, what if BPF does bpf_sk_assign() of an unbound and unconnected
-socket? Wouldn't that trigger the warning?
-
-To maybe sidestep this question: do you think the location of the
-WARN_ON_ONCE has to prevent this patch set from going in? I've been
-noodling at it for quite a while already and it would be good to see
-it land.
-
-Thanks
-
-Lorenz
+--=20
+With Best Regards,
+Andy Shevchenko
