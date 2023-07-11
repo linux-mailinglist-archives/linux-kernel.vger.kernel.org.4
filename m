@@ -2,127 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2670474E95D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA80174E95F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjGKIuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        id S231219AbjGKIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjGKIuE (ORCPT
+        with ESMTP id S229844AbjGKIu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:50:04 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22F21702;
-        Tue, 11 Jul 2023 01:49:26 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B6V6aG012944;
-        Tue, 11 Jul 2023 08:48:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=Hb+/WvdSZOGcP0ZbVzWAswSwAieAH5nBltcHMk+zViw=;
- b=Qjf+m+UfJWRjrkd5aXIl5Ohk5TgWM0GeCwAxlyrzVCJXZ3chVT0Q9v4RWQncfOnCdaPW
- FlooWCQ18+dnZgP5xIJPG2MKwRmZKwNiD5zPwDW9Som/yKvC61YmYs9IF2chO9Td1YDP
- nqEEATwiZM2RHMxeJE/t2IBJbqG6aZg9zM2duwhNPUScxdujBJT3cKPDc4/72M66PBp+
- mtrR+ss9Ztgt+XEFkYGY5KjxXYcHaq3p4lI/nj2guFBzyiQaopBV7uPyIKjIi+hAs7ta
- Igw0OACc4EDqmDlyQyoUVug+E4VM1jvPMCCam+Igh2Tbpc20X8czUkirUFcdyeIyugTQ GQ== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs0kr8d4u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 08:48:54 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36B8mpnd026641;
-        Tue, 11 Jul 2023 08:48:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rq0vknygn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 11 Jul 2023 08:48:51 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36B8mokV026614;
-        Tue, 11 Jul 2023 08:48:50 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 36B8moDS026613;
-        Tue, 11 Jul 2023 08:48:50 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-        id 613FB4994; Tue, 11 Jul 2023 16:48:49 +0800 (CST)
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        junwoo80.lee@samsung.com, martin.petersen@oracle.com,
-        quic_ziqichen@quicinc.com, quic_nitirawa@quicinc.com
-Cc:     linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1] scsi: ufs: qcom: Hold the mutex lock when config ESI
-Date:   Tue, 11 Jul 2023 16:48:46 +0800
-Message-Id: <1689065327-45039-1-git-send-email-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CGWuSHK50VGMgK2l1Ds9cVtPMEh9tt9z
-X-Proofpoint-ORIG-GUID: CGWuSHK50VGMgK2l1Ds9cVtPMEh9tt9z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1015 phishscore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 adultscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110077
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Tue, 11 Jul 2023 04:50:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C8E10C7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:50:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B566139D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88CDDC433C9;
+        Tue, 11 Jul 2023 08:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689065421;
+        bh=/k5olDGpbnyZ4n9IScGnO/ghFsMW4z+IdHliHFazRfY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QQdaVSMQf4Cl2d1URQhv/st9xBAGVyHlQnIRt+bNnJON7uqdHNVD1T6FxqBY7s+Vf
+         a2zcnX0dkaZBEYvxMgbS1H21aLNWqAfsdhs/IeCborE4VgQZ5Zu3W1cYJ9T9I+lHkL
+         vDi6be6VxrsmJUd1yA+UX+4kYRDmWh8UBK2EFqI5atIu2nXPkE+uoezEc0vjS0IA1v
+         8DEa0uMpjD2fTBdbLyMOCZ6a0Kr7h3urVQpvFd7aTWP6Mq/WkhlX6cSMpywmnkDMSx
+         m7nqPLZL5A1azKj/Tad4gi8k4Tw5/DMFdj2ThNB33pS8WUwRHrRwr6cESa/aNPXuT9
+         9S82HvLTXZGSg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69161C4167B;
+        Tue, 11 Jul 2023 08:50:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V2 net 0/4] net: fec: fix some issues of ndo_xdp_xmit()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168906542142.15715.5308120032595362444.git-patchwork-notify@kernel.org>
+Date:   Tue, 11 Jul 2023 08:50:21 +0000
+References: <20230706081012.2278063-1-wei.fang@nxp.com>
+In-Reply-To: <20230706081012.2278063-1-wei.fang@nxp.com>
+To:     Wei Fang <wei.fang@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, netdev@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lock the MSI descriptor storage of a device when config ESI.
-Otherwise we would meet plenty of warnings during boot up.
+Hello:
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index f36bcdb..d29e63e 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1680,6 +1680,7 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
- 		goto out;
- 	}
- 
-+	msi_lock_descs(hba->dev);
- 	msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
- 		ret = devm_request_irq(hba->dev, desc->irq,
- 				       ufs_qcom_mcq_esi_handler,
-@@ -1691,14 +1692,17 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
- 			break;
- 		}
- 	}
-+	msi_unlock_descs(hba->dev);
- 
- 	if (ret) {
- 		/* Rewind */
-+		msi_lock_descs(hba->dev);
- 		msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
- 			if (desc == failed_desc)
- 				break;
- 			devm_free_irq(hba->dev, desc->irq, hba);
- 		}
-+		msi_unlock_descs(hba->dev);
- 		platform_msi_domain_free_irqs(hba->dev);
- 	} else {
- 		if (host->hw_ver.major == 6 && host->hw_ver.minor == 0 &&
+On Thu,  6 Jul 2023 16:10:08 +0800 you wrote:
+> From: Wei Fang <wei.fang@nxp.com>
+> 
+> We encountered some issues when testing the ndo_xdp_xmit() interface
+> of the fec driver on i.MX8MP and i.MX93 platforms. These issues are
+> easy to reproduce, and the specific reproduction steps are as follows.
+> 
+> step1: The ethernet port of a board (board A) is connected to the EQOS
+> port of i.MX8MP/i.MX93, and the FEC port of i.MX8MP/i.MX93 is connected
+> to another ethernet port, such as a switch port.
+> 
+> [...]
+
+Here is the summary with links:
+  - [V2,net,1/4] net: fec: dynamically set the NETDEV_XDP_ACT_NDO_XMIT feature of XDP
+    https://git.kernel.org/netdev/net/c/be7ecbe7ec7d
+  - [V2,net,2/4] net: fec: recycle pages for transmitted XDP frames
+    https://git.kernel.org/netdev/net/c/20f797399035
+  - [V2,net,3/4] net: fec: increase the size of tx ring and update tx_wake_threshold
+    https://git.kernel.org/netdev/net/c/56b3c6ba53d0
+  - [V2,net,4/4] net: fec: use netdev_err_once() instead of netdev_err()
+    https://git.kernel.org/netdev/net/c/84a109471987
+
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
