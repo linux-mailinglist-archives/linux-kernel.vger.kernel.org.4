@@ -2,119 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FE274E8A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B9B74E8A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 10:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbjGKIDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 04:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S231723AbjGKIDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 04:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjGKIDP (ORCPT
+        with ESMTP id S229831AbjGKIDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 04:03:15 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A24AF;
-        Tue, 11 Jul 2023 01:03:13 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36B831jp003735;
-        Tue, 11 Jul 2023 03:03:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1689062581;
-        bh=rjsooygLZp8hiL8v3o9Cz9avKfcSEri3Z+I7BSF1yjE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=UhK+qwQ/UrMV//1lbDyCZrUR6y042aBa2zlkj70/Z1i3bmkBNbdOPbBvyJ9ZRN9z4
-         m/iqXz1V9lhp1pNiWT7dS4BPpTpy7+18YTpFbSR0UcgkRSVfLACSJMGV4e/JZHQJqA
-         flMKq29smBXXrKymw6IFHNKhO20ndxvcI+dGsa3I=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36B831Pe120719
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Jul 2023 03:03:01 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
- Jul 2023 03:03:00 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 11 Jul 2023 03:03:00 -0500
-Received: from [10.24.68.113] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36B82vBh019881;
-        Tue, 11 Jul 2023 03:02:58 -0500
-Message-ID: <ebc34b27-31b2-b57a-ec0c-fb4e0fa25c1e@ti.com>
-Date:   Tue, 11 Jul 2023 13:32:56 +0530
+        Tue, 11 Jul 2023 04:03:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E992
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 01:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689062597; x=1720598597;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=eyGG6dzB9CZXuAsyxkAbXw//cArH8N9tfew36H3vcQI=;
+  b=XenKIbs3c8CpPK7EhUozwdZh/K1gajc2o0sV84iBKlQ2hmcmG44bKCyq
+   Zm+3CbKNGv2fx7forYAUv/e1eNLU3j5VXUsowZmf/ZTveC3tKn29aFKCZ
+   14rl3OdbBcSAUQLPClLhrL+2TjYCi+VTrANkRusUYYxdSpkeMA7qC8+kd
+   a0jA3oEUogT5D85x2nGmUw8CJBNeshLlNa99DMVcG/DEEhuT73axEPO4H
+   s/7zgs32CNPvUPfdj23vmtMEirdwq+jWOKxpoV+5TGOrq76BvraG34k88
+   KdbxmYPHM3D/tVqU3v8klfmyAVttX9Mobvmh3IdOrcSTkji3rbTb4ithF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="430643154"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="430643154"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 01:03:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="715108432"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="715108432"
+Received: from sneaga-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.52.179])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 01:03:13 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     suijingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Li Yi <liyi@loongson.cn>
+Cc:     loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] drm/loongson: Fix two warnings because of passing wrong
+ type
+In-Reply-To: <afbbda82-0635-bef3-b9ff-d5c6575631b8@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230710100931.255234-1-suijingfeng@loongson.cn>
+ <87h6qcjc46.fsf@intel.com>
+ <afbbda82-0635-bef3-b9ff-d5c6575631b8@loongson.cn>
+Date:   Tue, 11 Jul 2023 11:03:11 +0300
+Message-ID: <87edlej2o0.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: ti-serdes-mux: Add defines for SERDES4 in
- J784S4 SoC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <peda@axentia.se>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <s-vadapalli@ti.com>
-References: <20230710102712.155195-1-j-choudhary@ti.com>
- <d136d58d-9582-3833-861f-086b64c1ad36@linaro.org>
- <ecbb6d34-e024-f6c6-5921-ba7bc6fe2e5e@ti.com>
- <97436a92-2cbd-0498-8aad-444ac3fab99b@linaro.org>
- <d54b0cc2-91d9-b081-fc39-0bbba715ee5b@ti.com>
- <80a43533-f6d6-b498-b677-08f7e608155a@linaro.org>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <80a43533-f6d6-b498-b677-08f7e608155a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 10 Jul 2023, suijingfeng <suijingfeng@loongson.cn> wrote:
+> Hi,
+>
+> On 2023/7/10 18:26, Jani Nikula wrote:
+>> On Mon, 10 Jul 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+>>> When accessing I/O memory, we should pass '__iomem *' type instead of
+>>> 'void *' simply, otherwise sparse tests will complain. After applied
+>>> this patch, the following two sparse warnings got fixed.
+>> Usually the commit message should explain why it's okay to cast away the
+>> warning.
+>>
+>> Because realistically this doesn't "fix" the warning, this merely hides
+>> it.
+>
+>
+> My understanding is that a point itself is just a variable where store a=
+=20
+> address,
+>
+> if this address originally point to I/O memory,
+>
+> then, we can other cast it to u64 type, then cast it back to '__iomem *'=
+=20
+> again.
+>
+> as long as the type's=C2=A0 bit-width is width enough to store this addre=
+ss,=20
+> we won't lost the information.
+>
+>
+> 'void *' or 'u64' is just a intermediate represent of the address.
+>
+> we can other cast it to u64 type, then cast it back to 'void __iomem *'=20
+> or 'void *' again.
+>
+>
+> Why it's okay ? My answer is that
+>
+> As long as a address is really point to the I/O memory, cast it to 'void=
+=20
+> __iomem *' is OK.
+>
+> As long as a address is really point to the system memory, cast it to=20
+> 'void *' is OK.
+
+The point of __iomem is to have sparse help you in tracking that, so you
+don't accidentally mix up the two.
+
+BR,
+Jani.
 
 
-On 11/07/23 13:05, Krzysztof Kozlowski wrote:
-> On 11/07/2023 09:21, Jayesh Choudhary wrote:
+>
+>
+>> BR,
+>> Jani.
 >>
->>
->> On 11/07/23 11:34, Krzysztof Kozlowski wrote:
->>> On 11/07/2023 07:55, Jayesh Choudhary wrote:
->>>> Hello Krzysztof,
->>>>
->>>> On 10/07/23 17:11, Krzysztof Kozlowski wrote:
->>>>> On 10/07/2023 12:27, Jayesh Choudhary wrote:
->>>>>> SERDES4 has 4 lanes. Add lane definitions for it.
->>>>>>
->>>>>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
->>>>>> ---
->>>>>>     include/dt-bindings/mux/ti-serdes.h | 20 ++++++++++++++++++++
->>>>>
->>>>> Where are the users of this binding constants? IOW, why do you need to
->>>>> add these?
->>>>>
->>>>> I don't see users of existing constants either...
->>>>>
->>>>
->>>> These constants are propagated in the idle-state property for the
->>>> mux-controller node (named serdes_ln_ctrl) usually in the final
->>>> board dts files and occasionally in the main dtsi files for TI SoCs.
+>>> 1) drivers/gpu/drm/loongson/lsdc_benchmark.c:27:35:
+>>>     sparse:     expected void volatile [noderef] __iomem *
+>>>     sparse:     got void *kptr
 >>>
->>> So they are not used.
->>
->> 'They' as in SERDES4 definition or others as well??
-> 
-> I made quick greps and it seems that none of the defines - existing and
-> new - are used. But here anyway we talk about this patch, which without
-> users does not have any rationale.
-These defines are yet to be added. For reference:
-https://lore.kernel.org/all/20230522092201.127598-3-s-vadapalli@ti.com/
+>>> 2) drivers/gpu/drm/loongson/lsdc_benchmark.c:42:51:
+>>>     sparse:     expected void const volatile [noderef] __iomem *
+>>>     sparse:     got void *kptr
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Closes: https://lore.kernel.org/oe-kbuild-all/202307100243.v3hv6aes-lkp=
+@intel.com/
+>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>> ---
+>>>   drivers/gpu/drm/loongson/lsdc_benchmark.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/loongson/lsdc_benchmark.c b/drivers/gpu/dr=
+m/loongson/lsdc_benchmark.c
+>>> index b088646a2ff9..36e352820bdb 100644
+>>> --- a/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>>> +++ b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>>> @@ -24,7 +24,7 @@ static void lsdc_copy_gtt_to_vram_cpu(struct lsdc_bo =
+*src_bo,
+>>>   	lsdc_bo_kmap(dst_bo);
+>>>=20=20=20
+>>>   	while (n--)
+>>> -		memcpy_toio(dst_bo->kptr, src_bo->kptr, size);
+>>> +		memcpy_toio((void __iomem *)dst_bo->kptr, src_bo->kptr, size);
+>>>=20=20=20
+>>>   	lsdc_bo_kunmap(src_bo);
+>>>   	lsdc_bo_kunmap(dst_bo);
+>>> @@ -39,7 +39,7 @@ static void lsdc_copy_vram_to_gtt_cpu(struct lsdc_bo =
+*src_bo,
+>>>   	lsdc_bo_kmap(dst_bo);
+>>>=20=20=20
+>>>   	while (n--)
+>>> -		memcpy_fromio(dst_bo->kptr, src_bo->kptr, size);
+>>> +		memcpy_fromio(dst_bo->kptr, (void __iomem *)src_bo->kptr, size);
+>>>=20=20=20
+>>>   	lsdc_bo_kunmap(src_bo);
+>>>   	lsdc_bo_kunmap(dst_bo);
+>
 
-SERDES4 by default is used for display but it can be configured for 
-QSGMII too. There are users for that configuration as well. So it felt 
-reasonable to add the definitions for SERDES4 which were missed earlier.
-
-Warm Regards,
--Jayesh
+--=20
+Jani Nikula, Intel Open Source Graphics Center
