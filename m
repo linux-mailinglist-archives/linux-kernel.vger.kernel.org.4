@@ -2,59 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025F974EF2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E4174EF34
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbjGKMlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S231562AbjGKMms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjGKMlX (ORCPT
+        with ESMTP id S229983AbjGKMmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:41:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41098B0;
-        Tue, 11 Jul 2023 05:41:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EB7BC225C3;
-        Tue, 11 Jul 2023 12:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689079279; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pTTkzVVPTdBTTX1F+dGFkKgrQMAgN0MI9e62axP2ESk=;
-        b=TtsgEo0ggMHrj25ng3aYrEMQybqPBakEUTcdctxqd21tyemkFpLLiFszDVNNwYswiP0Z3W
-        WTE3DBlSulUwv5f1yRZQRQssAqNmJM41hmoUO6ss68XCuXMjbY4QqR92QFgBXmdwU6/ahH
-        QIZQqNJCjg3zP8EzEyrGjl+Vv4zmGvY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C98341391C;
-        Tue, 11 Jul 2023 12:41:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id baRbMO9NrWT3QAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 11 Jul 2023 12:41:19 +0000
-Date:   Tue, 11 Jul 2023 14:41:18 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Tejun Heo <tj@kernel.org>,
+        Tue, 11 Jul 2023 08:42:46 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B9DB8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:42:21 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6687466137bso3740570b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1689079341; x=1691671341;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dmg9w9P3JYlTE5YF/tdSGmQe9gMk9DKIlFnuajmtraM=;
+        b=MQ5ty+Ms9xq2Gf8tT1u5KINp7LbCz3vSzcp6PPkar1PjXy2UOGDAONbcJWbI+E3Z1E
+         ikZ8U8ait2Sr5BYSdZ0mnqv3UujdxGaHwIDateSlAtRLzEgup9mGA8YcL/qo1k0FBGy/
+         FtozdxhzC6z10cVS8YU1HM4+O48pgEHDp5kJRIJNhHnzy5o1QbbQV3vpzByt9eoJCZRF
+         j8KrPcF99ChxD4ntqNGXPWk8MUCnNrtMqO4RYfasM8ZE8cbOScyeoYS5plADx8+31TVK
+         GOG7vI2PVHSpTcdBFa0p7rhtBHE39/Z0gT8Ap6MdmyXF7tQb0/Zbshyqv+rLDj6qHTCL
+         oBZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689079341; x=1691671341;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dmg9w9P3JYlTE5YF/tdSGmQe9gMk9DKIlFnuajmtraM=;
+        b=jY74HIVQ5IQDnSaTXdQ56mjarURkxhSQoh/EhbVn/TP82cuwARLwTgLZNHKQtqwRb6
+         8w3DF7QICkzlHL0Kv4EMsJ0yjWhXMZihXOIrnz21K/Ku/tYjyYZy1G6EiYkos0WTd6In
+         FTKIOkJOgcIQ705q0JLr/LQ20X1WBlayxhu4DbLGwdOS/cbAa1sQ9lxfr20bOQ7eIXPp
+         Rkl8SemEXtpAYBal3hcLKqmOH47cQYahE/wZGLoeRaFHSuTWqgfURM3CcPBWQEW4Mbl3
+         vGZU2bIBEe6+fm0K2lurNeNws++3kZVpcEZQAooHj2mv0OoC+LqbQSnlaHLp5O5NHwBb
+         JwRw==
+X-Gm-Message-State: ABy/qLYhJrUF6Phea2vb/xJ/7alKmFm4cS8Utdw+3UiO3c1e7Qz73o10
+        3CyDi8fk5v1HxieJofcu89Anrw==
+X-Google-Smtp-Source: APBJJlHySXBwiacKDORZhjNJUBjRrtdwMto4+SpJ1LfQJNYde55u+zkHIULuNxcqHK6dl79az4tI4A==
+X-Received: by 2002:a05:6a20:3948:b0:127:8833:cce3 with SMTP id r8-20020a056a20394800b001278833cce3mr15034530pzg.8.1689079341001;
+        Tue, 11 Jul 2023 05:42:21 -0700 (PDT)
+Received: from C02DV8HUMD6R.bytedance.net ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id d27-20020a63735b000000b0055c0508780asm1512222pgn.73.2023.07.11.05.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 05:42:20 -0700 (PDT)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the cgroup tree with the mm tree
-Message-ID: <xn7nv52qio4aq2ioquuglnfoe6hn2l7newjf53enyxxthy6opd@ztktowlsjub3>
-References: <20230711110734.7009339b@canb.auug.org.au>
+        David Ahern <dsahern@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Breno Leitao <leitao@debian.org>,
+        David Howells <dhowells@redhat.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     Abel Wu <wuyun.abel@bytedance.com>, Michal Hocko <mhocko@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org (open list),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        cgroups@vger.kernel.org (open list:CONTROL GROUP - MEMORY RESOURCE
+        CONTROLLER (MEMCG)),
+        linux-mm@kvack.org (open list:CONTROL GROUP - MEMORY RESOURCE
+        CONTROLLER (MEMCG))
+Subject: [PATCH RESEND net-next 1/2] net-memcg: Scopify the indicators of sockmem pressure
+Date:   Tue, 11 Jul 2023 20:41:43 +0800
+Message-Id: <20230711124157.97169-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="624tujepdzi6sdtb"
-Content-Disposition: inline
-In-Reply-To: <20230711110734.7009339b@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -65,32 +97,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now there are two indicators of socket memory pressure sit inside
+struct mem_cgroup, socket_pressure and tcpmem_pressure.
 
---624tujepdzi6sdtb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When in legacy mode aka. cgroupv1, the socket memory is charged
+into a separate counter memcg->tcpmem rather than ->memory, so
+the reclaim pressure of the memcg has nothing to do with socket's
+pressure at all. While for default mode, the ->tcpmem is simply
+not used.
 
-Hello.
+So {socket,tcpmem}_pressure are only used in default/legacy mode
+respectively. This patch fixes the pieces of code that make mixed
+use of both.
 
-On Tue, Jul 11, 2023 at 11:07:34AM +1000, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+---
+ include/linux/memcontrol.h | 4 ++--
+ mm/vmpressure.c            | 8 ++++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-Would alphabetical sorting of entries be helpful? (Lower conflict
-probability than the single end for appending.)
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 5818af8eca5a..5860c7f316b9 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1727,8 +1727,8 @@ void mem_cgroup_sk_alloc(struct sock *sk);
+ void mem_cgroup_sk_free(struct sock *sk);
+ static inline bool mem_cgroup_under_socket_pressure(struct mem_cgroup *memcg)
+ {
+-	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && memcg->tcpmem_pressure)
+-		return true;
++	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
++		return !!memcg->tcpmem_pressure;
+ 	do {
+ 		if (time_before(jiffies, READ_ONCE(memcg->socket_pressure)))
+ 			return true;
+diff --git a/mm/vmpressure.c b/mm/vmpressure.c
+index b52644771cc4..22c6689d9302 100644
+--- a/mm/vmpressure.c
++++ b/mm/vmpressure.c
+@@ -244,6 +244,14 @@ void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
+ 	if (mem_cgroup_disabled())
+ 		return;
+ 
++	/*
++	 * The in-kernel users only care about the reclaim efficiency
++	 * for this @memcg rather than the whole subtree, and there
++	 * isn't and won't be any in-kernel user in a legacy cgroup.
++	 */
++	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && !tree)
++		return;
++
+ 	vmpr = memcg_to_vmpressure(memcg);
+ 
+ 	/*
+-- 
+2.37.3
 
-Thanks,
-Michal
-
---624tujepdzi6sdtb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZK1N7AAKCRAGvrMr/1gc
-jlFLAP47B14jQYzwELF9vZsjK1/SuujT3qR3i4tFcnp++ipnfwEA3YlUsUVOpDCE
-XGJK/eTUn8ReFUylhASijiS7lmmohAU=
-=HX7y
------END PGP SIGNATURE-----
-
---624tujepdzi6sdtb--
