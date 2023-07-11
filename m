@@ -2,174 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133574F3B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B8E74F3B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjGKPh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S231238AbjGKPhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjGKPg5 (ORCPT
+        with ESMTP id S232948AbjGKPhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:36:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1188619BD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:36:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D488614DC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 15:36:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF09C433CC;
-        Tue, 11 Jul 2023 15:36:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689089790;
-        bh=fpzblsPSQYpoP86N5Eq39fYdejh6sSoZdOdfkJkZF2s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UFAoX/KoJ4MTJqDW16Qy4ZewD6kIoJ/icPvg1Mnrvdy+bJeQzgK72oVPkqfGq54Yt
-         PpU+l6XQAlWbCFQtsi1qah2V7H1C/r2GMZdlH2+KSD6vabNFqKsY+yGm5Joni/4U5l
-         HSnIBUYIhhk82nWgWBtKnm1YDvsCKK5mMlkQeHejr2K0TUfPkSz8vh8y7Kn8t9WZNg
-         zpck6twrEeunHRLtmZazsZgiX4bQCL91dg90JNkROibTGTQDv2BuKWMmcLg/2E25k9
-         SDk4mpfTaNZkGqJprGziLk1a9rz0arezvKYGsV9WFtHWSOokbUbEjkhxmfGhyL//pb
-         IjInw3D2oG2dA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 02AC540516; Tue, 11 Jul 2023 12:36:26 -0300 (-03)
-Date:   Tue, 11 Jul 2023 12:36:26 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Binbin Wu <binbin.wu@linux.intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Ricardo Koller <ricarkol@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync linux/kvm.h with the kernel
- sources
-Message-ID: <ZK12+virXMIXMysy@kernel.org>
+        Tue, 11 Jul 2023 11:37:00 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67621BD7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:36:45 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc77e76abso61395385e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689089804; x=1691681804;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ZhsmjYq3QjlwNHWIt4GGjxBOJJNeRrC5x7e3BBvxJY=;
+        b=F96F2sEJ06nYUYyN/zyNQaw/pCUKMgCuLABXL817tYt88ibRnJPBMiY09enxC3XWrn
+         I/kPoyrW30PE3dKPsAzlOyrqYHz+JyQLFs81bRb8ENp7xq6PoFEiJADIAXoeBEGy8xUy
+         o3olorhn/tOdh9Ms3JmoJFZ+5u9h0dMpSnlmGvmQUkyZs7EWCl0Gjohro230l963goXx
+         W/kVZwDkMoleduYSUTxenbIng1+0xGKEItEh4HSY2PjqqYVqtwfqmGNWFSuZG0+WxiOX
+         slmX5CscYscYP0xaSVYLz3G9cvdF48sU3F/vW/fhbSWDfhAKSz2uGBkcTNzz6RvCUZPG
+         SKQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689089804; x=1691681804;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8ZhsmjYq3QjlwNHWIt4GGjxBOJJNeRrC5x7e3BBvxJY=;
+        b=cyZUwTyC/YZVLxUWlWuuvsLJhUvzk8oeQ2QQCzhDMb7vAasDMXzjDmhzMhSsUuzEIR
+         cAMhBSwLA/z4Hja9tjtQSxMzKkoHk67jh7dXKHDPNdxrMNB7/xAapHzkXZeHngN3s/3t
+         uXGncqfMkfFYA+XdqiyHSs/q0JDXIgVphr+b2V/cS+I7Rr1zsjyirDQ4KS+e3lYYJd8v
+         CLYv1z4vMhqe50ZomVnJcuTTf2WlE5/2NIiA4hAkDyNJGad0uQ4F1YU9UmQj4a0CKfRc
+         OQ7AJ59gKSfOBdy2x3WrW7jCWAnqOnTjF49FX4jDqlgwy41Af5uJMqWR6vWwbiJXYxKL
+         G0NQ==
+X-Gm-Message-State: ABy/qLbVg1PoYou9v6xGpR8ZqwlCB8Vzv45p45g88q+76nSbBJuZG3oT
+        4GM5vkfCC98qyO+Tr/tCERyzqg==
+X-Google-Smtp-Source: APBJJlGZ9q49T7kmNKB1c37rwITt5wN6ld5+e/7kQyfM4bvBhWm7eitmkW7SIN6+Kw+F/jP/uPTfqQ==
+X-Received: by 2002:a7b:c019:0:b0:3f7:f584:579b with SMTP id c25-20020a7bc019000000b003f7f584579bmr13703893wmb.9.1689089804070;
+        Tue, 11 Jul 2023 08:36:44 -0700 (PDT)
+Received: from [127.0.1.1] ([93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id v6-20020a05600c444600b003fbb1ce274fsm23458249wmn.0.2023.07.11.08.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 08:36:43 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH 0/3] Add startek-kd070fhfid015 display support
+Date:   Tue, 11 Jul 2023 17:36:26 +0200
+Message-Id: <20230711-startek_display-v1-0-163917bed385@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPp2rWQC/x2N0QqDMAwAf0XyvILt0Dl/ZYyR2qhhpUrixob47
+ wt7vIPjdlASJoW+2kHozcpLMfCnCoYZy0SOkzGEOpzri/dON5SNno/Eumb8umvTpdA2YxsRwaq
+ ISi4KlmG2rrxyNrkKjfz5b2734/gBYFObAHYAAAA=
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Guillaume La Roque <glaroque@baylibre.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1608; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=zxoNkkhxg+qIZpTjwjGcbJbbjcuZjCmWKqPfmbpNbvo=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkrXcK9p5lesXkclNpI2GO8vx9IXvx9+574xhKLYKi
+ wSF834OJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZK13CgAKCRArRkmdfjHURSg/EA
+ Crxlkf0UGRqKF5KavZ7sr4JCyLFmB/5GQogqNk3v1vhrz35svHdt13bVypxZmp+YRh/JN4IG7dGEpE
+ +kkYjBrJ35C7lyQjZDrMM2ZQWkA3bH3ugOz8r2fPGaf3AjoPZbT6D7U85m1BG9cq3LJ5tPSlMY/1PE
+ E8UY1ZSiHRy8CFoFyaaFdA0+d78z7dfkDhHvsIu0O57coedYThVQxi+f39jZXse2P4xEiqj3DsWWK8
+ GesIGWeCKs2agEQzNDmup33oHhkbgAxAuZMb6XwnqKUXceLytNRE7/hpaF1M0HRXuwrxCzpf6XXQLr
+ Y9erzL+UMvkksoL9FZvF1ONohW0oXXH4/FMs7RvfEGB9yh17x/0EevYyOi7ZKnnGFhaAsQcxL1Gim5
+ rCg9P0rCLLFrAehiP3rjACy6G4Hm7GQTkhmMW+IrDOumZ0cO39q5g8jfk9jglUQjIYX0AzUOT5rci7
+ gEYLqD4oaWo+8ZRoE72G6Vf6SEnLx+JSZAkikVC13hZAXyAaBZ3VSYv6jiK4mJ2co+tfROudLoCr1J
+ OIXqYsdLjNcTsEYT8MYrvGM7SjIHe54i7hLjX/f6YJaFBACtnEIRXrqGNfZjfebbB3QnC2nzq8Lz0s
+ Ft4dhdH9i+G+RKLj5+2tP6AgB9zZWlD1It9wKr7or2xNvAo4RmMzrYxvSGRg==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Add the support of the Startek KD070FHFID015 panel.
+It's a 7-inch TFT LCD display with a resolution of 1024 x 600 pixels.
 
-- Arnaldo
+This serie come from a bigger one [1]. Then I addressed the previous
+comments for the related commits here.
 
-Full explanation:
+Changes in v1:
+- Fix typos in the driver.
+- Merge 2 regulators in one bulk variable in the driver.
+- Remove backlight enable/disable from the driver because it's already
+  managed by the backlight core.
+- Move hardcoded values from function to the generic structure in the
+  driver.
+- Remove unnecessary function (stk_panel_del).
+- Replace some functions by macro to increase the readability.
+- Link to parent serie: [1]
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+[1]: https://lore.kernel.org/all/20230220-display-v1-0-45cbc68e188b@baylibre.com/
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
+Alexandre Mergnat (2):
+      dt-bindings: display: panel: add startek kd070fhfid015 support
+      arm64: defconfig: enable STARTEK KD070FHFID015 panel
 
-To pick the changes in:
+Guillaume La Roque (1):
+      drm/panel: Support for startek-kd070fhfid015 MIPI-DSI panel
 
-  89d01306e34d6ace ("RISC-V: KVM: Implement device interface for AIA irqchip")
-  22725266bdf95bdd ("KVM: Fix comment for KVM_ENABLE_CAP")
-  2f440b72e852be42 ("KVM: arm64: Add KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE")
-
-That just rebuilds perf, as these patches don't add any new KVM ioctl to
-be harvested for the the 'perf trace' ioctl syscall argument
-beautifiers.
-
-This addresses this perf build warning:
-
-  Warning: Kernel ABI header differences:
-    diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Anup Patel <apatel@ventanamicro.com>
-Cc: Binbin Wu <binbin.wu@linux.intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>
-Cc: Ricardo Koller <ricarkol@google.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+ .../display/panel/startek,kd070fhfid015.yaml       |  51 +++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/gpu/drm/panel/Kconfig                      |  11 +
+ drivers/gpu/drm/panel/Makefile                     |   1 +
+ .../gpu/drm/panel/panel-startek-kd070fhfid015.c    | 434 +++++++++++++++++++++
+ 5 files changed, 498 insertions(+)
 ---
- tools/include/uapi/linux/kvm.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230711-startek_display-958d265f6baa
 
-diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-index 737318b1c1d9a163..f089ab290978450e 100644
---- a/tools/include/uapi/linux/kvm.h
-+++ b/tools/include/uapi/linux/kvm.h
-@@ -1190,6 +1190,8 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 225
- #define KVM_CAP_PMU_EVENT_MASKED_EVENTS 226
- #define KVM_CAP_COUNTER_OFFSET 227
-+#define KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE 228
-+#define KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES 229
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
-@@ -1442,6 +1444,8 @@ enum kvm_device_type {
- #define KVM_DEV_TYPE_XIVE		KVM_DEV_TYPE_XIVE
- 	KVM_DEV_TYPE_ARM_PV_TIME,
- #define KVM_DEV_TYPE_ARM_PV_TIME	KVM_DEV_TYPE_ARM_PV_TIME
-+	KVM_DEV_TYPE_RISCV_AIA,
-+#define KVM_DEV_TYPE_RISCV_AIA		KVM_DEV_TYPE_RISCV_AIA
- 	KVM_DEV_TYPE_MAX,
- };
- 
-@@ -1613,7 +1617,7 @@ struct kvm_s390_ucas_mapping {
- #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
- #define KVM_SET_DEBUGREGS         _IOW(KVMIO,  0xa2, struct kvm_debugregs)
- /*
-- * vcpu version available with KVM_ENABLE_CAP
-+ * vcpu version available with KVM_CAP_ENABLE_CAP
-  * vm version available with KVM_CAP_ENABLE_CAP_VM
-  */
- #define KVM_ENABLE_CAP            _IOW(KVMIO,  0xa3, struct kvm_enable_cap)
+Best regards,
 -- 
-2.37.1
+Alexandre Mergnat <amergnat@baylibre.com>
 
