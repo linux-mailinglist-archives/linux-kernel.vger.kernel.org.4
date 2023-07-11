@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC0074F3FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5748274F405
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjGKPqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S232756AbjGKPr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbjGKPqX (ORCPT
+        with ESMTP id S231213AbjGKPrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:46:23 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6466ED;
-        Tue, 11 Jul 2023 08:46:16 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31434226a2eso6754713f8f.1;
-        Tue, 11 Jul 2023 08:46:16 -0700 (PDT)
+        Tue, 11 Jul 2023 11:47:24 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D146CF0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:47:22 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so60400745e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689090375; x=1691682375;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TSHzWr4gaLs4jyK9BMNn2YEQIAnAbtQY/+dliKHHYxs=;
-        b=UYS+7tIh6u+ojy0oVfob+Sev7z0uPPCQbErkQpQk1O+aw22pl77XLL8DNQLpZ5C5VX
-         dCLihQlJnJ2hS7roLef3cvntWUiIFWKvkGFPW37HzuzQzBMUXcgPXlBvk7JQt0jeFzRk
-         GSF2ADgVJthd+Qi0UAOuuE2Gao+crsO42QZZBLl7v9vw5LYSUPEBMOa5vu5nXPXmLWqT
-         nBEeunutG3xUBZx4X438J7tJP5tIhQ6J8b0ofwTJtF1nRUrQC9oKcUX5KUGBp6ll3BQG
-         iP/pNUCvbqlB0OZVZCzt4a1wNWzPP7ox5rY6xj4Cu3w/cp7ojsfkbSK9AihF3dHbANXY
-         V5bw==
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689090441; x=1691682441;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H4EaPljyU0HSPbHu61XlLmSr07kl10hJYMoKYo6/bmM=;
+        b=XWRsF2YVPc1QlYZwZyN3y7o1RaQWpfyxNK8iPw2+XAvkWY7Z/nW2VdqZTHvubNBPNT
+         KQR/nYxq8lzt8WrBIJhEy+rcLo8oEI6R5dCKNSljsu1GnTUkmO53brVKvo5fNoTpiZ8j
+         i0UjO1rGlyHLfNPDtmnLP/uRSKOvsIGLo1XdoyHZHRt5GzetvZ8j+3evP5BAN9YkceCn
+         cwo9EmG45mDFWD+mjFO1YOgRFuu57MFGjct0xaMSIJlVfmMirlF6N1b4N3TyCJeME9cF
+         TlwvWRPRO+dftUUORHs9pZP0lih3oEGFXfD5S/PlQXXXN73SOElLeoH247PnQCQjKGTv
+         frzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689090375; x=1691682375;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TSHzWr4gaLs4jyK9BMNn2YEQIAnAbtQY/+dliKHHYxs=;
-        b=ax0n6vajVtonQpVQwMj2dUkMapAqiEMKm3uZbtPZ2KWKAZzf6Slhli7+WAeImyRhVh
-         GSymB38GTilSYA0StbdnJDMVMTKMH7UYJUWQLpdVkjZxyqjAW8jAJQ0GhI84oH4eaRVm
-         P/vUegjaAV0z14+j6hwjZpkIz31k1iq69gqrzfQuldB5mzueVrg+LGFpuj2FzIgim3MC
-         V93W6ddMJzDWHjgECO1cd2gbMf6Qww6RXAsFI0RMIowKftEadzdeCeTPMW6GYYiyF8Eb
-         XF0fmVzBXHaSwJOIdrWQgOzJ9fpglQzxlzla1vW7UCGp7zcwBpGYQjXpTmHUjBbd6PXR
-         tMUg==
-X-Gm-Message-State: ABy/qLZKe/M+9J+EswLKVw9Xm07ktCOQHtlkLsHreSRbj33IIad6PkX/
-        sJeVBN8zWsi0LJT3j1Fe8QaRNmjFlwY=
-X-Google-Smtp-Source: APBJJlHYOoGUWXHQEGRrv1wSYYMjVMio85ATQTXMSE8aJyyC4C8fPFL3liKN90fsUX65qG2C6jlrNQ==
-X-Received: by 2002:adf:e290:0:b0:30f:c012:b529 with SMTP id v16-20020adfe290000000b0030fc012b529mr21025161wri.56.1689090374932;
-        Tue, 11 Jul 2023 08:46:14 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g12-20020a5d46cc000000b0031455482d1fsm2568456wrs.47.2023.07.11.08.46.14
+        d=1e100.net; s=20221208; t=1689090441; x=1691682441;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H4EaPljyU0HSPbHu61XlLmSr07kl10hJYMoKYo6/bmM=;
+        b=HwJja/jySeoCJKMktAWmn9UNH+kefgzjlV6tfsva3OGKnjQKdsHvvcmSB0MvxpFDl0
+         b9JLJkzQlpKFwGgD5qijqvcmC4/eYeMjJ45QM07KI7MwVDpWIfrIHV69Oa/I/YUe+AiY
+         IqLr5CQkVQqkFKd5jdCiDKFhSRxVaSJ1lf+M6EAPHcXuHyFNbLobfY2mYnBwsVEMkY/C
+         1hmPlpq8iWu3jD3w67kda/mx8fKX2Y4Mw7pOH5AIVM2+SUdhhfsqGbNOF+4Ptw+C8oxF
+         LIgsEKPyNoXr7w8eP+SnEe2xPPtJ66UpEzH1UTwal6fFSlJe2IDZKtHJ9aSjj0w8sfWn
+         LXTQ==
+X-Gm-Message-State: ABy/qLYikuXztwxdadLMi8B7quCewNE8Kqa13GQ5v4RU0f349xcwxqUX
+        DLYG8+lra2yXes+AorCG+HDJvQ==
+X-Google-Smtp-Source: APBJJlF9uq2sMMAnt7oJuhvGOiwBfgQ0ZGxq/t3cqkwUsht0sMUdFcJ25CdjcEjQEfncTKdT500SrQ==
+X-Received: by 2002:a7b:c5d0:0:b0:3fb:b008:1ff6 with SMTP id n16-20020a7bc5d0000000b003fbb0081ff6mr13614981wmk.0.1689090441001;
+        Tue, 11 Jul 2023 08:47:21 -0700 (PDT)
+Received: from airbuntu ([104.132.45.107])
+        by smtp.gmail.com with ESMTPSA id t22-20020a7bc3d6000000b003fc02218d6csm11108557wmj.25.2023.07.11.08.47.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 08:46:14 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 17:46:12 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
+        Tue, 11 Jul 2023 08:47:20 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:47:18 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] ASoC: tegra: tegra20_ac97: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <ZK15ROig1u7kaXfO@orome>
-References: <20230711034846.69437-1-frank.li@vivo.com>
- <20230711034846.69437-5-frank.li@vivo.com>
+Subject: Re: [PATCH] sched/fair: remove util_est boosting
+Message-ID: <20230711154718.gudn32sru5opwvlw@airbuntu>
+References: <20230706135144.324311-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yrPPLIbhK53dQkQ8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230711034846.69437-5-frank.li@vivo.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230706135144.324311-1-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---yrPPLIbhK53dQkQ8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jul 11, 2023 at 11:48:45AM +0800, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On 07/06/23 15:51, Vincent Guittot wrote:
+> There is no need to use runnable_avg when estimating util_est and that
+> even generates wrong behavior because one includes blocked tasks whereas
+> the other one doesn't. This can lead to accounting twice the waking task p,
+> once with the blocked runnable_avg and another one when adding its
+> util_est.
+> 
+> cpu's runnable_avg is already used when computing util_avg which is then
+> compared with util_est.
+> 
+> In some situation, feec will not select prev_cpu but another one on the
+> same performance domain because of higher max_util
+> 
+> Fixes: 7d0583cf9ec7 ("sched/fair, cpufreq: Introduce 'runnable boosting'")
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 > ---
->  sound/soc/tegra/tegra20_ac97.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Can we verify the numbers that introduced this magic boost are still valid
+please?
 
---yrPPLIbhK53dQkQ8
-Content-Type: application/pgp-signature; name="signature.asc"
+Otherwise LGTM.
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSteUQACgkQ3SOs138+
-s6GNFRAAoGU/u5P+4DbrdieXiUfZLIqdhM4uAmLJHkY7i7xuluvvsk35OBeA4Fj1
-I4mpibVDYTja7Wx6j4C8BGr5B8kk1V0dOu4wk6gQaN4zjGb2tN8bkA7v8R/6saP+
-OD3H/0t7ZZrtm/XDBD9R2Pv5gdbptYfwA/j5NpWwGSSc7iQ2gyInzbk0UKIrW4ci
-6GEKBL3qYk2dhgyD3QgSnBQecfMbkzbGzcqyT+7P8axhjclJstTZs2dlozBIC2tf
-L/Yd8n+S/3GfIH7oI0qgGbaPuoWqEmXgAL6dvddR8021kcQQJvnAl//w0EudtLXh
-Ae/auR0eLEt9YklWLXWgEIoBmGvcdqvnE29vW885RS331+th29aK39oOfRptroBJ
-FZ8MuXyUwDO0GQNkFIm6WyNuXmqxf9yzRfauGDDuPAlpPHe8plW2Zr+iTBMbjPp0
-Y72o6OCRKLyBlECkT3xYxzOwDj5qcxGgChPxKTPgyYOZ3Etz6CWys3YO+Mn+0q3s
-ilFNpaHpER/TkiWHaf1f1Afoszbic/DV/wBZf6zOZD8Ggfs6Q6QhaTJfGvUqBNVI
-AqW5hC2Ya06qUrUpB5G+NR2/F+QX8VS0ub428mai6SUemlmYat8PvDlUMpWbj06p
-JN7dyctd89Gxw+iiQgF9euFNixjCIha5XTgdXGny+Zp+802AJGQ=
-=zwSX
------END PGP SIGNATURE-----
+Thanks!
 
---yrPPLIbhK53dQkQ8--
+--
+
+Qais Yousef
+
+>  kernel/sched/fair.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index a80a73909dc2..77c9f5816c31 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7289,9 +7289,6 @@ cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
+>  
+>  		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
+>  
+> -		if (boost)
+> -			util_est = max(util_est, runnable);
+> -
+>  		/*
+>  		 * During wake-up @p isn't enqueued yet and doesn't contribute
+>  		 * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
+> -- 
+> 2.34.1
+> 
