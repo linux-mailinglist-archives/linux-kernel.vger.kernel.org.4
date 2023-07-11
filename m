@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7617274ED90
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8051574ED95
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjGKMGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        id S229785AbjGKMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGKMGP (ORCPT
+        with ESMTP id S230078AbjGKMIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:06:15 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73FCE4B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:06:14 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 1466867373; Tue, 11 Jul 2023 14:06:10 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 14:06:09 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Pankaj Raghav <p.raghav@samsung.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "Clemens S." <cspringsguth@gmail.com>,
-        Martin Belanger <martin.belanger@dell.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        John Meneghini <jmeneghi@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVMe <linux-nvme@lists.infradead.org>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        =?utf-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
- (Samsung SM-953 Datacenter SSD)
-Message-ID: <20230711120609.GB27050@lst.de>
-References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com> <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com> <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info> <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com> <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com> <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com> <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
+        Tue, 11 Jul 2023 08:08:12 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E7F0E5F;
+        Tue, 11 Jul 2023 05:08:09 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.9.158])
+        by gateway (Coremail) with SMTP id _____8BxXesoRq1khH8DAA--.4821S3;
+        Tue, 11 Jul 2023 20:08:08 +0800 (CST)
+Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxfSMnRq1k+6goAA--.1095S2;
+        Tue, 11 Jul 2023 20:08:08 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3 0/2] irqchip/loongson-eiointc: Add simple irq routing method
+Date:   Tue, 11 Jul 2023 20:08:05 +0800
+Message-Id: <20230711120807.1805186-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxfSMnRq1k+6goAA--.1095S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7JFWxZr1xAw48tF4fXrW7KFX_yoWxuFgEgF
+        92v395GrWSqFWFva9Fy3W7trZrCay5W3WY9F4v9r15Z348Jr1DGrZFyrZ7JFnFgF18ZFn5
+        CrZ5ur1fZw1ayosvyTuYvTs0mTUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUb7kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+        wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
+        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzZ2-UUUUU
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,21 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 11:39:11AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Well, that "They keep pumping out more and more devices with the same
-> breakage" and the "new device" comment from Pankaj below bear the
-> question: should we stop trying to play "whack a mole" with all those
-> quirk entries and handle devices with duplicate ids just like Windows does?
+Fix return value checking of eiointc_index where int type
+is converted uint32_t and check smaller than 0.
 
-As far as I can tell Windows completely ignores the IDs.  Which, looking
-back, I'd love to be able to do as well, but they are already used
-by udev for the /dev/disk/by-id/ links.   Those are usually not used
-on desktop systems, as they use the file system labels and UUIDs, but
-that doesn't work for non-file system uses.
+Add simple irq route support on system with only one eioi node,
+rather than use anysend method.
 
-And all this has been working really well with the good old enterprise
-SSDs, it's just that the cheap consumer devices keep fucking it up.
+---
+Changes in v3:
+  Modify some spell checking problems.
 
-If we'd take it away now we'd break existing users, which puts us between
-a rock and a hard place.
+Changes in v2:
+  Use the simple irq routing on embeded board like 2K0500 and 2K2000
+board, since there is only one eio node.
+
+---
+Bibo Mao (2):
+  irqchip/loongson-eiointc: Fix return value checking of eiointc_index
+  irqchip/loongson-eiointc: Simplify irq routing on some platforms
+
+ drivers/irqchip/irq-loongson-eiointc.c | 91 ++++++++++++++++++++++----
+ 1 file changed, 80 insertions(+), 11 deletions(-)
+
+-- 
+2.27.0
 
