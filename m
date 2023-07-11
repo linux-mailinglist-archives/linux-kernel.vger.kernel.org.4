@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0ED74F011
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E7C74F013
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjGKN0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 09:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S232358AbjGKN0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjGKN0E (ORCPT
+        with ESMTP id S232665AbjGKN0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 09:26:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A321E5F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NIbIs7qALfTkQpijTnEcAoyrwK1musx6nJU1Uy2RWNc=; b=iwVQ1n9K/yCsf96VsGZlhJtCU2
-        chrMyygEfGuAHO8LtJ9CMTYW+6zdciQqrt6J6ji+6NRBqlEA9UNFSkaHB+THwgZIKF37CHn0KNlm4
-        UJBe/5DCjF+jJpYoojBHbWVR94zXz9JaLSoEZ+V3fr5FMGhJ3YLgnkGit8DhF46qrSlk6asmH1GYn
-        gV+0JycjUegHNJPUozmYIhAkl0uDBZF29g5LrHNQtIJ3raHoInfI9PyaWP6AuuBB2u9XoP4VEzP8A
-        rS5wIIeFurDR/K8QNOk+W+FHw9Q4FMqM1A9gNbH9ooKh6Oa2Z9mRcnD58ZM7KscHeTw2R5botU17K
-        NkDn5VtQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJDNK-00FkgC-Cs; Tue, 11 Jul 2023 13:25:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0923E300222;
-        Tue, 11 Jul 2023 15:25:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E665A243429D2; Tue, 11 Jul 2023 15:25:53 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 15:25:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bruno Goncalves <bgoncalv@redhat.com>
-Cc:     arjan@linux.intel.com, rafael.j.wysocki@intel.com, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [6.5.0-rc1] unchecked MSR access error: RDMSR from 0xe2 at rIP:
- 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_icpu)
-Message-ID: <20230711132553.GN3062772@hirez.programming.kicks-ass.net>
-References: <CA+QYu4qSBdhEgFURu+ouAf2d_JNPbZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com>
- <20230711112421.GI3062772@hirez.programming.kicks-ass.net>
- <CA+QYu4qzJgiiU1qsjtWb9OU3=C=hb_c-Ag5Y4c=Xp_ObfGH=hg@mail.gmail.com>
- <20230711125557.GM3062772@hirez.programming.kicks-ass.net>
+        Tue, 11 Jul 2023 09:26:23 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8DA10CB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:26:15 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbf1b82dc7so58857835e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 06:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1689081974; x=1691673974;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQ4QN8lSbvwIJvfCRdu3GsuuZZlEHhucGRO0HI9BGps=;
+        b=PJfb3hZxD1mSUs9MjHm73olK4DicwNoMYeSMv4SmVst2QOScBvpV3bO73RyIVyoHe2
+         N5X9vYfSQjWudLAtnv07WQmHT+QF23RRXHweVCqULhdmyAU6lMupirK5K4HztNkFWyWQ
+         2BonOqwO8PwpW6inaCDuPcH8dnBfjj4oQja4PwPNtEx4cINT9RASxaO26SONHSkmN7uC
+         L3t3ZnpFv/koV3TAy3ZIGOylsAL1TnJ3vnByQ693U3g0D+TkJLQVaAHuCVPTwt4JEGGY
+         ocYZHKHXFlXnFMe6c0q9JWMZcKLKMz9OoOBk2eqh2QdR4ZjP84jq2L/ucSC3egH5t/m9
+         i7MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689081974; x=1691673974;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PQ4QN8lSbvwIJvfCRdu3GsuuZZlEHhucGRO0HI9BGps=;
+        b=IFiQxreHrfsviF+j9z0GgvIlNPl0m/0M5AMV5Z3R4PULbhUV/yzg03uRfaruLm7Own
+         qrAyQVvw6bMBnwQlgT7r1IRx3CYAwS46Ex542hClLZZb27FlqsVYr/B25AKf6+wMN+N/
+         SXhPXIydyfwv6NfSjwVyZEntHUxkE9g2b+1f658vAG98oLY+gmbJOiSDCevuxz3+mX0z
+         477Fj122+dcoVfjPWCXZNKEH5E4UoTE0FmLLnLP8QLnrERr5oXSnf0brbRf6fYml731y
+         /I2d8ObccxpC+pBDcppatiYSdoeCiojfNfRy7fWbfvG6pArIf304LCvOetcrioSCLAeG
+         CWRg==
+X-Gm-Message-State: ABy/qLa2QIVgBIsLk4ZgU0AqZ5hUrgpG2oPYoAxql2EJDDLfuphHeQmm
+        RCcN4S9pO0ocquVlaqRZqKpbNg==
+X-Google-Smtp-Source: APBJJlEGoS/Ne6jFT4BxyKW4qL53mJ8lQhsxyb/J+w7fzAoEB4xWcd9fSFFT0sAfAO0UhTmyjZjZHQ==
+X-Received: by 2002:a7b:c5ce:0:b0:3fc:5a3:367c with SMTP id n14-20020a7bc5ce000000b003fc05a3367cmr9822539wmk.32.1689081974174;
+        Tue, 11 Jul 2023 06:26:14 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003fbaade072dsm2569934wmg.23.2023.07.11.06.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 06:26:13 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 15:26:12 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Conor Dooley <conor@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/9] RISC-V: Add riscv_fw_parent_hartid() function
+Message-ID: <20230711-3151a76400deb88b218e9f9b@orel>
+References: <20230710094321.1378351-1-apatel@ventanamicro.com>
+ <20230710094321.1378351-2-apatel@ventanamicro.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230711125557.GM3062772@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230710094321.1378351-2-apatel@ventanamicro.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:55:57PM +0200, Peter Zijlstra wrote:
-
-> Oohh, this vm-guest mode is new :/ But it doesn't make sense, that
-> commit babbles something about waking CPUs from idle to do TLB
-> invalidate, but that shouldn't be the case, that's what we have
-> kvm_flush_tlb_multi() for, it should avoid the IPI and flush on
-> vcpu-enter.
+On Mon, Jul 10, 2023 at 03:13:13PM +0530, Anup Patel wrote:
+> We add common riscv_fw_parent_hartid() which help device drivers
+> to get parent hartid of the INTC (i.e. local interrupt controller)
+> fwnode. This should work for both DT and ACPI.
 > 
-> Arjan, what is the actual problem you're trying to solve any why hide
-> this in intel_idle ?
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/processor.h |  3 +++
+>  arch/riscv/kernel/cpu.c            | 16 ++++++++++++++++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index c950a8d9edef..39dc23a18f88 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -81,6 +81,9 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hartid);
+>  int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *hartid);
+>  int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid);
+>  
+> +struct fwnode_handle;
+> +int riscv_fw_parent_hartid(struct fwnode_handle *node, unsigned long *hartid);
+> +
+>  extern void riscv_fill_hwcap(void);
+>  extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
+>  
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index a2fc952318e9..9be9b3b1f333 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -96,6 +96,22 @@ int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid)
+>  	return -1;
+>  }
+>  
+> +/* Find hart ID of the CPU fwnode under which given fwnode falls. */
 
+This comment matches the comment for riscv_of_parent_hartid(), but I don't
+think it will be correct for the !is_of_node(node) case since
+fwnode_property_read_u64_array() isn't obliged to walk up its tree.
+Looking ahead it appears riscv_fw_parent_hartid() is only called with the
+parent node, so we could just drop this function and use
+fwnode_property_read_u64_array() directly at the two call sites.
 
-static __always_inline int __intel_idle_hlt(struct cpuidle_device *dev,
-					struct cpuidle_driver *drv, int index)
-{
-	raw_safe_halt();
-	raw_local_irq_disable();
-	return index;
-}
+Thanks,
+drew
 
-Which does:
-
-	STI
-	HLT
-	CLI
-
-static __cpuidle int intel_idle_hlt_irq_on(struct cpuidle_device *dev,
-                                   struct cpuidle_driver *drv, int index)
-{
-       int ret;
-
-       raw_local_irq_enable();
-       ret = __intel_idle_hlt(dev, drv, index);
-       raw_local_irq_disable();
-
-       return ret;
-}
-
-That is nonsensical code; because now you have:
-
-	STI
-	STI
-	HLT
-	CLI
-	CLI
-
-And that makes sense how?
-
-Rafael, can we please just pull these patches and try again later?
-
+> +int riscv_fw_parent_hartid(struct fwnode_handle *node, unsigned long *hartid)
+> +{
+> +	int rc;
+> +	u64 temp;
+> +
+> +	if (!is_of_node(node)) {
+> +		rc = fwnode_property_read_u64_array(node, "hartid", &temp, 1);
+> +		if (!rc)
+> +			*hartid = temp;
+> +	} else
+> +		rc = riscv_of_parent_hartid(to_of_node(node), hartid);
+> +
+> +	return rc;
+> +}
+> +
+>  DEFINE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
+>  
+>  unsigned long riscv_cached_mvendorid(unsigned int cpu_id)
+> -- 
+> 2.34.1
+> 
