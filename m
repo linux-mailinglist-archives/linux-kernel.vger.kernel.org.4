@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417C074EBA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5380F74EBB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjGKKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S230447AbjGKKZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjGKKWE (ORCPT
+        with ESMTP id S230439AbjGKKZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:22:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1973EDB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689070878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zxNChGIelKjoLuG8SrdI8P5hWqfFpZJORMAj7Wr1DkU=;
-        b=HwvPpfeWb7piwDg0zEqHwIDNijOf0CupwtjCYpPxFHfrVlDa3UaNou2iG8EtEAoq/en95B
-        S7EuF9MSj8/9jJR1b3Ur71IpC2civt0zQ6MshGa8otvwPFJ0bBLMVZBK5bTDfvnletQgoW
-        FRKqXRYKYa8QbVJjcmtq/UULrcKHL50=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-632-XGnvxWP4Nh6TKebtbCFyXQ-1; Tue, 11 Jul 2023 06:21:16 -0400
-X-MC-Unique: XGnvxWP4Nh6TKebtbCFyXQ-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-40234d83032so11494921cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:21:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689070876; x=1689675676;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zxNChGIelKjoLuG8SrdI8P5hWqfFpZJORMAj7Wr1DkU=;
-        b=K4d+PMzRcLSBQknxRWp6qYQFi94o9bU/d3XDxhnd2K4ar4yLLS6UXX2ytI2KwzuEjo
-         ntutTuKki7GEhkm2vPASjLkufZhowqXvleMIRtPbRmu4l6ZwSQejRMMwtuXmfiMoFN/A
-         0/NuUMauIEUDnRwtuZuAzB4z5mEngxDrNQhVqYyzFn6Yrugb+Aha0rtlIyiXQMJybbse
-         1O80VOvIL4qACHV0vCeAuK/Sg8RoGh2L0N3Gc+ZAktEeaoiwcXTV09gx38p0bgJD9x75
-         onGsLpKtE9RyCxHYQQkRnj/+49IQyondx1GafyV0jrZM4UNTaAQgwpsW/8V3BOXP0jah
-         p2sA==
-X-Gm-Message-State: ABy/qLYlVL/fvq8LKrIY4sFWL6IHsGx8xyoBqsfDldjPvqBt3IyFDQ5P
-        LleUclaLXbp3/UnwV+suNh/clp4S2ZX/8hu3PPdwnvaYkzIMBymYzvH/+G7hkP3jYjnGqpM/+q5
-        a49ww4p4nGt1Lb7vJ1Ci7ECYP
-X-Received: by 2002:a05:622a:1007:b0:3fd:eb2f:8627 with SMTP id d7-20020a05622a100700b003fdeb2f8627mr16474671qte.6.1689070876146;
-        Tue, 11 Jul 2023 03:21:16 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlE3KtM/WsWfyD0RTFaAra9Jvq2qFoYXTelie53paqoYE7qWLud5Wx2SOGqm6fMhIg5bzlRT5Q==
-X-Received: by 2002:a05:622a:1007:b0:3fd:eb2f:8627 with SMTP id d7-20020a05622a100700b003fdeb2f8627mr16474659qte.6.1689070875925;
-        Tue, 11 Jul 2023 03:21:15 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-235-188.dyn.eolo.it. [146.241.235.188])
-        by smtp.gmail.com with ESMTPSA id d4-20020ac851c4000000b00403ad6ec2e8sm954982qtn.26.2023.07.11.03.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 03:21:15 -0700 (PDT)
-Message-ID: <2a2d55f167a06782eb9dfa6988ec96c2eedb7fba.camel@redhat.com>
-Subject: Re: [PATCH net-next][resend v1 1/1] netlink: Don't use int as bool
- in netlink_update_socket_mc()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Leon Romanovsky <leon@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Date:   Tue, 11 Jul 2023 12:21:12 +0200
-In-Reply-To: <20230711063348.GB41919@unreal>
-References: <20230710100624.87836-1-andriy.shevchenko@linux.intel.com>
-         <20230711063348.GB41919@unreal>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 11 Jul 2023 06:25:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A5D136;
+        Tue, 11 Jul 2023 03:25:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85AF26145D;
+        Tue, 11 Jul 2023 10:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F8BC433C8;
+        Tue, 11 Jul 2023 10:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689071116;
+        bh=TOqlJUFHaJBKmQf2cGYAl73/mk9Gcc2SsywmsziYi5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fsBVrD0VftvJCAMA4m23UBTa2QMEpfh8VPytwt6VbmLtjVMZbDL22pwmxIYgsGvvd
+         KPPBk+sSC3gr1EcGohswi97s3Kwup2+aZeaps9CmTPeEGTmI+r6yF3F+yDHo0PrW++
+         xeWdIEkQJuWPJf+hbT+SmYC5SzKWwTiMbfnzkEd7z7JwVtNiK1PRhe8Nm0RporIEc/
+         6rmAZE8BYet39GdehoVcfD+RuKGLMESsIkPYCdLZScxU/b1xOwOWQnz1qo7JxEWo7M
+         AgFTtNtXCrrKNgvx/dUdbFooaddoZEhBBnbIcgV+7y6e5hBswhaIP2IudW+48ZpQbR
+         dPfGmovBooH7A==
+Date:   Tue, 11 Jul 2023 11:25:11 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+Cc:     corbet@lwn.net, catalin.marinas@arm.com, maz@kernel.org,
+        quic_pkondeti@quicinc.com, quic_kaushalk@quicinc.com,
+        quic_satyap@quicinc.com, quic_shashim@quicinc.com,
+        quic_songxue@quicinc.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+Message-ID: <20230711102510.GA1809@willie-the-truck>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+ <20230710093751.GC32673@willie-the-truck>
+ <5cf15f85-0397-96f7-4110-13494551b53b@quicinc.com>
+ <20230711082226.GA1554@willie-the-truck>
+ <84f0994a-26de-c20a-a32f-ec8fe41df3a3@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <84f0994a-26de-c20a-a32f-ec8fe41df3a3@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-07-11 at 09:33 +0300, Leon Romanovsky wrote:
-> On Mon, Jul 10, 2023 at 01:06:24PM +0300, Andy Shevchenko wrote:
-> > The bit operations take boolean parameter and return also boolean
-> > (in test_bit()-like cases). Don't threat booleans as integers when
-> > it's not needed.
-> >=20
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  net/netlink/af_netlink.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> > index 383631873748..d81e7a43944c 100644
-> > --- a/net/netlink/af_netlink.c
-> > +++ b/net/netlink/af_netlink.c
-> > @@ -1623,9 +1623,10 @@ EXPORT_SYMBOL(netlink_set_err);
-> >  /* must be called with netlink table grabbed */
-> >  static void netlink_update_socket_mc(struct netlink_sock *nlk,
-> >  				     unsigned int group,
-> > -				     int is_new)
-> > +				     bool new)
-> >  {
-> > -	int old, new =3D !!is_new, subscriptions;
-> > +	int subscriptions;
-> > +	bool old;
-> > =20
-> >  	old =3D test_bit(group - 1, nlk->groups);
-> >  	subscriptions =3D nlk->subscriptions - old + new;
->=20
-> So what is the outcome of "int - bool + bool" in the line above?
+On Tue, Jul 11, 2023 at 06:15:49PM +0800, Aiqun(Maria) Yu wrote:
+> On 7/11/2023 4:22 PM, Will Deacon wrote:
+> > On Tue, Jul 11, 2023 at 12:02:22PM +0800, Aiqun(Maria) Yu wrote:
+> > > On 7/10/2023 5:37 PM, Will Deacon wrote:
+> > > > On Mon, Jul 10, 2023 at 01:59:55PM +0800, Maria Yu wrote:
+> > > > > In order to be able to disable lse_atomic even if cpu
+> > > > > support it, most likely because of memory controller
+> > > > > cannot deal with the lse atomic instructions, use a
+> > > > > new idreg override to deal with it.
+> > > > 
+> > > > This should not be a problem for cacheable memory though, right?
+> > > > 
+> > > > Given that Linux does not issue atomic operations to non-cacheable mappings,
+> > > > I'm struggling to see why there's a problem here.
+> > > 
+> > > The lse atomic operation can be issued on non-cacheable mappings as well.
+> > > Even if it is cached data, with different CPUECTLR_EL1 setting, it can also
+> > > do far lse atomic operations.
+> > 
+> > Please can you point me to the place in the kernel sources where this
+> > happens? The architecture doesn't guarantee that atomics to non-cacheable
+> > mappings will work, see "B2.2.6 Possible implementation restrictions on
+> > using atomic instructions". Linux, therefore, doesn't issue atomics
+> > to non-cacheable memory.
+> 
+> We encounter the issue on third party kernel modules and third party apps
+> instead of linux kernel itself.
 
-FTR, I agree with Leon, the old code is more readable to me/I don't see
-a practical gain with this change.
+Great, so there's nothing to do in the kernel then!
 
-Cheers,
+The third party code needs to be modified not to use atomic instructions
+with non-cacheable mappings. No need to involve us with that.
 
-Paolo
+> This is a tradeoff of performance and stability. Per my understanding,
+> options can be used to enable the lse_atomic to have the most performance
+> cared system, and disable the lse_atomic by stability cared most system.
 
+Where do livelock and starvation fit in with "stability"? Disabling LSE
+atomics for things like qspinlock and the scheduler just because of some
+badly written third-party code isn't much of a tradeoff.
+
+Will
