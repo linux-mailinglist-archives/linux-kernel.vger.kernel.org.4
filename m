@@ -2,119 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE9074EF2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FA974F03A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 15:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjGKMmW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 08:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S232633AbjGKNdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 09:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjGKMmU (ORCPT
+        with ESMTP id S230252AbjGKNdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:42:20 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jul 2023 05:42:19 PDT
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4331B0;
-        Tue, 11 Jul 2023 05:42:19 -0700 (PDT)
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 089D61A0244;
-        Tue, 11 Jul 2023 12:31:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 078BD2000E;
-        Tue, 11 Jul 2023 12:31:14 +0000 (UTC)
-Message-ID: <07bfc0b4676d07274acdcdf38752f73573938382.camel@perches.com>
-Subject: Re: [PATCH v3] checkpatch: check for missing Fixes tags
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Tom Gall <tom.gall@linaro.org>, kernel-janitors@vger.kernel.org
-Date:   Tue, 11 Jul 2023 05:31:14 -0700
-In-Reply-To: <756970eb-6204-415a-a997-d67a14ba6584@moroto.mountain>
-References: <756970eb-6204-415a-a997-d67a14ba6584@moroto.mountain>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Tue, 11 Jul 2023 09:33:36 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F253E74;
+        Tue, 11 Jul 2023 06:33:35 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BCDhnh007024;
+        Tue, 11 Jul 2023 14:33:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=SKaScz94yf4PfXG20hUmoKKPt3qD8ElC55nnnr/MTkY=;
+ b=LNVkDtI3EIJwv8+VZU80lUHnFhI31zqpX7xvuKRZnytL+wMxW6ZUOI0OeZAXywrdhMJK
+ S6OAGSCZKwgocFD2oTtbCwzvNb/fOxvseubteqNQe3AuW53x3amkPlivrhJnttniyssL
+ d9J3JCc2GVHxiVbjMqvRWBHwPoMM/X/BrGFd9+k3rWRw8Y6fWmNvdii3TSKcU6XjkkZx
+ GMCtcoHDqFP1V0DnjzLRfLtUnp5+bvRJQFk8+jqYefS7cTTG0rZbZuWfuA6RgtSbx1Vi
+ C+TNfEAAHJfO6E9Qa9HsUFvPaqVTSvcZyTEnftz26T8/BoAjF6EZDq95835zanc8z/MI lg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rs6wb8401-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 14:33:09 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 07BD5100058;
+        Tue, 11 Jul 2023 14:33:09 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 83998222CB6;
+        Tue, 11 Jul 2023 14:33:08 +0200 (CEST)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 11 Jul
+ 2023 14:33:08 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <alain.volmat@foss.st.com>, <linux-media@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 0/2] media: stm32: correct s_stream calls in dcmi & st-mipid02
+Date:   Tue, 11 Jul 2023 14:32:08 +0200
+Message-ID: <20230711123211.794838-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 078BD2000E
-X-Stat-Signature: bntx7nnfjs8pgkaxre5rphbiyjb1h1rx
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19x2gh+vWixMU+NLw21/2xbr+6SUctP47I=
-X-HE-Tag: 1689078674-258117
-X-HE-Meta: U2FsdGVkX19WJVhw/iKSXETy0xJZnvCDQiiGHuoBIfwUnZePzCs0/u1bKh+ihRC5iT82hWN6003xPJD/GV85un13yIrw8x0IJAEu0kVmlrqqztUPVGG7SNvieWp/7DzKrgukrQXPKhBeFCaPPk6gA+r6wnwR+wfyTJpI5LwaGdJmOuLu/Vr2RZQC281UzdEyZR1JUTkf93hvyMEWehnAiZrfMQ55zmK50YwbvfyP2igwlXPchYSQjV/fsFg3v8PV6GeZJ4s+Ll/s6oCv77sEtHf3wHlBlHs4LoBMObbJn/aTZs33NUGxEnd5YIl0hxRoOOdD7/sxmgdH7r68JFH/XUdnffQlpM0wN4wG7C9zxLck8PJ61ozqkY086aq0vQxphc7fRZFZWZ2iG4DHQIYvOAIYQ/t00tpvMr5iBw85BelsGVPxSlG+cbrQEPHoYK3s
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.129.178.213]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-07-11 at 10:44 +0300, Dan Carpenter wrote:
-> This check looks for common words that probably indicate a patch
-> is a fix.  For now the regex is:
-> 
-> 	(?:(?:BUG: K.|UB)SAN: |Call Trace:|stable\@|syzkaller)/)
-> 
-> Why are stable patches encouraged to have a fixes tag?  Some people mark
-> their stable patches as "# 5.10" etc.  This is useful but a Fixes tag is
-> still a good idea.  For example, the Fixes tag helps in review.  It
-> helps people to not cherry-pick buggy patches without also
-> cherry-picking the fix.
-> 
-> Also if a bug affects the 5.7 kernel some people will round it up to
-> 5.10+ because 5.7 is not supported on kernel.org.  It's possible the Bad
-> Binder bug was caused by this sort of gap where companies outside of
-> kernel.org are supporting different kernels from kernel.org.
-> 
-> Should it be counted as a Fix when a patch just silences harmless
-> WARN_ON() stack trace.  Yes.  Definitely.
-> 
-> Is silencing compiler warnings a fix?  It seems unfair to the original
-> authors, but we use -Werror now, and warnings break the build so let's
-> just add Fixes tags.  I tell people that silencing static checker
-> warnings is not a fix but the rules on this vary by subsystem.
-> 
-> Is fixing a minor LTP issue (Linux Test Project) a fix?  Probably?  It's
-> hard to know what to do if the LTP test has technically always been
-> broken.
-> 
-> One clear false positive from this check is when someone updated their
-> debug output and included before and after Call Traces.  Or when crashes
-> are introduced deliberately for testing.  In those cases, you should
-> just ignore checkpatch.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
-> v3: Add UBSAN to the regex as Kees suggested.
-> 
-> v2: I fixed the formatting issues Joe pointed out.
+Currently the stm32 dcmi driver is calling s_stream to all subdevs until
+reaching the sensor subdev.  This serie corrects this by having a subdev
+only calling s_stream on its source subdev.
 
-But just added another.
+Alain Volmat (2):
+  media: i2c: st_mipid02: cascade s_stream call to the source subdev
+  media: stm32: dcmi: only call s_stream on the source subdev
 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -3186,6 +3193,16 @@ sub process {
->  			}
->  		}
->  
-> +# These indicate a bug fix
-> +		if (!$in_header_lines && !$is_patch &&
-> +			$line =~ /^This reverts commit/) {
-> +			$is_revert = 1;
-> +		}
-> +
-> +		if (!$in_header_lines && !$is_patch &&
-> +			$line =~ /(?:(?:BUG: K.|UB)SAN: |Call Trace:|stable\@|syzkaller)/) {
+ drivers/media/i2c/st-mipid02.c               | 11 ++++
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 63 +++++---------------
+ 2 files changed, 25 insertions(+), 49 deletions(-)
 
-align to open parenthesis please
+-- 
+2.25.1
 
