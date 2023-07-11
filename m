@@ -2,135 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4BB74F3FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D1574F403
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjGKPp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S229626AbjGKPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbjGKPps (ORCPT
+        with ESMTP id S232825AbjGKPqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:45:48 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D0E10FC;
-        Tue, 11 Jul 2023 08:45:44 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so60380075e9.0;
-        Tue, 11 Jul 2023 08:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689090343; x=1691682343;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gEnZrLvHdlB3PZ8L85NuzxKsb9GUXwvaPc+7AvopSIs=;
-        b=Ve35qujJ7tMg8SnA6xPQuYXHUiMu7GE3AMJYZK7HK5zf1Logu8Qu6+8webPkguM5CJ
-         zU6QQXqlSkCuZm75x3tMegGpfByijBndA5Y0YvKrratm6judUwMv4rcGSwxfcdNZS8hw
-         5Bhkvz/BD1yV02DttN2YFw9re4IgL74cfTTEpxWwYj4ewfStF+BwxdAYc0CltmNZW7NZ
-         YpA4/EmUuYpz01gcEoIUJXN8A9ixew6NFEtTBR08NMSSfei5g5vBEb7pVWZpidiC/HOY
-         u8Hntxen/sTpDMLqhbt3lQC1jt5+LuLrTtt90+7ETSwRmqiSBLt9E2OVM8cEuE5Ics8w
-         xhqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689090343; x=1691682343;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gEnZrLvHdlB3PZ8L85NuzxKsb9GUXwvaPc+7AvopSIs=;
-        b=gZqp2fIGihN/qK6yi4kBqAJux7/THbhJ3Xqn0vj2v0wiL9m54N6AqVustP4O2q2twz
-         dz1y4NEM3XS5EdAGViCqZa0thlvfeBCVCbzzPSMS5R9VOEzKIIP3rPaYM/Iz6xWtCvmO
-         JVb/N92lfvq9FoMghoosuD+IZitWr5mVm2SWr8Ff45b/FYs50rFHfjxKVuiFFTLbKU0h
-         4siI10Un5IYywhRH1hbijZitpkpxWGcoVXCpPZlbqJUCCtt675YjnirXWFW2QJICJ8cC
-         UmwC22ZWfZ14AD2zQyftvnQk1MuM+o8+rL5CTncwwMOT31F2AOBwY0NvFn4K1q44LuLv
-         D5QQ==
-X-Gm-Message-State: ABy/qLZI0i+3kAO8JBHEpL3rUXjGNrKS0ZbhpjMbgR3M+TOFG08FTz8k
-        k8pvGUlae1uo3Ui9GyLgCgw=
-X-Google-Smtp-Source: APBJJlHXhHtlNJoX08En4eWf1XbIwtd8s5TeV7etCD1pudCcBw050V+aHMjErPbL6Odb/Ug0wgAW+Q==
-X-Received: by 2002:a1c:7914:0:b0:3f9:b1e7:8a4b with SMTP id l20-20020a1c7914000000b003f9b1e78a4bmr14521606wme.21.1689090342506;
-        Tue, 11 Jul 2023 08:45:42 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s14-20020adfea8e000000b00301a351a8d6sm2576702wrm.84.2023.07.11.08.45.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 08:45:42 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 17:45:40 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     claudiu.beznea@microchip.com, u.kleine-koenig@pengutronix.de,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: atmel: enable clk when pwm already enabled in
- bootloader
-Message-ID: <ZK15JNtBFU_7l30o@orome>
-References: <20230710144214.63343-1-aarongt.shen@gmail.com>
- <ZKwdHUWzXujfVk0R@orome>
- <d3f07a74-3fce-2310-a1fc-239aa1a25024@gmail.com>
+        Tue, 11 Jul 2023 11:46:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08EE170A;
+        Tue, 11 Jul 2023 08:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1689090368; x=1689695168; i=deller@gmx.de;
+ bh=10xMRkjlDtxZS9LQyRHHnsW87xAMUprLN04Jvmm+ctI=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=conMbIE+nxzY1Ihl5gk4rASMagP3eSIKPLkMUeO6/ZvgOZzo7Ab1Bg8ex+Ls7LSn/jXxLDn
+ 8V5X0NbouhxtvH7SQrMG7cXZtcwFYfHLNbtItK46cGi8gZdJtwoN5YGGqJb9Q5kI698pnisuO
+ 37OawNy05VPw42nAUnYZPhtF5w6+vRQcTIk2AanIXP0SfOsmuDvvVDoDTDeLciyUB8dPQwhY4
+ NNb/oigsZ1YiQaHzRRBVtVe/42Q/08JYqaS58QOf7Uoh5wnvzMHJsmnJKxoA3yolfQuk4UXh1
+ aMu9avW7Y1+roZIGDxXa1qNCSf4E/VJbhmeSPYmqLHRPFG610nLw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.149.147]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N7zFZ-1pxXrX15Wd-015041; Tue, 11
+ Jul 2023 17:46:08 +0200
+Message-ID: <4de35c35-c00d-d21a-bcd1-dc878137eb94@gmx.de>
+Date:   Tue, 11 Jul 2023 17:46:07 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="B8pxxDeV9zU7sDZJ"
-Content-Disposition: inline
-In-Reply-To: <d3f07a74-3fce-2310-a1fc-239aa1a25024@gmail.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] of: Preserve "of-display" device name for compatibility
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Michal Suchanek <msuchanek@suse.de>
+Cc:     devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Cyril Brulebois <cyril@debamax.com>,
+        dri-devel@lists.freedesktop.org
+References: <20230710174007.2291013-1-robh@kernel.org>
+ <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <a0aa122d-38a1-d4be-edc1-a49b4e5e9b6b@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:OekAkpBqUCxuG1+JyXZyC7/2fpPfrldaJSFdZme0KAcMxvUfeoN
+ veCEfU7iFi+a33ulHh5TfAyA1lGOR+hPuATf/vCJiEjRac5ET/QcWuzxRrXC/JbS9tIaNNa
+ 8WwNTT3gM669xDj/3PmH4YPkl4FGnnA9IPPBTBzjkuxWQZn0X5XPAeF9kgFzwGk3/c7n9ww
+ dKADfwpo0wxkxshZ5IxAw==
+UI-OutboundReport: notjunk:1;M01:P0:ZN1cWxUa0fI=;fgbb/uD6p39KTmTtmPiJHwFZeeg
+ a6ylHQ320VvmzbF5ViY2jAzht3LKGyiN5mBiVzbuoperXxo1A5RCyZ9AbMr1TENEFsUeyhkQG
+ VJkdW2TdDh8pMKSCGItqXSk862RgTlb2O+NgbKaIXDrS0CysuppJIC7dCOygf82xW3oDU8M4B
+ VeUNgqtLzVn00ABC1r0t2RCukrSqeHlZwmu8T0t2uoiuZZP5OFLE9ii2aAo4pa79/KiIVq4UZ
+ AA1iFKyAD9OMi6p3Yv8D5qdw/NGG6m9M6QKbXpQ9qXMTma4zxLoM1lS0gRXlnKGlZOkc9F7dp
+ FLLe+rH72FXy+aFqsESouj5ZBiQAwxr9Ypks8sObOYHhC5Gre1Ng5iX3KKLCZ3N1vTjHmtT3C
+ u9efBJOAZIqyxe6gWMD9ZuMqVx2Jmq8NUe85tggFvLqD/cPo1sDjAs9ucqpNh9tB7OJmZ+37M
+ p6z/ndoguoWpdHGzq8HOhogzQOy/z85R/vIm0cqYcEZD6CAzQU35KXgNTI402sq9pofZHFM/Q
+ KnEU+XZUiHQOCFMh0aO+Kq3uiomuEF+CfWnouQdZCj5Jo6mDnSHY6V93UpHakHj89PgP6sf+b
+ OS8ytbbXKGXV6cRSJ1nEGlASaoVhn17+CdaAW6hXAT4L1AOXTjFkjsXrAhemqqRkZ7nxBtzNH
+ oJt7XHN3XQLfFnnDUY8cBqT2jGz2xS1kkp+h2UZJiKEGnXEFboacK6wmu4KSZDgQlIea81XGy
+ pF5jWciGmh5kiw8XiUsLJvytLcvrIfdmhyf+jaFsOzjjTXC8be8BfAo4xcI0LvC51oJgwNo/q
+ R23YoKr1vm3x3QwssM5zuYL+XeshlwHTBmkGWRdYrcT+QSqFWPawgI6cgcuApesYBAzI61klm
+ g6jGs/FULM7IqHKwHw9lRNzo+Ntvv+JDsWX17ZWFbS/FCIWJBfrcyVIc1Xs8pYG4WidLz8OaM
+ +nOMIKFX5QL15qy+J/1PrsmggL4=
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/11/23 08:00, Thomas Zimmermann wrote:
+>
+>
+> Am 10.07.23 um 19:40 schrieb Rob Herring:
+>> Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique=
+"),
+>> as spotted by Fr=C3=A9d=C3=A9ric Bonnard, the historical "of-display" d=
+evice is
+>> gone: the updated logic creates "of-display.0" instead, then as many
+>> "of-display.N" as required.
+>>
+>> This means that offb no longer finds the expected device, which prevent=
+s
+>> the Debian Installer from setting up its interface, at least on ppc64el=
+.
+>>
+>> Fix this by keeping "of-display" for the first device and "of-display.N=
+"
+>> for subsequent devices.
+>>
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217328
+>> Link: https://bugs.debian.org/1033058
+>> Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
+>> Cc: stable@vger.kernel.org
+>> Cc: Cyril Brulebois <cyril@debamax.com>
+>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 
---B8pxxDeV9zU7sDZJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Helge Deller <deller@gmx.de>
 
-On Tue, Jul 11, 2023 at 10:30:54AM +0800, Guiting Shen wrote:
-> On Mon, Jul 10, 2023 at 23:00:45PM GMT+8, Thierry Reding wrote:
-> > On Mon, Jul 10, 2023 at 10:42:14PM +0800, Guiting Shen wrote:
-> >> The driver would never call clk_eanble() if the pwm channel already
-> >> enable in bootloader which lead to dump the warning message of "the pwm
-> >> clk already disabled" when poweroff the pwm channel.
-> >>
-> >> Add atmel_pwm_enanle_clk_if_on() in probe function to enable clk if the
-> >> pwm channel already enabled in bootloader.
-> >=20
-> > You've got multiple spelling errors in the commit message. Also, PWM is
-> > an abbreviation and so should be all uppercase (except for the subject
-> > prefix). I also prefer spelling out terms like "clock" in the commit
-> > message. This is text that is supposed to be readable. It's not code.
->=20
-> Got it, Thank you. How about this commit message:
->=20
-> The driver would never call clk_enable() if the PWM channel was already
-> enabled in bootloader which lead to dump the warning message "the pwm
-> clock already disabled" when turn off the PWM channel.
->=20
-> Add atmel_pwm_enable_clk_if_on() in probe function to enable clk if the
-> PWM channel was already enabled in bootloader.
+Who will pick up that patch?
+Shall I take it via fbdev git tree?
 
-s/clk/clock/ but otherwise looks good.
+Helge
 
-Thierry
+>
+>> ---
+>> =C2=A0 drivers/of/platform.c | 2 +-
+>> =C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+>> index 051e29b7ad2b..0c3475e7d2ff 100644
+>> --- a/drivers/of/platform.c
+>> +++ b/drivers/of/platform.c
+>> @@ -552,7 +552,7 @@ static int __init of_platform_default_populate_init=
+(void)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 if (!of_get_property(node, "linux,opened", NULL) ||
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !of_get_property(node, "linux,boot-displ=
+ay", NULL))
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 continue;
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev=
+ =3D of_platform_device_create(node, "of-display.0", NULL);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev=
+ =3D of_platform_device_create(node, "of-display", NULL);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 of_node_put(node);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 if (WARN_ON(!dev))
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
+>
 
---B8pxxDeV9zU7sDZJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSteSQACgkQ3SOs138+
-s6Ewmw/+Jw6LqxW+nhesVM4WtgxXisrH0NZjNWnHnpN5oBoqgBSAVwdXgCPJKu4S
-L5GBmquR2ovzDLFCrn7Rkmis9FGeTu+kwFtcQY3ni47JCb6sg+oNM2qHmjC3O/Ad
-PpQMLLGaTsrCeSKYOiW1kSQXfB/O121aFdpDSuV2T/CZZWLeeFuCpPS6exjv7pCq
-GesJT7F1ZyeCH6kLrNN+5aciCSa+uOiSmvfjcZPsKbQcwiVxILIGIKCz1m2bKghE
-/7aA55I/l0G3DOkKk1JbY75tRVcyJDvldB39FMtY/vluqRxA2g/rWJ2EdGd9+IUr
-obHvnvsKUKD1MvNhgNe3qBmZg8HUrimB/YLBvth4yhEDbr4jgTwiPK/++Yx8lXdK
-CMbWdafBPsUingZ+N2oPfmYpm0zj91b7YR/dx43nqyQF4dfUi2NMw+eHZ/60jkst
-dv7hEbNFTd4OTcKkHjHWVC4fSrrT59YjoDt286WkFV04cKmwq7TK6Vev1m4o0Pfb
-zaMVQbja7A5Z+qQsPgIi8bFh0gzm0a7cZ1WsiDi7mSXkH3XoMcWyWrqlM6D7Z9BR
-kpiMJ4nH2ZGNIMiU3R0OZdr8GZ+SS0suhefHnosHsGVmxDUXoHqei6PfI3AsYERd
-QVsDLgy9kUM4ig4NAiZ7gHVB71Eb3DfnCi0A16fvfv/5w7h5kTY=
-=frzs
------END PGP SIGNATURE-----
-
---B8pxxDeV9zU7sDZJ--
