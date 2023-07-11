@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DD574F8E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C3D74F901
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjGKUSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S230119AbjGKU0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGKUSf (ORCPT
+        with ESMTP id S229769AbjGKU0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:18:35 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB910C7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:18:34 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-668704a5b5bso5443311b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689106714; x=1691698714;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AHQ6nFJYzOLsxp4Cvh6Qt2yjVHqJxutm7vOmfrcNDX8=;
-        b=gU+6fKWqEDBFi3CMOReEhuawOezpwYZAZX2TlhxmqHfIyioJXL9zMXhX0oCoh138sV
-         t7XKc9BPuCaf/e1Rz9Mp2eM3CHX6gct6PNoZcWqFRFFbvu1FVvPCYgrzovVtk1PdAh5R
-         kjulHgyJApP6XV36S5thBRxGmtEJcR6oogkDyr4puqRV7n4xThnDwZ7HwrCRc97Aj+pd
-         X3s1YxuDDTAlF4Www/ONJF9cI2KHk6wbv0upXda9R0bGOg/9vKOAReqU4K7IXySqXgdA
-         Ua+WGYcaYhvAC5bj6PsD7qLSYQZZkIbhtB6NHaBp7Bbna9au5mwq+fQ1gw2hRGdNg6c0
-         M1HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689106714; x=1691698714;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AHQ6nFJYzOLsxp4Cvh6Qt2yjVHqJxutm7vOmfrcNDX8=;
-        b=Yb9bOXFaXoUD8GFfolsfxEmG14WKjVXX7NromXG4OSdqMqcoWxGtIGAioMKgmnz6pG
-         Nr4B9eQr/lG6JQNSCeNcxw7A1Ifc3ATbKQa8/iPB67ISGiDuhk0v6O8OlOITWE4aVbzg
-         ezTSgFxy7dYBln9i1dB1gs1K6rVa5iqSmeNLCHfyFxO8br6ag2ejTHbRlPcnfuw9QcUx
-         4vIRONPGUnSy8T4AkQ6mR4MQ9nGamXmjKBlgaFFvEFwXmDXog3zwKFTdkg1I655amZc9
-         U9S/OwOu9ejJawn9syotSI70Tsz8aBS9LWcIrN3nhdAToL7iY3vY8doxn6kqTVrgrW5F
-         MrIg==
-X-Gm-Message-State: ABy/qLaIOSwhcQAYKs9kFLy8v8hDsWnOcZZsRVmsdN+I0FDFmoQMrKWl
-        n2oXO0lJaAHk2pL52D5xtkr3IA==
-X-Google-Smtp-Source: APBJJlGW/76QXHpB92BCVxf9S/cFQibKuZxpLbyG6qJ+wjnJ9KEBPHPGtuTt+nGFTDquZLIOM4dpXQ==
-X-Received: by 2002:a05:6a00:2d84:b0:677:cda3:2222 with SMTP id fb4-20020a056a002d8400b00677cda32222mr18507941pfb.14.1689106714103;
-        Tue, 11 Jul 2023 13:18:34 -0700 (PDT)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id j6-20020aa783c6000000b0063a04905379sm2100623pfn.137.2023.07.11.13.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 13:18:33 -0700 (PDT)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Evan Green <evan@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v4] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
-Date:   Tue, 11 Jul 2023 13:18:30 -0700
-Message-Id: <20230711201831.2695097-1-evan@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 11 Jul 2023 16:26:46 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C483195
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:26:45 -0700 (PDT)
+Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEWD0N010176;
+        Tue, 11 Jul 2023 20:26:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=wrbYbxmSsn84uXtccGkdG1hHBv4JrqdqdbnPlrwx+qE=;
+ b=ZN/6ruNIdWQL+RPFXjizBeaLe9sPvTdI2CBGTh3eyr7HhNWWguYqX3R/Ocs2CUXXddnD
+ PxY8IziAMYm9jE06np8nx/8bOrNGvlqNpeMCryIZX60tH4JT2H4gXI/Ee4grS3xFE2sC
+ VjJFDvj9A4IrUrhPFtpWTKhBnoHLgkh1h4aFhpcVc77yXVarao8LIouyEiHZBgQJbl8r
+ nafIzNXGU/J8ECwGzx3iNpE0wWzj0ZVZLZ0g47V2R+NAntwhDh7+VL1841/QDhJK2Wha
+ ehs0OurYFf7Fuo6p1qZi/E44fm/B5IFvpa87OwH1+Mb4XJIIKUueynv2TTHZN/ImGkjn cw== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3rrwfj7vnx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 20:26:20 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 0044314799;
+        Tue, 11 Jul 2023 20:26:19 +0000 (UTC)
+Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.39])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id D9CF38081F7;
+        Tue, 11 Jul 2023 20:26:18 +0000 (UTC)
+Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 200934)
+        id 2B261302F47FB; Tue, 11 Jul 2023 15:26:18 -0500 (CDT)
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Steve Wahl <steve.wahl@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/platform/uv: Abort UV initialization when reduced nr_cpus requires it
+Date:   Tue, 11 Jul 2023 15:26:18 -0500
+Message-Id: <20230711202618.85562-1-steve.wahl@hpe.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Proofpoint-ORIG-GUID: DQUnrhds4lpglLy9FKrTR_ghPaq-sceI
+X-Proofpoint-GUID: DQUnrhds4lpglLy9FKrTR_ghPaq-sceI
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_11,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
+ suspectscore=0 mlxscore=0 adultscore=0 priorityscore=1501 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110184
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,123 +77,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In /proc/cpuinfo, most of the information we show for each processor is
-specific to that hart: marchid, mvendorid, mimpid, processor, hart,
-compatible, and the mmu size. But the ISA string gets filtered through a
-lowest common denominator mask, so that if one CPU is missing an ISA
-extension, no CPUs will show it.
+When nr_cpus is set to a smaller number than actually present, there
+is some node-to-socket mapping info we won't get access to in
+build_socket_tables().  This could later result in using a -1 value
+for some array indexing, and eventual kernel page faults.
 
-Now that we track the ISA extensions for each hart, let's report ISA
-extension info accurately per-hart in /proc/cpuinfo. We cannot change
-the "isa:" line, as usermode may be relying on that line to show only
-the common set of extensions supported across all harts. Add a new "hart
-isa" line instead, which reports the true set of extensions for that
-hart. This matches what is returned in riscv_hwprobe() when querying a
-given hart.
+To avoid this, if any unfilled table entries are found, print a
+warning message, and resume initializing, acting as if this is not a
+UV system.  UV features will be unavailable, but we will not cause
+kernel dumps.
 
-Signed-off-by: Evan Green <evan@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+This is a condition we expect only in platform debugging situations,
+not in day-to-day operation.
 
+Fixes: 8a50c5851927 ("x86/platform/uv: UV support for sub-NUMA clustering")
+Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
 ---
+ arch/x86/kernel/apic/x2apic_uv_x.c | 58 ++++++++++++++++++++++++------
+ 1 file changed, 47 insertions(+), 11 deletions(-)
 
-Changes in v4:
- - Documentation: Made the underline match the text line (Conor)
- - Documentation: hanged "in question" to "being described" (Andrew)
-
-Changes in v3:
- - Add some documentation (Conor)
-
-Changes in v2:
- - Added new "hart isa" line rather than altering behavior of existing
-   "isa" line (Conor, Palmer)
-
-
-I based this series on top of Conor's riscv-extensions-strings branch
-from July 3rd, since otherwise this change gets hopelessly entangled
-with that series.
-
----
- Documentation/riscv/uabi.rst | 10 ++++++++++
- arch/riscv/kernel/cpu.c      | 22 ++++++++++++++++++----
- 2 files changed, 28 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
-index 8960fac42c40..afdda580e5a2 100644
---- a/Documentation/riscv/uabi.rst
-+++ b/Documentation/riscv/uabi.rst
-@@ -42,6 +42,16 @@ An example string following the order is::
- 
-    rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
- 
-+"isa" vs "hart isa" lines in /proc/cpuinfo
-+------------------------------------------
-+
-+The "isa" line in /proc/cpuinfo describes the lowest common denominator of
-+RISC-V ISA extensions understood by the kernel and implemented on all harts. The
-+"hart isa" line, in contrast, describes the set of extensions understood by the
-+kernel on the particular hart being described, even if those extensions may not
-+be present on all harts in the system. The "hart isa" line is consistent with
-+what's returned by __riscv_hwprobe() when querying for that specific CPU.
-+
- Misaligned accesses
- -------------------
- 
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 1acf3679600d..6264b7b94945 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
- 
- #ifdef CONFIG_PROC_FS
- 
--static void print_isa(struct seq_file *f)
-+static void print_isa(struct seq_file *f, const unsigned long *isa_bitmap)
+diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
+index d9384d5b4b8e..8cf3f61b0000 100644
+--- a/arch/x86/kernel/apic/x2apic_uv_x.c
++++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+@@ -1567,11 +1567,13 @@ static void __init free_1_to_1_table(unsigned short **tp, char *tname, int min,
+  * If the number of nodes is >1 per socket, socket to node table will
+  * contain lowest node number on that socket.
+  */
+-static void __init build_socket_tables(void)
++static int __init build_socket_tables(void)
  {
--	seq_puts(f, "isa\t\t: ");
+ 	struct uv_gam_range_entry *gre = uv_gre_table;
+ 	int nums, numn, nump;
+-	int cpu, i, lnid;
++	int cpu, i, lnid, nid;
++	int sockid;
++	int rc = 0;
+ 	int minsock = _min_socket;
+ 	int maxsock = _max_socket;
+ 	int minpnode = _min_pnode;
+@@ -1580,11 +1582,12 @@ static void __init build_socket_tables(void)
+ 	if (!gre) {
+ 		if (is_uv2_hub() || is_uv3_hub()) {
+ 			pr_info("UV: No UVsystab socket table, ignoring\n");
+-			return;
++			return 0;
+ 		}
+ 		pr_err("UV: Error: UVsystab address translations not available!\n");
+ 		WARN_ON_ONCE(!gre);
+-		return;
++		rc = -EINVAL;
++		goto err_free_tables;
+ 	}
  
- 	if (IS_ENABLED(CONFIG_32BIT))
- 		seq_write(f, "rv32", 4);
-@@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
- 		seq_write(f, "rv64", 4);
+ 	numn = num_possible_nodes();
+@@ -1596,10 +1599,8 @@ static void __init build_socket_tables(void)
+ 	    || (alloc_conv_table(nums, &_socket_to_pnode) < 0)
+ 	    || (alloc_conv_table(numn, &_node_to_socket) < 0)
+ 	    || (alloc_conv_table(nums, &_socket_to_node) < 0)) {
+-		kfree(_pnode_to_socket);
+-		kfree(_socket_to_pnode);
+-		kfree(_node_to_socket);
+-		return;
++		rc = -ENOMEM;
++		goto err_free_tables;
+ 	}
  
- 	for (int i = 0; i < riscv_isa_ext_count; i++) {
--		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
-+		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id))
+ 	/* Fill in pnode/node/addr conversion list values: */
+@@ -1623,9 +1624,9 @@ static void __init build_socket_tables(void)
+ 	/* Set socket -> node values: */
+ 	lnid = NUMA_NO_NODE;
+ 	for_each_possible_cpu(cpu) {
+-		int nid = cpu_to_node(cpu);
+-		int apicid, sockid;
++		int apicid;
+ 
++		nid = cpu_to_node(cpu);
+ 		if (lnid == nid)
  			continue;
+ 		lnid = nid;
+@@ -1647,6 +1648,28 @@ static void __init build_socket_tables(void)
+ 			_socket_to_node[sockid - minsock]);
+ 	}
  
- 		/* Only multi-letter extensions are split by underscores */
-@@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
- 
- 	seq_printf(m, "processor\t: %lu\n", cpu_id);
- 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
--	print_isa(m);
-+
 +	/*
-+	 * For historical raisins, the isa: line is limited to the lowest common
-+	 * denominator of extensions supported across all harts. A true list of
-+	 * extensions supported on this hart is printed later in the hart_isa:
-+	 * line.
++	 * If nr_cpus=<val> is used to reduce the cpu count below
++	 * what's actually present, the cpu loop above may not find
++	 * all the node to socket mappings needed to complete these
++	 * tables.  Abort UV init and act like a non-uv system if this
++	 * happens.
 +	 */
-+	seq_puts(m, "isa\t\t: ");
-+	print_isa(m, NULL);
- 	print_mmu(m);
- 
- 	if (acpi_disabled) {
-@@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
- 	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
- 	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
- 	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
++	for_each_node(nid) {
++		if (_node_to_socket[nid] == SOCK_EMPTY) {
++			pr_err("UV: Incomplete node table (nr_cpus too small?)\n");
++			rc = -EINVAL;
++			goto err_free_tables;
++		}
++	}
++	for (sockid = 0; sockid < nums; sockid++) {
++		if (_socket_to_node[sockid] == SOCK_EMPTY) {
++			pr_err("UV: Incomplete socket table (nr_cpus too small?)\n");
++			rc = -EINVAL;
++			goto err_free_tables;
++		}
++	}
 +
-+	/*
-+	 * Print the ISA extensions specific to this hart, which may show
-+	 * additional extensions not present across all harts.
-+	 */
-+	seq_puts(m, "hart isa\t: ");
-+	print_isa(m, hart_isa[cpu_id].isa);
- 	seq_puts(m, "\n");
+ 	/*
+ 	 * If e.g. socket id == pnode for all pnodes,
+ 	 *   system runs faster by removing corresponding conversion table.
+@@ -1655,6 +1678,17 @@ static void __init build_socket_tables(void)
+ 	FREE_1_TO_1_TABLE(_node_to_socket, _min_socket, nums, numn);
+ 	FREE_1_TO_1_TABLE(_socket_to_pnode, _min_pnode, nums, nump);
+ 	FREE_1_TO_1_TABLE(_pnode_to_socket, _min_pnode, nums, nump);
++
++	return 0;
++
++ err_free_tables:
++	kfree(_pnode_to_socket);
++	kfree(_socket_to_pnode);
++	kfree(_node_to_socket);
++	kfree(_socket_to_node);
++	/* make is_uv_system() return false from now on */
++	uv_system_type = UV_NONE;
++	return rc;
+ }
  
- 	return 0;
+ /* Check which reboot to use */
+@@ -1763,7 +1797,9 @@ static void __init uv_system_init_hub(void)
+ 		return;
+ 	}
+ 
+-	build_socket_tables();
++	if (build_socket_tables() < 0)
++		return;
++
+ 	build_uv_gr_table();
+ 	set_block_size();
+ 	uv_init_hub_info(&hub_info);
 -- 
-2.34.1
+2.26.2
 
