@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF74974F95A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E37A74F95E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjGKUvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S231179AbjGKUxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjGKUvH (ORCPT
+        with ESMTP id S231177AbjGKUw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:51:07 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6A41AE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:51:06 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-676cc97ca74so1394041b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689108665; x=1689713465;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4KQjS5IB3HxBUPRZ52PjYkeXdm3xeIYaSrFkecAH7Y8=;
-        b=Yg8x27vG/jo6ntfVpqL8SMdc3Am7rOf3C7GPs7yktDM+ZCn1UZeK40SAnkL01dlsV4
-         UV3H+VsihfkXwmmDVvR8Bp7NbGejdB7OkPyrboUWGD10jjFZvA7ujOiXM0wKU8ICxCa9
-         mhjH+wEBOxEY1/vBCewgN6lm5PkMnN0sfDKN0C8W2jf00OuT7utWoK+M/Yo5mMdlTcb2
-         N3Jv/ubTq/TgNQhiTmxnuGB+2RUcCikJDdu/em9DUt8s6T0QbiacuYCWMop1NvbK+fHa
-         HykDUrvNmHuUudYMqoYnAO+WTHE+TVMR6migYeCZIoxOePT3b0g7Gnjl/vY/uB85/xqC
-         4wtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689108665; x=1689713465;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4KQjS5IB3HxBUPRZ52PjYkeXdm3xeIYaSrFkecAH7Y8=;
-        b=BU0L9ecBffCW/FwbGlNq1Ik5C3NrjSUjgaIa+k3ljC81drCRb1WjZ05q8d8IzMHxpj
-         jA+3t9ilgSXxYLrffW/YP43LgYLGf9tY5ESKthGqebvu1AXOyEN6KKqTSPbY3hvSsalU
-         YxURtoAPwHPk5SkuWc3SLZxNc/A14hzm42gac1OzIuOOxzhgE0Oh2JXOS/QsrZb3EtVB
-         2DvaEwaorQJucmVUVm3uG8kAz6GoY2nbvlnxZ32iQaUg59KopUEeleWjpjzkp9dKRH1v
-         DowLHDVCFCfvL2brxQEOEQpOc3SX0VG4DcU7GcbdRJFtFaOXc4gAAbrDeW5cXZwejJhg
-         bnGQ==
-X-Gm-Message-State: ABy/qLa7WXLaoLuSOda+BPnf9zxD/6CuDLbQAm4WFJrw3EavrpeCS4yX
-        OJvX1Y88P0OSCg0gG5NPZM8xbQ==
-X-Google-Smtp-Source: APBJJlFiXWlodvDO3oWvF0y1nyHpjI/oSicwjLwdAwZM3FzbLVW/18gjH31OMzxUAL3pjMrR0gZrqg==
-X-Received: by 2002:a05:6a00:e8e:b0:677:3439:874a with SMTP id bo14-20020a056a000e8e00b006773439874amr18907425pfb.3.1689108665547;
-        Tue, 11 Jul 2023 13:51:05 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id w19-20020aa78593000000b0067886c78745sm2148776pfn.66.2023.07.11.13.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 13:51:04 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, asml.silence@gmail.com,
-        Matteo Rizzo <matteorizzo@google.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
-        ribalda@chromium.org, rostedt@goodmis.org, jannh@google.com,
-        chenhuacai@kernel.org, gpiccoli@igalia.com, ldufour@linux.ibm.com,
-        evn@google.com, poprdi@google.com, jordyzomer@google.com,
-        jmoyer@redhat.com, krisman@suse.de
-In-Reply-To: <20230630151003.3622786-1-matteorizzo@google.com>
-References: <20230630151003.3622786-1-matteorizzo@google.com>
-Subject: Re: [PATCH v3 0/1] Add a sysctl to disable io_uring system-wide
-Message-Id: <168910866387.217585.15007808058378960214.b4-ty@kernel.dk>
-Date:   Tue, 11 Jul 2023 14:51:03 -0600
+        Tue, 11 Jul 2023 16:52:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A4A10C2;
+        Tue, 11 Jul 2023 13:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=/emvWvYcr0PrfMBIZh/6opl6dgnt0C4Vtimd6uINPmo=; b=vhEIYW++/rGGI2u5ESqmPK9iEF
+        7dKcCjTGP3fOSwDNfGY76EeW9hXLyFT+uk5zWj+Xt3AbqE3fktc8Rew0bhuDzL8IGQpKTnVSV8Lx2
+        z4NUNZB9tQGlFZVG1L3luB2G3RBDVHT9T4zX7E571omlXT9e3WsnGJazIRjbXRZYQz2lfGfNpC5Nx
+        ESIwsBj4puASpAZEFLQdE/Yopqk8Rwmghu8mtkcObVi3K961vkbOAcU6WyWufYsAcBEYxnmp1Ggnb
+        +rpjMGSbRYyXI/ne3w+7Ts18BG4Mn/QpzzgkaDQdglgus1l/zzLx4/nYrCnDGJxIKqHaMiiTx5FrW
+        ft74jMzw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJKLs-00Fs8h-13;
+        Tue, 11 Jul 2023 20:52:52 +0000
+Message-ID: <4418618a-ac75-f824-ec6d-984421dd5c6b@infradead.org>
+Date:   Tue, 11 Jul 2023 13:52:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 02/10] docs: ABI:
+ sysfs-bus-event_source-devices-hv_gpci: Document processor_bus_topology sysfs
+ interface file
+Content-Language: en-US
+To:     Kajol Jain <kjain@linux.ibm.com>, mpe@ellerman.id.au
+Cc:     linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, disgoel@linux.ibm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230710092717.55317-1-kjain@linux.ibm.com>
+ <20230710092717.55317-3-kjain@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230710092717.55317-3-kjain@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi--
 
-On Fri, 30 Jun 2023 15:10:02 +0000, Matteo Rizzo wrote:
-> Over the last few years we've seen many critical vulnerabilities in
-> io_uring[1] which could be exploited by an unprivileged process to gain
-> control over the kernel. This patch introduces a new sysctl which disables
-> the creation of new io_uring instances system-wide.
+On 7/10/23 02:27, Kajol Jain wrote:
+> Add details of the new hv-gpci interface file called
+> "processor_bus_topology" in the ABI documentation.
 > 
-> The goal of this patch is to give distros, system admins, and cloud
-> providers a way to reduce the risk of privilege escalation through io_uring
-> where disabling it with seccomp or at compile time is not practical. For
-> example a distro or cloud provider might want to disable io_uring by
-> default and have users enable it again if they need to run a program that
-> requires it. The new sysctl is designed to let a user with root on the
-> machine enable and disable io_uring systemwide at runtime without requiring
-> a kernel recompilation or a reboot.
+> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> ---
+>  .../sysfs-bus-event_source-devices-hv_gpci    | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
 > 
-> [...]
+> diff --git a/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
+> index 12e2bf92783f..2eeeab9a20fa 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
+> +++ b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
+> @@ -80,3 +80,35 @@ Contact:	Linux on PowerPC Developer List <linuxppc-dev@lists.ozlabs.org>
+>  Description:	read only
+>  		This sysfs file exposes the cpumask which is designated to make
+>  		HCALLs to retrieve hv-gpci pmu event counter data.
+> +
+> +What:		/sys/devices/hv_gpci/interface/processor_bus_topology
+> +Date:		July 2023
+> +Contact:	Linux on PowerPC Developer List <linuxppc-dev@lists.ozlabs.org>
+> +Description:	admin read only
+> +		This sysfs file exposes the system topology information by making HCALL
+> +		H_GET_PERF_COUNTER_INFO. The HCALL is made with counter request value
+> +		PROCESSOR_BUS_TOPOLOGY(0xD0).
+> +
+> +		* This sysfs file will be created only for power10 and above platforms.
+> +
+> +		* User needs root privileges to read data from this sysfs file.
+> +
+> +		* This sysfs file will be created, only when the HCALL returns "H_SUCESS",
 
-Applied, thanks!
+		                                                                H_SUCCESS
 
-[1/1] io_uring: add a sysctl to disable io_uring system-wide
-      commit: d55f54dac19a0cee1818353ab5aa3edac9034db4
+> +		  "H_AUTHORITY" and "H_PARAMETER" as the return type.
 
-Best regards,
+		            s/and/or/
+
+> +
+> +		  HCALL with return error type "H_AUTHORITY", can be resolved during
+
+		                             Drop the comma ^
+
+> +		  runtime by setting "Enable Performance Information Collection" option.
+> +
+> +		* The end user reading this sysfs file must decode the content as per
+> +		  underlying platform/firmware.
+> +
+> +		Possible error codes while reading this sysfs file:
+> +
+> +		* "-EPERM" : Partition is not permitted to retrieve performance information,
+> +			    required to set "Enable Performance Information Collection" option.
+> +
+> +		* "-EIO" : Can't retrieve system information because of invalid buffer length/invalid address
+> +			   or because of some hardware error. Refer getPerfCountInfo documentation for
+
+			                                      Refer to
+
+> +			   more information.
+> +
+> +		* "-EFBIG" : System information exceeds PAGE_SIZE.
+
 -- 
-Jens Axboe
-
-
-
+~Randy
