@@ -2,209 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A20E74F487
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB3974F48D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbjGKQKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S233291AbjGKQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbjGKQKb (ORCPT
+        with ESMTP id S233184AbjGKQLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:10:31 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C9312F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:10:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VN3B17G5YxPkmSPpXzfgBZlgM4P7bxMH0co6/ztyrfE28YOOWbviqfbnA4UF7fJVl3gpLycpwpBK4TBES7KG6eIh+9o8hbm1t0nPneZS8rnjSNEBrt9vMbv4jjerO44yRSILX148awcKV1XnQcZuY0H7trNrZdk2AesG9T7ao5U0m7/eVAsswAfznpgE7K1mvLjNrtXdXN0WHELydVJwQv/FL2aVP3rruobX1CdneZ6beI1C0S8F8wzyCbX/0wNKpWH8d6zkXH0cstu5/D4xAmNAd8SugrRYxMt6kMjK2VoCUw8Xcma3EU/J03HxcDQfBkMl6mFGfFXJhpqA3eVSkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z7kitYC+N/ZEKnVeRXUrpwC5sUAB1jQpQ/0i8cEbgdE=;
- b=BvI6BLrdyJ5E0Vz+CMVddGCtZYjsORLcqL3ZqrfC6dIvM2LmBBYZHnjZUUBodFNs83kVJC68QrxJDl8ajucBtedOuvt8S3rRQ/I/VzQgXH7Rzp6UuMjxmiF9KfjK3Emgich977Za2ZmBVuKJpdKi5LQvD8csXr+EK23XQs1a6pOnDOHYeceqXIzLqIctwRsWTZYyFO/YzONHAvN5g9S5fgY6eIz6UezXdyXHwHJwfeY9K+G39zqwCkrTl96OrFBecX2LrsyITUXsQ58NXdvAKaQ3kDQpJC+XyZwECcXyVtTCNS3s0cInwXQEj7nXRYv/L4sn62MECQni3HNUAwV47Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z7kitYC+N/ZEKnVeRXUrpwC5sUAB1jQpQ/0i8cEbgdE=;
- b=SS+iVxHRSx7HK+MNLFtceH0EY+4V98hI58tUgoyr7XT2pordSKNjhgOevSnphYSTr3RssX9L4VIxlfiqAUwDiyOReH/hD28OSE8rHYiBc90fBYKxq2k5ViaggY9kzommahQC0iKa7kpuDxxzXZkKVNVB96O+R8e4X1CSovnLPCo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by PH8PR12MB7375.namprd12.prod.outlook.com (2603:10b6:510:215::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Tue, 11 Jul
- 2023 16:10:09 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::4666:2db3:db1e:810c]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::4666:2db3:db1e:810c%7]) with mapi id 15.20.6565.026; Tue, 11 Jul 2023
- 16:10:09 +0000
-Message-ID: <b94c0ce9-ef64-3bfa-1f04-73104f942372@amd.com>
-Date:   Tue, 11 Jul 2023 12:10:05 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] amd/display: only accept async flips for fast updates
-Content-Language: en-US
-To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        michel.daenzer@mailbox.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com
-References: <20230621202459.979661-1-andrealmeid@igalia.com>
- <20230621202459.979661-2-andrealmeid@igalia.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20230621202459.979661-2-andrealmeid@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQXPR0101CA0005.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::18) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Tue, 11 Jul 2023 12:11:34 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81525171E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:10 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89d47ffb6so29828495ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1689091870; x=1691683870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=14BF34CA+deUxHLUvuKK0NdUXrmzEpT2HQriQO+aNSc=;
+        b=lAX+nmUnvQh8Wr4sSat33joYcFucraRvBlLjDezD4gl2CuEiTvYwK1rISc2zz7VGl3
+         4Z9xm4yMTWpiCWj83z0n3GITD7+A8laRk8aL0Ab2ADl3io+anea7vTXZTAG1PvdDyofW
+         w0Vyjl/9h85bclpewVFAtdHzjAJ7OSyEq+mpc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689091870; x=1691683870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=14BF34CA+deUxHLUvuKK0NdUXrmzEpT2HQriQO+aNSc=;
+        b=JjyKatxB9z0+/Murwj7KstfiMym2s2ntaLUXLiSl4G7VHzr01UaLoggM5Ug5yNNIE1
+         0jw2mDPyBItvxy+ft5v7TCwTf8qA9xhNwYWOKJ1m2SbU+OFT/CRIMu59yk82XtmfzUon
+         4cUEVkXS2FwM7cmAWj5A8Pdktygs7XlhaH26zAkmhcfyg7dfz5UD7hXCgTxON16jOCdq
+         /w6gR7WzL30GuRPtRwGDwUrPIYlrUGhX+MBadYhkaP92UPwjGEpssF7dPaFdVGgJS7BO
+         D+HMyCAk7Hbgel0gU6Uhb6R1wPoxgT3rtyverePzerQOVtmqaBaYxE6b6pbc7MyjW4mq
+         P9XQ==
+X-Gm-Message-State: ABy/qLboqGOuGZJRwtqyj0J9mYJ8oGFJ7BzxA7j/9kqheKw5AM2y+nJ2
+        gLu+r2Ka5rsACXzBbX5AOvn2Pw==
+X-Google-Smtp-Source: APBJJlGtLe6pwcli4y1GKQQMwNq1rjUHkyjEzCkkqTqxZcuk3wugA2wX5iXhBtkX+30AaZAOZXOf2g==
+X-Received: by 2002:a17:902:e548:b0:1b9:e1d5:c826 with SMTP id n8-20020a170902e54800b001b9e1d5c826mr4519362plf.16.1689091869978;
+        Tue, 11 Jul 2023 09:11:09 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c18-20020a170902c1d200b001b872695c1csm2098419plc.256.2023.07.11.09.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 09:11:08 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 09:11:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Ungerer <gerg@kernel.org>
+Cc:     linux-arm@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, brauner@kernel.org
+Subject: Re: [PATCH] fs: binfmt_elf_efpic: fix personality for fdpic ELF
+Message-ID: <202307110901.7E9A0D0AE5@keescook>
+References: <20230711133955.483393-1-gerg@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|PH8PR12MB7375:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28899a74-a856-418d-e18f-08db82294c51
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hedUpD1ptl2ywP37hlfjeUBJPfvCxlZqPyt5MIws1bQrgDVuBX4QzZMJr3XFZ1CX66Kke3VsdLKp9PuxqgtE2FJndVyag8Kix/3YuZnrxJdos86Wiz7cuWBTw0vRhNM3pFBfNE4851c4wYa86/TGYI/GuKbsBEZ7Os+fuyQVoIk1NM6TWHn21K6WnvuShjO0jn5wFUHgN5YcWKrH/SRsVBaFb0TcZW6308h/GHsubCZTX2AAITcUvpsRlgzWg4oYhNppOhSd/zbkUjF8fvehSeQ145iTyuIljKDvNFJezINfYdG3gHG1f+Xlum2aoIZd11+OH6qGChkqU8ZZv32rIwDgQhANhz/zOY1iJM9JVVtIpIkhJhvJo8aXy7TYG/YvTY38oi8zM3To7I+gmgsfEYEKZKx22xy0e0mNYRwmZ966MzWO7uXhOgAnxcnORBWRyQqpUV0Bq39SFMF1R/fxP1rzrxzvedUsd+zY3q0n4sAHFdXWsM7EIWhY0DYvC/i8HUEoHxsYICcNlYmJfiZy9snpdIOqC/ciWdgblc9hkIx5WN5xEJffkd7B1sQ8yM3EKnyAXJ4rmAOF803SDoTbDLlrd0HaINschg6VkdCCljgUJFra3BBMi8b5s9yN3VoLsgBFTuQBC16gdETA+eQ35g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199021)(31686004)(6486002)(6666004)(478600001)(2616005)(83380400001)(31696002)(36756003)(86362001)(186003)(2906002)(66946007)(6506007)(15650500001)(6512007)(66556008)(38100700002)(66476007)(26005)(316002)(8936002)(4326008)(41300700001)(5660300002)(53546011)(8676002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEtzRFVGM3BJVDJ6aVA0c09lY0F6aHNZY20rZ0xOaC84VFB0TmVMMENibXJs?=
- =?utf-8?B?Y3BVS0Q2cnFvenN6SU5RdDRnT2JBZ1FLV2Y1ZkJ6WVdGQXphanpFc25zaHBh?=
- =?utf-8?B?dGdTMzFFR0lxU2ZBSFJBSnpxTFo4SmtVZ0ZISVg5Y2trNjJkdE5IZzU3TnRs?=
- =?utf-8?B?UlRpR3Body8zcSs3bjE3eTBFdlV6elREZ1pMMFFhcjBybFJKYTNWU2szeUZT?=
- =?utf-8?B?eWxxRWFBOFhJMGVpWUVMdTlaL050YVJRTXRGNFBTY0RRTUsrWVQyYTZFS0Fo?=
- =?utf-8?B?eGo5T1I3WmtiNGJTc3pUL2ZoOWplVGFPdE56bXE3amh5azVBdXMzQ1JuOU0z?=
- =?utf-8?B?UzBZM1lteG9oUkxwZTIwTWVxbVJmYXM4OHpMUlpCc0RiREcwOTJKd29hYVRF?=
- =?utf-8?B?VzlXNGRKeFlIQ1NsR1VsMllheUNoZnRjQkkxR2hYNWlCbDNWWEJiR0RmL29p?=
- =?utf-8?B?TVVZVEt2bG01TlBzUU5lc2RaK3U5OFpNaDNvS3hNcFIxV0tNbnRIRTFmTzMv?=
- =?utf-8?B?Smt3NVZRWGxoMlJoUlhnUnNwK2kzaEMvTjhRc0o3bXk3ZmY5c0NzNk1qZXNs?=
- =?utf-8?B?NFBGODJmNWRONU5TNTFLTEZZSlBzYkNaSXBKVWRTZHQxSFY4eGgybUx6K0ky?=
- =?utf-8?B?Tm9zdjB2SDFPVGRqWG1aWmQ1STBScFh5L2o2UFIyNDNBdjRYbUVwUkZFRUUx?=
- =?utf-8?B?elhJSG1iK0thR1diZXR1WWcwREJlM0YyV2ovdnZvZnc2ZnY1Nm04VkdRN1Yz?=
- =?utf-8?B?RmZSNnpsYzAwaUd1MG01WTF5L0xaWkwyem94dlNJNFhQc2FlQWt3V25NNjBH?=
- =?utf-8?B?Ymw5QUxIREYweUNRNkM3K3ZCLzVQdjE5TzVTcEowb3pnaXh0aDBPb052NHpK?=
- =?utf-8?B?eGpXSTFDcU9FdVhVV1Y3Y3ZKVHJnc3ljODN0bTN5eGJjQzdwdlIrNXB3Q1Fi?=
- =?utf-8?B?TmpSTnlUUGNZeGlwbElGWVI1OWdna1Iza2hnbG5LakUxZGhibkFSMXlZTG96?=
- =?utf-8?B?VE13dzhTOGpFdkh1aVVvOU91WmVJZnFhZlhCMGFLREo5WlFMaE5jNFBEYWpU?=
- =?utf-8?B?bis1UU52RUpERWRsUWN1eVBad09ldlpqczNRc0l1VEgvNjg0UUdKZ2hJRmQ1?=
- =?utf-8?B?QzdtTFVHTlRSOUQ3OFBxN1c2NGJJTjZQWElmai9kenpObnJOS3laWEd1RUZF?=
- =?utf-8?B?dk85bUtmTXh3TUpsQUY2Smo5bUh5YlM0dkQ5T1JmSFVOaldTOXIxd0hlWjUx?=
- =?utf-8?B?THVDRysya3JvdEk1TE9VcU5XMGl6a1J2SDhWL1VtSGVJdk9PdzhWYW1IVGN2?=
- =?utf-8?B?cmVtVTc0VnNrZHNobzhiV2o3YWZoUmQwU0dnZkVOSW11R29GMHcrSUVWSzA2?=
- =?utf-8?B?OC9uSmh2ZWtBeEcwSzRBc2tJcmFQbWF1ZWNhTm5yM1F0K2I1SU4zQm43amly?=
- =?utf-8?B?N2NKUHRKaDhCSmRKNzlxMlVidm5obkUzeENRbk8xRVFjaWNHb2VjTEZsSjhK?=
- =?utf-8?B?WjZpMXVYUGV4S3hxcDRYUEdKc1J2SVF1eEtEYUx2KzVzZGR0KzZxWGI4VTdH?=
- =?utf-8?B?OFRHOFFRcWRxMEtrYzUrSHFlcEUzVG0rWTR1MjZKWGtyV2lMU3FxLzFmL085?=
- =?utf-8?B?NnUyYVF4ZmJNMlFCRHJRekhJLzJSaG43ck43NXRObnFOczN1Q3RBRWxXRDF0?=
- =?utf-8?B?TlFJUUJXMlJjdVY0TlN6ZWVvZnlpWEZBL3dpMm1tOXgwcm9UL01zcjlnSHJW?=
- =?utf-8?B?NXpNK0dsQTVTZ3hHSHp1TGc2N3pXa0oxT1g3ZmRBdTRDeURYb1daWDU4cU1z?=
- =?utf-8?B?TitLSExKMkxwWmIvTnJvS0h3Zmt3dzZOQW9GdWZSK21aVmJLS3lBSHZvaE9G?=
- =?utf-8?B?UzlCWjRzM0RPM1FDWml0TitZdWlJSXR4MkYvQWRLV1RGTHBlSzVwb2ZPN0d4?=
- =?utf-8?B?NWFVM0hhVmpqcGVGN1RJRzB1bTRBTU9VSnJvRnlzK3B4MUxkL1RDWHJmL1hn?=
- =?utf-8?B?RG83SU5tdjdNdUZ6MXhNVStsNlplbmw2ZkVxWHdETjlHMmFVSmZSaVRIeFY1?=
- =?utf-8?B?YmlnVFMxamo0WkQ4YUZRV0tEQ3VabE96TUhPSEN0d2JVYW1GM2RYd29CaWlJ?=
- =?utf-8?Q?AkQ/F4nuLv2kRMJp7FRTvQDkc?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28899a74-a856-418d-e18f-08db82294c51
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 16:10:09.2233
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5tHZ+jtsQ2I+XrzTBQMTe59oqnvaoRl5h2Td8t8S7oszHlrVRghE0Jm1idGaoj5H9TNopg5qxC16ewBxdgT8HA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7375
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711133955.483393-1-gerg@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-21 16:24, André Almeida wrote:
-> From: Simon Ser <contact@emersion.fr>
+On Tue, Jul 11, 2023 at 11:39:55PM +1000, Greg Ungerer wrote:
+> The elf-fdpic loader hard sets the process personality to either
+> PER_LINUX_FDPIC for true elf-fdpic binaries or to PER_LINUX for
+> normal ELF binaries (in this case they would be constant displacement
+> compiled with -pie for example). The problem with that is that it
+> will lose any other bits that may be in the ELF header personality
+> (such as the "bug emulation" bits).
 > 
-> Up until now, amdgpu was silently degrading to vsync when
-> user-space requested an async flip but the hardware didn't support
-> it.
+> On the ARM architecture the ADDR_LIMIT_32BIT flag is used to signify
+> a normal 32bit binary - as opposed to a legacy 26bit address binary.
+> This matters since start_thread() will set the ARM CPSR register as
+> required based on this flag. If the elf-fdpic loader loses this bit
+> the process will be mis-configured and crash out pretty quickly.
 > 
-> The hardware doesn't support immediate flips when the update changes
-> the FB pitch, the DCC state, the rotation, enables or disables CRTCs
-> or planes, etc. This is reflected in the dm_crtc_state.update_type
-> field: UPDATE_TYPE_FAST means that immediate flip is supported.
-> 
-> Silently degrading async flips to vsync is not the expected behavior
-> from a uAPI point-of-view. Xorg expects async flips to fail if
-> unsupported, to be able to fall back to a blit. i915 already behaves
-> this way.
-> 
-> This patch aligns amdgpu with uAPI expectations and returns a failure
-> when an async flip is not possible.
-> 
-> Signed-off-by: Simon Ser <contact@emersion.fr>
-> Reviewed-by: André Almeida <andrealmeid@igalia.com>
-> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+> Modify elf-fdpic loaders personality setting for ELF binaries so that
+> it preserves the upper three bytes by using the SET_PERSONALITY macro
+> to set it. This macro in the generic case sets PER_LINUX but and
+> preserves the upper bytes. Architectures can override this for their
+> specific use case, and ARM does exactly this.
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Thanks for tracking this down!
 
-Harry
+There are some twisty macros in use across all the architectures here!
 
+I notice the bare set_personality() call remains, though. Is that right?
+
+For example, ARM (and sh and xtensa) also sets:
+
+#define elf_check_fdpic(x) ((x)->e_ident[EI_OSABI] == ELFOSABI_ARM_FDPIC)
+
+so it's possible the first half of the "if" below could get executed,
+and ARM (and possibly other architectures) would again lose the other
+flags, if I'm reading correctly.
+
+(And the fact that PER_LINUX is actually 0x0 is oddly handled, leaving
+it implicit in most architectures.)
+
+What seems perhaps more correct is to remove the "if" entirely and make
+sure that SET_PERSONALITY() checks the header flags on all architectures?
+
+But I'm less familiar with this area, so please let me know what I'm
+missing. :)
+
+> 
+> Signed-off-by: Greg Ungerer <gerg@kernel.org>
 > ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c    |  8 ++++++++
->  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c   | 12 ++++++++++++
->  2 files changed, 20 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 514f6785a020..1d9b84e5835f 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -8136,7 +8136,15 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
->  		 * Only allow immediate flips for fast updates that don't
->  		 * change memory domain, FB pitch, DCC state, rotation or
->  		 * mirroring.
-> +		 *
-> +		 * dm_crtc_helper_atomic_check() only accepts async flips with
-> +		 * fast updates.
->  		 */
-> +		if (crtc->state->async_flip &&
-> +		    acrtc_state->update_type != UPDATE_TYPE_FAST)
-> +			drm_warn_once(state->dev,
-> +				      "[PLANE:%d:%s] async flip with non-fast update\n",
-> +				      plane->base.id, plane->name);
->  		bundle->flip_addrs[planes_count].flip_immediate =
->  			crtc->state->async_flip &&
->  			acrtc_state->update_type == UPDATE_TYPE_FAST &&
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> index 440fc0869a34..30d4c6fd95f5 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> @@ -398,6 +398,18 @@ static int dm_crtc_helper_atomic_check(struct drm_crtc *crtc,
->  		return -EINVAL;
->  	}
->  
-> +	/*
-> +	 * Only allow async flips for fast updates that don't change the FB
-> +	 * pitch, the DCC state, rotation, etc.
-> +	 */
-> +	if (crtc_state->async_flip &&
-> +	    dm_crtc_state->update_type != UPDATE_TYPE_FAST) {
-> +		drm_dbg_atomic(crtc->dev,
-> +			       "[CRTC:%d:%s] async flips are only supported for fast updates\n",
-> +			       crtc->base.id, crtc->name);
-> +		return -EINVAL;
-> +	}
-> +
->  	/* In some use cases, like reset, no stream is attached */
->  	if (!dm_crtc_state->stream)
->  		return 0;
+> Is anyone out there using elf-fdpic on ARM?
 
+It would seem you're the first? :) (_Should_ it be usable on ARM?)
+
+-Kees
+
+> This seems to break it rather badly due to the loss of that ADDR_LIMIT_32BIT
+> bit from the process personality.
+> 
+>  fs/binfmt_elf_fdpic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+> index a05eafcacfb2..f29ae1d96fd7 100644
+> --- a/fs/binfmt_elf_fdpic.c
+> +++ b/fs/binfmt_elf_fdpic.c
+> @@ -348,7 +348,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+>  	if (elf_check_fdpic(&exec_params.hdr))
+>  		set_personality(PER_LINUX_FDPIC);
+>  	else
+> -		set_personality(PER_LINUX);
+> +		SET_PERSONALITY(exec_params.hdr);
+>  	if (elf_read_implies_exec(&exec_params.hdr, executable_stack))
+>  		current->personality |= READ_IMPLIES_EXEC;
+>  
+> -- 
+> 2.25.1
+> 
+
+-- 
+Kees Cook
