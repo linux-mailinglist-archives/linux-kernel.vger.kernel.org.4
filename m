@@ -2,150 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6809974F465
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808B474F455
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjGKQGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
+        id S231200AbjGKQFA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 12:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjGKQGW (ORCPT
+        with ESMTP id S229476AbjGKQE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:06:22 -0400
-Received: from esa3.hc3370-68.iphmx.com (esa3.hc3370-68.iphmx.com [216.71.145.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113B9E7E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1689091568;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CQ07KOad9rBrX25HAdPxBhuEPDkFzDLdIlc2phuivUw=;
-  b=ULLcrm9X6+tEi2B+W+8aKR/Yt+q/hOyx7LQAv56I7B2Eg1SuoUQBBnSs
-   Jgt63MFFuSEwqprWri7YK/dU8URNPI5g9hUal2M68itelvxUuKK0lI9Re
-   W+ff3K4atFCIQ0gnUen+clQR+sIeB76BYVO+31rdnCz/9SBgv3fL8uSZK
-   o=;
-Authentication-Results: esa3.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-X-SBRS: 4.0
-X-MesageID: 115870688
-X-Ironport-Server: esa3.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.123
-X-Policy: $RELAYED
-IronPort-Data: A9a23:TiNRL60c5KI7ha1NBfbD5dpxkn2cJEfYwER7XKvMYLTBsI5bp2YHz
- zYXDTuAOayMZGr0KNt0PNzl9R8AuMDXxodrSQBkpC1hF35El5HIVI+TRqvS04F+DeWYFR46s
- J9OAjXkBJppJpMJjk71atANlVEliefTAOK6ULWeUsxIbVcMYD87jh5+kPIOjIdtgNyoayuAo
- tq3qMDEULOf82cc3lk8teTb8XuDgNyo4GlD5gNnPKgS1LPjvyJ94Kw3dPnZw0TQGuG4LsbiL
- 87fwbew+H/u/htFIrtJRZ6iLyXm6paLVeS/oiI+t5qK23CulQRrukoPD9IOaF8/ttm8t4sZJ
- OOhF3CHYVxB0qXkwIzxWvTDes10FfUuFLTveRBTvSEPpqFvnrSFL/hGVSkL0YMkFulfDSZP6
- qQoNRMxPlOMnsOJ7a68E/BCmZF2RCXrFNt3VnBIyDjYCbAtQIzZQrWM7thdtNsyrpkQR7CEP
- ZNfMGcxKk2aOHWjOX9OYH46tP2vnWK5dzRXpUiKrK4zy2PS0BZwwP7mN9+9ltmiHJwIzhnA+
- DKWl4j/Kg85EvO+7Bq6y3at2eXQsAz5cb0RPqLto5aGh3XMnzdOWXX6T2CTpfi/l177UdZYI
- E885CUjt+4x+VatQ927WAe3yFaAvxgBS59THvc85QWl1KXZ+UCaC3ICQzoHb8Yp3Oc/VTYt2
- 3eKksnvCDgpvL79dJ6G3u7K93XoY3FTdDJcI3ZeFmPp/uUPvqk/yRPQFuZ+M5LlzdLsOA7d3
- zfTtQYh0uB7YdEw60mrwbzWq2vy9smREVVstlu/snGNtV0gOtP8D2C8wR2CtKsbct7EJrWUl
- CJc8/Vy+tziGn1keMalZOwWVI+k6P+eWNE3qQ4+RsJxn9hBFpPKQGyx3N2dDB0zWir8UWW1C
- HI/QCsIjHOpAFOkbLVsf6W6ANkwwK7rGLzND66EP4IXPsEpKFPepUmCgHJ8OEi0wCARfVwXY
- 8/HIa5A815HYUiY8NZGb7hEiuJ6rszP7WjSWYr633yaPUm2PRaopUM+GALWNIgRtfrUyDg5B
- v4Db6NmPT0DCryhCsQWmKZPRW03wY8TXsiu8ZMPL7LYemKL2ggJUpfs/F/oQKQ994w9qwsC1
- ijVtpNwoLYnuUD6FA==
-IronPort-HdrOrdr: A9a23:tr6XYKySOkBc2pY/vLFbKrPxC+gkLtp133Aq2lEZdPULSKylfp
- GV/cjziyWbtN9IYgBcpTnyAtj9fZq8z+8+3WB1B93SPzUO11HYV72KgbGSpwEIeBeOu9K1t5
- 0QCZSWYeeYZTMW4amKgnjcLz9K+qjgzEncv5an854bd3ASV0gP1XYfNi+rVmlNACVWD5swE5
- SRouJBujqbYHwSKuirG3UfWODHhtvT0LbrewQPCRIL4BSHyWrA0s+0LzGomjMlFx9fy7Yr9m
- bI1yT/+6WYqvm+jjPMymPJ6JxSud35jv9OHtaFhMQ5IijlziyoeINicbufuy1dmpDi1H8a1P
- 335zswNcV67H3cOkuvpwH25gXm2DEyr1f/1F6xmxLY0I3EbQN/L/AEqZNScxPf5UZllsp7yr
- h302WQsIcSJQ/cnR76+8PDW3hR5wqJSDsZ4K0uZk5kIM4jgYxq3MgiFYRuYdA99RfBmcIa+S
- 9VfYfhDbhtAAqnhjvizxZSKZSXLwoO91G9MwY/k/3Q6iNRmn9hyUse2YgwolcsnahNEaVs1q
- D8KaJvm6hJTsgKKYRHJMlEb/eWJwX2ME/x2ET7GyW9KEjCAQOUl3b6jY9Fld2CadgGyoA/l4
- /GV04dvWkue1j2AcnLx5FT9AvRKV/NFAgF5/sukKSRgIeMMobDIGmGUhQjgsGgq/IQDonSXO
- uyIotfB7vmIXH1EYhE0gXiU90KQENuG/E9q5I+QRaDs8jLIorluqjSd+vSPqPkFXIhVnnkCn
- UOUTDvLIFL71ytWHX/nB/NMkmdMnDX7NZ1CuzX7uITwI8COslFtRUUk02w4oWRJThLosUNDT
- 9DyXPc49aGTEWNjBT1Bj9SS2pg525ukcbdb08=
-X-Talos-CUID: =?us-ascii?q?9a23=3ANNdYKGtdPU2Zx2LPf5zBR2cE6IspNXzClEfNAHP?=
- =?us-ascii?q?oSmlwaYK4VVjJ4Y17xp8=3D?=
-X-Talos-MUID: =?us-ascii?q?9a23=3AJRVNTw3Arg2tLSRrqGbYl35nojUj/YeIJ2Eosao?=
- =?us-ascii?q?/v8jbPzNdFDW0szedXdpy?=
-X-IronPort-AV: E=Sophos;i="6.01,196,1684814400"; 
-   d="scan'208";a="115870688"
-From:   Ross Lagerwall <ross.lagerwall@citrix.com>
-To:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        Ross Lagerwall <ross.lagerwall@citrix.com>
-Subject: [PATCH] blk-mq: Fix stall due to recursive flush plug
-Date:   Tue, 11 Jul 2023 17:04:34 +0100
-Message-ID: <20230711160434.248868-1-ross.lagerwall@citrix.com>
-X-Mailer: git-send-email 2.39.3
+        Tue, 11 Jul 2023 12:04:58 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5936F9B;
+        Tue, 11 Jul 2023 09:04:57 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3a3b7fafd61so4811049b6e.2;
+        Tue, 11 Jul 2023 09:04:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689091496; x=1691683496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y7zt5pO69xVTkx3WPA+RT/byFcn7lDWoK0rY+7VhmSY=;
+        b=iswsFtqDQPyT+TBcWW9QuGDGaoW9J/WE0dqbVdW2lfs12vS3rfmijgYd7SLjJaAZof
+         XrOA3Ce8j04eGTsHS0Su3Ums7ze/i5HjohDwArrnndmRTVthDeIbZwyx3B8m/WhvRyiH
+         +WD6q+Yw6Wdhpyk6f4NdBf53b4KwSZZW79ntkAzhvTfxY5DevdIf4OYcS4K8KJ5ImYAK
+         d0yLaq6Wr9s0xPEsx1ibL8amzrO2DVIg+c0UdkMkjfL/vv1G+grw1dffrkMy2k7htxrv
+         mKKRbhVCl01GHUU8Gy1vOOWvrdulGqP6pNvwrHuOSdfo7NCTPzVy6tbmPBxui2bayy5Z
+         QlbQ==
+X-Gm-Message-State: ABy/qLaK8gquVnCuVL57J8lg01orhIsLWN3Ym5o+LUzt1oQh62+gFMGt
+        /pX0cEOryUFqmyZQJa8MIV1pi+WPYs8PTg==
+X-Google-Smtp-Source: APBJJlELsv1YirHZDxBK1svirqsvA2URB3xoL7T7MpgJRuIfE7H6LFZcm35pIOmp1dGUcJI/gbeLwg==
+X-Received: by 2002:a05:6808:190b:b0:3a3:aedd:6b21 with SMTP id bf11-20020a056808190b00b003a3aedd6b21mr21095471oib.39.1689091496363;
+        Tue, 11 Jul 2023 09:04:56 -0700 (PDT)
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com. [209.85.167.170])
+        by smtp.gmail.com with ESMTPSA id u13-20020a056808000d00b003a371c611f6sm1005829oic.18.2023.07.11.09.04.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 09:04:56 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3a04e5baffcso4806589b6e.3;
+        Tue, 11 Jul 2023 09:04:56 -0700 (PDT)
+X-Received: by 2002:a05:6358:4198:b0:132:7a2e:87bc with SMTP id
+ w24-20020a056358419800b001327a2e87bcmr13654687rwc.5.1689091495810; Tue, 11
+ Jul 2023 09:04:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230710130113.14563-1-tzimmermann@suse.de> <20230710171903.GA14712@ravnborg.org>
+ <ab92f8d9-36ab-06bc-b85b-d52b7a1bfe9a@suse.de> <20230711144744.GA117276@ravnborg.org>
+ <bf439387-6b13-0fd9-f61b-1a5cbf731187@gmx.de>
+In-Reply-To: <bf439387-6b13-0fd9-f61b-1a5cbf731187@gmx.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Jul 2023 18:04:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXnTDK6uZNhNR=NFTiy4F+2nLJd1E47vDoXUV3zFSCGOA@mail.gmail.com>
+Message-ID: <CAMuHMdXnTDK6uZNhNR=NFTiy4F+2nLJd1E47vDoXUV3zFSCGOA@mail.gmail.com>
+Subject: Re: [PATCH 00/17] fbdev: Remove FBINFO_DEFAULT and
+ FBINFO_FLAG_DEFAULT flags
+To:     Helge Deller <deller@gmx.de>
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-nvidia@lists.surfsouth.com, linux-omap@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have seen rare IO stalls as follows:
+Hi Helge,
 
-* blk_mq_plug_issue_direct() is entered with an mq_list containing two
-requests.
-* For the first request, it sets last == false and enters the driver's
-queue_rq callback.
-* The driver queue_rq callback indirectly calls schedule() which calls
-blk_flush_plug().
-* blk_flush_plug() handles the remaining request in the mq_list. mq_list
-is now empty.
-* The original call to queue_rq resumes (with last == false).
-* The loop in blk_mq_plug_issue_direct() terminates because there are no
-remaining requests in mq_list.
+On Tue, Jul 11, 2023 at 5:26 PM Helge Deller <deller@gmx.de> wrote:
+> On 7/11/23 16:47, Sam Ravnborg wrote:
+> > On Tue, Jul 11, 2023 at 08:24:40AM +0200, Thomas Zimmermann wrote:
+> >> Am 10.07.23 um 19:19 schrieb Sam Ravnborg:
+> >>> On Mon, Jul 10, 2023 at 02:50:04PM +0200, Thomas Zimmermann wrote:
+> >>>> Remove the unused flags FBINFO_DEFAULT and FBINFO_FLAG_DEFAULT from
+> >>>> fbdev and drivers, as briefly discussed at [1]. Both flags were maybe
+> >>>> useful when fbdev had special handling for driver modules. With
+> >>>> commit 376b3ff54c9a ("fbdev: Nuke FBINFO_MODULE"), they are both 0
+> >>>> and have no further effect.
+> >>>>
+> >>>> Patches 1 to 7 remove FBINFO_DEFAULT from drivers. Patches 2 to 5
+> >>>> split this by the way the fb_info struct is being allocated. All flags
+> >>>> are cleared to zero during the allocation.
+> >>>>
+> >>>> Patches 8 to 16 do the same for FBINFO_FLAG_DEFAULT. Patch 8 fixes
+> >>>> an actual bug in how arch/sh uses the tokne for struct fb_videomode,
+> >>>> which is unrelated.
+> >>>>
+> >>>> Patch 17 removes both flag constants from <linux/fb.h>
+> >>>
+> >>> We have a few more flags that are unused - should they be nuked too?
+> >>> FBINFO_HWACCEL_FILLRECT
+> >>> FBINFO_HWACCEL_ROTATE
+> >>> FBINFO_HWACCEL_XPAN
+> >>
+> >> It seems those are there for completeness. Nothing sets _ROTATE,
+>
+> I think some fbdev drivers had hardware acceleration for ROTATE in the
+> past. HWACCEL_XPAN is still in some drivers.
+>
+> >> the others are simply never checked. According to the comments,
+> >> some are required, some are optional. I don't know what that
+> >> means.
+>
+> I think it's OK if you remove those flags which aren't used anywhere,
+> e.g. FBINFO_HWACCEL_ROTATE.
 
-The IO is now stalled because the last request submitted to the driver
-had last == false and there was no subsequent call to commit_rqs().
+Indeed.
 
-Fix this by returning early in blk_mq_flush_plug_list() if rq_count is 0
-which it will be in the recursive case, rather than checking if the
-mq_list is empty. At the same time, adjust one of the callers to skip
-the mq_list empty check as it is not necessary.
+> >> IIRC there were complains about performance when Daniel tried to remove
+> >> fbcon acceleration, so not all _HWACCEL_ flags are unneeded.
+>
+> Correct. I think COPYAREA and FILLRECT are the bare minimum to accelerate
+> fbcon, IMAGEBLIT is for showing the tux penguin (?),
+> XPAN/YPAN and YWRAP for some hardware screen panning needed by some drivers
+> (not sure if this is still used as I don't have such hardware, Geert?).
 
-Fixes: dc5fc361d891 ("block: attempt direct issue of plug list")
-Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
----
+Yes, they are used.  Anything that is handled in drivers/video/fbdev/core/
+is used:
 
-I'm not 100% sure if I've got the correct Fixes commit.
+$ git grep  HWACCEL_ -- drivers/video/fbdev/core/
+drivers/video/fbdev/core/fbcon.c:       if ((info->flags &
+FBINFO_HWACCEL_COPYAREA) &&
+drivers/video/fbdev/core/fbcon.c:           !(info->flags &
+FBINFO_HWACCEL_DISABLED))
+drivers/video/fbdev/core/fbcon.c:       int good_pan = (cap &
+FBINFO_HWACCEL_YPAN) &&
+drivers/video/fbdev/core/fbcon.c:       int good_wrap = (cap &
+FBINFO_HWACCEL_YWRAP) &&
+drivers/video/fbdev/core/fbcon.c:       int fast_copyarea = (cap &
+FBINFO_HWACCEL_COPYAREA) &&
+drivers/video/fbdev/core/fbcon.c:               !(cap &
+FBINFO_HWACCEL_DISABLED);
+drivers/video/fbdev/core/fbcon.c:       int fast_imageblit = (cap &
+FBINFO_HWACCEL_IMAGEBLIT) &&
+drivers/video/fbdev/core/fbcon.c:               !(cap &
+FBINFO_HWACCEL_DISABLED);
 
- block/blk-core.c | 3 +--
- block/blk-mq.c   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+BTW, I'm surprised FBINFO_HWACCEL_FILLRECT is not handled.
+But looking at the full history, it never was...
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 99d8b9812b18..90de50082146 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -1144,8 +1144,7 @@ void __blk_flush_plug(struct blk_plug *plug, bool from_schedule)
- {
- 	if (!list_empty(&plug->cb_list))
- 		flush_plug_callbacks(plug, from_schedule);
--	if (!rq_list_empty(plug->mq_list))
--		blk_mq_flush_plug_list(plug, from_schedule);
-+	blk_mq_flush_plug_list(plug, from_schedule);
- 	/*
- 	 * Unconditionally flush out cached requests, even if the unplug
- 	 * event came from schedule. Since we know hold references to the
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 5504719b970d..d5a7f36e634f 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2742,7 +2742,7 @@ void blk_mq_flush_plug_list(struct blk_plug *plug, bool from_schedule)
- {
- 	struct request *rq;
- 
--	if (rq_list_empty(plug->mq_list))
-+	if (plug->rq_count == 0)
- 		return;
- 	plug->rq_count = 0;
- 
+> >> Leaving them in for reference/completeness might be an option; or not. I
+> >> have no strong feelings about those flags.
+>
+> I'd say drop FBINFO_HWACCEL_ROTATE at least ?
+
+Agreed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.39.3
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
