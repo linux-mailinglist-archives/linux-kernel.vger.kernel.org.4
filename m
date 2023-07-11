@@ -2,125 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E143C74E562
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271EA74E565
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjGKDgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 23:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S229785AbjGKDjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 23:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjGKDgr (ORCPT
+        with ESMTP id S229468AbjGKDjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 23:36:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28895F9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689046561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RAKJNLVa7Dz/gEOC8l+W1ubVM3SUfpJDz/d6N9kvm8w=;
-        b=dtOCQgyeZfew8yc4ck0qqex2UgAsZmgASGXB3bhX84Cd0IIDwm/t5uuOCxbIVShvICpGyZ
-        devCD+AhzwrS/VrQ0+r6sU8mnD55RPcM9WN3J3b+nUn46S0OamygbwrcwrY8NNNtK8XoQu
-        n7ooLAi+3uE+lOKbE3bzJYfjf+liPqk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-rnGtRtxZNxW8idSVCPY9jA-1; Mon, 10 Jul 2023 23:35:56 -0400
-X-MC-Unique: rnGtRtxZNxW8idSVCPY9jA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 765518028B2;
-        Tue, 11 Jul 2023 03:35:55 +0000 (UTC)
-Received: from localhost (ovpn-12-93.pek2.redhat.com [10.72.12.93])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2547DC52D9C;
-        Tue, 11 Jul 2023 03:35:53 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 11:35:50 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        Wen Xiong <wenxiong@linux.ibm.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 2/2] nvme-pci: use blk_mq_max_nr_hw_queues() to calculate
- io queues
-Message-ID: <ZKzOFkokjTVwd4Ry@MiWiFi-R3L-srv>
-References: <20230708020259.1343736-1-ming.lei@redhat.com>
- <20230708020259.1343736-3-ming.lei@redhat.com>
- <20230710064109.GB24519@lst.de>
- <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+        Mon, 10 Jul 2023 23:39:08 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230A8137
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:39:07 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R0RS759sdzBJFS0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:39:03 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689046743; x=1691638744; bh=yZynzVUlk5mpXs9aHjvK7lG63wT
+        C8Y75Je7Bu13k+DQ=; b=qBHnLJwW4VAlI7YyZq6Nr7+t6mUAn+OEotJDeMTpbLe
+        gTtOGOlY/iG/2e0mVY3BMr5MTCuYqcya7b3VwEqnbwrlXHW8a9MpNRjS79XhJ56K
+        GkyGe7NOxlcKcHbxh7VDQw9L9EcidqssvQ0PHgmcr35bEg9MMNjc/DXe4k/ovZ+b
+        n1A2lZ8Yc1kfbdMfub1iN0AaaFVPdNNMN1PD6TxJCJJP+67q4FGa23890t+68kji
+        BJEQE5TX52yzDV5rrsw0LXsBdEtlHvy3HPXcoXtxivQVZbkJ5Kj2Dz93kTrJHAEK
+        VNM6kEQDr2Xyera+RseCEVC4DYoP2eIsctt1U0CK5tA==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5vEp06B-5k0o for <linux-kernel@vger.kernel.org>;
+        Tue, 11 Jul 2023 11:39:03 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R0RS72jLFzBJ8kq;
+        Tue, 11 Jul 2023 11:39:03 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Tue, 11 Jul 2023 11:39:03 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/flcn/msgq: Move assignment outside if condition
+In-Reply-To: <20230711033745.79190-1-xujianghui@cdjrlc.com>
+References: <20230711033745.79190-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <7ad788a6cf70f338a32690953531b439@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10/23 at 05:14pm, Ming Lei wrote:
-> On Mon, Jul 10, 2023 at 08:41:09AM +0200, Christoph Hellwig wrote:
-> > On Sat, Jul 08, 2023 at 10:02:59AM +0800, Ming Lei wrote:
-> > > Take blk-mq's knowledge into account for calculating io queues.
-> > > 
-> > > Fix wrong queue mapping in case of kdump kernel.
-> > > 
-> > > On arm and ppc64, 'maxcpus=1' is passed to kdump command line, see
-> > > `Documentation/admin-guide/kdump/kdump.rst`, so num_possible_cpus()
-> > > still returns all CPUs.
-> > 
-> > That's simply broken.  Please fix the arch code to make sure
-> > it does not return a bogus num_possible_cpus value for these
-> 
-> That is documented in Documentation/admin-guide/kdump/kdump.rst.
-> 
-> On arm and ppc64, 'maxcpus=1' is passed for kdump kernel, and "maxcpu=1"
-> simply keep one of CPU cores as online, and others as offline.
+Fixes the following checkpatch errors:
 
-I don't know maxcpus on arm and ppc64 well. But maxcpus=1 or nr_cpus=1
-are suggested parameter. Because usually nr_cpus=1 is enough to make
-kdump kernel work well to capture vmcore. However, user is allowed to
-specify nr_cpus=n (n>1) if they think multiple cpus are needed in kdump
-kernel. Your hard coding of cpu number in kdump kernel may be not so
-reasonable.
+ERROR: do not use assignment in if condition
 
-Please cc kexec mailing list when posting so that people can view the
-whole thread of discussion.
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  drivers/gpu/drm/nouveau/nvkm/falcon/msgq.c | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks
-Baoquan
+diff --git a/drivers/gpu/drm/nouveau/nvkm/falcon/msgq.c 
+b/drivers/gpu/drm/nouveau/nvkm/falcon/msgq.c
+index 16b246fda666..52af200b45bc 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/falcon/msgq.c
++++ b/drivers/gpu/drm/nouveau/nvkm/falcon/msgq.c
+@@ -203,7 +203,8 @@ nvkm_falcon_msgq_new(struct nvkm_falcon_qmgr *qmgr, 
+const char *name,
+  {
+      struct nvkm_falcon_msgq *msgq = *pmsgq;
 
-> 
-> So Cc our arch(arm & ppc64) & kdump guys wrt. passing 'maxcpus=1' for
-> kdump kernel.
-> 
-> > setups, otherwise you'll have to paper over it in all kind of
-> > drivers.
-> 
-> The issue is only triggered for drivers which use managed irq &
-> multiple hw queues.
-> 
-> 
-> Thanks,
-> Ming
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+-    if (!(msgq = *pmsgq = kzalloc(sizeof(*msgq), GFP_KERNEL)))
++    msgq = *pmsgq = kzalloc(sizeof(*msgq), GFP_KERNEL);
++    if (!msgq)
+          return -ENOMEM;
 
+      msgq->qmgr = qmgr;
