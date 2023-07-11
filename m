@@ -2,139 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D5374F8C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01E374F8C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjGKUJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S231588AbjGKULI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjGKUJV (ORCPT
+        with ESMTP id S229537AbjGKULG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:09:21 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E216C171E;
-        Tue, 11 Jul 2023 13:09:17 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-668730696a4so3446551b3a.1;
-        Tue, 11 Jul 2023 13:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689106157; x=1691698157;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0AjrurSLjCfnq22wQVPyzNWuhvJYbXtr4WWuyj0oB9s=;
-        b=smN2+HX0faRVYygGOZFPccaAota1KFLmMs1jQjvZhI3B9d8PAf3rFlwY9kdCT7kktV
-         UunleB1j7AOzmZkoPtTcx496fwQsKRkLhmGIwiWAAofX0QAAMMQagFRvWkv2x+KBc9kE
-         pnTrvemOtC5P2PNJfBaTY64JKpZcwmT9foE0IoyBrAPGhszG2fXx6uS7QOMmFRY5D7Yw
-         TORYFr/ThLsC6nQaD2VxzuzAyE5eYf4rCJrCoBwUIDySEKc0lRkGNJG8wSZ2mFcFFLNz
-         GdAMrAiVgGFanSg/x/8WnpLC8OTL6cpjVGhtA2YaaHiDcJSxIl8BoShUuMCChsvWdAxd
-         WOuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689106157; x=1691698157;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0AjrurSLjCfnq22wQVPyzNWuhvJYbXtr4WWuyj0oB9s=;
-        b=LKMLSNap2x/0W5M34SbbXD1tEfcBfcehEzFWF7qzdF5+gmapBzuXRSVxgF1YUXzxrk
-         MeW6okjkE5AEo4phP3caxn/QRN1CE1fJjZfyYsj6lMn9GvIvWOMVMYEqCpgidLdAW7ui
-         SExAd8GecDCogt7HNrjecF+9nvYREAqN8LVDa5t5IGS5eYri1oMGYGMtXEXrCiOx5+Uz
-         JS7mkOOwCir98dSFH733q7eYLv9d+G2uKTtxoPWaaT35MirxXZx0nxCHAgZ+heux7Sd3
-         ngz4TumKUZJB39OG1Zeu0n7GvWiqaBsdH27XwvGEKkSu1Zg2+Rhc0cLIy+rrxeQqWnoF
-         9gVA==
-X-Gm-Message-State: ABy/qLaAIQ+ckU/UX6mKk3nsbwe0b1HZ1iWoT+QSBHJVg4XYQGvNDfme
-        hGW5yAwFOoap3djmTREZ5IU=
-X-Google-Smtp-Source: APBJJlGDQu2odG6nQ82sJP4Hvl6xC0g6W/0X6YKALLPC2oPn9xZJg+vaExMRgdxQvRyTgsW8Dx4LMQ==
-X-Received: by 2002:a05:6a00:1745:b0:67a:c810:3cb0 with SMTP id j5-20020a056a00174500b0067ac8103cb0mr15187493pfc.3.1689106157228;
-        Tue, 11 Jul 2023 13:09:17 -0700 (PDT)
-Received: from localhost.localdomain ([113.103.7.132])
-        by smtp.gmail.com with ESMTPSA id j6-20020a633c06000000b0051b36aee4f6sm1964047pga.83.2023.07.11.13.09.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 13:09:16 -0700 (PDT)
-From:   Guiting Shen <aarongt.shen@gmail.com>
-To:     claudiu.beznea@microchip.com
-Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
-Subject: [PATCH v3] pwm: atmel: Enable clk when pwm already enabled in bootloader
-Date:   Wed, 12 Jul 2023 04:09:05 +0800
-Message-Id: <20230711200905.6464-1-aarongt.shen@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jul 2023 16:11:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0385F139;
+        Tue, 11 Jul 2023 13:11:04 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:10:88d9::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 15CC666015A0;
+        Tue, 11 Jul 2023 21:11:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689106262;
+        bh=AKjjGI8lL4tEqfREwzTgvlPuVvgwqFyiKTV08IkeLzk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HaeF40IlzjmqqwfQZg9PAKghdL28cbFV+6QFAjoIfPClwiySBvGsG5O4cv9zCtRyH
+         Nf5tEH91hGyyS9fTPuakswByOyf0dJXsM8JRSqGwV5znGfM/pNdA6bcyRSpW6+QaHk
+         LW1VA/izd51O7LTN9aOX+nHNyGgyAuLuLRsBbusKqca67eScl4K6AaecsUoYgRl9ue
+         rOGdvLD5S0aTv61OcpMigfk5MxUterk+4s6fW+1QF6TXCfHIRODcLY66MrcjJSgHCw
+         e4QJXM7KyR3SFKLGbNNa3VUftHHWUMFG+iunmywA7JT5aqJ/UathT8h0R8AB2C+iPv
+         gRjpq3PmRuJiA==
+Message-ID: <dde98017c6c96f0e6f410ec2f568d932ea4f0b04.camel@collabora.com>
+Subject: Re: [PATCH 0/3] media: mediatek: vcodec: Add driver to support 10bit
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado" 
+        <nfraprado@collabora.com>
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        Mingjia Zhang <mingjia.zhang@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Date:   Tue, 11 Jul 2023 16:10:52 -0400
+In-Reply-To: <807a44d6-232a-400a-bfe6-441f46f4223b@notapiano>
+References: <20230711125749.15555-1-yunfei.dong@mediatek.com>
+         <af101e6831affc2e7152455ded1d779d38f1cb35.camel@collabora.com>
+         <807a44d6-232a-400a-bfe6-441f46f4223b@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver would never call clk_enable() if the PWM channel was already
-enabled in bootloader which lead to dump the warning message "the PWM
-clock already disabled" when turning off the PWM channel.
+Le mardi 11 juillet 2023 =C3=A0 15:40 -0400, N=C3=ADcolas F. R. A. Prado a =
+=C3=A9crit=C2=A0:
+> On Tue, Jul 11, 2023 at 03:15:33PM -0400, Nicolas Dufresne wrote:
+> [..]
+> > > Reference series:
+> > > [1]: this series depends on v6 which is send by Yunfei Dong.
+> > >      message-id: 20230704131349.8354-1-yunfei.dong@mediatek.com
+> >=20
+> > Its seems like 6.5.0-rc1 with the depedency and this patchset does not =
+boot on
+> > MT8195 Chromebooks. Which paltform has this been validated on ?
+>=20
+> Are you sure this was caused by these patches?
+>=20
+> I've recently noticed two issues that cause MT8195 Tomato to softlock the=
+ CPU
+> similar to your trace below.
+>=20
+> One of them is caused by having CONFIG_ARM_DSU_PMU=3Dm. Note that it is p=
+resent in
+> the arm64 defconfig. To workaround, the config needs to be disabled.
 
-Add atmel_pwm_enable_clk_if_on() in probe function to enable clock if
-the PWM channel was already enabled in bootloader.
+This isn't set in my config.
 
-Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
----
- drivers/pwm/pwm-atmel.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+  # CONFIG_ARM_DSU_PMU is not set
 
-diff --git a/drivers/pwm/pwm-atmel.c b/drivers/pwm/pwm-atmel.c
-index cdbc23649032..f8f1fbb8732d 100644
---- a/drivers/pwm/pwm-atmel.c
-+++ b/drivers/pwm/pwm-atmel.c
-@@ -464,6 +464,31 @@ static const struct of_device_id atmel_pwm_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, atmel_pwm_dt_ids);
- 
-+static int atmel_pwm_enable_clk_if_on(struct atmel_pwm_chip *atmel_pwm)
-+{
-+	unsigned int i;
-+	int err;
-+	u32 sr;
-+
-+	sr = atmel_pwm_readl(atmel_pwm, PWM_SR);
-+	if (!sr)
-+		return 0;
-+
-+	for (i = 0; i < atmel_pwm->chip.npwm; i++) {
-+		if (!(sr & (1 << i)))
-+			continue;
-+
-+		err = clk_enable(atmel_pwm->clk);
-+		if (err) {
-+			dev_err(atmel_pwm->chip.dev,
-+				"failed to enable clock: %pe\n", ERR_PTR(err));
-+			return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int atmel_pwm_probe(struct platform_device *pdev)
- {
- 	struct atmel_pwm_chip *atmel_pwm;
-@@ -504,8 +529,15 @@ static int atmel_pwm_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, atmel_pwm);
- 
-+	ret = atmel_pwm_enable_clk_if_on(atmel_pwm);
-+	if (ret < 0)
-+		goto remove_pwmchip;
-+
- 	return ret;
- 
-+remove_pwmchip:
-+	pwmchip_remove(&atmel_pwm->chip);
-+
- unprepare_clk:
- 	clk_unprepare(atmel_pwm->clk);
- 	return ret;
--- 
-2.25.1
+>=20
+> The other is caused by commit 46600ab142f8 ("regulator: Set
+> PROBE_PREFER_ASYNCHRONOUS for drivers between 5.10 and 5.15"). The whole =
+machine
+> gets really slow, including the serial. This issue only happens sometimes=
+. To
+> workaround that commit can be reverted.
+>=20
+> I intend to look into those issues and provide proper fixes in the follow=
+ing
+> days.
+
+If by slow you mean the self stall detection triggers, maybe, I haven't spe=
+nt
+time studying the current delta from 6.5.0-rc1 and Collabora forci branch, =
+but
+its non-null. Also, applying the same patches on top did not break the boot=
+, so
+quite unlikely. Here's a snapshot of my branch I made, I simply revert some
+conflicting  changes related to VP9 racing, then it applied cleanly.
+
+https://gitlab.collabora.com/nicolas/linux/-/commits/mt8195-10bit-2
+
+Nicolas
+
+>=20
+> Thanks,
+> N=C3=ADcolas
+>=20
+> >=20
+> >=20
+> > For the record:
+> >=20
+> >=20
+> > [   13.286252] platform 1c015000.dp-intf: deferred probe pending
+> > [   13.292007] platform 1c113000.dp-intf: deferred probe pending
+> > [   28.523484] rcu: INFO: rcu_preempt self-detected stall on CPU
+> > [   28.529231] rcu: 	5-....: (5250 ticks this GP)
+> > idle=3D51c4/1/0x4000000000000000 softirq=3D1434/1447 fqs=3D2471
+> > [   28.538706] rcu: 	(t=3D5254 jiffies g=3D-119 q=3D13320 ncpus=3D8)
+> > [   28.544095] Task dump for CPU 0:
+> > [   28.547313] task:cpuhp/0         state:R  running task     stack:0  =
+   pid:17
+> > ppid:2      flags:0x0000000a
+> > [   28.557221] Call trace:
+> > [   28.559658]  __switch_to+0xe4/0x15c
+> > [   28.563147]  0xffff776000196740
+> > [   28.566282] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
+> > [   28.572453] Hardware name: Acer Tomato (rev3 - 4) board (DT)
+> > [   28.578101] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BT=
+YPE=3D--)
+> > [   28.585053] pc : smp_call_function_single+0x1a4/0x1bc
+> > [   28.590098] lr : smp_call_function_single+0x178/0x1bc
+> > [   28.595140] sp : ffff80008008b9c0
+> > [   28.598444] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff776=
+00515c858
+> > [   28.605572] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000=
+000000000
+> > [   28.612699] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff800=
+08008bbb0
+> > [   28.619825] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000=
+000000000
+> > [   28.626952] x17: ffffa66484655000 x16: ffff800080028000 x15: 0000000=
+79c8b8c8b
+> > [   28.634078] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000=
+000000000
+> > [   28.641204] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000=
+000000000
+> > [   28.648331] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0f=
+cb8de2af4
+> > [   28.655458] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff800=
+08008ba08
+> > [   28.662585] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000=
+000000000
+> > [   28.669711] Call trace:
+> > [   28.672148]  smp_call_function_single+0x1a4/0x1bc
+> > [   28.676843]  perf_cgroup_attach+0x74/0xd8
+> > [   28.680847]  cgroup_migrate_execute+0x374/0x444
+> > [   28.685368]  cgroup_migrate+0x74/0x8c
+> > [   28.689021]  cgroup_attach_task+0x114/0x120
+> > [   28.693195]  __cgroup_procs_write+0x108/0x230
+> > [   28.697543]  cgroup_procs_write+0x1c/0x34
+> > [   28.701543]  cgroup_file_write+0xa0/0x1a4
+> > [   28.705545]  kernfs_fop_write_iter+0x118/0x1a8
+> > [   28.709983]  vfs_write+0x2d0/0x39c
+> > [   28.713376]  ksys_write+0x68/0xf4
+> > [   28.716682]  __arm64_sys_write+0x1c/0x28
+> > [   28.720594]  invoke_syscall+0x48/0x114
+> > [   28.724337]  el0_svc_common.constprop.0+0x44/0xe4
+> > [   28.729034]  do_el0_svc+0x38/0xa4
+> > [   28.732341]  el0_svc+0x2c/0x84
+> > [   28.735386]  el0t_64_sync_handler+0xc0/0xc4
+> > [   28.739561]  el0t_64_sync+0x190/0x194
+> > [   33.759553] vproc2: disabling
+> > [   33.762551] vproc1: disabling
+> > [   33.765548] vaud18: disabling
+> > [   33.768760] va09: disabling
+> > [   33.771599] vsram_md: disabling
+> > [   91.755483] rcu: INFO: rcu_preempt self-detected stall on CPU
+> > [   91.761220] rcu: 	5-....: (21005 ticks this GP)
+> > idle=3D51c4/1/0x4000000000000000 softirq=3D1434/1447 fqs=3D8569
+> > [   91.770778] rcu: 	(t=3D21062 jiffies g=3D-119 q=3D13628 ncpus=3D8)
+> > [   91.776253] Task dump for CPU 0:
+> > [   91.779471] task:cpuhp/0         state:R  running task     stack:0  =
+   pid:17
+> > ppid:2      flags:0x0000000a
+> > [   91.789376] Call trace:
+> > [   91.791812]  __switch_to+0xe4/0x15c
+> > [   91.795294]  0xffff776000196740
+> > [   91.798426] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
+> > [   91.804597] Hardware name: Acer Tomato (rev3 - 4) board (DT)
+> > [   91.810244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BT=
+YPE=3D--)
+> > [   91.817195] pc : smp_call_function_single+0x1a4/0x1bc
+> > [   91.822237] lr : smp_call_function_single+0x178/0x1bc
+> > [   91.827278] sp : ffff80008008b9c0
+> > [   91.830582] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff776=
+00515c858
+> > [   91.837709] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000=
+000000000
+> > [   91.844835] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff800=
+08008bbb0
+> > [   91.851962] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000=
+000000000
+> > [   91.859089] x17: ffffa66484655000 x16: ffff800080028000 x15: 0000000=
+79c8b8c8b
+> > [   91.866215] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000=
+000000000
+> > [   91.873342] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000=
+000000000
+> > [   91.880468] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0f=
+cb8de2af4
+> > [   91.887595] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff800=
+08008ba08
+> > [   91.894721] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000=
+000000000
+> > [   91.901848] Call trace:
+> > [   91.904284]  smp_call_function_single+0x1a4/0x1bc
+> > [   91.908979]  perf_cgroup_attach+0x74/0xd8
+> > [   91.912981]  cgroup_migrate_execute+0x374/0x444
+> > [   91.917502]  cgroup_migrate+0x74/0x8c
+> > [   91.921155]  cgroup_attach_task+0x114/0x120
+> > [   91.925329]  __cgroup_procs_write+0x108/0x230
+> > [   91.929677]  cgroup_procs_write+0x1c/0x34
+> > [   91.933677]  cgroup_file_write+0xa0/0x1a4
+> > [   91.937679]  kernfs_fop_write_iter+0x118/0x1a8
+> > [   91.942117]  vfs_write+0x2d0/0x39c
+> > [   91.945509]  ksys_write+0x68/0xf4
+> > [   91.948814]  __arm64_sys_write+0x1c/0x28
+> > [   91.952726]  invoke_syscall+0x48/0x114
+> > [   91.956467]  el0_svc_common.constprop.0+0x44/0xe4
+> > [   91.961164]  do_el0_svc+0x38/0xa4
+> > [   91.964472]  el0_svc+0x2c/0x84
+> > [   91.967517]  el0t_64_sync_handler+0xc0/0xc4
+> > [   91.971691]  el0t_64_sync+0x190/0x194
+> > [  154.987483] rcu: INFO: rcu_preempt self-detected stall on CPU
+> > [  154.993218] rcu: 	5-....: (36760 ticks this GP)
+> > idle=3D51c4/1/0x4000000000000000 softirq=3D1434/1447 fqs=3D14547
+> > [  155.002862] rcu: 	(t=3D36870 jiffies g=3D-119 q=3D13628 ncpus=3D8)
+> > [  155.008337] Task dump for CPU 0:
+> > [  155.011554] task:cpuhp/0         state:R  running task     stack:0  =
+   pid:17
+> > ppid:2      flags:0x0000000a
+> > [  155.021458] Call trace:
+> > [  155.023894]  __switch_to+0xe4/0x15c
+> > [  155.027376]  0xffff776000196740
+> > [  155.030507] CPU: 5 PID: 1 Comm: systemd Not tainted 6.5.0-rc1+ #36
+> > [  155.036676] Hardware name: Acer Tomato (rev3 - 4) board (DT)
+> > [  155.042323] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BT=
+YPE=3D--)
+> > [  155.049274] pc : smp_call_function_single+0x1a4/0x1bc
+> > [  155.054316] lr : smp_call_function_single+0x178/0x1bc
+> > [  155.059358] sp : ffff80008008b9c0
+> > [  155.062662] x29: ffff80008008b9c0 x28: ffff80008008bb90 x27: ffff776=
+00515c858
+> > [  155.069788] x26: ffff80008008bbb0 x25: 00000000ffffffff x24: 0000000=
+000000000
+> > [  155.076914] x23: 00000000fffffff5 x22: ffffd0fcb8de9b50 x21: ffff800=
+08008bbb0
+> > [  155.084041] x20: ffffd0fcb8de2af4 x19: ffff80008008ba00 x18: 0000000=
+000000000
+> > [  155.091168] x17: ffffa66484655000 x16: ffff800080028000 x15: 0000000=
+79c8b8c8b
+> > [  155.098294] x14: 00000000000001c1 x13: 00000000000001c1 x12: 0000000=
+000000000
+> > [  155.105421] x11: 0000000000000031 x10: ffff77613ef540c0 x9 : 0000000=
+000000000
+> > [  155.112548] x8 : ffff77613ef54140 x7 : 0000000000000005 x6 : ffffd0f=
+cb8de2af4
+> > [  155.119675] x5 : 0000000000000001 x4 : 0000000000000040 x3 : ffff800=
+08008ba08
+> > [  155.126801] x2 : 0000000000000000 x1 : 0000000000000011 x0 : 0000000=
+000000000
+> > [  155.133928] Call trace:
+> > [  155.136363]  smp_call_function_single+0x1a4/0x1bc
+> > [  155.141059]  perf_cgroup_attach+0x74/0xd8
+> > [  155.145060]  cgroup_migrate_execute+0x374/0x444
+> > [  155.149581]  cgroup_migrate+0x74/0x8c
+> > [  155.153234]  cgroup_attach_task+0x114/0x120
+> > [  155.157408]  __cgroup_procs_write+0x108/0x230
+> > [  155.161755]  cgroup_procs_write+0x1c/0x34
+> > [  155.165756]  cgroup_file_write+0xa0/0x1a4
+> > [  155.169757]  kernfs_fop_write_iter+0x118/0x1a8
+> > [  155.174195]  vfs_write+0x2d0/0x39c
+> > [  155.177587]  ksys_write+0x68/0xf4
+> > [  155.180893]  __arm64_sys_write+0x1c/0x28
+> > [  155.184805]  invoke_syscall+0x48/0x114
+> > [  155.188547]  el0_svc_common.constprop.0+0x44/0xe4
+> > [  155.193243]  do_el0_svc+0x38/0xa4
+> > [  155.196551]  el0_svc+0x2c/0x84
+> > [  155.199595]  el0t_64_sync_handler+0xc0/0xc4
+> > [  155.203769]  el0t_64_sync+0x190/0x194
+> >=20
+> >=20
+> > >=20
+> > > Mingjia Zhang (3):
+> > >   media: mediatek: vcodec: Add capture format to support 10bit tile m=
+ode
+> > >   media: mediatek: vcodec: Add capture format to support 10bit raster
+> > >     mode
+> > >   media: mediatek: vcodec: Add driver to support 10bit
+> > >=20
+> > >  .../media/v4l/pixfmt-reserved.rst             |  15 ++
+> > >  .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  |  22 ++-
+> > >  .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   5 +
+> > >  .../vcodec/decoder/mtk_vcodec_dec_stateless.c | 140 ++++++++++++++++=
++-
+> > >  drivers/media/v4l2-core/v4l2-common.c         |   4 +
+> > >  drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
+> > >  include/uapi/linux/videodev2.h                |   2 +
+> > >  7 files changed, 186 insertions(+), 4 deletions(-)
+> > >=20
+> >=20
 
