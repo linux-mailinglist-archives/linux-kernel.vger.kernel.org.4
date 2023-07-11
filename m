@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E184774E7CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D20374E7D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 09:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjGKHVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 03:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S230391AbjGKHWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 03:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjGKHVA (ORCPT
+        with ESMTP id S229868AbjGKHWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 03:21:00 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4BFCE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 00:20:57 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f087:2614:ec9d:569f])
-        by albert.telenet-ops.be with bizsmtp
-        id KjLt2A00K1w4dBK06jLuuy; Tue, 11 Jul 2023 09:20:54 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qJ7fz-0015rg-00;
-        Tue, 11 Jul 2023 09:20:53 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1qJ7g5-00Bu7W-Pz;
-        Tue, 11 Jul 2023 09:20:53 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] gpio: mxc: Improve PM configuration
-Date:   Tue, 11 Jul 2023 09:20:53 +0200
-Message-Id: <20230711072053.2837327-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Tue, 11 Jul 2023 03:22:03 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4068F4;
+        Tue, 11 Jul 2023 00:22:01 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36B7LpFC066063;
+        Tue, 11 Jul 2023 02:21:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1689060111;
+        bh=avBMW+R10qyIJQy362Zdr0zB1c1GNN1+THclbHiWsjk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=vlgBIOjWraSPerPRi5C9AGawMYeCYk0RRzZq+5gWjLtXV5UniU4CbYrbfrnEpGHo0
+         EMaLAnkz5mqSGqumwYqN17lEge5df+deWaX0cfVNQz7JtUV8B479I+mE3oDx3j6/JO
+         lVOUFxDJ8FnjD+wBX3uE33aAH0+/GJt9/SIsvBZE=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36B7LpbO002494
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Jul 2023 02:21:51 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
+ Jul 2023 02:21:51 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 11 Jul 2023 02:21:51 -0500
+Received: from [10.24.68.113] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36B7LmvX115195;
+        Tue, 11 Jul 2023 02:21:49 -0500
+Message-ID: <d54b0cc2-91d9-b081-fc39-0bbba715ee5b@ti.com>
+Date:   Tue, 11 Jul 2023 12:51:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: ti-serdes-mux: Add defines for SERDES4 in
+ J784S4 SoC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <peda@axentia.se>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <s-vadapalli@ti.com>
+References: <20230710102712.155195-1-j-choudhary@ti.com>
+ <d136d58d-9582-3833-861f-086b64c1ad36@linaro.org>
+ <ecbb6d34-e024-f6c6-5921-ba7bc6fe2e5e@ti.com>
+ <97436a92-2cbd-0498-8aad-444ac3fab99b@linaro.org>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <97436a92-2cbd-0498-8aad-444ac3fab99b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_PM=n (e.g. m68k/allmodconfig):
 
-    drivers/gpio/gpio-mxc.c:612:12: error: ‘mxc_gpio_runtime_resume’ defined but not used [-Werror=unused-function]
-      612 | static int mxc_gpio_runtime_resume(struct device *dev)
-          |            ^~~~~~~~~~~~~~~~~~~~~~~
-    drivers/gpio/gpio-mxc.c:602:12: error: ‘mxc_gpio_runtime_suspend’ defined but not used [-Werror=unused-function]
-      602 | static int mxc_gpio_runtime_suspend(struct device *dev)
-          |            ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Fix this by using the non-SET *_PM_OPS to configure the dev_pm_ops
-callbacks, and by wrapping the driver.pm initializer insider pm_ptr().
+On 11/07/23 11:34, Krzysztof Kozlowski wrote:
+> On 11/07/2023 07:55, Jayesh Choudhary wrote:
+>> Hello Krzysztof,
+>>
+>> On 10/07/23 17:11, Krzysztof Kozlowski wrote:
+>>> On 10/07/2023 12:27, Jayesh Choudhary wrote:
+>>>> SERDES4 has 4 lanes. Add lane definitions for it.
+>>>>
+>>>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>>>> ---
+>>>>    include/dt-bindings/mux/ti-serdes.h | 20 ++++++++++++++++++++
+>>>
+>>> Where are the users of this binding constants? IOW, why do you need to
+>>> add these?
+>>>
+>>> I don't see users of existing constants either...
+>>>
+>>
+>> These constants are propagated in the idle-state property for the
+>> mux-controller node (named serdes_ln_ctrl) usually in the final
+>> board dts files and occasionally in the main dtsi files for TI SoCs.
+> 
+> So they are not used. 
 
-As NOIRQ_SYSTEM_SLEEP_PM_OPS() uses pm_sleep_ptr() internally, the
-__maybe_unused annotations for the noirq callbacks are no longer needed,
-and can be removed.
+'They' as in SERDES4 definition or others as well??
 
-Fixes: 3283d820dce649ad ("gpio: mxc: add runtime pm support")
-Reported-by: noreply@ellerman.id.au
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/gpio/gpio-mxc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
-index a9fb6bd9aa6f9645..a43df5d5006e62d3 100644
---- a/drivers/gpio/gpio-mxc.c
-+++ b/drivers/gpio/gpio-mxc.c
-@@ -623,7 +623,7 @@ static int mxc_gpio_runtime_resume(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused mxc_gpio_noirq_suspend(struct device *dev)
-+static int mxc_gpio_noirq_suspend(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct mxc_gpio_port *port = platform_get_drvdata(pdev);
-@@ -634,7 +634,7 @@ static int __maybe_unused mxc_gpio_noirq_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused mxc_gpio_noirq_resume(struct device *dev)
-+static int mxc_gpio_noirq_resume(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct mxc_gpio_port *port = platform_get_drvdata(pdev);
-@@ -647,8 +647,8 @@ static int __maybe_unused mxc_gpio_noirq_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops mxc_gpio_dev_pm_ops = {
--	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(mxc_gpio_noirq_suspend, mxc_gpio_noirq_resume)
--	SET_RUNTIME_PM_OPS(mxc_gpio_runtime_suspend, mxc_gpio_runtime_resume, NULL)
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(mxc_gpio_noirq_suspend, mxc_gpio_noirq_resume)
-+	RUNTIME_PM_OPS(mxc_gpio_runtime_suspend, mxc_gpio_runtime_resume, NULL)
- };
- 
- static int mxc_gpio_syscore_suspend(void)
-@@ -695,7 +695,7 @@ static struct platform_driver mxc_gpio_driver = {
- 		.name	= "gpio-mxc",
- 		.of_match_table = mxc_gpio_dt_ids,
- 		.suppress_bind_attrs = true,
--		.pm = &mxc_gpio_dev_pm_ops,
-+		.pm = pm_ptr(&mxc_gpio_dev_pm_ops),
- 	},
- 	.probe		= mxc_gpio_probe,
- };
--- 
-2.34.1
-
+Do not add headers which are not used - neither to
+> the kernel sources, nor to the DTSI. The header constants don't even
+> look as suitable for bindings, although this is tricky to judge without
+> users.
+> 
+> Best regards,
+> Krzysztof
+> 
