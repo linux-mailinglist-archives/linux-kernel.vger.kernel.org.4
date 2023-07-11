@@ -2,136 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2572B74F7C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D1074F819
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjGKSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 14:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S229583AbjGKSm5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 14:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjGKSF5 (ORCPT
+        with ESMTP id S229509AbjGKSm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:05:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88651716;
-        Tue, 11 Jul 2023 11:05:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6851A615B6;
-        Tue, 11 Jul 2023 18:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE81EC433C8;
-        Tue, 11 Jul 2023 18:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689098754;
-        bh=xIq4UPJc5cJM6QesWCRibpmblqZYNDtcrH7yYHl3oK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mWaDSgMdD4UzMmzKqW6Lxv4GAHzx73ct8iijKJbB5W+gmcZcf1g4mTyEDxU/WBCFx
-         +3cqk+Xk6nCGHIj7hPMbJUxa8tfoGcg3xZFAJge3mW7Lo1N2kHmbPm74BHmTapWjNs
-         R5XXG4mwhC4C5ANrfJAmAFGEM3LVVGldL8dhjsbYnCY9FsHLoO9YO42nnzmI6QwrNf
-         CbOqf2IDC9lRytEtWxsvGP7/qhOCKvtB1Tp9c4svbUctXaYy8lf6xtzqYjSeF6BVr6
-         0gcweyNJH3KuERy2BcMiB93WaQycOJiT80L9nBBl9/ZsbU+AUw//GzBg9lgaeHVl/5
-         l2r+UBmUfbppw==
-Date:   Tue, 11 Jul 2023 19:05:49 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Huqiang Qin <huqiang.qin@amlogic.com>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        brgl@bgdev.pl, andy@kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] dt-bindings: gpio: Add a header file for Amlogic
- C3 SoCs
-Message-ID: <20230711-monthly-return-8792ce346c26@spud>
-References: <20230710042812.2007928-1-huqiang.qin@amlogic.com>
- <20230710042812.2007928-2-huqiang.qin@amlogic.com>
- <20230710-maybe-mantis-e647d94fd13a@spud>
- <424cb61a-9102-9a43-c999-36939e8d6cc0@amlogic.com>
+        Tue, 11 Jul 2023 14:42:56 -0400
+Received: from 14.mo582.mail-out.ovh.net (14.mo582.mail-out.ovh.net [46.105.56.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13B31704
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:42:54 -0700 (PDT)
+Received: from director6.ghost.mail-out.ovh.net (unknown [10.108.4.200])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 2D27723A93
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:06:34 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-42n7r (unknown [10.110.115.59])
+        by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id CBA2B1FE33;
+        Tue, 11 Jul 2023 18:06:33 +0000 (UTC)
+Received: from courmont.net ([37.59.142.102])
+        by ghost-submission-6684bf9d7b-42n7r with ESMTPSA
+        id 5e55LSmarWQWAwAApIyesg
+        (envelope-from <remi@remlab.net>); Tue, 11 Jul 2023 18:06:33 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004a521992a-6c1f-49e2-b636-6ed0849ec6b9,
+                    BD5993DD31A8D185A8BDB9FDB50A3FED214DC06B) smtp.auth=postmaster@courmont.net
+X-OVh-ClientIp: 87.92.194.88
+From:   =?ISO-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 03/12] RISC-V: add helper function to read the vector VLEN
+Date:   Tue, 11 Jul 2023 21:06:32 +0300
+Message-ID: <5073588.8QdJVB83L8@basile.remlab.net>
+Organization: Remlab
+In-Reply-To: <20230711153743.1970625-4-heiko@sntech.de>
+References: <20230711153743.1970625-1-heiko@sntech.de>
+ <20230711153743.1970625-4-heiko@sntech.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BB6EK5uDa3jar4Xq"
-Content-Disposition: inline
-In-Reply-To: <424cb61a-9102-9a43-c999-36939e8d6cc0@amlogic.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Ovh-Tracer-Id: 11108691431442553307
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkfhojghfggfgtgesthhqredttddtjeenucfhrhhomheptformhhiucffvghnihhsqdevohhurhhmohhnthcuoehrvghmihesrhgvmhhlrggsrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhfegfeefvdefueetleefffduuedvjeefheduueekieeltdetueetueeugfevffenucffohhmrghinheprhgvmhhlrggsrdhnvghtnecukfhppeduvdejrddtrddtrddupdekjedrledvrdduleegrdekkedpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrvghmihesrhgvmhhlrggsrdhnvghtqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le tiistaina 11. heinäkuuta 2023, 18.37.34 EEST Heiko Stuebner a écrit :
+> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> 
+> VLEN describes the length of each vector register and some instructions
+> need specific minimal VLENs to work correctly.
+> 
+> The vector code already includes a variable riscv_vsize that contains the
+> value of "32 vector registers with vlenb length" that gets filled during
+> boot. vlenb is the value contained in the CSR_VLENB register and
+> the value represents "VLEN / 8".
+> 
+> So add riscv_vector_vlen() to return the actual VLEN value for in-kernel
+> users when they need to check the available VLEN.
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> ---
+>  arch/riscv/include/asm/vector.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/vector.h
+> b/arch/riscv/include/asm/vector.h index ac2c23045eec..88cf76a2316d 100644
+> --- a/arch/riscv/include/asm/vector.h
+> +++ b/arch/riscv/include/asm/vector.h
+> @@ -232,4 +232,15 @@ static inline bool
+> riscv_v_vstate_ctrl_user_allowed(void) { return false; }
+> 
+>  #endif /* CONFIG_RISCV_ISA_V */
+> 
+> +/*
+> + * Return the implementation's vlen value.
+> + *
+> + * riscv_vsize contains the value of "32 vector registers with vlenb
+> length" + * so rebuild the vlen value in bits from it.
+> + */
+> +static inline int riscv_vector_vlen(void)
+> +{
+> +	return riscv_v_vsize / 32 * 8;
+> +}
 
---BB6EK5uDa3jar4Xq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+KVM already has a bespoke conversion to bytes (rather than bits). Factor code?
 
-On Tue, Jul 11, 2023 at 10:55:40AM +0800, Huqiang Qin wrote:
-> Hi Conor,
->=20
-> On 2023/7/11 0:38, Conor Dooley wrote:
-> >> diff --git a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-p=
-inctrl-a1.yaml b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pi=
-nctrl-a1.yaml
-> >> index 99080c9eaac3..e019b6aa6ca3 100644
-> >> --- a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-=
-a1.yaml
-> >> +++ b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-=
-a1.yaml
-> >> @@ -17,6 +17,7 @@ properties:
-> >>      enum:
-> >>        - amlogic,meson-a1-periphs-pinctrl
-> >>        - amlogic,meson-s4-periphs-pinctrl
-> >> +      - amlogic,c3-periphs-pinctrl
-> > Alphanumerical order here perhaps?
->=20
-> Okay
->=20
-> >=20
-> >> +++ b/include/dt-bindings/gpio/amlogic-c3-gpio.h
-> >> @@ -0,0 +1,72 @@
-> >> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
-> > Any reason to deviate from the usual license terms for bindings, which =
-is
-> > "GPL-2.0-only OR BSD-2-Clause"?
->=20
-> I initially used the license commonly used by Amlogic (reference: meson-s=
-4-gpio.h):
-> ```
-> /* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> ```
->=20
-> But when I checked the patch, some warnings appeared:
-> ```
-> WARNING: DT binding headers should be licensed (GPL-2.0-only OR .*)
-> #37: FILE: include/dt-bindings/gpio/amlogic-c3-gpio.h:1:
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> ```
-> So I followed the prompts and changed the license.
->=20
-> Can I ignore this warning and use the (GPL-2.0+ OR MIT) license?
+> +
+>  #endif /* ! __ASM_RISCV_VECTOR_H */
 
-If the tools are happy then I suppose you are okay.. I'll leave that to
-Rob or Krzysztof, but if you have a reason for diverging that seems fine
-to me.
 
-Thanks,
-Conor.
+-- 
+レミ・デニ-クールモン
+http://www.remlab.net/
 
---BB6EK5uDa3jar4Xq
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK2Z/QAKCRB4tDGHoIJi
-0gtfAP9/EXCGxkNjEP4so+mvz8Kfk7PRNhgkTxX9QnngeOPp1AD/XndZ8ks4QCwV
-IXXaGza3r7f0IgKHFv0erzhbfM1q7gY=
-=JIPw
------END PGP SIGNATURE-----
-
---BB6EK5uDa3jar4Xq--
