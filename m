@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C659574E2B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE18074E2B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjGKAm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S229892AbjGKAnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjGKAmx (ORCPT
+        with ESMTP id S229702AbjGKAm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:42:53 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287A0A0;
-        Mon, 10 Jul 2023 17:42:53 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-262dc1ced40so3724175a91.3;
-        Mon, 10 Jul 2023 17:42:53 -0700 (PDT)
+        Mon, 10 Jul 2023 20:42:58 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF4F1B0;
+        Mon, 10 Jul 2023 17:42:57 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso3765647a12.1;
+        Mon, 10 Jul 2023 17:42:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689036172; x=1691628172;
+        d=gmail.com; s=20221208; t=1689036177; x=1691628177;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k68Ut8PHB5gxL0IDowPNH7dg2dW+Rmk/0PtqyCTd1NQ=;
-        b=e4jlusCcMCV7+BkUO2FzbepFRFyFtElyzMALPFlALaKrv2sP+ytjsE0oRYTP3Xg4lT
-         pJvLGP8804mhShhJGO7lINYsZ9bddCyobLRyNaaEDJ7B6YJ6qZT0TedtxfUmr6RxGeiU
-         gbFHYtrVSoiStLksZ346zHw21Vj9/aSpLerH4K62KMe4tlTmWe/kLptE3MI0MRd6rigY
-         20ygw/w3ybhGLGwS/Fib5yMpQIa+Z7N/ilqP861+UxtfW1xX1YMJmm/k+YYghFdY1vO4
-         gCNxDLbdxJrvJRn6zXnAEyke0w6mMMoUNeeGC+01JzCzvXVeDdRjzy3frrsgALebflmi
-         VmsA==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wqRUB5GOcQ1b+cRv1jVfh7t7hV1+cLaTJfgnZElCik8=;
+        b=fStzMHOmVVj1XFBo8m8JIqOV4qRKdD6NBhDqvoD1ujGZh2PM6dkZ8MIBJ+nWzmHb4s
+         UqTFODF5I1PwXsOX3QeWHl+IGXLA/luXJ/HBORQffFBKWEF8mYCkoUGBNi9JXkSLmF/C
+         9mtLTd4VeoDQjwmzw2bjAPrjcJucK+SOmg2+XmTvGLYk6RyrraW+FuUg/KorzOo5C/gj
+         fP7cTvV3NeWUFAXE1s0ueIlyV6YMAAuDjNiCTv45hXoCDcWSJwc7E56efvP4eH6FwNHg
+         7GRnvAHRgCQ2K3DHxEnmoCDmBpyQ5Ao0kYyaUd66yabQyM1PyQhcz4h0ZAXL62K0rdlF
+         Yztg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689036172; x=1691628172;
+        d=1e100.net; s=20221208; t=1689036177; x=1691628177;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k68Ut8PHB5gxL0IDowPNH7dg2dW+Rmk/0PtqyCTd1NQ=;
-        b=JDbZAp0d4CbQ0aQE1+JmSjYLCZe5ZK7ZFHLwyzB2A0+S37dCG0JmVGqKij11mEN8Dx
-         R2BwPJ8ZscCdbw41feyPyqhfkBETp0GG1VApshMud8ZzMGdunHN1uiI9/gu9UEeZjd3O
-         QW/qAghKq30SYhVa9trL/6Efm9BE2qmYKAkCjuRZWzhUlPWXE2iVdoaajO8rq0xvMru1
-         xDJkJxYmJQvSz/ba5wQ2JGva6BZCStb9a8LGtIRzjxMbNzWtya1CCSQnU0dbYSXJJAVi
-         xhAhBoVsVU5PElNO5HRlUWgJn919gm082hT6gOB5WUscdj4EvcGzOLiUaxU1pMu2c16J
-         BP+g==
-X-Gm-Message-State: ABy/qLYN3xqmsQ3AW+DAFivDf7ggHZ0SAu+lM4CsxhCtvLz+PFJbrv9d
-        cvtNQMz5yyiVBbW/w+kqCXF8cdIxSjc=
-X-Google-Smtp-Source: APBJJlEi0RzKpIFVtgo7FwUOBO5jd5NH0n7fWfx4yGxNRBu4NaR6kAdGyNSWcgKIwCsuxhnhTn1mzA==
-X-Received: by 2002:a17:90a:74c6:b0:262:ff86:ac2d with SMTP id p6-20020a17090a74c600b00262ff86ac2dmr14601850pjl.46.1689036172466;
-        Mon, 10 Jul 2023 17:42:52 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:96bf:7e77:39eb:7a23])
-        by smtp.gmail.com with ESMTPSA id i5-20020a17090adc0500b002630c9d78aasm544174pjv.5.2023.07.10.17.42.51
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wqRUB5GOcQ1b+cRv1jVfh7t7hV1+cLaTJfgnZElCik8=;
+        b=YWNGTKHLLSu1gVLQma2aQL1+0G7BdpSZxlM7iXO0b1i00xkjBuQryvN55tUS8xdvQT
+         EwH1Pp8IAAbnQmUNgadqYZOw1Z8ZSYOjeGwjBjpk6rHOcZrdoJVN+63bBKiq4eFG5OAG
+         Z/f8dPmprw+ARlfBy9aTpsR+INUOpcpqrPvSgQB9Gz0MPTXimniZyD6KjuyxcZ+NwLPv
+         2yua4JmEioMTBBoWT6PQ0nBYQ7aE2zVxuHb1EQ+vgL3jjbZKOGks9QkvxvvqhvRAUAPd
+         Uj/vtcvyOyaFGlkOcW0jYidIzNZHIZb26kElMIsrwUnbm1hJMhKmNY1yj+V5Fhu7ISyg
+         i7kQ==
+X-Gm-Message-State: ABy/qLZZaDBbsz1FLgf5sDPXyWg87y/MrcJI27QWh+DbG1t5n2RJoNdY
+        9IfbRWuhEq4l0/iL2m7tkQM=
+X-Google-Smtp-Source: APBJJlFW3dAXvvoia1OaNIJhpVDBxDZXQiA4agQuGbAvqgt4XW2Yse6iZra3wEctumB9ahPen88cqA==
+X-Received: by 2002:a17:90b:4b8c:b0:263:730b:f562 with SMTP id lr12-20020a17090b4b8c00b00263730bf562mr14468738pjb.11.1689036176544;
+        Mon, 10 Jul 2023 17:42:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id ep11-20020a17090ae64b00b0025bbe90d3cbsm484470pjb.44.2023.07.10.17.42.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 17:42:52 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 17:42:49 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/10] Input: nomadik-ske-keypad - Convert to use devm_*
- api
-Message-ID: <ZKyliRefKiualqO1@google.com>
-References: <20230705052346.39337-1-frank.li@vivo.com>
- <20230705052346.39337-8-frank.li@vivo.com>
+        Mon, 10 Jul 2023 17:42:56 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 14:42:54 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [PATCH v4 8/9] cgroup/cpuset: Documentation update for partition
+Message-ID: <ZKyljsbJgLNpsBLI@slm.duckdns.org>
+References: <20230627143508.1576882-1-longman@redhat.com>
+ <20230627143508.1576882-9-longman@redhat.com>
+ <ZKx4ZJowRhRtjZxB@slm.duckdns.org>
+ <6d5aee58-f558-868c-76e0-0b58f8332110@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705052346.39337-8-frank.li@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6d5aee58-f558-868c-76e0-0b58f8332110@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On Wed, Jul 05, 2023 at 01:23:44PM +0800, Yangtao Li wrote:
-> @@ -305,7 +288,7 @@ static int __init ske_keypad_probe(struct platform_device *pdev)
->  	error = clk_prepare_enable(keypad->pclk);
->  	if (error) {
->  		dev_err(&pdev->dev, "Failed to prepare/enable pclk\n");
-> -		goto err_clk;
-> +		return error;
->  	}
->  
->  	error = clk_prepare_enable(keypad->clk);
+On Mon, Jul 10, 2023 at 08:21:43PM -0400, Waiman Long wrote:
+> > Wouldn't a partition root's cpus.exclusive always contain all of the CPUs in
+> > its cpus? Would it make sense for cpus.exclusive to be different from .cpus?
+> 
+> In auto-filled case, it should be the same as cpuset.cpus. I will clarify
+> that in the documentation. Thanks for catching that.
 
-We should not mix managed (devm) and normal resources, because doing so
-wrecks the order of resource unwinding. Lucklily we have
-devm_clk_get_enabled() now, so I switched the driver to use it and
-applied the patch.
+When the user writes something to the file, what would it mena if the
+content differs from the cgroup's cpuset.cpus?
 
 Thanks.
 
 -- 
-Dmitry
+tejun
