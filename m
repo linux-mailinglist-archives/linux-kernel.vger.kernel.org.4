@@ -2,325 +2,409 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B66674E2C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648CE74E2C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 02:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjGKAuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 20:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        id S230281AbjGKAuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 20:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjGKAt7 (ORCPT
+        with ESMTP id S230153AbjGKAuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 20:49:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01BAA0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 17:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689036597; x=1720572597;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=UZgv5SNKTccA6FLxbfEckb4OEzHKeJEe92vi+aV97zw=;
-  b=bEA33E2vTA8iX8oshW5Fl5g1h0dYBJOngZ/A+41hRqLjDZJ7lY4k9zkO
-   p9dSfJQiED/4p0pzr5rLepF7wbhbfTUkjWvsUi5gdATRSvsaPnh1jW92P
-   UwOTz9kjm53agMhG24wwnaiql5e7iK0KRE9nUbhoGWQ3yT3V6rhlHsB0T
-   7kmAHq+hewUdEXuTT/ZifK8ZeEdiYeZLVk5Wcyt+NX4Fd7cbklUkH/BIl
-   22vnLti3oGE7nVoCyu7UH9/PoZu5xTLVw6bBXAZmbCsuyoGESlqBbCgNd
-   sz1RZ/m+du7j9Hwd04yCDDpe7cRGpqryIuKzb3POVHWQOEOHlyVoFTrXI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361956157"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="361956157"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 17:49:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="894981500"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="894981500"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 17:49:53 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Zhu <alexlzhu@fb.com>
-Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
-        <20230703135330.1865927-5-ryan.roberts@arm.com>
-        <87edlkgnfa.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <44e60630-5e9d-c8df-ab79-cb0767de680e@arm.com>
-        <524bacd2-4a47-2b8b-6685-c46e31a01631@redhat.com>
-        <ZKgZrNuxuq4ACvIb@casper.infradead.org>
-        <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
-        <9dd036a8-9ba3-0cc4-b791-cb3178237728@arm.com>
-        <87y1jofoyi.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <6c2f3127-9334-85ba-48f6-83a9c87abde0@arm.com>
-        <874jmcf7kh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <501d1a6a-c9cf-94c3-b773-c648b944b30f@arm.com>
-Date:   Tue, 11 Jul 2023 08:48:16 +0800
-In-Reply-To: <501d1a6a-c9cf-94c3-b773-c648b944b30f@arm.com> (Ryan Roberts's
-        message of "Mon, 10 Jul 2023 10:25:36 +0100")
-Message-ID: <87v8ere0j3.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Mon, 10 Jul 2023 20:50:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68231BE;
+        Mon, 10 Jul 2023 17:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5539661143;
+        Tue, 11 Jul 2023 00:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22480C433C8;
+        Tue, 11 Jul 2023 00:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689036611;
+        bh=mZmsLSP5c8pSPcG/BlSgKxjmgEV+HlIp/6GqTKi3MCE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EBAlG74wtNwEaFpLHKoRzRSo5JRzTj2CCx44ZJ2KVJZSUMtRYwTuD+7vw2XAo8T/I
+         WBzkon6LhTYKpSe+WkZmRqxKyNWuO3ZsVbUklHYyoLhsAMn6tf/ZiW+/5OUJehsiov
+         HZHtrJfNCv9T8sObIkqcgGoROf/psXiQ5+kIRMDYfncyKYrqKRea+EeG60T/nRcoMG
+         N+v2cXtQN8g+Vw7X+TCu183oy225Bmhy3B70nCEZZzEcTLekRoUpxYvZU7jnWzh8uY
+         ON0rMlEZ1NObU3vpSvBxVHILIrxnqUsFJ73nXSCPc5+RT/angr39G1FTgEHqTjpU9D
+         8TpqzegIyimxw==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 11 Jul 2023 03:50:05 +0300
+Message-Id: <CTYXI8TL7C36.2SCWH82FAZWBO@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
+        <lukas@wunner.de>, <p.rosenberger@kunbus.com>,
+        "kernel test robot" <yujie.liu@intel.com>
+Subject: Re: [PATCH 3] tpm,tpm_tis: Disable interrupts after 1000 unhandled
+ IRQs
+X-Mailer: aerc 0.14.0
+References: <20230619092219.2600-1-LinoSanfilippo@gmx.de>
+In-Reply-To: <20230619092219.2600-1-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ryan Roberts <ryan.roberts@arm.com> writes:
 
-> On 10/07/2023 10:18, Huang, Ying wrote:
->> Ryan Roberts <ryan.roberts@arm.com> writes:
->>=20
->>> On 10/07/2023 04:03, Huang, Ying wrote:
->>>> Ryan Roberts <ryan.roberts@arm.com> writes:
->>>>
->>>>> On 07/07/2023 15:07, David Hildenbrand wrote:
->>>>>> On 07.07.23 15:57, Matthew Wilcox wrote:
->>>>>>> On Fri, Jul 07, 2023 at 01:29:02PM +0200, David Hildenbrand wrote:
->>>>>>>> On 07.07.23 11:52, Ryan Roberts wrote:
->>>>>>>>> On 07/07/2023 09:01, Huang, Ying wrote:
->>>>>>>>>> Although we can use smaller page order for FLEXIBLE_THP, it's ha=
-rd to
->>>>>>>>>> avoid internal fragmentation completely.=C2=A0 So, I think that =
-finally we
->>>>>>>>>> will need to provide a mechanism for the users to opt out, e.g.,
->>>>>>>>>> something like "always madvise never" via
->>>>>>>>>> /sys/kernel/mm/transparent_hugepage/enabled.=C2=A0 I'm not sure =
-whether it's
->>>>>>>>>> a good idea to reuse the existing interface of THP.
->>>>>>>>>
->>>>>>>>> I wouldn't want to tie this to the existing interface, simply bec=
-ause that
->>>>>>>>> implies that we would want to follow the "always" and "madvise" a=
-dvice too;
->>>>>>>>> That
->>>>>>>>> means that on a thp=3Dmadvise system (which is certainly the case=
- for android and
->>>>>>>>> other client systems) we would have to disable large anon folios =
-for VMAs that
->>>>>>>>> haven't explicitly opted in. That breaks the intention that this =
-should be an
->>>>>>>>> invisible performance boost. I think it's important to set the po=
-licy for
->>>>>>>>> use of
->>>>>>>>
->>>>>>>> It will never ever be a completely invisible performance boost, ju=
-st like
->>>>>>>> ordinary THP.
->>>>>>>>
->>>>>>>> Using the exact same existing toggle is the right thing to do. If =
-someone
->>>>>>>> specify "never" or "madvise", then do exactly that.
->>>>>>>>
->>>>>>>> It might make sense to have more modes or additional toggles, but
->>>>>>>> "madvise=3Dnever" means no memory waste.
->>>>>>>
->>>>>>> I hate the existing mechanisms.=C2=A0 They are an abdication of our
->>>>>>> responsibility, and an attempt to blame the user (be it the sysadmin
->>>>>>> or the programmer) of our code for using it wrongly.=C2=A0 We shoul=
-d not
->>>>>>> replicate this mistake.
->>>>>>
->>>>>> I don't agree regarding the programmer responsibility. In some cases=
- the
->>>>>> programmer really doesn't want to get more memory populated than req=
-uested --
->>>>>> and knows exactly why setting MADV_NOHUGEPAGE is the right thing to =
-do.
->>>>>>
->>>>>> Regarding the madvise=3Dnever/madvise/always (sys admin decision), m=
-emory waste
->>>>>> (and nailing down bugs or working around them in customer setups) ha=
-ve been very
->>>>>> good reasons to let the admin have a word.
->>>>>>
->>>>>>>
->>>>>>> Our code should be auto-tuning.=C2=A0 I posted a long, detailed out=
-line here:
->>>>>>> https://lore.kernel.org/linux-mm/Y%2FU8bQd15aUO97vS@casper.infradea=
-d.org/
->>>>>>>
->>>>>>
->>>>>> Well, "auto-tuning" also should be perfect for everybody, but once r=
-eality
->>>>>> strikes you know it isn't.
->>>>>>
->>>>>> If people don't feel like using THP, let them have a word. The "madv=
-ise" config
->>>>>> option is probably more controversial. But the "always vs. never" ab=
-solutely
->>>>>> makes sense to me.
->>>>>>
->>>>>>>> I remember I raised it already in the past, but you *absolutely* h=
-ave to
->>>>>>>> respect the MADV_NOHUGEPAGE flag. There is user space out there (f=
-or
->>>>>>>> example, userfaultfd) that doesn't want the kernel to populate any
->>>>>>>> additional page tables. So if you have to respect that already, th=
-en also
->>>>>>>> respect MADV_HUGEPAGE, simple.
->>>>>>>
->>>>>>> Possibly having uffd enabled on a VMA should disable using large fo=
-lios,
->>>>>>
->>>>>> There are cases where we enable uffd *after* already touching memory=
- (postcopy
->>>>>> live migration in QEMU being the famous example). That doesn't fly.
->>>>>>
->>>>>>> I can get behind that.=C2=A0 But the notion that userspace knows wh=
-at it's
->>>>>>> doing ... hahaha.=C2=A0 Just ignore the madvise flags.=C2=A0 Usersp=
-ace doesn't
->>>>>>> know what it's doing.
->>>>>>
->>>>>> If user space sets MADV_NOHUGEPAGE, it exactly knows what it is doin=
-g ... in
->>>>>> some cases. And these include cases I care about messing with sparse=
- VM memory :)
->>>>>>
->>>>>> I have strong opinions against populating more than required when us=
-er space set
->>>>>> MADV_NOHUGEPAGE.
->>>>>
->>>>> I can see your point about honouring MADV_NOHUGEPAGE, so think that i=
-t is
->>>>> reasonable to fallback to allocating an order-0 page in a VMA that ha=
-s it set.
->>>>> The app has gone out of its way to explicitly set it, after all.
->>>>>
->>>>> I think the correct behaviour for the global thp controls (cmdline an=
-d sysfs)
->>>>> are less obvious though. I could get on board with disabling large an=
-on folios
->>>>> globally when thp=3D"never". But for other situations, I would prefer=
- to keep
->>>>> large anon folios enabled (treat "madvise" as "always"),
->>>>
->>>> If we have some mechanism to auto-tune the large folios usage, for
->>>> example, detect the internal fragmentation and split the large folio,
->>>> then we can use thp=3D"always" as default configuration.  If my memory
->>>> were correct, this is what Johannes and Alexander is working on.
->>>
->>> Could you point me to that work? I'd like to understand what the mechan=
-ism is.
->>> The other half of my work aims to use arm64's pte "contiguous bit" to t=
-ell the
->>> HW that a span of PTEs share the same mapping and is therefore coalesce=
-d into a
->>> single TLB entry. The side effect of this, however, is that we only hav=
-e a
->>> single access and dirty bit for the whole contpte extent. So I'd like t=
-o avoid
->>> any mechanism that relies on getting access/dirty at the base page gran=
-ularity
->>> for a large folio.
->>=20
->> Please take a look at the THP shrinker patchset,
->>=20
->> https://lore.kernel.org/linux-mm/cover.1667454613.git.alexlzhu@fb.com/
+BTW, you should do next time:
+
+git format-patch -v4 to get "[PATCH v4]", which defacto way to mark up
+patch set versions.
+
+On Mon Jun 19, 2023 at 12:22 PM EEST, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 >
-> Thanks!
+> After activation of interrupts for TPM TIS drivers 0-day reports an
+> interrupt storm on an Inspur NF5180M6 server.
 >
->>=20
->>>>
->>>>> with the argument that
->>>>> their order is much smaller than traditional THP and therefore the in=
-ternal
->>>>> fragmentation is significantly reduced.
->>>>
->>>> Do you have any data for this?
->>>
->>> Some; its partly based on intuition that the smaller the allocation uni=
-t, the
->>> smaller the internal fragmentation. And partly on peak memory usage dat=
-a I've
->>> collected for the benchmarks I'm running, comparing baseline-4k kernel =
-with
->>> baseline-16k and baseline-64 kernels along with a 4k kernel that suppor=
-ts large
->>> anon folios (I appreciate that's not exactly what we are talking about =
-here, and
->>> it's not exactly an extensive set of results!):
->>>
->>>
->>> Kernel Compliation with 8 Jobs:
->>> | kernel        |   peak |
->>> |:--------------|-------:|
->>> | baseline-4k   |   0.0% |
->>> | anonfolio     |   0.1% |
->>> | baseline-16k  |   6.3% |
->>> | baseline-64k  |  28.1% |
->>>
->>>
->>> Kernel Compliation with 80 Jobs:
->>> | kernel        |   peak |
->>> |:--------------|-------:|
->>> | baseline-4k   |   0.0% |
->>> | anonfolio     |   1.7% |
->>> | baseline-16k  |   2.6% |
->>> | baseline-64k  |  12.3% |
->>>
->>=20
->> Why is anonfolio better than baseline-64k if you always allocate 64k
->> anonymous folio?  Because page cache uses 64k in baseline-64k?
+> Fix this by detecting the storm and falling back to polling:
+> Count the number of unhandled interrupts within a 10 ms time interval. In
+> case that more than 1000 were unhandled deactivate interrupts entirely,
+> deregister the handler and use polling instead.
 >
-> No, because the VMA boundaries are aligned to 4K and not 64K. Large Anon =
-Folios
-> only allocates a 64K folio if it does not breach the bounds of the VMA (a=
-nd if
-> it doesn't overlap other allocated PTEs).
-
-Thanks for explanation!
-
-We will use more memory for file cache too for baseline-64k, right?  So,
-you observed much more anonymous pages, but not so for file cache pages?
-
->>=20
->> We may need to test some workloads with sparse access patterns too.
+> Also print a note to point to the tpm_tis_dmi_table.
 >
-> Yes, I agree if you have a workload with a pathalogical memory access pat=
-tern
-> where it writes to addresses with a stride of 64K, all contained in a sin=
-gle
-> VMA, then you will end up allocating 16x the memory. This is obviously an
-> unrealistic extreme though.
+> Since the interrupt deregistration function devm_free_irq() waits for all
+> interrupt handlers to finish, only trigger a worker in the interrupt
+> handler and do the unregistration in the worker to avoid a deadlock.
+>
+> Note: the storm detection logic equals the implementation in
+> note_interrupt() which uses timestamps and counters stored in struct
+> irq_desc. Since this structure is private to the generic interrupt core
+> the TPM TIS core uses its own timestamps and counters. Furthermore the TP=
+M
+> interrupt handler always returns IRQ_HANDLED to prevent the generic
+> interrupt core from processing the interrupt storm.
+>
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202305041325.ae8b0c43-yujie.liu@in=
+tel.com/
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 117 ++++++++++++++++++++++++++++----
+>  drivers/char/tpm/tpm_tis_core.h |   4 ++
+>  2 files changed, 106 insertions(+), 15 deletions(-)
+>
+> Changes to v2:
+> - use define for max number of unhandles irqs(requested by Jarko)
+> - rename intmask to int_mask (requested by Jarko)
+> - rephrased short summary (requested by Jarko)
+> - rename disable_interrupts to tpm_tis_disable_interrupts (requested by J=
+arko)
+> - print info message concerning adding an entry to tpm_tis_dmi_table
+>   (suggested by Jerry)
+> - amended commit message
+> - handle failure of locality request by returning IRQ_NONE
+> - dont take and release locality in __tpm_tis_disable_interrupts but in i=
+ts
+> caller
+>
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
+ore.c
+> index 558144fa707a..d42537b985c5 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -24,9 +24,12 @@
+>  #include <linux/wait.h>
+>  #include <linux/acpi.h>
+>  #include <linux/freezer.h>
+> +#include <linux/dmi.h>
+>  #include "tpm.h"
+>  #include "tpm_tis_core.h"
+> =20
+> +#define TPM_TIS_MAX_UNHANDLED_IRQS	1000
+> +
+>  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value);
+> =20
+>  static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
+> @@ -468,25 +471,29 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
+ const u8 *buf, size_t len)
+>  	return rc;
+>  }
+> =20
+> -static void disable_interrupts(struct tpm_chip *chip)
+> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
+> +{
+> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> +	u32 int_mask =3D 0;
+> +
+> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &int_mask);
+> +	int_mask &=3D ~TPM_GLOBAL_INT_ENABLE;
+> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), int_mask);
+> +
+> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
+> +}
+> +
+> +static void tpm_tis_disable_interrupts(struct tpm_chip *chip)
+>  {
+>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> -	u32 intmask;
+> -	int rc;
+> =20
+>  	if (priv->irq =3D=3D 0)
+>  		return;
+> =20
+> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> -	if (rc < 0)
+> -		intmask =3D 0;
+> -
+> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
+> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> +	__tpm_tis_disable_interrupts(chip);
+> =20
+>  	devm_free_irq(chip->dev.parent, priv->irq, chip);
+>  	priv->irq =3D 0;
+> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
+>  }
 
-I think that there should be some realistic workload which has sparse
-access patterns.
+These look pretty good.
 
-Best Regards,
-Huang, Ying
+> =20
+>  /*
+> @@ -552,7 +559,7 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *bu=
+f, size_t len)
+>  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
+>  		tpm_msleep(1);
+>  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
+> -		disable_interrupts(chip);
+> +		tpm_tis_disable_interrupts(chip);
+>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	return rc;
+>  }
+> @@ -752,6 +759,71 @@ static bool tpm_tis_req_canceled(struct tpm_chip *ch=
+ip, u8 status)
+>  	return status =3D=3D TPM_STS_COMMAND_READY;
+>  }
+> =20
+> +static irqreturn_t tpm_tis_reenable_polling(struct tpm_chip *chip)
 
->>=20
->>>>
->>>>> I really don't want to end up with user
->>>>> space ever having to opt-in (with MADV_HUGEPAGE) to see the benefits =
-of large
->>>>> anon folios.
->>>>>
->>>>> I still feel that it would be better for the thp and large anon folio=
- controls
->>>>> to be independent though - what's the argument for tying them togethe=
-r?
->>>>>
->>=20
+
+I'd rename this to tpm_tis_revert_interrupts(), as it reverts enabling
+the interrupts. Polling was never enabled in a fully initialized driver
+so the function name is implying something that never happened.
+
+> +{
+> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> +	const char *product;
+> +	const char *vendor;
+> +
+> +	dev_warn(&chip->dev, FW_BUG
+> +		 "TPM interrupt storm detected, polling instead\n");
+> +
+> +	vendor =3D dmi_get_system_info(DMI_SYS_VENDOR);
+> +	product =3D dmi_get_system_info(DMI_PRODUCT_VERSION);
+> +
+> +	if (vendor && product) {
+> +		dev_info(&chip->dev,
+> +			"Consider adding the following entry to tpm_tis_dmi_table:\n");
+> +		dev_info(&chip->dev, "\tDMI_SYS_VENDOR: %s\n", vendor);
+> +		dev_info(&chip->dev, "\tDMI_PRODUCT_VERSION: %s\n", product);
+> +	}
+> +
+> +	if (tpm_tis_request_locality(chip, 0) !=3D 0)
+> +		return IRQ_NONE;
+> +
+> +	__tpm_tis_disable_interrupts(chip);
+> +	tpm_tis_relinquish_locality(chip, 0);
+> +
+> +	/*
+> +	 * devm_free_irq() must not be called from within the interrupt handler=
+,
+> +	 * since this function waits for running handlers to finish and thus it
+> +	 * would deadlock. Instead trigger a worker that takes care of the
+> +	 * unregistration.
+> +	 */
+
+Way too complex description. This should do:
+
+	/* Defer devm_free_irq() outside the interrupt context: */
+
+> +	schedule_work(&priv->free_irq_work);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t tpm_tis_check_for_interrupt_storm(struct tpm_chip *ch=
+ip)
+
+What does checking interrupt storm mean, anyway?
+
+> +{
+> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> +	irqreturn_t irqret =3D IRQ_HANDLED;
+> +
+> +	/*
+> +	 * The worker to free the TPM interrupt (free_irq_work) may already
+> +	 * be scheduled, so make sure it is not scheduled again.
+> +	 */
+
+I don't understand the text in the comment. It is not even a proper
+sentence ("to work to free").
+
+> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> +		return IRQ_HANDLED;
+> +
+> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
+> +		priv->unhandled_irqs =3D 1;
+> +	else
+> +		priv->unhandled_irqs++;
+> +
+> +	priv->last_unhandled_irq =3D jiffies;
+> +
+> +	if (priv->unhandled_irqs > TPM_TIS_MAX_UNHANDLED_IRQS)
+> +		irqret =3D tpm_tis_reenable_polling(chip);
+> +
+> +	/*
+> +	 * Prevent the genirq code from starting its own interrupt storm
+> +	 * handling by always reporting that the interrupt was handled.
+> +	 */
+
+Ditto, textual content is confusing.
+
+You can either make them more informative, or add a short description
+before the function.
+
+> +	return irqret;
+> +}
+> +
+>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  {
+>  	struct tpm_chip *chip =3D dev_id;
+> @@ -761,10 +833,10 @@ static irqreturn_t tis_int_handler(int dummy, void =
+*dev_id)
+> =20
+>  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt)=
+;
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+
+s/unhandled/err/g
+
+> =20
+>  	if (interrupt =3D=3D 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+> =20
+>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+> @@ -780,10 +852,13 @@ static irqreturn_t tis_int_handler(int dummy, void =
+*dev_id)
+>  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt)=
+;
+>  	tpm_tis_relinquish_locality(chip, 0);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+> =20
+>  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	return IRQ_HANDLED;
+> +
+> +unhandled:
+> +	return tpm_tis_check_for_interrupt_storm(chip);
+>  }
+> =20
+>  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+> @@ -804,6 +879,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *c=
+hip)
+>  		chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
+>  }
+> =20
+> +static void tpm_tis_free_irq_func(struct work_struct *work)
+> +{
+> +	struct tpm_tis_data *priv =3D container_of(work, typeof(*priv), free_ir=
+q_work);
+> +	struct tpm_chip *chip =3D priv->chip;
+> +
+> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
+> +	priv->irq =3D 0;
+> +}
+> +
+>  /* Register the IRQ and issue a command that will cause an interrupt. If=
+ an
+>   * irq is seen then leave the chip setup for IRQ operation, otherwise re=
+verse
+>   * everything and leave in polling mode. Returns 0 on success.
+> @@ -816,6 +900,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *=
+chip, u32 intmask,
+>  	int rc;
+>  	u32 int_status;
+> =20
+> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+> =20
+>  	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>  				       tis_int_handler, IRQF_ONESHOT | flags,
+> @@ -918,6 +1003,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
+>  		interrupt =3D 0;
+> =20
+>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+> +	flush_work(&priv->free_irq_work);
+> =20
+>  	tpm_tis_clkrun_enable(chip, false);
+> =20
+> @@ -1021,6 +1107,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
+m_tis_data *priv, int irq,
+>  	chip->timeout_b =3D msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+>  	chip->timeout_c =3D msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+>  	chip->timeout_d =3D msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
+> +	priv->chip =3D chip;
+>  	priv->timeout_min =3D TPM_TIMEOUT_USECS_MIN;
+>  	priv->timeout_max =3D TPM_TIMEOUT_USECS_MAX;
+>  	priv->phy_ops =3D phy_ops;
+> @@ -1179,7 +1266,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
+m_tis_data *priv, int irq,
+>  			rc =3D tpm_tis_request_locality(chip, 0);
+>  			if (rc < 0)
+>  				goto out_err;
+> -			disable_interrupts(chip);
+> +			tpm_tis_disable_interrupts(chip);
+>  			tpm_tis_relinquish_locality(chip, 0);
+>  		}
+>  	}
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_c=
+ore.h
+> index 610bfadb6acf..b1a169d7d1ca 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -91,11 +91,15 @@ enum tpm_tis_flags {
+>  };
+> =20
+>  struct tpm_tis_data {
+> +	struct tpm_chip *chip;
+>  	u16 manufacturer_id;
+>  	struct mutex locality_count_mutex;
+>  	unsigned int locality_count;
+>  	int locality;
+>  	int irq;
+> +	struct work_struct free_irq_work;
+> +	unsigned long last_unhandled_irq;
+> +	unsigned int unhandled_irqs;
+>  	unsigned int int_mask;
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+>
+> base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
+> --=20
+> 2.40.1
+
+
+BR, Jarkko
