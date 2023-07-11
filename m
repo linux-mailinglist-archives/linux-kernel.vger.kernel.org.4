@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C9E74F5E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF0874F5D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjGKQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S232992AbjGKQnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbjGKQoW (ORCPT
+        with ESMTP id S232986AbjGKQnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:44:22 -0400
-Received: from out-44.mta1.migadu.com (out-44.mta1.migadu.com [IPv6:2001:41d0:203:375::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3AB213B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:44:01 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689093837;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JsW608w9Icre+eeXWiPepSjKi7cGG5If1vSETO465rs=;
-        b=QF9u5YarQ3XzlTFgOQ75cikl4e7GNbilk51J/EF5FT5P17CXSbsJhIZPn2v2xfDNiD3iPg
-        OL2K7w14/U1uqKbPrZ+SREEjfjWxoRcLu+YoI4CCjBNUfs96b9Eb/rlpz4+aGHn7BvrvUg
-        A5l4s7aCH2f1LJn0RlazEQQwuZEJWso=
-From:   Sui Jingfeng <sui.jingfeng@linux.dev>
-To:     David Airlie <airlied@gmail.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>
-Subject: [PATCH v3 9/9] drm/loongson: Add an implement for the is_primary_gpu function callback
-Date:   Wed, 12 Jul 2023 00:43:10 +0800
-Message-Id: <20230711164310.791756-10-sui.jingfeng@linux.dev>
-In-Reply-To: <20230711164310.791756-1-sui.jingfeng@linux.dev>
-References: <20230711164310.791756-1-sui.jingfeng@linux.dev>
+        Tue, 11 Jul 2023 12:43:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D7310C4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 09:43:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E41561572
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:43:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16386C433C7;
+        Tue, 11 Jul 2023 16:43:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689093813;
+        bh=eA2bGBHEF0CP+7ab4OmsDTkFauO4Whvf5Zoc+ACWKGo=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=km9rbw9lLJXhEDqO6HEKU0oO5DBp2/07Xsyhp+pVcStemfdZrgwprWzznd1V6fA9E
+         5SCJpg4nxyTuzZw1bvbp491zxP1paDRq8HQELuCVL7dUQ8avgzSg51AQyAoEolnKsu
+         uTzXdberEhUoA7PNXcbuwxazXn4HRF1BnhYhXWpT5z7/kiHp9YbFfSjQ1lW/6crCph
+         RWkWdkJXxNd7gUJuQ3B/HMOgheYkdPbHYrVXwNqmbnuKD65Iw2c0rKSHze4Ktr/TNz
+         0pQvV/SbCtBBwRM7Umnvwf2GuyPYVYbsCmVwg2rkV4nz0M4yutyLz7jSaIsXvYYj97
+         6j0tloE8K5DDA==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        schnelle@linux.ibm.com, eli.billauer@gmail.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, derek.kiernan@amd.com,
+        dragan.cvetic@amd.com, linux@dominikbrodowski.net,
+        Jonathan.Cameron@huawei.com, linus.walleij@linaro.org,
+        tsbogend@alpha.franken.de, joyce.ooi@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, tglx@linutronix.de, maz@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, kernel test robot <lkp@intel.com>
+In-Reply-To: <20230707135852.24292-1-bhe@redhat.com>
+References: <20230707135852.24292-1-bhe@redhat.com>
+Subject: Re: (subset) [PATCH 0/8] Make several Kconfig options depend on
+ HAS_IOMEM
+Message-Id: <168909380572.208562.4889103848181230553.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 22:13:25 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/loongson/lsdc_drv.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+On Fri, 07 Jul 2023 21:58:44 +0800, Baoquan He wrote:
+> In thread of one patch posting, LKP test robot reported some compiling
+> errors, paste the LKP report link here:
+> 
+> https://lore.kernel.org/all/202306211329.ticOJCSv-lkp@intel.com/T/#u
+> 
+> In the config file, several Kconfig options are like below:
+> ------
+> '# CONFIG_PCI is not set'
+> CONFIG_OF_EARLY_FLATTREE=y
+> CONFIG_DMA_DECLARE_COHERENT=y
+> ------
+> 
+> [...]
 
-diff --git a/drivers/gpu/drm/loongson/lsdc_drv.c b/drivers/gpu/drm/loongson/lsdc_drv.c
-index d10a28c2c494..92ef07d6a534 100644
---- a/drivers/gpu/drm/loongson/lsdc_drv.c
-+++ b/drivers/gpu/drm/loongson/lsdc_drv.c
-@@ -257,6 +257,14 @@ static unsigned int lsdc_vga_set_decode(struct pci_dev *pdev, bool state)
- 	return VGA_RSRC_NORMAL_IO | VGA_RSRC_NORMAL_MEM;
- }
- 
-+static bool lsdc_is_primary_gpu(struct pci_dev *pdev)
-+{
-+	struct drm_device *ddev = pci_get_drvdata(pdev);
-+	struct lsdc_device *ldev = to_lsdc(ddev);
-+
-+	return drm_aperture_contain_firmware_fb(ldev->vram_base, ldev->vram_size);
-+}
-+
- static int lsdc_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- {
- 	const struct lsdc_desc *descp;
-@@ -289,7 +297,7 @@ static int lsdc_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	pci_set_drvdata(pdev, ddev);
- 
--	vga_client_register(pdev, lsdc_vga_set_decode, NULL);
-+	vga_client_register(pdev, lsdc_vga_set_decode, lsdc_is_primary_gpu);
- 
- 	drm_kms_helper_poll_init(ddev);
- 
+Applied, thanks!
+
+[1/8] idmaengine: make FSL_EDMA and INTEL_IDMA64 depends on HAS_IOMEM
+      commit: 33629b377856fe5722a2a813b83d21e88281d474
+
+Best regards,
 -- 
-2.25.1
+~Vinod
+
 
