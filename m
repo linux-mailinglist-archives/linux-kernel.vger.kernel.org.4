@@ -2,80 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E1C74FBF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DBA74FBF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjGKXzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 19:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S231183AbjGKX5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 19:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGKXzW (ORCPT
+        with ESMTP id S230439AbjGKX5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 19:55:22 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35DE170F;
-        Tue, 11 Jul 2023 16:55:20 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5700b15c12fso72300627b3.1;
-        Tue, 11 Jul 2023 16:55:20 -0700 (PDT)
+        Tue, 11 Jul 2023 19:57:02 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D24E1716
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:57:00 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3a3e1152c23so4491320b6e.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689119719; x=1691711719;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=l0eHGvYiAjOvtyvlgCffZ7LMt7sWot3qzaN4MmhWSwE=;
-        b=MSfjWEV84b6m+wWASrmm8K6FRsBtMeZS3FlTe9y4uvc1YIBJjTuCZP3KFHss/DtA5c
-         LvcUBDcq/TBFSzX8SXKmDnKdOA0r0iq17ka12owKtEE2Je3WwoUvP0GJqqB5KKFge0Zq
-         ucmcyjo/BjsGAzLRCkbw4sZksSw8IDXbSI/sEIqzKXOqgqLfHpgdEx47ytYuTJIQXerO
-         dffN1kB3r4kLLai3L2D8IFO3RDR2j8os0AqoEKX4TUO2sVAoEJvD3JGzBm5rQdnw7R83
-         FmiWA/NzH6BntazM+8i+lFYtbIEsmt0DBlWs6dO/dZ3o7RKinmYo6qCh5AQgFf5Dbh3D
-         IjUw==
+        d=ziepe.ca; s=google; t=1689119819; x=1691711819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=leJKi4u06YRTzo0lBrUW1GjV6mczJ561dFwtREQL+Dg=;
+        b=DXK8WidcvmvzjeVYH/6WijviZ73toBOmyVp9mIOd03ZD+R3rHWdoxQSvE5e9wD1KCJ
+         9mK/DDwssbLXSnouE8MAwnVDe+VkRcpQSrinJNmyu0FnYmd+CKVNA1F34dvSGu5lfZwy
+         cyr25JKjczwfRObdI7oARPE9gHghtmOAegQpocDq/APkFl+1PNSXGJo1xP2SNdGpJGtv
+         /nEQL7vqxVxYsTwIY7luylFSj8xoTEsYM9t5cm2HxYfPwTnzx8rs4qClhieKHRjwL54Q
+         8sya8gM8UB4rmOcx/i0v01+HlH4cbtNGlO2x9kzZaZUcFmUL9dtfGxX7fDRkv+FMzf1u
+         InjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689119719; x=1691711719;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l0eHGvYiAjOvtyvlgCffZ7LMt7sWot3qzaN4MmhWSwE=;
-        b=ekt+dF9JXC428ZO8HKqLPsHSkwS9nguu+FirvmoHFIQPBRKvq20FgvsEcmdDzdUUcg
-         /LK6+rhI8tSpgCyfBqQXOhCzap9OjoXqhTx+BkErv4kDl6/uABLiefpBHQvATU4EHVUW
-         i/osEiYmUs18pQ/NF20iT8Nepef4CmX9CgsOkjE8KHNJP5dDtun1pxpXyLXbl5mRi3Ad
-         grfiyrKj5tUS8SPXD26/YpcU55lRtvL4UX8v/8QfzhUnHNqgnU3A88bI2lvHnG/sOen9
-         sdNLOyiFTK4kGaiDOGC5l5Q58jyQj4K7A6CIHkoe1kYxxY1yS9ZGF5DBb2fl2IPrGVSG
-         fD1w==
-X-Gm-Message-State: ABy/qLbnNiw6OgbkM5DnoE7vk6FrUxdPmJ4Be8989VY7RtcsJB0b8EM9
-        XnsAvx9PRdWTCMeY7zARX5ENr1eBH+xrANHnLD0FICapKNY=
-X-Google-Smtp-Source: APBJJlHO7JQH+4wLoUl6AYA0Mh0njxShJB6/nHwg1DNX32M6H9lyeiBsJcVDVsV5Gf28FRFr1PQL1GcRjUrWma+QFkc=
-X-Received: by 2002:a0d:cec3:0:b0:57a:4719:859e with SMTP id
- q186-20020a0dcec3000000b0057a4719859emr14085154ywd.50.1689119719362; Tue, 11
- Jul 2023 16:55:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689119819; x=1691711819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=leJKi4u06YRTzo0lBrUW1GjV6mczJ561dFwtREQL+Dg=;
+        b=lhr3eq9p7sflQlS+gmeDqGizZAvL7UW00R9lL5ygpYTVzoF76cKdXyqw4+XDXbVfxK
+         5Gn0COJBFnriMOPJ/IrEFYQzgr6xdb7hMGCXEw8H01gqxJALVRjEio5uC8ex+laUoYiz
+         AGybvpasFDRGdKllbk44ZzJOJ4EJwT5ltYkW0grjC2Wjg/Qg94J6m/Z8iG686j9rnQ5d
+         +JsiuW83KcKk4STT/p6ROsKxB6pD5TgS9r1VGr7oTBhSy9L6w30vsO0+zGwcdIMI7eks
+         JDwEryaLjfr8SC4JTEw9Jayj3tAztWItWSmf4YMoBmkqeZ4MNejGkSlqjyibMg+1dBrl
+         Pgdg==
+X-Gm-Message-State: ABy/qLaK1qim5AyoTUvTVvD7gBTJcieRU181nz4BJnDIK9ix7hFlqpgg
+        wiYyfVcEJh4VcGSXRpcbtj0gJg==
+X-Google-Smtp-Source: APBJJlHPVDwycmPbbNO1kwHaGDMrzsNQAmVLFppzVomF/d82yUMQJxrek5vJqs3gAPlID0cxcW6lxg==
+X-Received: by 2002:a05:6808:11cf:b0:3a3:fa64:b543 with SMTP id p15-20020a05680811cf00b003a3fa64b543mr9841890oiv.12.1689119819344;
+        Tue, 11 Jul 2023 16:56:59 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id x11-20020a63b34b000000b005533c53f550sm1952223pgt.45.2023.07.11.16.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 16:56:58 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qJNE0-000KOY-Hj;
+        Tue, 11 Jul 2023 20:56:56 -0300
+Date:   Tue, 11 Jul 2023 20:56:56 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZK3sSMSVWM5EbHLG@ziepe.ca>
+References: <ZKyZBbKEpmkFkpWV@ziepe.ca>
+ <20230711042708.GA18658@lst.de>
+ <20230710215906.49514550@kernel.org>
+ <20230711050445.GA19323@lst.de>
+ <ZK1FbjG+VP/zxfO1@ziepe.ca>
+ <20230711090047.37d7fe06@kernel.org>
+ <ZK2Gh2qGxlpZexCM@ziepe.ca>
+ <20230711100636.63b0a88a@kernel.org>
+ <ZK2k9YQiXTtcGhp0@ziepe.ca>
+ <20230711133420.5df88f02@kernel.org>
 MIME-Version: 1.0
-References: <20230523021425.2406309-1-azeemshaikh38@gmail.com>
- <202305231020.37C95FD@keescook> <CADmuW3UAHODqC5YAmjK1sOuo3C56noOa6hsHA+2Es2R9MT36_g@mail.gmail.com>
- <AM0PR04MB62891F29BB182FA2B24A37098F30A@AM0PR04MB6289.eurprd04.prod.outlook.com>
-In-Reply-To: <AM0PR04MB62891F29BB182FA2B24A37098F30A@AM0PR04MB6289.eurprd04.prod.outlook.com>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Tue, 11 Jul 2023 19:55:08 -0400
-Message-ID: <CADmuW3VO5nrpkYuRDur74w0DZFPWJP1ErXzCgxOCS+Z0DjFbzA@mail.gmail.com>
-Subject: Re: [PATCH] soc: fsl: qe: Replace all non-returning strlcpy with strscpy
-To:     Leo Li <leoyang.li@nxp.com>, Kees Cook <keescook@chromium.org>
-Cc:     Qiang Zhao <qiang.zhao@nxp.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711133420.5df88f02@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Sorry for the late response.  But I found some old discussions with the conclusion to be not converting old users.  Has this been changed later on?
-> https://lwn.net/Articles/659214/
->
+On Tue, Jul 11, 2023 at 01:34:20PM -0700, Jakub Kicinski wrote:
 
-@Kees Cook what's your advice here?
+> > Yep. At the high end open standards based ethernet has also notably
+> > "failed" as well. Every switch vendor now offers their own proprietary
+> > ecosystem on a whole bunch of different axis. They all present
+> > "ethernet" toward the host but the host often needs to work in a
+> > special way to really take full advantage of the proprietary fabric
+> > behaviors.
+> 
+> I'm not familiar with "high end open standards based on ethernet", would
+> those be some RDMA / storage things? For TCP/IP networks pretty much
+> the only things that matter in a switch are bandwidth, size of buffers,
+> power... Implementation stuff.
+
+I would say when you are getting into ethernet deployments with 25 or
+51 Tbps switches directly connected to hosts running at >100G you are
+getting into the high end side of things.
+
+These are very expensive networks. They run complex congestion
+provoking workloads. They have sophisticated multi-pathing. They often
+use use a non-blocking topology. Congestion management is important.
+
+Making this work with good utilization, and low tail latency is a
+really hard problem. Many of the solutions come with switch features
+supporting it.
+
+You'd proably say these are not TCP focused networks, even though they
+are based on ethernet and IP.
+
+So I think of them as high end "standards based" ethernet and IP
+looking networks that have proprietary elements mixed in throughout.
+
+Right now there is a bit of a press war between vendors on 'ethernet
+for AI'. Both Broadcom and NVIDIA are taking techonlogies that were
+originally built for TCP ethernet networks and remixing/speeding them
+up to run roce workloads effectively. There is alot more information
+available now without NDA that shows some detail on this space.
+
+AWS's SRD multipathing, Broadcom "AI Ethernet" and NVIDIA's Spectrum-X
+spring to mind as topical to what these sorts of ethernet networks
+are.
+
+> A lot of "standardization" efforts are just attempts to prove to 
+> a buyers that an ecosystem exists.
+
+Heh, that was probably more true years ago. These days it seems like
+some standardization is also being done so the large hyperscalers can
+improve their Approved Vendors List.
+
+I suppose as long as the result is something we can implement openly
+in Linux the motivation for standardization is less important.
+
+Jason
