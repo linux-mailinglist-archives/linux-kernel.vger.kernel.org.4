@@ -2,185 +2,559 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB93674E74D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1152974E750
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 08:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjGKG1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 02:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
+        id S231183AbjGKG32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 02:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjGKG04 (ORCPT
+        with ESMTP id S230106AbjGKG30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 02:26:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8CB10C4;
-        Mon, 10 Jul 2023 23:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689056809; x=1720592809;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Zt56k/ylATpiWcmI7Gmuu8RUv+NfirBJziZ1r67mpaI=;
-  b=cVYK4rIy0euTP0n1W85Fo/IoztsQpM6Gl3Jwtfp3vuRH0AjO+1/TlaAJ
-   eHTFZtztZE9BpIxxz5GKBqWPv73RTIbOH1lSvtxVDLf06urZgzI0S8nBP
-   Cxq2ixhvyv2lAzJYuYGfpXzO3mUNg/6OXqDmF5GunzVuI/oaGadbWiDGW
-   Sxvfoq4kLp/ictq3Di9mjLxq9aOiifRUR6gDUCmS6B7XbF701NNU1cbGn
-   EFCoS47IHNX3zoZTxTZFoxl6zP8i0x0CgcgP4Q3SqxgNaQo4xP5O3EKP4
-   fXxlR/ENAxmer52T9u77jYcsteQSx5JiVqiV5/UQXzQmNP7MPOikmmQ4j
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="349342410"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="349342410"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 23:26:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="671255776"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="671255776"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP; 10 Jul 2023 23:26:45 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 23:26:45 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 10 Jul 2023 23:26:45 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Mon, 10 Jul 2023 23:26:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GxnQSeOtPu79OAwkG8VaGuaPPVYrQJChaXyan3a0VfXiKBYpwdnC9eEibYHCRLf8p7IpbECAQFrkg50sqZlxPHYUqXhQmOaVTOtAMVmbKeTzVwnRe/hotHPh6Y+EZ/Rdav+nCylexwAD2h/sn4XaIykymVG6k7Izqo3p87nmiMsRArDoH1yVeBzmUPq93sS4JmHZT+qWI7czYfpgML/g4I+gHRL5GvmPPtz2MzHFB4CtXK1eZE4hE1Sxg5y6MkFkVO+pDUPljjVF2HXB6XoJw/XthtLCVjRP1muamronwMPy6zmoGALjZY9yiMK0DwWGlvyRrAlA7ioTCPBn/z3Wdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nFF3lhjHzp7Vuj75/BSvCX25dPw9/sm89tgEb8BIVso=;
- b=Sv31iB6w9qURWUmuGoTRZo8zNTMU18Uw0f2Qugs2gLLBDGQ4QxoRsm0yNECK66S6bX4/UvJ4zMlNRBa5bFjN+hQMZU9r2DaPlZQU/HURFu8kclC7sdVQz7Ap9142eswWnKXBG5DMC4wgsWN0RITRq3ahEBZKOhOq3XlXIjcvL0nFp81I9zLmrkA5mg5RHfU2hyDCVQs0JuuOd1L4DX/vvFlBBgHY5vRQTDt+JiRrTHObhuq7iI7T8QYuoP56l1qx9gf0oqWj9JNAuuB+Sb2+9XlYG8LayzSGanyZzOJIJxI8X7iZogOVDqLNLOfjRTLJXOPR36hYxJaOCa6xdgK6qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DS7PR11MB6200.namprd11.prod.outlook.com (2603:10b6:8:98::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Tue, 11 Jul
- 2023 06:26:43 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
- 06:26:43 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 9/9] iommu: Use fault cookie to store iopf_param
-Thread-Topic: [PATCH 9/9] iommu: Use fault cookie to store iopf_param
-Thread-Index: AQHZs5ROZ0DTU24O6Ue9hKGIoQNDRq+0GN5A
-Date:   Tue, 11 Jul 2023 06:26:43 +0000
-Message-ID: <BN9PR11MB5276454AD26C2BDC12CAEDE78C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
- <20230711010642.19707-10-baolu.lu@linux.intel.com>
-In-Reply-To: <20230711010642.19707-10-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS7PR11MB6200:EE_
-x-ms-office365-filtering-correlation-id: 49c137f8-374e-42c0-cfc4-08db81d7cb41
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G2a2fXoRABPtuBBKBBlzRUtceziQPi7l9J39k8kexeZRt9tF+8U1r2K2Gp2aNXHPcIiOYQaEc0v1P488HyQrvDXEvUk3dj85/rrQfnBw/j23IMg7B+ACtBgGAi/yyt0EB5k5vOsx5cu9FFEEPO27dc7411dxd6vn6eJMZjBV8tnlNTlCRzf9R9xZeWZu+PRKicfS4E6SoN1TeBUiITtM+LEfnNlKOdZ3YccLxePrLU05oIA5dVDudCCYve2+aL3NeSXyEhtvQs9yjrvhM/ocvFcu+2X4OxqDfwcfUzBTtjjWuxgMyF9mrlZJ40QFMP5TbjeA3ek/HFlboKpMLF7wk9vPHQeZzW4O3ith92h/Ac5MbGrtmCnwasc35YBUOAZN9zJiYxjvSQqK/kJfYhNMP+2lk1Nyq9t9QLput5V+GY70n3jxIJ9nfUoYalJtHThNiWVRAbsNA3TR7KxuuK7yi+fB7JTSuLoy9u9on0hVpTluvYGBZ9MSVJCPbSPTRnvuoJeiw9NMyQ2fU6X0jUodrQXB8hnbP9GU1P1XEomu4OlvAGuyUJ25aaMRThQ3np1xloQ9ckZkeG4Q+RCG7JXC6fuLPu6J6A3u6N0Ax7v5mMxGfZp+v6ATHyPSbDx7EE1P
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199021)(38070700005)(33656002)(86362001)(55016003)(38100700002)(82960400001)(122000001)(478600001)(110136005)(71200400001)(41300700001)(54906003)(7696005)(8676002)(8936002)(5660300002)(52536014)(7416002)(2906002)(316002)(4326008)(66556008)(64756008)(66446008)(66946007)(76116006)(66476007)(4744005)(26005)(6506007)(9686003)(186003)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3GRyLW8ybsIeeOPXZFSsyCZdO+hsEs7gOTCEed+V11EOtaK83dlw1OEWPqtd?=
- =?us-ascii?Q?0kwRVDIazLWfPeR3Q7PNxPXy3JxPEB3Cb38dj59uMf/YWt4vdRwc2EBBmCl7?=
- =?us-ascii?Q?UFyPjnb9REBpaTJtG0BHdZo3oDIMXI/7iZhwfMX1l1Xn+OEXkbo3FtQsYBiq?=
- =?us-ascii?Q?gErf8VawHR9qBzSa8+CQoGAgfEz5ngq5KfHG94j3e/ysJ1TpLp31BWt0490G?=
- =?us-ascii?Q?Y2WWkROLsAhU8H7oK3JJkUifG5PEj+0IkFP6Q8rF/Enkq1k/JHnVC3ZKZVSg?=
- =?us-ascii?Q?XRcHcqmr6DIWathBEm0nU7NYid6btQSknmRx+x+ypVI/clpW/myiTkCTv39c?=
- =?us-ascii?Q?V0dvMH58Y4aaxx+ZOZFrM3V+on2jzRS0Af5iEibmDHVnRlek5Qq6xIplMEMw?=
- =?us-ascii?Q?GkPuC52JI+AEdM55NJMLfWnvEX0nqD6xjL7lTL6iarEAEJj1vmJTKlj1r/4s?=
- =?us-ascii?Q?3LI5vg24F5Ly7Mi6O0wXsNG0tS1CmSyn61+mvUZxC0yRpcFXkZI2vSxNp2rT?=
- =?us-ascii?Q?DPYfk7jqJU4j2UxwnYA4cYDIDso/VBN1n98eUkZjNy5kCNayCryCkeHzo6ic?=
- =?us-ascii?Q?NmyxRQaCsa0P570xV6L8bGN5U3Z2p5J29JsIP3SHvQPbxzyiKGNzqOLKr5wr?=
- =?us-ascii?Q?qH0PddTn3+HZw862xdTfwYcBOdKbFHW7TgdEBcmqWaiq+yZLdZPtf+s3svmA?=
- =?us-ascii?Q?JSQK0m7db3j2VfQXs1ZzwPAufNQwITYzpLJibR0JfqhSG+OCk4ccoqDxWfUy?=
- =?us-ascii?Q?Gg77bdmMRo+x/F8EOVgS0ThksVK6Z1JU3/CMVbezwlO2pkBaCwqN7X++DbuZ?=
- =?us-ascii?Q?2v2kF/KyXxD0zrCAgyyIGDOhxMtoTZA7cYETij2t2QkF/e6IViWgvKAfoxMG?=
- =?us-ascii?Q?YtJN+4tly0PZJlevVd4+WWidd6/k6aW3D1ygcgFDONiEWUpREs4RsDIdtfUE?=
- =?us-ascii?Q?/CS6J9ceO0uBnnarKG166awMOszmd1u5WR9Q8QAxVPYRV1XygQ9I3qHA7PAx?=
- =?us-ascii?Q?f2LFTPk3gGik4TLCgHJIVYL8Jmz8nNFb7dNgROmn6JEbH6y6LnhWOYEPD2dO?=
- =?us-ascii?Q?N8XkmxHJnolnK+3HGYefhVQj1iSLR1FCCwIp8jRf7VBzlUVpMm+vswHz8ts6?=
- =?us-ascii?Q?W62BHEUZ8vOl/CB/2vh7ZaLIJVJJ+uKrsXIRi0KJdBUvb/jiJ9QMA1lH5Lmq?=
- =?us-ascii?Q?4qUqBCKJiffAVMiZGrnwae58cW/LUzcBVt0P84NPIJesqwLM6T1nRHcSvT5T?=
- =?us-ascii?Q?7TpMRdZ339K4B95RTN/4zokBZY4RnLfJjq6k4luvcHjYVovIEq6QRWnVlH2I?=
- =?us-ascii?Q?OclFRyM9a6rxWJ5gVttNLlSS0cWNQ0WAI8+J06rZsP1TC52yywpyWVDxbj/V?=
- =?us-ascii?Q?nXAuAeh5fcDIHEfP9T6qevPrng9T3nFbBircnpvc+6hgd2T3ced34WTEaD/6?=
- =?us-ascii?Q?VrebD2leKXTfc3xgHCmRixTr6PFYkrRMPp2QZ4JYcJApb/dExlW7covIrbBX?=
- =?us-ascii?Q?eXHwqVPNCSHvXJ77qnV+GwuVSwhlfMqJYX7Q+3NNxOtUBfnBemAT2KanfliT?=
- =?us-ascii?Q?byX2gZCJHLKPMPUi3JV1R7ybM9xI7lBSrqG1MHcm?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 11 Jul 2023 02:29:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0AE5C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 23:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689056911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PeHLmRMmw6WcINSUxpVuTDAzADhiHuJNoMm940CL0J8=;
+        b=XxP1msZHWM5sQsHWiC08pk35LiAqxigz71B5WOA7sFNsTLlcjkd3wg/OHzmTu3thL6wGGh
+        RsEiEVwjr9eJp/zFXjiw9eRmjH3McRllPtOPpL29HSi+ovjzxjt376c7BoEFHYV+PsE975
+        ++e+gygIDjvoPsCLhd26VhWqSqrpopY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-h4DBs5PsOOGOkerZ78GOjg-1; Tue, 11 Jul 2023 02:28:26 -0400
+X-MC-Unique: h4DBs5PsOOGOkerZ78GOjg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 36F2F101A54E;
+        Tue, 11 Jul 2023 06:28:26 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.211])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0B3E200AD6E;
+        Tue, 11 Jul 2023 06:28:22 +0000 (UTC)
+From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To:     loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+        johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jinjian.song@fibocom.com, haijun.liu@mediatek.com,
+        jtornosm@redhat.com
+Subject: [PATCH] net: wwan: t7xx: Add AP CLDMA
+Date:   Tue, 11 Jul 2023 08:28:13 +0200
+Message-ID: <20230711062817.6108-1-jtornosm@redhat.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49c137f8-374e-42c0-cfc4-08db81d7cb41
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2023 06:26:43.0603
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pci49cI5oAHEGAqKAtQ8+dGrRniEfygCPgAvSAdCLLF0w/EULGnzqwZTVPDJhiMbuOh4iiodFeDbU1JnFEcPwQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6200
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Tuesday, July 11, 2023 9:07 AM
->=20
-> Remove the static iopf_param pointer from struct iommu_fault_param to
-> save memory.
+At this moment with the current status, t7xx is not functional due to
+problems like this after connection, if there is no activity:
+[   57.370534] mtk_t7xx 0000:72:00.0: [PM] SAP suspend error: -110
+[   57.370581] mtk_t7xx 0000:72:00.0: can't suspend
+    (t7xx_pci_pm_runtime_suspend [mtk_t7xx] returned -110)
+because after this, the traffic no longer works.
 
-why is there memory saving? you replace a single pointer with a xarray now.=
-..
+The complete series 'net: wwan: t7xx: fw flashing & coredump support'
+was reverted because of issues with the pci implementation.
+In order to have at least the modem working, it would be enough if just
+the first commit of the series is re-applied:
+d20ef656f994 net: wwan: t7xx: Add AP CLDMA
+With that, the Application Processor would be controlled, correctly
+suspended and the commented problems would be fixed (I am testing here
+like this with no related issue).
 
-> @@ -303,16 +303,27 @@ int iopf_queue_add_device(struct iopf_queue
-> *queue, struct device *dev)
->=20
->  	mutex_lock(&queue->lock);
->  	mutex_lock(&param->lock);
-> -	if (!param->iopf_param) {
-> -		list_add(&iopf_param->queue_list, &queue->devices);
-> -		param->iopf_param =3D iopf_param;
-> -		ret =3D 0;
-> +	curr =3D iommu_set_device_fault_cookie(dev, 0, iopf_param);
-> +	if (IS_ERR(curr)) {
-> +		ret =3D PTR_ERR(curr);
-> +		goto err_free;
->  	}
+This commit is independent of the others and not related to the
+commented pci implementation for the new features: fw flashing and
+coredump collection.
 
-So although the new xarray is called a per-pasid storage, here only
-slot#0 is used for sva which includes a list containing partial req's
-for many pasid's. It doesn't sound clean...
+Use v2 patch version of d20ef656f994 as JinJian Song suggests
+(https://patchwork.kernel.org/project/netdevbpf/patch/20230105154215.198828-1-m.chetan.kumar@linux.intel.com/).
+
+Original text from the commit that would be re-applied:
+
+    d20ef656f994 net: wwan: t7xx: Add AP CLDMA
+    Author: Haijun Liu <haijun.liu@mediatek.com>
+    Date:   Tue Aug 16 09:53:28 2022 +0530
+
+    The t7xx device contains two Cross Layer DMA (CLDMA) interfaces to
+    communicate with AP and Modem processors respectively. So far only
+    MD-CLDMA was being used, this patch enables AP-CLDMA.
+
+    Rename small Application Processor (sAP) to AP.
+
+    Signed-off-by: Haijun Liu <haijun.liu@mediatek.com>
+    Co-developed-by: Madhusmita Sahu <madhusmita.sahu@intel.com>
+    Signed-off-by: Madhusmita Sahu <madhusmita.sahu@intel.com>
+    Signed-off-by: Moises Veleta <moises.veleta@linux.intel.com>
+    Signed-off-by: Devegowda Chandrashekar <chandrashekar.devegowda@intel.com>
+    Signed-off-by: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
+    Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+    Reviewed-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+    Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+ drivers/net/wwan/t7xx/t7xx_hif_cldma.c     | 17 +++--
+ drivers/net/wwan/t7xx/t7xx_hif_cldma.h     |  2 +-
+ drivers/net/wwan/t7xx/t7xx_mhccif.h        |  1 +
+ drivers/net/wwan/t7xx/t7xx_modem_ops.c     | 76 +++++++++++++++++-----
+ drivers/net/wwan/t7xx/t7xx_modem_ops.h     |  2 +
+ drivers/net/wwan/t7xx/t7xx_port.h          |  6 +-
+ drivers/net/wwan/t7xx/t7xx_port_ctrl_msg.c |  8 ++-
+ drivers/net/wwan/t7xx/t7xx_port_proxy.c    | 18 ++++-
+ drivers/net/wwan/t7xx/t7xx_reg.h           |  2 +-
+ drivers/net/wwan/t7xx/t7xx_state_monitor.c | 13 +++-
+ drivers/net/wwan/t7xx/t7xx_state_monitor.h |  2 +
+ 11 files changed, 116 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+index aec3a18d44bd..4f56d8cc0aea 100644
+--- a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
++++ b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+@@ -1066,13 +1066,18 @@ static void t7xx_hw_info_init(struct cldma_ctrl *md_ctrl)
+ 	struct t7xx_cldma_hw *hw_info = &md_ctrl->hw_info;
+ 	u32 phy_ao_base, phy_pd_base;
+ 
+-	if (md_ctrl->hif_id != CLDMA_ID_MD)
+-		return;
+-
+-	phy_ao_base = CLDMA1_AO_BASE;
+-	phy_pd_base = CLDMA1_PD_BASE;
+-	hw_info->phy_interrupt_id = CLDMA1_INT;
+ 	hw_info->hw_mode = MODE_BIT_64;
++
++	if (md_ctrl->hif_id == CLDMA_ID_MD) {
++		phy_ao_base = CLDMA1_AO_BASE;
++		phy_pd_base = CLDMA1_PD_BASE;
++		hw_info->phy_interrupt_id = CLDMA1_INT;
++	} else {
++		phy_ao_base = CLDMA0_AO_BASE;
++		phy_pd_base = CLDMA0_PD_BASE;
++		hw_info->phy_interrupt_id = CLDMA0_INT;
++	}
++
+ 	hw_info->ap_ao_base = t7xx_pcie_addr_transfer(pbase->pcie_ext_reg_base,
+ 						      pbase->pcie_dev_reg_trsl_addr, phy_ao_base);
+ 	hw_info->ap_pdn_base = t7xx_pcie_addr_transfer(pbase->pcie_ext_reg_base,
+diff --git a/drivers/net/wwan/t7xx/t7xx_hif_cldma.h b/drivers/net/wwan/t7xx/t7xx_hif_cldma.h
+index 47a35e552da7..4410bac6993a 100644
+--- a/drivers/net/wwan/t7xx/t7xx_hif_cldma.h
++++ b/drivers/net/wwan/t7xx/t7xx_hif_cldma.h
+@@ -34,7 +34,7 @@
+ /**
+  * enum cldma_id - Identifiers for CLDMA HW units.
+  * @CLDMA_ID_MD: Modem control channel.
+- * @CLDMA_ID_AP: Application Processor control channel (not used at the moment).
++ * @CLDMA_ID_AP: Application Processor control channel.
+  * @CLDMA_NUM:   Number of CLDMA HW units available.
+  */
+ enum cldma_id {
+diff --git a/drivers/net/wwan/t7xx/t7xx_mhccif.h b/drivers/net/wwan/t7xx/t7xx_mhccif.h
+index 209b386bc088..20c50dce9fc3 100644
+--- a/drivers/net/wwan/t7xx/t7xx_mhccif.h
++++ b/drivers/net/wwan/t7xx/t7xx_mhccif.h
+@@ -25,6 +25,7 @@
+ 			 D2H_INT_EXCEPTION_CLEARQ_DONE |	\
+ 			 D2H_INT_EXCEPTION_ALLQ_RESET |		\
+ 			 D2H_INT_PORT_ENUM |			\
++			 D2H_INT_ASYNC_AP_HK |			\
+ 			 D2H_INT_ASYNC_MD_HK)
+ 
+ void t7xx_mhccif_mask_set(struct t7xx_pci_dev *t7xx_dev, u32 val);
+diff --git a/drivers/net/wwan/t7xx/t7xx_modem_ops.c b/drivers/net/wwan/t7xx/t7xx_modem_ops.c
+index 7d0f5e4f0a78..24e7d491468e 100644
+--- a/drivers/net/wwan/t7xx/t7xx_modem_ops.c
++++ b/drivers/net/wwan/t7xx/t7xx_modem_ops.c
+@@ -44,6 +44,7 @@
+ #include "t7xx_state_monitor.h"
+ 
+ #define RT_ID_MD_PORT_ENUM	0
++#define RT_ID_AP_PORT_ENUM	1
+ /* Modem feature query identification code - "ICCC" */
+ #define MD_FEATURE_QUERY_ID	0x49434343
+ 
+@@ -298,6 +299,7 @@ static void t7xx_md_exception(struct t7xx_modem *md, enum hif_ex_stage stage)
+ 	}
+ 
+ 	t7xx_cldma_exception(md->md_ctrl[CLDMA_ID_MD], stage);
++	t7xx_cldma_exception(md->md_ctrl[CLDMA_ID_AP], stage);
+ 
+ 	if (stage == HIF_EX_INIT)
+ 		t7xx_mhccif_h2d_swint_trigger(t7xx_dev, H2D_CH_EXCEPTION_ACK);
+@@ -426,7 +428,7 @@ static int t7xx_parse_host_rt_data(struct t7xx_fsm_ctl *ctl, struct t7xx_sys_inf
+ 		if (ft_spt_st != MTK_FEATURE_MUST_BE_SUPPORTED)
+ 			return -EINVAL;
+ 
+-		if (i == RT_ID_MD_PORT_ENUM)
++		if (i == RT_ID_MD_PORT_ENUM || i == RT_ID_AP_PORT_ENUM)
+ 			t7xx_port_enum_msg_handler(ctl->md, rt_feature->data);
+ 	}
+ 
+@@ -456,12 +458,12 @@ static int t7xx_core_reset(struct t7xx_modem *md)
+ 	return 0;
+ }
+ 
+-static void t7xx_core_hk_handler(struct t7xx_modem *md, struct t7xx_fsm_ctl *ctl,
++static void t7xx_core_hk_handler(struct t7xx_modem *md, struct t7xx_sys_info *core_info,
++				 struct t7xx_fsm_ctl *ctl,
+ 				 enum t7xx_fsm_event_state event_id,
+ 				 enum t7xx_fsm_event_state err_detect)
+ {
+ 	struct t7xx_fsm_event *event = NULL, *event_next;
+-	struct t7xx_sys_info *core_info = &md->core_md;
+ 	struct device *dev = &md->t7xx_dev->pdev->dev;
+ 	unsigned long flags;
+ 	int ret;
+@@ -531,19 +533,33 @@ static void t7xx_md_hk_wq(struct work_struct *work)
+ 	t7xx_cldma_start(md->md_ctrl[CLDMA_ID_MD]);
+ 	t7xx_fsm_broadcast_state(ctl, MD_STATE_WAITING_FOR_HS2);
+ 	md->core_md.handshake_ongoing = true;
+-	t7xx_core_hk_handler(md, ctl, FSM_EVENT_MD_HS2, FSM_EVENT_MD_HS2_EXIT);
++	t7xx_core_hk_handler(md, &md->core_md, ctl, FSM_EVENT_MD_HS2, FSM_EVENT_MD_HS2_EXIT);
++}
++
++static void t7xx_ap_hk_wq(struct work_struct *work)
++{
++	struct t7xx_modem *md = container_of(work, struct t7xx_modem, ap_handshake_work);
++	struct t7xx_fsm_ctl *ctl = md->fsm_ctl;
++
++	 /* Clear the HS2 EXIT event appended in t7xx_core_reset(). */
++	t7xx_fsm_clr_event(ctl, FSM_EVENT_AP_HS2_EXIT);
++	t7xx_cldma_stop(md->md_ctrl[CLDMA_ID_AP]);
++	t7xx_cldma_switch_cfg(md->md_ctrl[CLDMA_ID_AP]);
++	t7xx_cldma_start(md->md_ctrl[CLDMA_ID_AP]);
++	md->core_ap.handshake_ongoing = true;
++	t7xx_core_hk_handler(md, &md->core_ap, ctl, FSM_EVENT_AP_HS2, FSM_EVENT_AP_HS2_EXIT);
+ }
+ 
+ void t7xx_md_event_notify(struct t7xx_modem *md, enum md_event_id evt_id)
+ {
+ 	struct t7xx_fsm_ctl *ctl = md->fsm_ctl;
+-	void __iomem *mhccif_base;
+ 	unsigned int int_sta;
+ 	unsigned long flags;
+ 
+ 	switch (evt_id) {
+ 	case FSM_PRE_START:
+-		t7xx_mhccif_mask_clr(md->t7xx_dev, D2H_INT_PORT_ENUM);
++		t7xx_mhccif_mask_clr(md->t7xx_dev, D2H_INT_PORT_ENUM | D2H_INT_ASYNC_MD_HK |
++						   D2H_INT_ASYNC_AP_HK);
+ 		break;
+ 
+ 	case FSM_START:
+@@ -556,16 +572,26 @@ void t7xx_md_event_notify(struct t7xx_modem *md, enum md_event_id evt_id)
+ 			ctl->exp_flg = true;
+ 			md->exp_id &= ~D2H_INT_EXCEPTION_INIT;
+ 			md->exp_id &= ~D2H_INT_ASYNC_MD_HK;
++			md->exp_id &= ~D2H_INT_ASYNC_AP_HK;
+ 		} else if (ctl->exp_flg) {
+ 			md->exp_id &= ~D2H_INT_ASYNC_MD_HK;
+-		} else if (md->exp_id & D2H_INT_ASYNC_MD_HK) {
+-			queue_work(md->handshake_wq, &md->handshake_work);
+-			md->exp_id &= ~D2H_INT_ASYNC_MD_HK;
+-			mhccif_base = md->t7xx_dev->base_addr.mhccif_rc_base;
+-			iowrite32(D2H_INT_ASYNC_MD_HK, mhccif_base + REG_EP2RC_SW_INT_ACK);
+-			t7xx_mhccif_mask_set(md->t7xx_dev, D2H_INT_ASYNC_MD_HK);
++			md->exp_id &= ~D2H_INT_ASYNC_AP_HK;
+ 		} else {
+-			t7xx_mhccif_mask_clr(md->t7xx_dev, D2H_INT_ASYNC_MD_HK);
++			void __iomem *mhccif_base = md->t7xx_dev->base_addr.mhccif_rc_base;
++
++			if (md->exp_id & D2H_INT_ASYNC_MD_HK) {
++				queue_work(md->handshake_wq, &md->handshake_work);
++				md->exp_id &= ~D2H_INT_ASYNC_MD_HK;
++				iowrite32(D2H_INT_ASYNC_MD_HK, mhccif_base + REG_EP2RC_SW_INT_ACK);
++				t7xx_mhccif_mask_set(md->t7xx_dev, D2H_INT_ASYNC_MD_HK);
++			}
++
++			if (md->exp_id & D2H_INT_ASYNC_AP_HK) {
++				queue_work(md->handshake_wq, &md->ap_handshake_work);
++				md->exp_id &= ~D2H_INT_ASYNC_AP_HK;
++				iowrite32(D2H_INT_ASYNC_AP_HK, mhccif_base + REG_EP2RC_SW_INT_ACK);
++				t7xx_mhccif_mask_set(md->t7xx_dev, D2H_INT_ASYNC_AP_HK);
++			}
+ 		}
+ 		spin_unlock_irqrestore(&md->exp_lock, flags);
+ 
+@@ -578,6 +604,7 @@ void t7xx_md_event_notify(struct t7xx_modem *md, enum md_event_id evt_id)
+ 
+ 	case FSM_READY:
+ 		t7xx_mhccif_mask_set(md->t7xx_dev, D2H_INT_ASYNC_MD_HK);
++		t7xx_mhccif_mask_set(md->t7xx_dev, D2H_INT_ASYNC_AP_HK);
+ 		break;
+ 
+ 	default:
+@@ -629,6 +656,12 @@ static struct t7xx_modem *t7xx_md_alloc(struct t7xx_pci_dev *t7xx_dev)
+ 	md->core_md.feature_set[RT_ID_MD_PORT_ENUM] &= ~FEATURE_MSK;
+ 	md->core_md.feature_set[RT_ID_MD_PORT_ENUM] |=
+ 		FIELD_PREP(FEATURE_MSK, MTK_FEATURE_MUST_BE_SUPPORTED);
++
++	INIT_WORK(&md->ap_handshake_work, t7xx_ap_hk_wq);
++	md->core_ap.feature_set[RT_ID_AP_PORT_ENUM] &= ~FEATURE_MSK;
++	md->core_ap.feature_set[RT_ID_AP_PORT_ENUM] |=
++		FIELD_PREP(FEATURE_MSK, MTK_FEATURE_MUST_BE_SUPPORTED);
++
+ 	return md;
+ }
+ 
+@@ -640,6 +673,7 @@ int t7xx_md_reset(struct t7xx_pci_dev *t7xx_dev)
+ 	md->exp_id = 0;
+ 	t7xx_fsm_reset(md);
+ 	t7xx_cldma_reset(md->md_ctrl[CLDMA_ID_MD]);
++	t7xx_cldma_reset(md->md_ctrl[CLDMA_ID_AP]);
+ 	t7xx_port_proxy_reset(md->port_prox);
+ 	md->md_init_finish = true;
+ 	return t7xx_core_reset(md);
+@@ -669,6 +703,10 @@ int t7xx_md_init(struct t7xx_pci_dev *t7xx_dev)
+ 	if (ret)
+ 		goto err_destroy_hswq;
+ 
++	ret = t7xx_cldma_alloc(CLDMA_ID_AP, t7xx_dev);
++	if (ret)
++		goto err_destroy_hswq;
++
+ 	ret = t7xx_fsm_init(md);
+ 	if (ret)
+ 		goto err_destroy_hswq;
+@@ -681,12 +719,16 @@ int t7xx_md_init(struct t7xx_pci_dev *t7xx_dev)
+ 	if (ret)
+ 		goto err_uninit_ccmni;
+ 
+-	ret = t7xx_port_proxy_init(md);
++	ret = t7xx_cldma_init(md->md_ctrl[CLDMA_ID_AP]);
+ 	if (ret)
+ 		goto err_uninit_md_cldma;
+ 
++	ret = t7xx_port_proxy_init(md);
++	if (ret)
++		goto err_uninit_ap_cldma;
++
+ 	ret = t7xx_fsm_append_cmd(md->fsm_ctl, FSM_CMD_START, 0);
+-	if (ret) /* fsm_uninit flushes cmd queue */
++	if (ret) /* t7xx_fsm_uninit() flushes cmd queue */
+ 		goto err_uninit_proxy;
+ 
+ 	t7xx_md_sys_sw_init(t7xx_dev);
+@@ -696,6 +738,9 @@ int t7xx_md_init(struct t7xx_pci_dev *t7xx_dev)
+ err_uninit_proxy:
+ 	t7xx_port_proxy_uninit(md->port_prox);
+ 
++err_uninit_ap_cldma:
++	t7xx_cldma_exit(md->md_ctrl[CLDMA_ID_AP]);
++
+ err_uninit_md_cldma:
+ 	t7xx_cldma_exit(md->md_ctrl[CLDMA_ID_MD]);
+ 
+@@ -722,6 +767,7 @@ void t7xx_md_exit(struct t7xx_pci_dev *t7xx_dev)
+ 
+ 	t7xx_fsm_append_cmd(md->fsm_ctl, FSM_CMD_PRE_STOP, FSM_CMD_FLAG_WAIT_FOR_COMPLETION);
+ 	t7xx_port_proxy_uninit(md->port_prox);
++	t7xx_cldma_exit(md->md_ctrl[CLDMA_ID_AP]);
+ 	t7xx_cldma_exit(md->md_ctrl[CLDMA_ID_MD]);
+ 	t7xx_ccmni_exit(t7xx_dev);
+ 	t7xx_fsm_uninit(md);
+diff --git a/drivers/net/wwan/t7xx/t7xx_modem_ops.h b/drivers/net/wwan/t7xx/t7xx_modem_ops.h
+index 7469ed636ae8..abe633cf7adc 100644
+--- a/drivers/net/wwan/t7xx/t7xx_modem_ops.h
++++ b/drivers/net/wwan/t7xx/t7xx_modem_ops.h
+@@ -66,10 +66,12 @@ struct t7xx_modem {
+ 	struct cldma_ctrl		*md_ctrl[CLDMA_NUM];
+ 	struct t7xx_pci_dev		*t7xx_dev;
+ 	struct t7xx_sys_info		core_md;
++	struct t7xx_sys_info		core_ap;
+ 	bool				md_init_finish;
+ 	bool				rgu_irq_asserted;
+ 	struct workqueue_struct		*handshake_wq;
+ 	struct work_struct		handshake_work;
++	struct work_struct		ap_handshake_work;
+ 	struct t7xx_fsm_ctl		*fsm_ctl;
+ 	struct port_proxy		*port_prox;
+ 	unsigned int			exp_id;
+diff --git a/drivers/net/wwan/t7xx/t7xx_port.h b/drivers/net/wwan/t7xx/t7xx_port.h
+index 8ea9079af997..4ae8a00a8532 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port.h
++++ b/drivers/net/wwan/t7xx/t7xx_port.h
+@@ -36,9 +36,13 @@
+ /* Channel ID and Message ID definitions.
+  * The channel number consists of peer_id(15:12) , channel_id(11:0)
+  * peer_id:
+- * 0:reserved, 1: to sAP, 2: to MD
++ * 0:reserved, 1: to AP, 2: to MD
+  */
+ enum port_ch {
++	/* to AP */
++	PORT_CH_AP_CONTROL_RX = 0x1000,
++	PORT_CH_AP_CONTROL_TX = 0x1001,
++
+ 	/* to MD */
+ 	PORT_CH_CONTROL_RX = 0x2000,
+ 	PORT_CH_CONTROL_TX = 0x2001,
+diff --git a/drivers/net/wwan/t7xx/t7xx_port_ctrl_msg.c b/drivers/net/wwan/t7xx/t7xx_port_ctrl_msg.c
+index 68430b130a67..ae632ef96698 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port_ctrl_msg.c
++++ b/drivers/net/wwan/t7xx/t7xx_port_ctrl_msg.c
+@@ -167,8 +167,12 @@ static int control_msg_handler(struct t7xx_port *port, struct sk_buff *skb)
+ 	case CTL_ID_HS2_MSG:
+ 		skb_pull(skb, sizeof(*ctrl_msg_h));
+ 
+-		if (port_conf->rx_ch == PORT_CH_CONTROL_RX) {
+-			ret = t7xx_fsm_append_event(ctl, FSM_EVENT_MD_HS2, skb->data,
++		if (port_conf->rx_ch == PORT_CH_CONTROL_RX ||
++		    port_conf->rx_ch == PORT_CH_AP_CONTROL_RX) {
++			int event = port_conf->rx_ch == PORT_CH_CONTROL_RX ?
++				    FSM_EVENT_MD_HS2 : FSM_EVENT_AP_HS2;
++
++			ret = t7xx_fsm_append_event(ctl, event, skb->data,
+ 						    le32_to_cpu(ctrl_msg_h->data_length));
+ 			if (ret)
+ 				dev_err(port->dev, "Failed to append Handshake 2 event");
+diff --git a/drivers/net/wwan/t7xx/t7xx_port_proxy.c b/drivers/net/wwan/t7xx/t7xx_port_proxy.c
+index 894b1d11b2c9..274846d39fbf 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port_proxy.c
++++ b/drivers/net/wwan/t7xx/t7xx_port_proxy.c
+@@ -48,7 +48,7 @@
+ 	     i < (proxy)->port_count;		\
+ 	     i++, (p) = &(proxy)->ports[i])
+ 
+-static const struct t7xx_port_conf t7xx_md_port_conf[] = {
++static const struct t7xx_port_conf t7xx_port_conf[] = {
+ 	{
+ 		.tx_ch = PORT_CH_UART2_TX,
+ 		.rx_ch = PORT_CH_UART2_RX,
+@@ -89,6 +89,14 @@ static const struct t7xx_port_conf t7xx_md_port_conf[] = {
+ 		.path_id = CLDMA_ID_MD,
+ 		.ops = &ctl_port_ops,
+ 		.name = "t7xx_ctrl",
++	}, {
++		.tx_ch = PORT_CH_AP_CONTROL_TX,
++		.rx_ch = PORT_CH_AP_CONTROL_RX,
++		.txq_index = Q_IDX_CTRL,
++		.rxq_index = Q_IDX_CTRL,
++		.path_id = CLDMA_ID_AP,
++		.ops = &ctl_port_ops,
++		.name = "t7xx_ap_ctrl",
+ 	},
+ };
+ 
+@@ -428,6 +436,9 @@ static void t7xx_proxy_init_all_ports(struct t7xx_modem *md)
+ 		if (port_conf->tx_ch == PORT_CH_CONTROL_TX)
+ 			md->core_md.ctl_port = port;
+ 
++		if (port_conf->tx_ch == PORT_CH_AP_CONTROL_TX)
++			md->core_ap.ctl_port = port;
++
+ 		port->t7xx_dev = md->t7xx_dev;
+ 		port->dev = &md->t7xx_dev->pdev->dev;
+ 		spin_lock_init(&port->port_update_lock);
+@@ -442,7 +453,7 @@ static void t7xx_proxy_init_all_ports(struct t7xx_modem *md)
+ 
+ static int t7xx_proxy_alloc(struct t7xx_modem *md)
+ {
+-	unsigned int port_count = ARRAY_SIZE(t7xx_md_port_conf);
++	unsigned int port_count = ARRAY_SIZE(t7xx_port_conf);
+ 	struct device *dev = &md->t7xx_dev->pdev->dev;
+ 	struct port_proxy *port_prox;
+ 	int i;
+@@ -456,7 +467,7 @@ static int t7xx_proxy_alloc(struct t7xx_modem *md)
+ 	port_prox->dev = dev;
+ 
+ 	for (i = 0; i < port_count; i++)
+-		port_prox->ports[i].port_conf = &t7xx_md_port_conf[i];
++		port_prox->ports[i].port_conf = &t7xx_port_conf[i];
+ 
+ 	port_prox->port_count = port_count;
+ 	t7xx_proxy_init_all_ports(md);
+@@ -481,6 +492,7 @@ int t7xx_port_proxy_init(struct t7xx_modem *md)
+ 	if (ret)
+ 		return ret;
+ 
++	t7xx_cldma_set_recv_skb(md->md_ctrl[CLDMA_ID_AP], t7xx_port_proxy_recv_skb);
+ 	t7xx_cldma_set_recv_skb(md->md_ctrl[CLDMA_ID_MD], t7xx_port_proxy_recv_skb);
+ 	return 0;
+ }
+diff --git a/drivers/net/wwan/t7xx/t7xx_reg.h b/drivers/net/wwan/t7xx/t7xx_reg.h
+index 7c1b81091a0f..c41d7d094c08 100644
+--- a/drivers/net/wwan/t7xx/t7xx_reg.h
++++ b/drivers/net/wwan/t7xx/t7xx_reg.h
+@@ -56,7 +56,7 @@
+ #define D2H_INT_RESUME_ACK			BIT(12)
+ #define D2H_INT_SUSPEND_ACK_AP			BIT(13)
+ #define D2H_INT_RESUME_ACK_AP			BIT(14)
+-#define D2H_INT_ASYNC_SAP_HK			BIT(15)
++#define D2H_INT_ASYNC_AP_HK			BIT(15)
+ #define D2H_INT_ASYNC_MD_HK			BIT(16)
+ 
+ /* Register base */
+diff --git a/drivers/net/wwan/t7xx/t7xx_state_monitor.c b/drivers/net/wwan/t7xx/t7xx_state_monitor.c
+index 0bcca08ff2bd..80edb8e75a6a 100644
+--- a/drivers/net/wwan/t7xx/t7xx_state_monitor.c
++++ b/drivers/net/wwan/t7xx/t7xx_state_monitor.c
+@@ -285,8 +285,9 @@ static int fsm_routine_starting(struct t7xx_fsm_ctl *ctl)
+ 	t7xx_fsm_broadcast_state(ctl, MD_STATE_WAITING_FOR_HS1);
+ 	t7xx_md_event_notify(md, FSM_START);
+ 
+-	wait_event_interruptible_timeout(ctl->async_hk_wq, md->core_md.ready || ctl->exp_flg,
+-					 HZ * 60);
++	wait_event_interruptible_timeout(ctl->async_hk_wq,
++					 (md->core_md.ready && md->core_ap.ready) ||
++					  ctl->exp_flg, HZ * 60);
+ 	dev = &md->t7xx_dev->pdev->dev;
+ 
+ 	if (ctl->exp_flg)
+@@ -297,6 +298,13 @@ static int fsm_routine_starting(struct t7xx_fsm_ctl *ctl)
+ 		if (md->core_md.handshake_ongoing)
+ 			t7xx_fsm_append_event(ctl, FSM_EVENT_MD_HS2_EXIT, NULL, 0);
+ 
++		fsm_routine_exception(ctl, NULL, EXCEPTION_HS_TIMEOUT);
++		return -ETIMEDOUT;
++	} else if (!md->core_ap.ready) {
++		dev_err(dev, "AP handshake timeout\n");
++		if (md->core_ap.handshake_ongoing)
++			t7xx_fsm_append_event(ctl, FSM_EVENT_AP_HS2_EXIT, NULL, 0);
++
+ 		fsm_routine_exception(ctl, NULL, EXCEPTION_HS_TIMEOUT);
+ 		return -ETIMEDOUT;
+ 	}
+@@ -335,6 +343,7 @@ static void fsm_routine_start(struct t7xx_fsm_ctl *ctl, struct t7xx_fsm_command
+ 		return;
+ 	}
+ 
++	t7xx_cldma_hif_hw_init(md->md_ctrl[CLDMA_ID_AP]);
+ 	t7xx_cldma_hif_hw_init(md->md_ctrl[CLDMA_ID_MD]);
+ 	fsm_finish_command(ctl, cmd, fsm_routine_starting(ctl));
+ }
+diff --git a/drivers/net/wwan/t7xx/t7xx_state_monitor.h b/drivers/net/wwan/t7xx/t7xx_state_monitor.h
+index b1af0259d4c5..b6e76f3903c8 100644
+--- a/drivers/net/wwan/t7xx/t7xx_state_monitor.h
++++ b/drivers/net/wwan/t7xx/t7xx_state_monitor.h
+@@ -38,10 +38,12 @@ enum t7xx_fsm_state {
+ enum t7xx_fsm_event_state {
+ 	FSM_EVENT_INVALID,
+ 	FSM_EVENT_MD_HS2,
++	FSM_EVENT_AP_HS2,
+ 	FSM_EVENT_MD_EX,
+ 	FSM_EVENT_MD_EX_REC_OK,
+ 	FSM_EVENT_MD_EX_PASS,
+ 	FSM_EVENT_MD_HS2_EXIT,
++	FSM_EVENT_AP_HS2_EXIT,
+ 	FSM_EVENT_MAX
+ };
+ 
+-- 
+2.41.0
+
