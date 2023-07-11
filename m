@@ -2,146 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B6974EB79
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5BF74EB81
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjGKKIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S229928AbjGKKJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjGKKIG (ORCPT
+        with ESMTP id S229468AbjGKKJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:08:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F7BF9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:07:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689070038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kZ1Zgpgj63HwlWEwsThyu6JQTmo8pm99b3bKVT/0+Bg=;
-        b=TF+PxuUPt6YCzAkLp6iEsplm4Zo+Ajd512Jwcrls+8uCT7Hwmtqt7yRm7hStxl63wlIDT8
-        UFI3LtZzuD/txldRabect52wajAB4S8xhCvIDSQ67u5CtzFYX4oUV3S0GWHxFDGZjrFt+s
-        lj6gdyOhM9vlkRya73598PCGvBN6vsM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-364-FCNK8GS9PlSekO8RzJ33TA-1; Tue, 11 Jul 2023 06:07:17 -0400
-X-MC-Unique: FCNK8GS9PlSekO8RzJ33TA-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a34a0b75eso347366266b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:07:16 -0700 (PDT)
+        Tue, 11 Jul 2023 06:09:32 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7B5BF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:09:30 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso8744031e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689070169; x=1691662169;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7dRYhDe8BiVEV0EBlHbMEnxi5wvB4qWMFbFVB8lXRts=;
+        b=aFgnj794CZ/PSLsUzrOXSBGzhI4B7HswMutmsFqschHSz8cORA+/pDetACQMnLtiVf
+         SmrzCFCT/cs+yM6BikKD/fqtRXullzc+RV31vTmrAL7rMnzI7g16FM72t2KqZivXVtiL
+         fMRV7ruLnrIMLDcjsLJWEglSNQS1EXdKxUdtJ7xeV2OpYxq6LtL3o6/GCUCTxNGksEAq
+         OaXuZwr3JCMIQ1l/iQaAsAXZe5TMsMdztIpr3EeEXtf9nprw/1zwlBw+P4lNXSRt+M6k
+         rXc9W4f0n7upozPz3dJJtgCxGq6YYdfg3Q3boXohjB+hDA1PLH4SmzjbP61YS/E3XkvU
+         pJlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689070036; x=1691662036;
+        d=1e100.net; s=20221208; t=1689070169; x=1691662169;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kZ1Zgpgj63HwlWEwsThyu6JQTmo8pm99b3bKVT/0+Bg=;
-        b=VDdy60GQE7PSXi0oxZzgd6qSRxZzjCkFhnn1g+/xV+QIe6TTlJxeEHt7Z8byqEiduZ
-         +X0CIYVCDvZILBhG1ZaV990r1VSXJkg3aXJKdGlwUDm+B5oV2tyl6uULMuYzT7969QNj
-         B2ZJiOpieuLooxk1zYcsmRIngcuyKDWSfnngvQ9xQTiPkv95nSgScjYWP0mtPj1ZnJdR
-         5HNgNvCIHW522ziiF9SHWcnXoF9PxSABQ3SrBEU8a/1lfXAAiKBEoCSsTq8XER0oSlDE
-         Sfz91FhjOnlcXpDNqUWO2IuhiX9/olmfBFCxmnBtzxIcfVNND9voJPm17CZ7120ex3ps
-         0zgw==
-X-Gm-Message-State: ABy/qLYy72/Qx/yFQpoP8XV4rehnPNdczVzbc6Kw868e2P1Lrg+Bc+6U
-        N4cJLBwOm858HdkIAiR1h0W3e4Je5XQsHfTXJQHT1WauRBbR594MaelBdEv8AH+gOeaKIGPeDKG
-        OnFf8DS6GIDePNE/3WdzOgX4I
-X-Received: by 2002:a17:906:7a0a:b0:993:d6bc:a48c with SMTP id d10-20020a1709067a0a00b00993d6bca48cmr14516421ejo.1.1689070036100;
-        Tue, 11 Jul 2023 03:07:16 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlH+/om4tcSMyQz1hCZ852VhrJeYEsGhn+t+zR2tDcDzsnqJcXQM+57d0CWh2h2C5po5WopocQ==
-X-Received: by 2002:a17:906:7a0a:b0:993:d6bc:a48c with SMTP id d10-20020a1709067a0a00b00993d6bca48cmr14516399ejo.1.1689070035842;
-        Tue, 11 Jul 2023 03:07:15 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id lf16-20020a170907175000b00993928e4d1bsm960476ejc.24.2023.07.11.03.07.14
+        bh=7dRYhDe8BiVEV0EBlHbMEnxi5wvB4qWMFbFVB8lXRts=;
+        b=WFnP++8285AO83pKoPhwkm1bNJ3onh7zW8E95X91l325fcDELfDijnPVc4lLdrVuY0
+         wrqDxgrGsfJiBYME560gSfB2n9QrAlro5Uqdz8G9IIfmKPkh90IaSApkuhnbyimwOFAo
+         0TjNv/EXHGJcwPI0H/MHWuN+qLhkXHhfgAUig8GcHJ5iB/KIjloa1TtHEkaeoe1ZSQnI
+         2u51fGH88bSs4Qr5OksipXvetgVSfFrWEyR56Fg3LZ0Jil1xY6ULazHqy4GXAEOPGcN8
+         koxzS7jVALn6Y/YuZZKC+ey2pPThEcd+QQ0ZoI6FhcbiJ/uXqcm7sDWQbd5FBf2Cz4xQ
+         vriw==
+X-Gm-Message-State: ABy/qLZxxJQhvLn6HP40PzJ2MZz9m/4qMzJOoae++MPsY7j+o9UEO9EO
+        s989DEdgYknFDVR5fR6lZKkwKQ==
+X-Google-Smtp-Source: APBJJlHdaYP6KQEeXomKRN9uoCu1+yo8uHO71sdRJ/mNUCNoupGWQiJZQ4tH2nJN9kqa4WSAGURoBQ==
+X-Received: by 2002:a05:6512:2346:b0:4fb:7be5:8f4e with SMTP id p6-20020a056512234600b004fb7be58f4emr3008339lfu.6.1689070168929;
+        Tue, 11 Jul 2023 03:09:28 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id 15-20020ac2482f000000b004fb88fffd19sm256372lft.146.2023.07.11.03.09.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 03:07:15 -0700 (PDT)
-Message-ID: <be62be68-d69a-9081-68d2-8202da3a49f1@redhat.com>
-Date:   Tue, 11 Jul 2023 12:07:14 +0200
+        Tue, 11 Jul 2023 03:09:28 -0700 (PDT)
+Message-ID: <1090089b-2fa9-9781-51a8-38957e261bfd@linaro.org>
+Date:   Tue, 11 Jul 2023 13:09:27 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] platform/x86: dell-ddv: Improve error handling
-Content-Language: en-US, nl
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230707010333.12954-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230707010333.12954-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] drm/client: Send hotplug event after registering a client
+Content-Language: en-GB
+To:     Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+        noralf@tronnes.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        amd-gfx@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Paul Schyska <pschyska@gmail.com>,
+        Torsten Krah <krah.tm@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        freedreno@lists.freedesktop.org,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Moritz Duge <MoritzDuge@kolahilft.de>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230710091029.27503-1-tzimmermann@suse.de>
+ <325dad0e-38ff-9f60-efc9-0fd711d63267@linaro.org>
+ <117aea3d-c316-509d-7be7-ade155b4ae85@suse.de>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <117aea3d-c316-509d-7be7-ade155b4ae85@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 11/07/2023 09:07, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 10.07.23 um 23:11 schrieb Dmitry Baryshkov:
+> [...]
+>>> ---
+>>>   drivers/gpu/drm/armada/armada_fbdev.c     |  4 ----
+>>>   drivers/gpu/drm/drm_client.c              | 21 +++++++++++++++++++++
+>>>   drivers/gpu/drm/drm_fbdev_dma.c           |  4 ----
+>>>   drivers/gpu/drm/drm_fbdev_generic.c       |  4 ----
+>>>   drivers/gpu/drm/exynos/exynos_drm_fbdev.c |  4 ----
+>>>   drivers/gpu/drm/gma500/fbdev.c            |  4 ----
+>>>   drivers/gpu/drm/msm/msm_fbdev.c           |  4 ----
+>>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> # msm
+> 
+> Thanks.
+> 
+>>
+>>>   drivers/gpu/drm/omapdrm/omap_fbdev.c      |  4 ----
+>>>   drivers/gpu/drm/radeon/radeon_fbdev.c     |  4 ----
+>>>   drivers/gpu/drm/tegra/fbdev.c             |  4 ----
+>>>   10 files changed, 21 insertions(+), 36 deletions(-)
+>>
+>> BTW: As you have been clearing this area. I see that significant 
+>> amount of DRM drivers use exactly the same code for 
+>> msm_fbdev_client_funcs and for the significant part of 
+>> foo_fbdev_setup(). Do you have any plans for moving that into a 
+>> library / generic code? If not, I can take a look at crafting the patch.
+>>
+> 
+> You're not the first to ask. :) I've so far not attempted to address 
+> this duplication. I've been bitten by premature helperization before, so 
+> I wanted to wait a bit longer. A lot of the fbdev and client code is 
+> changing quite a bit. After things stabilized, I want to to try to do 
+> some more code sharing.
 
-On 7/7/23 03:03, Armin Wolf wrote:
-> If for some reason a external function returns -ENODEV,
-> no error message is being displayed because the driver
-> assumes that -ENODEV can only be returned internally if
-> no sensors, etc where found.
-> Fix this by explicitly returning 0 in such a case since
-> missing hardware is no error. Also remove the now obsolete
-> check for -ENODEV.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Ack, thank you for sharing this.
 
-Thank you for your series, I've applied this series to my fixes
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
-
-I will include this series in my next fixes pull-req to Linus
-for the current kernel development cycle.
-
-Regards,
-
-Hans
-
-> ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index 2750dee99c3e..db1e9240dd02 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -616,7 +616,8 @@ static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_data *data)
->  	}
-> 
->  	if (index < 2) {
-> -		ret = -ENODEV;
-> +		/* Finding no available sensors is not an error */
-> +		ret = 0;
-> 
->  		goto err_release;
->  	}
-> @@ -841,13 +842,13 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
-> 
->  	if (IS_REACHABLE(CONFIG_ACPI_BATTERY)) {
->  		ret = dell_wmi_ddv_battery_add(data);
-> -		if (ret < 0 && ret != -ENODEV)
-> +		if (ret < 0)
->  			dev_warn(&wdev->dev, "Unable to register ACPI battery hook: %d\n", ret);
->  	}
-> 
->  	if (IS_REACHABLE(CONFIG_HWMON)) {
->  		ret = dell_wmi_ddv_hwmon_add(data);
-> -		if (ret < 0 && ret != -ENODEV)
-> +		if (ret < 0)
->  			dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
->  	}
-> 
-> --
-> 2.30.2
-> 
+-- 
+With best wishes
+Dmitry
 
