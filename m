@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51B674F32B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9A974F32C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjGKPRB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jul 2023 11:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S231418AbjGKPRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGKPQ5 (ORCPT
+        with ESMTP id S229512AbjGKPRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:16:57 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA766A0;
-        Tue, 11 Jul 2023 08:16:56 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-579e5d54e68so68961387b3.1;
-        Tue, 11 Jul 2023 08:16:56 -0700 (PDT)
+        Tue, 11 Jul 2023 11:17:44 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39459E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:17:43 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-55ae2075990so3098217a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1689088663; x=1691680663;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fHVi0s1IuFWl/ehc9JahlJPqzNF4LF+SBFa5ECpZnHU=;
+        b=QBZIohgfNhM2E78kevVsEE+1Qwv2hpSFridUR6C3jQu0iwC34OsaifbF//xI0Mdw3p
+         rCTp69jk/NYhnXVQHxBKHRuCK8YLb44a3jET6ruicOdHHi++WmzXvZzTIP23ZlwpfYiL
+         cUEfD/ZWGUqxoIV1h53jOKyT1kBRlEmw/cw4A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689088616; x=1691680616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6rp97t0SvD8s0Who/ua4azUvnOtZZ5RKlcFsre7+/tw=;
-        b=PjTePUAZDZ0OPOG0z3dRT/Fm+WDPGZQ4hmSPrpSza6zPz6IH38xFao5oNusgnJeg7t
-         uJ3ocxuHhNoza+UH/nIGlPrSx5uWvWEFESDq3PjPSLeSX3wOM4RiLNawNxaIKe2S4dNw
-         Ua35zTtq6s7ijfVsg6kN/xnklaW4YIFA2sgwnSCwRXRBcAa08sKcSv3GEtGdrmod8CrU
-         kkcBnK8qzKZUCAM9ylByOl+8YR4nzJVRgpTuiVZR5iuprhmV1yy1kUBdPrn2H7eASa3h
-         S9NkPv68Efq56GUgecHkTlASTZAakN/QmvLuj5iLavvkx3BEjwQI6qCYMSDwnmhu6x/O
-         G7sA==
-X-Gm-Message-State: ABy/qLYR0yCc9o42H1ctlmTxdFt7PrGy6iOhproS0nLtprFpiq+b4wC8
-        6iDgkwpfUBcW8d0MNT5gwNotWtACjyjtsg==
-X-Google-Smtp-Source: APBJJlFkLS2Qz62XP3sReL988oxSMjFe0SGyWYOrproFPt4U60NPM3VmCuRgEbjHdak4yeRsBinsgw==
-X-Received: by 2002:a81:5303:0:b0:57a:6e41:948e with SMTP id h3-20020a815303000000b0057a6e41948emr10091943ywb.11.1689088615700;
-        Tue, 11 Jul 2023 08:16:55 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id r186-20020a8181c3000000b0056d3d7a59cesm619774ywf.12.2023.07.11.08.16.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 08:16:55 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-bd61dd9a346so6800350276.2;
-        Tue, 11 Jul 2023 08:16:54 -0700 (PDT)
-X-Received: by 2002:a25:cd85:0:b0:c60:fb80:99f7 with SMTP id
- d127-20020a25cd85000000b00c60fb8099f7mr13925299ybf.16.1689088612983; Tue, 11
- Jul 2023 08:16:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689088663; x=1691680663;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fHVi0s1IuFWl/ehc9JahlJPqzNF4LF+SBFa5ECpZnHU=;
+        b=DfFBQXYCROCA388kNEYv7viUQE6HO/4w3OB7GBJgz9c6kxTgZ+09rDGgNuXL7/0/jZ
+         4EeYaQlaG4F9hc+QostSM3EyVp7d2KZBetB1IJInt7lBkQam3lvPiYGzpvu10hR2x0bM
+         4WmhL7ijlczzXab7uDb9QScXyUwjhhyyarTIlB0EEDDtWB/UhfonwdRFQ5N+dUbkGz0J
+         He8YCo12Wy8WmunK9eCvfcC8X6FYERYfT4TCcRmecaLoH+GQw0XenQpwVcLIC8tnRenJ
+         YkgdIat+0nILFhZ8UTOSA4YI2AE3XzMpi/por+uCFUvQ+nVogog4qLzJFpjq3cOuT+lG
+         uMIA==
+X-Gm-Message-State: ABy/qLZ3W/bpWHEm/i6EONP8v0W76/Wgf8D4njhf4BW3DDmRjvuVkA20
+        3pnsZLzn34z1qSAhz3tozhSib8K+EWlAxB9s4W+ZqQ==
+X-Google-Smtp-Source: APBJJlHhYE6STEI4c21sZdMEoWx7KaAxx0Fj//AEgaZ6unUd0HExYb43K+nDJUSHCG6QMeLmsK8yig==
+X-Received: by 2002:a17:90a:7e86:b0:262:ecd9:ed09 with SMTP id j6-20020a17090a7e8600b00262ecd9ed09mr12456604pjl.33.1689088663255;
+        Tue, 11 Jul 2023 08:17:43 -0700 (PDT)
+Received: from google.com ([110.11.159.72])
+        by smtp.gmail.com with ESMTPSA id ji19-20020a170903325300b001b869410ed2sm2073335plb.72.2023.07.11.08.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 08:17:42 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 00:17:38 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v2 3/5] printk: Consolidate console deferred
+ printing
+Message-ID: <20230711151738.GD12154@google.com>
+References: <20230710134524.25232-1-john.ogness@linutronix.de>
+ <20230710134524.25232-4-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20230710142227.965586663@linuxfoundation.org>
-In-Reply-To: <20230710142227.965586663@linuxfoundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Jul 2023 17:16:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVcZ2W7o42ZAdMHfPYZ9d0MCRat_PKWoh=JDHK=m=dM1g@mail.gmail.com>
-Message-ID: <CAMuHMdVcZ2W7o42ZAdMHfPYZ9d0MCRat_PKWoh=JDHK=m=dM1g@mail.gmail.com>
-Subject: Re: [PATCH 6.3 000/424] 6.3.13-rc4 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710134524.25232-4-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On (23/07/10 15:51), John Ogness wrote:
+> Printing to consoles can be deferred for several reasons:
+> 
+> - explicitly with printk_deferred()
+> - printk() in NMI context
+> - recursive printk() calls
+> 
+> The current implementation is not consistent. For printk_deferred(),
+> irq work is scheduled twice. For NMI und recursive, panic CPU
+> suppression and caller delays are not properly enforced.
+> 
+> Correct these inconsistencies by consolidating the deferred printing
+> code so that vprintk_deferred() is the top-level function for
+> deferred printing and vprintk_emit() will perform whichever irq_work
+> queueing is appropriate.
+> 
+> Also add kerneldoc for wake_up_klogd() and defer_console_output() to
+> clarify their differences and appropriate usage.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-On Mon, Jul 10, 2023 at 4:29 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 6.3.13 release.
-> There are 424 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 12 Jul 2023 14:21:05 +0000.
-> Anything received after that time might be too late.
+Looks good to me
 
-> Zhanhao Hu <zero12113@hust.edu.cn>
->     clk: imx93: fix memory leak and missing unwind goto in imx93_clocks_probe
-
-This commit was flagged to contain a bug by two reporters almost 4 weeks
-ago, but no one took any action. Hence I have sent a fix
-https://lore.kernel.org/all/20230711150812.3562221-1-geert+renesas@glider.be
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
