@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F77674F93E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA34174F93F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjGKUoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
+        id S231308AbjGKUog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjGKUoL (ORCPT
+        with ESMTP id S230525AbjGKUoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:44:11 -0400
+        Tue, 11 Jul 2023 16:44:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E0E1716
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:44:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F310FA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:44:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F09D61615
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB39C433C8;
-        Tue, 11 Jul 2023 20:44:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D53A361625
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:44:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5C4C433CD;
+        Tue, 11 Jul 2023 20:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689108246;
-        bh=wQW4GBLchAMNvg0zf9lV5IU0ctx7DGvRlxsvP/ATa+8=;
+        s=k20201202; t=1689108249;
+        bh=1guEqJf5+OkgpLUyXf9dWW0/CtKqT6vSVMJIe9pjt6w=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rTqvPzGG1ppsoIhKChbMaWF+HRAtG5ie1lyLUeXCFW7AwFq7fUXDa+ye4znhLsamH
-         XJqvcQg1d1Y5FDvJ6MTzdKuD6LzPJG8aucajJlXDqL45OE6jkncze+1uUwQUyEdsl0
-         gHqYAE2k4LUgfxia9KLPSl6ccN5paX85t3HrPjxMW24P+Ew6PnhfTva5K9AvPjul+k
-         LXh+0dUBDzchhq+omXRfdnfsmhTSranBX4DOOyyA7lf1j7ew0wJtT7usC+T1kQxvfO
-         wbjtBLDKn02YDqJDqE43baudBVCyqHIPiUXh+lFmQUd+C6vkqor+5lVx82jtHi2yhe
-         Hlwbmelp0z7Tw==
+        b=t9MzO8bSHRogekgPqKQpViXQsUSYHnmrn/b5ADQd7TFmZUxIznnN9T4uK/ZVKhbEF
+         4W+cZC8yhKmusTA5Rbipm7Gv0ixhYP7DLfrUAGCYWde4j+zTYmb5RQPZQaIrIaRN8D
+         unpkZfIJufw2ulmeopTd2U79F0qShAAjw9ZfP7eqlmDLEDlIBX3WUca0ZLBepHtGg0
+         L91nsuSd0qK6TpFzAZjNxn/ChxGS6YhFuYaprTzM3Yy9OdAGN/255Gqa9hSn69Xcdj
+         /8JAPhRISwxr7LSWHb2qjl2SAwovW5FqIF/PfmZ4MGR1yoFvJXVWa3MfrI4C/4wGFZ
+         zWRxTYs5P+R5g==
 From:   Mark Brown <broonie@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee@kernel.org>,
+To:     Vinod Koul <vkoul@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Benjamin Gray <bgray@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1688643442.git.geert@linux-m68k.org>
-References: <cover.1688643442.git.geert@linux-m68k.org>
-Subject: Re: (subset) [PATCH 0/3] regmap: Fix REGMAP selections
-Message-Id: <168910824397.478364.12914850721215732231.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 21:44:03 +0100
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230705123018.30903-1-johan+linaro@kernel.org>
+References: <20230705123018.30903-1-johan+linaro@kernel.org>
+Subject: Re: (subset) [PATCH 0/8] ASoC/soundwire/qdsp6/wcd: fix leaks and
+ probe deferral
+Message-Id: <168910824667.478364.6400848972625194425.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 21:44:06 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -63,13 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Jul 2023 13:42:01 +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
+On Wed, 05 Jul 2023 14:30:10 +0200, Johan Hovold wrote:
+> I've been hitting a race during boot which breaks probe of the sound
+> card on the Lenovo ThinkPad X13s as I've previously reported here:
 > 
-> This patch series fixes several missing selects related to REGMAP.
+> 	https://lore.kernel.org/all/ZIHMMFtuDtvdpFAZ@hovoldconsulting.com/
 > 
-> The first patch fixes a serious thinko I made when making the regmap
-> KUnit test depend on REGMAP.
+> The immediate issue appeared to be a probe deferral that was turned into
+> a hard failure, but addressing that in itself only made things worse as
+> it exposed further bugs.
 > 
 > [...]
 
@@ -79,8 +83,20 @@ Applied to
 
 Thanks!
 
-[3/3] ASoC: codecs: SND_SOC_WCD934X should select REGMAP_IRQ
-      commit: e231cd833f6463e9a1d54acae9614b513c74d45e
+[2/8] ASoC: qdsp6: audioreach: fix topology probe deferral
+      commit: 46ec420573cefa1fc98025e7e6841bdafd6f1e20
+[3/8] ASoC: codecs: wcd938x: fix missing clsh ctrl error handling
+      commit: ed0dd9205bf69593edb495cb4b086dbae96a3f05
+[4/8] ASoC: codecs: wcd938x: fix resource leaks on component remove
+      commit: a3406f87775fee986876e03f93a84385f54d5999
+[5/8] ASoC: codecs: wcd934x: fix resource leaks on component remove
+      commit: 798590cc7d3c2b5f3a7548d96dd4d8a081c1bc39
+[6/8] ASoC: codecs: wcd-mbhc-v2: fix resource leaks on component remove
+      commit: a5475829adcc600bc69ee9ff7c9e3e43fb4f8d30
+[7/8] ASoC: topology: suppress probe deferral errors
+      commit: b6c3bdda3a7e43acfcec711ce20e7cfe44744740
+[8/8] ASoC: core: suppress probe deferral errors
+      commit: f09b6e96796056633453cb0d07b720d09f1efc68
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
