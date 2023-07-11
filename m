@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F7974F251
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22B674F253
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjGKOeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S230215AbjGKOeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbjGKOeG (ORCPT
+        with ESMTP id S233560AbjGKOeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:34:06 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261B71712
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:33:59 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-51dd16f823bso3914674a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:33:58 -0700 (PDT)
+        Tue, 11 Jul 2023 10:34:11 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB4B10E7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:01 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-51836731bfbso3126702a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:34:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689086037; x=1691678037;
+        d=google.com; s=20221208; t=1689086040; x=1691678040;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i17FLoNCi12ib3F8C35t83wNdppeBZG3dj7HY/hu0Qg=;
-        b=bF7ks1NOiP3BF1aqWMehZ/RymXHgICxwrRGh0fmfl8YsDQilu2nmGiaXt7lq7KHWZ/
-         e9N/L9vmQVA2AkmiBicDeuxKhtL0clapuMiVkJRboNpfFhF0gnkJtLlA5nH221cM06C8
-         w8ghPuSDsktDOO4BW/h6HGUuU2I56zCEwXmGcY8/d5lUyTen5sfwTBWKA0JKu2d1nbhU
-         OhUNrvMLxhBq2k+psa7klp3nulrB2kSJtBx2vVJ6EgDgszJ4V5GX848W2L0X5CZxd1FI
-         i2VCWpnJ7RjEds/XnyZFZeXfg0WKbqcobeZg8o+VHatLpaakqsxWcz13vMxE+PonafDG
-         DLeA==
+        bh=6gUN4hkfqv1qmZBEmgq0ujJ8OMQMxN9ipJDwtCO0z/w=;
+        b=ri7p9vV6wORs1YMnbVsQYCOsM+xoAZB3cF7gqHY0/TcF5npm8tbHpwX2wyWrRS5eOe
+         cxnQFf/BJF4hXOinqViiCsfFKctuu14j0AismWmP79AnONqF62avtF9X2j2Kgx0KfPHd
+         y2y23Qez4j3uD5gEqac0wu0yUTUNV2Vdrz6xX3ZoyX3lvrerkh7+JcGftmryZe+yxwHo
+         jzKgxcF3xFaPgSC6kO7SKyBS5TiHWaPfb9+CunLBx5v1eVNxAyiAVBxi9tdKU2HSoUsc
+         SdB3Ld1Ryvz/KmGIMbXAZ7M0qqYwv7XKFe+NCZaKr4WEG80RFBaN264nA/xvtXiyugeL
+         HDJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689086037; x=1691678037;
+        d=1e100.net; s=20221208; t=1689086040; x=1691678040;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i17FLoNCi12ib3F8C35t83wNdppeBZG3dj7HY/hu0Qg=;
-        b=bdJnqriFXscCG5FGz7tFPLW8v0mLDhTA0AhFdLAzRMKImmjw9eyr7MPUAErDSUNTvs
-         qo+Z+Fh09+mnGrLR0V8/Vp/3HRmHPFpCKIIEwicEyZZKmu/BproKceLGkSX73Xu2PlsQ
-         3veaEZ1OKibMnWbA7h4AupExkpFgfDi8s5mKKMr4UCeLRrVxqWzvLOcccB66L4tpAbaO
-         eIFWR7RSTwlOBGIYyCLQGqSFDO5GqB6AIXZgFlQ2laTVSX6jR4g7Sfs9pJEhQhcjPt3r
-         RtnrCwl8YLhbTwXNpIkfrQbBl+8JepnsJ1DII+/NsiVM81XdNCbZxNuxHR41E0BuVYjr
-         CrEQ==
-X-Gm-Message-State: ABy/qLaxAqPFwtk+pS87RgWx6nunGnjfjAXuWlZzc2bAIcUz3ddkme52
-        NUbO+/LgYRVAzh/QOypEU1ztgt+4xHc=
-X-Google-Smtp-Source: APBJJlGNWFJLgtlulnhBeOMdEwDi3KGdL3AjhF9WjdYEy0zcia1bCw7YygoOrzA5eHxyMc8FxCdKjfKZ7z0=
+        bh=6gUN4hkfqv1qmZBEmgq0ujJ8OMQMxN9ipJDwtCO0z/w=;
+        b=iGkQ77KsagASh3jIeNACiWuaak6U20qBNCIEwrKJp8LizrKkOSqZNt0W45iw4YYRTs
+         JxxKEI/91N7AM4ji05qGSs8cCS4utyqcDOVoO83bnba/bto/ibRvrWEkF8RjxH3Pmakv
+         s8chgkmBaxf2V7qi5QYhWTb+noHr4O9KLCYXTXUgZf4PrMh9E3aPZwyxZtSkSMv46vop
+         m0MgLs0wd3YwxWs20XVCAJnkL19FGGrOJGLHXYNifFhwlbLghQcK4orYDdIB4UozSA24
+         N3W4DiIku2UzfFbWXKymtAJvXnEOJv8PdF8O5rW/rcCrecH0yik2uto+SCoZno5tsEN4
+         Wvlg==
+X-Gm-Message-State: ABy/qLY1jc57xZKfobbKEYUIjAJ1GLBqIJXvRRUg0UVN0pxFH8WAp7Rb
+        UDPVJ8eF7K+oZT4YvCb+WfAcm7cat/Q=
+X-Google-Smtp-Source: APBJJlEl5eZizLWdD0LG9EWoFPqQYZtN3FlxalPV8qr6GFGRoc0oBdk244stQXXlvHP/KKaa3FZUvVbs4+c=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:564d:3aaa:6b5f:4419])
- (user=glider job=sendgmr) by 2002:a50:a6c9:0:b0:51e:2514:309d with SMTP id
- f9-20020a50a6c9000000b0051e2514309dmr75741edc.7.1689086037613; Tue, 11 Jul
- 2023 07:33:57 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 16:33:31 +0200
+ (user=glider job=sendgmr) by 2002:a50:c252:0:b0:51e:1c91:3c7e with SMTP id
+ t18-20020a50c252000000b0051e1c913c7emr82313edf.6.1689086040235; Tue, 11 Jul
+ 2023 07:34:00 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 16:33:32 +0200
 In-Reply-To: <20230711143337.3086664-1-glider@google.com>
 Mime-Version: 1.0
 References: <20230711143337.3086664-1-glider@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230711143337.3086664-5-glider@google.com>
-Subject: [PATCH 2/5] linux/bitqueue.h: add a KUnit test for bitqueue.h
+Message-ID: <20230711143337.3086664-6-glider@google.com>
+Subject: [PATCH 3/5] arm64: mte: add a test for MTE tags compression
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com, catalin.marinas@arm.com, will@kernel.org,
         pcc@google.com, andreyknvl@gmail.com
@@ -69,294 +69,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests checking that struct bitq correctly handles sub-byte values.
+Ensure that tag sequences containing alternating values are compressed
+to buffers of expected size and correctly decompressed afterwards.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- lib/Kconfig.debug   |   8 ++
- lib/Makefile        |   1 +
- lib/test_bitqueue.c | 244 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 253 insertions(+)
- create mode 100644 lib/test_bitqueue.c
+ arch/arm64/Kconfig           |  10 ++
+ arch/arm64/mm/Makefile       |   1 +
+ arch/arm64/mm/test_mtecomp.c | 175 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 186 insertions(+)
+ create mode 100644 arch/arm64/mm/test_mtecomp.c
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ce51d4dc6803e..a6598b2c250d5 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2678,6 +2678,14 @@ config SIPHASH_KUNIT_TEST
- 	  This is intended to help people writing architecture-specific
- 	  optimized versions.  If unsure, say N.
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index b25b584a0a9cb..31fc50208b383 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -2075,6 +2075,16 @@ config ARM64_MTE_COMP
+ 	  128-byte tag buffers corresponding to 4K pages can be compressed using
+ 	  the EA0 algorithm to save heap memory.
  
-+config BITQUEUE_KUNIT_TEST
-+	tristate "Test <linux/bitqueue.h>" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
++config ARM64_MTE_COMP_KUNIT_TEST
++	tristate "Test tag compression for ARM64 MTE" if !KUNIT_ALL_TESTS
 +	default KUNIT_ALL_TESTS
++	depends on KUNIT && ARM64_MTE_COMP
 +	help
-+	  Enable this option to test the kernel's bit queue implementation
-+	  (<linux/bitqueue.h>).
++	  Test EA0 compression algorithm enabled by CONFIG_ARM64_MTE_COMP.
 +
- config TEST_UDELAY
- 	tristate "udelay test driver"
- 	help
-diff --git a/lib/Makefile b/lib/Makefile
-index 876fcdeae34ec..7efb6aba31cf9 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -394,6 +394,7 @@ CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
- obj-$(CONFIG_STRSCPY_KUNIT_TEST) += strscpy_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-+obj-$(CONFIG_BITQUEUE_KUNIT_TEST) += test_bitqueue.o
++	  Ensure that tag sequences containing alternating values are compressed
++	  to buffers of expected size and correctly decompressed afterwards.
++
+ config ARM64_SVE
+ 	bool "ARM Scalable Vector Extension support"
+ 	default y
+diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+index 46778f6dd83c2..170dc62b010b9 100644
+--- a/arch/arm64/mm/Makefile
++++ b/arch/arm64/mm/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_TRANS_TABLE)	+= trans_pgd-asm.o
+ obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
+ obj-$(CONFIG_ARM64_MTE)		+= mteswap.o
+ obj-$(CONFIG_ARM64_MTE_COMP)	+= mtecomp.o
++obj-$(CONFIG_ARM64_MTE_COMP_KUNIT_TEST) += test_mtecomp.o
+ KASAN_SANITIZE_physaddr.o	+= n
  
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
-diff --git a/lib/test_bitqueue.c b/lib/test_bitqueue.c
+ obj-$(CONFIG_KASAN)		+= kasan_init.o
+diff --git a/arch/arm64/mm/test_mtecomp.c b/arch/arm64/mm/test_mtecomp.c
 new file mode 100644
-index 0000000000000..aec04b3a5f068
+index 0000000000000..67bef6f28dac4
 --- /dev/null
-+++ b/lib/test_bitqueue.c
-@@ -0,0 +1,244 @@
++++ b/arch/arm64/mm/test_mtecomp.c
+@@ -0,0 +1,175 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Test cases for struct bitq, a simple bit queue.
++ * Test cases for EA0, the compression algorithm for MTE tags.
 + */
 +
++#include <asm/mtecomp.h>
 +#include <kunit/test.h>
-+#include <linux/bitqueue.h>
 +#include <linux/slab.h>
++#include <linux/types.h>
 +
-+/* Set up a bit queue containing @size bytes. */
-+static void bitq_setup(struct bitq *it, size_t size)
++/*
++ * Test that ea0_tags_to_ranges() produces a single range for a zero-filled tag
++ * buffer.
++ */
++static void test_tags_to_ranges_zero(struct kunit *test)
 +{
-+	u8 *data = kmalloc(size, GFP_KERNEL);
++	u8 tags[128], dtags[128];
++	short r_sizes[256];
++	int r_len = 256;
++	u8 r_tags[256];
 +
-+	bitq_init(it, data, size);
-+}
-+
-+/* Tear down the bit queue. */
-+static void bitq_teardown(struct bitq *it)
-+{
-+	kfree(it->data);
-+	memset(it, 0, sizeof(*it));
-+}
-+
-+/* Test that nothing can be popped from an empty queue. */
-+static void test_empty(struct kunit *test)
-+{
-+	struct bitq it;
-+	u8 val = 0;
-+
-+	/* Allocate a two-byte queue. */
-+	bitq_setup(&it, 2);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), -1);
-+	bitq_teardown(&it);
-+}
-+
-+/* Test that simple byte-granular enqueue/dequeue operations work. */
-+static void test_basic_enqueue_dequeue(struct kunit *test)
-+{
-+	struct bitq it;
-+	u8 val = 0;
-+
-+	/* Allocate a two-byte queue. */
-+	bitq_setup(&it, 2);
-+	/* Enqueue two 8-bit values. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xaa, 8), 8);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xbb, 8), 8);
-+	/* Cannot enqueue the third byte. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 1, 8), -1);
-+	/* Dequeue two bytes. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0xaa);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0xbb);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), -1);
-+	bitq_teardown(&it);
-+}
-+
-+/* Test that values shorter than 8 bits can be enqueued and dequeued. */
-+static void test_shorter_than_byte(struct kunit *test)
-+{
-+	struct bitq it;
-+	u8 val = 0;
-+
-+	/* Allocate a two-byte queue. */
-+	bitq_setup(&it, 2);
-+	/* Enqueue two 0b101 values. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b101, 3), 3);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b101, 3), 3);
-+	/* The first byte of the queue is now 0b10110100. */
-+
-+	/* Now dequeue three 2-bit values: 0b10, 0b11, 0b01. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 2), 2);
-+	KUNIT_EXPECT_EQ(test, val, 0b10);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 2), 2);
-+	KUNIT_EXPECT_EQ(test, val, 0b11);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 2), 2);
-+	KUNIT_EXPECT_EQ(test, val, 0b01);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
-+	bitq_teardown(&it);
-+}
-+
-+/* Test that bits are carried over correctly if they do not fit. */
-+static void test_carryover(struct kunit *test)
-+{
-+	struct bitq it;
-+	u8 val = 0;
-+	int i;
-+
-+	/* Allocate a three-byte queue. */
-+	bitq_setup(&it, 3);
-+	/* Enqueue 0b100 seven times. */
-+	for (i = 0; i < 7; i++)
-+		KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b100, 3), 3);
-+	/* Now dequeue three 7-bit values: 0b1001001, 0b0010010, 0b0100100. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 7), 7);
-+	KUNIT_EXPECT_EQ(test, val, 0b1001001);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 7), 7);
-+	KUNIT_EXPECT_EQ(test, val, 0b0010010);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 7), 7);
-+	KUNIT_EXPECT_EQ(test, val, 0b0100100);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
-+	bitq_teardown(&it);
++	memset(tags, 0, 128);
++	ea0_tags_to_ranges(tags, r_tags, r_sizes, &r_len);
++	KUNIT_EXPECT_EQ(test, r_len, 1);
++	KUNIT_EXPECT_EQ(test, r_tags[0], 0);
++	KUNIT_EXPECT_EQ(test, r_sizes[0], 256);
++	ea0_ranges_to_tags(r_tags, r_sizes, r_len, dtags);
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
 +/*
-+ * Test case extracted from the EA0 tag compression algorithm, where
-+ * carried over bits were accidentally written into the previous byte.
++ * Test that a small number of different tags is correctly transformed into
++ * ranges.
 + */
-+static void test_carryover_ea0(struct kunit *test)
++static void test_tags_to_ranges_simple(struct kunit *test)
 +{
-+	struct bitq it;
-+	u8 val = 0;
++	u8 tags[128], dtags[128];
++	const u8 ex_tags[] = { 0xa, 0x0, 0xa, 0xb, 0x0 };
++	const short ex_sizes[] = { 1, 2, 2, 1, 250 };
++	short r_sizes[256];
++	int r_len = 256;
++	u8 r_tags[256];
 +
-+	/* Allocate a three-byte queue. */
-+	bitq_setup(&it, 3);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b100, 3), 3);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b1010, 4), 4);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b0000, 4), 4);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b1010, 4), 4);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0b1011, 4), 4);
-+
-+	/* Now dequeue two byte values: 0b10010100, 0b00010101. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0b10010100);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0b00010101);
-+	/* And the remaining 0b011. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 3), 3);
-+	KUNIT_EXPECT_EQ(test, val, 0b011);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
-+	bitq_teardown(&it);
++	memset(tags, 0, 128);
++	tags[0] = 0xa0;
++	tags[1] = 0x0a;
++	tags[2] = 0xab;
++	ea0_tags_to_ranges(tags, r_tags, r_sizes, &r_len);
++	KUNIT_EXPECT_EQ(test, r_len, 5);
++	KUNIT_EXPECT_EQ(test, memcmp(r_tags, ex_tags, sizeof(ex_tags)), 0);
++	KUNIT_EXPECT_EQ(test, memcmp(r_sizes, ex_sizes, sizeof(ex_sizes)), 0);
++	ea0_ranges_to_tags(r_tags, r_sizes, r_len, dtags);
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Test that upper bits of the pushed value are discarded. */
-+static void test_trim_upper_bits(struct kunit *test)
++/* Test that repeated 0xa0 byte produces 256 ranges of length 1. */
++static void test_tags_to_ranges_repeated(struct kunit *test)
 +{
-+	struct bitq it;
-+	u8 val = 0;
++	u8 tags[128], dtags[128];
++	short r_sizes[256];
++	int r_len = 256;
++	u8 r_tags[256];
 +
-+	/* Allocate a two-byte queue. */
-+	bitq_setup(&it, 2);
-+	/* Enqueue two values that do not fit into 4 bits. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xab, 4), 4);
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xab, 4), 4);
-+	/* The first byte of the queue is now 0xbb. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0xbb);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
-+	bitq_teardown(&it);
++	memset(tags, 0xa0, 128);
++	ea0_tags_to_ranges(tags, r_tags, r_sizes, &r_len);
++	KUNIT_EXPECT_EQ(test, r_len, 256);
++	ea0_ranges_to_tags(r_tags, r_sizes, r_len, dtags);
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Another test for discarding the upper bits. */
-+static void test_trim_upper_bits2(struct kunit *test)
++/* Test that a zero-filled array is compressed into inline storage. */
++static void test_compress_zero(struct kunit *test)
 +{
-+	struct bitq it;
-+	u8 val = 0;
++	u8 tags[128], dtags[128];
++	u64 handle;
 +
-+	/* Allocate a two-byte queue. */
-+	bitq_setup(&it, 2);
-+	/* Push seven zero bits. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0, 7), 7);
-+	/* Push a single 1 bit, but pass a bigger value to bitq_enqueue(). */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xff, 1), 1);
-+	/* The first byte of the queue is now 0x01. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0x01);
-+
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 1), -1);
-+	bitq_teardown(&it);
++	memset(tags, 0, 128);
++	handle = ea0_compress(tags);
++	KUNIT_EXPECT_EQ(test, handle & BIT_ULL(63), 0);
++	/* Tags are stored inline. */
++	KUNIT_EXPECT_EQ(test, ea0_storage_size(handle), 8);
++	KUNIT_EXPECT_TRUE(test, ea0_decompress(handle, dtags));
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Test that a NULL value can be used as output of bitq_dequeue() */
-+static void test_dequeue_to_null(struct kunit *test)
++/*
++ * Test that a very small number of tag ranges ends up compressed into 8 bytes.
++ */
++static void test_compress_simple(struct kunit *test)
 +{
-+	struct bitq it;
++	u8 tags[128], dtags[128];
++	u64 handle;
 +
-+	/* Allocate a two-byte queue. */
-+	bitq_setup(&it, 2);
-+	/* Enqueue a byte value. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 0xab, 8), 8);
-+	/* Dequeue the byte, but discard its value. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, NULL, 8), 8);
++	memset(tags, 0, 128);
++	tags[0] = 0xa0;
++	tags[1] = 0x0a;
++	tags[2] = 0xab;
 +
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, NULL, 1), -1);
-+	bitq_teardown(&it);
++	handle = ea0_compress(tags);
++	KUNIT_EXPECT_EQ(test, handle & BIT_ULL(63), 0);
++	/* Tags are stored inline. */
++	KUNIT_EXPECT_EQ(test, ea0_storage_size(handle), 8);
++	KUNIT_EXPECT_TRUE(test, ea0_decompress(handle, dtags));
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+/* Test that bitq_init_full works. */
-+static void test_init_full(struct kunit *test)
++/*
++ * Generate a buffer that will contain @nranges of tag ranges, test that it
++ * compresses into @exp_size bytes and decompresses into the original tag
++ * sequence.
++ */
++static void compress_range_helper(struct kunit *test, int nranges, int exp_size)
 +{
-+	struct bitq it;
-+	u8 data[2] = { 0xaa, 0xbb };
-+	u8 val = 0;
++	u8 tags[128], dtags[128];
++	u64 handle;
++	int i;
 +
-+	/* Initialize a queue with the contents of @data */
-+	bitq_init_full(&it, data, 2);
-+	/* Cannot enqueue anything else. */
-+	KUNIT_EXPECT_EQ(test, bitq_enqueue(&it, 1, 8), -1);
-+	/* Dequeue two bytes. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0xaa);
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, &val, 8), 8);
-+	KUNIT_EXPECT_EQ(test, val, 0xbb);
++	memset(tags, 0, 128);
 +
-+	/* Queue is empty. */
-+	KUNIT_EXPECT_EQ(test, bitq_dequeue(&it, NULL, 1), -1);
++	if (nranges > 1) {
++		nranges--;
++		for (i = 0; i < nranges / 2; i++)
++			tags[i] = 0xab;
++		if (nranges % 2)
++			tags[nranges / 2] = 0xa0;
++	}
++
++	handle = ea0_compress(tags);
++	KUNIT_EXPECT_EQ(test, handle & BIT_ULL(63), 0);
++	KUNIT_EXPECT_EQ(test, ea0_storage_size(handle), exp_size);
++	KUNIT_EXPECT_TRUE(test, ea0_decompress(handle, dtags));
++	KUNIT_EXPECT_EQ(test, memcmp(tags, dtags, 128), 0);
 +}
 +
-+static struct kunit_case bitq_test_cases[] = {
-+	KUNIT_CASE(test_empty),
-+	KUNIT_CASE(test_basic_enqueue_dequeue),
-+	KUNIT_CASE(test_shorter_than_byte),
-+	KUNIT_CASE(test_carryover),
-+	KUNIT_CASE(test_carryover_ea0),
-+	KUNIT_CASE(test_trim_upper_bits),
-+	KUNIT_CASE(test_trim_upper_bits2),
-+	KUNIT_CASE(test_dequeue_to_null),
-+	KUNIT_CASE(test_init_full),
++/*
++ * Test that every number of tag ranges is correctly compressed and
++ * decompressed.
++ */
++static void test_compress_ranges(struct kunit *test)
++{
++	int i, exp_size;
++
++	for (i = 1; i <= 256; i++) {
++		if (i < 7)
++			exp_size = 8;
++		else if (i < 12)
++			exp_size = 16;
++		else if (i < 24)
++			exp_size = 32;
++		else if (i < 47)
++			exp_size = 64;
++		else
++			exp_size = 128;
++		compress_range_helper(test, i, exp_size);
++	}
++}
++
++static struct kunit_case mtecomp_test_cases[] = {
++	KUNIT_CASE(test_tags_to_ranges_zero),
++	KUNIT_CASE(test_tags_to_ranges_simple),
++	KUNIT_CASE(test_tags_to_ranges_repeated),
++	KUNIT_CASE(test_compress_zero),
++	KUNIT_CASE(test_compress_simple),
++	KUNIT_CASE(test_compress_ranges),
 +	{}
 +};
 +
-+static struct kunit_suite bitq_test_suite = {
-+	.name = "bitq",
-+	.test_cases = bitq_test_cases,
++static struct kunit_suite mtecomp_test_suite = {
++	.name = "mtecomp",
++	.test_cases = mtecomp_test_cases,
 +};
-+kunit_test_suites(&bitq_test_suite);
++kunit_test_suites(&mtecomp_test_suite);
 +
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Alexander Potapenko <glider@google.com>");
