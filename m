@@ -2,62 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257E674EA52
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12A674EA5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjGKJZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
+        id S232221AbjGKJZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjGKJYt (ORCPT
+        with ESMTP id S231601AbjGKJZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:24:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E6619B6;
-        Tue, 11 Jul 2023 02:20:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1B6162059E;
-        Tue, 11 Jul 2023 09:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689067217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0yrG6a18vPr19xyMGpiJuE+vcoBpKkcNTahmnTLig8g=;
-        b=rpL5rSN1pJLDNzdiNLUjhLqlFyP+X8UZNy66kSagfNJjHVQQY7SNsS2Ozow9DOtqayqOlL
-        9r8hmGgUwgwAlx0L3VkrR80gCQI4yzZS4bioZuNaYrSG2rHzEN6TzRu4NGic6X+dXj6zJp
-        1IKBGvW55F6H+TSCK29XOwcokX4JiuE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE14E1390F;
-        Tue, 11 Jul 2023 09:20:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4D11NdAerWSiVwAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Tue, 11 Jul 2023 09:20:16 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mhiramat@kernel.org,
-        peterz@infradead.org
-Cc:     samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH v2 2/2] x86/retpoline,kprobes: Skip optprobe check for indirect jumps with retpolines and IBT
-Date:   Tue, 11 Jul 2023 11:19:52 +0200
-Message-Id: <20230711091952.27944-3-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230711091952.27944-1-petr.pavlu@suse.com>
-References: <20230711091952.27944-1-petr.pavlu@suse.com>
+        Tue, 11 Jul 2023 05:25:04 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D79F1713;
+        Tue, 11 Jul 2023 02:21:01 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B8rCqN012303;
+        Tue, 11 Jul 2023 09:20:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EOvr3X7Tg5Zj9PHDz3vITWr2SqX4F6MjeLuvg3QK5Bo=;
+ b=daWVU4If8VuUZL1PTeRxo2craFT/texQBuuilgRcQOlEwBI0ExwBJR6dCPgvnKL+eoKU
+ jpKbgP9W+aXwzkfvwc/zrDTbbKap06rHyQCEfWu6jYA5QTXpaTu9XoATNAS0c+6Glikr
+ 9Qpl5++iiEfhlOZkct0PEC4w64Wl0eRooq8+ZxCv7SDqLSRDfprk5R/NlOOvl4bbEcHK
+ x1wHmevDjk/gifR7+FmvjA0c74X20UrJO5tUPbaMe2MIHDQFhctgKUBFttX+QRuP55Vs
+ jmMtnTLb/nyxX2SUT5xloiik6CAQz/f3RevOVd80r/e48yxSvMyC0huf5r+DJgqdmH2S 4g== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs3y20215-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:20:55 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B9KZn9018440
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:20:35 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 02:20:29 -0700
+Message-ID: <216ced8f-66eb-3953-3011-a86deffd6255@quicinc.com>
+Date:   Tue, 11 Jul 2023 14:50:26 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 6/6] thermal/drivers/tsens: Add IPQ5332 support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_varada@quicinc.com>
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-7-quic_ipkumar@quicinc.com>
+ <96e52c65-6216-91ba-8d2b-197f86433d98@linaro.org>
+ <8661411f-ea47-2a7a-ceb4-6c37978c3a75@quicinc.com>
+ <CAA8EJpoTy5sxFpK8=KqmR5zjj_Kt18hX_CJqvQbxHDmBqmduGw@mail.gmail.com>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <CAA8EJpoTy5sxFpK8=KqmR5zjj_Kt18hX_CJqvQbxHDmBqmduGw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JUEA8-JYAFMlHNgMInHHc2qBOELtkIQA
+X-Proofpoint-GUID: JUEA8-JYAFMlHNgMInHHc2qBOELtkIQA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 adultscore=0 clxscore=1015 phishscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110083
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,149 +89,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kprobes optimization check can_optimize() calls
-insn_is_indirect_jump() to detect indirect jump instructions in
-a target function. If any is found, creating an optprobe is disallowed
-in the function because the jump could be from a jump table and could
-potentially land in the middle of the target optprobe.
 
-With retpolines, insn_is_indirect_jump() additionally looks for calls to
-indirect thunks which the compiler potentially used to replace original
-jumps. This extra check is however unnecessary because jump tables are
-disabled when the kernel is built with retpolines. The same is currently
-the case with IBT.
-
-Based on this observation, remove the logic to look for calls to
-indirect thunks and skip the check for indirect jumps altogether if the
-kernel is built with retpolines or IBT. Remove subsequently the symbols
-__indirect_thunk_start and __indirect_thunk_end which are no longer
-needed.
-
-Dropping this logic indirectly fixes a problem where the range
-[__indirect_thunk_start, __indirect_thunk_end] wrongly included also the
-return thunk. It caused that machines which used the return thunk as
-a mitigation and didn't have it patched by any alternative ended up not
-being able to use optprobes in any regular function.
-
-Fixes: 0b53c374b9ef ("x86/retpoline: Use -mfunction-return")
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- arch/x86/include/asm/nospec-branch.h |  3 ---
- arch/x86/kernel/kprobes/opt.c        | 40 +++++++++++-----------------
- arch/x86/kernel/vmlinux.lds.S        |  2 --
- tools/perf/util/thread-stack.c       |  4 +--
- 4 files changed, 17 insertions(+), 32 deletions(-)
-
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 55388c9f7601..c5460be93fa7 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -461,9 +461,6 @@ enum ssb_mitigation {
- 	SPEC_STORE_BYPASS_SECCOMP,
- };
- 
--extern char __indirect_thunk_start[];
--extern char __indirect_thunk_end[];
--
- static __always_inline
- void alternative_msr_write(unsigned int msr, u64 val, unsigned int feature)
- {
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 57b0037d0a99..517821b48391 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -226,7 +226,7 @@ static int copy_optimized_instructions(u8 *dest, u8 *src, u8 *real)
- }
- 
- /* Check whether insn is indirect jump */
--static int __insn_is_indirect_jump(struct insn *insn)
-+static int insn_is_indirect_jump(struct insn *insn)
- {
- 	return ((insn->opcode.bytes[0] == 0xff &&
- 		(X86_MODRM_REG(insn->modrm.value) & 6) == 4) || /* Jump */
-@@ -260,26 +260,6 @@ static int insn_jump_into_range(struct insn *insn, unsigned long start, int len)
- 	return (start <= target && target <= start + len);
- }
- 
--static int insn_is_indirect_jump(struct insn *insn)
--{
--	int ret = __insn_is_indirect_jump(insn);
--
--#ifdef CONFIG_RETPOLINE
--	/*
--	 * Jump to x86_indirect_thunk_* is treated as an indirect jump.
--	 * Note that even with CONFIG_RETPOLINE=y, the kernel compiled with
--	 * older gcc may use indirect jump. So we add this check instead of
--	 * replace indirect-jump check.
--	 */
--	if (!ret)
--		ret = insn_jump_into_range(insn,
--				(unsigned long)__indirect_thunk_start,
--				(unsigned long)__indirect_thunk_end -
--				(unsigned long)__indirect_thunk_start);
--#endif
--	return ret;
--}
--
- /* Decode whole function to ensure any instructions don't jump into target */
- static int can_optimize(unsigned long paddr)
- {
-@@ -334,9 +314,21 @@ static int can_optimize(unsigned long paddr)
- 		/* Recover address */
- 		insn.kaddr = (void *)addr;
- 		insn.next_byte = (void *)(addr + insn.length);
--		/* Check any instructions don't jump into target */
--		if (insn_is_indirect_jump(&insn) ||
--		    insn_jump_into_range(&insn, paddr + INT3_INSN_SIZE,
-+		/*
-+		 * Check any instructions don't jump into target, indirectly or
-+		 * directly.
-+		 *
-+		 * The indirect case is present to handle a code with jump
-+		 * tables. When the kernel uses retpolines, the check should in
-+		 * theory additionally look for jumps to indirect thunks.
-+		 * However, the kernel built with retpolines or IBT has jump
-+		 * tables disabled so the check can be skipped altogether.
-+		 */
-+		if (!IS_ENABLED(CONFIG_RETPOLINE) &&
-+		    !IS_ENABLED(CONFIG_X86_KERNEL_IBT) &&
-+		    insn_is_indirect_jump(&insn))
-+			return 0;
-+		if (insn_jump_into_range(&insn, paddr + INT3_INSN_SIZE,
- 					 DISP32_SIZE))
- 			return 0;
- 		addr += insn.length;
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index a4cd04c458df..dd5b0a68cf84 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -133,9 +133,7 @@ SECTIONS
- 		KPROBES_TEXT
- 		SOFTIRQENTRY_TEXT
- #ifdef CONFIG_RETPOLINE
--		__indirect_thunk_start = .;
- 		*(.text..__x86.*)
--		__indirect_thunk_end = .;
- #endif
- 		STATIC_CALL_TEXT
- 
-diff --git a/tools/perf/util/thread-stack.c b/tools/perf/util/thread-stack.c
-index 374d142e7390..c6a0a27b12c2 100644
---- a/tools/perf/util/thread-stack.c
-+++ b/tools/perf/util/thread-stack.c
-@@ -1038,9 +1038,7 @@ static int thread_stack__trace_end(struct thread_stack *ts,
- 
- static bool is_x86_retpoline(const char *name)
- {
--	const char *p = strstr(name, "__x86_indirect_thunk_");
--
--	return p == name || !strcmp(name, "__indirect_thunk_start");
-+	return strstr(name, "__x86_indirect_thunk_") == name;
- }
- 
- /*
--- 
-2.35.3
-
+On 7/10/2023 8:33 PM, Dmitry Baryshkov wrote:
+> On Mon, 10 Jul 2023 at 16:47, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
+>>
+>> On 7/10/2023 4:54 PM, Dmitry Baryshkov wrote:
+>>> On 10/07/2023 13:37, Praveenkumar I wrote:
+>>>> IPQ5332 uses tsens v2.3.3 IP and it is having combined interrupt as
+>>>> like IPQ8074. But as the SoCs does not have RPM, kernel needs to
+>>>> take care of sensor enablement and calibration. Hence introduced
+>>>> new ops and data for IPQ5332 and reused the feature_config from
+>>>> IPQ8074.
+>>>>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> ---
+>>>>    drivers/thermal/qcom/tsens-v2.c | 13 +++++++++++++
+>>>>    drivers/thermal/qcom/tsens.c    |  3 +++
+>>>>    drivers/thermal/qcom/tsens.h    |  2 +-
+>>>>    3 files changed, 17 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/thermal/qcom/tsens-v2.c
+>>>> b/drivers/thermal/qcom/tsens-v2.c
+>>>> index db48b1d95348..8b6e3876fd2c 100644
+>>>> --- a/drivers/thermal/qcom/tsens-v2.c
+>>>> +++ b/drivers/thermal/qcom/tsens-v2.c
+>>>> @@ -237,6 +237,19 @@ struct tsens_plat_data data_ipq8074 = {
+>>>>        .fields    = tsens_v2_regfields,
+>>>>    };
+>>>>    +static const struct tsens_ops ops_ipq5332_v2 = {
+>>> Please drop v2. It is unclear if it refers to tsens being v2 or being
+>>> specific to ipq5332 v2.
+>> Sure, will drop v2.
+>>>> +    .init        = init_common,
+>>>> +    .get_temp    = get_temp_tsens_valid,
+>>>> +    .calibrate    = tsens_v2_calibration,
+>>>> +};
+>>>> +
+>>>> +struct tsens_plat_data data_ipq5332 = {
+>>>> +    .sensors_to_en    = 0xF800,
+>>> This doesn't seem to match the offsets that you have enabled in the DTSI.
+>> In order to overcome the DT binding check failure, added all the
+>> available QFPROM offsets in the DTSI. Else DT binding check failing on
+>> "nvmem-cell-names".
+> This is not a way to overcome issues in DT bindings. Please fix DT
+> bindings instead by using alternatives, enums, etc.
+Sure, will fix the DT bindings.
+>
+>>>> +    .ops        = &ops_ipq5332_v2,
+>>>> +    .feat        = &ipq8074_feat,
+>>>> +    .fields        = tsens_v2_regfields,
+>>>> +};
+>>>> +
+>>>>    /* Kept around for backward compatibility with old msm8996.dtsi */
+>>>>    struct tsens_plat_data data_8996 = {
+>>>>        .num_sensors    = 13,
+>>>> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+>>>> index 169690355dad..e8ba2901cda8 100644
+>>>> --- a/drivers/thermal/qcom/tsens.c
+>>>> +++ b/drivers/thermal/qcom/tsens.c
+>>>> @@ -1140,6 +1140,9 @@ static const struct of_device_id tsens_table[] = {
+>>>>        }, {
+>>>>            .compatible = "qcom,ipq8074-tsens",
+>>>>            .data = &data_ipq8074,
+>>>> +    }, {
+>>>> +        .compatible = "qcom,ipq5332-tsens",
+>>>> +        .data = &data_ipq5332,
+>>>>        }, {
+>>>>            .compatible = "qcom,mdm9607-tsens",
+>>>>            .data = &data_9607,
+>>>> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+>>>> index f8897bc8944e..36040f9beebc 100644
+>>>> --- a/drivers/thermal/qcom/tsens.h
+>>>> +++ b/drivers/thermal/qcom/tsens.h
+>>>> @@ -701,6 +701,6 @@ extern struct tsens_plat_data data_8226,
+>>>> data_8909, data_8916, data_8939, data_8
+>>>>    extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
+>>>>      /* TSENS v2 targets */
+>>>> -extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
+>>>> +extern struct tsens_plat_data data_8996, data_ipq8074, data_ipq5332,
+>>>> data_tsens_v2;
+>>>>      #endif /* __QCOM_TSENS_H__ */
+>> --
+>> Thanks,
+>> Praveenkumar
+>
+>
