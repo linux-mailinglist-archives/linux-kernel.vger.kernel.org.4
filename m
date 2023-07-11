@@ -2,94 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F2A74F9BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A6074F9B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 23:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjGKVag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 17:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S231154AbjGKV1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 17:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjGKVad (ORCPT
+        with ESMTP id S229538AbjGKV06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:30:33 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A7D11B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:30:32 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b9d80e33fbso17746205ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1689111032; x=1691703032;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vppmwRRbyi5GVcqEuzCwPvW7VSP+pm8Knc+bGCD6gFQ=;
-        b=juHvMnq0uCdj1HrRrOHCtvwCA9TetWPKCCAqRCWccouGKKaqd02BVbQ7UQ36p5PJt5
-         iv7CfkmNlhEj7Bgo8J/R+bjVipGnHcitAhpid5NVPXlIMYXs0xfCSMhiil55sQ2gx1FY
-         6PX1x5/5QqPiZLJITUBToOOzNPzNKyvODmJjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689111032; x=1691703032;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vppmwRRbyi5GVcqEuzCwPvW7VSP+pm8Knc+bGCD6gFQ=;
-        b=jfUTvaaz2V8+jU/p5F2BoeWXYlceQG1EYktpZ/oeYjVdTpU+sEfMvInXwAgrEXCz+m
-         pV08OtMFMyS1v1+t2IbpLOuCKQ+GEzD41t8tDc5YxFEp//ih6+sfSgaYVhXcVhY5keui
-         olsfjV2DX+vHcrQGY0B0bO74Dop1xwYXAYSd6yxYnM0/bO6/A5zF06HPMR0lLRcsD4t5
-         e7dbSjgKsf5cozshhBSXPeWYRh1/9T5g1GwH1IbNt8T3y/G4wkFv/nyM55AlzZdEt34p
-         ctHduqNI2eZf+BL9HSRakNBj5J2OcfsaPNIHYu86wp9RcNl7Uqn8hR4tcew3ZCNaoXIb
-         axGg==
-X-Gm-Message-State: ABy/qLY2tHACPma0WYDv+Q4bkiRS8zZ3esBV/lG8rfFGdp7s0L6401qJ
-        fSQuiQhco+r7LZnlqyEai83+99OpBoOAxTp028c=
-X-Google-Smtp-Source: APBJJlFyso7NqCnY006Lit+lDEdWaICt+E2jnc/okglEaclfY4HCJ6PPxwcl4jkaSABEJ7oX78F+Kw==
-X-Received: by 2002:a17:902:da89:b0:1b8:5541:9d5b with SMTP id j9-20020a170902da8900b001b855419d5bmr14314325plx.17.1689111031869;
-        Tue, 11 Jul 2023 14:30:31 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b001b9c5e07bc3sm43847plw.238.2023.07.11.14.30.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 14:30:31 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     arnd@arndb.de, Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Kees Cook <keescook@chromium.org>, will@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vmlinux.lds.h: Remove a reference to no longer used sections .text..refcount
-Date:   Tue, 11 Jul 2023 14:30:22 -0700
-Message-Id: <168911102014.3161793.10168759191370577926.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230711125054.9000-1-petr.pavlu@suse.com>
-References: <20230711125054.9000-1-petr.pavlu@suse.com>
+        Tue, 11 Jul 2023 17:26:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6799B11B;
+        Tue, 11 Jul 2023 14:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689110817; x=1720646817;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C0W4vK0nHZFJTZTCOXP5H3pwC5NtQZZWQEmceLgjBEQ=;
+  b=J5XvfZ0EhgHmZMpuM5wtONC1jv0cVzYSeNhLGy8qom0q8Sk/vmiJrTy0
+   BwR/A+Zhfq0lV4xgiEYIRTksqq++lbHq61V7lJkt8WpAOpQs2/ngEnduP
+   52u2685iLAu+u4H7dDjwtTu9hzceqhdBBxwRcl/hqir/sgGT6H+dct0Jg
+   7MSGMcmJjP6VEzsTMs+IkmDtKK+fRlnMfue3IjA5Aflf+E1mw3vsEzNa9
+   wo7Jg48gguyS7gqD3Jm4awvb/5G6JV0/xX2QSBE5CgHKvDbJOEsUyt3xO
+   hpPCTSxQT1QBJFTubAqwpcJU5wXy3lynVzjChSk7yC58Yafv09XKasULa
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="362206928"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="362206928"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:26:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865865649"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="865865649"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:26:55 -0700
+Date:   Tue, 11 Jul 2023 14:31:51 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 5/9] iommu: Make fault_param generic
+Message-ID: <20230711143151.3191f23c@jacob-builder>
+In-Reply-To: <20230711010642.19707-6-baolu.lu@linux.intel.com>
+References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
+ <20230711010642.19707-6-baolu.lu@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi BaoLu,
 
-On Tue, 11 Jul 2023 14:50:54 +0200, Petr Pavlu wrote:
-> Sections .text..refcount were previously used to hold an error path code
-> for fast refcount overflow protection on x86, see commit 7a46ec0e2f48
-> ("locking/refcounts, x86/asm: Implement fast refcount overflow
-> protection") and commit 564c9cc84e2a ("locking/refcounts, x86/asm: Use
-> unique .text section for refcount exceptions").
+On Tue, 11 Jul 2023 09:06:38 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+wrote:
+
+> The iommu faults, including recoverable faults (IO page faults) and
+> unrecoverable faults (DMA faults), are generic to all devices. The
+> iommu faults could possibly be triggered for every device.
 > 
-> The code was replaced and removed in commit fb041bb7c0a9
-> ("locking/refcount: Consolidate implementations of refcount_t") and no
-> sections .text..refcount are present since then.
+> The fault_param pointer under struct dev_iommu is the per-device fault
+> data. Therefore, the fault_param pointer should be allocated during
+> iommu device probe and freed when the device is released.
 > 
-> [...]
+> With this done, the individual iommu drivers that support iopf have no
+> need to call iommu_[un]register_device_fault_handler() any more.
+> This will make it easier for the iommu drivers to support iopf, and it
+> will also make the fault_param allocation and free simpler.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    | 13 +------------
+>  drivers/iommu/intel/iommu.c                    | 18 ++++--------------
+>  drivers/iommu/iommu.c                          | 14 ++++++++++++++
+>  3 files changed, 19 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c index
+> a5a63b1c947e..fa8ab9d413f8 100644 ---
+> a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c +++
+> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c @@ -437,7 +437,6 @@
+> bool arm_smmu_master_sva_enabled(struct arm_smmu_master *master) 
+>  static int arm_smmu_master_sva_enable_iopf(struct arm_smmu_master
+> *master) {
+> -	int ret;
+>  	struct device *dev = master->dev;
+>  
+>  	/*
+> @@ -450,16 +449,7 @@ static int arm_smmu_master_sva_enable_iopf(struct
+> arm_smmu_master *master) if (!master->iopf_enabled)
+>  		return -EINVAL;
+>  
+> -	ret = iopf_queue_add_device(master->smmu->evtq.iopf, dev);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf,
+> dev);
+> -	if (ret) {
+> -		iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
+> -		return ret;
+> -	}
+> -	return 0;
+> +	return iopf_queue_add_device(master->smmu->evtq.iopf, dev);
+>  }
+>  
+>  static void arm_smmu_master_sva_disable_iopf(struct arm_smmu_master
+> *master) @@ -469,7 +459,6 @@ static void
+> arm_smmu_master_sva_disable_iopf(struct arm_smmu_master *master) if
+> (!master->iopf_enabled) return;
+>  
+> -	iommu_unregister_device_fault_handler(dev);
+>  	iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
+>  }
+>  
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 5c8c5cdc36cf..22e43db20252 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4594,23 +4594,14 @@ static int intel_iommu_enable_iopf(struct device
+> *dev) if (ret)
+>  		return ret;
+>  
+> -	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf,
+> dev);
+> -	if (ret)
+> -		goto iopf_remove_device;
+> -
+>  	ret = pci_enable_pri(pdev, PRQ_DEPTH);
+> -	if (ret)
+> -		goto iopf_unregister_handler;
+> +	if (ret) {
+> +		iopf_queue_remove_device(iommu->iopf_queue, dev);
+> +		return ret;
+> +	}
+>  	info->pri_enabled = 1;
+>  
+>  	return 0;
+> -
+> -iopf_unregister_handler:
+> -	iommu_unregister_device_fault_handler(dev);
+> -iopf_remove_device:
+> -	iopf_queue_remove_device(iommu->iopf_queue, dev);
+> -
+> -	return ret;
+>  }
+>  
+>  static int intel_iommu_disable_iopf(struct device *dev)
+> @@ -4637,7 +4628,6 @@ static int intel_iommu_disable_iopf(struct device
+> *dev)
+>  	 * fault handler and removing device from iopf queue should never
+>  	 * fail.
+>  	 */
+> -	WARN_ON(iommu_unregister_device_fault_handler(dev));
+>  	WARN_ON(iopf_queue_remove_device(iommu->iopf_queue, dev));
+>  
+>  	return 0;
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 65895b987e22..8d1f0935ea71 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -299,7 +299,15 @@ static int dev_iommu_get(struct device *dev)
+>  		return -ENOMEM;
+>  
+>  	mutex_init(&param->lock);
+> +	param->fault_param = kzalloc(sizeof(*param->fault_param),
+> GFP_KERNEL);
+since fault_param is _always_ allocated/freed along with param, can we merge
+into one allocation? i.e.
+ struct dev_iommu {
+        struct mutex lock;
+-       struct iommu_fault_param        *fault_param;
++       struct iommu_fault_param        fault_param;
 
-Applied, thanks!
 
-[1/1] vmlinux.lds.h: Remove a reference to no longer used sections .text..refcount
-      https://git.kernel.org/kees/c/5fc522485598
+> +	if (!param->fault_param) {
+> +		kfree(param);
+> +		return -ENOMEM;
+> +	}
+> +	mutex_init(&param->fault_param->lock);
+> +	INIT_LIST_HEAD(&param->fault_param->faults);
+>  	dev->iommu = param;
+> +
+>  	return 0;
+>  }
+>  
+> @@ -312,6 +320,12 @@ static void dev_iommu_free(struct device *dev)
+>  		fwnode_handle_put(param->fwspec->iommu_fwnode);
+>  		kfree(param->fwspec);
+>  	}
+> +	/*
+> +	 * All pending faults should have been drained before
+> +	 * device release.
+> +	 */
+> +	WARN_ON_ONCE(!list_empty(&param->fault_param->faults));
+> +	kfree(param->fault_param);
+>  	kfree(param);
+>  }
+>  
 
-Best regards,
--- 
-Kees Cook
 
+Thanks,
+
+Jacob
