@@ -2,124 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3F574ECE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7424A74ECED
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 13:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjGKLcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 07:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S231190AbjGKLcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 07:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGKLcJ (ORCPT
+        with ESMTP id S229518AbjGKLcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 07:32:09 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E2EA6;
-        Tue, 11 Jul 2023 04:32:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 755C55C00E7;
-        Tue, 11 Jul 2023 07:32:05 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Tue, 11 Jul 2023 07:32:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1689075125; x=1689161525; bh=/C
-        vj5KuDdmHIGd859qaJsBs/f1fpWATGo78ystxolZ8=; b=C4Tl5XZgJGIc7j43HJ
-        4fGyI/IRlktc3w6e0XFyC1Sg6fp8cLDzoB1xPJ/yosSCoI1QS/IIkA7A0lmOtSB5
-        8dS0sjpFCOyKj521J54iNrg2Ng8+adx4HMWT43DkM+FJcICGaQpids1RewgEq1Xj
-        0mY/MPzvKuffj8CGY+mzm9mDWmVhhvEbPTNxnU75mrfiB7BL+Eq7WxgavTeKOobo
-        O8eQk0OtdaNegptl2lVjD4jRydZYvCjVnTJ66OECZngYMjqizqY133wtbpYlGLGk
-        nxZgL729F0mocqDVx9p2E8s6g3NUBTZ0kf1O2D7yx4W09UvSleY+E25vqJ6FkgSF
-        Hfrg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1689075125; x=1689161525; bh=/Cvj5KuDdmHIG
-        d859qaJsBs/f1fpWATGo78ystxolZ8=; b=QqHVCmHeA3F+kyNbq+cIkQQCEtoHx
-        HsAMIDNNGIYjXVDzLpogMsF84iRhwfmY38lNiYRP4tDLqwRRID821vzTvgRLSw2N
-        iQqDY6Iq8rWyG9lLkEmR5e/UJG9diErjrD8AFbczp0X5rKkN8AG44+gfgfPaGLvL
-        hEL9WPOz/L9mb0cXjNy3JPxTH2oZtFGu2NYSMi0+g5/Ya/upwP8K+ycBfabbXSDS
-        pC7VjP6/HjSulVngpPClEkB50uvje1m9i5hPtX8K305ne5TzZEfZciWBQo/Qos9j
-        xbHxrcsOpeJnDp6IHEvgnIXFodpKlEk/s2SWjSA3iqRI90V/hVTnTDDhA==
-X-ME-Sender: <xms:tT2tZMq7b3F3GuNwIAVPns9-hrMV7r0Yc6YT9LqOf-jJMKbcl7Fh9A>
-    <xme:tT2tZCqNeEHxlc-UStg0uiSOgPvE3_cLgP_6sxhq7l1ERIaLmgg6bipvjEiyrkpas
-    EjV8FZ1WrtLpcs-7GM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdegudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:tT2tZBMvQLXICA6Yc7Zt2AWWWwfYYPHBdt_zdRvw9CwK-9s0jeSfHQ>
-    <xmx:tT2tZD6JBvvCY4Z7UDnCJz03QOvfOhdkKUjt4ButXwR1zHx1yx7H8Q>
-    <xmx:tT2tZL7ngUbKLupOWUkuw3qJR51wOdtRI_3lKoDd41m846IM35HoCQ>
-    <xmx:tT2tZPiMQDZ505eWhA_Ewk2IXxTzTQEwFwWy0ucHcigyBE5CiFgBjQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id ECECE1700090; Tue, 11 Jul 2023 07:32:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <55fee4b7-41f0-4f24-ad0e-a4527486bad1@app.fastmail.com>
-In-Reply-To: <e48c4d4046de97205fd52a73f77e9b203c3b871e.1689074739.git.legion@kernel.org>
-References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
- <cover.1689074739.git.legion@kernel.org>
- <e48c4d4046de97205fd52a73f77e9b203c3b871e.1689074739.git.legion@kernel.org>
-Date:   Tue, 11 Jul 2023 13:31:44 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Alexey Gladkov" <legion@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>
-Cc:     "Palmer Dabbelt" <palmer@sifive.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Jens Axboe" <axboe@kernel.dk>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        "Christian Borntraeger" <borntraeger@de.ibm.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Catalin Marinas" <catalin.marinas@arm.com>, christian@brauner.io,
-        "Rich Felker" <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Deepa Dinamani" <deepa.kernel@gmail.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "David Howells" <dhowells@redhat.com>, fenghua.yu@intel.com,
-        firoz.khan@linaro.org, "Florian Weimer" <fweimer@redhat.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
-        "Kim Phillips" <kim.phillips@arm.com>, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, "Russell King" <linux@armlinux.org.uk>,
-        linuxppc-dev@lists.ozlabs.org, "Andy Lutomirski" <luto@kernel.org>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Namhyung Kim" <namhyung@kernel.org>, paul.burton@mips.com,
-        "Paul Mackerras" <paulus@samba.org>,
-        "Peter Zijlstra" <peterz@infradead.org>, ralf@linux-mips.org,
-        rth@twiddle.net, schwidefsky@de.ibm.com,
-        sparclinux@vger.kernel.org, stefan@agner.ch,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Tony Luck" <tony.luck@intel.com>, tycho@tycho.ws,
-        "Will Deacon" <will@kernel.org>, x86@kernel.org,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH v3 3/5] arch: Register fchmodat4, usually as syscall 451
-Content-Type: text/plain
+        Tue, 11 Jul 2023 07:32:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9547127
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 04:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XqgoWL9LCniJF/VVbTLcSycpWfuGM7KgkkgzB8rRFNM=; b=c2aX5ppcvu2VslvkDX3y/gtJph
+        mJcJfublX0YhUR1AsTGezG06pQ5iRow76GdWd5hX6jPxDxbTiLBvS610y3wGHxvsmiG+EO2pBv/3w
+        BShKT0yw84G12YaJlD1Wseh0pzYQUPLvOMPXy5AkhLW2JYogXMahzwe/wS2lIFcyk83SJjklryquJ
+        w2abnEicSATbUBfUOYpdeF36Hl8sYCc3KetHI3T0lT8Np1VcG7IkxwvNwrNYG9xWpRsvytsB0R5Zq
+        XII5MnT82Y0Q0R/ew66/VBpIfVwEC7PQdHxKCSlZOb8NwxdVG0hmmMIn9/2olZvv+KnE1j3LY+Ren
+        qRHOglRA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJBb7-002NoV-1W;
+        Tue, 11 Jul 2023 11:32:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0AF4430036B;
+        Tue, 11 Jul 2023 13:31:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E0EFC240EBDB4; Tue, 11 Jul 2023 13:31:58 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 13:31:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        naveen.n.rao@linux.vnet.ibm.com,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
+Subject: Re: [Patch v3 2/6] sched/topology: Record number of cores in sched
+ group
+Message-ID: <20230711113158.GJ3062772@hirez.programming.kicks-ass.net>
+References: <cover.1688770494.git.tim.c.chen@linux.intel.com>
+ <04641eeb0e95c21224352f5743ecb93dfac44654.1688770494.git.tim.c.chen@linux.intel.com>
+ <4797e9147143decf561ede6b7658721d05dda4dc.camel@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4797e9147143decf561ede6b7658721d05dda4dc.camel@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,24 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
-> From: Palmer Dabbelt <palmer@sifive.com>
->
-> This registers the new fchmodat4 syscall in most places as nuber 451,
-> with alpha being the exception where it's 561.  I found all these sites
-> by grepping for fspick, which I assume has found me everything.
->
-> Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+On Mon, Jul 10, 2023 at 03:40:34PM -0700, Tim Chen wrote:
+> On Fri, 2023-07-07 at 15:57 -0700, Tim Chen wrote:
+> > From: Tim C Chen <tim.c.chen@linux.intel.com>
+> > 
+> > When balancing sibling domains that have different number of cores,
+> > tasks in respective sibling domain should be proportional to the number
+> > of cores in each domain. In preparation of implementing such a policy,
+> > record the number of tasks in a scheduling group.
+> 
+> Caught a typo.  Should be "the number of cores" instead of
+> "the number of tasks" in a scheduling group.
+> 
+> Peter, should I send you another patch with the corrected commit log?
 
-In linux-6.5-rc1, number 451 is used for __NR_cachestat, the
-next free one at the moment is 452.
+I'll fix it up, already had to fix the patch because due to robot
+finding a compile fail for SCHED_SMT=n builds.
 
->  arch/arm/tools/syscall.tbl                  | 1 +
->  arch/arm64/include/asm/unistd32.h           | 2 ++
 
-Unfortunately, you still also need to change __NR_compat_syscalls
-in arch/arm64/include/asm/unistd.h. Aside from these two issues,
-your patch is the correct way to hook up a new syscall.
 
-   Arnd
+> > @@ -1275,14 +1275,22 @@ build_sched_groups(struct sched_domain *sd, int cpu)
+> >  static void init_sched_groups_capacity(int cpu, struct sched_domain *sd)
+> >  {
+> >  	struct sched_group *sg = sd->groups;
+> > +	struct cpumask *mask = sched_domains_tmpmask2;
+> >  
+> >  	WARN_ON(!sg);
+> >  
+> >  	do {
+> > -		int cpu, max_cpu = -1;
+> > +		int cpu, cores = 0, max_cpu = -1;
+> >  
+> >  		sg->group_weight = cpumask_weight(sched_group_span(sg));
+> >  
+> > +		cpumask_copy(mask, sched_group_span(sg));
+> > +		for_each_cpu(cpu, mask) {
+> > +			cores++;
+#ifdef CONFIG_SCHED_SMT
+> > +			cpumask_andnot(mask, mask, cpu_smt_mask(cpu));
+#else
+			__cpumask_clear_cpu(cpu, mask);
+#endif
+
+or something along them lines -- should be in queue.git/sched/core
+already.
+
+> > +		}
+> > +		sg->cores = cores;
+> > +
+> >  		if (!(sd->flags & SD_ASYM_PACKING))
+> >  			goto next;
+> >  
+> 
