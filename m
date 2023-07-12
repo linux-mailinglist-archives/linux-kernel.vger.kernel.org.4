@@ -2,220 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5388D750BE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DA3750BBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbjGLPJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S232918AbjGLPFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbjGLPIV (ORCPT
+        with ESMTP id S232864AbjGLPFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:08:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2261FCC;
-        Wed, 12 Jul 2023 08:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689174490; x=1720710490;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=5CFiEMl7BqDo1OvWWAOo8ubtcAGSEuhwKZCoQaZtgwI=;
-  b=UbIakJrftQp2dGMqO1++84qkTBfx4cAY+rFGg03nBQNIDC6/b40KqZo+
-   f476E9idUUQbmza9CzaqBWcy1/8RAYVNebsRb3zTKWLY6N9js6xmeyITn
-   ljifbjq2nYWQ+qfb7Epg7Qsnk06U2LAKPzk3RlJIjn7+sv/hW1cZZ65pD
-   lhhAbOv7Z3rO4ioTXGa2pRv9hJ67i/brwWO7sMB96SE0F5Zo1u0iFWOTu
-   EemicGkvUh5jlnJQdjT9kiw7dcpMPTGQsEOBV9nfQZB6GjTq5kw4H6FUG
-   MXfbr3dbJjrFV8b8Dd7jOEN1hyTkmzHKKFYjXPqTQ2MJfTXIndEYV+hux
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="367534224"
-X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
-   d="scan'208";a="367534224"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 08:04:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="721531738"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="721531738"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.166])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 08:04:00 -0700
-Message-ID: <1d99287a-e76d-9beb-f795-da5e34ab10fe@intel.com>
-Date:   Wed, 12 Jul 2023 18:03:56 +0300
+        Wed, 12 Jul 2023 11:05:09 -0400
+Received: from mail-oa1-f78.google.com (mail-oa1-f78.google.com [209.85.160.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CE21BDA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:05:05 -0700 (PDT)
+Received: by mail-oa1-f78.google.com with SMTP id 586e51a60fabf-1b07f55975bso1488219fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:05:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689174304; x=1691766304;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m94uNVGmc3E0yBEqPvT1uJfZAtrvKe9dapVrNuSbByc=;
+        b=a9MLlkToXCU0KNJa+mvtMZcqmBtVgtIFSSV2N/DPEGTjhn2ATPuuA5QHx+ZS78/c4M
+         P1HK7Enu9to3TtV+osBjSo7a3X3yRxwbzq2nniUS2nXV6H0Hz9RKlBtxULMebboFPS6W
+         L7dN78qXx1LTdOTXUPU+tN0tCvvx7FM6OZbHjQ+nGNOVUbv9Z1u7Kb6Lld3BBRZT8U1d
+         jxYJEqxvYTOmC+PR3Bh2hbUqiOaYVWLzeC73xLel0jF6MRSSirypwaSgP2wFDasPbk9u
+         1HoIAIVbhpbCscd/8DtT2EdobmcBW5axrN91PVLMCUMP5XQgKuOrL0HVP4A3RaeRBZeK
+         X/SA==
+X-Gm-Message-State: ABy/qLb/MyaReItPZS8xCa1NKFGGVmiBu0U4MWjxANRw1JHmHLBhYQSH
+        eogVfxOxAE4jx/J2R89A5+F3U0oiHXT9KiSK5+NJGErm4pMK
+X-Google-Smtp-Source: APBJJlE6T4mKAFfXv9J5kh533uZw7yg1Mbm6bvYZirhGaKSi+0a2yNsJa1xutVhKpvYIqxMqZPLHddPeicgsgBG5OrRP2aA+x8U5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH 3/5] perf record: Tracking side-band events for all CPUs
- when tracing selected CPUs
-Content-Language: en-US
-To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, kan.liang@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20230704074217.240939-1-yangjihong1@huawei.com>
- <20230704074217.240939-4-yangjihong1@huawei.com>
- <206972a3-d44d-1c75-3fbc-426427614543@intel.com>
- <747a2780-10d8-8094-3251-8e2c15f961b0@huawei.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <747a2780-10d8-8094-3251-8e2c15f961b0@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6870:ee16:b0:1b0:4e46:7f13 with SMTP id
+ ga22-20020a056870ee1600b001b04e467f13mr3474579oab.2.1689174304068; Wed, 12
+ Jul 2023 08:05:04 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 08:05:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b9d6e06004b8aa0@google.com>
+Subject: [syzbot] [staging?] [usb?] memory leak in _r8712_init_xmit_priv
+From:   syzbot <syzbot+cf71097ffb6755df8251@syzkaller.appspotmail.com>
+To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/23 17:44, Yang Jihong wrote:
-> Hello,
-> 
-> On 2023/7/11 21:13, Adrian Hunter wrote:
->> On 4/07/23 10:42, Yang Jihong wrote:
->>> User space tasks can migrate between CPUs, we need to track side-band
->>> events for all CPUs.
->>>
->>> The specific scenarios are as follows:
->>>
->>>           CPU0                                 CPU1
->>>    perf record -C 0 start
->>>                                taskA starts to be created and executed
->>>                                  -> PERF_RECORD_COMM and PERF_RECORD_MMAP
->>>                                     events only deliver to CPU1
->>>                                ......
->>>                                  |
->>>                            migrate to CPU0
->>>                                  |
->>>    Running on CPU0    <----------/
->>>    ...
->>>
->>>    perf record -C 0 stop
->>>
->>> Now perf samples the PC of taskA. However, perf does not record the
->>> PERF_RECORD_COMM and PERF_RECORD_COMM events of taskA.
->>> Therefore, the comm and symbols of taskA cannot be parsed.
->>>
->>> The sys_perf_event_open invoked is as follows:
->>>
->>>    # perf --debug verbose=3 record -e cpu-clock -C 1 true
->>>    <SNIP>
->>>    Opening: cpu-clock
->>>    ------------------------------------------------------------
->>>    perf_event_attr:
->>>      type                             1
->>>      size                             136
->>>      { sample_period, sample_freq }   4000
->>>      sample_type                      IP|TID|TIME|ID|CPU|PERIOD
->>>      read_format                      ID|LOST
->>>      disabled                         1
->>>      inherit                          1
->>>      freq                             1
->>>      sample_id_all                    1
->>>      exclude_guest                    1
->>>    ------------------------------------------------------------
->>>    sys_perf_event_open: pid -1  cpu 1  group_fd -1  flags 0x8 = 5
->>>    Opening: dummy:HG
->>>    ------------------------------------------------------------
->>>    perf_event_attr:
->>>      type                             1
->>>      size                             136
->>>      config                           0x9
->>>      { sample_period, sample_freq }   4000
->>>      sample_type                      IP|TID|TIME|ID|CPU|PERIOD
->>>      read_format                      ID|LOST
->>>      inherit                          1
->>>      mmap                             1
->>>      comm                             1
->>>      freq                             1
->>>      task                             1
->>>      sample_id_all                    1
->>>      mmap2                            1
->>>      comm_exec                        1
->>>      ksymbol                          1
->>>      bpf_event                        1
->>>    ------------------------------------------------------------
->>>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
->>>    sys_perf_event_open: pid -1  cpu 1  group_fd -1  flags 0x8 = 7
->>>    sys_perf_event_open: pid -1  cpu 2  group_fd -1  flags 0x8 = 9
->>>    sys_perf_event_open: pid -1  cpu 3  group_fd -1  flags 0x8 = 10
->>>    sys_perf_event_open: pid -1  cpu 4  group_fd -1  flags 0x8 = 11
->>>    sys_perf_event_open: pid -1  cpu 5  group_fd -1  flags 0x8 = 12
->>>    sys_perf_event_open: pid -1  cpu 6  group_fd -1  flags 0x8 = 13
->>>    sys_perf_event_open: pid -1  cpu 7  group_fd -1  flags 0x8 = 14
->>>    <SNIP>
->>>
->>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->>> ---
->>>   tools/perf/builtin-record.c | 31 +++++++++++++++++++++++++++++++
->>>   1 file changed, 31 insertions(+)
->>>
->>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->>> index 8872cd037f2c..69e0d8c75aab 100644
->>> --- a/tools/perf/builtin-record.c
->>> +++ b/tools/perf/builtin-record.c
->>> @@ -908,6 +908,31 @@ static int record__config_off_cpu(struct record *rec)
->>>       return off_cpu_prepare(rec->evlist, &rec->opts.target, &rec->opts);
->>>   }
->>>   +static int record__config_tracking_events(struct record *rec)
->>> +{
->>> +    struct evsel *evsel;
->>> +    struct evlist *evlist = rec->evlist;
->>> +    struct record_opts *opts = &rec->opts;
->>> +
->>> +    /*
->>> +     * User space tasks can migrate between CPUs, so when tracing
->>> +     * selected CPUs, sideband for all CPUs is still needed.
->>> +     */
->>> +    if (opts->target.cpu_list) {
->>
->> I am not sure if anyone minds doing this by default, but perhaps
->> we should say something about it on the perf record man page.
->>
-> Okay, will add comments to the man page.
-> 
->>> +        evsel = evlist__findnew_tracking_event(evlist);
->>> +        if (!evsel)
->>> +            return -ENOMEM;
->>> +
->>> +        if (!evsel->core.system_wide) {
->>> +            evsel->core.system_wide = true;
->>> +            evsel__set_sample_bit(evsel, TIME);
->>> +            perf_evlist__propagate_maps(&evlist->core, &evsel->core);
->>> +        }
->>
->> Perhaps better to export via internel/evsel.h
->>
->> void perf_evsel__go_system_wide(struct perf_evlist *evlist, struct perf_evsel *evsel)
->> {
->>     if (!evsel->system_wide) {
->>         evsel->system_wide = true;
->>         if (evlist->needs_map_propagation)
->>             __perf_evlist__propagate_maps(evlist, evsel);
->>     }
->> }
->>
->> As suggested in response to patch 2, perhaps deal with system_wide
->> inside evlist__findnew_tracking_event()
->>
-> Okay, I'll modify it as above, so maybe we need to export perf_evlist__propagate_maps().
-> 
-> As mentioned in the patch 1, __perf_evlist__propagate_maps is low-level and avoid to export it.
-> Or can we export perf_evsel__go_system_wide() via through internel/evlist.h?
+Hello,
 
-Yes
+syzbot found the following issue on:
 
-> In this way, we do not need to export perf_evlist__propagate_maps().
-> If so, would it be more appropriate to call perf_evlist__go_system_wide()?
+HEAD commit:    8689f4f2ea56 Merge tag 'mmc-v6.5-2' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ac3fa0a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=832b404e095b70c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf71097ffb6755df8251
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16f26d02a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14482e54a80000
 
-Sure
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/31f0c2383fbf/disk-8689f4f2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/98c44efd609e/vmlinux-8689f4f2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/bbd75026af9a/bzImage-8689f4f2.xz
 
-> 
-> Thanks,
-> Yang
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cf71097ffb6755df8251@syzkaller.appspotmail.com
 
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810a4db000 (size 4096):
+  comm "kworker/0:3", pid 4752, jiffies 4294941496 (age 19.480s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8154bfa4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
+    [<ffffffff83c3bf41>] kmalloc include/linux/slab.h:582 [inline]
+    [<ffffffff83c3bf41>] _r8712_init_xmit_priv+0x2b1/0x660 drivers/staging/rtl8712/rtl871x_xmit.c:131
+    [<ffffffff83c36b86>] r8712_init_drv_sw+0xc6/0x260 drivers/staging/rtl8712/os_intfs.c:311
+    [<ffffffff83c35766>] r871xu_drv_init+0x1f6/0x9d0 drivers/staging/rtl8712/usb_intf.c:386
+    [<ffffffff83237329>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82ba039d>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82ba039d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+    [<ffffffff82ba0761>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:798
+    [<ffffffff82ba086a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:828
+    [<ffffffff82ba0a5b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:956
+    [<ffffffff82b9d7b1>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82ba0f82>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1028
+    [<ffffffff82b9ef1a>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b9b513>] device_add+0x993/0xc60 drivers/base/core.c:3625
+    [<ffffffff83234409>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+    [<ffffffff83246ed1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+    [<ffffffff83236a00>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
+
+BUG: memory leak
+unreferenced object 0xffff88810a4de000 (size 4096):
+  comm "kworker/0:3", pid 4752, jiffies 4294941496 (age 19.480s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8154bfa4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
+    [<ffffffff83c3bf41>] kmalloc include/linux/slab.h:582 [inline]
+    [<ffffffff83c3bf41>] _r8712_init_xmit_priv+0x2b1/0x660 drivers/staging/rtl8712/rtl871x_xmit.c:131
+    [<ffffffff83c36b86>] r8712_init_drv_sw+0xc6/0x260 drivers/staging/rtl8712/os_intfs.c:311
+    [<ffffffff83c35766>] r871xu_drv_init+0x1f6/0x9d0 drivers/staging/rtl8712/usb_intf.c:386
+    [<ffffffff83237329>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82ba039d>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82ba039d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+    [<ffffffff82ba0761>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:798
+    [<ffffffff82ba086a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:828
+    [<ffffffff82ba0a5b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:956
+    [<ffffffff82b9d7b1>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82ba0f82>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1028
+    [<ffffffff82b9ef1a>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b9b513>] device_add+0x993/0xc60 drivers/base/core.c:3625
+    [<ffffffff83234409>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+    [<ffffffff83246ed1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+    [<ffffffff83236a00>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
+
+BUG: memory leak
+unreferenced object 0xffff88810a4d9000 (size 4096):
+  comm "kworker/0:3", pid 4752, jiffies 4294941496 (age 19.480s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8154bfa4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
+    [<ffffffff83c3bf41>] kmalloc include/linux/slab.h:582 [inline]
+    [<ffffffff83c3bf41>] _r8712_init_xmit_priv+0x2b1/0x660 drivers/staging/rtl8712/rtl871x_xmit.c:131
+    [<ffffffff83c36b86>] r8712_init_drv_sw+0xc6/0x260 drivers/staging/rtl8712/os_intfs.c:311
+    [<ffffffff83c35766>] r871xu_drv_init+0x1f6/0x9d0 drivers/staging/rtl8712/usb_intf.c:386
+    [<ffffffff83237329>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82ba039d>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82ba039d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+    [<ffffffff82ba0761>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:798
+    [<ffffffff82ba086a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:828
+    [<ffffffff82ba0a5b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:956
+    [<ffffffff82b9d7b1>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82ba0f82>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1028
+    [<ffffffff82b9ef1a>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b9b513>] device_add+0x993/0xc60 drivers/base/core.c:3625
+    [<ffffffff83234409>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+    [<ffffffff83246ed1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+    [<ffffffff83236a00>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
