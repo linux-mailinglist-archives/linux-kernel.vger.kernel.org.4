@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4C3750420
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9020750429
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjGLKHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S232415AbjGLKMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbjGLKHX (ORCPT
+        with ESMTP id S231615AbjGLKMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:07:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D6910F2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:07:21 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJWkZ-0007N2-6F; Wed, 12 Jul 2023 12:07:11 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJWkX-00DrC7-5m; Wed, 12 Jul 2023 12:07:09 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJWkW-004H2K-AL; Wed, 12 Jul 2023 12:07:08 +0200
-Date:   Wed, 12 Jul 2023 12:07:08 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/27] drivers/thermal/rcar_gen3_thermal: Convert to
- platform remove callback returning void
-Message-ID: <20230712100708.mw3swyq7zkymlmbg@pengutronix.de>
-References: <20230712081258.29254-1-frank.li@vivo.com>
- <20230712081258.29254-4-frank.li@vivo.com>
+        Wed, 12 Jul 2023 06:12:08 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB01991;
+        Wed, 12 Jul 2023 03:12:06 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 053DF61E5FE01;
+        Wed, 12 Jul 2023 12:09:16 +0200 (CEST)
+Message-ID: <461f3b88-87e6-32f2-3ed8-5764a9a6e162@molgen.mpg.de>
+Date:   Wed, 12 Jul 2023 12:09:15 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pk5nif3dzdh2d62m"
-Content-Disposition: inline
-In-Reply-To: <20230712081258.29254-4-frank.li@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] media: aspeed: Fix memory overwrite if timing is 1600x900
+Content-Language: en-US
+To:     Jammy Huang <jammy_huang@aspeedtech.com>
+References: <20230712092606.2508-1-jammy_huang@aspeedtech.com>
+Cc:     eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230712092606.2508-1-jammy_huang@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Jammy,
 
---pk5nif3dzdh2d62m
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 12, 2023 at 04:12:35PM +0800, Yangtao Li wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+Thank you very much for your patch.
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Am 12.07.23 um 11:26 schrieb Jammy Huang:
+> When capturing 1600x900, system could crash when system memory usage is
+> tight.
 
-Best regards
-Uwe
+Please provide part of the trace, and if you have a commend to reproduce 
+it, please also add it. Is it documented somewhere, that it needs to be 
+aligned?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> The size of macro block captured is 8x8. Therefore, we should make sure
+> the height of src-buf is 8 aligned to fix this issue.
+> 
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> ---
+>   drivers/media/platform/aspeed/aspeed-video.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+> index 374eb7781936..14594f55a77f 100644
+> --- a/drivers/media/platform/aspeed/aspeed-video.c
+> +++ b/drivers/media/platform/aspeed/aspeed-video.c
+> @@ -1130,7 +1130,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>   static void aspeed_video_set_resolution(struct aspeed_video *video)
+>   {
+>   	struct v4l2_bt_timings *act = &video->active_timings;
+> -	unsigned int size = act->width * act->height;
+> +	unsigned int size = act->width * ALIGN(act->height, 8);
+>   
+>   	/* Set capture/compression frame sizes */
+>   	aspeed_video_calc_compressed_size(video, size);
+> @@ -1147,7 +1147,7 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
+>   		u32 width = ALIGN(act->width, 64);
+>   
+>   		aspeed_video_write(video, VE_CAP_WINDOW, width << 16 | act->height);
+> -		size = width * act->height;
+> +		size = width * ALIGN(act->height, 8);
 
---pk5nif3dzdh2d62m
-Content-Type: application/pgp-signature; name="signature.asc"
+Maybe add a comment.
 
------BEGIN PGP SIGNATURE-----
+Excuse my ignorance, but as `width` is already 64 bit aligned, how does 
+aligning the second factor make a difference for `size`? Can you give an 
+example?
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSue0sACgkQj4D7WH0S
-/k7gbwgAibSgcD6uBzS+XZrjl3S3IDYb3WsZ74zJEX7/ZJc97zSwKB7SOa1APLtn
-rMiH0+zbLfqU2w8La5TJsK48COYySjaMe2wCV6zQdFFPrfJHy1BGn/wyJK7omQ6u
-nVfmSyetB71U/s+onuj7N4A6ZCSFcwxkaQPHa7N/bfTtDYiuKkACXmLLs1iPfkoC
-SrQUJSj2P3rRln6+1IO0fuh8F6Y7NIjHMqDt+mld2xfHQT/JhB41PF2YUWk8h5mc
-jUrl1LN+MGr1WCCh4kco/o3dtGqKRAe6EUVErsze4lGlr+eoAql6rb+orwAYa3nC
-t6COCTPhqFr+lOGVT37rQrTFqdIl+g==
-=ZOdH
------END PGP SIGNATURE-----
+>   	} else {
+>   		aspeed_video_write(video, VE_CAP_WINDOW,
+>   				   act->width << 16 | act->height);
+> 
+> base-commit: 2605e80d3438c77190f55b821c6575048c68268e
 
---pk5nif3dzdh2d62m--
+
+Kind regards,
+
+Paul
