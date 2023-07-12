@@ -2,144 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2DE74FCF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519E274FCFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGLCMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S231688AbjGLCQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 22:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjGLCML (ORCPT
+        with ESMTP id S229537AbjGLCQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:12:11 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BBE11B;
-        Tue, 11 Jul 2023 19:12:09 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4R11TH6rp5z4f3mJ4;
-        Wed, 12 Jul 2023 10:12:03 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP1 (Coremail) with SMTP id cCh0CgDX9jDyC65k9Z0eNA--.18259S2;
-        Wed, 12 Jul 2023 10:12:06 +0800 (CST)
-Subject: Re: [PATCH bpf] bpf: cpumap: Fix memory leak in cpu_map_update_elem
-To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>, Pu Lehui <pulehui@huawei.com>
-References: <20230711115848.2701559-1-pulehui@huaweicloud.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <e065f385-3baf-eacb-7ca5-6ade14491eee@huaweicloud.com>
-Date:   Wed, 12 Jul 2023 10:12:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 11 Jul 2023 22:16:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3320A171C;
+        Tue, 11 Jul 2023 19:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689128180; x=1720664180;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7teqUly4Me+A9J/Fx2asWCUANEjQCBGyzvt5+0uDrZE=;
+  b=lzZE1Dwbuuyvuhb/lMw+7wy+hkI4wj7+nh4nKeOmhN8xYNIJzCBZ/17x
+   zPImWk3knvZdmxIlI1pqLLkIMazcIOTRYeuOmozZ9Olqi6lvL2pvwvOsB
+   NZYgxbw3Uxyfg2pXTLy2QP152c+/hy2LaYW1dKwCkocy28plRlrSDinXA
+   vVFTATKkdqiqbWKY6ljz6lbqjHCJfNE3L4HJNxmHzAoZ7EZVymQkLQhCn
+   zaytxIi9M+0Ck3mzdmaUuwJ1HcHQ4pPhzgxrqkkZ6AQZFR3ycQdaSv5sS
+   SsbM9LlBDhicsdH+2BxI3kKnUF/mvpu3HgxC5YvpBlpv6ZWfvlhBmfNDt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="428520559"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="428520559"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:16:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="724696128"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="724696128"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.60]) ([10.252.187.60])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:16:15 -0700
+Message-ID: <4519fb58-9b56-3c99-48be-a70505571f4a@linux.intel.com>
+Date:   Wed, 12 Jul 2023 10:16:11 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230711115848.2701559-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/9] iommu: Add device parameter to iopf handler
 Content-Language: en-US
-X-CM-TRANSID: cCh0CgDX9jDyC65k9Z0eNA--.18259S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrWrAFWrZF1xCFWfAFy7Wrg_yoW5Cr4Dpr
-        Wrtr1DKr48tr4DZw48t3WrGr18Zw1jya4UJrZ3Jr4fAF18G3W8t348GFZ7JFZrZrn8Xry7
-        Jas8t3yvg34DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
+ <20230711010642.19707-3-baolu.lu@linux.intel.com>
+ <20230711102620.37b06884@jacob-builder>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230711102620.37b06884@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/7/12 1:26, Jacob Pan wrote:
+> Hi BaoLu,
 
+Hi Jacob,
 
-On 7/11/2023 7:58 PM, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
->
-> Syzkaller reported a memory leak as follows:
->
-> BUG: memory leak
-> unreferenced object 0xff110001198ef748 (size 192):
->   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
->   hex dump (first 32 bytes):
->     00 00 00 00 4a 19 00 00 80 ad e3 e4 fe ff c0 00  ....J...........
->     00 b2 d3 0c 01 00 11 ff 28 f5 8e 19 01 00 11 ff  ........(.......
->   backtrace:
->     [<ffffffffadd28087>] __cpu_map_entry_alloc+0xf7/0xb00
->     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
->     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
->     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
->     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
->     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
->     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
->
-> BUG: memory leak
-> unreferenced object 0xff110001198ef528 (size 192):
->   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffffadd281f0>] __cpu_map_entry_alloc+0x260/0xb00
->     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
->     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
->     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
->     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
->     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
->     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
->
-> BUG: memory leak
-> unreferenced object 0xff1100010fd93d68 (size 8):
->   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
->   hex dump (first 8 bytes):
->     00 00 00 00 00 00 00 00                          ........
->   backtrace:
->     [<ffffffffade5db3e>] kvmalloc_node+0x11e/0x170
->     [<ffffffffadd28280>] __cpu_map_entry_alloc+0x2f0/0xb00
->     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
->     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
->     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
->     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
->     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
->     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
->
-> In the cpu_map_update_elem flow, when kthread_stop is called before
-> calling the threadfn of rcpu->kthread, since the KTHREAD_SHOULD_STOP bit
-> of kthread has been set by kthread_stop, the threadfn of rcpu->kthread
-> will never be executed, and rcpu->refcnt will never be 0, which will
-> lead to the allocated rcpu, rcpu->queue and rcpu->queue->queue cannot be
-> released.
->
-> Calling kthread_stop before executing kthread's threadfn will return
-> -EINTR. We can complete the release of memory resources in this state.
->
-> Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CPUMAP")
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> 
+> On Tue, 11 Jul 2023 09:06:35 +0800, Lu Baolu<baolu.lu@linux.intel.com>
+> wrote:
+> 
+>> Add the device parameter to the iopf handler so that it can know which
+>> device this fault was generated.
+>>
+>> This is necessary for use cases such as delivering IO page faults to user
+>> space. The IOMMUFD layer needs to be able to lookup the device id of a
+>> fault and route it together with the fault message to the user space.
+>>
+>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h      | 1 +
+>>   drivers/iommu/iommu-sva.h  | 4 ++--
+>>   drivers/iommu/io-pgfault.c | 2 +-
+>>   drivers/iommu/iommu-sva.c  | 2 +-
+>>   4 files changed, 5 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 0eb0fb852020..a00fb43b5e73 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -249,6 +249,7 @@ struct iommu_domain {
+>>   	struct iommu_domain_geometry geometry;
+>>   	struct iommu_dma_cookie *iova_cookie;
+>>   	enum iommu_page_response_code (*iopf_handler)(struct iommu_fault
+>> *fault,
+>> +						      struct device *dev,
+>>   						      void *data);
+>>   	void *fault_data;
+>>   	union {
+>> diff --git a/drivers/iommu/iommu-sva.h b/drivers/iommu/iommu-sva.h
+>> index 54946b5a7caf..c848661c4e20 100644
+>> --- a/drivers/iommu/iommu-sva.h
+>> +++ b/drivers/iommu/iommu-sva.h
+>> @@ -23,7 +23,7 @@ struct iopf_queue *iopf_queue_alloc(const char *name);
+>>   void iopf_queue_free(struct iopf_queue *queue);
+>>   int iopf_queue_discard_partial(struct iopf_queue *queue);
+>>   enum iommu_page_response_code
+>> -iommu_sva_handle_iopf(struct iommu_fault *fault, void *data);
+>> +iommu_sva_handle_iopf(struct iommu_fault *fault, struct device *dev,
+>> void *data);
+>>   #else /* CONFIG_IOMMU_SVA */
+>>   static inline int iommu_queue_iopf(struct iommu_fault *fault, void
+>> *cookie) @@ -63,7 +63,7 @@ static inline int
+>> iopf_queue_discard_partial(struct iopf_queue *queue) }
+>>   
+>>   static inline enum iommu_page_response_code
+>> -iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
+>> +iommu_sva_handle_iopf(struct iommu_fault *fault, struct device *dev,
+>> void *data) {
+>>   	return IOMMU_PAGE_RESP_INVALID;
+>>   }
+>> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
+>> index e5b8b9110c13..fa604e1b5c5c 100644
+>> --- a/drivers/iommu/io-pgfault.c
+>> +++ b/drivers/iommu/io-pgfault.c
+>> @@ -88,7 +88,7 @@ static void iopf_handler(struct work_struct *work)
+>>   		 * faults in the group if there is an error.
+>>   		 */
+>>   		if (status == IOMMU_PAGE_RESP_SUCCESS)
+>> -			status = domain->iopf_handler(&iopf->fault,
+>> +			status = domain->iopf_handler(&iopf->fault,
+>> group->dev, domain->fault_data);
+>>   
+>>   		if (!(iopf->fault.prm.flags &
+>> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+>> index 3ebd4b6586b3..14766a2b61af 100644
+>> --- a/drivers/iommu/iommu-sva.c
+>> +++ b/drivers/iommu/iommu-sva.c
+>> @@ -157,7 +157,7 @@ EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+>>    * I/O page fault handler for SVA
+>>    */
+>>   enum iommu_page_response_code
+>> -iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
+>> +iommu_sva_handle_iopf(struct iommu_fault *fault, struct device *dev,
+> dev has no use for sva handler, right? mark them __always_unused?
 
-Acked-by: Hou Tao <houtao1@huawei.com>
+My understanding is that __always_unused attribute in Linux kernel code
+marks a variable or function as unused. It implies that the compiler is
+free to optimize the variable or function away.
+
+If my understanding is correct, then it may not be suitable here.
+
+Best regards,
+baolu
 
