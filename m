@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866177501CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF347501D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjGLIi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S232328AbjGLIjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjGLIhr (ORCPT
+        with ESMTP id S231210AbjGLIi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:37:47 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33E01FCB;
-        Wed, 12 Jul 2023 01:36:02 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C8H6W5005418;
-        Wed, 12 Jul 2023 08:35:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=4wWvmE6riY6W/gEOwFAliD2QEWEyS8lb/MuEGAJ1j5o=;
- b=W8wCk4xvkQn1//6F4lTivAknvJaZrparsug2om/MrAq7Cig1Q22gMS8yTPhnlhyk54bx
- rgO2PKLcJqRTO3ieRQzqcYyrZ15pQ+Pga9oA4OwuLJY+gTla14D3F0sFhj9bxPr5rFR1
- +ikqwVe9ESkWm+4UrIZA9FXPZgm9wCEpDtEICqOUPrAErFZDoLxxFSZEc29iyV0c6c14
- iIVWmi1vHOeqCayZIcm/4gMDqHccOGB1Ey5Ao4/h80/FLo102QRKrlFCb7+5+nJnQHcI
- FA9eHzbdDKpOaXH902yyT8qtYqF0YUkJJe15gJW2MxiGt98trsu4xg0rlIvHCKNX2BDz Vw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rsrh80fb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 08:35:51 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36C6akB3008911;
-        Wed, 12 Jul 2023 08:35:49 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3rpye59u22-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 08:35:49 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36C8ZkP727067074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jul 2023 08:35:46 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB8222004D;
-        Wed, 12 Jul 2023 08:35:45 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A122E2004B;
-        Wed, 12 Jul 2023 08:35:45 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jul 2023 08:35:45 +0000 (GMT)
-Date:   Wed, 12 Jul 2023 10:35:43 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v5 00/38] New page table range API
-Message-ID: <20230712103543.4304235c@p-imbrenda>
-In-Reply-To: <ZK46Mb0jAtCxFma2@casper.infradead.org>
-References: <20230710204339.3554919-1-willy@infradead.org>
-        <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
-        <ZK1My5hQYC2Kb6G1@casper.infradead.org>
-        <20230711172440.77504856@p-imbrenda>
-        <ZK46Mb0jAtCxFma2@casper.infradead.org>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Wed, 12 Jul 2023 04:38:29 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A74E2685
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:37:16 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-66869feb7d1so3683876b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1689151036; x=1691743036;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rBUqtpQ/qPgW5u7ywMLTowE+PlXrM3g8tx27h51sMCE=;
+        b=VqzN9T6Qk0SmNiMem+kRtijR440z3E/ALzGAi5DDK6EoHaDzEG/nn3Ed2Qv6pH6Iyw
+         VHphXyz81s1pWvpd9DYqoqyVUxrs9jGYhkmJrFtpjhHBEwogtxcBINhKqQHqVblVqUO8
+         /KeWzOyK6V4UDu0itEHFvgsvtfZKNRJXn+mbCx2r8H8oYSb/p0K+H5e7vx4a0/h3Zpm1
+         twR1Zo4NCjJTuFY8b1HAl+Q6DJYwJjOe4MC1k0S6I7CrK3mu0QXpEHzbyOFcxsuTgfNz
+         JplpzbKV72uyfouPy9r3K5hfutrfi3qrrOPCi5u3iYE8E9zF8IVLRtOX9LffJXqcWJSw
+         D5qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689151036; x=1691743036;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rBUqtpQ/qPgW5u7ywMLTowE+PlXrM3g8tx27h51sMCE=;
+        b=EXYHF+yRzbWHOoRQWnMVG6pG2VohZ0GbPnp4BN4BUz+/HvrI1wic9M8xMBJsndva7r
+         q5HM6mLbO80EMUMiWx3hHqFl3riOP7PAZ/Qrgap38AxLxnMnpNcZ/X9SXD8V1fbCWbaH
+         E/I48vOcoRnTRq5M6omW6sLpCsWXi0nkMZsU9KapdhZQgUMhgja1dbvLys6jY0Xa3NK3
+         MQVyUMMoawMtGlIe/hB34/+wlmq+YYBYcXoHXb4ZucyZzcFBpi57pBMhQOhgnWyO2C/r
+         c0p66f+AMxU9NdnGm4fO6pEVBArwOhIH84FI4XCHvmGW76Q2CRtrovATmdhrIOnIKkMr
+         IUbA==
+X-Gm-Message-State: ABy/qLY4PDHPhT4bLloeykCMz3QfjAMJxytZOM8w9G4k1ptvJcdT99iJ
+        zbEPZh776EXH2bc9cY+OkVccVw==
+X-Google-Smtp-Source: APBJJlH41zH8i6+u4OkMNyNGL+1U7FgwlqKFvL7f8wmCC510ncVN0Y1EGYRFfKG++mLfEqfgMFyv7w==
+X-Received: by 2002:a05:6a00:1409:b0:673:5d1e:6654 with SMTP id l9-20020a056a00140900b006735d1e6654mr16234608pfu.33.1689151036022;
+        Wed, 12 Jul 2023 01:37:16 -0700 (PDT)
+Received: from [10.254.22.102] ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id c19-20020aa78e13000000b00682b2fbd20fsm3078868pfr.31.2023.07.12.01.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 01:37:15 -0700 (PDT)
+Message-ID: <ed82e6b9-3d9f-259a-82bc-cc51f9131f29@bytedance.com>
+Date:   Wed, 12 Jul 2023 16:37:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BaW4a-jtxRC0PTUlpLFwd8HG0wdDW65g
-X-Proofpoint-ORIG-GUID: BaW4a-jtxRC0PTUlpLFwd8HG0wdDW65g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_05,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=937
- suspectscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0
- impostorscore=0 priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307120070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH] mm: kfence: allocate kfence_metadata at runtime
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
+        Marco Elver <elver@google.com>
+References: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
+ <CANpmjNOHz+dRbJsAyg29nksPMcd2P6109iPxTem_-b2qfUvXtw@mail.gmail.com>
+ <2a16a76c-506c-f325-6792-4fb58e8da531@bytedance.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <2a16a76c-506c-f325-6792-4fb58e8da531@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,73 +78,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jul 2023 06:29:21 +0100
-Matthew Wilcox <willy@infradead.org> wrote:
 
-> On Tue, Jul 11, 2023 at 05:24:40PM +0200, Claudio Imbrenda wrote:
-> > On Tue, 11 Jul 2023 13:36:27 +0100
-> > Matthew Wilcox <willy@infradead.org> wrote:  
-> > > > I think we do use PG_arch_1 on s390 for our secure page handling and
-> > > > making this perf folio instead of physical page really seems wrong
-> > > > and it probably breaks this code.    
-> > > 
-> > > Per-page flags are going away in the next few years, so you're going to  
-> > 
-> > For each 4k physical page frame, we need to keep track whether it is
-> > secure or not.  
+
+在 2023/7/12 16:28, Peng Zhang 写道:
 > 
-> Do you?  Wouldn't it make more sense to track that per allocation instead
-
-no
-
-> of per page?  ie if we allocate a 16kB anon folio for a VMA, don't you
-> want the entire folio to be marked as secure vs insecure?
-
-if we allocate a 16k folio, it would actually be initially marked as
-non-secure until the guest touches any of it, then only those 4k pages
-that are needed get marked as secure.
-
-the guest can also share the pages with the host, in which case the
-individual 4k pages get marked as non-secure once I/O is attempted on
-them (e.g. direct I/O)
-
-userspace (i.e. QEMU) can also try to look into the guest, causing
-individual pages to be exported (securely encrypted and then marked as
-non-secure) if they were secure and not shared.
-
-I/O cannot trigger exports, it will just fail, and that should not
-happen because in some cases it can bring down the whole system. Which
-is one of the main reasons why we need to keep track of the state.
-
 > 
-> I don't really know what secure means in this context.  I think it has
-> something to do with which of the VM or the hypervisor can access it, but
-> it feels like something new that I've never had properly explained to me.
-
-Secure means it belongs to a secure guest (confidential VM,
-protected virtualisation, Secure Execution, there are many names...).
-
-Hardware will prevent the host (or any other entity except for the
-secure guest itself) from accessing those 4k physical page frames,
-regardless of how the host might try. An exception will be presented
-for any attempts.
-
-I/O will not trigger any exception, and will instead just fail.
-
-I hope this explains why we need to track the property for each 4k
-physical page frame.
-
+> 在 2023/7/10 18:19, Marco Elver 写道:
+>> On Mon, 10 Jul 2023 at 05:27, 'Peng Zhang' via kasan-dev
+>> <kasan-dev@googlegroups.com> wrote:
+>>>
+>>> kfence_metadata is currently a static array. For the purpose of
+>>> allocating scalable __kfence_pool, we first change it to runtime
+>>> allocation of metadata. Since the size of an object of kfence_metadata
+>>> is 1160 bytes, we can save at least 72 pages (with default 256 objects)
+>>> without enabling kfence.
+>>>
+>>> Below is the numbers obtained in qemu (with default 256 objects).
+>>> before: Memory: 8134692K/8388080K available (3668K bss)
+>>> after: Memory: 8136740K/8388080K available (1620K bss)
+>>> More than expected, it saves 2MB memory.
+>>>
+>>> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+>>
+>> Seems like a reasonable optimization, but see comments below.
+>>
+>> Also with this patch applied on top of v6.5-rc1, KFENCE just doesn't
+>> init at all anymore (early init). Please fix.
+> I'm very sorry because I made a slight modification before sending the
+> patch but it has not been tested, which caused it to not work properly.
+> I fixed some of the issues you mentioned in v2[1].
 > 
-> > A bit in struct page seems the most logical choice. If that's not
-> > possible anymore, how would you propose we should do?  
+> [1] 
+> https://lore.kernel.org/lkml/20230712081616.45177-1-zhangpeng.00@bytedance.com/
 > 
-> The plan is to shrink struct page down to a single pointer (which
-
-interesting
-
-> includes a few tag bits to say what type that pointer is -- a page
-> table, anon mem, file mem, slab, etc).  So there won't be any bits
-> available for something like "secure or not".  You could use a side
-> structure if you really need to keep track on a per page basis.
-
-I guess that's something we will need to work on
+>>
+>>> ---
+>>>   mm/kfence/core.c   | 102 ++++++++++++++++++++++++++++++++-------------
+>>>   mm/kfence/kfence.h |   5 ++-
+>>>   2 files changed, 78 insertions(+), 29 deletions(-)
+>>>
+>>> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+>>> index dad3c0eb70a0..b9fec1c46e3d 100644
+>>> --- a/mm/kfence/core.c
+>>> +++ b/mm/kfence/core.c
+>>> @@ -116,7 +116,7 @@ EXPORT_SYMBOL(__kfence_pool); /* Export for test 
+>>> modules. */
+>>>    * backing pages (in __kfence_pool).
+>>>    */
+>>>   static_assert(CONFIG_KFENCE_NUM_OBJECTS > 0);
+>>> -struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
+>>> +struct kfence_metadata *kfence_metadata;
+>>>
+>>>   /* Freelist with available objects. */
+>>>   static struct list_head kfence_freelist = 
+>>> LIST_HEAD_INIT(kfence_freelist);
+>>> @@ -643,13 +643,56 @@ static unsigned long kfence_init_pool(void)
+>>>          return addr;
+>>>   }
+>>>
+>>> +static int kfence_alloc_metadata(void)
+>>> +{
+>>> +       unsigned long nr_pages = KFENCE_METADATA_SIZE / PAGE_SIZE;
+>>> +
+>>> +#ifdef CONFIG_CONTIG_ALLOC
+>>> +       struct page *pages;
+>>> +
+>>> +       pages = alloc_contig_pages(nr_pages, GFP_KERNEL, 
+>>> first_online_node,
+>>> +                                  NULL);
+>>> +       if (pages)
+>>> +               kfence_metadata = page_to_virt(pages);
+>>> +#else
+>>> +       if (nr_pages > MAX_ORDER_NR_PAGES) {
+>>> +               pr_warn("KFENCE_NUM_OBJECTS too large for buddy 
+>>> allocator\n");
+>>
+>> Does this mean that KFENCE won't work at all if we can't allocate the
+>> metadata? I.e. it won't work either in early nor late init modes?
+>>
+>> I know we already have this limitation for _late init_ of the KFENCE 
+>> pool.
+>>
+>> So I have one major question: when doing _early init_, what is the
+>> maximum size of the KFENCE pool (#objects) with this change?
+> It will be limited to 2^10/sizeof(struct kfence_metadata) by buddy
+                 Sorry,  2^10*PAGE_SIZE/sizeof(struct kfence_metadata)
+> system, so I used memblock to allocate kfence_metadata in v2.
+>>
+>>> +               return -EINVAL;
+>>> +       }
+>>> +       kfence_metadata = alloc_pages_exact(KFENCE_METADATA_SIZE,
+>>> +                                           GFP_KERNEL);
+>>> +#endif
+>>> +
+>>> +       if (!kfence_metadata)
+>>> +               return -ENOMEM;
+>>> +
+>>> +       memset(kfence_metadata, 0, KFENCE_METADATA_SIZE);
+>>
+>> memzero_explicit, or pass __GFP_ZERO to alloc_pages?
+> Unfortunately, __GFP_ZERO does not work successfully in
+> alloc_contig_pages(), so I used memzero_explicit() in v2.
+> Even though I don't know if memzero_explicit() is necessary
+> (it just uses the barrier).
+>>
+>>> +       return 0;
+>>> +}
+>>> +
+>>> +static void kfence_free_metadata(void)
+>>> +{
+>>> +       if (WARN_ON(!kfence_metadata))
+>>> +               return;
+>>> +#ifdef CONFIG_CONTIG_ALLOC
+>>> +       free_contig_range(page_to_pfn(virt_to_page((void 
+>>> *)kfence_metadata)),
+>>> +                         KFENCE_METADATA_SIZE / PAGE_SIZE);
+>>> +#else
+>>> +       free_pages_exact((void *)kfence_metadata, KFENCE_METADATA_SIZE);
+>>> +#endif
+>>> +       kfence_metadata = NULL;
+>>> +}
+>>> +
+>>>   static bool __init kfence_init_pool_early(void)
+>>>   {
+>>> -       unsigned long addr;
+>>> +       unsigned long addr = (unsigned long)__kfence_pool;
+>>>
+>>>          if (!__kfence_pool)
+>>>                  return false;
+>>>
+>>> +       if (!kfence_alloc_metadata())
+>>> +               goto free_pool;
+>>> +
+>>>          addr = kfence_init_pool();
+>>>
+>>>          if (!addr) {
+>>> @@ -663,6 +706,7 @@ static bool __init kfence_init_pool_early(void)
+>>>                  return true;
+>>>          }
+>>>
+>>> +       kfence_free_metadata();
+>>>          /*
+>>>           * Only release unprotected pages, and do not try to go back 
+>>> and change
+>>>           * page attributes due to risk of failing to do so as well. 
+>>> If changing
+>>> @@ -670,31 +714,12 @@ static bool __init kfence_init_pool_early(void)
+>>>           * fails for the first page, and therefore expect 
+>>> addr==__kfence_pool in
+>>>           * most failure cases.
+>>>           */
+>>> +free_pool:
+>>>          memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - 
+>>> (unsigned long)__kfence_pool));
+>>>          __kfence_pool = NULL;
+>>>          return false;
+>>>   }
+>>>
+>>> -static bool kfence_init_pool_late(void)
+>>> -{
+>>> -       unsigned long addr, free_size;
+>>> -
+>>> -       addr = kfence_init_pool();
+>>> -
+>>> -       if (!addr)
+>>> -               return true;
+>>> -
+>>> -       /* Same as above. */
+>>> -       free_size = KFENCE_POOL_SIZE - (addr - (unsigned 
+>>> long)__kfence_pool);
+>>> -#ifdef CONFIG_CONTIG_ALLOC
+>>> -       free_contig_range(page_to_pfn(virt_to_page((void *)addr)), 
+>>> free_size / PAGE_SIZE);
+>>> -#else
+>>> -       free_pages_exact((void *)addr, free_size);
+>>> -#endif
+>>> -       __kfence_pool = NULL;
+>>> -       return false;
+>>> -}
+>>> -
+>>>   /* === DebugFS Interface 
+>>> ==================================================== */
+>>>
+>>>   static int stats_show(struct seq_file *seq, void *v)
+>>> @@ -896,6 +921,10 @@ void __init kfence_init(void)
+>>>   static int kfence_init_late(void)
+>>>   {
+>>>          const unsigned long nr_pages = KFENCE_POOL_SIZE / PAGE_SIZE;
+>>> +       unsigned long addr = (unsigned long)__kfence_pool;
+>>> +       unsigned long free_size = KFENCE_POOL_SIZE;
+>>> +       int ret;
+>>> +
+>>>   #ifdef CONFIG_CONTIG_ALLOC
+>>>          struct page *pages;
+>>>
+>>> @@ -913,15 +942,29 @@ static int kfence_init_late(void)
+>>>                  return -ENOMEM;
+>>>   #endif
+>>>
+>>> -       if (!kfence_init_pool_late()) {
+>>> -               pr_err("%s failed\n", __func__);
+>>> -               return -EBUSY;
+>>> +       ret = kfence_alloc_metadata();
+>>> +       if (!ret)
+>>> +               goto free_pool;
+>>> +
+>>> +       addr = kfence_init_pool();
+>>> +       if (!addr) {
+>>> +               kfence_init_enable();
+>>> +               kfence_debugfs_init();
+>>> +               return 0;
+>>>          }
+>>>
+>>> -       kfence_init_enable();
+>>> -       kfence_debugfs_init();
+>>> +       pr_err("%s failed\n", __func__);
+>>> +       kfence_free_metadata();
+>>> +       free_size = KFENCE_POOL_SIZE - (addr - (unsigned 
+>>> long)__kfence_pool);
+>>> +       ret = -EBUSY;
+>>>
+>>> -       return 0;
+>>> +free_pool:
+>>> +#ifdef CONFIG_CONTIG_ALLOC
+>>> +       free_contig_range(page_to_pfn(virt_to_page((void *)addr)), 
+>>> free_size / PAGE_SIZE);
+>>> +#else
+>>> +       free_pages_exact((void *)addr, free_size);
+>>> +#endif
+>>
+>> You moved this from kfence_init_pool_late - that did "__kfence_pool =
+>> NULL" which is missing now.
+> Thanks for spotting this, I added it in v2.
+> 
