@@ -2,289 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FE775052A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC664750529
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbjGLKwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S231555AbjGLKwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbjGLKwl (ORCPT
+        with ESMTP id S229536AbjGLKwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:52:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A324C10C7;
-        Wed, 12 Jul 2023 03:52:39 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C8cnfx003815;
-        Wed, 12 Jul 2023 10:52:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=9kopEKy0CzwxpGm86TYpnrg0eSGrBkWZlaQuOJ20tVI=;
- b=W9gX/VxAwxjHpXSOHzwq5KSifC1yoeLSwDCOzUHpLESMZaDwEtJX3UTQRoET25ToLFKt
- w7rWDpTRqzs5YH7Lbobockc+F0LjURWOo8Gx9lJbGABLc4ACUHRBdBf8SNK57yCy/+QG
- 1uFG3VYvAsSwbe7/Z/zFBxcGaFu1ePbKDDzKTF96j+ztmJYbo7Yj0yP01+Nw0qg1H779
- 2IolO55mN4jEMrMBL6aDkcrfFWkh4ZemIWFXs/vFhWFHkz7BUtHC6sNfQ96ZMrI+FGcQ
- vTEgTwAUEEwjEBFs1KAtDc+uouATzhLhCqCv+fioNcJ9dhIEJvTpqTb7pyo/+CL6xPLK MQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgar93av-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 10:52:32 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CAqSwC012097
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 10:52:28 GMT
-Received: from ipa-build-02.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 12 Jul 2023 03:52:26 -0700
-From:   Minghao Zhang <quic_minghao@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <linus.walleij@linaro.org>
-CC:     Minghao Zhang <quic_minghao@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_satyap@quicinc.com>,
-        <quic_tsoni@quicinc.com>
-Subject: [PATCH V3] pinctrl: qcom: Add support to log pin status before suspend for TLMM
-Date:   Wed, 12 Jul 2023 18:52:00 +0800
-Message-ID: <20230712105200.26012-1-quic_minghao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
+        Wed, 12 Jul 2023 06:52:40 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2132.outbound.protection.outlook.com [40.107.215.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5644BE77;
+        Wed, 12 Jul 2023 03:52:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JubuFrdkI8GH5WR1/ZJ5/YMiumg2n0uqXA2P1/vmuSUTHG7pi0WWSJnJaNLuxfpI5difIPrBQcAgMEzJqukc0fy2HZ2OmGd7sA50ygXsiFrtqTCnanY5fhCPIDZUxweDjij54G8mdKOuJ1QhAYqMkEtK5IB0xefoWRBinHbXO1fSTJLVNKidMoDbNXPArBLZw9LFER7bLmaw6rInVIDdp6K7b7SL9V5yt5qcp5vGfyRqHSc9zLCQZ1NXb6p3H0UKEzzzZk8U7/m94AgvmdhAT7bwyCAGmYbCro+mmPveygyijbbjsNrIxm+pT34QEvOeohzKXXVdnqqS/jiOYQKKuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d7I8KX/y3eG679NMKsc6dWCOKLapVLoTrMgx8Iug3CU=;
+ b=gj+xfBvcLmKaeAZD2K9flB9/Kpeg0N5tGYHrueBfW4g1A50AYsYLbm/XDA90V+Vs2241YuKgpVmy+twryr7CYvhIz7VBC21cQFphN8i7NYmxkAO21/LmY9i8XnwCgrRjv42aHW6+B0K8HSqklX1dXRwao55y6YIjFUHBRUYlRtaw6Jr+wb/b8zek+tXT1JkekZYdbd2KW2MoyUigrKJt62tRFdQBZENVwAZM/CtHizvnSwFxcpOFBgkGC5z7sYgtCkcSOkd80x2q1suuCpE7ezCaOXWszXNAA1CfqZ+j4DTD58q/+orMXsHWr8vRYHE5nWK/AINnxc77fzb5I9wJqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d7I8KX/y3eG679NMKsc6dWCOKLapVLoTrMgx8Iug3CU=;
+ b=hEago5gkKTmdCZkkoqly6NWxZg0gWgl21TlCG29ObWzLM7aDgJFWvmRnxWYkDOu2XrlYhmbZ0muBaEsRbPhBglHADB8+XQjUxbBy+w8ArECKxqLja0Qhu6O/c4/p1SJR+rVP1LnFx4cNRrt0MvmJ8fd/LJBOKMg242tLy6W4tpEzm6Y8OyT4fwGE8iDEMxhxW40lGllP0wubZJ/+WXpGS9H3FLEU+E0iv+osO1X5VJpEdfNDUFl4aj7HVcfoebYudvPKo+CsRY5CHx0duUjbHJJ0TdPZqzjJIOhx2OwORBUWkZDo5YPKlLsUi4kxGWuUnymyvUFhEo18nFhtHz+mVQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ TYSPR06MB6766.apcprd06.prod.outlook.com (2603:1096:400:473::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.20; Wed, 12 Jul 2023 10:52:34 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 10:52:34 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] i2c: busses: fix parameter check in i2c_gpio_fault_injector_init()
+Date:   Wed, 12 Jul 2023 18:52:17 +0800
+Message-Id: <20230712105218.11056-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4459JJjMDKUGGWmlEsARCryLzwQY7sKr
-X-Proofpoint-ORIG-GUID: 4459JJjMDKUGGWmlEsARCryLzwQY7sKr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_06,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- mlxlogscore=880 spamscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 clxscore=1011 adultscore=0 malwarescore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120096
+X-ClientProxiedBy: SG2PR01CA0182.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::20) To SG2PR06MB5288.apcprd06.prod.outlook.com
+ (2603:1096:4:1dc::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|TYSPR06MB6766:EE_
+X-MS-Office365-Filtering-Correlation-Id: df65577c-ed15-47ce-b2a3-08db82c61913
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OrGIHCP36vtnKtLbpikk7GfrZjgx4p9N+O49BaMQ+lK+29Tp5jOAT1eA5dh0+apWm1LIV+pdXoWll9RRIeGvefvi9zqnz90W6NcpKZfktnu8f3V+i6PDyqwnlndGH4mQ6rjpgjQ8dcYcMheXazVubXbzf9BGV2DgT8ALcPpvbAgWR69mm+gOOEayF8jptvHMLa6kUyUwixz2Au+BfVdv+knEYhygUkS1TyK6+DfwTDwxEpnYD551Fw2HIi8pkaxTa0JVypPWA8jqXWCieFC0nl4n9AqDyQUI4qAVAEejC184UcJnK66SZPBBVZCYmUxOFuzCrnkFk5V2jtpNknL0yGLnvtQsx+fDE2/RdO1ZU95NoYq8jmSw4SqvD+ZkudT7W3IZNLZFVPbWOZ0rygmgQeXhb6/52gOQS1J1Mhxh5w5M17pgsdcq4xisGJIdwSRnBcSdwmRU5kNvjeO0dCQJPz0YV2ij/bb5H96pGfOaEIwd0JmpvIGIe+caXXI6a00YojFKvxOYq76i6WzrDnk18VodxbrnlyRWClquVEo0Qasi9i4h4yjCpnPMTOs8BFo7XP2UkZ7IUaAnFYMZIi24eBeEDQfzdD+Km106tWmDREUkrhMCxwu0NqnN7uixXPle
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199021)(36756003)(186003)(4744005)(26005)(5660300002)(2616005)(2906002)(1076003)(6506007)(83380400001)(107886003)(6666004)(478600001)(110136005)(41300700001)(316002)(6512007)(8676002)(8936002)(66476007)(66556008)(66946007)(4326008)(6486002)(52116002)(86362001)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PyKkM9G+PrLrg2RD9UAHBI/QD+s0j3lSAv2HLvTZUm0tmtwhLbVmq1CXkpsP?=
+ =?us-ascii?Q?5xObQSybfV/kIuafw+R8p654VjJZe2WauLk2ejBMHbDarNXRt/EsTF5nwrcd?=
+ =?us-ascii?Q?oCel6SB/fP0zugd6wh/tNeMJBzGaTBFkhzYKtAht16OVDpEEOuADDfPjoLkk?=
+ =?us-ascii?Q?8+f4LZy9CJUTxoDvya1M88ACHxuabN49N/bx5K7NIgQLo20huoxG1Dz6H5iT?=
+ =?us-ascii?Q?x6pJY50A/36rZmN2kAGFLdmDqcdq+0Cn3PAQgozSdoyZaeSkBl9F8iwJ/kzo?=
+ =?us-ascii?Q?kVb1ICPrtCNFPntP/D20L0sNe0cxjMpabkjS8d+WsaiIaHYFFvArttDOtMRI?=
+ =?us-ascii?Q?1dw8FIds9uQ/4eHwBYoun4rFmD9qiPymf7nH1pLTysAWQhoCmtxll9eax7hL?=
+ =?us-ascii?Q?zxY54C0IZL01cXUhCbY40FjrXUPjV4P4zsCUhnCSL2ZYL3n35wJaY3gnE14a?=
+ =?us-ascii?Q?s7q5qwr6djtbIPFduIr3N/8es1NxywMmsGJ/8ZMUp2LTCGVZ0Lf1CWj4ulnX?=
+ =?us-ascii?Q?epfaxjFWXj1AvB3i21jxP0eN68MuNFAnXBTyBtpX/zk1p1qXgGTxUlHzhQ4V?=
+ =?us-ascii?Q?BaLOYj4S46FiUn2On60171sa+7nrk0MOKlCcsFPSjfhI0mQWnUF/c1jI9lqI?=
+ =?us-ascii?Q?V7TdkSiaDtEeV9vte12nPTK4KYqWi35hec64h9BlxiJxpuvqKG05XOaXEHZc?=
+ =?us-ascii?Q?uIuEiSiSXoVOVgecBMzwbyi7J8IrYeELfUSyB8atxDB/NqTupbHa0RVcTTcD?=
+ =?us-ascii?Q?F4c4Rc7u8JPjXKcHacirceMac2oUK549eauDtCbRifDBa0wDirhU6So3eJlY?=
+ =?us-ascii?Q?Z9NdYeCn4tKStEg1YnnLz0kksB473Is9Wf+YZxCtjl1whstLj/ykHoBECqhR?=
+ =?us-ascii?Q?h8T9Xp20vqD492i2SXJAjWd5dWoxT3ylSEwekQYw9LxTABSlhbiwwXWDzdlX?=
+ =?us-ascii?Q?TYhV07NFh6SN4EWa3X3fZEqbbRPsqdF4uYoytJmxeJ+kE8zJT2rjffFpCbU3?=
+ =?us-ascii?Q?kLLUC2PttAxNIEVl9yeqey+OABK5lvQg7shDaVALwypVQPnZsJl/eAd8lWVf?=
+ =?us-ascii?Q?+/NcSfcaX6zBjof8r6n7TnXfljSroAlrIKWea+4ebDSeZaoxgJvIJylD/28C?=
+ =?us-ascii?Q?lGEk0BSvh9jM+ByOJGykxFSeZuLivqAUT6vRHz14W1xKHG4W4bb1ewx7/va2?=
+ =?us-ascii?Q?XUNIc+GeZnWnut7qIgyvyNRbNxzhjHoWEAucT9n6/xiHCtlnDHbzSPE1YEoE?=
+ =?us-ascii?Q?IZyM3sMm+IMbmLVAnGK2VjclDrpN7jQrk4mv0AzFw2OOmAKM1WZUQlgb1XBs?=
+ =?us-ascii?Q?+E4d3F1ljrdFi3lCe1GuTrCzwOtVLpVufTm1lqBEtNs6DcbO5HW5oPRE4IXE?=
+ =?us-ascii?Q?/Yjbt9pcaAs5czgTcKnmf8eb8VLywmwfbibWLleiWOujtcqgS2zdnPT62Xlf?=
+ =?us-ascii?Q?Sk5etQoIbDEHPhOq7N7kNwWDuDmKiIlzHfEmEpiQd2lwLLP8Kk+LJNYc6Nzp?=
+ =?us-ascii?Q?uXnSVG8Ne4OIRuobueGK+tWwZkJI29OXnPG23k9lD6PZh/JiccVszwRfAR0x?=
+ =?us-ascii?Q?KSExYkAezzw+lN77XDD5of+iyB4X1vii2LrOunjH?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df65577c-ed15-47ce-b2a3-08db82c61913
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 10:52:34.0892
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r2GhXP+8dag4Kx0cSG0t6Evu0PP0hDuALTTghx0VWI7ndG8189cTw6mh3AlomoW9UTNVnw+k5DgKFQ5Vdc0jpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6766
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change supports to print pin status before device suspend
-to debug for TLMM. And expose 2 APIs to enable/disable this
-functionality.
+Make IS_ERR() judge the debugfs_create_dir() function return.
 
-Signed-off-by: Minghao Zhang <quic_minghao@quicinc.com>
+Signed-off-by: Minjie Du <duminjie@vivo.com>
 ---
- drivers/pinctrl/qcom/pinctrl-msm.c | 133 ++++++++++++++++++++++-------
- drivers/pinctrl/qcom/pinctrl-msm.h |   4 +
- 2 files changed, 108 insertions(+), 29 deletions(-)
+ drivers/i2c/busses/i2c-gpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-index 2585ef2b2793..ed1c5b2817aa 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.c
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-@@ -82,6 +82,21 @@ struct msm_pinctrl {
- 	u32 phys_base[MAX_NR_TILES];
- };
+diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
+index e5a5b9e8b..07719ad74 100644
+--- a/drivers/i2c/busses/i2c-gpio.c
++++ b/drivers/i2c/busses/i2c-gpio.c
+@@ -265,7 +265,7 @@ static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
+ 	 */
+ 	if (!i2c_gpio_debug_dir) {
+ 		i2c_gpio_debug_dir = debugfs_create_dir("i2c-fault-injector", NULL);
+-		if (!i2c_gpio_debug_dir)
++		if (!IS_ERR(i2c_gpio_debug_dir))
+ 			return;
+ 	}
  
-+static bool pinctrl_msm_log_mask;
-+
-+static const char * const pulls_keeper[] = {
-+	"no pull",
-+	"pull down",
-+	"keeper",
-+	"pull up"
-+};
-+
-+static const char * const pulls_no_keeper[] = {
-+	"no pull",
-+	"pull down",
-+	"pull up",
-+};
-+
- #define MSM_ACCESSOR(name) \
- static u32 msm_readl_##name(struct msm_pinctrl *pctrl, \
- 			    const struct msm_pingroup *g) \
-@@ -653,6 +668,29 @@ static void msm_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
- 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
- }
- 
-+static void msm_gpio_pin_status_get(struct msm_pinctrl *pctrl, const struct msm_pingroup *g,
-+				    unsigned int offset, int *is_out, unsigned int *func,
-+				    int *drive, int *pull, int *egpio_enable, int *val)
-+{
-+	u32 ctl_reg, io_reg;
-+
-+	ctl_reg = msm_readl_ctl(pctrl, g);
-+	io_reg = msm_readl_io(pctrl, g);
-+
-+	*is_out = !!(ctl_reg & BIT(g->oe_bit));
-+	*func = (ctl_reg >> g->mux_bit) & 7;
-+	*drive = (ctl_reg >> g->drv_bit) & 7;
-+	*pull = (ctl_reg >> g->pull_bit) & 3;
-+	*egpio_enable = 0;
-+	if (pctrl->soc->egpio_func && ctl_reg & BIT(g->egpio_present))
-+		*egpio_enable = !(ctl_reg & BIT(g->egpio_enable));
-+
-+	if (*is_out)
-+		*val = !!(io_reg & BIT(g->out_bit));
-+	else
-+		*val = !!(io_reg & BIT(g->in_bit));
-+}
-+
- #ifdef CONFIG_DEBUG_FS
- 
- static void msm_gpio_dbg_show_one(struct seq_file *s,
-@@ -669,40 +707,13 @@ static void msm_gpio_dbg_show_one(struct seq_file *s,
- 	int pull;
- 	int val;
- 	int egpio_enable;
--	u32 ctl_reg, io_reg;
--
--	static const char * const pulls_keeper[] = {
--		"no pull",
--		"pull down",
--		"keeper",
--		"pull up"
--	};
--
--	static const char * const pulls_no_keeper[] = {
--		"no pull",
--		"pull down",
--		"pull up",
--	};
- 
- 	if (!gpiochip_line_is_valid(chip, offset))
- 		return;
- 
- 	g = &pctrl->soc->groups[offset];
--	ctl_reg = msm_readl_ctl(pctrl, g);
--	io_reg = msm_readl_io(pctrl, g);
--
--	is_out = !!(ctl_reg & BIT(g->oe_bit));
--	func = (ctl_reg >> g->mux_bit) & 7;
--	drive = (ctl_reg >> g->drv_bit) & 7;
--	pull = (ctl_reg >> g->pull_bit) & 3;
--	egpio_enable = 0;
--	if (pctrl->soc->egpio_func && ctl_reg & BIT(g->egpio_present))
--		egpio_enable = !(ctl_reg & BIT(g->egpio_enable));
--
--	if (is_out)
--		val = !!(io_reg & BIT(g->out_bit));
--	else
--		val = !!(io_reg & BIT(g->in_bit));
-+	msm_gpio_pin_status_get(pctrl, g, offset, &is_out, &func,
-+					&drive, &pull, &egpio_enable, &val);
- 
- 	if (egpio_enable) {
- 		seq_printf(s, " %-8s: egpio\n", g->grp.name);
-@@ -732,6 +743,39 @@ static void msm_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
- #define msm_gpio_dbg_show NULL
- #endif
- 
-+static void msm_gpio_log_pin_status(struct gpio_chip *chip, unsigned int offset)
-+{
-+	const struct msm_pingroup *g;
-+	struct msm_pinctrl *pctrl = gpiochip_get_data(chip);
-+	unsigned int func;
-+	int is_out;
-+	int drive;
-+	int pull;
-+	int val;
-+	int egpio_enable;
-+
-+	if (!gpiochip_line_is_valid(chip, offset))
-+		return;
-+
-+	g = &pctrl->soc->groups[offset];
-+	msm_gpio_pin_status_get(pctrl, g, offset, &is_out, &func,
-+					&drive, &pull, &egpio_enable, &val);
-+
-+	pr_debug("%s: %s, %s, func%d, %dmA, %s\n",
-+		g->grp.name, is_out ? "out" : "in",
-+		val ? "high" : "low", func,
-+		msm_regval_to_drive(drive),
-+		pctrl->soc->pull_no_keeper ? pulls_no_keeper[pull] : pulls_keeper[pull]);
-+}
-+
-+static void msm_gpios_status(struct gpio_chip *chip)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < chip->ngpio; i++)
-+		msm_gpio_log_pin_status(chip, i);
-+}
-+
- static int msm_gpio_init_valid_mask(struct gpio_chip *gc,
- 				    unsigned long *valid_mask,
- 				    unsigned int ngpios)
-@@ -1475,6 +1519,35 @@ SIMPLE_DEV_PM_OPS(msm_pinctrl_dev_pm_ops, msm_pinctrl_suspend,
- 
- EXPORT_SYMBOL(msm_pinctrl_dev_pm_ops);
- 
-+void debug_pintctrl_msm_enable(void)
-+{
-+	pinctrl_msm_log_mask = true;
-+}
-+EXPORT_SYMBOL(debug_pintctrl_msm_enable);
-+
-+void debug_pintctrl_msm_disable(void)
-+{
-+	pinctrl_msm_log_mask = false;
-+}
-+EXPORT_SYMBOL(debug_pintctrl_msm_disable);
-+
-+static __maybe_unused int noirq_msm_pinctrl_suspend(struct device *dev)
-+{
-+	struct msm_pinctrl *pctrl = dev_get_drvdata(dev);
-+
-+	if (pinctrl_msm_log_mask) {
-+		pr_debug("%s\n", pctrl->chip.label);
-+		msm_gpios_status(&pctrl->chip);
-+	}
-+
-+	return 0;
-+}
-+
-+const struct dev_pm_ops noirq_msm_pinctrl_dev_pm_ops = {
-+	.suspend_noirq = noirq_msm_pinctrl_suspend,
-+};
-+EXPORT_SYMBOL(noirq_msm_pinctrl_dev_pm_ops);
-+
- int msm_pinctrl_probe(struct platform_device *pdev,
- 		      const struct msm_pinctrl_soc_data *soc_data)
- {
-@@ -1536,6 +1609,8 @@ int msm_pinctrl_probe(struct platform_device *pdev,
- 	if (ret)
- 		return ret;
- 
-+	pinctrl_msm_log_mask = false;
-+
- 	platform_set_drvdata(pdev, pctrl);
- 
- 	dev_dbg(&pdev->dev, "Probed Qualcomm pinctrl driver\n");
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
-index 5e4410bed823..60e0257dafbf 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.h
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.h
-@@ -161,6 +161,10 @@ struct msm_pinctrl_soc_data {
- };
- 
- extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
-+extern const struct dev_pm_ops noirq_msm_pinctrl_dev_pm_ops;
-+
-+void debug_pintctrl_msm_enable(void);
-+void debug_pintctrl_msm_disable(void);
- 
- int msm_pinctrl_probe(struct platform_device *pdev,
- 		      const struct msm_pinctrl_soc_data *soc_data);
 -- 
-2.17.1
+2.39.0
 
