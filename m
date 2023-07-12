@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE044750AA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C54750AAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjGLORH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 10:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S232252AbjGLOSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjGLORF (ORCPT
+        with ESMTP id S231773AbjGLOSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:17:05 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FD112E;
-        Wed, 12 Jul 2023 07:17:04 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5700b15c12fso78427367b3.1;
-        Wed, 12 Jul 2023 07:17:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689171424; x=1691763424;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tyyFJfH5D8Bahiy0fpzGvTieHeBNsFN/lGuaj1/X0Yw=;
-        b=QPWJaI0s6BhnWK18XsagKyGIwmUUw1CSGjcwIDpCCik1A3oRQQdh22hQlebTtkEGRC
-         8RNs/qZvwgzngnZ9/uNJj0/czaQ7NGeR1pdXZyGO5YOXfzl6RaJHj1NV2r/q5SGjkyJv
-         IMr9pJ76E7iEVVZkHMJtz65nTARQV8F3aR3MVSl5HMjuHwV4iTxUDd3OyMrTo+ZoKcF/
-         RUKffUquR8dTDTLG8o9quh2iwBCTQRysljnkNiSqL4pu6MCEWj2CotkXv6Tz1s5JFNsx
-         t/b56uotAQ9gtGyghxlh2Um5cNmUiwvdfQ/l2R4gLdEtaWWgWPHoLW1IAk50xFfWOZRz
-         saTg==
-X-Gm-Message-State: ABy/qLYCcP2lsXlgvc21mhdIE21RDFR0gODOfM9e5s1NgLGW5NQiTLCc
-        L5sQPy3BrlSJ65ZJFyoL8O6yI6n6DKy4sw==
-X-Google-Smtp-Source: APBJJlED3MiB1h58MvI3CEE1zUbP2k+V5iFclE+HKSuKnStPCorlG5fifPR5gqYEyu4u0qK6uH/2+g==
-X-Received: by 2002:a0d:c784:0:b0:56f:ff88:2e43 with SMTP id j126-20020a0dc784000000b0056fff882e43mr17762581ywd.27.1689171423726;
-        Wed, 12 Jul 2023 07:17:03 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id x66-20020a0dee45000000b005772646629csm1174508ywe.144.2023.07.12.07.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 07:17:03 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-579d5d89b41so78328727b3.2;
-        Wed, 12 Jul 2023 07:17:03 -0700 (PDT)
-X-Received: by 2002:a5b:a83:0:b0:bc9:1019:543 with SMTP id h3-20020a5b0a83000000b00bc910190543mr15888117ybq.58.1689171422864;
- Wed, 12 Jul 2023 07:17:02 -0700 (PDT)
+        Wed, 12 Jul 2023 10:18:41 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5104810C2;
+        Wed, 12 Jul 2023 07:18:39 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36CEISXg027458;
+        Wed, 12 Jul 2023 09:18:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1689171508;
+        bh=Q2qC031RY1YwzS5Cvq9Q8bcfDhZxdfNO7PiWoI1D2AU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=YrKAFrXEOpfRBZrc7MLa0IbE9BYhs/x8CconZK6ucp8anrkt8sSp1uo8TElOomCKP
+         AtdER/fCA46dQvKXcj9KTzAFheffGsCtpBStHrz4t3E4y3I1RbVj+mr+v2a9sWZZ4y
+         /HFoNp0/vif6ai/VOC1MwIVUuYP1udXprAKAu/lE=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36CEIS2w020366
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 12 Jul 2023 09:18:28 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
+ Jul 2023 09:18:28 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 12 Jul 2023 09:18:28 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36CEISLa079341;
+        Wed, 12 Jul 2023 09:18:28 -0500
+Date:   Wed, 12 Jul 2023 09:18:28 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Jayesh Choudhary <j-choudhary@ti.com>
+CC:     <vigneshr@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <afd@ti.com>, <s-vadapalli@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 3/5] arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY
+ nodes
+Message-ID: <20230712141828.lnpo4mhd5dv34rlz@census>
+References: <20230710101705.154119-1-j-choudhary@ti.com>
+ <20230710101705.154119-4-j-choudhary@ti.com>
 MIME-Version: 1.0
-References: <20230712140116.18718-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230712140116.18718-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jul 2023 16:16:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXkMWDsjp_QOMUeV3XN5TdYtmMqX1GKbV=Bn8Q-3zyJYg@mail.gmail.com>
-Message-ID: <CAMuHMdXkMWDsjp_QOMUeV3XN5TdYtmMqX1GKbV=Bn8Q-3zyJYg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: renesas_sdhi: remove outdated indentation
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230710101705.154119-4-j-choudhary@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 4:05 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Using tabs to make a structure initialization more readable is not
-> considered helpful. Remove the final appearance from this driver.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+On 15:47-20230710, Jayesh Choudhary wrote:
+> From: Siddharth Vadapalli <s-vadapalli@ti.com>
+> 
+> J784S4 SoC has 4 Serdes instances along with their respective WIZ
+> instances. Add device-tree nodes for them and disable them by default.
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> [j-choudhary@ti.com: fix serdes_wiz clock order]
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+NAK. This patch introduces the following dtbs_check warning.
+arch/arm64/boot/dts/ti/k3-am69-sk.dtb: serdes-refclk: 'clock-frequency' is a required property
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
