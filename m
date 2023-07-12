@@ -2,313 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E1674FED5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D5674FED6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjGLFoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 01:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S231853AbjGLFoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 01:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjGLFoH (ORCPT
+        with ESMTP id S231790AbjGLFoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 01:44:07 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3481734;
-        Tue, 11 Jul 2023 22:44:06 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-791b8525b59so2389629241.1;
-        Tue, 11 Jul 2023 22:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689140645; x=1691732645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1X8svQeU/vQ8nNpre2HEbmEgp/6gfX998+HBlVUgH8g=;
-        b=OQEx/BDgWACgQBVnRZ6QGg0Y5fGar/q8v3ojwm1U5XaXpFmITrnL2Ye3Mynj3N7S61
-         RoGj8Qu6XliUGqj2qQU/Mn8khDne3AP+kkv6+UMdgJEmxfEyedwlzuPo14Aopt1Hx+IK
-         5TG/F4k3Xn0wmAiNi2dTSh2qgKPm6CtKUxJD5u+8aEXeeNnJ8SU0hehCdVPS7J4rUsJU
-         hkhvr1J1x3wtZmg/XCCdrOaw+ZA2nW71XDrfPb286KZTFmQEwi/wDk2yrnJYaspwtfFq
-         mhK3kFYuuqS5fRjoNVEpa9Uj1x29AqDc3BN9keJO9eitclck9ej1hNco59OZyNJqTVS4
-         x4bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689140645; x=1691732645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1X8svQeU/vQ8nNpre2HEbmEgp/6gfX998+HBlVUgH8g=;
-        b=Af9wkdkOsL8c304JWvbK+lB6JugeOn9TusFHvU5zzXUwOR43kOIorQNYPYbQOBvQLW
-         RuQGVDYlkTsBRt1Fb65E0XmLmth/QpXhcVf0X/oGRsM1U4ckLceVxyFBPIMnXlg7BiuM
-         HZbnp+K2w32jjoMjOPa81Ti0FjyJsArvEFMPa5q3UmvC/vrrXJpa2DZOE5srG1znK8oa
-         74wCDGj+B9995C3w6/6eELGILXDRLze30XdHyInIaMau6HbJmRVxzI/Ch6kVcIN9tLqs
-         RsYevapelVW1qV24DpxcjycUdTFcvFDQ16LMmOqASvjyD3GaHshyeCNCgCn5weTpk/ZD
-         mu6w==
-X-Gm-Message-State: ABy/qLYWBiSTGUMjJuekBaHbKIUqEnU5pWPy6lHg2GOJRmBp7ieAIwUN
-        n+bnX6NJ5rAVFvSWoQfZ91X+xk2OxjWv0r1c26g=
-X-Google-Smtp-Source: APBJJlGYUFw6zPaJGxaLXZ60xuExH+lESdQi+xlDFx820cVhR+l2t9OoroTZZWdJtzKaJW9qNpw5+pdWQYGZl+Zsg1w=
-X-Received: by 2002:a05:6102:395:b0:443:895d:1b53 with SMTP id
- m21-20020a056102039500b00443895d1b53mr9071453vsq.10.1689140645129; Tue, 11
- Jul 2023 22:44:05 -0700 (PDT)
+        Wed, 12 Jul 2023 01:44:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290CD173B;
+        Tue, 11 Jul 2023 22:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689140667; x=1720676667;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xkJNOQbIe3Ek/OWTXqgC8D9Wm7aeIy2w4ZWDPqFFbw4=;
+  b=EzPBQ98aO4uKmBBLLl81dc4Z12Kkfo4wu7QqOR9Vgdy85J5yQPcOGoPa
+   dhk05ixNJk6nFbPDAmfHSTmtkBzdzoobRea0kUVtPurOFqrURXFKUSQVc
+   +oVHrenbDjymtjakX1phvG6hllOn5+1f2p40HbUMXNRLPdiLp+8sEx79K
+   u6F75fCjjyAcbLkVMNFQNSR8u+X/+6aOhDzVvgCy6y9G9K1r9EN83IXQM
+   4r4l7+13hnglvhKK14q7FECDfnnPOPOgZTO4/LFL4XjnveXs1fvqG+TfH
+   4rpzoqYs7dYnCxZO7caNO8jG0N+C/mw7c1jbdgXatWvmksxAx8898C/RI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="368342779"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="368342779"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 22:44:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="724745735"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="724745735"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.166])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 22:44:17 -0700
+Message-ID: <8256a332-6a9c-c552-ceb5-fc6cc08792cd@intel.com>
+Date:   Wed, 12 Jul 2023 08:44:14 +0300
 MIME-Version: 1.0
-References: <20230710183338.58531-1-ivan@cloudflare.com> <2023071039-negate-stalemate-6987@gregkh>
- <CABWYdi39+TJd1qV3nWs_eYc7XMC0RvxG22ihfq7rzuPaNvn1cQ@mail.gmail.com>
- <CAOQ4uxiFhkSM2pSNLCE6cLz6mhYOvk5D7vDsghVTqy9cDqeqew@mail.gmail.com> <CABWYdi26iboFTFz+Vex3VO0fzmFzyfOxgr-qc964mLiC3En7=A@mail.gmail.com>
-In-Reply-To: <CABWYdi26iboFTFz+Vex3VO0fzmFzyfOxgr-qc964mLiC3En7=A@mail.gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 12 Jul 2023 08:43:53 +0300
-Message-ID: <CAOQ4uxgLp+gwJPTWj9uwhncx8RD5-mZY7qOaD2C6pbu7c4+srw@mail.gmail.com>
-Subject: Re: [PATCH] kernfs: attach uuid for every kernfs and report it in fsid
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org, kernel-team@cloudflare.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH 3/3] perf machine: Include data symbols in the kernel map
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230620201818.1670753-1-namhyung@kernel.org>
+ <20230620201818.1670753-3-namhyung@kernel.org>
+ <a791e982-ada3-7f26-e105-bc7fa9c7d346@intel.com>
+ <CAM9d7cjZA9JD_bxkaRyJxgt4sirCvwdyCARVTGMPOGHsip+MHA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAM9d7cjZA9JD_bxkaRyJxgt4sirCvwdyCARVTGMPOGHsip+MHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 1:04=E2=80=AFAM Ivan Babrou <ivan@cloudflare.com> w=
-rote:
->
-> On Tue, Jul 11, 2023 at 2:49=E2=80=AFAM Amir Goldstein <amir73il@gmail.co=
-m> wrote:
-> >
-> > On Tue, Jul 11, 2023 at 12:21=E2=80=AFAM Ivan Babrou <ivan@cloudflare.c=
-om> wrote:
-> > >
-> > > On Mon, Jul 10, 2023 at 12:40=E2=80=AFPM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Mon, Jul 10, 2023 at 11:33:38AM -0700, Ivan Babrou wrote:
-> > > > > The following two commits added the same thing for tmpfs:
-> > > > >
-> > > > > * commit 2b4db79618ad ("tmpfs: generate random sb->s_uuid")
-> > > > > * commit 59cda49ecf6c ("shmem: allow reporting fanotify events wi=
-th file handles on tmpfs")
-> > > > >
-> > > > > Having fsid allows using fanotify, which is especially handy for =
-cgroups,
-> > > > > where one might be interested in knowing when they are created or=
- removed.
-> > > > >
-> > > > > Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
-> > > > > ---
-> > > > >  fs/kernfs/mount.c | 13 ++++++++++++-
-> > > > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-> > > > > index d49606accb07..930026842359 100644
-> > > > > --- a/fs/kernfs/mount.c
-> > > > > +++ b/fs/kernfs/mount.c
-> > > > > @@ -16,6 +16,8 @@
-> > > > >  #include <linux/namei.h>
-> > > > >  #include <linux/seq_file.h>
-> > > > >  #include <linux/exportfs.h>
-> > > > > +#include <linux/uuid.h>
-> > > > > +#include <linux/statfs.h>
-> > > > >
-> > > > >  #include "kernfs-internal.h"
-> > > > >
-> > > > > @@ -45,8 +47,15 @@ static int kernfs_sop_show_path(struct seq_fil=
-e *sf, struct dentry *dentry)
-> > > > >       return 0;
-> > > > >  }
-> > > > >
-> > > > > +int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-> > > > > +{
-> > > > > +     simple_statfs(dentry, buf);
-> > > > > +     buf->f_fsid =3D uuid_to_fsid(dentry->d_sb->s_uuid.b);
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > >  const struct super_operations kernfs_sops =3D {
-> > > > > -     .statfs         =3D simple_statfs,
-> > > > > +     .statfs         =3D kernfs_statfs,
-> > > > >       .drop_inode     =3D generic_delete_inode,
-> > > > >       .evict_inode    =3D kernfs_evict_inode,
-> > > > >
-> > > > > @@ -351,6 +360,8 @@ int kernfs_get_tree(struct fs_context *fc)
-> > > > >               }
-> > > > >               sb->s_flags |=3D SB_ACTIVE;
-> > > > >
-> > > > > +             uuid_gen(&sb->s_uuid);
-> > > >
-> > > > Since kernfs has as lot of nodes (like hundreds of thousands if not=
- more
-> > > > at times, being created at boot time), did you just slow down creat=
-ing
-> > > > them all, and increase the memory usage in a measurable way?
-> > >
-> > > This is just for the superblock, not every inode. The memory increase
-> > > is one UUID per kernfs instance (there are maybe 10 of them on a basi=
-c
-> > > system), which is trivial. Same goes for CPU usage.
-> > >
-> > > > We were trying to slim things down, what userspace tools need this
-> > > > change?  Who is going to use it, and what for?
-> > >
-> > > The one concrete thing is ebpf_exporter:
-> > >
-> > > * https://github.com/cloudflare/ebpf_exporter
-> > >
-> > > I want to monitor cgroup changes, so that I can have an up to date ma=
-p
-> > > of inode -> cgroup path, so that I can resolve the value returned fro=
-m
-> > > bpf_get_current_cgroup_id() into something that a human can easily
-> > > grasp (think system.slice/nginx.service). Currently I do a full sweep
-> > > to build a map, which doesn't work if a cgroup is short lived, as it
-> > > just disappears before I can resolve it. Unfortunately, systemd
-> > > recycles cgroups on restart, changing inode number, so this is a very
-> > > real issue.
-> > >
-> > > There's also this old wiki page from systemd:
-> > >
-> > > * https://freedesktop.org/wiki/Software/systemd/Optimizations
-> > >
-> > > Quoting from there:
-> > >
-> > > > Get rid of systemd-cgroups-agent. Currently, whenever a systemd cgr=
-oup runs empty a tool "systemd-cgroups-agent" is invoked by the kernel whic=
-h then notifies systemd about it. The need for this tool should really go a=
-way, which will save a number of forked processes at boot, and should make =
-things faster (especially shutdown). This requires introduction of a new ke=
-rnel interface to get notifications for cgroups running empty, for example =
-via fanotify() on cgroupfs.
-> > >
-> > > So a similar need to mine, but for different systemd-related needs.
-> > >
-> > > Initially I tried adding this for cgroup fs only, but the problem fel=
-t
-> > > very generic, so I pivoted to having it in kernfs instead, so that an=
-y
-> > > kernfs based filesystem would benefit.
-> > >
-> > > Given pretty much non-existing overhead and simplicity of this, I
-> > > think it's a change worth doing, unless there's a good reason to not
-> > > do it. I cc'd plenty of people to make sure it's not a bad decision.
-> > >
-> >
-> > I agree. I think it was a good decision.
-> > I have some followup questions though.
-> >
-> > I guess your use case cares about the creation of cgroups?
-> > as long as the only way to create a cgroup is via vfs
-> > vfs_mkdir() -> ... cgroup_mkdir()
-> > fsnotify_mkdir() will be called.
-> > Is that a correct statement?
->
-> As far as I'm aware, this is the only way. We have the cgroups mailing
-> list CC'd to confirm.
->
-> I checked systemd and docker as real world consumers and both use
-> mkdir and are visible in fanotify with this patch applied.
->
-> > Because if not, then explicit fsnotify_mkdir() calls may be needed
-> > similar to tracefs/debugfs.
-> >
-> > I don't think that the statement holds for dieing cgroups,
-> > so explicit fsnotify_rmdir() are almost certainly needed to make
-> > inotify/fanotify monitoring on cgroups complete.
-> >
-> > I am on the fence w.r.t making the above a prerequisite to merging
-> > your patch.
-> >
-> > One the one hand, inotify monitoring of cgroups directory was already
-> > possible (I think?) with the mentioned shortcomings for a long time.
-> >
-> > On the other hand, we have an opportunity to add support to fanotify
-> > monitoring of cgroups directory only after the missing fsnotify hooks
-> > are added, making fanotify API a much more reliable option for
-> > monitoring cgroups.
-> >
-> > So I am leaning towards requiring the missing fsnotify hooks before
-> > attaching a unique fsid to cgroups/kernfs.
->
-> Unless somebody responsible for cgroups says there's a different way
-> to create cgroups, I think this requirement doesn't apply.
->
+On 11/07/23 20:30, Namhyung Kim wrote:
+> Hi Adrian,
+> 
+> On Tue, Jul 11, 2023 at 8:19 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 20/06/23 23:18, Namhyung Kim wrote:
+>>> When perf record -d is used, it needs data mmaps to symbolize global data.
+>>> But it missed to collect kernel data maps so it cannot symbolize them.
+>>> Instead of having a separate map, just increase the kernel map size to
+>>> include the data section.
+>>>
+>>> Probably we can have a separate kernel map for data, but the current
+>>> code assumes a single kernel map.  So it'd require more changes in other
+>>> places and looks error-prone.  I decided not to go that way for now.
+>>>
+>>> Also it seems the kernel module size already includes the data section.
+>>>
+>>> For example, my system has the following.
+>>>
+>>>   $ grep -e _stext -e _etext -e _edata /proc/kallsyms
+>>>   ffffffff99800000 T _stext
+>>>   ffffffff9a601ac8 T _etext
+>>>   ffffffff9b446a00 D _edata
+>>>
+>>> Size of the text section is (0x9a601ac8 - 0x99800000 = 0xe01ac8) and
+>>> size of the data section is (0x9b446a00 - 0x99800000 = 0x1c46a00).
+>>>
+>>> Before:
+>>>   $ perf record -d true
+>>>
+>>>   $ perf report -D | grep MMAP | head -1
+>>>   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0xe01ac8) @ 0xffffffff99800000]: x [kernel.kallsyms]_text
+>>>                                                                ^^^^^^^^
+>>>                                                                  here
+>>> After:
+>>>   $ perf report -D | grep MMAP | head -1
+>>>   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0x1c46a00) @ 0xffffffff99800000]: x [kernel.kallsyms]_text
+>>>                                                                ^^^^^^^^^
+>>>
+>>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>>> ---
+>>>  tools/perf/util/machine.c | 5 ++++-
+>>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+>>> index ddc0a2130caf..e93a66f6e0b3 100644
+>>> --- a/tools/perf/util/machine.c
+>>> +++ b/tools/perf/util/machine.c
+>>> @@ -1218,7 +1218,10 @@ static int machine__get_running_kernel_start(struct machine *machine,
+>>>
+>>>       *start = addr;
+>>>
+>>> -     err = kallsyms__get_function_start(filename, "_etext", &addr);
+>>> +     if (machine->has_data_mmap)
+>>> +             err = kallsyms__get_symbol_start(filename, "_edata", &addr);
+>>> +     else
+>>> +             err = kallsyms__get_function_start(filename, "_etext", &addr);
+>>
+>> What is the downside of just extending it unconditionally?
+> 
+> I don't know.. maybe some people would argue it needs the
+> proper protection bits other than 'x' but this patch also breaks it.
+> But as I said, I'm not sure if we really want to change that now.
+> 
+> That said, we can make it unconditional. :)
 
-I was more concerned about the reliability of FAN_DELETE for
-dieing cgroups without an explicit rmdir() from userspace.
+Might as well to start with.  Will need a big comment.
 
-> > In any case, either with or without the missing hooks, I would not
-> > want this patch merged until Jan had a chance to look at the
-> > implications and weigh in on the missing hooks question.
-> > Jan is on vacation for three weeks, so in the meanwhile, feel free
-> > to implement and test the missing hooks or wait for his judgement.
->
-> Sure, I can definitely wait.
->
-> > On an unrelated side topic,
-> > I would like to point your attention to this comment in the patch that
-> > was just merged to v6.5-rc1:
-> >
-> > 69562eb0bd3e ("fanotify: disallow mount/sb marks on kernel internal pse=
-udo fs")
-> >
-> >         /*
-> >          * mount and sb marks are not allowed on kernel internal pseudo=
- fs,
-> >          * like pipe_mnt, because that would subscribe to events on all=
- the
-> >          * anonynous pipes in the system.
-> >          *
-> >          * SB_NOUSER covers all of the internal pseudo fs whose objects=
- are not
-> >          * exposed to user's mount namespace, but there are other SB_KE=
-RNMOUNT
-> >          * fs, like nsfs, debugfs, for which the value of allowing sb a=
-nd mount
-> >          * mark is questionable. For now we leave them alone.
-> >          */
-> >
-> > My question to you, as the only user I know of for fanotify FAN_REPORT_=
-FID
-> > on SB_KERNMOUNT, do you have plans to use a mount or filesystem mark
-> > to monitor cgroups? or only inotify-like directory watches?
->
-> My plan is to use FAN_MARK_FILESYSTEM for the whole cgroup mount,
-> since that is what I was able to make work with my limited
-> understanding of the whole fanotify thing. I started with
-> fanotify_fid.c example from here:
->
-> * https://man7.org/linux/man-pages/man7/fanotify.7.html
->
-> My existing code does the mark this way (on v6.5-rc1 with my patch applie=
-d):
->
-> ret =3D fanotify_mark(fd, FAN_MARK_ADD | FAN_MARK_ONLYDIR |
-> FAN_MARK_FILESYSTEM, FAN_CREATE | FAN_DELETE | FAN_ONDIR, AT_FDCWD,
-> argv[1]);
->
-> My goal is to set a watch for all cgroups and drop capabilities, so
-> that I can keep monitoring for events while being unprivileged.
+Also do we know if all arch's do it like that? Perhaps
+need to fallback to _etext if _edata is not found?
 
-As long as you do not need to open_by_handle_at() or as long as you
-retain CAP_DAC_READ_SEARCH.
+> 
+> Thanks,
+> Namhyung
+> 
+>>
+>>>       if (!err)
+>>>               *end = addr;
+>>>
+>>
 
-> As far
-> as I'm aware, this sort of recursive monitoring without races isn't
-> possible with inode level monitoring (I might be wrong here).
-
-You are not wrong.
-
->
-> I do get -EINVAL for FAN_MARK_MOUNT instead of FAN_MARK_FILESYSTEM.
-
-Right. FAN_CREATE | FAN_DELETE not supported with FAN_MARK_MOUNT.
-
-Thanks,
-Amir.
