@@ -2,179 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E5B75044F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E8875044D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbjGLKVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S231765AbjGLKUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbjGLKU7 (ORCPT
+        with ESMTP id S231642AbjGLKUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:20:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AADA1999
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689157212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EPjeYevfqbPQ4JlLcY8o9Fqt9gv9gjqLCmOEwCBjH0Y=;
-        b=fYWfV2ZRMDeFYYh5mFvDO9xnX/eXYyOXVNV0MeQMIiVehE1D3/hFRIOT/4fJvIK163089b
-        CW1PwBUFL3cq2z8KAroSlRXo6MOe48AZDypxlGP+qdVUaktxDxNw70+MohVCt+8Naaid8M
-        eLn0Yx9IOvChSh/eM9ZkcgEp+Lhxk04=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-373-imokWBKuM2OfCFEyH4b_gg-1; Wed, 12 Jul 2023 06:20:11 -0400
-X-MC-Unique: imokWBKuM2OfCFEyH4b_gg-1
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-51e16d34722so4491725a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:20:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689157210; x=1691749210;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EPjeYevfqbPQ4JlLcY8o9Fqt9gv9gjqLCmOEwCBjH0Y=;
-        b=DugZiXqdkxWNpTLsH6ULi8vCmaJ7lFmqazRgjDcV59XOUvlU8nJbJFofBK2GYYxyFE
-         SziK41hhhgvd5kumgEbvP9YfKjOHzEuVz3QLJBD+m8YmM5Fo6JJ7rPSbJETheCBTOh1J
-         gaZn78AsrylsksOSWy2eeLM9uLR/oOru3EBq7vaqlZ/9MHhAZQF/WSKYsshsog/59c9b
-         Vvl8a8vRAqQgEax7g5jMLznT92pg+u3N4dQ+gxFlr48VFYd7s1g/5tI+qXZILrSSKgMO
-         dqJ6Cw8yArwajXWBrZ+dwhHaOtTQesKLXJkX/pBPgAX76I3EklcbXZCKMfOgu6ybAV1t
-         vhLA==
-X-Gm-Message-State: ABy/qLbND+2DTkK8NZgQrESi1CgTNCKospx6jKTbsfwrWwQHCZIMYxh+
-        S7erRMIFQ1yKjPvEEm7Y75Etf16zf1mj8zwN+eWG1wVWcDB5acoykPtMr22h3ZMkiQIfyicOjP3
-        G7MNQv+ZTUd9eLnp5e1qhhS1WhRoSRQsR
-X-Received: by 2002:a05:6402:4c9:b0:51d:df5e:5674 with SMTP id n9-20020a05640204c900b0051ddf5e5674mr19076587edw.1.1689157210262;
-        Wed, 12 Jul 2023 03:20:10 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGsYUWHNn5ole/Z1wCnN0grhEeSpqhiQIF15CpZEW+eQ4zV1FRMf2WQrYguHABgq3AUj8ZUjA==
-X-Received: by 2002:a05:6402:4c9:b0:51d:df5e:5674 with SMTP id n9-20020a05640204c900b0051ddf5e5674mr19076567edw.1.1689157209891;
-        Wed, 12 Jul 2023 03:20:09 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id be25-20020a0564021a3900b00514a5f7a145sm2544922edb.37.2023.07.12.03.20.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 03:20:09 -0700 (PDT)
-Message-ID: <d56a3a15-58f7-1af6-0563-55e2db4ac45b@redhat.com>
-Date:   Wed, 12 Jul 2023 12:20:08 +0200
+        Wed, 12 Jul 2023 06:20:33 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC53CAD
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:20:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689157232; x=1720693232;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tY/BfVTFYGugQI0lJy+CeErN+l4YRI6ixdTewpDFRCY=;
+  b=VgBpMT9sZxkl7XMKNGB1TFg8J4HgptpKPAWKP+rH+uWani+XkbcDzPHd
+   x5jQD8tQdJFsNh7wWeaQNQNcMnWvnq0pVGW8K5pcMMvOe65oS6S/gx29j
+   F+U0EkzricYWOSuECph2XE+tnehcN6hxK3cNblXXLBbN5x0BCT/8LBW+S
+   +rE2p0b4Gctvrl3R3+UbDHy8OhdEbK92hXFXQAQo2XZJ2s8hsiE3bRzRg
+   HAd/UmTzH9BHRKDyIs3mXAOMyMnWrSWg73hHdbTS45posLizxqTQ4rB7h
+   MUM/F7idzWbMgv0Y7pgYDXgqyL6sTSA/eD/iyDeBoQhkdsJswl/i2r5HC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="354759615"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="354759615"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 03:20:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="866070621"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="866070621"
+Received: from hoermank-mobl.ger.corp.intel.com (HELO [10.252.42.188]) ([10.252.42.188])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 03:20:26 -0700
+Message-ID: <ab085fff-ade7-02b1-22e0-acba8e6c1846@linux.intel.com>
+Date:   Wed, 12 Jul 2023 12:20:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.5-2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Content-Language: en-US, nl
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v3] ASoC: Intel: sof_rt5682: add jsl_rt5650 board config
+Content-Language: en-US
+To:     "Lu, Brent" <brent.lu@intel.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc:     "Rojewski, Cezary" <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Zhi, Yong" <yong.zhi@intel.com>,
+        "Bhat, Uday M" <uday.m.bhat@intel.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Song, Gongjun" <gongjun.song@intel.com>,
+        Terry Cheong <htcheong@chromium.org>,
+        "Chiang, Mac" <mac.chiang@intel.com>,
+        "R, Dharageswari" <dharageswari.r@intel.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230712100855.272467-1-brent.lu@intel.com>
+ <2e9a5d5b-f637-1f9a-b500-03f9c151dc26@linux.intel.com>
+ <CY5PR11MB6257F77DBF1D123FAD0DF4689736A@CY5PR11MB6257.namprd11.prod.outlook.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <CY5PR11MB6257F77DBF1D123FAD0DF4689736A@CY5PR11MB6257.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Here is the first round of fixes for platform-drivers-x86 for 6.5.
-
-Nothing special to report just various small fixes + hw-id additions.
-
-Regards,
-
-Hans
 
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+On 7/12/23 08:15, Lu, Brent wrote:
+>>> +	{
+>>> +		.id = "10EC5650",
+>>> +		.drv_name = "jsl_rt5650",
+>>> +		.machine_quirk = snd_soc_acpi_codec_list,
+>>> +		.quirk_data = &rt5650_spk,
+>>> +		.sof_tplg_filename = "sof-jsl-rt5650-dual.tplg",
+>>
+>> what does 'dual' mean in this context? it's not something we've used before
+>> so a comment would be needed IMHO.
+>>
+>> two DAIs, two codecs?
+> 
+> Dual I2S. Should we remove it? Just sof-jsl-rt5650.tplg?
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+that would be my preference, we have lots of configurations with 2 I2S
+and never mention it in the topology file name. 'dual' sounds more
+confusing than helping here.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.5-2
-
-for you to fetch changes up to 6b293a8c91bca52726448d03216e65da509e9bb7:
-
-  platform/x86: touchscreen_dmi: Add info for the Archos 101 Cesium Educ tablet (2023-07-11 12:15:30 +0200)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.5-2
-
-Misc. small fixes and hw-id additions.
-
-The following is an automated git shortlog grouped by driver:
-
-Move s2idle quirk from thinkpad-acpi to amd-pmc:
- - Move s2idle quirk from thinkpad-acpi to amd-pmc
-
-dell-ddv:
- -  Fix mangled list in documentation
- -  Improve error handling
-
-int3472/discrete:
- -  set variable skl_int3472_regulator_second_sensor storage-class-specifier to static
-
-platform/x86/amd:
- -  pmf: Add new ACPI ID AMDI0103
- -  pmc: Add new ACPI ID AMDI000A
- -  pmc: Apply nvme quirk to HP 15s-eq2xxx
-
-platform/x86/intel/tpmi:
- -  Prevent overflow for cap_offset
-
-touchscreen_dmi:
- -  Add info for the Archos 101 Cesium Educ tablet
-
-wmi:
- -  Replace open coded guid_parse_and_compare()
- -  Break possible infinite loop when parsing GUID
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      platform/x86: wmi: Break possible infinite loop when parsing GUID
-      platform/x86: wmi: Replace open coded guid_parse_and_compare()
-
-Armin Wolf (2):
-      platform/x86: dell-ddv: Improve error handling
-      platform/x86: dell-ddv: Fix mangled list in documentation
-
-Mario Limonciello (2):
-      platform/x86: Move s2idle quirk from thinkpad-acpi to amd-pmc
-      platform/x86/amd: pmc: Apply nvme quirk to HP 15s-eq2xxx
-
-Shyam Sundar S K (2):
-      platform/x86/amd: pmc: Add new ACPI ID AMDI000A
-      platform/x86/amd: pmf: Add new ACPI ID AMDI0103
-
-Srinivas Pandruvada (1):
-      platform/x86/intel/tpmi: Prevent overflow for cap_offset
-
-Thomas GENTY (1):
-      platform/x86: touchscreen_dmi: Add info for the Archos 101 Cesium Educ tablet
-
-Tom Rix (1):
-      platform/x86: int3472/discrete: set variable skl_int3472_regulator_second_sensor storage-class-specifier to static
-
- Documentation/wmi/devices/dell-wmi-ddv.rst         |   3 +-
- drivers/platform/x86/amd/Makefile                  |   2 +-
- drivers/platform/x86/amd/pmc-quirks.c              | 176 +++++++++++++++++++++
- drivers/platform/x86/amd/pmc.c                     |  32 ++--
- drivers/platform/x86/amd/pmc.h                     |  44 ++++++
- drivers/platform/x86/amd/pmf/core.c                |   3 +
- drivers/platform/x86/dell/dell-wmi-ddv.c           |   7 +-
- .../platform/x86/intel/int3472/clk_and_regulator.c |   2 +-
- drivers/platform/x86/intel/tpmi.c                  |   4 +-
- drivers/platform/x86/thinkpad_acpi.c               | 143 -----------------
- drivers/platform/x86/touchscreen_dmi.c             |  22 +++
- drivers/platform/x86/wmi.c                         |  28 ++--
- 12 files changed, 276 insertions(+), 190 deletions(-)
- create mode 100644 drivers/platform/x86/amd/pmc-quirks.c
- create mode 100644 drivers/platform/x86/amd/pmc.h
-
+The rest of the patch is fine.
