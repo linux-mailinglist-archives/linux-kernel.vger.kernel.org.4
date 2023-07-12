@@ -2,392 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB297505D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B3E7505DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbjGLLS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S232594AbjGLLS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbjGLLSG (ORCPT
+        with ESMTP id S233089AbjGLLSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:18:06 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8AB10FC;
-        Wed, 12 Jul 2023 04:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1689160671; x=1720696671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lhRxDcYtJmzjvEKOk63PC9RGZFT+CaERpZn0eKpHh6Q=;
-  b=V+DedQVmOD3i8n74nMeXP2p6Mn+y08AbNLH7fH1x9UdjNeQFx74qvDiz
-   JcbbFMtJ8E2kmN+xRcfF/PHN5yiGuJJyJOz0XXDmHUmGwy1bh/XN8xfc7
-   h/lH7E3O3aOeBmeHTNkQfxAc1r/2ZcO5fZKp4H1HzsFOoqDNxFydCyCTB
-   4tXJfvxSbYejyEJ+VnF3i+KtDt0KE24UB1LD0JaWdzInRHEfGTzVV1c1R
-   Lvy15HEOgatK3is57WG4S5Siz8KLYtkKFrcEHY6aEQPKJmu6MOb4tX/y3
-   mL+9rU7mmb4e0LNPdYX7Tu8z9awccCJ9wtM0pRbhTK0HPnazsrD+qHV/G
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="asc'?scan'208";a="235058594"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 04:17:50 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Jul 2023 04:17:49 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 12 Jul 2023 04:17:46 -0700
-Date:   Wed, 12 Jul 2023 12:17:15 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Ortiz <sameo@rivosinc.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>, <linux@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>, <devicetree@vger.kernel.org>,
-        <sorear@fastmail.com>, Jiatai He <jiatai2021@iscas.ac.cn>
-Subject: Re: [PATCH v4 1/4] RISC-V: Add Bitmanip/Scalar Crypto parsing from DT
-Message-ID: <20230712-backrest-negative-ee459a175151@wendy>
-References: <20230712084134.1648008-1-sameo@rivosinc.com>
- <20230712084134.1648008-2-sameo@rivosinc.com>
- <20230712-bulldozer-affected-199042dc3afd@wendy>
- <20230712-antibody-cried-1a6a68332c78@wendy>
+        Wed, 12 Jul 2023 07:18:52 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2106.outbound.protection.outlook.com [40.107.117.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2601736
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:18:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RpBeSBYgpWWf0mFQucYkLejweR1wlHYUi6Aw38U7t/zKvqj0UpGYILSMiTiscTypORuZjtugxQO9UeSTmDk88K10vVS6MzT7/I5kTdO57N3cHqKYktmrNblkxIAtHS7ajjTNstUEG9cebRZhn/IAYpngyCOqD2SpRvjNIPunAd+9lAgyTJwtUUJ3JcMe1wRSxTDMCxjQEIPRS1DFJJIbMoMxMA9QW0G/Eikd9exgLdtITRB6SgUDIEhN2kDGJL9KvDSMzWs5Ws1uMa2YnU7a0J3jZR3jiD/PoZzVTXBtl1qCcsrBSK/lVN4E+fjysdkNTkX+UgD9xvfRioItHirakQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hDKCicLULOso587BMmlw43A5fl+CvMB3t3AJlMmFiyI=;
+ b=JMq6vD1t1Sxew2FXlbX+3PihecKubPJVPdLe5SsOAl7lUtH6x3GnzbPftoJvDgEeTEbIvDFKEz2oilhuHVoLDQjZDgpXnbkDdBMQq4ZafcMQ/sDPBCEcRPeeA+83CbslM4fcMDlsRqCRjdhWJAIWhmGTjUVU8LaP3wLbghCDvlok4WvN7/XdcBfaHeWQiwgNeIAzQXLPSEBpT5J/sseUv6RQpU3U7Zgjahp5Oauf5A531HuVZCpdtzpOPkpL0eGHT05QwRCrSNRDxJ/XOy1qeq9G15B2V8Rkh5rWQFavKfqgg+MEZIRMFmtEzxY/uKE6Vtck8i9IYlmUayQusw5Xtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hDKCicLULOso587BMmlw43A5fl+CvMB3t3AJlMmFiyI=;
+ b=YEfsLyV05FAf5aBmJ13Zo0t4az3tcyoPOajBcLFapbMIyJl/LI2gQLNFpE9ELb/yYXLEnqqQmRUhdYY5h/V96pK3GJttrEibb+G9yyIT0wCuNiU3+ds1sNa+wYQ1yTFPmusurURi22hlIN1xYh8jqpKeqo1bHroZbdGbs1cCs5mKHYIzmdv6oFKOfZjZzOxU5I5a4bUbnsrr6SDfAlZgllzJGunDWizZlfbtD8iTPg3khSrfaBpm9XKhA2czjnSfMIfjiE8n1pwxE9CqgkmuFboIRs+P6UFAnVeha1Evt3hFfbg7fopMDQnFlW7W3QJKvnZs928bvS9Lfwr1vmJ5TQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ TYSPR06MB6544.apcprd06.prod.outlook.com (2603:1096:400:477::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
+ 2023 11:18:47 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 11:18:47 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org (open list:NVM EXPRESS DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] drivers: host: fix parameter check in nvme_fault_inject_init()
+Date:   Wed, 12 Jul 2023 19:18:37 +0800
+Message-Id: <20230712111838.11923-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0087.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::15) To SG2PR06MB5288.apcprd06.prod.outlook.com
+ (2603:1096:4:1dc::9)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jmjKz8Svm3lzfLi6"
-Content-Disposition: inline
-In-Reply-To: <20230712-antibody-cried-1a6a68332c78@wendy>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|TYSPR06MB6544:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f364131-5524-4cc9-c724-08db82c9c265
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xa6Nb1iQRAdGZad3wAVNXqfW8a1UrM4jVu1zvx9m/qV1hlIJ1/+9nywBUILaWNHa4fRHtAxZHNmvgTHli0KXg2XRT8xHJ8GUpXfkMnZny1oXNWga+7p0sGF4sGL3gQKfisEBsRAzSMTHKw68b08DMi4XdNClS+KAvE9OWvceBbJoKqkGxMCXj5E6aBLD+ieE0U8ngkp4drwU6Y82OurTcvYeQa9fVRYdR+bIbHCr3vbH75Yauf7gMEDlzPqQqgdqI+gxArgQyIY/tqt2tleOp+V5b29XBANx8FqtQSXMc7bUtfryQE0p7R56w2JIB/hJsuHhczAMyE2oxzgtry0Pa5WAPYdFEFr2bsU33uoLJvBKYL51Jg6qAL3WHe5lEkfIW38lwrfu30hTFaGPprNTKFSjdqHDGL8DLnv87OQ5AkacbvXhn+6mbUIyl8WKWvyscAk9QXKtN7s0trO0xItE8Spw1FQvi7NvaCG5f3YgTVBnbaWIraXlKBl3e/Gc3JkaiBtH6XiZB1sG89BKBghVq/OxQaFsA3S7RwvG0iaGmjMrHeT5C7jICR0lZjVm7fIaKwEI/g5pizxxnzNTmsmn687Z35320Aphvi6XSCz5+h4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199021)(38100700002)(2616005)(38350700002)(4744005)(41300700001)(316002)(2906002)(8676002)(8936002)(5660300002)(66476007)(4326008)(66556008)(66946007)(6666004)(6486002)(52116002)(6512007)(83380400001)(478600001)(36756003)(110136005)(1076003)(6506007)(107886003)(186003)(26005)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xmgZhZsHlPTlwlxtnEzpsQKnichNpbWqolWyGcT6k5oPc8sODE0jewcJlkTo?=
+ =?us-ascii?Q?GSkXhAfBsfpnxoqpeND4tZQbKj2PkN6p/Zgb+wubDkfjD9zTgkIIqIhRJe6Z?=
+ =?us-ascii?Q?1eHESGvTZS+Ffl6cZuUnvnShL/26DmE3dtePKK4rht/MRB8RXCsH66HFucHT?=
+ =?us-ascii?Q?iwALhEjWpGhbRgjhKdPeQTc2EQ5N0k3erD128aKN6tgWjTNQMxg3FHhEPRan?=
+ =?us-ascii?Q?9BnY9a43M33x9D4g1M1d+P3ft4UiMt/e0e3ndCrOcADLQRa7AuMSeWachDvD?=
+ =?us-ascii?Q?T8+YzDUT4RIKMlSiHmPoEL48qHRLgFcO5RQzj9y6gpgukBQdc2zqb4/eVuBI?=
+ =?us-ascii?Q?wQuXclSvQAhTkUKUnkRWPlAuofs/WCVoZrRJzPautQ9gmx7HGkUs/OF3gD87?=
+ =?us-ascii?Q?IHS9RfB9/IvBtrjyDk2pBVb6zW4IvzM7vX85+VkRBP2bcVOgHkBtoW1Dyfk/?=
+ =?us-ascii?Q?CP11sl2KscmnzbqhlK337WyROx/9Zm7+uCj4JA7L3459mNVF9mHpT8q4JRio?=
+ =?us-ascii?Q?HJUJQGO6QOlMvkDdgfOc+s2pB23dtFCq2m9PtbWwAUUQ4pjNk64M/lDRyR/7?=
+ =?us-ascii?Q?vw/wVGZ4H4KUaJik55r9J8WNV7i4bSch+stqm1p1fknGABHHYZXP91p4KNEr?=
+ =?us-ascii?Q?McWJQ8zJmstrpThavyeoosnJLU8gD6hZ0F+UsIQzHwsVjmMjZOtlTT6HoqyI?=
+ =?us-ascii?Q?+FFjlDfEaxNpetDvfa7zgUyY02Oaw8bO6SC2Btea+8LmG00xUUdEhnEzjRWx?=
+ =?us-ascii?Q?+pSCoAVlijXS9V1tdWoy7Tc74QZh41qYAlVKEqQtib1HuWzkIfoSuBi5M+X4?=
+ =?us-ascii?Q?AnfgunobcivtPJ+rFhFSks7i04EMHBIImklmwPhi1eEwU8HQLld4E8HzvMpl?=
+ =?us-ascii?Q?v248VryFNp0qcvpnuZg68nDT4318xhu5nLywzq6G952zGH5+QEDuY2oVvHNV?=
+ =?us-ascii?Q?JW4zLbhxlZG5V/vIVw6tQfnrJQzVbInegsEwaQq1BcyGYo2BcOniF3uG8k1z?=
+ =?us-ascii?Q?ECb8Z62jciL54mBxgFDkUjsuOE8W88uPBJUqGZNG8yKp2md6Y6aWJOhJeTes?=
+ =?us-ascii?Q?gomAqZpT6n/vMAHU7YOg6i/7cu+xtFMSWi1ZyOGgEDg9qJoB3HGksFKd7N6S?=
+ =?us-ascii?Q?CiHx2kGQiXiM58y9XbgH3rFGZtnjvosxI6cU4KWV+AJwnhg6ke+usGBAoiY8?=
+ =?us-ascii?Q?rGY9akTFiDdHJ987zHbmFbZfPx+ZRL4AAMO6M+VVO3w29wRzitgD3PqrFv3i?=
+ =?us-ascii?Q?0ex2UZa91kXDA6pHCaMu6uxu1D80juriO6cDu0H6rLBAxefjIhF/2y8HZYRY?=
+ =?us-ascii?Q?EgWnDJoOkFM5+q5zmp/0OZeq7wW3fC6R4AysBtxMzkh++Zh4Arwn0j0ndQ91?=
+ =?us-ascii?Q?qdxqcD5X48kxM1MrCZJ5gb0wDb9o8Fm10nMLx41qUF4xSDH+tbnF+yaVSPHo?=
+ =?us-ascii?Q?5DBvKoMaS96MDm4EDu29BBTSVfKcmugSXBzzk0v36OeigqZ69SG19vt4IKi4?=
+ =?us-ascii?Q?xuKQc9uIWnn0d+Ifsq21BUWGGRSrFSwRMZOtjnjkh97YHj80QlYqtUU/ZFZD?=
+ =?us-ascii?Q?bKmr7hTXTlMj+8ludiNgLmrXl4JpHssZoGZpME77?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f364131-5524-4cc9-c724-08db82c9c265
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 11:18:46.6519
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WZN97aoClfK41Rq5XrlBkqGypVPHE8v35GzCU3TSxCqySY+5hobKjnp6WcSkMSEi/WIJha+OzHbbm/1e65UOlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6544
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---jmjKz8Svm3lzfLi6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Make IS_ERR() judge the debugfs_create_dir() function return.
 
-Me again, spotted an issue after sending.
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ drivers/nvme/host/fault_inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, Jul 12, 2023 at 11:46:52AM +0100, Conor Dooley wrote:
-> On Wed, Jul 12, 2023 at 11:39:16AM +0100, Conor Dooley wrote:
-> > On Wed, Jul 12, 2023 at 10:41:17AM +0200, Samuel Ortiz wrote:
-> > > From: "Hongren (Zenithal) Zheng" <i@zenithal.me>
-> > >=20
-> > > Parse Zb/Zk related string from DT and output them to cpuinfo.
-> >=20
-> > One thing that has sprung to mind is that this is not limited to DT
-> > anymore, since the information could in theory come from ACPI too.
-> > Ditto the title I guess.
-> >=20
-> > > It is worth noting that the Scalar Crypto extension defines "zk" as a
-> > > shorthand for the Zkn, Zkr and Zkt extensions. Since the Zkn one also
-> > > implies the Zbkb, Zbkc and Zbkx extensions, simply passing the valid
-> > > "zk" extension name through a DT will enable all of the  Zbkb, Zbkc,
-> > > Zbkx, Zkn, Zkr and Zkt extensions.
-> > >=20
-> > > Also, since there currently is no mechanism to merge all enabled
-> > > extensions, the generated cpuinfo output could be relatively large.
-> > > For example, setting the "riscv,isa" DT property to "rv64imafdc_zk_zk=
-s"
-> > > will generate the following cpuinfo output:
-> > > "rv64imafdc_zbkb_zbkc_zbkx_zknd_zkne_zknh_zkr_zksed_zksh_zkt".
-> >=20
-> > On that note, I've created another version of what checking for
-> > supersets could look like, since it'll be needed either by my series or
-> > this one, depending on what gets merged first. I've yet to test the
-> > dedicated extensions part of it, but I wanted to get this out before I
-> > went looking at other fixes in the area.
-> >=20
-> > Evan, since it was you that commented on this stuff last time around,
-> > could you take another look? I'm still not keen on the "subset_of"
-> > arrays, but they're an improvement on what I had last time around for
-> > sure.
->=20
-> I would rather use the "property" member, renaming it to "properties",
-> but I didn't get the macro right in the bit of time I had this morning.
-> I'll try to think of a cleaner way...
->=20
-> > (I took authorship since only the #defines & part of the commit
-> > message came from the original commit)
-> >=20
-> > -- >8 --
-> > From 2351c46fd1c9f6de312463875a4887f03d365b76 Mon Sep 17 00:00:00 2001
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > Date: Wed, 12 Jul 2023 11:25:36 +0100
-> > Subject: [PATCH] RISC-V: add detection of scalar crypto extensions
-> >=20
-> > It is worth noting that the Scalar Crypto extension defines "zk" as a
-> > shorthand for the Zkn, Zkr and Zkt extensions. Since the Zkn one also
-> > implies the Zbkb, Zbkc and Zbkx extensions, simply passing the valid
-> > "zk" extension name through a DT shold enable all of the Zbkb, Zbkc,
-> > Zbkx, Zkn, Zkr and Zkt extensions.
-> > For example, setting the "riscv,isa" DT property to "rv64imafdc_zk"
-> > should generate the following cpuinfo output:
-> > "rv64imafdc_zicntr_zicsr_zifencei_zihpm_zbkb_zbkc_zbkx_zknd_zkne_zknh_z=
-kr_zkt"
-> >=20
-> > riscv_isa_ext_data grows a pair of new members, to permit searching for
-> > supersets of the extension in question, both while parsing the ISA
-> > string and the new dedicated extension properties.
-> >=20
-> > Co-developed-by: Hongren (Zenithal) Zheng <i@zenithal.me>
-> > Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
-> > Co-developed-by: Samuel Ortiz <sameo@rivosinc.com>
-> > Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  arch/riscv/include/asm/hwcap.h | 13 +++++
-> >  arch/riscv/kernel/cpufeature.c | 95 +++++++++++++++++++++++++++++-----
-> >  2 files changed, 94 insertions(+), 14 deletions(-)
-> >=20
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
-cap.h
-> > index b7b58258f6c7..46d54f31e162 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -58,6 +58,17 @@
-> >  #define RISCV_ISA_EXT_ZICSR		40
-> >  #define RISCV_ISA_EXT_ZIFENCEI		41
-> >  #define RISCV_ISA_EXT_ZIHPM		42
-> > +#define RISCV_ISA_EXT_ZBC		43
-> > +#define RISCV_ISA_EXT_ZBKB		44
-> > +#define RISCV_ISA_EXT_ZBKC		45
-> > +#define RISCV_ISA_EXT_ZBKX		46
-> > +#define RISCV_ISA_EXT_ZKND		47
-> > +#define RISCV_ISA_EXT_ZKNE		48
-> > +#define RISCV_ISA_EXT_ZKNH		49
-> > +#define RISCV_ISA_EXT_ZKR		50
-> > +#define RISCV_ISA_EXT_ZKSED		51
-> > +#define RISCV_ISA_EXT_ZKSH		52
-> > +#define RISCV_ISA_EXT_ZKT		53
-> > =20
-> >  #define RISCV_ISA_EXT_MAX		64
-> > =20
-> > @@ -77,6 +88,8 @@ struct riscv_isa_ext_data {
-> >  	const unsigned int id;
-> >  	const char *name;
-> >  	const char *property;
-> > +	const unsigned int superset_count;
-> > +	const char **subset_of;
+diff --git a/drivers/nvme/host/fault_inject.c b/drivers/nvme/host/fault_inject.c
+index 83d2e6860..1ba10a5c6 100644
+--- a/drivers/nvme/host/fault_inject.c
++++ b/drivers/nvme/host/fault_inject.c
+@@ -27,7 +27,7 @@ void nvme_fault_inject_init(struct nvme_fault_inject *fault_inj,
+ 
+ 	/* create debugfs directory and attribute */
+ 	parent = debugfs_create_dir(dev_name, NULL);
+-	if (!parent) {
++	if (IS_ERR(parent)) {
+ 		pr_warn("%s: failed to create debugfs directory\n", dev_name);
+ 		return;
+ 	}
+-- 
+2.39.0
 
-I forgot to stage the addition of a const qualifier here,
-it should be `const char * const *subset_of`, otherwise it fails to
-build.
-
-Cheers,
-Conor.
-
-> >  };
-> > =20
-> >  extern const struct riscv_isa_ext_data riscv_isa_ext[];
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
-ure.c
-> > index 5945dfc5f806..e862958d5495 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -103,8 +103,22 @@ static bool riscv_isa_extension_check(int id)
-> >  	.name =3D #_name,				\
-> >  	.property =3D #_name,			\
-> >  	.id =3D _id,				\
-> > +	.superset_count =3D 0,			\
-> > +	.subset_of =3D NULL,			\
-> >  }
-> > =20
-> > +#define __RISCV_ISA_EXT_DATA_SUBSET(_name, _id, _subset_of) {	\
-> > +	.name =3D #_name,						\
-> > +	.property =3D #_name,					\
-> > +	.id =3D _id,						\
-> > +	.superset_count =3D ARRAY_SIZE(_subset_of),		\
-> > +	.subset_of =3D _subset_of,				\
-> > +}
-> > +
-> > +static const char * const riscv_subset_of_zbk[] =3D { "zk", "zkn", "zk=
-s" };
-> > +static const char * const riscv_subset_of_zkn[] =3D { "zk", "zkn" };
-> > +static const char * const riscv_subset_of_zk[]  =3D { "zk" };
-> > +static const char * const riscv_subset_of_zks[] =3D { "zks" };
-> >  /*
-> >   * The canonical order of ISA extension names in the ISA string is def=
-ined in
-> >   * chapter 27 of the unprivileged specification.
-> > @@ -167,7 +181,18 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =
-=3D {
-> >  	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
-> >  	__RISCV_ISA_EXT_DATA(zba, RISCV_ISA_EXT_ZBA),
-> >  	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
-> > +	__RISCV_ISA_EXT_DATA(zbc, RISCV_ISA_EXT_ZBC),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zbkb, RISCV_ISA_EXT_ZBKB, riscv_subset_of=
-_zbk),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zbkc, RISCV_ISA_EXT_ZBKC, riscv_subset_of=
-_zbk),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zbkx, RISCV_ISA_EXT_ZBKX, riscv_subset_of=
-_zbk),
-> >  	__RISCV_ISA_EXT_DATA(zbs, RISCV_ISA_EXT_ZBS),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zknd, RISCV_ISA_EXT_ZKND, riscv_subset_of=
-_zkn),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zkne, RISCV_ISA_EXT_ZKNE, riscv_subset_of=
-_zkn),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zknh, RISCV_ISA_EXT_ZKNH, riscv_subset_of=
-_zkn),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zkr, RISCV_ISA_EXT_ZKR, riscv_subset_of_z=
-k),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zksed, RISCV_ISA_EXT_ZKSED, riscv_subset_=
-of_zks),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zksh, RISCV_ISA_EXT_ZKSH, riscv_subset_of=
-_zks),
-> > +	__RISCV_ISA_EXT_DATA_SUBSET(zkt, RISCV_ISA_EXT_ZKT, riscv_subset_of_z=
-k),
-> >  	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
-> >  	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
-> >  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> > @@ -179,6 +204,31 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =
-=3D {
-> > =20
-> >  const size_t riscv_isa_ext_count =3D ARRAY_SIZE(riscv_isa_ext);
-> > =20
-> > +static inline int __init riscv_try_match_extension(const char *name, c=
-onst unsigned int bit,
-> > +						   const char *ext, const char *ext_end,
-> > +						   struct riscv_isainfo *isainfo)
-> > +{
-> > +	if ((ext_end - ext =3D=3D strlen(name)) && !strncasecmp(ext, name, st=
-rlen(name)) &&
-> > +	    riscv_isa_extension_check(bit)) {
-> > +		set_bit(bit, isainfo->isa);
-> > +		return 0;
-> > +	}
-> > +
-> > +	return -ENOENT;
-> > +}
-> > +
-> > +static inline void __init riscv_try_match_supersets(struct riscv_isa_e=
-xt_data ext_data,
-> > +						    const char *ext, const char *ext_end,
-> > +						    struct riscv_isainfo *isainfo)
-> > +{
-> > +	for (int i =3D 0; i < ext_data.superset_count; i++) {
-> > +		const char *superset =3D ext_data.subset_of[i];
-> > +		const int bit =3D ext_data.id;
-> > +
-> > +		riscv_try_match_extension(superset, bit, ext, ext_end, isainfo);
-> > +	}
-> > +}
-> > +
-> >  static void __init riscv_parse_isa_string(unsigned long *this_hwcap, s=
-truct riscv_isainfo *isainfo,
-> >  					  unsigned long *isa2hwcap, const char *isa)
-> >  {
-> > @@ -310,16 +360,9 @@ static void __init riscv_parse_isa_string(unsigned=
- long *this_hwcap, struct risc
-> >  		if (*isa =3D=3D '_')
-> >  			++isa;
-> > =20
-> > -#define SET_ISA_EXT_MAP(name, bit)						\
-> > -		do {								\
-> > -			if ((ext_end - ext =3D=3D sizeof(name) - 1) &&		\
-> > -			     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
-> > -			     riscv_isa_extension_check(bit))			\
-> > -				set_bit(bit, isainfo->isa);			\
-> > -		} while (false)							\
-> > -
-> >  		if (unlikely(ext_err))
-> >  			continue;
-> > +
-> >  		if (!ext_long) {
-> >  			int nr =3D tolower(*ext) - 'a';
-> > =20
-> > @@ -327,12 +370,21 @@ static void __init riscv_parse_isa_string(unsigne=
-d long *this_hwcap, struct risc
-> >  				*this_hwcap |=3D isa2hwcap[nr];
-> >  				set_bit(nr, isainfo->isa);
-> >  			}
-> > -		} else {
-> > +
-> >  			for (int i =3D 0; i < riscv_isa_ext_count; i++)
-> > -				SET_ISA_EXT_MAP(riscv_isa_ext[i].name,
-> > -						riscv_isa_ext[i].id);
-> > +				riscv_try_match_supersets(riscv_isa_ext[i], ext, ext_end, isainfo);
-> > +		} else {
-> > +			for (int i =3D 0; i < riscv_isa_ext_count; i++) {
-> > +				const char *name =3D riscv_isa_ext[i].name;
-> > +				const int bit =3D riscv_isa_ext[i].id;
-> > +				int ret;
-> > +
-> > +				ret =3D riscv_try_match_extension(name, bit, ext, ext_end, isainfo=
-);
-> > +				if (ret && riscv_isa_ext[i].superset_count)
-> > +					riscv_try_match_supersets(riscv_isa_ext[i], ext,
-> > +								  ext_end, isainfo);
-> > +			}
-> >  		}
-> > -#undef SET_ISA_EXT_MAP
-> >  	}
-> >  }
-> > =20
-> > @@ -434,8 +486,23 @@ static int __init riscv_fill_hwcap_from_ext_list(u=
-nsigned long *isa2hwcap)
-> >  			continue;
-> > =20
-> >  		for (int i =3D 0; i < riscv_isa_ext_count; i++) {
-> > -			if (of_property_match_string(cpu_node, "riscv,isa-extensions",
-> > -						     riscv_isa_ext[i].property) < 0)
-> > +			struct riscv_isa_ext_data ext =3D riscv_isa_ext[i];
-> > +			int ret;
-> > +
-> > +			ret =3D of_property_match_string(cpu_node, "riscv,isa-extensions",
-> > +						       ext.property);
-> > +
-> > +			if (ret < 0 && ext.superset_count) {
-> > +				for (int j =3D 0; j < ext.superset_count; j++) {
-> > +					ret =3D of_property_match_string(cpu_node,
-> > +								       "riscv,isa-extensions",
-> > +								       ext.subset_of[j]);
-> > +					if (ret >=3D 0)
-> > +						break;
-> > +				}
-> > +			}
-> > +
-> > +			if (ret < 0)
-> >  				continue;
-> > =20
-> >  			if (!riscv_isa_extension_check(riscv_isa_ext[i].id))
-> > --=20
-> > 2.40.1
-> >=20
-> >=20
->=20
->=20
-
-
-
---jmjKz8Svm3lzfLi6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK6LuwAKCRB4tDGHoIJi
-0kMjAQDJ9XcvvG+VskEb01lbCg3q38npnqhUpklt2gBTS81RngEA9fmzDdL0Zz/a
-AGa7YfXo9nyOln5r4qDkJhDD7YRyDQQ=
-=IVPy
------END PGP SIGNATURE-----
-
---jmjKz8Svm3lzfLi6--
