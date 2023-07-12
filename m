@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC71750666
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD32B75065F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjGLLkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
+        id S232644AbjGLLkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjGLLkS (ORCPT
+        with ESMTP id S229668AbjGLLkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:40:18 -0400
+        Wed, 12 Jul 2023 07:40:17 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F371F19A6;
-        Wed, 12 Jul 2023 04:40:09 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBZVtC032077;
-        Wed, 12 Jul 2023 11:39:42 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8753D19A7;
+        Wed, 12 Jul 2023 04:40:05 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBdXg7030493;
+        Wed, 12 Jul 2023 11:39:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=S8kgrjTTL4lWCAvjC5av2SNwL0eEAEeHJCs6sq7OfSg=;
- b=YS5bP+xBXCaF5Qvyxxipdy0bOMrKssnDihHtn0qPdnsCAKb0Rrmwpd7opmSJ0J/8sxY3
- FhAxjPAbGf+1qDHZQLVwSQ9Ay/Rtpt8aFvYjO4sUHmWBwEZIvW5F8Z+c7eDFOnfH48uk
- BhGQNsgULV0rG/5uVutEgyWJEpMwxUhq7jtFkAcWQO7OLW1591E1b11sURlvBUxo68A5
- f/xeNTDPXVMhYsbvmxnMEeys9olnM9ROnN554XAyTUer61UdS3rf2a/aMaUw+Gq9Vjwy
- Zv9ZjZMhb+w/P3fPDW4AiZv1MBxMCMj0/fIP27krvckgIVn1FsZEJi7rH2EdYTd7qZUP 8A== 
+ bh=9W2CzbsgCDcZp7mvX+M2W0SEHEUd5pqL2CuMumFS0/0=;
+ b=pV/5e/Ymppzp4pTKlq8gz0FH4Ero816pXAg/xt5m3w5TiFzogMM8x+19nEdqfMIxdqpt
+ U6sbPCjLqC80fwVh/RoUErHXYVIEkKj5Na9N8icRWy3X7ViEdDmKgJeNIPDiGiCIBJ5m
+ Qx1/TRQpU2HtmDwKXNsRA0MhxrzE7sS9kvVYq9OEmXfXJtTl2YDuGG7PkmTQg1BfOrp/
+ 7LTgAWDAUtq71rlTUduy/3PrxO5XCepTqDY8FDejjxkzBPPtVje5YdaJseMX9xARBtTE
+ Cg9/2N5nyUPug583obp9efE5Xto7XBsp06tQeyaVupZF+L7HLEnvmtnnPuTKFMOUzyY4 fA== 
 Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgd395s5-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf4s9arw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 11:39:42 +0000
+        Wed, 12 Jul 2023 11:39:33 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CBd7H1031810
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CBdFpH031903
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 11:39:07 GMT
+        Wed, 12 Jul 2023 11:39:15 GMT
 Received: from varda-linux.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 12 Jul 2023 04:38:59 -0700
+ 15.2.1118.30; Wed, 12 Jul 2023 04:39:07 -0700
 From:   Varadarajan Narayanan <quic_varada@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
@@ -54,9 +54,9 @@ To:     <agross@kernel.org>, <andersson@kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
 CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v4 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
-Date:   Wed, 12 Jul 2023 17:08:19 +0530
-Message-ID: <e3a6e5cf68d67637fa541f6dc690dbcabd5e3fec.1689160067.git.quic_varada@quicinc.com>
+Subject: [PATCH v4 3/6] phy: qcom-m31: Introduce qcom,m31 USB phy driver
+Date:   Wed, 12 Jul 2023 17:08:20 +0530
+Message-ID: <3a8baa278457c62f24504ab817b7ba5431391394.1689160067.git.quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1689160067.git.quic_varada@quicinc.com>
 References: <cover.1689160067.git.quic_varada@quicinc.com>
@@ -67,15 +67,15 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DZE6hadq6oNMuukelwv86zcRU40Fl7Sw
-X-Proofpoint-GUID: DZE6hadq6oNMuukelwv86zcRU40Fl7Sw
+X-Proofpoint-GUID: 3c_JwGurkXdhntGRhz22P39stqldc_NT
+X-Proofpoint-ORIG-GUID: 3c_JwGurkXdhntGRhz22P39stqldc_NT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-12_06,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 adultscore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 mlxlogscore=999 phishscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2307120104
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -87,87 +87,319 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the M31 USB2 phy present in IPQ5332.
+Add the M31 USB2 phy driver.
 
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
 v4:
-	Move M31 URL to description
-	Remove maxItems and relevant content from clock-names
-	Change node name to generic name
-	'make dt_binding_check DT_SCHEMA_FILES=qcom' passed
-v3:
-	Incorporate review comments. Will bring in ipq5018 compatible
-	string while posting ipq5018 usb patchset.
-
+	Remove unused enum
+	Error handling for devm_clk_get
 v1:
-	Rename qcom,m31.yaml -> qcom,ipq5332-usb-hsphy.yaml
-	Drop default binding "m31,usb-hsphy"
+	Combine driver, makefile and kconfig into 1 patch
+	Remove 'qscratch' region and its usage. The controller driver takes care
+	of those settings
+	Use compatible/data to handle ipq5332 init
+	Drop the default case
+	Get resources by index instead of name as there is only one resource
 	Add clock
-	Remove 'oneOf' from compatible
-	Remove 'qscratch' region from register space as it is not needed
-	Remove reset-names
-	Fix the example definition
+	Fix review comments in the driver
 ---
- .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml       | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+ drivers/phy/qualcomm/Kconfig        |  11 ++
+ drivers/phy/qualcomm/Makefile       |   1 +
+ drivers/phy/qualcomm/phy-qcom-m31.c | 256 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 268 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
+index 97ca595..76be191 100644
+--- a/drivers/phy/qualcomm/Kconfig
++++ b/drivers/phy/qualcomm/Kconfig
+@@ -197,3 +197,14 @@ config PHY_QCOM_SGMII_ETH
+ 	help
+ 	  Enable this to support the internal SerDes/SGMII PHY on various
+ 	  Qualcomm chipsets.
++
++config PHY_QCOM_M31_USB
++	tristate "Qualcomm M31 HS PHY driver support"
++	depends on (USB || USB_GADGET) && ARCH_QCOM
++	select USB_PHY
++	help
++	  Enable this to support M31 HS PHY transceivers on Qualcomm chips
++	  with DWC3 USB core. It handles PHY initialization, clock
++	  management required after resetting the hardware and power
++	  management. This driver is required even for peripheral only or
++	  host only mode configurations.
+diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
+index b030858..0b5dd66 100644
+--- a/drivers/phy/qualcomm/Makefile
++++ b/drivers/phy/qualcomm/Makefile
+@@ -22,3 +22,4 @@ obj-$(CONFIG_PHY_QCOM_USB_SS)		+= phy-qcom-usb-ss.o
+ obj-$(CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2)+= phy-qcom-snps-femto-v2.o
+ obj-$(CONFIG_PHY_QCOM_IPQ806X_USB)	+= phy-qcom-ipq806x-usb.o
+ obj-$(CONFIG_PHY_QCOM_SGMII_ETH)	+= phy-qcom-sgmii-eth.o
++obj-$(CONFIG_PHY_QCOM_M31_USB)		+= phy-qcom-m31.o
+diff --git a/drivers/phy/qualcomm/phy-qcom-m31.c b/drivers/phy/qualcomm/phy-qcom-m31.c
 new file mode 100644
-index 0000000..eea90ff
+index 0000000..fd568ef
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-hsphy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/phy/qualcomm/phy-qcom-m31.c
+@@ -0,0 +1,256 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (c) 2014-2016, 2020, The Linux Foundation. All rights reserved.
++ */
 +
-+title: M31 USB PHY
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/reset.h>
++#include <linux/slab.h>
++#include <linux/usb/of.h>
++#include <linux/usb/phy.h>
 +
-+maintainers:
-+  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
-+  - Varadarajan Narayanan <quic_varada@quicinc.org>
++#define USB2PHY_PORT_UTMI_CTRL1		0x40
 +
-+description:
-+  USB M31 PHY (https://www.m31tech.com) found in Qualcomm
-+  IPQ5018, IPQ5332 SoCs.
++#define USB2PHY_PORT_UTMI_CTRL2		0x44
++ #define UTMI_ULPI_SEL			BIT(7)
++ #define UTMI_TEST_MUX_SEL		BIT(6)
 +
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,ipq5332-usb-hsphy
++#define HS_PHY_CTRL_REG			0x10
++ #define UTMI_OTG_VBUS_VALID		BIT(20)
++ #define SW_SESSVLD_SEL			BIT(28)
 +
-+  reg:
-+    maxItems: 1
++#define USB_PHY_UTMI_CTRL0		0x3c
 +
-+  clocks:
-+    maxItems: 1
++#define USB_PHY_UTMI_CTRL5		0x50
++ #define POR_EN				BIT(1)
++ #define ATERESET			~BIT(0)
 +
-+  clock-names:
-+    items:
-+      - const: cfg_ahb
++#define USB_PHY_HS_PHY_CTRL_COMMON0	0x54
++ #define COMMONONN			BIT(7)
++ #define FSEL				BIT(4)
++ #define RETENABLEN			BIT(3)
++ #define FREQ_24MHZ			(5 << 4)
 +
-+  resets:
-+    maxItems: 1
++#define USB_PHY_HS_PHY_CTRL2		0x64
++ #define USB2_SUSPEND_N_SEL		BIT(3)
++ #define USB2_SUSPEND_N			BIT(2)
++ #define USB2_UTMI_CLK_EN		BIT(1)
 +
-+additionalProperties: false
++#define USB_PHY_CFG0			0x94
++ #define UTMI_PHY_OVERRIDE_EN		BIT(1)
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
-+    usbphy0: usb-phy@7b000 {
-+        compatible = "qcom,ipq5332-usb-hsphy";
-+        reg = <0x0007b000 0x12c>;
++#define USB_PHY_REFCLK_CTRL		0xa0
++ #define CLKCORE			BIT(1)
 +
-+        clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-+        clock-names = "cfg_ahb";
++#define USB2PHY_PORT_POWERDOWN		0xa4
++ #define POWER_UP			BIT(0)
++ #define POWER_DOWN			0
 +
-+        resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-+    };
++#define USB_PHY_FSEL_SEL		0xb8
++ #define FREQ_SEL			BIT(0)
++
++#define USB2PHY_USB_PHY_M31_XCFGI_1	0xbc
++ #define USB2_0_TX_ENABLE		BIT(2)
++
++#define USB2PHY_USB_PHY_M31_XCFGI_4	0xc8
++ #define HSTX_SLEW_RATE_565PS		GENMASK(1, 0)
++ #define PLL_CHARGING_PUMP_CURRENT_35UA	GENMASK(4, 3)
++ #define ODT_VALUE_38_02_OHM		GENMASK(7, 6)
++
++#define USB2PHY_USB_PHY_M31_XCFGI_5	0xcc
++ #define ODT_VALUE_45_02_OHM		BIT(2)
++ #define HSTX_PRE_EMPHASIS_LEVEL_0_55MA	BIT(0)
++
++#define USB2PHY_USB_PHY_M31_XCFGI_11	0xe4
++ #define XCFG_COARSE_TUNE_NUM		BIT(1)
++ #define XCFG_FINE_TUNE_NUM		BIT(3)
++
++struct m31_phy_regs {
++	u32 off;
++	u32 val;
++	u32 delay;
++};
++
++struct m31_priv_data {
++	bool				ulpi_mode;
++	const struct m31_phy_regs	*regs;
++};
++
++#define M31_REG(__o, __v, __d)	\
++	{ .off = __o, .val = __v, .delay = __d }
++
++#define M31_REG_INVALID			0xffffffffu
++
++struct m31_phy_regs m31_ipq5332_regs[] = {
++	M31_REG(USB_PHY_CFG0, UTMI_PHY_OVERRIDE_EN, 0),
++	M31_REG(USB_PHY_UTMI_CTRL5, POR_EN, 15),
++	M31_REG(USB_PHY_FSEL_SEL, FREQ_SEL, 0),
++	M31_REG(USB_PHY_HS_PHY_CTRL_COMMON0,
++		COMMONONN | FREQ_24MHZ | RETENABLEN, 0),
++	M31_REG(USB_PHY_UTMI_CTRL5, POR_EN & ATERESET, 0),
++	M31_REG(USB_PHY_HS_PHY_CTRL2,
++		USB2_SUSPEND_N_SEL | USB2_SUSPEND_N | USB2_UTMI_CLK_EN, 0),
++	M31_REG(USB2PHY_USB_PHY_M31_XCFGI_11,
++		XCFG_COARSE_TUNE_NUM  | XCFG_FINE_TUNE_NUM, 0),
++	M31_REG(USB2PHY_USB_PHY_M31_XCFGI_4,
++		HSTX_SLEW_RATE_565PS | PLL_CHARGING_PUMP_CURRENT_35UA |
++		ODT_VALUE_38_02_OHM, 0),
++	M31_REG(USB2PHY_USB_PHY_M31_XCFGI_1, USB2_0_TX_ENABLE, 0),
++	M31_REG(USB2PHY_USB_PHY_M31_XCFGI_5,
++		ODT_VALUE_45_02_OHM | HSTX_PRE_EMPHASIS_LEVEL_0_55MA, 4),
++	M31_REG(USB_PHY_UTMI_CTRL5, 0x0, 0),
++	M31_REG(USB_PHY_HS_PHY_CTRL2, USB2_SUSPEND_N | USB2_UTMI_CLK_EN, 0),
++	M31_REG(M31_REG_INVALID, 0, 0),
++};
++
++struct m31usb_phy {
++	struct usb_phy			phy;
++	void __iomem			*base;
++	const struct m31_phy_regs	*regs;
++
++	struct clk			*cfg_ahb_clk;
++	struct reset_control		*phy_reset;
++
++	bool				cable_connected;
++	bool				suspended;
++	bool				ulpi_mode;
++};
++
++static void m31usb_phy_enable_clock(struct m31usb_phy *qphy)
++{
++	const struct m31_phy_regs *regs = qphy->regs;
++
++	for (; regs->off != M31_REG_INVALID; regs++) {
++		writel(regs->val, qphy->base + regs->off);
++		if (regs->delay)
++			udelay(regs->delay);
++	}
++}
++
++static int m31usb_phy_init(struct usb_phy *phy)
++{
++	int ret;
++	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
++
++	ret = clk_prepare_enable(qphy->cfg_ahb_clk);
++	if (ret) {
++		dev_err(phy->dev, "failed to enable cfg ahb clock, %d\n", ret);
++		return ret;
++	}
++
++	/* Perform phy reset */
++	reset_control_assert(qphy->phy_reset);
++	udelay(5);
++	reset_control_deassert(qphy->phy_reset);
++
++	/* configure for ULPI mode if requested */
++	if (qphy->ulpi_mode)
++		writel(0x0, qphy->base + USB2PHY_PORT_UTMI_CTRL2);
++
++	/* Enable the PHY */
++	writel(POWER_UP, qphy->base + USB2PHY_PORT_POWERDOWN);
++
++	/* Make sure above write completed */
++	wmb();
++
++	/* Turn on phy ref clock */
++	m31usb_phy_enable_clock(qphy);
++
++	return 0;
++}
++
++static void m31usb_phy_shutdown(struct usb_phy *phy)
++{
++	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
++
++	/* Disable the PHY */
++	writel_relaxed(POWER_DOWN, qphy->base + USB2PHY_PORT_POWERDOWN);
++	/* Make sure above write completed */
++	wmb();
++
++	clk_disable_unprepare(qphy->cfg_ahb_clk);
++}
++
++static int m31usb_phy_probe(struct platform_device *pdev)
++{
++	const struct m31_priv_data *data;
++	struct device *dev = &pdev->dev;
++	struct m31usb_phy *qphy;
++	int ret;
++
++	qphy = devm_kzalloc(dev, sizeof(*qphy), GFP_KERNEL);
++	if (!qphy)
++		return -ENOMEM;
++
++	qphy->phy.dev = dev;
++
++	qphy->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(qphy->base))
++		return PTR_ERR(qphy->base);
++
++	qphy->phy_reset = devm_reset_control_get_exclusive_by_index(dev, 0);
++	if (IS_ERR(qphy->phy_reset))
++		return PTR_ERR(qphy->phy_reset);
++
++	qphy->cfg_ahb_clk = devm_clk_get(dev, "cfg_ahb");
++	if (IS_ERR(qphy->cfg_ahb_clk)) {
++		ret = PTR_ERR(qphy->cfg_ahb_clk);
++		dev_err(dev, "failed to get cfg_ahb clock, %d\n", ret);
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, qphy);
++
++	data = of_device_get_match_data(dev);
++	qphy->regs = data->regs;
++	qphy->ulpi_mode = data->ulpi_mode;
++
++	qphy->phy.label			= "m31-usb-phy";
++	qphy->phy.init			= m31usb_phy_init;
++	qphy->phy.shutdown		= m31usb_phy_shutdown;
++	qphy->phy.type			= USB_PHY_TYPE_USB2;
++
++	ret = usb_add_phy_dev(&qphy->phy);
++
++	return ret;
++}
++
++static void m31usb_phy_remove(struct platform_device *pdev)
++{
++	struct m31usb_phy *qphy = platform_get_drvdata(pdev);
++
++	usb_remove_phy(&qphy->phy);
++}
++
++static const struct m31_priv_data m31_ipq5332_data = {
++	.ulpi_mode = false,
++	.regs = m31_ipq5332_regs,
++};
++
++static const struct of_device_id m31usb_phy_id_table[] = {
++	{ .compatible = "qcom,ipq5332-usb-hsphy", .data = &m31_ipq5332_data },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, m31usb_phy_id_table);
++
++static struct platform_driver m31usb_phy_driver = {
++	.probe		= m31usb_phy_probe,
++	.remove_new	= m31usb_phy_remove,
++	.driver = {
++		.name	= "qcom-m31usb-phy",
++		.of_match_table = m31usb_phy_id_table,
++	},
++};
++
++module_platform_driver(m31usb_phy_driver);
++
++MODULE_DESCRIPTION("USB2 Qualcomm M31 HSPHY driver");
++MODULE_LICENSE("GPL");
 -- 
 2.7.4
 
