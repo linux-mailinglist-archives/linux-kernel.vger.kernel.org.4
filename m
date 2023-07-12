@@ -2,78 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB7275066A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68E275067D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjGLLmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S232229AbjGLLnr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 07:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjGLLmN (ORCPT
+        with ESMTP id S230229AbjGLLnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:42:13 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5278F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:41:44 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98377c5d53eso855760866b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689162101; x=1691754101;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GkLaNoWskYXvslP1Qpy+TOolPrbyrAyjVa+N07spH6w=;
-        b=GdjQR8SX+x1pUX1Mtuv5xuheRUWPa4xiVxpkVzvnVRdbcp1cUzjP0h14IUqu6A49uh
-         +ILaIzXUf2Mhdwplokt+KkGbaABFpL8/iEI694YXvZbBt7Sog7sBDmxeW+Y0f7ZsOdWe
-         5ofrVDPbBcKUZHkbjXE8r4GO44GkCD/FlM/TEQSYzuMasTPzjCcd+Lq+xCrQ3EVK+2mK
-         pv8A4mjEVcn1b4BRijKkmUZeFw8rnVWf32GcC4Xpfs95QPNVnjLryFYlRJay1WKbzbXy
-         rPBtfLVfj+D1a26xpFSgBL4hhG0LAYfs7ama2jywMK6z6E0r+9Jtm/p/MKJkAvGCu6eJ
-         zd3g==
+        Wed, 12 Jul 2023 07:43:45 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D08D1980;
+        Wed, 12 Jul 2023 04:43:44 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57712d00cc1so80686747b3.3;
+        Wed, 12 Jul 2023 04:43:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689162101; x=1691754101;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GkLaNoWskYXvslP1Qpy+TOolPrbyrAyjVa+N07spH6w=;
-        b=LXHhNfVITuUmg0EN5cNZVh29oWFAijxxlo/rKezNPtMIYhRMraWrYMf2WZjIAw1xXO
-         3uD6hc9MoRO1uZk88vwDkJ98k67d3WomtBvAMABVRlPTSOXNinAly/Ec2qzZWviROEiN
-         cSvyhRpSaUzikJ7FrcBOp2L7JQdAWdWAOyhaMqd3qEo66LHISWv/TCYatIkNcNFDYXL0
-         nQ7QQdNCP7R2Re8q2SXWJeSVo5y9dW3JGmlig3VJKmaCUEoHS5KKD6LeZ2IMIKDt2axS
-         Z/PuEQbkrgCRw0ZlCRRNB1JkOczNBWerHl/TLS1ci95j9FQbq/DwBa34/UyQBDsxeA0U
-         FuRw==
-X-Gm-Message-State: ABy/qLYWTzdwrObH3+XMwohsV7C7yjmu6MoLmLNu97jIfW77ROZLIxpZ
-        Jq82+zj4kfsIDpe7TF2SKqb2GlclSULznPy9J4qQVA==
-X-Google-Smtp-Source: APBJJlETTVGODR20/rwVslhngoGW4fSKBoGdRTlMwhh0V6YrmWG0usTUtZoVfuLIpCAbQ7YW2JEtyp8nTpjT009g3QQ=
-X-Received: by 2002:a05:6402:1293:b0:51e:5789:a71d with SMTP id
- w19-20020a056402129300b0051e5789a71dmr11910654edv.12.1689162101091; Wed, 12
- Jul 2023 04:41:41 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689162223; x=1691754223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZFaa1eey2gFBEkQTz4+FvOqjiuJjKAg/tTkqzXxKkMw=;
+        b=AxMhJcDjOzPhmC8jTZE4lggCg763BS+rLs49ypbyQLRgnl4CCboi+S0WsrbwE9Zdow
+         Y2goESZX6RVk7Gst5+m4eHW+uAczxPq1TKKBMKdbUMqIpgpLgZ/XB043h6UbV1ZeGfS9
+         4ZCxAB5p5UgSf2p0QV45oU0rm2ahLesM4JDRWQ/VjWW4RqJidTpDviMnBsVpDC2FDLNV
+         OH3YYXOYcgPJaHgBHfElJlKGbqvZ/wi3A8YMjRaAfdqhERenwCyaarkoUS1Czr414Utf
+         4jwpY5mIA8UsesEHcakviOoNZZFJmALp4pkVLR/IFimfdq7+F2RZFflQ9oq+y2NWT5V7
+         vNIw==
+X-Gm-Message-State: ABy/qLZGwMy4vnbL5TCzb6XHfZpnyznicrdE96kBT5aQd4iFw3oEtmcK
+        D68b8Xe+sSDHFYJigdOuYFKO16RWvW1EHQ==
+X-Google-Smtp-Source: APBJJlGMIyJ2PM9Ugkvat2OdD8kl7nbkrUSZTKe+vV0IuzVh3mUiWX4qcTm1eQ/TYxVFXlAssSuvbg==
+X-Received: by 2002:a0d:ce43:0:b0:57a:f72:ebf8 with SMTP id q64-20020a0dce43000000b0057a0f72ebf8mr22549179ywd.28.1689162223181;
+        Wed, 12 Jul 2023 04:43:43 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id o123-20020a0dfe81000000b0057069c60799sm1116366ywf.53.2023.07.12.04.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 04:43:42 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-c49777d6e7aso7876166276.1;
+        Wed, 12 Jul 2023 04:43:42 -0700 (PDT)
+X-Received: by 2002:a25:68ca:0:b0:c85:a84:d87e with SMTP id
+ d193-20020a2568ca000000b00c850a84d87emr8445978ybc.10.1689162221895; Wed, 12
+ Jul 2023 04:43:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230712083741.7615-1-slark_xiao@163.com>
-In-Reply-To: <20230712083741.7615-1-slark_xiao@163.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 12 Jul 2023 13:41:03 +0200
-Message-ID: <CAMZdPi_qcLYGSUYg+4skkNUzUVSV5Fk1Ohe75ZWwyN7=MpfkUg@mail.gmail.com>
-Subject: Re: [PATCH] bus: mhi: host: pci_generic: Add support for Dell DW5932e
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     mani@kernel.org, fabio.porcedda@gmail.com, bhelgaas@google.com,
-        song.fc@gmail.com, duke_xinanwen@163.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230712081258.29254-1-frank.li@vivo.com> <20230712081258.29254-21-frank.li@vivo.com>
+In-Reply-To: <20230712081258.29254-21-frank.li@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jul 2023 13:43:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWiAnN0a3wKGekvLSR7Gxh2kp-Bvmyb9o8EaxFWK8GC+Q@mail.gmail.com>
+Message-ID: <CAMuHMdWiAnN0a3wKGekvLSR7Gxh2kp-Bvmyb9o8EaxFWK8GC+Q@mail.gmail.com>
+Subject: Re: [PATCH 21/27] thermal/drivers/rcar_thermal: Convert to platform
+ remove callback returning void
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jul 2023 at 10:38, Slark Xiao <slark_xiao@163.com> wrote:
+On Wed, Jul 12, 2023 at 10:23 AM Yangtao Li <frank.li@vivo.com> wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
 >
-> The DW5932e has 2 variants: eSIM(DW5932e-eSIM) and non-eSIM(DW5932e).
-> Both of them are designed based on Qualcomm SDX62 and it will
-> align with the Foxconn sdx65 settings.
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
 >
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
