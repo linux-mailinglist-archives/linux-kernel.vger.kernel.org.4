@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2C67507C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333C8750786
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbjGLMMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S231881AbjGLMHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbjGLMMF (ORCPT
+        with ESMTP id S229505AbjGLMHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:12:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6063E5F;
-        Wed, 12 Jul 2023 05:12:02 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBgLvI016373;
-        Wed, 12 Jul 2023 12:12:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=tltQXugxcZeoO8dwlag/RdnQKSKFt0PN5wxaRNpTQLE=;
- b=IFSoiMmyi9a0TZ4NBySuasNEDApH7Xe3fYRELBYvTq9fZIEQkOQVxE5Q93UsZ2qob+J/
- CBtRy9DBg8HY8A/cV+7fM6EbtJdrJMrgrkUeQU+I/UjvGPvB0vAsBUhuZJXheQuWwFW0
- /lednIMbaGXLVgno+J/yFU9oLrjZOGQt5QHheIWz8rQdVCd0nCsk/dNHGIJRoQCVInYb
- sblQz12vpaOpGeEjvGzqXk8ocNyHfKWBT58vutijw63b36Sn7xWZmyov0xGceFa++aCI
- UmhGyEUyXYeum3jyMOMV2XJPWVx035A+ZtU1iXF2Yh2ZGrPAK4HCSwF+bJnMviQ2Wq9l Og== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rsuhhrtt5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:12:01 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBY54Z020388;
-        Wed, 12 Jul 2023 12:06:58 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rpye59waq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:06:58 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36CC6rqw31785322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jul 2023 12:06:53 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A8632004B;
-        Wed, 12 Jul 2023 12:06:53 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC8A220043;
-        Wed, 12 Jul 2023 12:06:52 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jul 2023 12:06:52 +0000 (GMT)
-Date:   Wed, 12 Jul 2023 14:06:51 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janosch Frank <frankja@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mhartmay@linux.ibm.com,
-        nsg@linux.ibm.com, borntraeger@de.ibm.com, nrb@linux.ibm.com
-Subject: Re: [PATCH v2 2/2] KVM: s390: pv: fix index value of replaced ASCE
-Message-ID: <20230712140651.37d84e5d@p-imbrenda>
-In-Reply-To: <e3daf6b9-c7e9-89f3-b6ab-d8cf89de0b86@linux.ibm.com>
-References: <20230705111937.33472-1-imbrenda@linux.ibm.com>
-        <20230705111937.33472-3-imbrenda@linux.ibm.com>
-        <e3daf6b9-c7e9-89f3-b6ab-d8cf89de0b86@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Wed, 12 Jul 2023 08:07:07 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488EC10F3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:07:02 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BAFC40007;
+        Wed, 12 Jul 2023 12:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689163620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E7ByKZ6oXF6klWgs2IJLwIobDTVTZio3/GXOfUphAec=;
+        b=o4PPeJa6zgRt3UiGPCief6r+PAxy2XWT8DlOmuoUwwpF8ch48sJUaMbjT/suvREM7Hcq37
+        8z+/KLv7GUBt6TZtsK79jHsq826uZHC9U7z+/HbNlVpZ+PFFaENxM7b5luXr1XWo2PCgnx
+        HsnUVGr7rk9iUmsK0aeibehjZXFeOw/yXIgEt5a9NVFNM+M23L0P3ZV3Ie3XsbsiyMxvpP
+        siKtD56rxyksEnM7A8EQBLHK7TDOiyJkkfIbzWJ/vXVwKj7owExNXALh3xU25ZqiOfe7Tn
+        mDGkOuKqGvp7Qw7ZGLgfxB+Z9RVBCkygIap408+nQNilsXfZbowSbThkpQ4jgQ==
+Date:   Wed, 12 Jul 2023 14:06:55 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/18] mtd: rawnand: sunxi: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20230712140655.72fc2a3d@xps-13>
+In-Reply-To: <20230712135455.71fbeb5f@xps-13>
+References: <20230707040622.78174-1-frank.li@vivo.com>
+        <20230712135455.71fbeb5f@xps-13>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Shp0wLu6T1-ef94pjMgPiBBL6MSo6_oc
-X-Proofpoint-ORIG-GUID: Shp0wLu6T1-ef94pjMgPiBBL6MSo6_oc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_07,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 mlxlogscore=918 clxscore=1015 mlxscore=0 phishscore=0
- adultscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120108
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jul 2023 13:58:49 +0200
-Janosch Frank <frankja@linux.ibm.com> wrote:
 
-> On 7/5/23 13:19, Claudio Imbrenda wrote:
-> > The index field of the struct page corresponding to a guest ASCE should
-> > be 0. When replacing the ASCE in s390_replace_asce(), the index of the
-> > new ASCE should also be set to 0.
-> > 
-> > Having the wrong index might lead to the wrong addresses being passed
-> > around when notifying pte invalidations, and eventually to validity
-> > intercepts (VM crash) if the prefix gets unmapped and the notifier gets
-> > called with the wrong address.
-> > 
-> > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>  
-> 
-> No fixes tag?
+miquel.raynal@bootlin.com wrote on Wed, 12 Jul 2023 13:54:55 +0200:
 
-oops, you're right
+> Hi Yangtao,
+>=20
+> frank.li@vivo.com wrote on Fri,  7 Jul 2023 12:06:05 +0800:
+>=20
+> > Convert platform_get_resource(), devm_ioremap_resource() to a single
+> > call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> > what this function does.
+> >=20
+> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > ---
+> >  drivers/mtd/nand/raw/sunxi_nand.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/s=
+unxi_nand.c
+> > index 9884304634f6..db36bd755b8d 100644
+> > --- a/drivers/mtd/nand/raw/sunxi_nand.c
+> > +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+> > @@ -2087,8 +2087,7 @@ static int sunxi_nfc_probe(struct platform_device=
+ *pdev)
+> >  	nand_controller_init(&nfc->controller);
+> >  	INIT_LIST_HEAD(&nfc->chips);
+> > =20
+> > -	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > -	nfc->regs =3D devm_ioremap_resource(dev, r);
+> > +	nfc->regs =3D devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+>=20
+> Why do you keep a reference over the resource? Why not just
+> devm_platform_ioremap_resource(pdev, 0) ?
+>=20
+> This comment is valid for almost all the cases in this series.
 
-Fixes: faa2f72cb356 ("KVM: s390: pv: leak the topmost page table when
-destroy fails")
+Actually 'r' is used at the bottom, so the patch is good. I reviewed
+all the patches, 17 look right, I have a minor comment on one of them.
+In order to avoid resending all the patches, I'll first apply the 17
+good ones and ask you to resend just the last one.
+
+> When the resource is only needed in an error printk, I am also in favor
+> of modifying the error message to avoid having to grab the resource.
+>=20
+> >  	if (IS_ERR(nfc->regs))
+> >  		return PTR_ERR(nfc->regs);
+> > =20
+>=20
+> These comments apply to the 18 patches.
+>=20
+> Thanks,
+> Miqu=C3=A8l
 
 
-> 
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-> 
-
+Thanks,
+Miqu=C3=A8l
