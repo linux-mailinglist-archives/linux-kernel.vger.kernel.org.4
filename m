@@ -2,255 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D18A74FCB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D4F74FCB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjGLBdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S229964AbjGLBeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGLBdv (ORCPT
+        with ESMTP id S229489AbjGLBeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:33:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E19CF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:33:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5F2D615D3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:33:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D65C433C8;
-        Wed, 12 Jul 2023 01:33:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689125629;
-        bh=2S6wbnljUFNSm7ROG4giIHQvf1V+Wm4CNR7UiKL6Wp8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NkniyM1QqJrEVjZXIwSmV55WRRuUt+bvS7kEncVAPpwPW3SmCif/MhisyuH0NcuaV
-         MFk1ijI4+Nzz8Kx321MHmncS/OGlQl1yDyTjmOZpnzE1GTt98HxwLJH99Ak6t9LNI+
-         PS0wXGoSpb0ipsboJbPSSJuozLmnJGpYNLkka44Oc33dwlC+LYcyc10chHkDiPuik0
-         KVWdEnM3HArRbQmo0F/w+bk74ic/EaW1+SE6qgzp3CdKHcaamsnNi+X4Lkm9iMyV/l
-         GjwYQBgfwpohywDMtmjSp0fPkGC8lnpH5HucQV3zJPL9wxVx/aZMWMXvqpcPtHVj8M
-         m7eSwACqOZj6A==
-Message-ID: <330c96f7-fbad-dd17-6368-f1378b3b5375@kernel.org>
-Date:   Wed, 12 Jul 2023 09:33:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: do not issue small discard commands
- during checkpoint
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Daejun Park <daejun7.park@samsung.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
+        Tue, 11 Jul 2023 21:34:22 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86679CF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:34:21 -0700 (PDT)
+Received: from [127.0.0.1] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 36C1Xv6M3005253
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 11 Jul 2023 18:33:58 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 36C1Xv6M3005253
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023061001; t=1689125639;
+        bh=ClM94+5yVUo/lO+PGTwr0h4lTfg8AfnnGoYBdlNEIU4=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=NWEoPpr/WOQ3qTRhUEm+2128imouq7YzhkHsqm3mvJCANUE+DmwQQjkHd74uGUwkP
+         /HdJTUNPjV/ZVgya+fj3svaWLdXMgx+KQDQo3k4tdxj4IHVRN/bQWWk5u3ojnMU72R
+         vX50P4aYyyOR8h0uWnCPUqlVJwhckzdea8130k1kEsv/3naCErsQvPxhN4fwXdrYBF
+         DHpb5dOQEJA68vwxs1tocgO2h9TEU9tL4mEu9ySna+nLAg8r9xlEcQ2GBOhiGI7ABy
+         1Wq4+ksVMkpRCnx7tCoCLGJOy2ltO9RkXGZ/psXyhvpft97gke6g9FgVfJ4Yu5HrnW
+         zd4AWl79cIDrQ==
+Date:   Tue, 11 Jul 2023 18:33:54 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>, x86@kernel.org
+CC:     Thomas Gleixner <tglx@linutronix.de>, bluca@debian.org,
+        lennart@poettering.net, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        =?ISO-8859-1?Q?Daniel_P_=2E_Berrang=E9?= <berrange@redhat.com>,
         linux-kernel@vger.kernel.org
-References: <20230613203947.2745943-1-jaegeuk@kernel.org>
- <ZInmkgjDnAUD5Nk0@google.com>
- <50d5fa8c-4fe9-8a03-be78-0b5383e55b62@kernel.org>
- <ZKP6EJ5dZ4f4wScp@google.com>
- <65143701-4c19-ab66-1500-abd1162639cd@kernel.org>
- <ZKWovWZDiHjMavtB@google.com>
- <cadfb8d7-f5d0-a3ec-cafb-a0c06ad7d290@kernel.org>
- <ZK2FT9CUjxXvQ2K5@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZK2FT9CUjxXvQ2K5@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH v2] x86/boot: add .sbat section to the bzImage
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230711154449.1378385-1-eesposit@redhat.com>
+References: <20230711154449.1378385-1-eesposit@redhat.com>
+Message-ID: <7E9D397B-439F-484C-B950-9094605A7B4D@zytor.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/12 0:37, Jaegeuk Kim wrote:
-> On 07/06, Chao Yu wrote:
->> On 2023/7/6 1:30, Jaegeuk Kim wrote:
->>> On 07/04, Chao Yu wrote:
->>>> On 2023/7/4 18:53, Jaegeuk Kim wrote:
->>>>> On 07/03, Chao Yu wrote:
->>>>>> On 2023/6/15 0:10, Jaegeuk Kim wrote:
->>>>>>> If there're huge # of small discards, this will increase checkpoint latency
->>>>>>> insanely. Let's issue small discards only by trim.
->>>>>>>
->>>>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->>>>>>> ---
->>>>>>>
->>>>>>>      Change log from v1:
->>>>>>>       - move the skip logic to avoid dangling objects
->>>>>>>
->>>>>>>      fs/f2fs/segment.c | 2 +-
->>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->>>>>>> index 8c7af8b4fc47..0457d620011f 100644
->>>>>>> --- a/fs/f2fs/segment.c
->>>>>>> +++ b/fs/f2fs/segment.c
->>>>>>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
->>>>>>>      			len = next_pos - cur_pos;
->>>>>>>      			if (f2fs_sb_has_blkzoned(sbi) ||
->>>>>>> -			    (force && len < cpc->trim_minlen))
->>>>>>> +					!force || len < cpc->trim_minlen)
->>>>>>>      				goto skip;
->>>>>>
->>>>>> Sorry for late reply.
->>>>>>
->>>>>> We have a configuration for such case, what do you think of setting
->>>>>> max_small_discards to zero? otherwise, w/ above change, max_small_discards
->>>>>> logic may be broken?
->>>>>>
->>>>>> What:           /sys/fs/f2fs/<disk>/max_small_discards
->>>>>> Date:           November 2013
->>>>>> Contact:        "Jaegeuk Kim" <jaegeuk.kim@samsung.com>
->>>>>> Description:    Controls the issue rate of discard commands that consist of small
->>>>>>                    blocks less than 2MB. The candidates to be discarded are cached until
->>>>>>                    checkpoint is triggered, and issued during the checkpoint.
->>>>>>                    By default, it is disabled with 0.
->>>>>>
->>>>>> Or, if we prefer to disable small_discards by default, what about below change:
->>>>>
->>>>> I think small_discards is fine, but need to avoid long checkpoint latency only.
->>>>
->>>> I didn't get you, do you mean we can still issue small discard by
->>>> fstrim, so small_discards functionality is fine?
->>>
->>> You got the point.
->>
->> Well, actually, what I mean is max_small_discards sysfs entry's functionality
->> is broken. Now, the entry can not be used to control number of small discards
->> committed by checkpoint.
-> 
-> Could you descrbie this problem first?
+On July 11, 2023 8:44:49 AM PDT, Emanuele Giuseppe Esposito <eesposit@redha=
+t=2Ecom> wrote:
+>*Important*: this is just an RFC, as I am not expert in this area and
+>I don't know what's the best way to achieve this=2E
+>
+>v2:
+>* add standard "sbat,1,SBAT Version,=2E=2E=2E" header string
+>
+>The aim of this patch is to add a =2Esbat section to the linux binary
+>(https://github=2Ecom/rhboot/shim/blob/main/SBAT=2Emd)=2E
+>We mainly need SBAT in UKIs (Unified Kernel Images), as we might want
+>to revoke authorizations to specific signed PEs that were initially
+>considered as trusted=2E The reason might be for example a security issue
+>related to a specific linux release=2E
+>
+>A =2Esbat is simply a section containing a string with the component name
+>and a version number=2E This version number is compared with the value in
+>OVMF_VARS, and if it's less than the variable, the binary is not trusted,
+>even if it is correctly signed=2E
+>
+>Right now an UKI is built with a =2Esbat section containing the
+>systemd-stub sbat string (upstream + vendor), we would like to add
+>also a per-component specific string (ie vmlinux has its own sbat,
+>again upstream + vendor, each signed add-on its own and so on)=2E
+>In this way, if a specific kernel version has an issue, we can revoke
+>it without compromising all other UKIs that are using a different
+>kernel with the same stub/initrd/something else=2E
+>
+>Issues with this patch:
+>* the string is added in a file but it is never deleted
+>* if the code is not modified but make is issued again, objcopy will
+>  be called again and will fail because =2Esbat exists already, making
+>  compilation fail
+>* minor display issue: objcopy command is printed in the make logs
+>
+>Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat=2Ecom>
+>---
+> arch/x86/boot/Makefile | 3 +++
+> 1 file changed, 3 insertions(+)
+>
+>diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+>index 9e38ffaadb5d=2E=2E6982a50ba0c0 100644
+>--- a/arch/x86/boot/Makefile
+>+++ b/arch/x86/boot/Makefile
+>@@ -83,6 +83,9 @@ cmd_image =3D $(obj)/tools/build $(obj)/setup=2Ebin $(o=
+bj)/vmlinux=2Ebin \
+>=20
+> $(obj)/bzImage: $(obj)/setup=2Ebin $(obj)/vmlinux=2Ebin $(obj)/tools/bui=
+ld FORCE
+> 	$(call if_changed,image)
+>+	@$(kecho) "sbat,1,SBAT Version,sbat,1,https://github=2Ecom/rhboot/shim/=
+blob/main/SBAT=2Emd" > linux=2Esbat
+>+	@$(kecho) "linux,1,The Linux Developers,linux,$(KERNELVERSION),https://=
+linux=2Eorg" >> linux=2Esbat;
+>+	$(OBJCOPY) --set-section-alignment '=2Esbat=3D512' --add-section =2Esba=
+t=3Dlinux=2Esbat $@;
+> 	@$(kecho) 'Kernel: $@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat =
+=2Eversion`)')'
+>=20
+> OBJCOPYFLAGS_vmlinux=2Ebin :=3D -O binary -R =2Enote -R =2Ecomment -S
 
-Oh, alright, actually, I've described this problem literally, but maybe it's not
-clear, let me give some examples as below:
-
-echo 0 > /sys/fs/f2fs/vdb/max_small_discards
-xfs_io -f /mnt/f2fs/file -c "pwrite 0 2m" -c "fsync"
-xfs_io /mnt/f2fs/file -c "fpunch 0 4k"
-sync
-cat /proc/fs/f2fs/vdb/discard_plist_info |head -2
-
-echo 100 > /sys/fs/f2fs/vdb/max_small_discards
-rm /mnt/f2fs/file
-xfs_io -f /mnt/f2fs/file -c "pwrite 0 2m" -c "fsync"
-xfs_io /mnt/f2fs/file -c "fpunch 0 4k"
-sync
-cat /proc/fs/f2fs/vdb/discard_plist_info |head -2
-
-Before the patch:
-
-Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
-   0         .       .       .       .       .       .       .       .
-
-Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
-   0         3       1       .       .       .       .       .       .
-
-After the patch:
-Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
-   0         .       .       .       .       .       .       .       .
-
-Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
-   0         .       .       .       .       .       .       .       .
-
-So, now max_small_discards can not be used to control small discard number
-cached by checkpoint.
-
-Thanks,
-
-> 
->>
->> I think there is another way to achieve "avoid long checkpoint latency caused
->> by committing huge # of small discards", the way is we can set max_small_discards
->> to small value or zero, w/ such configuration, it will take checkpoint much less
->> time or no time to committing small discard due to below control logic:
->>
->> f2fs_flush_sit_entries()
->> {
->> ...
->> 			if (!(cpc->reason & CP_DISCARD)) {
->> 				cpc->trim_start = segno;
->> 				add_discard_addrs(sbi, cpc, false);
->> 			}
->> ...
->> }
->>
->> add_discard_addrs()
->> {
->> ...
->> 	while (force || SM_I(sbi)->dcc_info->nr_discards <=
->> 				SM_I(sbi)->dcc_info->max_discards) {
->>
->> It will break the loop once nr_discards is larger than max_discards, if
->> max_discards is set to zero, checkpoint won't take time to handle small discards.
->>
->> ...
->> 		if (!de) {
->> 			de = f2fs_kmem_cache_alloc(discard_entry_slab,
->> 						GFP_F2FS_ZERO, true, NULL);
->> 			de->start_blkaddr = START_BLOCK(sbi, cpc->trim_start);
->> 			list_add_tail(&de->list, head);
->> 		}
->> ...
->> 	}
->> ...
->>
->> Thanks,
->>
->>>
->>>>
->>>> Thanks,
->>>>
->>>>>
->>>>>>
->>>>>>    From eb89d9b56e817e3046d7fa17165b12416f09d456 Mon Sep 17 00:00:00 2001
->>>>>> From: Chao Yu <chao@kernel.org>
->>>>>> Date: Mon, 3 Jul 2023 09:06:53 +0800
->>>>>> Subject: [PATCH] Revert "f2fs: enable small discard by default"
->>>>>>
->>>>>> This reverts commit d618ebaf0aa83d175658aea5291e0c459d471d39 in order
->>>>>> to disable small discard by default, so that if there're huge number of
->>>>>> small discards, it will decrease checkpoint's latency obviously.
->>>>>>
->>>>>> Also, this patch reverts 9ac00e7cef10 ("f2fs: do not issue small discard
->>>>>> commands during checkpoint"), due to it breaks small discard feature which
->>>>>> may be configured via sysfs entry max_small_discards.
->>>>>>
->>>>>> Fixes: 9ac00e7cef10 ("f2fs: do not issue small discard commands during checkpoint")
->>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
->>>>>> ---
->>>>>>     fs/f2fs/segment.c | 4 ++--
->>>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->>>>>> index 14c822e5c9c9..0a313368f18b 100644
->>>>>> --- a/fs/f2fs/segment.c
->>>>>> +++ b/fs/f2fs/segment.c
->>>>>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
->>>>>>     			len = next_pos - cur_pos;
->>>>>>
->>>>>>     			if (f2fs_sb_has_blkzoned(sbi) ||
->>>>>> -					!force || len < cpc->trim_minlen)
->>>>>> +			    (force && len < cpc->trim_minlen))
->>>>>>     				goto skip;
->>>>>>
->>>>>>     			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
->>>>>> @@ -2269,7 +2269,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
->>>>>>     	atomic_set(&dcc->queued_discard, 0);
->>>>>>     	atomic_set(&dcc->discard_cmd_cnt, 0);
->>>>>>     	dcc->nr_discards = 0;
->>>>>> -	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
->>>>>> +	dcc->max_discards = 0;
->>>>>>     	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
->>>>>>     	dcc->min_discard_issue_time = DEF_MIN_DISCARD_ISSUE_TIME;
->>>>>>     	dcc->mid_discard_issue_time = DEF_MID_DISCARD_ISSUE_TIME;
->>>>>> -- 
->>>>>> 2.40.1
->>>>>>
->>>>>>
->>>>>>
->>>>>>>      			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
+Please ignore my previous message=2E It is a separate PECOFF section becau=
+se it is consumed by UEFI rather than Linux=2E
