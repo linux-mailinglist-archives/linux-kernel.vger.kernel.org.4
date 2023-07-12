@@ -2,233 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E991750985
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66244750986
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbjGLNXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S233008AbjGLNXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbjGLNWp (ORCPT
+        with ESMTP id S233681AbjGLNW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:22:45 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2071.outbound.protection.outlook.com [40.107.220.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0B91BD1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:22:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wrwl16wuggIrqom+Xoe+BetN9x8vEJ5Yqg35VnmBiHOOZFCT5vTK8ysXEvAvjnsR6SPXkK8hBy22cCaTrydEXH+wIoDzmZjGHijTkjBUHptmJ89E54XkBDK8nRIjh8NM9nouZHDsTWncj4dUiNTfKJ3OS/wSGTjy5lmWPpCDGeODF8ZTF1BqZsbvj7haJci3ajuQfnmWGbIkM0/v9FCAYBIXeqrTOPls0gUdEpAv7X0DsSJDqKj0v7T0H2BmVegzCnMbUvHQ2J+GG4dhxan+wM37UHWcUE52PU6mgv84zzJXFerxHVWVKNXkYcg4L5M45P+EreyiJsIxL/vGTHlAXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EPQ6NcBWL1rQz/cpxl99LJZ3X8nSpqvTOFw1IMDaRzY=;
- b=XN2M6+R1vK8D4veDWsv/1p91tO6vEbjvx4/NwFniTkxpYjvaZ1ukiB5nTorWrQv5Dc/ifSHD3AEIeJm7hjHXcBJ93Mt3QYu/7olW49MRVgs7Vgh25/5sJWH4uHo/OcyZkhtgjhc/4szT8zJ41/A32K0GM22sjAYcTLKIQtrjzOMX24S+OivMD4W8LTLP5OfxQhTezWc2/+LxWrUtskLpl+HmzLLx+t4DD/XfhGEdtyXg6rmCaULgpvSJL/4pAt6Y6ENo7gOX/0MD0ACY4pJzwzLcnl/gQhmISiUK4UDGSI9n7sr561ya3eBicZzYn5foRiKzQss67in5Rt31rg10Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EPQ6NcBWL1rQz/cpxl99LJZ3X8nSpqvTOFw1IMDaRzY=;
- b=iCmh4+34RvGkB+q8N2nVQDyWTEsQ79++c34esrelou5fTlVfC3pR7QysHPQF+z3pLAxJ6fnFSewYr3C/QjkYiJBYSTBPKfJ/2eYcorj1rlUpyASFJxXnDdfyY9LnuDsQhM9t2AkdkSdrgQNJ86xKuvTdmr+GD0vEQq1+aWmMMcI=
-Received: from DM4PR12MB7765.namprd12.prod.outlook.com (2603:10b6:8:102::7) by
- PH0PR12MB8175.namprd12.prod.outlook.com (2603:10b6:510:291::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.31; Wed, 12 Jul 2023 13:22:40 +0000
-Received: from DM4PR12MB7765.namprd12.prod.outlook.com
- ([fe80::8d98:f5c2:35b:e9ff]) by DM4PR12MB7765.namprd12.prod.outlook.com
- ([fe80::8d98:f5c2:35b:e9ff%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 13:22:40 +0000
-From:   "Gangurde, Abhijit" <abhijit.gangurde@amd.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>
-Subject: RE: [PATCH 2/4] cdx: add sysfs for reset_all
-Thread-Topic: [PATCH 2/4] cdx: add sysfs for reset_all
-Thread-Index: AQHZs/EUUy9Euq5qGkqDKEw5nDOPv6+0l/SAgAF9vjA=
-Date:   Wed, 12 Jul 2023 13:22:39 +0000
-Message-ID: <DM4PR12MB77654A9127AAFE17BAC021A58F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
-References: <20230711121027.936487-1-abhijit.gangurde@amd.com>
- <20230711121027.936487-3-abhijit.gangurde@amd.com>
- <2023071111-unreached-probation-45c5@gregkh>
-In-Reply-To: <2023071111-unreached-probation-45c5@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=0a6ee296-dedd-40cd-9138-d5eb6ecdf1c9;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-07-12T12:45:51Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB7765:EE_|PH0PR12MB8175:EE_
-x-ms-office365-filtering-correlation-id: a5b8d241-3da5-47fb-1d5e-08db82db1123
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9KNETHW3/a8TbIEepqelJpbI4UUM507kxJnOm5jjcjvi5l1ACa1DjSAuZDjjsHoP8Tdgx2Wdrl+F/ak7u2i+B3KiE5Fq+DpBMNEFB6lrBCkoiC65KoLSZACjHk9S7ZBmHipS15OkcxHDEvcvtNrkcXyScGxbNW3E3ptfoL3FE16MlAL9Bql7809f7YNJx9VBf9r/agyEp3WD1ZwbJ0ntKNAZHL9bnu3XB2YAArvEUKhZ65q4xQQ/nH6Ouat9PJYBidD4TeBcrOxqv+kll1AjkTo+gX9lofqGBg9T54tC+4CWXk2+ZAFCK3r5Oggdn/T4D8DjG3kqTEnA5Ijh4wh8g7Zh1xKiQgzohzB5kbrWGXlZ4Q4RjqMmZP1kMh0YyQVTD3gvvmgZ1ZPEHN70LcerqF98tHdKBSy2Bbea3H07ekiJs1P3dyo+ruvrFOL5PYuIeHa0hAHpC4NkMikgUyqnnmY27BHaXKyquzPectVP3j65T7o4NtZUXZCLwhteuhoqCrxE4k4CUotj+AT05h87G3J3GVnte1TY4M9YN90ZewbkgghVV26+Ud8QUgHMKqXc4s9j4sJ910jA98MgvokEgFHYh8Yo5ypirDryXv7yvzG5Fhs5cQUv/I3WVe+78vM3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB7765.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199021)(6506007)(54906003)(122000001)(38100700002)(2906002)(9686003)(186003)(86362001)(5660300002)(64756008)(6916009)(66446008)(4326008)(66476007)(66556008)(66946007)(76116006)(38070700005)(478600001)(55016003)(33656002)(316002)(8676002)(52536014)(8936002)(83380400001)(7696005)(41300700001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3+QOkqx0IY6vBCrXzpkIXWPWArF/Hy88hsEgsT0cBZ4gJ00ACERPrNNJUeA8?=
- =?us-ascii?Q?6JWxmVHtolRm/2QzdQ9uSb5uTo+rRXYt0WfAiJCs8aEGoUdvw4QNiPl/EqD6?=
- =?us-ascii?Q?Elz3dcoRKeLhfQ85oiFf4jISxYuFIU0A/fQusmBnCFwNv9qehNzmhs16FBcr?=
- =?us-ascii?Q?7rpCQEKG1ZxwDrXc6VkEDGViNDEH2VhWTtFplRUBdzxVKMn1y80bbD2EJNmV?=
- =?us-ascii?Q?qizcRGfQreQnhO745WBeLXjygE6BqLVcJ+dDfUWzD52KdZVFRdE9IgSDxNIO?=
- =?us-ascii?Q?s4b/VNJS9+CvzBSyMa1QcdaRrEe/TShwkhhAKnO0PAbzyqj5LVut/zlwLf9A?=
- =?us-ascii?Q?LKv8Iuvl2dWlY+oNOop0BiGiVHOQGlfpKaTJszXYtTy6GYxuvdgYA6n9yn8Y?=
- =?us-ascii?Q?I4kVtp3GNKQPE8lswjjjsAK9Ch/8amQFoTbNd15tTK9LmMFqAqlEIdGyz4XV?=
- =?us-ascii?Q?tTbt5O2nekdz8cVrlufAhkPzM6amKTHR6HR8G6OW+RPvMSoqaL+62DRkWSFY?=
- =?us-ascii?Q?ueY28zMvlAP4CZFeyFLyTCbsO/gD4P0iqQ/1daZPrgAtQanVT6La8vaOo55k?=
- =?us-ascii?Q?x/Z3XWvRTmKNFwgo+sG10SSXGte3nwd9UYuPw3UhIAvT0ncO8o3J5KM5Yinc?=
- =?us-ascii?Q?GrAo1cl6VOLlC1aOZs+1c+BtBfx6sJPArO5NvQ+vQfSaoZKmUAR4ZYyOjrQe?=
- =?us-ascii?Q?W3NEU0Vt3bZjflhHb35pjhhp0Y87D9ee5SQH294EQF8dkSKAQh4JYwVqCsno?=
- =?us-ascii?Q?qR7+Sp/MGY6HKdD0rAXgsnUh2rWUQjQYP/fB6E++xkBk73G2/Hsiiw6JGeZS?=
- =?us-ascii?Q?djtUrpxyxDFpVHONUiRCSblN6xau7F3mY/RYaQBvDCuc3f7bMIhC7APoHz6y?=
- =?us-ascii?Q?I4kOuELW48IcBTXQl55MyimNDWfvZEf/VUKsMezSkapc350AmlWmR1gstb39?=
- =?us-ascii?Q?eli5vgznxw//a8cZ846L4s5T0EUVlbrT6SKSnCxtQBL5g2eVoIKlkErSDHfr?=
- =?us-ascii?Q?aLhvuo6kTXsOujuqDNnW/k0Jmrth4Y9PY7Yp9gLfQuo1sIOCw49Q2rATMGH+?=
- =?us-ascii?Q?gYb8zZA5HcSO/Qbxd7Js36XH52ot/y8ospZ1Bd2DskCQgfgOnbC5d2uohGsd?=
- =?us-ascii?Q?qOtL8GX5ff1yekyRJez6EIx087n+0tp6ulkSaL+jxIsgdzJ6mMCjkdFkLXGF?=
- =?us-ascii?Q?UxztQfAzhJgCc9GJ/YxT5Rb5WN7TnAmWWNt4a+B47VmXN+MyLqPjjmKwQqlb?=
- =?us-ascii?Q?MiIm8xUX8o0oi+7BwvvthFVZSiIep/TRb1eaiZGAT+5P+iSLceSwAlFPrfRs?=
- =?us-ascii?Q?2j+IsRJ1vfHJO8QCqXpZ4s85gUYOrveVopwIIY/jP2vSCB4+TRSDAajd8qxY?=
- =?us-ascii?Q?XSZfOKwgBb7iJsk+aXtcapJ8jqww984uBOjo4Ss8uVOoCmnRg9QI5sfOeuOz?=
- =?us-ascii?Q?rYibmz88rSMDhjGYg/1Q8hvrjcCSiOIMyeOeh3rD6WEQ3inhFBgiy9gVDbPu?=
- =?us-ascii?Q?l1wroPyTmUmyZx21fy5Kp6JD3qEq5K5Yom+GhuqZ98FGyT3iVp428Eo1Et7J?=
- =?us-ascii?Q?5Fg0trjacKjpQM9IRI542FORgwFKwDNWeBCzcL3cDJycA7PcNPyr3TIJJ2Zq?=
- =?us-ascii?Q?n07iQsXU6ntebnFzs95uqK8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 12 Jul 2023 09:22:58 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7981999
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:22:54 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b708e49059so110169841fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689168173; x=1691760173;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vJdY0r0c+OQBiyruPlkckpTHmMf63inSmX8kBhtjPIo=;
+        b=At6+ABsjo0n6r+pxO/uwJo3EAAitynpBh4JaHqb2lftgVryeeX7e18z5QoGiN/qhp1
+         f4wejg6o0TyAuHz2FtgssMVkK6rsxGr04mAfsbtUfaulQrW6z59gQvZhXp73m5ZVMCLq
+         Tz5zKSvVoSHznI+x6LdTMqvM1YrP+tBkYXfWOrSCxZnaP7XIWzD/3T5fzMtDrY2ksuyV
+         YYPX4MaIg9yKkEyEKLlckr8hGjyLmMd/1VxnDqcGUhWXpnNjTpYwoyZKmuqWvLfvWNgD
+         t8M29ZjfMF418kO7hMMn2uzk9n8skPMSwRUn00fVAg2SBgp3xVdVz+28nzSbZPWe2ZRm
+         kW3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689168173; x=1691760173;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vJdY0r0c+OQBiyruPlkckpTHmMf63inSmX8kBhtjPIo=;
+        b=UUbdv71Syk8GjB4FBUAi2Czw2rDZ/3k5dj0nDT2N4oQ+gGgIT8gGxt6epfR9S5iX3Y
+         UfKSNhiNlQlS6dK3gmVISinUehUIsfvHNTHQvSYEEucElbPR05o8T7dExlbubZoY/CXN
+         LmiOb9oXBuBn/a1RRxzQSvoA7kEf1LzeYWOmdqNyTtaa9mcuhA21+EauyD6tmjWNozJr
+         leSNL94zZiMRNhQi8BMFLi0QO2Z4TlZlDaBuG7NAYowyydYJjOGczEpKRk/zXiPdGdvi
+         0l7eXIYIwycd/B+l1zLNZ9EzZ6/7DvAtxH74l3sjCLKyK7UCuD48SK8eqvt03AQ4U1G2
+         rstQ==
+X-Gm-Message-State: ABy/qLYLl+Wv8wWtP/+2BW1zYK7c//98yYTDB7Gaju2plCvTjHYkZOHt
+        ofiyVGUB0mLhbnTEy5a5XENlpg==
+X-Google-Smtp-Source: APBJJlF3qn8wSSD82KbbVvLgpEPjF7dqmfgzaZs+L3SWjow2RfwwBY7n5ke7AHqBXeoqh9k2+e1wCA==
+X-Received: by 2002:a2e:3313:0:b0:2b6:fa3e:f2fa with SMTP id d19-20020a2e3313000000b002b6fa3ef2famr15436572ljc.32.1689168172845;
+        Wed, 12 Jul 2023 06:22:52 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id t21-20020a2e9555000000b002b6ff15226fsm963620ljh.59.2023.07.12.06.22.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 06:22:52 -0700 (PDT)
+Message-ID: <107aad9f-40c0-f32b-9f74-6c82ee6785bf@linaro.org>
+Date:   Wed, 12 Jul 2023 16:22:51 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB7765.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5b8d241-3da5-47fb-1d5e-08db82db1123
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2023 13:22:39.9718
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4xLvis3AIxVMdRysZcP1b78pS7zdkrmN+xLH7Fzn/4e3xLhoqEpTUsq970RvI6sY05JcmFRUKCLQKdkWiofPBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8175
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 14/14] scsi: ufs: qcom: Add support for scaling
+ interconnects
+Content-Language: en-GB
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
+References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
+ <20230712103213.101770-19-manivannan.sadhasivam@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230712103213.101770-19-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On 12/07/2023 13:32, Manivannan Sadhasivam wrote:
+> Qcom SoCs require scaling the interconnect paths for proper working of the
+> peripherals connected through interconnects. Even for accessing the UFS
+> controller, someone should setup the interconnect paths. So far, the
+> bootloaders used to setup the interconnect paths before booting linux as
+> they need to access the UFS storage for things like fetching boot firmware.
+> But with the advent of multi boot options, bootloader nowadays like in
+> SA8540p SoC do not setup the interconnect paths at all.
+> 
+> So trying to configure UFS in the absence of the interconnect path
+> configuration, results in boot crash.
+> 
+> To fix this issue and also to dynamically scale the interconnects (UFS-DDR
+> and CPU-UFS), interconnect API support is added to the Qcom UFS driver.
+> With this support, the interconnect paths are scaled dynamically based on
+> the gear configuration.
+> 
+> During the early stage of ufs_qcom_init(), ufs_qcom_icc_init() will setup
+> the paths to max bandwidth to allow configuring the UFS registers. Touching
+> the registers without configuring the icc paths would result in a crash.
+> However, we don't really need to set max vote for the icc paths as any
+> minimal vote would suffice. But the max value would allow initialization to
+> be done faster. After init, the bandwidth will get updated using
+> ufs_qcom_icc_update_bw() based on the gear and lane configuration.
+> 
+> The bandwidth values defined in ufs_qcom_bw_table struct are taken from
+> Qcom downstream vendor devicetree source and are calculated as per the
+> UFS3.1 Spec, Section 6.4.1, HS Gear Rates. So it is fixed across platforms.
+> 
+> Cc: Brian Masney <bmasney@redhat.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/ufs/host/ufs-qcom.c | 131 +++++++++++++++++++++++++++++++++++-
+>   drivers/ufs/host/ufs-qcom.h |   3 +
+>   2 files changed, 133 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 8d6fd4c3324f..8a3132d45a65 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -7,6 +7,7 @@
+>   #include <linux/time.h>
+>   #include <linux/clk.h>
+>   #include <linux/delay.h>
+> +#include <linux/interconnect.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+> @@ -46,6 +47,49 @@ enum {
+>   	TSTBUS_MAX,
+>   };
+>   
+> +#define QCOM_UFS_MAX_GEAR 4
+> +#define QCOM_UFS_MAX_LANE 2
+> +
+> +enum {
+> +	MODE_MIN,
+> +	MODE_PWM,
+> +	MODE_HS_RA,
+> +	MODE_HS_RB,
+> +	MODE_MAX,
 
-> > Add sysfs for reset_all entry which resets all the
-> > devices on the CDX bus.
->
-> On all CDX busses, right?  Why all?  Why not per-bus?
->
+MODE_MIN and MODE_MAX seem to be unused
 
-This was on similar line to bus enable/disable. Would extend this to suppor=
-t per bus in v2.
+> +};
+> +
+> +struct __ufs_qcom_bw_table {
+> +	u32 bw1;
+> +	u32 bw2;
 
->
-> >
-> > Co-developed-by: Puneet Gupta <puneet.gupta@amd.com>
-> > Signed-off-by: Puneet Gupta <puneet.gupta@amd.com>
-> > Co-developed-by: Nipun Gupta <nipun.gupta@amd.com>
-> > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> > Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-> > Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-
-> vuuren@amd.com>
-> > Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-cdx | 11 ++++++++++
-> >  drivers/cdx/cdx.c                       | 29 +++++++++++++++++++++++++
-> >  2 files changed, 40 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-cdx
-> b/Documentation/ABI/testing/sysfs-bus-cdx
-> > index 0afa85b3c63b..d9e00058471d 100644
-> > --- a/Documentation/ABI/testing/sysfs-bus-cdx
-> > +++ b/Documentation/ABI/testing/sysfs-bus-cdx
-> > @@ -22,6 +22,17 @@ Description:
-> >
-> >               # echo 0 > /sys/bus/cdx/enable
-> >
-> > +What:              /sys/bus/cdx/reset_all
-> > +Date:              July 2023
-> > +Contact:   puneet.gupta@amd.com
-> > +Description:
-> > +           Writing y/1/on to this file resets all the devices
-> > +           present on the CDX bus
-> > +
-> > +           For example::
-> > +
-> > +             # echo 1 > /sys/bus/cdx/reset_all
->
-> What does resetting a device mean will happen?
+Please consider:
 
-It would be same of pcie flr to the device. Would add more description in v=
-2.
+s/bw1/mem_bw/
+s/bw2/cfg_bw/
 
->
-> > +
-> >  What:              /sys/bus/cdx/devices/.../vendor
-> >  Date:              March 2023
-> >  Contact:   nipun.gupta@amd.com
-> > diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
-> > index 48c493a43491..4d20047b55bb 100644
-> > --- a/drivers/cdx/cdx.c
-> > +++ b/drivers/cdx/cdx.c
-> > @@ -106,6 +106,11 @@ int cdx_dev_reset(struct device *dev)
-> >  }
-> >  EXPORT_SYMBOL_GPL(cdx_dev_reset);
-> >
-> > +static int reset_cdx_device(struct device *dev, void *data)
-> > +{
-> > +   return cdx_dev_reset(dev);
-> > +}
-> > +
-> >  /**
-> >   * cdx_unregister_device - Unregister a CDX device
-> >   * @dev: CDX device
-> > @@ -433,9 +438,33 @@ static ssize_t rescan_store(const struct bus_type
-> *bus,
-> >  }
-> >  static BUS_ATTR_WO(rescan);
-> >
-> > +static ssize_t reset_all_store(const struct bus_type *bus,
-> > +                          const char *buf, size_t count)
-> > +{
-> > +   bool val;
-> > +   int ret;
-> > +
-> > +   if (kstrtobool(buf, &val) < 0)
-> > +           return -EINVAL;
-> > +
-> > +   if (!val)
-> > +           return -EINVAL;
-> > +
-> > +   /* Reset all the devices attached to cdx bus */
-> > +   ret =3D bus_for_each_dev(bus, NULL, NULL, reset_cdx_device);
->
-> No locking needed?
+> +} ufs_qcom_bw_table[MODE_MAX + 1][QCOM_UFS_MAX_GEAR + 1][QCOM_UFS_MAX_LANE + 1] = {
 
-Would protect this with  a lock.
+I'd say, these +1's are slightly confusing and unnecessary.
 
->
-> > +   if (ret) {
-> > +           pr_err("error in CDX bus reset\n");
->
-> What error?  For what device?  Put the error message in the reset
-> callback, not here, as you have no idea what device failed.
+> +	[MODE_MIN][0][0] = { 0,		0 },	/* Bandwidth values are in KB/s */
 
-Would correct in v2.
+I'd say, this becomes impossible to check. Can you please structure it?
+Either by inclusion:
 
-Thanks,
-Abhijit
+[MODE_PWM] = {
+   [1] = {
+      [1] = { .. },
+      [2] = { .. },
+   },
+   // etc.
+};
+
+Also, do we have defines for gears? Can we use them instead of indices?
+
+> +	[MODE_PWM][1][1] = { 922,	1000 },
+> +	[MODE_PWM][2][1] = { 1844,	1000 },
+> +	[MODE_PWM][3][1] = { 3688,	1000 },
+> +	[MODE_PWM][4][1] = { 7376,	1000 },
+> +	[MODE_PWM][1][2] = { 1844,	1000 },
+> +	[MODE_PWM][2][2] = { 3688,	1000 },
+> +	[MODE_PWM][3][2] = { 7376,	1000 },
+> +	[MODE_PWM][4][2] = { 14752,	1000 },
+> +	[MODE_HS_RA][1][1] = { 127796,	1000 },
+> +	[MODE_HS_RA][2][1] = { 255591,	1000 },
+> +	[MODE_HS_RA][3][1] = { 1492582,	102400 },
+> +	[MODE_HS_RA][4][1] = { 2915200,	204800 },
+> +	[MODE_HS_RA][1][2] = { 255591,	1000 },
+> +	[MODE_HS_RA][2][2] = { 511181,	1000 },
+> +	[MODE_HS_RA][3][2] = { 1492582,	204800 },
+> +	[MODE_HS_RA][4][2] = { 2915200,	409600 },
+> +	[MODE_HS_RB][1][1] = { 149422,	1000 },
+> +	[MODE_HS_RB][2][1] = { 298189,	1000 },
+> +	[MODE_HS_RB][3][1] = { 1492582,	102400 },
+> +	[MODE_HS_RB][4][1] = { 2915200,	204800 },
+> +	[MODE_HS_RB][1][2] = { 298189,	1000 },
+> +	[MODE_HS_RB][2][2] = { 596378,	1000 },
+> +	[MODE_HS_RB][3][2] = { 1492582,	204800 },
+> +	[MODE_HS_RB][4][2] = { 2915200,	409600 },
+> +	[MODE_MAX][0][0] = { 7643136, 307200 },
+> +};
+> +
+>   static struct ufs_qcom_host *ufs_qcom_hosts[MAX_UFS_QCOM_HOSTS];
+>   
+>   static void ufs_qcom_get_default_testbus_cfg(struct ufs_qcom_host *host);
+> @@ -789,6 +833,51 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
+>   	}
+>   }
+>   
+> +static int ufs_qcom_icc_set_bw(struct ufs_qcom_host *host, u32 bw1, u32 bw2)
+> +{
+> +	struct device *dev = host->hba->dev;
+> +	int ret;
+> +
+> +	ret = icc_set_bw(host->icc_ddr, 0, bw1);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = icc_set_bw(host->icc_cpu, 0, bw2);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct __ufs_qcom_bw_table ufs_qcom_get_bw_table(struct ufs_qcom_host *host)
+> +{
+> +	struct ufs_pa_layer_attr *p = &host->dev_req_params;
+> +	int gear = max_t(u32, p->gear_rx, p->gear_tx);
+> +	int lane = max_t(u32, p->lane_rx, p->lane_tx);
+> +
+> +	if (ufshcd_is_hs_mode(p)) {
+> +		if (p->hs_rate == PA_HS_MODE_B)
+> +			return ufs_qcom_bw_table[MODE_HS_RB][gear][lane];
+> +		else
+> +			return ufs_qcom_bw_table[MODE_HS_RA][gear][lane];
+> +	} else {
+> +		return ufs_qcom_bw_table[MODE_PWM][gear][lane];
+> +	}
+> +}
+> +
+> +static int ufs_qcom_icc_update_bw(struct ufs_qcom_host *host)
+> +{
+> +	struct __ufs_qcom_bw_table bw_table;
+> +
+> +	bw_table = ufs_qcom_get_bw_table(host);
+> +
+> +	return ufs_qcom_icc_set_bw(host, bw_table.bw1, bw_table.bw2);
+> +}
+> +
+>   static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+>   				enum ufs_notify_change_status status,
+>   				struct ufs_pa_layer_attr *dev_max_params,
+> @@ -852,6 +941,8 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+>   		memcpy(&host->dev_req_params,
+>   				dev_req_params, sizeof(*dev_req_params));
+>   
+> +		ufs_qcom_icc_update_bw(host);
+> +
+>   		/* disable the device ref clock if entered PWM mode */
+>   		if (ufshcd_is_hs_mode(&hba->pwr_info) &&
+>   			!ufshcd_is_hs_mode(dev_req_params))
+> @@ -981,7 +1072,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
+>   
+>   	switch (status) {
+>   	case PRE_CHANGE:
+> -		if (!on) {
+> +		if (on) {
+> +			ufs_qcom_icc_update_bw(host);
+> +		} else {
+>   			if (!ufs_qcom_is_link_active(hba)) {
+>   				/* disable device ref_clk */
+>   				ufs_qcom_dev_ref_clk_ctrl(host, false);
+> @@ -993,6 +1086,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
+>   			/* enable the device ref clock for HS mode*/
+>   			if (ufshcd_is_hs_mode(&hba->pwr_info))
+>   				ufs_qcom_dev_ref_clk_ctrl(host, true);
+> +		} else {
+> +			ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MIN][0][0].bw1,
+> +					    ufs_qcom_bw_table[MODE_MIN][0][0].bw2);
+>   		}
+>   		break;
+>   	}
+> @@ -1031,6 +1127,34 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
+>   	.deassert = ufs_qcom_reset_deassert,
+>   };
+>   
+> +static int ufs_qcom_icc_init(struct ufs_qcom_host *host)
+> +{
+> +	struct device *dev = host->hba->dev;
+> +	int ret;
+> +
+> +	host->icc_ddr = devm_of_icc_get(dev, "ufs-ddr");
+> +	if (IS_ERR(host->icc_ddr))
+> +		return dev_err_probe(dev, PTR_ERR(host->icc_ddr),
+> +				    "failed to acquire interconnect path\n");
+> +
+> +	host->icc_cpu = devm_of_icc_get(dev, "cpu-ufs");
+> +	if (IS_ERR(host->icc_cpu))
+> +		return dev_err_probe(dev, PTR_ERR(host->icc_cpu),
+> +				    "failed to acquire interconnect path\n");
+> +
+> +	/*
+> +	 * Set Maximum bandwidth vote before initializing the UFS controller and
+> +	 * device. Ideally, a minimal interconnect vote would suffice for the
+> +	 * initialization, but a max vote would allow faster initialization.
+> +	 */
+> +	ret = ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MAX][0][0].bw1,
+> +				  ufs_qcom_bw_table[MODE_MAX][0][0].bw2);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed to set bandwidth request\n");
+> +
+> +	return 0;
+> +}
+> +
+>   /**
+>    * ufs_qcom_init - bind phy with controller
+>    * @hba: host controller instance
+> @@ -1085,6 +1209,10 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+>   		}
+>   	}
+>   
+> +	err = ufs_qcom_icc_init(host);
+> +	if (err)
+> +		goto out_variant_clear;
+> +
+>   	host->device_reset = devm_gpiod_get_optional(dev, "reset",
+>   						     GPIOD_OUT_HIGH);
+>   	if (IS_ERR(host->device_reset)) {
+> @@ -1282,6 +1410,7 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
+>   				    dev_req_params->pwr_rx,
+>   				    dev_req_params->hs_rate,
+>   				    false);
+> +		ufs_qcom_icc_update_bw(host);
+>   		ufshcd_uic_hibern8_exit(hba);
+>   	}
+>   
+> diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+> index 6289ad5a42d0..dc27395ecba1 100644
+> --- a/drivers/ufs/host/ufs-qcom.h
+> +++ b/drivers/ufs/host/ufs-qcom.h
+> @@ -206,6 +206,9 @@ struct ufs_qcom_host {
+>   	struct clk *tx_l1_sync_clk;
+>   	bool is_lane_clks_enabled;
+>   
+> +	struct icc_path *icc_ddr;
+> +	struct icc_path *icc_cpu;
+> +
+>   #ifdef CONFIG_SCSI_UFS_CRYPTO
+>   	struct qcom_ice *ice;
+>   #endif
+
+-- 
+With best wishes
+Dmitry
+
