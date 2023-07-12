@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA427509B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8742F7509C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjGLNjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S232947AbjGLNlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjGLNjb (ORCPT
+        with ESMTP id S232727AbjGLNk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:39:31 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6831BEA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:39:28 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R1JkN60NszBJDhY
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 21:39:24 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689169164; x=1691761165; bh=/UeUJ1f7hroFyIuieneXVutLeIx
-        IgeB0rY2bsGxmm5E=; b=IYaEUMUe1ZFauc6hj1TuFr9o2tMxm0uf6N0RUuw3r14
-        hg2E10eXAEMmw/7DrJKoOkN8iZLlIyNZZexZxV3TEgSo+TxK3YHGJ5gmt4Zee4Gf
-        L4cForHjiIdv4wJ9MtODBe25P8Cf1RcHVFWda4UPLcZhXqK0Sdc4u8d2oTbcBDg/
-        MT0NyhwR+tcEipfApmJcMjZMa4g1RlrEId3iTojMI2iJ4FKzG4h4ZcR0LbBDgHuQ
-        QMAwflO/hUmcGkfYnd0yAAGV1a/kL7K4m8exFn7tWdHnKy0dnPcQSv5Y6RCVEUTR
-        PX7IJjsULm2I1/zqROVnVZCUIS9++XCgZ8tQ46Ujmhw==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vYAJDklKbtC1 for <linux-kernel@vger.kernel.org>;
-        Wed, 12 Jul 2023 21:39:24 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R1JkN2dtFzBR7b8;
-        Wed, 12 Jul 2023 21:39:24 +0800 (CST)
+        Wed, 12 Jul 2023 09:40:56 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE3119BE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:40:55 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso3906872b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689169254; x=1691761254;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Kqh6fNIY9AJljwrK0e2rNLKBwfhh3ijZgx+ok+fnrI=;
+        b=5EEoH9hI3BRpj2k/wZBtzWVgxdQWeCG9MGqEeequWdxBEGrdLj7Fvi2FV7Ph5MuL1s
+         x0rQUYf/MUXN4WMG2g9ORlwQpo8h4oK3qBQdyBdGbLd+rL77EqH6G27LcOaHq6E2+g+z
+         17McHVpC5lE5vi7aWaxmfSYNman4xCnTDNf22eM1cbCpTik9xPLD54dLEgJs7IyO0t2z
+         F/WPkuK8g7m0eAHx6yMATB46qdro5jRbxjAfonFDv9uRNgHq2ln+nxze86OMLdIgAghl
+         nZUv6OPqsbrt6t9CPga55Jes0G+j8o9vxSJVOvisc9CGq4FfmI9tDOQXq0/zRyiXQtLt
+         61Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689169254; x=1691761254;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3Kqh6fNIY9AJljwrK0e2rNLKBwfhh3ijZgx+ok+fnrI=;
+        b=lMkjqTTgfzGOrc3CJDS9P2bHi1MbGWQaog4ec6eS+GaU4l1an+nYwfOLhEmEp09AJZ
+         pFufbaKoao1aV2MMapfDGJa2CDPn/Ge7h6tKKlaleNZVAHzucPZ8RuSTcTkL7z7m9tm1
+         SxbMU2Mfc8FVjSq61UC1/4QyThncCvsLvZFiYH0Z5T4skPr3GYjzjR46INgqPFbx7/62
+         3OqkECrPgq7F2lAZYJRjSs0hajhRkDdks6AUYYQq7uQMdo9pitnf68fY4s74UvDCxwiy
+         8q8I4QQCbrVc0bhl9gVC0XkOBnkAOEYZDXJIWbGoeEzRVdWg485tRNeI8l5T+RxLTIm0
+         dLIQ==
+X-Gm-Message-State: ABy/qLZAVU1gLG7x1IAIe5XadG4AzE1YY6jzbZ51FW52pnpLMPT2+08C
+        HRk+vFPM0HrCDOEVFcwV0V02XQkq/9eDARJFMMg=
+X-Google-Smtp-Source: APBJJlHhCR4FyKSMod5bL33rCVPPYzjI//x+UGhJ4p+/Acc0Ye58uNfbCQ5C1waGuZMXeHcsBSwFVw==
+X-Received: by 2002:aa7:88c1:0:b0:682:f529:6d69 with SMTP id k1-20020aa788c1000000b00682f5296d69mr10775524pff.7.1689169254368;
+        Wed, 12 Jul 2023 06:40:54 -0700 (PDT)
+Received: from localhost ([50.38.6.230])
+        by smtp.gmail.com with ESMTPSA id c24-20020a62e818000000b0067aea93af40sm3648425pfi.2.2023.07.12.06.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 06:40:53 -0700 (PDT)
+In-Reply-To: <20230628091213.2908149-1-guoren@kernel.org>
+References: <20230628091213.2908149-1-guoren@kernel.org>
+Subject: Re: [PATCH] riscv: sigcontext: Correct the comment of sigreturn
+Message-Id: <168916917326.11308.11157139765378457247.b4-ty@rivosinc.com>
+Date:   Wed, 12 Jul 2023 06:39:33 -0700
 MIME-Version: 1.0
-Date:   Wed, 12 Jul 2023 21:39:24 +0800
-From:   huzhi001@208suo.com
-To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org
-Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] SVM: Fix warnings in svm.h
-In-Reply-To: <tencent_B97FAD99B25D9BCC5AB9EA89BA04061D7B07@qq.com>
-References: <tencent_B97FAD99B25D9BCC5AB9EA89BA04061D7B07@qq.com>
-User-Agent: Roundcube Webmail
-Message-ID: <e541a2b2fe55ade4277f34fa64953683@208suo.com>
-X-Sender: huzhi001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-901c5
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following checkpatch warnings are removed:
-WARNING: Prefer __packed over __attribute__((__packed__))
 
-Signed-off-by: ZhiHu <huzhi001@208suo.com>
----
-  arch/x86/include/asm/svm.h | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 28 Jun 2023 05:12:13 -0400, guoren@kernel.org wrote:
+> The real-time signals enlarged the sigset_t type, and most architectures
+> have changed to using rt_sigreturn as the only way. The riscv is one of
+> them, and there is no sys_sigreturn in it. Only some old architecture
+> preserved sys_sigreturn as part of the historical burden.
+> 
+> 
 
-diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-index e7c7379d6ac7..7ecebccf8a83 100644
---- a/arch/x86/include/asm/svm.h
-+++ b/arch/x86/include/asm/svm.h
-@@ -119,7 +119,7 @@ enum {
-  };
+Applied, thanks!
 
--struct __attribute__ ((__packed__)) vmcb_control_area {
-+struct __packed vmcb_control_area {
-      u32 intercepts[MAX_INTERCEPT];
-      u32 reserved_1[15 - MAX_INTERCEPT];
-      u16 pause_filter_thresh;
+[1/1] riscv: sigcontext: Correct the comment of sigreturn
+      https://git.kernel.org/palmer/c/471aba2e4760
+
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
+
