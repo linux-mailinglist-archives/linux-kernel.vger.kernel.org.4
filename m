@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B7375029A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30ED750299
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjGLJNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
+        id S232963AbjGLJNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjGLJMw (ORCPT
+        with ESMTP id S233131AbjGLJMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:12:52 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FEC11B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:12:50 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so72672375e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:12:50 -0700 (PDT)
+        Wed, 12 Jul 2023 05:12:54 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C2E1BB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:12:52 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so10463131e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:12:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689153169; x=1691745169;
+        d=9elements.com; s=google; t=1689153170; x=1691745170;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=As2y1S5d2MKNIGGSQpxsJqwHM8ix7xWAPQggfbywHb4=;
-        b=Hs0IRBomcYhxipA/LiintP1gtFz4DiE7t+yEZ7uHGCq082dAK1i0xqnOkPPKy9gv5R
-         0FbdI+i1lgZQUBWsNbBF1NsciF7dLdCfuXHCR0pN2QqY5JCCOwqRfSp1GpctvmPzUR72
-         w7h1i24zz9YT8gJoyYvHKhgMm0MNZbQ39XCgCj4TS1023eCnO52jesVLqxrsnIQN/lZX
-         tcH8lTgu3BTy+9Q2I5EhZcilGQu6ttx8rSMi2VN97cTrlhP76iw6Nmun8PiGMYOghkPR
-         /rhtyX0UCFPiXW9Vvx+rPVS2AkypAuUgi+7DRcxcPzQy9a3WGrj5nXOsbsYs6EmAXL/v
-         sepA==
+        bh=Q4ZoGAPYZ8auh+cY1dsqTY2FAmhOhUJEp9FjQd56o+w=;
+        b=dvqNet6tpnktRGtOqzbtsVLpj/bfeHpughlaL3oKMVMMLyJVS2VbOXxFOoQcjHaw5Q
+         MGIrOYLAfDkrECTvPuokDmFvHBWum2prAlWUJk6EkSaeywvahuyjPN9Jq2px5kCLXJMe
+         DTsK+ymPr4+epiKI1oyPCTmuKrNXcWSh1DUQyYFBiwy4MgfMxISiHEjnAK6m/wzPcgUj
+         4A+7jUysHPi7csWV3Z/H4fXL/az/tflwcUMEOpTe29lTUfTDfCMwQlZ33m+WD/WxTzEF
+         qnUPrCxE9rjjZmlsE4GdF6bRoOH3r24nKcfrrDIdWa8TMdv5ceXbknxMoyK+VLMWEQbX
+         SsLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689153169; x=1691745169;
+        d=1e100.net; s=20221208; t=1689153170; x=1691745170;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=As2y1S5d2MKNIGGSQpxsJqwHM8ix7xWAPQggfbywHb4=;
-        b=M+2r3Z13+FtcPCwrVjo94NsquzX0hTy0ch8GYWhGVOiAA1BnaPyb+tl/WrWvhOdwCj
-         a13RLO4jBkM0oEsvHTdWYCfOoPsA5KdsHAuYC8fkcL7aT9ajUplHFS30qYNE7uyCmtuf
-         YIhHukJSkIhPRNFI1EtEVxzF7nCnLCRPPzYzTHqA8Ua7O3fuyRJasv6Cjo4H2Slx1mkb
-         l2LvH3tkMFZshnGVeY04Bpko9xSP8FJp7mVoSXWfq6FJ0vys1as0m5RqCpLaC14yDw4K
-         naqQ2PBGRJ8BICjmxUkmQrZXNOhJ6AtRXPBlsVnVOSemanCgNzHcdegyHOWAW+TJgLpg
-         CDVQ==
-X-Gm-Message-State: ABy/qLb+i4wB7n+Hycp06nTXhRxws990FfFF3iL8eymeKfdC0MqjfGVC
-        N2Rr8KPILSjLfSs6l2Ek8hVwt6R42xRvDz95pzV3NA==
-X-Google-Smtp-Source: APBJJlG+8CvYiKqmaycbha1cyDEg2VMoqqT40oIx06ECrjzd+sS/mZtwA/vlvGg/cL6i7ymTaVLp1w==
-X-Received: by 2002:a7b:c5d4:0:b0:3fa:9e61:19ed with SMTP id n20-20020a7bc5d4000000b003fa9e6119edmr16894535wmk.23.1689153168720;
-        Wed, 12 Jul 2023 02:12:48 -0700 (PDT)
+        bh=Q4ZoGAPYZ8auh+cY1dsqTY2FAmhOhUJEp9FjQd56o+w=;
+        b=lcAXpfUXahrFpvhUrRr9o8nHNjq396Q1kp4LiMjy/PRiyE2+ljdVH/QVCHVupp3jHj
+         lDS0tAF2ZXOH9824KWPoUPNhrC6CuoKRlQG0csImmdNJzzNemAVjrpI1RPTsl7gNQH19
+         ZG0G9/lwxZIkmZovRG16Cz5XW4i7peJkxNIJen6G/jS/X0wtrumyJOgj/214dwy2R5JW
+         TBV/HJhyyc3qHzCKVlT8600/rS4Tei3kek7MgFzZ5AvU/AlZszJ7yCouK2y86kHAgYky
+         GCy723JbEGdyg1QEytyL7l3BdJkzyYyVmym8mZt+gEScA609ckYPDnOvReXp0BhpEt+G
+         QCmw==
+X-Gm-Message-State: ABy/qLblgebKbU7jAs3vvQ36rQ64555OfuDIv3YzUZwtUcEzAJuOqnO/
+        qguiP9QtvPEZfhhI9JW5uBWiv0payW18uK0bXdUacg==
+X-Google-Smtp-Source: APBJJlGizh6n/pkq78hK09NOTcM0Jj2uV2XDJzt6VG+ZM8Y399uMjadI/eauuTqoi357/XOBtMWInQ==
+X-Received: by 2002:ac2:4c49:0:b0:4f8:6b7f:c6d6 with SMTP id o9-20020ac24c49000000b004f86b7fc6d6mr18579724lfk.48.1689153169817;
+        Wed, 12 Jul 2023 02:12:49 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id y11-20020a05600c364b00b003f90b9b2c31sm15013711wmq.28.2023.07.12.02.12.48
+        by smtp.gmail.com with ESMTPSA id y11-20020a05600c364b00b003f90b9b2c31sm15013711wmq.28.2023.07.12.02.12.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 02:12:48 -0700 (PDT)
+        Wed, 12 Jul 2023 02:12:49 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com
 Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v2 2/3] hwmon: (peci/cputemp) Add Intel Sapphire Rapids support
-Date:   Wed, 12 Jul 2023 11:12:39 +0200
-Message-ID: <20230712091241.3668454-2-Naresh.Solanki@9elements.com>
+Subject: [PATCH v2 3/3] hwmon: (peci/dimmtemp) Add Sapphire Rapids support
+Date:   Wed, 12 Jul 2023 11:12:40 +0200
+Message-ID: <20230712091241.3668454-3-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230712091241.3668454-1-Naresh.Solanki@9elements.com>
 References: <20230712091241.3668454-1-Naresh.Solanki@9elements.com>
@@ -76,67 +76,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add support to read DTS for reading Intel Sapphire Rapids platform.
+This patch extends the functionality of the hwmon (peci/dimmtemp) to
+include support for Sapphire Rapids platform.
+
+Sapphire Rapids can accommodate up to 8 CPUs, each with 16 DIMMs. To
+accommodate this configuration, the maximum supported DIMM count is
+increased, and the corresponding Sapphire Rapids ID and threshold code
+are added.
+
+The patch has been tested on a 4S system with 64 DIMMs installed.
+Default thresholds are utilized for Sapphire Rapids, as accessing the
+threshold requires accessing the UBOX device on Uncore bus 0, which can
+only be achieved using MSR access. The non-PCI-compliant MMIO BARs are
+not available for this purpose.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
 Changes in V2:
-- Refactored from previous patchset as seperate patch based on subsystem.
+- Update subject.
 ---
- drivers/hwmon/peci/cputemp.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/hwmon/peci/dimmtemp.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-index e5b65a382772..a812c15948d9 100644
---- a/drivers/hwmon/peci/cputemp.c
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -363,6 +363,7 @@ static int init_core_mask(struct peci_cputemp *priv)
- 	switch (peci_dev->info.model) {
- 	case INTEL_FAM6_ICELAKE_X:
- 	case INTEL_FAM6_ICELAKE_D:
-+	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
- 					     reg->func, reg->offset + 4, &data);
- 		if (ret)
-@@ -531,6 +532,13 @@ static struct resolved_cores_reg resolved_cores_reg_icx = {
- 	.offset = 0xd0,
- };
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index ed968401f93c..edafbfd66fef 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -30,8 +30,10 @@
+ #define DIMM_IDX_MAX_ON_ICX	2
+ #define CHAN_RANK_MAX_ON_ICXD	4
+ #define DIMM_IDX_MAX_ON_ICXD	2
++#define CHAN_RANK_MAX_ON_SPR	128
++#define DIMM_IDX_MAX_ON_SPR	2
  
-+static struct resolved_cores_reg resolved_cores_reg_spr = {
-+	.bus = 31,
-+	.dev = 30,
-+	.func = 6,
-+	.offset = 0x80,
-+};
+-#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
++#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_SPR
+ #define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
+ #define DIMM_NUMS_MAX		(CHAN_RANK_MAX * DIMM_IDX_MAX)
+ 
+@@ -530,6 +532,15 @@ read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u
+ 	return 0;
+ }
+ 
++static int
++read_thresholds_spr(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
++{
++	/* Use defaults */
++	*data = (95 << 16) | (90 << 8);
 +
- static const struct cpu_info cpu_hsx = {
- 	.reg		= &resolved_cores_reg_hsx,
- 	.min_peci_revision = 0x33,
-@@ -549,6 +557,12 @@ static const struct cpu_info cpu_icx = {
- 	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
++	return 0;
++}
++
+ static const struct dimm_info dimm_hsx = {
+ 	.chan_rank_max	= CHAN_RANK_MAX_ON_HSX,
+ 	.dimm_idx_max	= DIMM_IDX_MAX_ON_HSX,
+@@ -572,6 +583,13 @@ static const struct dimm_info dimm_icxd = {
+ 	.read_thresholds = &read_thresholds_icx,
  };
  
-+static const struct cpu_info cpu_spr = {
-+	.reg		= &resolved_cores_reg_spr,
++static const struct dimm_info dimm_spr = {
++	.chan_rank_max	= CHAN_RANK_MAX_ON_SPR,
++	.dimm_idx_max	= DIMM_IDX_MAX_ON_SPR,
 +	.min_peci_revision = 0x40,
-+	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
++	.read_thresholds = &read_thresholds_spr,
 +};
 +
- static const struct auxiliary_device_id peci_cputemp_ids[] = {
+ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
  	{
- 		.name = "peci_cpu.cputemp.hsx",
-@@ -574,6 +588,10 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 		.name = "peci_cpu.cputemp.icxd",
- 		.driver_data = (kernel_ulong_t)&cpu_icx,
+ 		.name = "peci_cpu.dimmtemp.hsx",
+@@ -597,6 +615,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
+ 		.name = "peci_cpu.dimmtemp.icxd",
+ 		.driver_data = (kernel_ulong_t)&dimm_icxd,
  	},
 +	{
-+		.name = "peci_cpu.cputemp.spr",
-+		.driver_data = (kernel_ulong_t)&cpu_spr,
++		.name = "peci_cpu.dimmtemp.spr",
++		.driver_data = (kernel_ulong_t)&dimm_spr,
 +	},
  	{ }
  };
- MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
+ MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
 -- 
 2.41.0
 
