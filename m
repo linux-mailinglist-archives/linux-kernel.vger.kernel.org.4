@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E511074FCE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4953774FCCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjGLB5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S230393AbjGLBoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjGLB5A (ORCPT
+        with ESMTP id S229512AbjGLBoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:57:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33523171E;
-        Tue, 11 Jul 2023 18:56:59 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R116S2Y4CzVjZf;
-        Wed, 12 Jul 2023 09:55:44 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Tue, 11 Jul 2023 21:44:11 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570B01712;
+        Tue, 11 Jul 2023 18:44:10 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R10rP6Hspz1JC9d;
+        Wed, 12 Jul 2023 09:43:33 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 12 Jul 2023 09:56:56 +0800
-Subject: Re: [PATCH] cgroup/cpuset: update parent subparts cpumask while
- holding css refcnt
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>
-CC:     <tj@kernel.org>, <hannes@cmpxchg.org>, <lizefan.x@bytedance.com>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230701065049.1758266-1-linmiaohe@huawei.com>
- <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
- <74f1906e-fe58-c745-a851-b160374f7acf@redhat.com>
- <30b1f809-a11b-efe8-289c-04a801f20207@huawei.com>
- <tebnrmbl6ouz567vlalojcynk25siwwom7et7yn2vvi6zyv6nv@jj3r5o3kl52j>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <7233195b-63bc-ff1a-3b14-6eca0db7cc25@huawei.com>
-Date:   Wed, 12 Jul 2023 09:56:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2507.27; Wed, 12 Jul 2023 09:44:07 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next] modpost: move some defines to the file head
+Date:   Wed, 12 Jul 2023 09:57:47 +0800
+Message-ID: <20230712015747.77263-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-In-Reply-To: <tebnrmbl6ouz567vlalojcynk25siwwom7et7yn2vvi6zyv6nv@jj3r5o3kl52j>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 19:52, Michal Koutn� wrote:
-> On Tue, Jul 11, 2023 at 10:52:02AM +0800, Miaohe Lin <linmiaohe@huawei.com> wrote:
->> commit 2bdfd2825c9662463371e6691b1a794e97fa36b4
->> Author: Waiman Long <longman@redhat.com>
->> Date:   Wed Feb 2 22:31:03 2022 -0500
->>
->>     cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
-> 
-> Aha, thanks for the pointer.
-> 
-> I've also found a paragraph in [1]:
->> In addition, the -rt patchset turns spinlocks into a sleeping locks so
->> that the corresponding critical sections can be preempted, which also
->> means that these sleeplockified spinlocks (but not other sleeping
->> locks!) may be acquire within -rt-Linux-kernel RCU read-side critical
->> sections.
-> 
-> That suggests (together with practical use) that dicussed spinlocks
-> should be fine in RCU read section. And the possible reason is deeper in
-> generate_sched_domains() that do kmalloc(..., GFP_KERNEL).
+with "module: Ignore RISC-V mapping symbols too", build error occurs,
 
-update_parent_subparts_cpumask() would call update_flag() that do kmemdup(..., GFP_KERNEL)?
+scripts/mod/modpost.c: In function ‘is_valid_name’:
+scripts/mod/modpost.c:1055:57: error: ‘EM_RISCV’ undeclared (first use in this function)
+  return !is_mapping_symbol(name, elf->hdr->e_machine == EM_RISCV);
 
-> 
-> Alas update_cpumask_hier() still calls generate_sched_domains(), OTOH,
-> update_parent_subparts_cpumask() doesn't seem so.
+Fix it by moving the EM_RISCV to the file head, also some other
+defines in case of similar problem in the future.
 
-It seems update_parent_subparts_cpumask() doesn't call generate_sched_domains().
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ scripts/mod/modpost.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-> 
-> The idea to not relieve rcu_read_lock() in update_cpumask() iteration
-> (instead of the technically unneeded refcnt bump) would have to be
-> verified with CONFIG_PROVE_RCU && CONFIG_LOCKDEP. WDYT?
-
-The idea to relieve rcu_read_lock() in update_cpumask() iteration was initially introduced
-via the below commit:
-
-commit d7c8142d5a5534c3c7de214e35a40a493a32b98e
-Author: Waiman Long <longman@redhat.com>
-Date:   Thu Sep 1 16:57:43 2022 -0400
-
-    cgroup/cpuset: Make partition invalid if cpumask change violates exclusivity rule
-
-    Currently, changes in "cpust.cpus" of a partition root is not allowed if
-    it violates the sibling cpu exclusivity rule when the check is done
-    in the validate_change() function. That is inconsistent with the
-    other cpuset changes that are always allowed but may make a partition
-    invalid.
-
-    Update the cpuset code to allow cpumask change even if it violates the
-    sibling cpu exclusivity rule, but invalidate the partition instead
-    just like the other changes. However, other sibling partitions with
-    conflicting cpumask will also be invalidated in order to not violating
-    the exclusivity rule. This behavior is specific to this partition
-    rule violation.
-
-    Note that a previous commit has made sibling cpu exclusivity rule check
-    the last check of validate_change(). So if -EINVAL is returned, we can
-    be sure that sibling cpu exclusivity rule violation is the only rule
-    that is broken.
-
-It would be really helpful if @Waiman can figure this out.
-
-Thanks both.
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 7c71429d6502..885cca272eb8 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -60,6 +60,22 @@ static unsigned int nr_unresolved;
+ 
+ #define MODULE_NAME_LEN (64 - sizeof(Elf_Addr))
+ 
++#ifndef EM_RISCV
++#define EM_RISCV		243
++#endif
++
++#ifndef R_RISCV_SUB32
++#define R_RISCV_SUB32		39
++#endif
++
++#ifndef EM_LOONGARCH
++#define EM_LOONGARCH		258
++#endif
++
++#ifndef R_LARCH_SUB32
++#define R_LARCH_SUB32		55
++#endif
++
+ void __attribute__((format(printf, 2, 3)))
+ modpost_log(enum loglevel loglevel, const char *fmt, ...)
+ {
+@@ -1428,22 +1444,6 @@ static int addend_mips_rel(uint32_t *location, Elf_Rela *r)
+ 	return 0;
+ }
+ 
+-#ifndef EM_RISCV
+-#define EM_RISCV		243
+-#endif
+-
+-#ifndef R_RISCV_SUB32
+-#define R_RISCV_SUB32		39
+-#endif
+-
+-#ifndef EM_LOONGARCH
+-#define EM_LOONGARCH		258
+-#endif
+-
+-#ifndef R_LARCH_SUB32
+-#define R_LARCH_SUB32		55
+-#endif
+-
+ static void section_rela(struct module *mod, struct elf_info *elf,
+ 			 Elf_Shdr *sechdr)
+ {
+-- 
+2.41.0
 
