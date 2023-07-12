@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2796774FFB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962BE74FFBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjGLGuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 02:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S231797AbjGLGvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 02:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGLGun (ORCPT
+        with ESMTP id S231488AbjGLGvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 02:50:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F96ADC;
-        Tue, 11 Jul 2023 23:50:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 14BAC22581;
-        Wed, 12 Jul 2023 06:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689144641; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0RkH5WqJss4L/epVGtpcnugvrtDh2KTyP98Fes5eso=;
-        b=GUv37xgI+gqiC6MqWK9+hM0+lMfuz2ib0W9F1YAXyw6QMovnCBbKTEKQ3pmIUjCIbGWjnE
-        x7Lv6Mpzxu1LCOmgdapwTZiRuvDJBmVoZIqngMGHQXhsIvSqXW7gQIcOtGDjmsDyP0FoP4
-        7nI+QJoWCcoQRoTfX3Rmej0iK/B3KQY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689144641;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0RkH5WqJss4L/epVGtpcnugvrtDh2KTyP98Fes5eso=;
-        b=3UNbjRgI++VXyRei9e//0f3aU0ELwy0YT3Vc3K3zh6hzoLd3eLAsds/c2/kVWGfGtmcnrY
-        F/7tgC8yKAz5GxAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9D8C133DD;
-        Wed, 12 Jul 2023 06:50:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rewnNEBNrmQyFQAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 12 Jul 2023 06:50:40 +0000
-Message-ID: <5f239919-d4bb-17ed-f8d1-8edb4f3659fc@suse.de>
-Date:   Wed, 12 Jul 2023 08:50:40 +0200
+        Wed, 12 Jul 2023 02:51:03 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0841BC0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:50:59 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-7656652da3cso572093685a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1689144658; x=1691736658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ikjp8bXOr9w+1zAFDDrD/xtGyBZP1yYzO0vDJOIDmiY=;
+        b=oRfKsJ28pU7X/VXGOIWXuIohz/jy3PtnVwxE1tJl+2WoTIRrsSiGyxhk0ztXNgkLS3
+         LWmWQ3IuCt55Gf7Nrf3+rInkoIVVctwDPrApYDWUyUXr7AD/zXgZJgtzWZLUMhkMeSNZ
+         MldWZiSScORaun1iv/LI/tKwl+0nO+tPtI/q0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689144658; x=1691736658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ikjp8bXOr9w+1zAFDDrD/xtGyBZP1yYzO0vDJOIDmiY=;
+        b=CF+ZFoA9t//W3vdC75IkOQM8xbymxRIPDqWzD0yek2W34//wBtge7NN9DhseRK43EO
+         vDqxtQUSD7lKPs+vh4i+KkefDhVP2O2HrGdVo1aEYZO513sQttklv2HrCYxf0ARGVNI5
+         nU4pH5Smm1ZL1/7Y9oG8pI5EFQk06e+HpoG9mE64B9VJL4kZklekDbK/JiywHIOjbriN
+         BJE69aOEeh91WrKc71xvW5ZNagUY++Ke0qXJ7Osw9cWeOY3GOgd8uQrtmEZ0zqE/ybao
+         DZ56LwRJrYxpeZfiTGqR4eI83FFFbOrTH12BlkdTfgDqRgm1BfBGqFzwdgNz3XQAc17I
+         jczw==
+X-Gm-Message-State: ABy/qLaAhyji3gYZGAWkQsptDv4wL28evkjfBQOx9bX9IkUVeW7sIOjE
+        YbuxMt/U6ERE3aBY2LDYaBLl+A==
+X-Google-Smtp-Source: APBJJlFNN4hfmssZAwCqbgmaoduWlCOkP5fkqpM7evtL79kHVgTQd+I270rF3FRQnqsRRRkxA3Mg0A==
+X-Received: by 2002:a05:620a:47b0:b0:765:a58f:d080 with SMTP id dt48-20020a05620a47b000b00765a58fd080mr16800084qkb.47.1689144658577;
+        Tue, 11 Jul 2023 23:50:58 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:99a0:b85a:11e5:45aa])
+        by smtp.gmail.com with ESMTPSA id q7-20020a63ae07000000b004fab4455748sm2717499pgf.75.2023.07.11.23.50.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 23:50:58 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Xin Ji <xji@analogixsemi.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Pin-yen Lin <treapking@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: [PATCH RESEND v11] drm/bridge: it6505: Fix Kconfig indentation
+Date:   Wed, 12 Jul 2023 14:50:53 +0800
+Message-ID: <20230712065054.2377278-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
-Content-Language: en-US
-To:     James Smart <jsmart2021@gmail.com>, Daniel Wagner <dwagner@suse.de>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Ewan Milne <emilne@redhat.com>
-References: <20230620133711.22840-1-dwagner@suse.de>
- <20230620133711.22840-5-dwagner@suse.de>
- <594f73f2-59b0-bbcb-d7a0-6d89e2446830@gmail.com>
- <7kcc75btp5bo5oqjnpqlwwo37l2f4atwfemknbmvqagrqicl2i@njn4tai7e4m7>
- <0605ac36-16d5-2026-d3c6-62d346db6dfb@gmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <0605ac36-16d5-2026-d3c6-62d346db6dfb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,87 +79,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/23 00:47, James Smart wrote:
-> On 7/6/2023 5:07 AM, Daniel Wagner wrote:
->> Hi James,
->>
->> On Sat, Jul 01, 2023 at 05:11:11AM -0700, James Smart wrote:
->>> As much as you want to make this change to make transports "similar", 
->>> I am dead set against it unless you are completing a long qualification
->>> of the change on real FC hardware and FC-NVME devices. There is probably 
->>> 1.5 yrs of testing of different race conditions that drove this change.
->>> You cannot declare success from a simplistic toy tool such as fcloop for 
->>> validation.
->>>
->>> The original issues exist, probably have even morphed given the time 
->>> from
->>> the original change, and this will seriously disrupt the transport 
->>> and any
->>> downstream releases.  So I have a very strong NACK on this change.
->>>
->>> Yes - things such as the connect failure results are difficult to return
->>> back to nvme-cli. I have had many gripes about the nvme-cli's 
->>> behavior over
->>> the years, especially on negative cases due to race conditions which
->>> required retries. It still fails this miserably.  The async reconnect 
->>> path
->>> solved many of these issues for fc.
->>>
->>> For the auth failure, how do we deal with things if auth fails over 
->>> time as
->>> reconnects fail due to a credential changes ?  I would think 
->>> commonality of
->>> this behavior drives part of the choice.
->>
->> Alright, what do you think about the idea to introduce a new '--sync' 
->> option to
->> nvme-cli which forwards this info to the kernel that we want to wait 
->> for the
->> initial connect to succeed or fail? Obviously, this needs to handle 
->> signals too.
->>
->>  From what I understood this is also what Ewan would like to have
-> To me this is not sync vs non-sync option, it's a max_reconnects value 
-> tested for in nvmf_should_reconnect(). Which, if set to 0 (or 1), should 
-> fail if the initial connect fails.
-> 
-Well, this is more a technical detail while we continue to harp about 
-'sync' vs 'non-sync'.
-Currently all instances of ->create_ctrl() are running asynchronously,
-ie ->create_ctrl() returns a 'ctrl' object which is still in the process
-of establishing the connection.
-(And there it doesn't really matter whether it's FC or TCP/RDMA; FC is 
-kicking of a workqueue for the 'reconnect' call, whereas TCP/RDMA is 
-creating the association and issues the actual 'connect' NVMe SQE via
-an I/O workqueue; net result is identical).
-And when we talk about 'sync' connect we are planning to _wait_ until
-this asynchronous operation reaches a steady state, ie either after the 
-connect attempts succeeded or after the connect retries are exhausted.
+From: Pin-yen Lin <treapking@chromium.org>
 
-And yes, we _are_ aware that this might be a quite long time.
+Replace the spaces with tab characters in the Kconfig file.
 
-> Right now max_reconnects is calculated by the ctrl_loss_tmo and 
-> reconnect_delay. So there's already a way via the cli to make sure 
-> there's only 1 connect attempt. I wouldn't mind seeing an exact cli 
-> option that sets it to 1 connection attempt w/o the user calculation and 
-> 2 value specification.
-> 
-Again, we do _not_ propose to change any of the default settings.
-The 'sync' option will not modify the reconnect settings, it will just 
-wait until a steady state it reached.
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+Splitting this patch out of its original type-C mux patch series [1] to
+get it merged. This is a cleanup that is not strictly related to the
+rest of the series, and that series is still undergoing dicussions about
+the design.
 
-> I also assume that this is not something that would be set by default in 
-> the auto-connect scripts or automated cli startup scripts.
-> 
-You assume correctly. That's why it'll be an additional option.
+[1] https://lore.kernel.org/r/20230331091145.737305-10-treapking@chromium.org
+ drivers/gpu/drm/bridge/Kconfig | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Cheers,
-
-Hannes
+diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+index 82c68b042444..44a660a4bdbf 100644
+--- a/drivers/gpu/drm/bridge/Kconfig
++++ b/drivers/gpu/drm/bridge/Kconfig
+@@ -74,19 +74,19 @@ config DRM_FSL_LDB
+ 	  Support for i.MX8MP DPI-to-LVDS on-SoC encoder.
+ 
+ config DRM_ITE_IT6505
+-        tristate "ITE IT6505 DisplayPort bridge"
+-        depends on OF
++	tristate "ITE IT6505 DisplayPort bridge"
++	depends on OF
+ 	select DRM_DISPLAY_DP_HELPER
+ 	select DRM_DISPLAY_HDCP_HELPER
+ 	select DRM_DISPLAY_HELPER
+-        select DRM_DP_AUX_BUS
+-        select DRM_KMS_HELPER
+-        select DRM_DP_HELPER
+-        select EXTCON
+-        select CRYPTO
+-        select CRYPTO_HASH
+-        help
+-          ITE IT6505 DisplayPort bridge chip driver.
++	select DRM_DP_AUX_BUS
++	select DRM_KMS_HELPER
++	select DRM_DP_HELPER
++	select EXTCON
++	select CRYPTO
++	select CRYPTO_HASH
++	help
++	  ITE IT6505 DisplayPort bridge chip driver.
+ 
+ config DRM_LONTIUM_LT8912B
+ 	tristate "Lontium LT8912B DSI/HDMI bridge"
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+2.41.0.390.g38632f3daf-goog
 
