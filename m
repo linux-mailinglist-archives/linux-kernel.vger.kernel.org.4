@@ -2,104 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACAD7508FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B107750906
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbjGLNBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S233256AbjGLNB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbjGLNBW (ORCPT
+        with ESMTP id S233018AbjGLNB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:01:22 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32E11736;
-        Wed, 12 Jul 2023 06:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=7Mwy7Es+QCyPK8S0J7Ou3RSKVlLA8cMmzE6C5fqkOHA=;
-        t=1689166881; x=1690376481; b=lTJQKVJQ0RPkEhlLeGsUvjhJ8cZTUvPvlbyrvRA0ca2shVP
-        4qzyOZsbdOT9RQqGOduZI6pNscXb4ICTxR3URWwCGE3B0oKUDI//r1Zx4jgw2rsQley5ejlfZ6ZDH
-        Dm6kQEuXVK4xv3px1jMCbPi14z5EmyCyHHQguVbRj9kFh4FTns7MON+UZeG2VK8/ATQyS7RAYlWp3
-        0jthUan8usKKksdYCPnJjjSmmzMgmbxvo1NmjFGmIl9wPl9fZ9nJour2V6Lf/4Jypzx4Qu+7WPdT1
-        qafw8pHYLW1dWz5l+hDGgijp2miEyceMK6mogTvKFGak0joMLqZ62vX/QvVnfIWA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1qJZSk-00GfuA-1M;
-        Wed, 12 Jul 2023 15:00:58 +0200
-Message-ID: <6a4a8980912380085ea628049b5e19e38bcd8e1d.camel@sipsolutions.net>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Enrico Mioso <mrkiko.rs@gmail.com>
-Cc:     Jan Engelhardt <jengelh@inai.de>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        Wed, 12 Jul 2023 09:01:56 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BC619BA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:01:52 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-765ae938b1bso652008085a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689166911; x=1691758911;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YWpuSX94flQxvT/7GFNnyt8FcFburvzifDepq9lHVso=;
+        b=iYD+caT5C5DZuj4SVL8bXKmm54Fife2Oz9uLMzl6trcTZ3BhImO/CJ2diP8cel4MIq
+         XvWzM2pXRBQEjLiVo3Hgt06eJWjI2g2knQDKpA2bpSVnKpPcB5kCx3F2DSBXcUoh1RcW
+         evRk6qNJjMFTRHZraP9CHksMsuP51beQli1rjtg5cRvCFZIiXfjjqzmq7912pS2ynyNH
+         /SqCiWdXv8u7bRbNQhIjI9Y4D6U/0F8mt1bkXpyu60M2tzC25xcrXZUnG7XOxux/chyn
+         iUj28ba/siqynf7x2SgrK9XpRda5v7gelAg/mnDloWN4XKIrIZHL0ttb9xLfMYOzQPpS
+         n/hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689166911; x=1691758911;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YWpuSX94flQxvT/7GFNnyt8FcFburvzifDepq9lHVso=;
+        b=gedT4GHFbSmMs/c/EOJ52rLfqPcP9h15NIrTfSvQRnvC23P9vSQbIDZqFgnFW2SBcB
+         daqzsFuzWxrYP4uhxWkE5ZiQahEac0/xGoc1nN5nnpjQFb3zbpl2HKVWBen8QbAKA4f+
+         UgN4+5h7jnZi/O22Xkzp6YWuGQ7HIHQNHiJOQHAJprmKYQ4Qj1Y1k0l3XFmRjrabS1OU
+         auSUJaID7iAddzFHBa1YukyFwsXZTobqsSTYwfpDyC1f8fkaV5NX6g3ALjmVlDZR532O
+         CIZnLTnR/ShdqyntF+qBsfL+WjRi012la9UIOCbpmYk9nfic9Y6v0ARfYDAjtBVI3ZzG
+         L2Vg==
+X-Gm-Message-State: ABy/qLYK+VfwZVNFgNnSSi/Tz8Weyfy82rwgveiX/ypD9NCcPCauG2HT
+        IPi7E67tlWqaLzkronn50dZzcdgwN3/ZUPvgbNc=
+X-Google-Smtp-Source: APBJJlFY1e3i66W1OtOcIX3n2XlytjAfsqmXfgyyy6DjtCl2reodlKdOdi1miiqTfvLyhJirNei5sQ==
+X-Received: by 2002:ae9:dfc5:0:b0:767:d847:278a with SMTP id t188-20020ae9dfc5000000b00767d847278amr6940605qkf.74.1689166911567;
+        Wed, 12 Jul 2023 06:01:51 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id u17-20020a05620a121100b007673f8803c3sm2105604qkj.96.2023.07.12.06.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 06:01:47 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qJZTU-000OJR-6S;
+        Wed, 12 Jul 2023 10:01:44 -0300
+Date:   Wed, 12 Jul 2023 10:01:44 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Samiullah Khawaja <skhawaja@google.com>,
+        Willem de Bruijn <willemb@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Date:   Wed, 12 Jul 2023 15:00:55 +0200
-In-Reply-To: <e5a92f9c-2d56-00fc-5e01-56e7df8dc1c1@suse.com>
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-         <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr> <ZKM5nbDnKnFZLOlY@rivendell>
-         <2023070430-fragment-remember-2fdd@gregkh>
-         <e5a92f9c-2d56-00fc-5e01-56e7df8dc1c1@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        logang@deltatee.com, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZK6kOBl4EgyYPtaD@ziepe.ca>
+References: <20230710215906.49514550@kernel.org>
+ <20230711050445.GA19323@lst.de>
+ <ZK1FbjG+VP/zxfO1@ziepe.ca>
+ <20230711090047.37d7fe06@kernel.org>
+ <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
+ <20230711093224.1bf30ed5@kernel.org>
+ <CAHS8izNHkLF0OowU=p=mSNZss700HKAzv1Oxqu2bvvfX_HxttA@mail.gmail.com>
+ <20230711133915.03482fdc@kernel.org>
+ <2263ae79-690e-8a4d-fca2-31aacc5c9bc6@kernel.org>
+ <CAHS8izP=k8CqUZk7bGUx4ctm4m2kRC2MyEJv+N4+b0cHVkTQmA@mail.gmail.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izP=k8CqUZk7bGUx4ctm4m2kRC2MyEJv+N4+b0cHVkTQmA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-07-12 at 11:22 +0200, Oliver Neukum wrote:
->=20
-> On 04.07.23 08:47, Greg Kroah-Hartman wrote:
-> > On Mon, Jul 03, 2023 at 11:11:57PM +0200, Enrico Mioso wrote:
-> > > Hi all!!
-> > >=20
-> > > I think the rndis_host USB driver might emit a warning in the dmesg, =
-but disabling the driver wouldn't be a good idea.
-> > > The TP-Link MR6400 V1 LTE modem and also some ZTE modems integrated i=
-n routers do use this protocol.
-> > >=20
-> > > We may also distinguish between these cases and devices you might plu=
-g in - as they pose different risk levels.
-> >=20
-> > Again, you have to fully trust the other side of an RNDIS connection,
-> > any hints on how to have the kernel determine that?
+On Tue, Jul 11, 2023 at 08:42:24PM -0700, Mina Almasry wrote:
 
-> it is a network protocol. So this statement is kind of odd.
-> Are you saying that there are RNDIS messages that cannot be verified
-> for some reason, that still cannot be disclosed?
+> 1. The device memory driver would be the p2pdma provider. It would
+> expose a user API which allocates a device memory region, calls
+> pci_p2pdma_add_resource() and pci_p2pmem_publish() on it, and returns
+> a reference to it to the userspace.
 
-Agree, it's also just a USB device, so no special trickery with DMA,
-shared buffers, etc.
+This is not quite right, if you convert any of the GPU drivers to use
+P2PDMA you are going to need to restructure the p2pmem stuff to
+seperate the genalloc. The GPU driver must continue to be the owner
+and allocator of the MMIO memory it already controls, we can't have
+two allocators working in parallel. 
 
-I mean, yeah, the RNDIS code is really old and almost certainly has a
-severe lack of input validation, but that still doesn't mean it's
-fundamentally impossible.
+The genalloc stuff supports the special NVMe use case, I don't know of
+anything else that would like to work that way.
 
-johannes
+> 2. The NIC driver would be the p2pdma client and orchestrator. It
+> would expose a user API which binds an rxq to a pci device. Prior to
+> the bind the user API would check that the pci device has published
+> p2p memory (pci_has_p2pmem()), and check the the p2p mem is accessible
+> to the driver (pci_p2pdma_distance() I think), etc.
+
+This doesn't fit the programming model for GPUs at all. You don't want
+to get packets landing in random GPU memory that a kernel side
+allocator selects, you want packets landing in GPU memory owned by a
+specific process that owns the TCP connection.
+
+This is why DMABUF is used here as it gives a handle to the GPU
+memory. What you want is to get the P2P pages either directly from the
+DMABUF or via pin_user_pages() on the DMABUF's mmap.
+
+> AFAICT, all the concerns brought up in this thread are sidestepped by
+> using p2pdma. I need not allocate struct pages in the core dma-buf
+> code anymore (or anywhere), and I need not allocate pgmaps. I would
+> just re-use the p2pdma support.
+
+Well, as I said it is going to be a big ask to P2P enable any of the
+DRM drivers.
+
+And you still have the netmem vs zone_device struct page conflict to
+figure out
+
+But it is alot closer to reasonable than this RFC.
+
+Jason
