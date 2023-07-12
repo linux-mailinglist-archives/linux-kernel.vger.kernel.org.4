@@ -2,158 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6284750B01
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934B6750B0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjGLO3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S232558AbjGLOaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbjGLO3D (ORCPT
+        with ESMTP id S232190AbjGLOaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:29:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D765B1BDF;
-        Wed, 12 Jul 2023 07:29:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6764861805;
-        Wed, 12 Jul 2023 14:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C456FC433C8;
-        Wed, 12 Jul 2023 14:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689172140;
-        bh=ymDSmyQE+1VjD+F72bagnnqt4nfj752WMEBt5dK+Lf8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S0R/RaIUJMVH5qRd3pz5jBpfJ9HajmRwajHprZjx4FJo8VuMyk11Gzoauc+8Oi1r5
-         RQ2UbSV+xn9cGThw1Vao2W57lLkhyQA5D+CQOCbVK84AW8FxOjF2XPMX6RQ0DgjwZ/
-         jKV5Jm9v78U1GUyTpweDIgXj88SVHlVaARwtMzRBsVrVADMtIDU84GljlX7E+QlKD/
-         M8WW1BFb9+TmxctYDtMpsQodux4nSlCGfhhv0AErc+zZALvp5htxNuE03oT0aU6OeS
-         PVEQdEhyiFBTAhYwcqHTsaMtAwz1NTuh8Jq+BpovEjAZnyOVOFAeo/LbbU5M+QGL+p
-         e1LeC3DzwOAhA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.96)
-        (envelope-from <mchehab@kernel.org>)
-        id 1qJapt-003beq-1r;
-        Wed, 12 Jul 2023 16:28:57 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Brendan Higgins" <brendanhiggins@google.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        "David Gow" <davidgow@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        "Nikolai Kondrashov" <spbnick@gmail.com>,
-        "Rae Moar" <rmoar@google.com>,
-        "Shuah Khan" <skhan@linuxfoundation.org>,
-        Arthur Grillo <arthurgrillo@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mauro.chehab@intel.com
-Subject: [PATCH RFC 2/2] drm: add documentation for drm_buddy_test kUnit test
-Date:   Wed, 12 Jul 2023 16:28:55 +0200
-Message-Id: <0e5f68ab045965292fee1748254bf9b91db9039a.1689171160.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1689171160.git.mchehab@kernel.org>
-References: <cover.1689171160.git.mchehab@kernel.org>
+        Wed, 12 Jul 2023 10:30:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A489F213A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689172165;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=SmfB+i5ITyD8VcQT6H0n4jQbBtZaHz3osNrT9kioxiQ=;
+        b=UuFg+m2Yvq/cYBpAgRMODwJ54BqHfYqmezUXh1VJIWgEP0vfhBG1M0pRo81QTilsuArSDw
+        W8mdLhVObMlcS1VxSYDBJ10HohWfUJe/NMmNu1iW/HDvI1ejebyhz+z5LaQc6zKYXbXzu/
+        HLk7qiwAh7we4NiMCwkxNA8KUHsO9n0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-345-Qb12_jhYNeq7bYtmyBnREg-1; Wed, 12 Jul 2023 10:29:24 -0400
+X-MC-Unique: Qb12_jhYNeq7bYtmyBnREg-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-315af0252c2so358681f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:29:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689172163; x=1691764163;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SmfB+i5ITyD8VcQT6H0n4jQbBtZaHz3osNrT9kioxiQ=;
+        b=ijlv9oVVO5wkFvyHhjDevIIzcAz8cklX70qxUjITRY3PthsxnVgL9O63L+++RbDw41
+         6uz3pxAGMDk3BSpfXrlUQdekFWaNTNJWryJt6Ck99DsXYEPpeHG333ue8r30uCXr5zBr
+         r0uljiG61ovUD8/VDq/5dNbmjCuGDwOXl0umnvaUI9hs0ZKjEG64NsQPdYK3RX/8IPbr
+         QPZ4Uux3r7YLRzRi3jKEnJZQgYAjKQ0W4dQl4zIiW1AL8fgL6VpT0vEVsOqrWHU7DHF/
+         khLTaFsn5NNjTPcZK1nBR9taj1en0873Yd48PrOLrTg5KXHlkazhBh0GOCDV1uqLosC/
+         cFZQ==
+X-Gm-Message-State: ABy/qLa+X7H2hD2bP08UiwsSLFo8mxRQB/BJyY25DfPRjqAw9c5FouqN
+        knnenxAurl3UiDPhV+eukw2f5o8o8osJs+3FpTVdo37woyyXpRrrAPI+VINwZKzIChNnssZLm7M
+        x+zalIDAMeYKmZSv6kS8/SGByn9+S8DdO8uf8p1uD
+X-Received: by 2002:adf:ec8e:0:b0:314:1ebc:6e19 with SMTP id z14-20020adfec8e000000b003141ebc6e19mr17387199wrn.64.1689172163288;
+        Wed, 12 Jul 2023 07:29:23 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGrLy4XTfg4SYrDedL3LjN5ZHr+LA3Ut1XmsVNXLi1zBJheiu9Ajx5OzglpHTo4/1SshVrdO+NlkBUDSAisljg=
+X-Received: by 2002:adf:ec8e:0:b0:314:1ebc:6e19 with SMTP id
+ z14-20020adfec8e000000b003141ebc6e19mr17387145wrn.64.1689172162850; Wed, 12
+ Jul 2023 07:29:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+From:   Vitaly Grinberg <vgrinber@redhat.com>
+Date:   Wed, 12 Jul 2023 17:29:12 +0300
+Message-ID: <CACLnSDhA1io1tU0rVvuz6KYx3-c_4zEniLEs3KFUqsvLWATYWw@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 08/10] ice: implement dpll interface to control cgu
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     David Airlie <airlied@redhat.com>, andy.ren@getcruise.com,
+        anthony.l.nguyen@intel.com, arnd@arndb.de, axboe@kernel.dk,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        claudiajkang@gmail.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, geert+renesas@glider.be,
+        gregkh@linuxfoundation.org, hkallweit1@gmail.com,
+        idosch@nvidia.com, intel-wired-lan@lists.osuosl.org,
+        jacek.lawrynowicz@linux.intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        jesse.brandeburg@intel.com, Jiri Pirko <jiri@resnulli.us>,
+        jonathan.lemon@gmail.com, kuba@kernel.org, kuniyu@amazon.com,
+        leon@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux@zary.sk, liuhangbin@gmail.com, lucien.xin@gmail.com,
+        masahiroy@kernel.org, michal.michalik@intel.com,
+        milena.olech@intel.com, Michal Schmidt <mschmidt@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>, netdev@vger.kernel.org,
+        nicolas.dichtel@6wind.com, nipun.gupta@amd.com, ogabbay@kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, phil@nwl.cc,
+        Petr Oros <poros@redhat.com>, razor@blackwall.org,
+        ricardo.canuelo@collabora.com, richardcochran@gmail.com,
+        saeedm@nvidia.com, sj@kernel.org, tzimmermann@suse.de,
+        vadfed@fb.com, vadfed@meta.com, vadim.fedorenko@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As an example for the new documentation tool, add a documentation
-for drm_buddy_test.
-
-I opted to place this on a completely different directory, in order
-to make easier to test the feature with:
-
-	$ make SPHINXDIRS="tests" htmldocs
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH RFC 0/2] at: https://lore.kernel.org/all/cover.1689171160.git.mchehab@kernel.org/
-
- Documentation/index.rst                |  2 +-
- Documentation/tests/index.rst          |  6 ++++++
- Documentation/tests/kunit.rst          |  5 +++++
- drivers/gpu/drm/tests/drm_buddy_test.c | 12 ++++++++++++
- 4 files changed, 24 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/tests/index.rst
- create mode 100644 Documentation/tests/kunit.rst
-
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index 9dfdc826618c..80a6ce14a61a 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -60,7 +60,7 @@ Various other manuals with useful information for all kernel developers.
-    fault-injection/index
-    livepatch/index
-    rust/index
--
-+   test/index
- 
- User-oriented documentation
- ===========================
-diff --git a/Documentation/tests/index.rst b/Documentation/tests/index.rst
-new file mode 100644
-index 000000000000..bfc39eb5c0aa
---- /dev/null
-+++ b/Documentation/tests/index.rst
-@@ -0,0 +1,6 @@
-+========================
-+Kunit documentation test
-+========================
-+
-+.. toctree::
-+   kunit
-diff --git a/Documentation/tests/kunit.rst b/Documentation/tests/kunit.rst
-new file mode 100644
-index 000000000000..6ffc151988a0
---- /dev/null
-+++ b/Documentation/tests/kunit.rst
-@@ -0,0 +1,5 @@
-+Kunit tests
-+-----------
-+
-+.. include-test:: drivers/gpu/drm/tests/drm_buddy_test.c
-+
-diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-index 09ee6f6af896..dd6c5afd6cd6 100644
---- a/drivers/gpu/drm/tests/drm_buddy_test.c
-+++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-@@ -737,6 +737,18 @@ static int drm_buddy_suite_init(struct kunit_suite *suite)
- 	return 0;
- }
- 
-+/**
-+ * KTEST_SUITE: set of tests for drm buddy alloc
-+ * Scope: drm subsystem
-+ * Mega feature: drm
-+ * Feature: buddy_alloc
-+ *
-+ * KTEST_TEST: drm_test_buddy_alloc_%s
-+ * Description: Run DRM buddy allocation %arg[1] test
-+ *
-+ * arg[1].values: limit, range, optimistic, smoke, pathological
-+ */
-+
- static struct kunit_case drm_buddy_tests[] = {
- 	KUNIT_CASE(drm_test_buddy_alloc_limit),
- 	KUNIT_CASE(drm_test_buddy_alloc_range),
--- 
-2.40.1
+Hi,
+I'd like to clarify about the DPLL phase offset requirement. We can
+live without it during the initial submission. The addition of phase
+offset can be an increment to patch v10.
+Thanks,
+Vitaly
 
