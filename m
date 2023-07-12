@@ -2,141 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C71B75085A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF94750870
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbjGLMeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S233324AbjGLMfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjGLMeS (ORCPT
+        with ESMTP id S233233AbjGLMfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:34:18 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D953B0;
-        Wed, 12 Jul 2023 05:34:16 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R1HGV6k34z1JCVN;
-        Wed, 12 Jul 2023 20:33:38 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 12 Jul
- 2023 20:34:13 +0800
-Subject: Re: [PATCH v5 RFC 1/6] page_pool: frag API support for 32-bit arch
- with 64-bit DMA
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     Yunsheng Lin <yunshenglin0825@gmail.com>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Liang Chen <liangchen.linux@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>
-References: <20230629120226.14854-1-linyunsheng@huawei.com>
- <20230629120226.14854-2-linyunsheng@huawei.com>
- <20230707170157.12727e44@kernel.org>
- <3d973088-4881-0863-0207-36d61b4505ec@gmail.com>
- <20230710113841.482cbeac@kernel.org>
- <8639b838-8284-05a2-dbc3-7e4cb45f163a@intel.com>
- <20230711093705.45454e41@kernel.org>
- <1bec23ff-d38b-3fdf-1bb3-89658c1d465a@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <46ad09d9-6596-cf07-5cab-d6ceb1e36f3c@huawei.com>
-Date:   Wed, 12 Jul 2023 20:34:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Wed, 12 Jul 2023 08:35:39 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368B810FC;
+        Wed, 12 Jul 2023 05:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1689165337; x=1720701337;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XAbpANE/Fng5ECm20P1cz/dS/we/2gWEgl+TdS/1S6M=;
+  b=fVQv6PIbWnX9T9WpHW1d3e0CGWeF+b01Ol+GPCLmskMWXRygvN+ZeNZF
+   hjsxqMGeeKqkZ8DZtneUujBdzvTje0vsbP7JkkrHA0oUDLZ8JCGEaJxes
+   BPWnJeHTIgcN4WfCugdz5jul+e9hE9rpvkqywyFF6hyDtiE0YMmEnxwRr
+   6iSmJXInkPk4gIfxnghbCSImXITb/OKLEN1DRIlE7xd1EwBLSQZT7na+h
+   vgO2sxyD9+GTMtmaAp1IBQHksHe11cvkMmBaBf3XO1YpPtEVsqf8rF+F+
+   SqkMvs+U+NuiTOHu4FpJPFSBOAW2PfPtYxERnlRJ9L1fbzlTsYgAnfgzu
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="asc'?scan'208";a="220004003"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 05:35:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 12 Jul 2023 05:35:35 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 12 Jul 2023 05:35:34 -0700
+Date:   Wed, 12 Jul 2023 13:34:57 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <soc@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <workflows@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Documentation/process: maintainer-soc: document
+ dtbs_check requirement for Samsung
+Message-ID: <20230712-unfasten-trespass-d57b3ff1f134@wendy>
+References: <20230712084131.127982-1-krzysztof.kozlowski@linaro.org>
+ <20230712-skier-ribcage-0d82be7e16fd@wendy>
+ <da79ac87-f112-be43-52b2-2293e1a99d9b@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <1bec23ff-d38b-3fdf-1bb3-89658c1d465a@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oZupxwsk8vse9QyQ"
+Content-Disposition: inline
+In-Reply-To: <da79ac87-f112-be43-52b2-2293e1a99d9b@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/12 0:59, Alexander Lobakin wrote:
-> From: Jakub Kicinski <kuba@kernel.org>
-> Date: Tue, 11 Jul 2023 09:37:05 -0700
-> 
->> On Tue, 11 Jul 2023 12:59:00 +0200 Alexander Lobakin wrote:
->>> I'm fine with that, although ain't really able to work on this myself
->>> now :s (BTW I almost finished Netlink bigints, just some more libie/IAVF
->>> crap).
->>
->> FWIW I was thinking about the bigints recently, and from ynl
->> perspective I think we may want two flavors :( One which is at
->> most the length of platform's long long, and another which is
-> 
-> (not sure we shouldn't split a separate thread off this one at this
->  point :D)
-> 
-> `long long` or `long`? `long long` is always 64-bit unless I'm missing
-> something. On my 32-bit MIPS they were :D
-> If `long long`, what's the point then if we have %NLA_U64 and would
-> still have to add dumb padding attrs? :D I thought the idea was to carry
-> 64+ bits encapsulated in 32-bit primitives.
-> 
->> always a bigint. The latter will be more work for user space
->> to handle, so given 99% of use cases don't need more than 64b
->> we should make its life easier?
->>
->>> It just needs to be carefully designed, because if we want move ALL the
->>> inlines to a new header, we may end up including 2 PP's headers in each
->>> file. That's why I'd prefer "core/driver" separation. Let's say skbuff.c
->>> doesn't need page_pool_create(), page_pool_alloc(), and so on, while
->>> drivers don't need some of its internal functions.
->>> OTOH after my patch it's included in only around 20-30 files on
->>> allmodconfig. That is literally nothing comparing to e.g. kernel.h
->>> (w/includes) :D
->>
->> Well, once you have to rebuilding 100+ files it gets pretty hard to
->> clean things up ;) 
->>
->> I think I described the preferred setup, previously:
->>
->> $path/page_pool.h:
->>
->> #include <$path/page_pool/types.h>
->> #include <$path/page_pool/helpers.h>
->>
->> $path/page_pool/types.h - has types
->> $path/page_pool/helpers.h - has all the inlines
->>
->> C sources can include $path/page_pool.h, headers should generally only
->> include $path/page_pool/types.h.
+--oZupxwsk8vse9QyQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Does spliting the page_pool.h as above fix the problem about including
-a ton of static inline functions from "linux/dma-mapping.h" in skbuff.c?
+On Wed, Jul 12, 2023 at 01:46:20PM +0200, Krzysztof Kozlowski wrote:
+> On 12/07/2023 11:48, Conor Dooley wrote:
+> > On Wed, Jul 12, 2023 at 10:41:31AM +0200, Krzysztof Kozlowski wrote:
+> >> Samsung ARM/ARM64 SoCs (except legacy S5PV210) are also expected not to
+> >> bring any new dtbs_check warnings.  In fact this have been already
+> >> enforced and tested since few release.
+> >>
+> >> Cc: Conor Dooley <conor.dooley@microchip.com>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> ---
+> >=20
+> >> Not sure where to document this. Creating new maintainer profile for
+> >> Samsung SoC would be an overkill. OTOH, more SoCs might want to grow
+> >> this list, so this also scales poor.
+> >=20
+> > To me, this portion of the document was "information to the
+> > submaintainer", which would be you, not information to the contributors
+> > to the platform. Adding the comment about Samsung SoC seems aimed at
+> > contributors?
+>=20
+> Yes, I want to document it for contributors, so they won't be surprised.
+> Any hints where to store it? I could put it in the "About" tab of my
+> kernel.org repo, but no one checks this for contribution guidelines.
 
-As the $path/page_pool/helpers.h which uses dma_get_cache_alignment()
-must include the "linux/dma-mapping.h" which has dma_get_cache_alignment()
-defining as a static inline function.
-and if skbuff.c include $path/page_pool.h or $path/page_pool/helpers.h,
-doesn't we still have the same problem? Or do I misunderstand something
-here?
+I've not got a better suggestion for where to put this, but under
+something labelled as "Information for (new) Submaintainers" isn't
+where I would be looking as a contributor.
+Is adding to the generic DT documentation that dtbs_check should not add
+any new warnings at W=3D1 too extreme?
+writing-schema.rst has the instructions about how to run dtbs_check while
+writing dt-binding patches, but we don't seem to have any docs about
+running dtbs_check for dts/dtsi changes.
 
-> 
-> Aaah okay, I did read it backwards ._. Moreover, generic stack barely
-> uses PP's inlines, it needs externals mostly.
-> 
-> Thanks,
-> Olek
-> 
-> .
-> 
+--oZupxwsk8vse9QyQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK6d8QAKCRB4tDGHoIJi
+0lwSAQDBl5SejPpAFmt5bv2VhK+0qeUjxPKk2oF8smIN4o1SmAEA0svDs8omMe+R
+WsZHkfgbSn5tEDE4rofWHvQ8e/QKrgM=
+=b8RU
+-----END PGP SIGNATURE-----
+
+--oZupxwsk8vse9QyQ--
