@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A8E7501E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE307501E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbjGLIly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S232235AbjGLIl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjGLIlp (ORCPT
+        with ESMTP id S231891AbjGLIlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:41:45 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168F495
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:41:44 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so7262803f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:41:44 -0700 (PDT)
+        Wed, 12 Jul 2023 04:41:47 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD80EB7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:41:45 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3159da54e95so2927187f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:41:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689151302; x=1691743302;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689151304; x=1691743304;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RT/Vt3RRfMq4FWYr6OtGjxwm1ECt6aNXHT5BGeUxff0=;
-        b=gYPnPU3NZw9utPGclL+789aHb3o31Fbn2cEUJggsFY2ACdfcnuBKWAjFigGD/0gpDO
-         eHwKw0QqyK/YPRuyAOaFskMLIjkJhWDXb1jndmGbaM8cOK+RbjkgAYFEXALOoTKzUgcG
-         qPgnErIFUSnExWOiZ+H3qDiANwpt1Ci0AYavvs8PtIWDR7ZE/beHvm1/MLJ83PyK7AnY
-         rXIfuD8G2m+9o5uogS8UZDn+2kGx/XtM2NvqNVcfPnIlm8s1h4f8PgOlZVQJCaQRCZB0
-         /5F/AMo1W/vzP5kQZX4jvCjTRrJgI4fLsP7XIbMnoo0cUjBLdps3vjVS8cgjlnSvAQMN
-         l6Ng==
+        bh=v1czZOouN4R8rvhecyOdxS/fUEZ430UatGfS2CvREC4=;
+        b=gwIEGJSQC2lc733QUx0mL7EQanAHivGO25GBSLLMgQRoYPRXALoEAYGOLEivj17mmI
+         Nj4adO3RRLQUuocWBGImYB6bGtYnORM9NlRikeifzi0PQ0IL1dGto2Q2nnMlqxqS7sSY
+         /tiCrbAcHJHjDDEqAycahauO/NFvxTeu1wiIo6sKj1MQQElsuFtRfiCMi/z7JDe6TuTk
+         uKm8BiXX0T2jk24G4j1SqFYu3QCPjEyUSCW5PTT9HPR2Fx3KCavu9WNXTJfq2LZ+GIrJ
+         BRO4mnmHVIfy31z+Cq4z1XI2Z8QYYQ/2mKSBLUY16RN5ZOn6IK9aSxkzbWIt0AQOqrhD
+         U+OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689151302; x=1691743302;
+        d=1e100.net; s=20221208; t=1689151304; x=1691743304;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RT/Vt3RRfMq4FWYr6OtGjxwm1ECt6aNXHT5BGeUxff0=;
-        b=T4OAHFHANs6gkzLh+toHaU8+nALnGKM8tyYv3pfw+X2eoONXgFa2rO0Znwc/NQ5VKH
-         1SKqjyAEG5+6LrAuOiXdhG+xZVBW3FvR5mHXXax9/kCJoekexuKaTHaE8kk0JnD8wX8w
-         2gw9PCekAmORph25SygVtcXk+nZp8cHOFFe9Ip/sBlcFe00qOUOV4wZqFsuSVjgehz2s
-         +RNQEYBxcJzQlsItC4lvHztAOgoiHI9Yx33VCtVTHpEwiG5TeTC3TeSpVKZQCcO1gVhY
-         Uz1zw4r/uD3i12+lBkgh41UYj0egpF5Uiz3KoGxZ29vyNCxQaCF5wdlvjY+iFwbrEiUG
-         6m+Q==
-X-Gm-Message-State: ABy/qLazSKRjETJxCrLrf7vSDeVI9coFcFXfbAeHdfJrY9u0gQPHeOjn
-        AVu5fSDSvddoiAmQiNzwY7OZMQ==
-X-Google-Smtp-Source: APBJJlG5aEliuCg0Tzq/nowgmurWqSwaYDI+IB0QIjxf7737XRRWEo6xEPUUb76lZKABoel7Q4lrxQ==
-X-Received: by 2002:adf:ec8e:0:b0:314:1ebc:6e19 with SMTP id z14-20020adfec8e000000b003141ebc6e19mr16442275wrn.64.1689151302320;
-        Wed, 12 Jul 2023 01:41:42 -0700 (PDT)
+        bh=v1czZOouN4R8rvhecyOdxS/fUEZ430UatGfS2CvREC4=;
+        b=Rv6+vuBE+p0i5PyL5d/FQDB2x2Mp6pXVud4hmwQkxxKimpONlhnWjVP9zF32lom8Ko
+         MhNNbWpbqjEuNC4dPaPYxaqQV6uP+3N/uSLmV1qYFg8x/EP0n36DOMcguyuyEYzVdDPF
+         5lWjAEGX0OwORvn1XPeVR/Z97NCozDWCB0yC6hs2HxqshoutKAjvMjvIdzzGtiT9JOdc
+         059wQ+wtc1rYdQtvX18SwnK+F+Zzt6YiHYLZzSyThWUI814UeXg82+1INYJtv/YCB0cm
+         koH2LWOsLb8ci0q/CsaDr7zhVc+fEis6qy21sdvVmscZOgXPpxJpiusOk0uH3CH039Lz
+         EuEA==
+X-Gm-Message-State: ABy/qLZ+GO7xk8U9CcqK/EryiQxz/gsiTni5+OjQyPeClRyGpblALZn4
+        y+qOjng3RbjZg9WigmQBckXN/w==
+X-Google-Smtp-Source: APBJJlGg+rsqRu4BTGL/I9uL08XG6vx+bsh+ed8/X0b+TdypKH3GEvF2pa6eJu2t24MkEFtNLOKYDQ==
+X-Received: by 2002:adf:e7c1:0:b0:314:1270:8fc with SMTP id e1-20020adfe7c1000000b00314127008fcmr17540498wrn.0.1689151304363;
+        Wed, 12 Jul 2023 01:41:44 -0700 (PDT)
 Received: from vermeer.tail79c99.ts.net ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
-        by smtp.gmail.com with ESMTPSA id z13-20020adfe54d000000b003143ac73fd0sm4496122wrm.1.2023.07.12.01.41.41
+        by smtp.gmail.com with ESMTPSA id z13-20020adfe54d000000b003143ac73fd0sm4496122wrm.1.2023.07.12.01.41.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 01:41:42 -0700 (PDT)
+        Wed, 12 Jul 2023 01:41:44 -0700 (PDT)
 From:   Samuel Ortiz <sameo@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -66,9 +66,9 @@ Cc:     Samuel Ortiz <sameo@rivosinc.com>, linux@rivosinc.com,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
         Evan Green <evan@rivosinc.com>, devicetree@vger.kernel.org,
         sorear@fastmail.com
-Subject: [PATCH v4 2/4] dt-bindings: riscv: Document the 1.0 scalar cryptography extensions
-Date:   Wed, 12 Jul 2023 10:41:18 +0200
-Message-ID: <20230712084134.1648008-3-sameo@rivosinc.com>
+Subject: [PATCH v4 3/4] RISC-V: hwprobe: Expose Zbc and the scalar crypto extensions
+Date:   Wed, 12 Jul 2023 10:41:19 +0200
+Message-ID: <20230712084134.1648008-4-sameo@rivosinc.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230712084134.1648008-1-sameo@rivosinc.com>
 References: <20230712084134.1648008-1-sameo@rivosinc.com>
@@ -76,133 +76,151 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RISC-V cryptography extensions define a set of instructions, CSR
-definitions, architectural interfaces and also extension shorthands for
-running scalar and vector based cryptography operations on RISC-V
-systems.
+Zbc was missing from a previous Bit-Manipulation extension hwprobe
+patch.
 
-This documents all the dt-bindings for the scalar cryptography
-extensions, including the Zk, Zkn and Zks shorthands.
+Add all scalar crypto extensions bits, and define a macro for setting
+the hwprobe key/pair in a more readable way.
 
+Reviewed-by: Evan Green <evan@rivosinc.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
 ---
- .../devicetree/bindings/riscv/extensions.yaml | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ Documentation/riscv/hwprobe.rst       | 35 ++++++++++++++++++++++++++
+ arch/riscv/include/uapi/asm/hwprobe.h | 11 ++++++++
+ arch/riscv/kernel/sys_riscv.c         | 36 ++++++++++++++++-----------
+ 3 files changed, 68 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
-index cc1f546fdbdc..3d3d0d2f71e7 100644
---- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-+++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-@@ -190,6 +190,24 @@ properties:
-             instructions as ratified at commit 6d33919 ("Merge pull request #158
-             from hirooih/clmul-fix-loop-end-condition") of riscv-bitmanip.
+diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
+index 19165ebd82ba..105b59e2e780 100644
+--- a/Documentation/riscv/hwprobe.rst
++++ b/Documentation/riscv/hwprobe.rst
+@@ -72,11 +72,46 @@ The following keys are defined:
+        extensions.
  
-+        - const: zbkb
-+          description: |
-+            The standard Zbkb cryptography extension for bit-manipulation
-+            instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
+   * :c:macro:`RISCV_HWPROBE_EXT_ZBB`: The Zbb extension is supported, as defined
++      in version 1.0 of the Bit-Manipulation ISA extensions.
 +
-+        - const: zbkc
-+          description: |
-+            The standard Zbkc cryptography extension for carry-less multiply
-+            instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
-+
-+        - const: zbkx
-+          description: |
-+            The standard Zbkx cryptography extension for crossbar permutation
-+            instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
-+
-         - const: zicbom
-           description:
-             The standard Zicbom extension for base cache management operations as
-@@ -240,6 +258,75 @@ properties:
-             ratified in the 20191213 version of the unprivileged ISA
-             specification.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZBC`: The Zbc extension is supported, as defined
+        in version 1.0 of the Bit-Manipulation ISA extensions.
  
-+        - const: zk
-+          description: |
-+            The standard Zk cryptography extension is a shorthand for the
-+            union of the Zkn, Zkr and Zkt cryptography extensions, as ratified
-+            at commit 73de909 ("Zvk: Update AES instruction specs") of
-+            riscv-crypto.
+   * :c:macro:`RISCV_HWPROBE_EXT_ZBS`: The Zbs extension is supported, as defined
+        in version 1.0 of the Bit-Manipulation ISA extensions.
+ 
++  * :c:macro:`RISCV_HWPROBE_EXT_ZBKB`: The Zbkb extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zkn
-+          description: |
-+            The standard Zkn cryptography extension covers the NIST algorithm
-+            suite that other cryptography extensions support. It is the union of
-+            the Zbkb, Zbkc, Zbkx, Zknd, Zkne and Zknh extensions, as ratified at
-+            commit 73de909 ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZBKC`: The Zbkc extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zknd
-+          description: |
-+            The standard Zknd cryptography extension for AES block cipher
-+            decryption acceleration instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZBKX`: The Zbkx extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zkne
-+          description: |
-+            The standard Zkne cryptography extension for AES block cipher
-+            encryption acceleration instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKND`: The Zknd extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zknh
-+          description: |
-+            The standard Zknh cryptography extension for SHA2 hash algorithm
-+            functions acceleration instructions as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKNE`: The Zkne extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zkr
-+          description: |
-+            The standard Zkr cryptography extension for the entropy source CSR
-+            definitions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
-+            Systems with the Zkr extension enabled must set the MSECCFG SSEED
-+            bit to 1 in order for the Linux kernel to access the SEED CSR.
-+            As userspace access to the entropy source is usually carefully
-+            controlled and exclusively managed by the Linux kernel, M-mode
-+            should set USEED to 0.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKNH`: The Zknh extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zks
-+          description: |
-+            The standard Zks cryptography extension covers the ShangMi algorithm
-+            suite that other cryptography extensions support. It is the union of
-+            the Zbkb, Zbkc, Zbkx, Zksed and Zksh extensions, as ratified at
-+            commit 73de909 ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKR`: The Zkr extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions. Depending on the
++    M-mode `mseccfg` CSR configuration, userspace may not be allowed to directly
++    access the Zkr-defined `seed` CSR.
 +
-+        - const: zksed
-+          description: |
-+            The standard Zksed cryptography extension for SM4 block cipher
-+            acceleration instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKSED`: The Zksed extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zksh
-+          description: |
-+            The standard Zksh cryptography extension for SM3 hash algorithm
-+            funstions acceleration instructions, as ratified at commit 73de909
-+            ("Zvk: Update AES instruction specs") of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKSH`: The Zksh extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-+        - const: zkt
-+          description: |
-+            The standard Zkt cryptography extension for data independent
-+            execution latency attestation, for a safe subset of instructions,
-+            as ratified at commit 73de909 ("Zvk: Update AES instruction specs")
-+            of riscv-crypto.
++  * :c:macro:`RISCV_HWPROBE_EXT_ZKT`: The Zkt extension is supported, as defined
++    in version 1.0 of the Scalar Cryptography ISA extensions.
 +
-         - const: ztso
-           description:
-             The standard Ztso extension for total store ordering, as ratified
+ * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
+   information about the selected set of processors.
+ 
+diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+index 006bfb48343d..8357052061b3 100644
+--- a/arch/riscv/include/uapi/asm/hwprobe.h
++++ b/arch/riscv/include/uapi/asm/hwprobe.h
+@@ -29,6 +29,17 @@ struct riscv_hwprobe {
+ #define		RISCV_HWPROBE_EXT_ZBA		(1 << 3)
+ #define		RISCV_HWPROBE_EXT_ZBB		(1 << 4)
+ #define		RISCV_HWPROBE_EXT_ZBS		(1 << 5)
++#define		RISCV_HWPROBE_EXT_ZBC		(1 << 6)
++#define		RISCV_HWPROBE_EXT_ZBKB		(1 << 7)
++#define		RISCV_HWPROBE_EXT_ZBKC		(1 << 8)
++#define		RISCV_HWPROBE_EXT_ZBKX		(1 << 9)
++#define		RISCV_HWPROBE_EXT_ZKND		(1 << 10)
++#define		RISCV_HWPROBE_EXT_ZKNE		(1 << 11)
++#define		RISCV_HWPROBE_EXT_ZKNH		(1 << 12)
++#define		RISCV_HWPROBE_EXT_ZKR		(1 << 13)
++#define		RISCV_HWPROBE_EXT_ZKSED		(1 << 14)
++#define		RISCV_HWPROBE_EXT_ZKSH		(1 << 15)
++#define		RISCV_HWPROBE_EXT_ZKT		(1 << 16)
+ #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+ #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+ #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
+index 26ef5526bfb4..df15926196b6 100644
+--- a/arch/riscv/kernel/sys_riscv.c
++++ b/arch/riscv/kernel/sys_riscv.c
+@@ -145,20 +145,28 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+ 	for_each_cpu(cpu, cpus) {
+ 		struct riscv_isainfo *isainfo = &hart_isa[cpu];
+ 
+-		if (riscv_isa_extension_available(isainfo->isa, ZBA))
+-			pair->value |= RISCV_HWPROBE_EXT_ZBA;
+-		else
+-			missing |= RISCV_HWPROBE_EXT_ZBA;
+-
+-		if (riscv_isa_extension_available(isainfo->isa, ZBB))
+-			pair->value |= RISCV_HWPROBE_EXT_ZBB;
+-		else
+-			missing |= RISCV_HWPROBE_EXT_ZBB;
+-
+-		if (riscv_isa_extension_available(isainfo->isa, ZBS))
+-			pair->value |= RISCV_HWPROBE_EXT_ZBS;
+-		else
+-			missing |= RISCV_HWPROBE_EXT_ZBS;
++#define SET_HWPROBE_EXT_PAIR(ext)					\
++		do {							\
++			if (riscv_isa_extension_available(isainfo->isa, ext)) \
++				pair->value |= RISCV_HWPROBE_EXT_## ext; \
++			else						\
++				missing |= RISCV_HWPROBE_EXT_## ext;	\
++		} while (false)						\
++
++		SET_HWPROBE_EXT_PAIR(ZBA);
++		SET_HWPROBE_EXT_PAIR(ZBB);
++		SET_HWPROBE_EXT_PAIR(ZBC);
++		SET_HWPROBE_EXT_PAIR(ZBS);
++		SET_HWPROBE_EXT_PAIR(ZBKB);
++		SET_HWPROBE_EXT_PAIR(ZBKC);
++		SET_HWPROBE_EXT_PAIR(ZBKX);
++		SET_HWPROBE_EXT_PAIR(ZKND);
++		SET_HWPROBE_EXT_PAIR(ZKNE);
++		SET_HWPROBE_EXT_PAIR(ZKNH);
++		SET_HWPROBE_EXT_PAIR(ZKR);
++		SET_HWPROBE_EXT_PAIR(ZKSED);
++		SET_HWPROBE_EXT_PAIR(ZKSH);
++		SET_HWPROBE_EXT_PAIR(ZKT);
+ 	}
+ 
+ 	/* Now turn off reporting features if any CPU is missing it. */
 -- 
 2.41.0
 
