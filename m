@@ -2,33 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B3C750C71
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538D8750C6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjGLP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S233628AbjGLP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbjGLP2H (ORCPT
+        with ESMTP id S233374AbjGLP2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Jul 2023 11:28:07 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C56D1BD5;
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B581C2;
         Wed, 12 Jul 2023 08:28:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=axis.com; q=dns/txt; s=axis-central1; t=1689175686;
   x=1720711686;
-  h=references:from:to:cc:subject:in-reply-to:date:
-   message-id:mime-version;
-  bh=HV2jebiOT6mQ2HdkOPhLHt3aK1bDvbiJCC1sTblJH5M=;
-  b=dkNrtssclX51nFDUdqZgyelD1J0g5QUPFBm0Cl6Kxepd72WGhCOZFfVb
-   x0tC4au7lzk77Z0D1AO5YJQ3pVn4SQFpq9UM8wcCCLQmQHEkPlG192adu
-   +dItZADjgAa96CTDkxNl+UHMfmtWI9XYDtg0z5FxRFYmh78/aZ7NbUQi5
-   0JNqyO5NnN/fmyRxyEbNBb0kg8OI1x6OQVCc/DKUNq6KVA5OFy+Dl3jmq
-   cVXUhbyvLq+d52CCdgz3pppaiDhP9l60rrKBJHCAyp6X6Iy/9iJCorQtm
-   l1S6Jh0Qbm86a7cedpkBCHmxJGMAsnlewq5B2301mK5r+r/iRxIEmHVh9
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=AtZaat57K0cFWC3O715ofKEr2hCcMnCQF0lwfCNSfiA=;
+  b=V8Yw72vvjlRzCFOpaaWRXR0H3o6xePL6ylfroF5IavqGwbBOF/ZrDhrV
+   BoOZKiFCjD3gy6A1UgPSFwLIR4SO9ZruDhaThypNhVEXFdjiG+eqT/uZH
+   r8DlnApvabi4PFuBFhhgldZutKB2bSaAefGvMPLO+cL9xyq6bweWL/c5H
+   7fy7RnrpuW024zafC5ciLLQ4CK+utKbyN+vvkaT/pF48DDqL5z87n++zc
+   6a8ZAT6a9p8YRyJ/DmjNh8+LU2UOqhc00iOkyJCfIFFbtplAkq8mFdBkU
+   mmLWrZsXZXvqtQH+IZ2gIVZ8gc+DN86Q06oqS8iViZUq+9tmrvryxsWHd
    w==;
-References: <cover.1689174736.git.waqar.hameed@axis.com>
 User-agent: a.out
 From:   Waqar Hameed <waqar.hameed@axis.com>
 To:     Jonathan Cameron <jic23@kernel.org>,
@@ -36,12 +34,11 @@ To:     Jonathan Cameron <jic23@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
-CC:     <kernel@axis.com>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/3] dt-bindings: iio: proximity: Add Murata IRS-D200
-In-Reply-To: <cover.1689174736.git.waqar.hameed@axis.com>
+CC:     <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/3] Add driver for Murata IRS-D200
 Date:   Wed, 12 Jul 2023 17:12:16 +0200
-Message-ID: <3b9b284effa7d63c5c3c022f0d51312052bbe62c.1689174736.git.waqar.hameed@axis.com>
+Message-ID: <cover.1689174736.git.waqar.hameed@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.0.5.60]
@@ -57,83 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Murata IRS-D200 is a PIR sensor for human detection. It uses the I2C bus
-for communication with interrupt support. Add devicetree bindings
-requiring the compatible string, I2C slave address (reg), power supply
-and interrupts.
+Murata IRS-D200 is a PIR sensor for human detection. In this series we
+add devicetree bindings and an IIO driver with support for triggered
+buffer and events. Link to the datasheet should be added to the
+devicetree bindings, when that is available.
 
-Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
----
- .../iio/proximity/murata,irsd200.yaml         | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Changes in v2:
+
+[dt-bindings]
+* Remove "bindings for" in commit subject.
+* Remove superfluous yaml block style indicator ('|') for
+  `description:`.
+* Change node name in example from `pir` to `proximity`.
+* Add required `vdd-supply` property.
+
+[iio]
+* Add event enums for running period and count.
+* Use `set_trigger_state` callback instead of `iio_buffer_setup_ops`'s
+  `predisable` and `postenable`.
+* Use `regmap_bulk_read()` in `irsd200_read_data()` and
+  `irsd200_read_timer()`.
+* Use `regmap_bulk_write()` in `irsd200_write_timer()`.
+* Remove comment for macro `IRS_UPPER_COUNT()`.
+* Move `IIO_EV_INFO_LOW/HIGH_PASS_FILTER_3DB` from `iio_event_spec` to
+  `iio_chan_spec`.
+* Ignore timer (`IRS_INTR_TIMER`) interrupts.
+* Clarify comment on `ssleep(3)` in `irsd200_write_data_rate()`.
+* Only check for non-zero return values from `regmap` functions (as
+  opposed to `ret < 0`).
+* Add macro defines for operation states.
+* Remove fix size in static const array declarations.
+* Remove unnecessary `ret` variable in `irsd200_write_raw()`.
+* Remove comments in `irsd200_event_spec[]`.
+* Remove unnecessary call to `i2c_set_clientdata()` in probe.
+* Use `dev_err_probe()` everywhere in probe.
+* Remove unnecessary braces around if statement in probe.
+* Get and enable regulator in probe.
+
+Link to v1: https://lore.kernel.org/lkml/cover.1686926857.git.waqarh@axis.com/
+
+Waqar Hameed (3):
+  dt-bindings: iio: proximity: Add Murata IRS-D200
+  iio: Add event enums for running period and count
+  iio: Add driver for Murata IRS-D200
+
+ Documentation/ABI/testing/sysfs-bus-iio       |  16 +
+ .../iio/proximity/murata,irsd200.yaml         |  60 ++
+ drivers/iio/industrialio-event.c              |   2 +
+ drivers/iio/proximity/Kconfig                 |  12 +
+ drivers/iio/proximity/Makefile                |   1 +
+ drivers/iio/proximity/irsd200.c               | 982 ++++++++++++++++++
+ include/linux/iio/types.h                     |   2 +
+ 7 files changed, 1075 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/murata,irsd200.yaml
+ create mode 100644 drivers/iio/proximity/irsd200.c
 
-diff --git a/Documentation/devicetree/bindings/iio/proximity/murata,irsd200.yaml b/Documentation/devicetree/bindings/iio/proximity/murata,irsd200.yaml
-new file mode 100644
-index 000000000000..67f5389ece67
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/proximity/murata,irsd200.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/proximity/murata,irsd200.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Murata IRS-D200 PIR sensor
-+
-+maintainers:
-+  - Waqar Hameed <waqar.hameed@axis.com>
-+
-+description:
-+  PIR sensor for human detection.
-+
-+properties:
-+  compatible:
-+    const: murata,irsd200
-+
-+  reg:
-+    items:
-+      - enum:
-+          - 0x48
-+          - 0x49
-+        description: |
-+          When the AD pin is connected to GND, the slave address is 0x48.
-+          When the AD pin is connected to VDD, the slave address is 0x49.
-+
-+  interrupts:
-+    maxItems: 1
-+    description:
-+      Type should be IRQ_TYPE_EDGE_RISING.
-+
-+  vdd-supply:
-+    description:
-+      3.3 V supply voltage.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - vdd-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        proximity@48 {
-+            compatible = "murata,irsd200";
-+            reg = <0x48>;
-+            interrupts = <24 IRQ_TYPE_EDGE_RISING>;
-+            vdd-supply = <&regulator_3v3>;
-+        };
-+    };
-+...
+
+base-commit: 3f01e9fed8454dcd89727016c3e5b2fbb8f8e50c
 -- 
 2.30.2
 
