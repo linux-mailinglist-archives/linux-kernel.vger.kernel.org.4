@@ -2,150 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014E5750738
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8033750732
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjGLLzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S233578AbjGLLyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjGLLyt (ORCPT
+        with ESMTP id S233562AbjGLLyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:54:49 -0400
-Received: from out199-16.us.a.mail.aliyun.com (out199-16.us.a.mail.aliyun.com [47.90.199.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64DF2D6B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:53:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VnCvYDS_1689162686;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VnCvYDS_1689162686)
-          by smtp.aliyun-inc.com;
-          Wed, 12 Jul 2023 19:51:27 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, alexl@redhat.com
-Subject: [PATCH v3 2/2] erofs: boost negative xattr lookup with bloom filter
-Date:   Wed, 12 Jul 2023 19:51:23 +0800
-Message-Id: <20230712115123.33712-3-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230712115123.33712-1-jefflexu@linux.alibaba.com>
-References: <20230712115123.33712-1-jefflexu@linux.alibaba.com>
+        Wed, 12 Jul 2023 07:54:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0526C1FEE;
+        Wed, 12 Jul 2023 04:52:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6A1761780;
+        Wed, 12 Jul 2023 11:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8050CC433C8;
+        Wed, 12 Jul 2023 11:52:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689162778;
+        bh=z/2unuxkQBfu6lN68wWhSCQcwSPkxxj54V22sMSdgxU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DYuCAJAEzWZK8BwlhyvLp8JVuMejLvy+16dY3CnLT2dCyJuoeq32469WAni+mKBT2
+         CIJteXVRd9wmCXNtL1rnmuKalYjQ/C138i5FnlmZhMepnoSB1fNqwOGc2+liucP6LE
+         e4PQRSWwl4uZyZx+9ZHghM9je+FqtvVFrkqfZ5JIQjJHFJ2z1KFo3SV03rvf6MvTRm
+         IwO7VideHzHBGQsGFHdm66GG8CCTyzL+01uPfPVZ8UdsQf9XfuTEVMT1gDbCwJ2lYT
+         yfTMmT7BLDStSVOneEpqsMIy9X7xXf3sLBHmyKFqGLzzW8lf/X8vz2v6oLmM7xYas2
+         qCaoWGqz60jMQ==
+Date:   Wed, 12 Jul 2023 12:52:52 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 2/2] leds: simatic-ipc-leds-gpio: fix comment style in
+ SPDX header
+Message-ID: <20230712115252.GA10768@google.com>
+References: <20230706161040.21152-1-henning.schild@siemens.com>
+ <20230706161040.21152-3-henning.schild@siemens.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230706161040.21152-3-henning.schild@siemens.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Optimise the negative xattr lookup with bloom filter.
+On Thu, 06 Jul 2023, Henning Schild wrote:
 
-The bit value for the bloom filter map has a reverse semantics for
-compatibility.  That is, the bit value of 0 indicates existence, while
-the bit value of 1 indicates the absence of corresponding xattr.
+> This was found with giving the file to checkpatch.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>  drivers/leds/simple/simatic-ipc-leds-gpio.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.h b/drivers/leds/simple/simatic-ipc-leds-gpio.h
+> index bf258c32f83d..3d4877aa4e0c 100644
+> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.h
+> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
 
-This feature is enabled only when xattr_filter_reserved is non-zero.
-The on-disk format for the filter map may change in the future, in which
-case the reserved flag will be set non-zero and we don't need bothering
-the compatible bits again at that time.  For now disable the optimization
-if this reserved flag is non-zero.
+What prompted this change?
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/internal.h |  3 +++
- fs/erofs/super.c    |  1 +
- fs/erofs/xattr.c    | 13 +++++++++++++
- 3 files changed, 17 insertions(+)
+% git grep -F "// SPDX-License-Identifier:" -- drivers/leds | wc -l
+117
+% git grep -F "/* SPDX-License-Identifier:" -- drivers/leds | wc -l
+2
 
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 36e32fa542f0..ebcad25e3750 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -151,6 +151,7 @@ struct erofs_sb_info {
- 	u32 xattr_prefix_start;
- 	u8 xattr_prefix_count;
- 	struct erofs_xattr_prefix_item *xattr_prefixes;
-+	unsigned int xattr_filter_reserved;
- #endif
- 	u16 device_id_mask;	/* valid bits of device id to be used */
- 
-@@ -251,6 +252,7 @@ EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
- EROFS_FEATURE_FUNCS(dedupe, incompat, INCOMPAT_DEDUPE)
- EROFS_FEATURE_FUNCS(xattr_prefixes, incompat, INCOMPAT_XATTR_PREFIXES)
- EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
-+EROFS_FEATURE_FUNCS(xattr_filter, compat, COMPAT_XATTR_FILTER)
- 
- /* atomic flag definitions */
- #define EROFS_I_EA_INITED_BIT	0
-@@ -270,6 +272,7 @@ struct erofs_inode {
- 	unsigned char inode_isize;
- 	unsigned int xattr_isize;
- 
-+	unsigned long xattr_name_filter;
- 	unsigned int xattr_shared_count;
- 	unsigned int *xattr_shared_xattrs;
- 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 9d6a3c6158bd..72122323300e 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -388,6 +388,7 @@ static int erofs_read_superblock(struct super_block *sb)
- 	sbi->xattr_blkaddr = le32_to_cpu(dsb->xattr_blkaddr);
- 	sbi->xattr_prefix_start = le32_to_cpu(dsb->xattr_prefix_start);
- 	sbi->xattr_prefix_count = dsb->xattr_prefix_count;
-+	sbi->xattr_filter_reserved = dsb->xattr_filter_reserved;
- #endif
- 	sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
- 	sbi->root_nid = le16_to_cpu(dsb->root_nid);
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 40178b6e0688..eb1d1974d4b3 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2021-2022, Alibaba Cloud
-  */
- #include <linux/security.h>
-+#include <linux/xxhash.h>
- #include "xattr.h"
- 
- struct erofs_xattr_iter {
-@@ -87,6 +88,7 @@ static int erofs_init_inode_xattrs(struct inode *inode)
- 	}
- 
- 	ih = it.kaddr + erofs_blkoff(sb, it.pos);
-+	vi->xattr_name_filter = le32_to_cpu(ih->h_name_filter);
- 	vi->xattr_shared_count = ih->h_shared_count;
- 	vi->xattr_shared_xattrs = kmalloc_array(vi->xattr_shared_count,
- 						sizeof(uint), GFP_KERNEL);
-@@ -392,7 +394,10 @@ int erofs_getxattr(struct inode *inode, int index, const char *name,
- 		   void *buffer, size_t buffer_size)
- {
- 	int ret;
-+	uint32_t bit;
- 	struct erofs_xattr_iter it;
-+	struct erofs_inode *vi = EROFS_I(inode);
-+	struct erofs_sb_info *sbi = EROFS_SB(inode->i_sb);
- 
- 	if (!name)
- 		return -EINVAL;
-@@ -401,6 +406,14 @@ int erofs_getxattr(struct inode *inode, int index, const char *name,
- 	if (ret)
- 		return ret;
- 
-+	/* the reserved flag is non-zero if hashing algorithm changes */
-+	if (erofs_sb_has_xattr_filter(sbi) && !sbi->xattr_filter_reserved) {
-+		bit = xxh32(name, strlen(name), EROFS_XATTR_FILTER_SEED + index);
-+		bit &= EROFS_XATTR_FILTER_BITS - 1;
-+		if (test_bit(bit, &vi->xattr_name_filter))
-+			return -ENOATTR;
-+	}
-+
- 	it.index = index;
- 	it.name = (struct qstr)QSTR_INIT(name, strlen(name));
- 	if (it.name.len > EROFS_NAME_LEN)
 -- 
-2.19.1.6.gb485710b
-
+Lee Jones [李琼斯]
