@@ -2,213 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C175001E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C08C750023
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjGLHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S232107AbjGLHf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbjGLHfR (ORCPT
+        with ESMTP id S232171AbjGLHfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:35:17 -0400
-Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1FEE49
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:35:13 -0700 (PDT)
-Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-3a3c77c9962so8142970b6e.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:35:13 -0700 (PDT)
+        Wed, 12 Jul 2023 03:35:41 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808A51992;
+        Wed, 12 Jul 2023 00:35:32 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso10807886e87.3;
+        Wed, 12 Jul 2023 00:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689147331; x=1691739331;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/PE2l96LFO78ASyoK1rIpXPjUnfUbV0qJEzUZeBNGTE=;
+        b=Bx3Ueff9WHXlKvS/70TUr1hwkp9KgqrIJ/VQXFUzEq9WtJpNgByppCFtNqcWpKAm+W
+         GVOFUQjPUlazNF8aTjULXG0U1Q56yADKq4tlhQQqPfntdy8qkbOS8qCOyWiH8BUFvk7H
+         uQbkpBOEpbvjcUuRi/KCCAoaf8x1klSRh/KFkN3pnV0Nii/y9rU7Wv8fLAt1ll8FY8Rp
+         YnkzVcYkJej49Xe7MoODZaSLL8T00AmdP5g8LbZPt0Vjna76FCYVG0vbG6k75fET3I3p
+         aV2hDbNDywu0oWjqXD/NbzNEiDowiuqIccux1+7I4x2CX41e27mZh0CdV4SKdeLF8nLC
+         +fjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689147312; x=1691739312;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+SQFg+7zXK+mKefvUNVcXSJPT7ibCPmFtzOXy4FGgkQ=;
-        b=VraxaAFV+jauyGRkuFcpPclPC4PsKphX3KYpHEBBJz3Hg6wyxWktZQFyYvWmhup0GB
-         J1sLxeP8DcuMsji5LNkJDtNdEDAQgjxG9JzXe580ja5/bC7g25npfzuocgaJEW5PB3Lm
-         G8Z7HyjFysaLmCGJIYtyXtP5OABK8uT4gPfL9ZehX7anvAo+D/XkPOEkrMgphb7i9Ydp
-         U0WZwzOglDZTacRUnvXSrf55WHQLGcByZAOWiliZQHZmEe3Fn9bQFbPsGKvEmx/8RNhR
-         BGazRV+dw6L8BAd9UPIKyl/lbJ6Zvmy+jZspUgaaXxJu3Fv4P6gLbGYikxewCBDCPekn
-         4OKQ==
-X-Gm-Message-State: ABy/qLbr9yBfKghWC2uI19j8OXbzL6Iihe2Mx7Rgoc9PDnKY7usInKFc
-        2Dy9G/6hsF0Ttq6EX70uxNomU5g/Q+bye4owHN5Rq8faw9U1
-X-Google-Smtp-Source: APBJJlE9Bwb8jCHDJDGiKiGGdZY9M32HYBl4dmzk0lNnXQC3JMuXwZhLZ02vPPwFHCQaXw0X4V9cjxbTOsq8JaLaeSdYatQ4RkG5
+        d=1e100.net; s=20221208; t=1689147331; x=1691739331;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/PE2l96LFO78ASyoK1rIpXPjUnfUbV0qJEzUZeBNGTE=;
+        b=WQJbWxEjR/IwgTBTMey6a2v+ZtJZSjTPENO7F9hijQZ13Mr1miGgDYuKa2QcAfRU6Z
+         Irct8BfYN+ydwT7yLOQgxCfMZ3C9FX0THJ2wDW8ZRxuUWluhx01xfgParNbhujIzSBIZ
+         4UePmYB04n3QQKlHvqCSXk3w8kLCtE1ZZiswR/lnSO1npPrl9bn3X/aeeNb7nbRWYe6o
+         JcAD/Eu8KAfUe0ZtdOzT4ES4eFj1vwRKuM20JfDaaZ2iZ7xvM07MVFzCLbTYxakBWqAp
+         dgT1ai7ReEPgB+0F6mVOoTwJcApoDOCnyPGjMfvrVjPjDE0PwzdKvNGRfC03L1LADZEq
+         IPkg==
+X-Gm-Message-State: ABy/qLYVx+MTsdBUh3zE0ajWK5RGVPmcG26aPp3n6qKAkVpm4W7VHw2N
+        G9djiU5Mqzs9HlFIlPYKwQc=
+X-Google-Smtp-Source: APBJJlECOmtP22hrQRQPHUAyhMTCH4MMW99NWkLufXU/36WFrjC0ehSY2SUAZ6vxYmQzgTOmL8legA==
+X-Received: by 2002:a05:6512:3d28:b0:4fb:8802:9554 with SMTP id d40-20020a0565123d2800b004fb88029554mr18715169lfv.6.1689147330175;
+        Wed, 12 Jul 2023 00:35:30 -0700 (PDT)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id o1-20020ac24341000000b004eff1163c37sm588675lfl.308.2023.07.12.00.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 00:35:29 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 10:35:19 +0300
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <contact@emersion.fr>, <laurent.pinchart@ideasonboard.com>,
+        <sebastian.wick@redhat.com>, <ville.syrjala@linux.intel.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <wayland-devel@lists.freedesktop.org>
+Subject: Re: [PATCH RFC v4 2/7] drm: Introduce pixel_source DRM plane
+ property
+Message-ID: <20230712103519.1a941d26@eldfell>
+In-Reply-To: <79eb29b5-f018-d92c-b514-5ae0c954ff46@quicinc.com>
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+        <20230404-solid-fill-v4-2-f4ec0caa742d@quicinc.com>
+        <6e3eec49-f798-ff91-8b4d-417d31089296@linaro.org>
+        <20230630112708.4d3a08a7@eldfell>
+        <eb78b4d6-6da2-1cb5-5fab-01d7bf233111@quicinc.com>
+        <e17db728-d91b-a2b3-08a9-1dd1fde9c727@linaro.org>
+        <53ca10d5-c1e0-285a-30b9-4e9a2a1b70c9@quicinc.com>
+        <916d6b67-0f37-3814-4a15-d4a6fd6891ab@linaro.org>
+        <79eb29b5-f018-d92c-b514-5ae0c954ff46@quicinc.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:aca:b9c2:0:b0:3a1:f3e2:c977 with SMTP id
- j185-20020acab9c2000000b003a1f3e2c977mr3999935oif.11.1689147312445; Wed, 12
- Jul 2023 00:35:12 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 00:35:12 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000881d0606004541d1@google.com>
-Subject: [syzbot] [fs?] INFO: task hung in pipe_release (4)
-From:   syzbot <syzbot+f527b971b4bdc8e79f9e@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Koo4mZ9l75IMKSB1KGUOoX.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/Koo4mZ9l75IMKSB1KGUOoX.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+On Tue, 11 Jul 2023 15:42:28 -0700
+Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
 
-HEAD commit:    3f01e9fed845 Merge tag 'linux-watchdog-6.5-rc2' of git://w..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16c5cd8ca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=150188feee7071a7
-dashboard link: https://syzkaller.appspot.com/bug?extid=f527b971b4bdc8e79f9e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a86682a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1520ab6ca80000
+> On 7/11/2023 3:19 PM, Dmitry Baryshkov wrote:
+> > On 12/07/2023 01:07, Jessica Zhang wrote: =20
+> >>
+> >>
+> >> On 7/10/2023 1:11 PM, Dmitry Baryshkov wrote: =20
+> >>> On 10/07/2023 22:51, Jessica Zhang wrote: =20
+> >>>>
+> >>>>
+> >>>> On 6/30/2023 1:27 AM, Pekka Paalanen wrote: =20
+> >>>>> On Fri, 30 Jun 2023 03:42:28 +0300
+> >>>>> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+> >>>>> =20
+> >>>>>> On 30/06/2023 03:25, Jessica Zhang wrote: =20
+> >>>>>>> Add support for pixel_source property to drm_plane and related
+> >>>>>>> documentation.
+> >>>>>>>
+> >>>>>>> This enum property will allow user to specify a pixel source for =
+the
+> >>>>>>> plane. Possible pixel sources will be defined in the
+> >>>>>>> drm_plane_pixel_source enum.
+> >>>>>>>
+> >>>>>>> The current possible pixel sources are DRM_PLANE_PIXEL_SOURCE_FB =
+and
+> >>>>>>> DRM_PLANE_PIXEL_SOURCE_COLOR. The default value is *_SOURCE_FB. =
+=20
+> >>>>>>
+> >>>>>> I think, this should come before the solid fill property addition.=
+=20
+> >>>>>> First
+> >>>>>> you tell that there is a possibility to define other pixel=20
+> >>>>>> sources, then
+> >>>>>> additional sources are defined. =20
+> >>>>>
+> >>>>> Hi,
+> >>>>>
+> >>>>> that would be logical indeed. =20
+> >>>>
+> >>>> Hi Dmitry and Pekka,
+> >>>>
+> >>>> Sorry for the delay in response, was out of office last week.
+> >>>>
+> >>>> Acked.
+> >>>> =20
+> >>>>> =20
+> >>>>>>>
+> >>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> >>>>>>> ---
+> >>>>>>> =C2=A0=C2=A0 drivers/gpu/drm/drm_atomic_state_helper.c |=C2=A0 1 +
+> >>>>>>> =C2=A0=C2=A0 drivers/gpu/drm/drm_atomic_uapi.c=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++
+> >>>>>>> =C2=A0=C2=A0 drivers/gpu/drm/drm_blend.c=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 81=20
+> >>>>>>> +++++++++++++++++++++++++++++++
+> >>>>>>> =C2=A0=C2=A0 include/drm/drm_blend.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0|=C2=A0 2 +
+> >>>>>>> =C2=A0=C2=A0 include/drm/drm_plane.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0| 21 ++++++++
+> >>>>>>> =C2=A0=C2=A0 5 files changed, 109 insertions(+)
+> >>>>>>>
+> >>>>>>> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c=20
+> >>>>>>> b/drivers/gpu/drm/drm_atomic_state_helper.c
+> >>>>>>> index fe14be2bd2b2..86fb876efbe6 100644
+> >>>>>>> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
+> >>>>>>> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+> >>>>>>> @@ -252,6 +252,7 @@ void=20
+> >>>>>>> __drm_atomic_helper_plane_state_reset(struct drm_plane_state=20
+> >>>>>>> *plane_state,
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 plane_state->alpha =3D DRM_B=
+LEND_ALPHA_OPAQUE;
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 plane_state->pixel_blend_mod=
+e =3D DRM_MODE_BLEND_PREMULTI;
+> >>>>>>> +=C2=A0=C2=A0=C2=A0 plane_state->pixel_source =3D DRM_PLANE_PIXEL=
+_SOURCE_FB;
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (plane_state->solid_fill_=
+blob) {
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_=
+property_blob_put(plane_state->solid_fill_blob);
+> >>>>>>> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c=20
+> >>>>>>> b/drivers/gpu/drm/drm_atomic_uapi.c
+> >>>>>>> index a28b4ee79444..6e59c21af66b 100644
+> >>>>>>> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> >>>>>>> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> >>>>>>> @@ -596,6 +596,8 @@ static int=20
+> >>>>>>> drm_atomic_plane_set_property(struct drm_plane *plane,
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_=
+property_blob_put(solid_fill);
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
+rn ret;
+> >>>>>>> +=C2=A0=C2=A0=C2=A0 } else if (property =3D=3D plane->pixel_sourc=
+e_property) {
+> >>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 state->pixel_source =
+=3D val;
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (property =3D=3D p=
+lane->alpha_property) {
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 stat=
+e->alpha =3D val;
+> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (property =3D=3D p=
+lane->blend_mode_property) { =20
+> >>>>>>
+> >>>>>> I think, it was pointed out in the discussion that=20
+> >>>>>> drm_mode_setplane()
+> >>>>>> (a pre-atomic IOCTL to turn the plane on and off) should also reset
+> >>>>>> pixel_source to FB. =20
+> >>>>
+> >>>> I don't remember drm_mode_setplane() being mentioned in the=20
+> >>>> pixel_source discussion... can you share where it was mentioned? =20
+> >>>
+> >>> https://lore.kernel.org/dri-devel/20230627105849.004050b3@eldfell/
+> >>>
+> >>> Let me quote it here:
+> >>> "Legacy non-atomic UAPI wrappers can do whatever they want, and progr=
+am
+> >>> any (new) properties they want in order to implement the legacy
+> >>> expectations, so that does not seem to be a problem."
+> >>>
+> >>> =20
+> >>>>
+> >>>> I'd prefer to avoid having driver change the pixel_source directly=20
+> >>>> as it could cause some unexpected side effects. In general, I would=
+=20
+> >>>> like userspace to assign the value of pixel_source without driver=20
+> >>>> doing anything "under the hood". =20
+> >>>
+> >>> s/driver/drm core/
+> >>>
+> >>> We have to remain compatible with old userspace, especially with the=
+=20
+> >>> non-atomic one. If the userspace calls=20
+> >>> ioctl(DRM_IOCTL_MODE_SETPLANE), we have to display the specified FB,=
+=20
+> >>> no matter what was the value of PIXEL_SOURCE before this ioctl. =20
+> >>
+> >>
+> >> Got it, thanks the clarification -- I see your point.
+> >>
+> >> I'm already setting plane_state->pixel_source to FB in=20
+> >> __drm_atomic_helper_plane_reset() and it seems to me that all drivers=
+=20
+> >> are calling that within their respective plane_funcs->reset().
+> >>
+> >> Since (as far as I know) reset() is being called for both the atomic=20
+> >> and non-atomic paths, shouldn't that be enough to default pixel_source=
+=20
+> >> to FB for old userspace? =20
+> >=20
+> > No, this will not clean up the state between userspace apps. Currently=
+=20
+> > the rule is simple: call DRM_IOCTL_MODE_SETPLANE, get the image from FB=
+=20
+> > displayed. We should keep it so.
+> >  =20
+>=20
+> Ok, so you are considering a use-case where we bootup with a userspace=20
+> (which is aware of pixel_source), that one uses the pixel_source to=20
+> switch the property to solid_color and then we kill this userspace and=20
+> bootup one which is unaware of this property and uses=20
+> DRM_IOCTL_MODE_SETPLANE, then we should default back to FB.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/991cea284d12/disk-3f01e9fe.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/13051b4d971a/vmlinux-3f01e9fe.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/31cc7c3c2596/bzImage-3f01e9fe.xz
+Not even that complex. There is no need to reboot and no need to kill
+anything to hit this. A simple VT-switch can switch between two
+different KMS clients, one could be using atomic with solid_fill, and
+the other is an old legacy UAPI user. If the atomic client leaves stuff
+up in KMS state, it would be nice if the legacy app still worked.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f527b971b4bdc8e79f9e@syzkaller.appspotmail.com
+Or, maybe it's not a VT-switch but switching from, say, a graphical
+login manager to a desktop or back. The same thing, different KMS
+clients. But in this case it is more likely that userspace follows
+common play rules, so it's less likely to have problematic left-over
+KMS state.
 
-INFO: task syz-executor421:5031 blocked for more than 143 seconds.
-      Not tainted 6.5.0-rc1-syzkaller-00006-g3f01e9fed845 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor421 state:D stack:27728 pid:5031  ppid:5021   flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5381 [inline]
- __schedule+0xc9a/0x5880 kernel/sched/core.c:6710
- schedule+0xde/0x1a0 kernel/sched/core.c:6786
- schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6845
- __mutex_lock_common kernel/locking/mutex.c:679 [inline]
- __mutex_lock+0xa3b/0x1350 kernel/locking/mutex.c:747
- __pipe_lock fs/pipe.c:103 [inline]
- pipe_release+0x4d/0x310 fs/pipe.c:721
- __fput+0x40c/0xad0 fs/file_table.c:384
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- ptrace_notify+0x118/0x140 kernel/signal.c:2372
- ptrace_report_syscall include/linux/ptrace.h:411 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:473 [inline]
- syscall_exit_work kernel/entry/common.c:252 [inline]
- syscall_exit_to_user_mode_prepare+0x129/0x220 kernel/entry/common.c:279
- __syscall_exit_to_user_mode_work kernel/entry/common.c:284 [inline]
- syscall_exit_to_user_mode+0xd/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbe8982b7da
-RSP: 002b:00007ffd74cb3820 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007fbe8982b7da
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 000000000000000a R08: 0000000000000000 R09: 00007ffd74d90080
-R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000a9f7
-R13: 000000000000aa29 R14: 00007fbe898b642c R15: 00007fbe898b6420
- </TASK>
+Or, maybe you simply quit the atomic KMS client and expect fbcon to
+successfully take over. I don't know what APIs fbcon uses inside the
+kernel, but it definitely should clean up any mess left over by an
+atomic (or legacy) KMS client to make sure it shows itself.
+Traditionally it has failed to do that though, I don't know if things
+are better nowadays (GAMMA_LUT, HDR_OUTPUT_METADATA, probably more).
 
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/13:
- #0: ffffffff8c9a3af0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:522
-1 lock held by rcu_tasks_trace/14:
- #0: ffffffff8c9a37f0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:522
-1 lock held by khungtaskd/28:
- #0: ffffffff8c9a4700 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x340 kernel/locking/lockdep.c:6615
-2 locks held by getty/4773:
- #0: ffff88802d33a098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:243
- #1: ffffc900015c02f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xf08/0x13f0 drivers/tty/n_tty.c:2187
-1 lock held by syz-executor421/5031:
- #0: ffff888022606868 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
- #0: ffff888022606868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_release+0x4d/0x310 fs/pipe.c:721
-2 locks held by syz-executor421/5032:
+Switching between two KMS clients is fundamentally problematic. If both
+old and new KMS client are atomic, the kernel cannot simply go
+resetting any KMS state automatically, because the kernel does not
+know which part of state is good to reset and which would just cause
+unwanted flicker and delays. That means that it is up to the two atomic
+KMS clients to agree on common play rules and not leave funny state up.
+IOW, not the kernel's problem, by what I have understood from kernel
+developer opinions.
 
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.5.0-rc1-syzkaller-00006-g3f01e9fed845 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/03/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x29c/0x350 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x2a4/0x300 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:160 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
- watchdog+0xe16/0x1090 kernel/hung_task.c:379
- kthread+0x344/0x440 kernel/kthread.c:389
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 5032 Comm: syz-executor421 Not tainted 6.5.0-rc1-syzkaller-00006-g3f01e9fed845 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/03/2023
-RIP: 0010:__ip_append_data+0x957/0x3c90 net/ipv4/ip_output.c:1198
-Code: 31 ff 29 eb 89 de e8 d8 6d e9 f8 85 db 0f 8e b5 1a 00 00 e8 ab 71 e9 f8 48 8b 44 24 38 41 39 de 41 0f 4e de 41 89 dc 80 38 00 <0f> 85 15 29 00 00 48 8b 44 24 18 48 8b 18 48 8d bb f0 00 00 00 48
-RSP: 0018:ffffc90003b9f520 EFLAGS: 00000246
-RAX: ffffed100fab0f00 RBX: 0000000000000006 RCX: 0000000000000000
-RDX: ffff888019e95940 RSI: ffffffff889b7015 RDI: 0000000000000005
-RBP: 000000000000001c R08: 0000000000000005 R09: 0000000000000000
-R10: 000000000000057e R11: 0000000000000001 R12: 0000000000000006
-R13: dffffc0000000000 R14: 0000000000000006 R15: ffff8880132dd3c0
-FS:  00007fbe897e96c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005598ca226780 CR3: 00000000193f8000 CR4: 0000000000350ef0
-Call Trace:
- <NMI>
- </NMI>
- <TASK>
- ip_append_data net/ipv4/ip_output.c:1352 [inline]
- ip_append_data+0x115/0x1a0 net/ipv4/ip_output.c:1331
- udp_sendmsg+0x881/0x2840 net/ipv4/udp.c:1287
- inet_sendmsg+0x9d/0xe0 net/ipv4/af_inet.c:830
- sock_sendmsg_nosec net/socket.c:725 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:748
- splice_to_socket+0x964/0xee0 fs/splice.c:882
- do_splice_from fs/splice.c:934 [inline]
- do_splice+0xb8a/0x1ec0 fs/splice.c:1295
- __do_splice+0x14e/0x270 fs/splice.c:1373
- __do_sys_splice fs/splice.c:1584 [inline]
- __se_sys_splice fs/splice.c:1566 [inline]
- __x64_sys_splice+0x19c/0x250 fs/splice.c:1566
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbe8982c519
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 61 1a 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fbe897e9218 EFLAGS: 00000246 ORIG_RAX: 0000000000000113
-RAX: ffffffffffffffda RBX: 00007fbe898b6428 RCX: 00007fbe8982c519
-RDX: 0000000000000005 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fbe898b6420 R08: 000000000004ffe0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbe898b642c
-R13: 00007fbe898834f4 R14: 04000000000003bd R15: 00007ffd74cb3758
- </TASK>
+However, legacy KMS clients are different. As legacy clients, they may
+not even have access to the properties they might need to clean up
+after a previous atomic KMS client. The legacy UAPI is expected to
+be slow and glitchy, but also Just Work(TM), so the kernel can reset
+everything a legacy KMS client would not have access to when a legacy
+KMS client issues drmModeSetPlane or drmModeSetCrtc (pardon for using
+libdrm API functions for the ioctls whose names I never memorised).
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Thanks,
+pq
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--Sig_/Koo4mZ9l75IMKSB1KGUOoX.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+-----BEGIN PGP SIGNATURE-----
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmSuV7cACgkQI1/ltBGq
+qqe1bhAAjr/t3vy/wQYTZoNif5ySebXZ0/JcaGv9X5OWb6H3K3IgxruypCHW+Qzu
+fgYX+fFAxl58FaqnMu4USebdshELA9FFrq3dbrNeSWvo9/AzdTeoNhhYatcMlgJq
+H0f5Gs+h2/va7PIav3guMlyVcJYRIT8mzjE5SUrVPDnF8t7lyqbYmdBXE59dEvFD
+xpMP2aRjtEyu4zqP7q9VjK63QddhlOgo/Fl6+3zuaPH0mdEOnO4ZssC2zGB7OL0l
+DwSh6QR7R+os+WVdPFyCZVlp0FbGltSK5UdcsArHKhgNVjwtETrTJHZYmRMmzFzy
+VVez22vHgdijfAsmLG+GHG0eQYkOu8MDujaIi1UooEAa6AGQvvsji9jWfglnN6z6
++bQLYif2JVhawUc3T/+8+ey5gMDIgRyUzRGv1pa3Z2bUGVRLYtdTQ75POlYtkZM0
+bBK4QKjV8rXVEJ9JTS7ElB6tesFrPSHdQinoAHU3YB4ZPkxksQiLdBfDtnp/4Tca
+p7tFuSVjg1zwWyoUHTADVlgG7BF4IcW6FjeeC657+2S3XFhXSOEV2RE1A+zGICnK
+K2BpLuWqFLepK+LESBfQvKV5plFWrLpIM+5HNIaPt1lwNF4AFVPVGLowOt0oGU0f
+LcKiJzDn6moVLQc5fU8nPrQD9rseXyG2Y6kDSdDC3OFCrSj2jnw=
+=nBtI
+-----END PGP SIGNATURE-----
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--Sig_/Koo4mZ9l75IMKSB1KGUOoX.--
