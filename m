@@ -2,100 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD1E74FD6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9025174FD73
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjGLDIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S230285AbjGLDJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjGLDIh (ORCPT
+        with ESMTP id S229718AbjGLDJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:08:37 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01141712
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:08:34 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R12kS6z45zBS5pk
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:08:32 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689131312; x=1691723313; bh=0CcwIDO4opsdPdT4gBowEy44D9V
-        0u/t38EtRWkFSWAU=; b=bBnaNlAQyesxeAgkFte1OKh/5DV8Hu3PWYdRzp2uaq4
-        w2kmA40H/ylOK1VsSZW25+dcB61IxoDF/JkvVj/51aGn6D0jDFkjqonHG9SlsVob
-        z4xm5FFk8KHYkK/6hfPULHVr5HcAmguBq2isZErHNIq0AIu9k+KtRXb3+cMtJMTl
-        zbF3s3MN9p3ZYd8u2lV08PLWnjGnJt5CmbIfCnr36bKDdCAeEarciwML0Oh6gSvo
-        JZEdsyZ2LlvZIVr0DjSniZR7/B3wxVPiIzxDwwXQV10AJubMJRNafBFuRW0GRAxi
-        FixeLcVTuPyU0nfaHb1MIPnUXoDnbLqK8hUfQqnqUKw==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id fSEAcqpiBu4S for <linux-kernel@vger.kernel.org>;
-        Wed, 12 Jul 2023 11:08:32 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R12kS3r3pzBJ8lQ;
-        Wed, 12 Jul 2023 11:08:32 +0800 (CST)
+        Tue, 11 Jul 2023 23:09:30 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D059D1712;
+        Tue, 11 Jul 2023 20:09:28 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C2upi5030604;
+        Wed, 12 Jul 2023 03:09:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=unT4TGu4vj4swGuvnf1SU6F2ymowiMhTHYePcXIoqQs=;
+ b=FKK5RUaBV7yAQKHQ8SQcnoQzLy6irO0yL92mE0LPXX3LZDo9Q2DJSfnNmaWky/Dvzvae
+ 1N67OZP+CuFBsm8EFJVCh++dEdPVgsscQ9dXYgODLQ4IuOF3VMXq0VnM1fE5HBA4FHi2
+ f3MjdHFRtMICHNtproMnuC3K4zBGWTn1zlo9PG3o3SLUi9ocBNTf31OukyLeODoTSf3I
+ y7rsXidfzjWJH2x3Z6ARH+ilw3wmipDEGGZY2UDWXAj1QsNTZUAZV9pZ2VrYbVeorU3b
+ Wv9Ab5oap3eQYvvEkL9nQaMdo6t0gRVAg/ybH/UK+cKgIyrTyOg6xtoQy0FnZLwOscfZ DQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf51gedw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 03:09:16 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C39F13000622
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 03:09:15 GMT
+Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 20:09:12 -0700
+Message-ID: <67c2621f-4cad-2495-9785-7737246d3e90@quicinc.com>
+Date:   Wed, 12 Jul 2023 11:09:10 +0800
 MIME-Version: 1.0
-Date:   Wed, 12 Jul 2023 11:08:32 +0800
-From:   shijie001@208suo.com
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org
-Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86:Fix warnings in debugfs.c
-In-Reply-To: <tencent_5FEF30EB273BF931FF82DB522CA8CB13A307@qq.com>
-References: <tencent_5FEF30EB273BF931FF82DB522CA8CB13A307@qq.com>
-User-Agent: Roundcube Webmail
-Message-ID: <d02e47813a9b22b2c625caf8ac5ae0fb@208suo.com>
-X-Sender: shijie001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+To:     Will Deacon <will@kernel.org>
+CC:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <maz@kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+ <20230710093751.GC32673@willie-the-truck>
+ <5cf15f85-0397-96f7-4110-13494551b53b@quicinc.com>
+ <20230711082226.GA1554@willie-the-truck>
+ <84f0994a-26de-c20a-a32f-ec8fe41df3a3@quicinc.com>
+ <20230711102510.GA1809@willie-the-truck>
+From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+In-Reply-To: <20230711102510.GA1809@willie-the-truck>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 9pM9JF9wyctwtA2vdxDJQ6sFV5k5Xh3F
+X-Proofpoint-GUID: 9pM9JF9wyctwtA2vdxDJQ6sFV5k5Xh3F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_14,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 spamscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307120025
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following checkpatch warning is removed:
-WARNING: Prefer seq_puts to seq_printf
+On 7/11/2023 6:25 PM, Will Deacon wrote:
+> On Tue, Jul 11, 2023 at 06:15:49PM +0800, Aiqun(Maria) Yu wrote:
+>> On 7/11/2023 4:22 PM, Will Deacon wrote:
+>>> On Tue, Jul 11, 2023 at 12:02:22PM +0800, Aiqun(Maria) Yu wrote:
+>>>> On 7/10/2023 5:37 PM, Will Deacon wrote:
+>>>>> On Mon, Jul 10, 2023 at 01:59:55PM +0800, Maria Yu wrote:
+>>>>>> In order to be able to disable lse_atomic even if cpu
+>>>>>> support it, most likely because of memory controller
+>>>>>> cannot deal with the lse atomic instructions, use a
+>>>>>> new idreg override to deal with it.
+>>>>>
+>>>>> This should not be a problem for cacheable memory though, right?
+>>>>>
+>>>>> Given that Linux does not issue atomic operations to non-cacheable mappings,
+>>>>> I'm struggling to see why there's a problem here.
+>>>>
+>>>> The lse atomic operation can be issued on non-cacheable mappings as well.
+>>>> Even if it is cached data, with different CPUECTLR_EL1 setting, it can also
+>>>> do far lse atomic operations.
+>>>
+>>> Please can you point me to the place in the kernel sources where this
+>>> happens? The architecture doesn't guarantee that atomics to non-cacheable
+>>> mappings will work, see "B2.2.6 Possible implementation restrictions on
+>>> using atomic instructions". Linux, therefore, doesn't issue atomics
+>>> to non-cacheable memory.
+>>
+>> We encounter the issue on third party kernel modules and third party apps
+>> instead of linux kernel itself.
+> 
+> Great, so there's nothing to do in the kernel then!
+> 
+> The third party code needs to be modified not to use atomic instructions
+> with non-cacheable mappings. No need to involve us with that.
 
-Signed-off-by: Jie Shi <shijie001@208suo.com>
----
-  arch/x86/kvm/debugfs.c | 6 +++---
-  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+>> This is a tradeoff of performance and stability. Per my understanding,
+>> options can be used to enable the lse_atomic to have the most performance
+>> cared system, and disable the lse_atomic by stability cared most system.
+> 
+> Where do livelock and starvation fit in with "stability"? Disabling LSE
+> atomics for things like qspinlock and the scheduler just because of some
+> badly written third-party code isn't much of a tradeoff.
+We also have requirement to have cpus/system fully support lse atomic 
+and cpus/system not fully support lse atomic with a generic kernel image.
+Same kernel module wanted to be used by lse atomic fully support cpu and 
+not fully support cpu/system as well.
 
-diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
-index ee8c4c3496ed..a3e118397aa3 100644
---- a/arch/x86/kvm/debugfs.c
-+++ b/arch/x86/kvm/debugfs.c
-@@ -133,20 +133,20 @@ static int kvm_mmu_rmaps_stat_show(struct seq_file 
-*m, void *v)
-      mutex_unlock(&kvm->slots_lock);
+That's why we want to have a runtime option here.
 
-      /* index=0 counts no rmap; index=1 counts 1 rmap */
--    seq_printf(m, "Rmap_Count:\t0\t1\t");
-+    seq_puts(m, "Rmap_Count:\t0\t1\t");
-      for (i = 2; i < RMAP_LOG_SIZE; i++) {
-          j = 1 << (i - 1);
-          k = (1 << i) - 1;
-          seq_printf(m, "%d-%d\t", j, k);
-      }
--    seq_printf(m, "\n");
-+    seq_puts(m, "\n");
+> 
+> Will
 
-      for (i = 0; i < KVM_NR_PAGE_SIZES; i++) {
-          seq_printf(m, "Level=%s:\t", kvm_lpage_str[i]);
-          cur = log[i];
-          for (j = 0; j < RMAP_LOG_SIZE; j++)
-              seq_printf(m, "%d\t", cur[j]);
--        seq_printf(m, "\n");
-+        seq_puts(m, "\n");
-      }
+-- 
+Thx and BRs,
+Aiqun(Maria) Yu
 
-      ret = 0;
