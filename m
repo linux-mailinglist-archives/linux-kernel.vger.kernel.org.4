@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32C375069A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9995D7506B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjGLLrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S233269AbjGLLrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbjGLLre (ORCPT
+        with ESMTP id S232985AbjGLLrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:47:34 -0400
+        Wed, 12 Jul 2023 07:47:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE35211F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:47:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B3319BC;
+        Wed, 12 Jul 2023 04:47:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6A1617A5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14356C433C7;
-        Wed, 12 Jul 2023 11:47:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 995B96179C;
+        Wed, 12 Jul 2023 11:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D464C433CA;
+        Wed, 12 Jul 2023 11:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689162434;
-        bh=f5mVoe34HV5wp/TbZuYdG3O0UtLsVgTcl18qYuE7l1w=;
+        s=k20201202; t=1689162439;
+        bh=bTeEZPf59lqakPF2P640QhtCaifAT8KzWjxjRQAvfnc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AWhwbFMEKwO+U3c0UHb390l/zu3wCZVhLi5vhf4r7y87X0VeOnfj7pU64j5fIU5wZ
-         aGowduAOLkfml16RD4ZE0whKuPGAIUDKdz7odwTAQLjHOxbntnh0EF6rpBMqJaliFn
-         Booc2XnSGyRNa2bIjkfY7+SDac0nP2uOKpqG2yPvuapUcfTe/NbNl12+I18xdM5B70
-         bXsZWHKQKb1hpguzd9XTZp940FhUdOIm5PgtK7HLQ1hQa+sM4dlt6SsfvQdRRDkIi7
-         M+WFzLe4MGw392dC6RycG1aG+4Nfg/8o6Bza42bO5pbMJn4CNGIlKbSpag6vGauLi/
-         jsKp9ELVW8X3g==
+        b=EiZoQjZ6OT3Ns26mOvM2p7uoHP09mmBq3LcJaYDrau8QaSqCuLLuh4DZ3E49nM2/1
+         M4cI+gkdiZMs6TAXBaWLu5RVN3pd7cdo6fCfyTe9OLCwdXj/3WKcKYQwd3NFr0QhzO
+         dNxUG3G8BX0lkYfp247WRyI9LMejNflUkUboKNMRs9Yd8g73JHBFMi+rsjzfU4+j0G
+         hRgHDvhfkHlCNb87ystKScAvOaNpBqpGy/6VNHSnbXO5B/uc3k14eqUvL+73sqkLd9
+         /PEku4ywk9LwSaWCUoB/watjzaDERPKE1t7xn7T44egvjg47elD5Wtikk4+Ud0kCS9
+         KW+qXVVi1XuuA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Mastan Katragadda <Mastan.Katragadda@amd.com>
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, vijendar.mukunda@amd.com,
-        Arungopal.kondaveeti@amd.com, vsujithkumar.reddy@amd.com,
-        venkataprasad.potturu@amd.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        David Lin <CTLIN0@nuvoton.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Antti Palosaari <crope@iki.fi>,
+        Sergey Kozlov <serjk@netup.ru>, Abylay Ospan <aospan@netup.ru>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
+        Michael Krufky <mkrufky@linuxtv.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Akihiro Tsukada <tskd08@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
-References: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
-Subject: Re: (subset) [PATCH 1/2] ASoC: SOF: amd: add revision check for
- sending sha dma completion command
-Message-Id: <168916242980.46574.9079979863277488670.b4-ty@kernel.org>
-Date:   Wed, 12 Jul 2023 12:47:09 +0100
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+In-Reply-To: <20230703135211.87416-1-andriy.shevchenko@linux.intel.com>
+References: <20230703135211.87416-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] ASoC: remove copy of intlog10()
+Message-Id: <168916243503.46574.8648492910653154560.b4-ty@kernel.org>
+Date:   Wed, 12 Jul 2023 12:47:15 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -75,12 +68,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 12:35:42 +0530, Mastan Katragadda wrote:
-> ACP driver should send SHA DMA completion command to PSP module for RN
-> platform only.
-> Add a revision check for RN platform.
+On Mon, 03 Jul 2023 16:52:07 +0300, Andy Shevchenko wrote:
+> The first three patches moves intlog10() to be available in entire
+> kernel. The last one removes copy of it in one driver. Besides already
+> good Lines of Code (LoC) statistics the upcoming users, if any, can
+> utilize the exported functions.
 > 
+> The series can be routed via ASoC tree (as Mauro suggested).
 > 
+> [...]
 
 Applied to
 
@@ -88,8 +84,14 @@ Applied to
 
 Thanks!
 
-[2/2] ASoC: SOF: amd: refactor PSP smn_read
-      commit: 2b48d170fb9965dda9d41edcb0bbfc9ee4c6584f
+[1/4] lib/math: Move dvb_math.c into lib/math/int_log.c
+      commit: f97fa3dcb2db02013e6904c032a1d2d45707ee40
+[2/4] lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
+      commit: 08f6a14b2d376e96cb7166694193ec3c3a496d25
+[3/4] lib/math/int_log: Replace LGPL-2.1-or-later boilerplate with SPDX identifier
+      commit: 9ab04d7ed8bdd395b0617a1647dd475681f99151
+[4/4] ASoC: nau8825: Replace copied'n'pasted intlog10()
+      commit: a04616321f50bc389cd8d19a6d300d3c3f1be77b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
