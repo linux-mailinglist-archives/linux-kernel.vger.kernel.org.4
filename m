@@ -2,206 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831AC74FE2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D9A74FE32
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjGLE13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 00:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S231334AbjGLEaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGLE11 (ORCPT
+        with ESMTP id S229640AbjGLEan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 00:27:27 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D830B1728
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:27:23 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-579dd20b1c8so72836337b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:27:23 -0700 (PDT)
+        Wed, 12 Jul 2023 00:30:43 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDA71726;
+        Tue, 11 Jul 2023 21:30:42 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b698937f85so106449941fa.2;
+        Tue, 11 Jul 2023 21:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689136043; x=1691728043;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wiHFwa+qInqC9Ufc7qLGqz2T4+XJI6K3K6pkdSvL2BE=;
-        b=YjT2iggkRTiXtZMR1jMLANF/DCx6aBNBHMVDVVl8Gr0GinPbSloyq6adfQMkbwXuDy
-         4LOhxp9lsDQkNYPLAl5k89Ck7UzmU2gS51lf58HBHMNkZxeBrwzXKOfpjPMpHU7Xhn8z
-         K9b44iVOIzPUbQ6ymuTwqdYb3uxH5ZNNlppLByjfI27io4ZaUeNDCqifG61+Enltfq1W
-         Q4VeG3xJt0Bk+AP9vkRr0OjwSSW1svxOnjAGiUGPKap1kin/J6ow8NcPSugD6S/XzNDL
-         Pw7KzGLDDMHF/NqW9CZBI1VUfB0aeFWeRbgCBvTEtczkxjQmMIk8cik2x0kBWOU3eCTM
-         DkUQ==
+        d=gmail.com; s=20221208; t=1689136240; x=1691728240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8FEG/oH6gh544Z3hupFRjyPw2jcIZbPPkJZIsg/itb0=;
+        b=mGbit/QZhR5zf5HHGqic70EOrefPwZyYsBYoUr1mMVgh5v7Qbr7zEhj2GoCeJqxgPl
+         Qb4UEyX5X059JCyQ6NJeoxIkqvMTZGePS8sW5CcPoELai4x+2XvU9jp1bDVpBMS/tEhO
+         gccopfMxyVSXXqXO59N+wtSmFooWumUnHOTtN/j/FvDtgRrXR49WRLrAweqEGUL94z3y
+         uK8KxwShzNK32Em0GlE51szEsnfNw+2pwMgeHP/zJteEJ3I45pKjDMMEiz8Zt1wKUKG9
+         fz6J/AyU2j3lsmJplI9gpp48fiB98Ib75zpyTMN1ldMyQ6MJBhjNk3hMfIfTJSQNM59t
+         fqpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689136043; x=1691728043;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wiHFwa+qInqC9Ufc7qLGqz2T4+XJI6K3K6pkdSvL2BE=;
-        b=UmEj1Acft0Go/Ion7MU5oEKRN5XpkSs0ns6BRadydSE3RfG9LlC9Y5uBRPpwl5F9cM
-         GurAbcHzze4Xcbvcd5FASxbLVAL1wo6by2pg5PmX4q3n1ygxWnc8p0qmnGee7iMSxDZ3
-         cdA/DgoLN1wrfjGzqhAlDImsCemvA4rtaK2roX0/CofHAS8fqyifoYu7cy8kSeeSW2w7
-         uyoJ8yKrGtZv0D6n3JPbHyVOiRv41TT1zxWTHobjSUdz8mO4KxMO/aScQmhIyMEoYsAI
-         J4iwZim9UYIBbCE6VL2R7IUSyzu+fzg5nbatlk/DRpeAEHkrKHBkwjOmHc0cK5Unm/Aq
-         exIw==
-X-Gm-Message-State: ABy/qLbP5QC2C1E7TPYjNiYhWZljQUaJKB7i7ZnG20QnDimUW3Upafj9
-        deRruovvBxTkQznPbU3oZC5VDg==
-X-Google-Smtp-Source: APBJJlF5lEOtFts7UwfGvvEUizjbQpUSNw8Id5rb3Vpn8mt/ge/Q6rrPqXyVhuX/GSF3C2Mj1ANz1w==
-X-Received: by 2002:a81:91d2:0:b0:559:deed:f363 with SMTP id i201-20020a8191d2000000b00559deedf363mr16696703ywg.2.1689136042885;
-        Tue, 11 Jul 2023 21:27:22 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id i67-20020a0df846000000b005772f3fc0acsm972965ywf.44.2023.07.11.21.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 21:27:22 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 21:27:09 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3 00/13] mm: free retracted page table by RCU
-Message-ID: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
+        d=1e100.net; s=20221208; t=1689136240; x=1691728240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8FEG/oH6gh544Z3hupFRjyPw2jcIZbPPkJZIsg/itb0=;
+        b=OFaB+mkRZL9atWqL9dysaTXXthj73ekkoJPIOfg0PAPMRiaLtHnrvHZLXhKVDQFQY4
+         GQSjc3Pzf62FltMmjQbuKhyiNdPA7lVHJP+7f+YUaoXWJJf9VeJZQtDM0ZesiRUqb+BY
+         NCmwAk/au4Suqf9X/AlkxNT71ZnqH15gFJEp6Z7FzgPqAl9qJv4jzatyBnV7shZQX/e7
+         2CG7d9yO7tlWrstd6bYQXrCvmRIDa0VhZr8NosoLqJ0c9SQtwa6wgX3/sEnxjy5oycbm
+         /G+Mhi05+fu9LvKilTbdfdVf+VvKHDNO79dvULEwCcN8ok5yMU0ptmiUls9B4Z1QCg9V
+         upqg==
+X-Gm-Message-State: ABy/qLbykYMjrL3WTwBDzl5/Yj0js6OK0U936DFFAlOaujGzRNwPtSEb
+        27xnqqv74bo6/uYsSkR54uUrelHGgoRu0O0cVcg=
+X-Google-Smtp-Source: APBJJlE40OEhJ2PYH91T4HIq5pcd6q70yeow9XhxzdrP/Z+spXJCkguhiExdfD1Jt8YBmYRMzz3wtEuVM4cmaQLivS8=
+X-Received: by 2002:a2e:99d4:0:b0:2b4:765b:f6ee with SMTP id
+ l20-20020a2e99d4000000b002b4765bf6eemr14552766ljj.41.1689136240040; Tue, 11
+ Jul 2023 21:30:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <ZK3h3+dHBGONHt+S@work>
+In-Reply-To: <ZK3h3+dHBGONHt+S@work>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 11 Jul 2023 23:30:28 -0500
+Message-ID: <CAH2r5msw8i2Bx4NxWPWei6WGjusAHPSgm4s7c-haTtD+O9z4mQ@mail.gmail.com>
+Subject: Re: [PATCH] smb: client: Fix -Wstringop-overflow issues
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is v3 of the series of patches to mm (and a few architectures), based
-on v6.5-rc1 which includes the preceding two series (thank you!): in which
-khugepaged takes advantage of pte_offset_map[_lock]() allowing for pmd
-transitions.  Differences from v1 and v2 are noted patch by patch below.
+tentatively merged into cifs-2.6.git for-next pending testing
 
-This replaces the v2 "mm: free retracted page table by RCU"
-https://lore.kernel.org/linux-mm/54cb04f-3762-987f-8294-91dafd8ebfb0@google.com/
-series of 12 posted on 2023-06-20.
+On Tue, Jul 11, 2023 at 6:20=E2=80=AFPM Gustavo A. R. Silva
+<gustavoars@kernel.org> wrote:
+>
+> pSMB->hdr.Protocol is an array of size 4 bytes, hence when the compiler
+> analyzes this line of code
+>
+>         parm_data =3D ((char *) &pSMB->hdr.Protocol) + offset;
+>
+> it legitimately complains about the fact that offset points outside the
+> bounds of the array. Notice that the compiler gives priority to the objec=
+t
+> as an array, rather than merely the address of one more byte in a structu=
+re
+> to wich offset should be added (which seems to be the actual intention of
+> the original implementation).
+>
+> Fix this by explicitly instructing the compiler to treat the code as a
+> sequence of bytes in struct smb_com_transaction2_spi_req, and not as an
+> array accessed through pointer notation.
+>
+> Notice that ((char *)pSMB) + sizeof(pSMB->hdr.smb_buf_length) points to
+> the same address as ((char *) &pSMB->hdr.Protocol), therefore this result=
+s
+> in no differences in binary output.
+>
+> Fixes the following -Wstringop-overflow warnings when built s390
+> architecture with defconfig (GCC 13):
+>   CC [M]  fs/smb/client/cifssmb.o
+> In function 'cifs_init_ace',
+>     inlined from 'posix_acl_to_cifs' at fs/smb/client/cifssmb.c:3046:3,
+>     inlined from 'cifs_do_set_acl' at fs/smb/client/cifssmb.c:3191:15:
+> fs/smb/client/cifssmb.c:2987:31: warning: writing 1 byte into a region of=
+ size 0 [-Wstringop-overflow=3D]
+>  2987 |         cifs_ace->cifs_e_perm =3D local_ace->e_perm;
+>       |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+> In file included from fs/smb/client/cifssmb.c:27:
+> fs/smb/client/cifspdu.h: In function 'cifs_do_set_acl':
+> fs/smb/client/cifspdu.h:384:14: note: at offset [7, 11] into destination =
+object 'Protocol' of size 4
+>   384 |         __u8 Protocol[4];
+>       |              ^~~~~~~~
+> In function 'cifs_init_ace',
+>     inlined from 'posix_acl_to_cifs' at fs/smb/client/cifssmb.c:3046:3,
+>     inlined from 'cifs_do_set_acl' at fs/smb/client/cifssmb.c:3191:15:
+> fs/smb/client/cifssmb.c:2988:30: warning: writing 1 byte into a region of=
+ size 0 [-Wstringop-overflow=3D]
+>  2988 |         cifs_ace->cifs_e_tag =3D  local_ace->e_tag;
+>       |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+> fs/smb/client/cifspdu.h: In function 'cifs_do_set_acl':
+> fs/smb/client/cifspdu.h:384:14: note: at offset [6, 10] into destination =
+object 'Protocol' of size 4
+>   384 |         __u8 Protocol[4];
+>       |              ^~~~~~~~
+>
+> This helps with the ongoing efforts to globally enable
+> -Wstringop-overflow.
+>
+> Link: https://github.com/KSPP/linux/issues/310
+> Fixes: dc1af4c4b472 ("cifs: implement set acl method")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  fs/smb/client/cifssmb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+> index 19f7385abeec..9dee267f1893 100644
+> --- a/fs/smb/client/cifssmb.c
+> +++ b/fs/smb/client/cifssmb.c
+> @@ -3184,7 +3184,7 @@ int cifs_do_set_acl(const unsigned int xid, struct =
+cifs_tcon *tcon,
+>         param_offset =3D offsetof(struct smb_com_transaction2_spi_req,
+>                                 InformationLevel) - 4;
+>         offset =3D param_offset + params;
+> -       parm_data =3D ((char *) &pSMB->hdr.Protocol) + offset;
+> +       parm_data =3D ((char *)pSMB) + sizeof(pSMB->hdr.smb_buf_length) +=
+ offset;
+>         pSMB->ParameterOffset =3D cpu_to_le16(param_offset);
+>
+>         /* convert to on the wire format for POSIX ACL */
+> --
+> 2.34.1
+>
 
-What is it all about?  Some mmap_lock avoidance i.e. latency reduction.
-Initially just for the case of collapsing shmem or file pages to THPs:
-the usefulness of MADV_COLLAPSE on shmem is being limited by that
-mmap_write_lock it currently requires.
 
-Likely to be relied upon later in other contexts e.g. freeing of
-empty page tables (but that's not work I'm doing).  mmap_write_lock
-avoidance when collapsing to anon THPs?  Perhaps, but again that's not
-work I've done: a quick attempt was not as easy as the shmem/file case.
+--=20
+Thanks,
 
-These changes (though of course not these exact patches) have been in
-Google's data centre kernel for three years now: we do rely upon them.
-
-Based on v6.5-rc1; and almost good on current mm-unstable or current
-linux-next - just one patch conflicts, the 12/13: I'll reply to that
-one with its mm-unstable or linux-next equivalent (vma_assert_locked()
-has been added next to where vma_try_start_write() is being removed).
-
-01/13 mm/pgtable: add rcu_read_lock() and rcu_read_unlock()s
-      v3: same as v1
-02/13 mm/pgtable: add PAE safety to __pte_offset_map()
-      v3: same as v2
-      v2: rename to pmdp_get_lockless_start/end() per Matthew;
-          so use inlines without _irq_save(flags) macro oddity;
-          add pmdp_get_lockless_sync() for use later in 09/13.
-03/13 arm: adjust_pte() use pte_offset_map_nolock()
-      v3: same as v1
-04/13 powerpc: assert_pte_locked() use pte_offset_map_nolock()
-      v3: same as v1
-05/13 powerpc: add pte_free_defer() for pgtables sharing page
-      v3: much simpler version, following suggestion by Jason
-      v2: fix rcu_head usage to cope with concurrent deferrals;
-          add para to commit message explaining rcu_head issue.
-06/13 sparc: add pte_free_defer() for pte_t *pgtable_t
-      v3: same as v2
-      v2: use page_address() instead of less common page_to_virt();
-          add para to commit message explaining simple conversion;
-          changed title since sparc64 pgtables do not share page.
-07/13 s390: add pte_free_defer() for pgtables sharing page
-      v3: much simpler version, following suggestion by Gerald
-      v2: complete rewrite, integrated with s390's existing pgtable
-          management; temporarily using a global mm_pgtable_list_lock,
-          to be restored to per-mm spinlock in a later followup patch.
-08/13 mm/pgtable: add pte_free_defer() for pgtable as page
-      v3: same as v2
-      v2: add comment on rcu_head to "Page table pages", per JannH
-09/13 mm/khugepaged: retract_page_tables() without mmap or vma lock
-      v3: same as v2
-      v2: repeat checks under ptl because UFFD, per PeterX and JannH;
-          bring back mmu_notifier calls for PMD, per JannH and Jason;
-          pmdp_get_lockless_sync() to issue missing interrupt if PAE.
-10/13 mm/khugepaged: collapse_pte_mapped_thp() with mmap_read_lock()
-      v3: updated to using ptent instead of *pte
-      v2: first check VMA, in case page tables torn down, per JannH;
-          pmdp_get_lockless_sync() to issue missing interrupt if PAE;
-          moved mmu_notifier after step 1, reworked final goto labels.
-11/13 mm/khugepaged: delete khugepaged_collapse_pte_mapped_thps()
-      v3: rediffed
-      v2: same as v1
-12/13 mm: delete mmap_write_trylock() and vma_try_start_write()
-      v3: rediffed (different diff needed for mm-unstable or linux-next)
-      v2: same as v1
-13/13 mm/pgtable: notes on pte_offset_map[_lock]()
-      v3: new: JannH asked for more helpful comment, this is my attempt;
-          could be moved to be the first in the series.
-
- arch/arm/mm/fault-armv.c            |   3 +-
- arch/powerpc/include/asm/pgalloc.h  |   4 +
- arch/powerpc/mm/pgtable-frag.c      |  29 +-
- arch/powerpc/mm/pgtable.c           |  16 +-
- arch/s390/include/asm/pgalloc.h     |   4 +
- arch/s390/mm/pgalloc.c              |  80 ++++-
- arch/sparc/include/asm/pgalloc_64.h |   4 +
- arch/sparc/mm/init_64.c             |  16 +
- include/linux/mm.h                  |  17 --
- include/linux/mm_types.h            |   4 +
- include/linux/mmap_lock.h           |  10 -
- include/linux/pgtable.h             |  10 +-
- mm/khugepaged.c                     | 481 +++++++++++-------------------
- mm/pgtable-generic.c                |  97 +++++-
- 14 files changed, 404 insertions(+), 371 deletions(-)
-
-Hugh
+Steve
