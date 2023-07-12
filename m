@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9074E74FCC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3025F74FCCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjGLBmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S231588AbjGLBoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjGLBmt (ORCPT
+        with ESMTP id S231516AbjGLBoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:42:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA141717
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:42:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66F7361646
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:42:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B788C433C7;
-        Wed, 12 Jul 2023 01:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689126167;
-        bh=HcjfZVS5j2QnPWisyqJiHTOrvnNm8k6hX0Manu9q8/8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=B8aJ2GG+y/4t3XEzdp/waPtP6ocY9E6lnlx+ug/lldeFATlh4BTecbXjwUztC3TsF
-         0t/o0sz1LQYlj1fuwN7s+qUApGcfv0OUrSSaPwXG0+V9LYGvpU4/4OCWhbV80N7Diu
-         SlJlcjxd72USrsutUGUgLJU7XDjkaag1HdohcoO0NFzeW5zbeXwouQTBVNXqUczuEA
-         4J1vcFyqHgT9uNnFHrKG+rw4FVTUAUxGXHvzUmFu/wINpnzVhhPEXiIGQ/lAWwCO76
-         dT22G2bIVPE13YaOZc+2xINJbiJ3n4pqsYEBHmpNd/3Or9lSl9nVv/G0JORAAQpbPk
-         1rRYYWLJMAJ+g==
-Message-ID: <a7885677-68ef-59c8-0639-579a688fcdad@kernel.org>
-Date:   Wed, 12 Jul 2023 11:42:40 +1000
+        Tue, 11 Jul 2023 21:44:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633D1717;
+        Tue, 11 Jul 2023 18:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689126253; x=1720662253;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5pOQqiTYbjzWAxv1kjdZf1mILm6585ylD9tNeo1102Q=;
+  b=HinER0FtY39VlryagLkTp11tzXWI0/HhcYwH3i0CoMDPD+ey9C+IO0wc
+   bXq5SwbnC+gR7YKBTjZpnWcgkNQ2zh/Doopbdlms43Zo9lz1+6/FK1HcU
+   8wYU27S6JVb6hBVotep9SONKqfYObZhh1SU6d2syP7kDr284LDOrQUnod
+   Jj9ETLS7vJFCyylM8NZcBvopgWUKIohuKzSAgXsUBFQQPooyRtwipqamg
+   /ppSMkrfFhO1V6nfF75KXydycSdYW9iWYRnaW3qqfCNxzb1O5z0MxwClA
+   0lJT2dfNAoVB3yE2qpDEfUgcyLbir63DsuIRLB3G9CtfxrxJyYEfUvBMc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349629565"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="349629565"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 18:44:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="834931580"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="834931580"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Jul 2023 18:44:11 -0700
+Date:   Wed, 12 Jul 2023 09:42:41 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, frank.li@vivo.com
+Cc:     Yangtao Li <frank.li@vivo.com>, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Alan Tull <atull@opensource.altera.com>,
+        Moritz Fischer <moritz.fischer@ettus.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] fpga: socfpga-a10: Fix incorrect return value of
+ devm_regmap_init_mmio
+Message-ID: <ZK4FEdv6j+83+7nV@yilunxu-OptiPlex-7050>
+References: <20230710133830.65631-1-frank.li@vivo.com>
+ <20230710133830.65631-3-frank.li@vivo.com>
+ <2023071010-anatomy-paying-3e3e@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/2] riscv: support the elf-fdpic binfmt loader
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, palmer@dabbelt.com,
-        viro@zeniv.linux.org.uk, ebiederm@xmission.com, brauner@kernel.org
-References: <20230711130754.481209-1-gerg@kernel.org>
- <20230711130754.481209-3-gerg@kernel.org> <202307110852.E093C93F@keescook>
-From:   Greg Ungerer <gerg@kernel.org>
-In-Reply-To: <202307110852.E093C93F@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023071010-anatomy-paying-3e3e@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
-
-On 12/7/23 01:53, Kees Cook wrote:
-> On Tue, Jul 11, 2023 at 11:07:54PM +1000, Greg Ungerer wrote:
->> Add support for enabling and using the binfmt_elf_fdpic program loader
->> on RISC-V platforms. The most important change is to setup registers
->> during program load to pass the mapping addresses to the new process.
->>
->> One of the interesting features of the elf-fdpic loader is that it
->> also allows appropriately compiled ELF format binaries to be loaded on
->> nommu systems. Appropriate being those compiled with -pie.
->>
->> Signed-off-by: Greg Ungerer <gerg@kernel.org>
+On 2023-07-10 at 16:11:35 +0200, Greg Kroah-Hartman wrote:
+> On Mon, Jul 10, 2023 at 09:38:30PM +0800, Yangtao Li wrote:
+> > When devm_regmap_init_mmio fails, we should return PTR_ERR(priv->regmap)
+> > instead of -ENODEV.
+> > 
+> > Fixes: acbb910ae04b ("fpga-manager: Add Socfpga Arria10 support")
 > 
-> ELF stuff looks fine to me. If the RISC-V folks are happy with the rest,
-> this looks good.
+> Why are you not also including a cc: stable@ tag here?
+
+The change is to propagate the error number produced by regmap, instead
+of using a fixed error number.
+
+I think this is more of an improvement, not a bug fix. So no need to
+merge to stable? And the changelog should be improved to avoid
+confusing.
+
+Thanks,
+Yilun
+
 > 
-> Acked-by: Kees Cook <keescook@chromium.org>
+> thanks,
 > 
-> Please feel free to carry this in the RISC-V tree. If you'd rather it go
-> via execve tree, please let me know. :)
-
-Thanks for the feedback, much appreciated!
-
-Regards
-Greg
-
-
+> greg k-h
