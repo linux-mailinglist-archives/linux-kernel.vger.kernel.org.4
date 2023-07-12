@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D004750017
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BB075001C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjGLHcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S231886AbjGLHfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjGLHcl (ORCPT
+        with ESMTP id S229551AbjGLHfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:32:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F23BE5F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:32:39 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4R18Wj6v1tztR9P;
-        Wed, 12 Jul 2023 15:29:37 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 12 Jul 2023 15:32:36 +0800
-Subject: Re: [PATCH -next] ubifs: Fix some kernel-doc comments
-To:     Yang Li <yang.lee@linux.alibaba.com>, <richard@nod.at>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230712071200.78575-1-yang.lee@linux.alibaba.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <94b243cb-da53-a3d4-7986-60e3be65a761@huawei.com>
-Date:   Wed, 12 Jul 2023 15:32:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Wed, 12 Jul 2023 03:35:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2FEE49;
+        Wed, 12 Jul 2023 00:35:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CB0AD22594;
+        Wed, 12 Jul 2023 07:35:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689147309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PZ2bZ81Z3Yq2Og22w7MZ8KBK5/vLlKpOWbCzlQnvBgo=;
+        b=fUOt+kc2pNRTHvtm9KJCQ9R4oVlVfMT8pBGzbpqaYVp4jKE5uBcl4jsooYLuez6Vi2zh2Y
+        0PYKDmJwf86IyvqbIkPksI8zHIratqswd5Lo4uwBeLJQ5gMFYB/9pFWMvORxUDNFkcaJ6m
+        9rN2/7iqiNzguwe703AczFWY/RtttYk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689147309;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PZ2bZ81Z3Yq2Og22w7MZ8KBK5/vLlKpOWbCzlQnvBgo=;
+        b=5kufGYXVf+Fg36xCOYKENxSaWoxVEIdSlp4TAO9rISt2g8vzs97fzLXWpGQOXyZSQkEW00
+        hP+/G5l9WqvU0iBw==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 59CBE2C142;
+        Wed, 12 Jul 2023 07:35:09 +0000 (UTC)
+Date:   Wed, 12 Jul 2023 09:35:08 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] libkmod, depmod: Load modprobe.d, depmod.d from
+ $prefix/lib.
+Message-ID: <20230712073508.GD9196@kitsune.suse.cz>
+References: <20230711153126.28876-1-msuchanek@suse.de>
+ <20230711153126.28876-3-msuchanek@suse.de>
+ <23779aa4-e1c1-c311-5f6b-8be652826cc7@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230712071200.78575-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23779aa4-e1c1-c311-5f6b-8be652826cc7@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,35 +72,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2023/7/12 15:12, Yang Li Ð´µÀ:
-> Add description of @time and @flags in ubifs_update_time().
-> 
-> to silence the warnings:
-> fs/ubifs/file.c:1383: warning: Function parameter or member 'time' not described in 'ubifs_update_time'
-> fs/ubifs/file.c:1383: warning: Function parameter or member 'flags' not described in 'ubifs_update_time'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5848
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->   fs/ubifs/file.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/fs/ubifs/file.c b/fs/ubifs/file.c
-> index 436b27d7c58f..5e86ef1be698 100644
-> --- a/fs/ubifs/file.c
-> +++ b/fs/ubifs/file.c
-> @@ -1375,6 +1375,8 @@ static inline int mctime_update_needed(const struct inode *inode,
->   /**
->    * ubifs_update_time - update time of inode.
->    * @inode: inode to update
-> + * @time:  timespec structure to hold the current time value
-> + * @flags: file time flag
+Hello,
 
-flags: time updating control flag determines updating which time fields 
-of @inode
+On Wed, Jul 12, 2023 at 08:47:20AM +0200, Jiri Slaby wrote:
+> On 11. 07. 23, 17:31, Michal Suchanek wrote:
+> > There is an ongoing effort to limit use of files outside of /usr (or
+> > $prefix on general). Currently all modprobe.d paths are hardcoded to
+> > outside of $prefix. Teach kmod to load modprobe.d from $prefix/lib.
+> > 
+> > On some distributions /usr/lib and /lib are the same directory because
+> > of a compatibility symlink, and it is possible to craft configuration
+> > files with sideeffects that would behave differently when loaded twice.
+> > However, the override semantic ensures that one 'overrides' the other,
+> > and only one configuration file of the same name is loaded from any of
+> > the seach directories.
+> 
+> search
+> 
+> ...
+> > --- a/man/Makefile.am
+> > +++ b/man/Makefile.am
+> > @@ -17,9 +17,14 @@ EXTRA_DIST = $(MAN5:%.5=%.xml) $(MAN8:%.8=%.xml)
+> >   CLEANFILES = $(dist_man_MANS)
+> >   %.5 %.8: %.xml
+> > -	$(AM_V_XSLT)$(XSLT) \
+> > +	$(AM_V_XSLT)if [ -n '$(prefix)' ] ; then \
+> > +		sed -e 's|@PREFIX@|$(prefix)|g' $< ; \
+> 
+> Hmm, if prefix is empty, this will remove @PREFIX@. So why you need this
+> 'if' at all?
 
->    *
->    * This function updates time of the inode.
->    */
->
+It removes the whole duplicate line.
+
+Thanks
+
+Michal
+
+> 
+> > +	else \
+> > +		sed -e '/@PREFIX@/d' $< ; \
+> > +	fi | \
+> 
+> 
+> -- 
+> js
+> suse labs
+> 
