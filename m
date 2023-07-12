@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA84F74FD75
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707DD74FD78
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjGLDJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S231651AbjGLDKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjGLDJi (ORCPT
+        with ESMTP id S231555AbjGLDKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:09:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC141739;
-        Tue, 11 Jul 2023 20:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689131377; x=1720667377;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EqeRPqMBCcZNqe+1FF45GoQNtxIV6ORKDRV/drrKLWg=;
-  b=iR9VlQRGGAwT5jlDylEOLg81ms1QnISmq8EHklyWGtBLLOY9bs7Y8P4B
-   PYPCoyo3VKUFy1tLsNo8/pINTm9d9LTa5cIHKfdOHE4x6pfTmXkG/GdAQ
-   B88THjqCxRWJqZozPta2u8Ldy1fBQ0DPBwhz5Yrs+3Krezgq8GkBNn7bY
-   nouuxWduE/OjsGH/5ZiKJnMZ0IhX5ZUrdZkcu3S79L0W6nTq8wpg1LRDt
-   gje3bBGyXknbXpBs5Jk7lpXPFN7bu01Cleh4pShQTuUbxQ6aMwFOmD7E/
-   Ax357GGxyWgzR8+R8n3YO0UOMeF+pznVwnFPCZ2JRZZdzDr9ge4Es3F7f
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="395583651"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="395583651"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 20:09:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="724708414"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="724708414"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.60]) ([10.252.187.60])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 20:09:27 -0700
-Message-ID: <ba68a3e3-da28-969e-2ef2-86fd1706dad4@linux.intel.com>
-Date:   Wed, 12 Jul 2023 11:09:25 +0800
+        Tue, 11 Jul 2023 23:10:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD971BE8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:09:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C1DE616A1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:09:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C858C433C8;
+        Wed, 12 Jul 2023 03:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689131396;
+        bh=Os4SCV5ZzvjtqSv6di6M5MCo9Im5sxnwXQeFenpBIjM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W/tEvxtA2Sfo9Djzp5f/eGjGpZaoyYSZ0Cgf9+dRDayXv7wOqSPv2kPbQ63UOGdY3
+         AI/2yI/2VrtISB9G5swwkkH1mcIMLuUF8hOvRoFobJaNFOioGNQ+8KzOJVbcBbk6Zm
+         ASbPOo7SnS7s2C3t9Z/NAb7ihcS0AuZuz+ZsHLo2kw3AUraOFi04I6xn8nzkRyw2D6
+         yLIW1Y6Lr/0FO4hLHIwCZ0yk9y9e+pFRd4XyX84mMay/0TwMCsOGhVBHyA3yuhWXRd
+         pirpb5L8AL9CkF26FcbGsp796/wlNR2vHQiPHwVhkW1cHI1B9gCCRF16stnFMPxNIx
+         95bTE+pLBNkoA==
+Date:   Tue, 11 Jul 2023 20:09:55 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     menglong8.dong@gmail.com
+Cc:     michael.chan@broadcom.com, leon@kernel.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [PATCH net-next v2] bnxt_en: use dev_consume_skb_any() in
+ bnxt_tx_int
+Message-ID: <20230711200955.2d3a4494@kernel.org>
+In-Reply-To: <20230711110743.39067-1-imagedong@tencent.com>
+References: <20230711110743.39067-1-imagedong@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     baolu.lu@linux.intel.com, "Liu, Yi L" <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 9/9] iommu: Use fault cookie to store iopf_param
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
- <20230711010642.19707-10-baolu.lu@linux.intel.com>
- <BN9PR11MB5276454AD26C2BDC12CAEDE78C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276454AD26C2BDC12CAEDE78C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 14:26, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Tuesday, July 11, 2023 9:07 AM
->>
->> Remove the static iopf_param pointer from struct iommu_fault_param to
->> save memory.
+On Tue, 11 Jul 2023 19:07:43 +0800 menglong8.dong@gmail.com wrote:
+> In bnxt_tx_int(), the skb in the tx ring buffer will be freed after the
+> transmission completes with dev_kfree_skb_any(), which will produce
+> the noise on the tracepoint "skb:kfree_skb":
 > 
-> why is there memory saving? you replace a single pointer with a xarray now...
+> $ perf script record -e skb:kfree_skb -a
+> $ perf script
+>   swapper     0 [014] 12814.337522: skb:kfree_skb: skbaddr=0xffff88818f145ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [003] 12814.338318: skb:kfree_skb: skbaddr=0xffff888108380600 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12814.375258: skb:kfree_skb: skbaddr=0xffff88818f147ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12814.451960: skb:kfree_skb: skbaddr=0xffff88818f145ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [008] 12814.562166: skb:kfree_skb: skbaddr=0xffff888112664600 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12814.732517: skb:kfree_skb: skbaddr=0xffff88818f145ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12814.800608: skb:kfree_skb: skbaddr=0xffff88810025d100 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12814.861501: skb:kfree_skb: skbaddr=0xffff888108295a00 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12815.377038: skb:kfree_skb: skbaddr=0xffff88818f147ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+>   swapper     0 [014] 12815.395530: skb:kfree_skb: skbaddr=0xffff88818f145ee0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
 
-iopf_param is duplicate with the fault cookie. So replace it with the
-fault cookie to remove duplication and save memory.
-
-> 
->> @@ -303,16 +303,27 @@ int iopf_queue_add_device(struct iopf_queue
->> *queue, struct device *dev)
->>
->>   	mutex_lock(&queue->lock);
->>   	mutex_lock(&param->lock);
->> -	if (!param->iopf_param) {
->> -		list_add(&iopf_param->queue_list, &queue->devices);
->> -		param->iopf_param = iopf_param;
->> -		ret = 0;
->> +	curr = iommu_set_device_fault_cookie(dev, 0, iopf_param);
->> +	if (IS_ERR(curr)) {
->> +		ret = PTR_ERR(curr);
->> +		goto err_free;
->>   	}
-> 
-> So although the new xarray is called a per-pasid storage, here only
-> slot#0 is used for sva which includes a list containing partial req's
-> for many pasid's. It doesn't sound clean...
-
-Just to make it generic so that IOMMUFD can also use it. IOMMUFD will
-use it to store the per-{device, pasid} object id (and possibly other
-data) so that it can be quickly retrieved in the critical fault
-delivering patch.
-
-Best regards,
-baolu
+I think this is way too verbose, people looking at networking code 
+are expected to understand kfree_skb vs consume_skb. Your v1 was fine,
+I'm going to apply it.
+-- 
+pw-bot: na
