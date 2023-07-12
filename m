@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CDD750237
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048D0750240
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjGLI76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S232096AbjGLJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbjGLI7f (ORCPT
+        with ESMTP id S231796AbjGLJAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:59:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86D01FDF;
-        Wed, 12 Jul 2023 01:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6vVyz3HWFOPsWCjVkQvhpKJWaNzacQU8pD7mOz5k2+4=; b=Ix8+Mtvk0Y/Rcjft+c4zuN08oD
-        rMDNW7fFrce8cT8UDecBcnL/s1llRd2rN3LPwnmv6jKmpHWv8iyIyIga/5tzOK2ztg0kgmBt3H4Gp
-        nWa7djDciJESbMPsigXIr3/OBlp8BCsrIovsMpbrLVNX4KWEuEpi/6XLCnvb5eF/wJghFHgq0G6Wo
-        6GH2I+anrpdCoxpnzkVumxX7z3+g4fpvi9ttrbQibRcX6w5ZEMWXxDKlLqgr8tKgwWtUb1ZJr1AMk
-        GczvN3hJ0BiIkFzFXZ5a57WZSdpkXBJ8UgMQYCQHn1gOAGD8D4I6I0Nx9yEg0Hb61RhtYPwqCxdIb
-        K8vcxY0A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJVfg-003bI1-2C;
-        Wed, 12 Jul 2023 08:58:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 12 Jul 2023 05:00:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C613E2D54;
+        Wed, 12 Jul 2023 01:58:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC12230114F;
-        Wed, 12 Jul 2023 10:58:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B1979243AF2B7; Wed, 12 Jul 2023 10:58:03 +0200 (CEST)
-Date:   Wed, 12 Jul 2023 10:58:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com
-Subject: Re: [PATCH 2/7] futex: factor out the futex wake handling
-Message-ID: <20230712085803.GD3100107@hirez.programming.kicks-ass.net>
-References: <20230712004705.316157-1-axboe@kernel.dk>
- <20230712004705.316157-3-axboe@kernel.dk>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2252616E6;
+        Wed, 12 Jul 2023 08:58:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E9CC433C7;
+        Wed, 12 Jul 2023 08:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689152314;
+        bh=AqrrOdfRU9om9M6vSXjzTWkrWbITMkMN92jg5DFdzNQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=njg59PeEhMaEX1bV5nYHs+2dHLWFyI9dohNyNc9Kdboe+OmTveat/7dkoXi1tYv6N
+         G04pvSnCjW6Fmvmn+zZwHCza+tEENGmiMevGFksowUoCDZmnC35u1SJctBElQJyYVF
+         UlqfKDzyiNOLeclaqkfjOEGw08zQa91FPqmY5d/2GxMdgBdI2Ez6iJ7i+HeX89gkBL
+         8WZvzjFmR25e+9F+OFE857VzsRt9s6UVMHwsxwYul3ioP9S+GkVfIqB2t4GA8nJmI0
+         rBLPPNsymsbtK5h7lYj/F8jdBcoaJKwHfSaxWelZe4r4b+Df0NaitHxPYz8o90ch2n
+         whw5pkoMFnulA==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH] tty: make check_tty_count() void
+Date:   Wed, 12 Jul 2023 10:58:30 +0200
+Message-ID: <20230712085830.4908-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230712004705.316157-3-axboe@kernel.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 06:47:00PM -0600, Jens Axboe wrote:
-> In preparation for having another waker that isn't futex_wake_mark(),
-> add a wake handler in futex_q. No extra data is associated with the
-> handler outside of struct futex_q itself. futex_wake_mark() is defined as
-> the standard wakeup helper, now set through futex_q_init like other
-> defaults.
+The return value is unused, so drop it.
 
-Urgh... so if I understand things right, you're going to replace this
-with a custom wake function that does *NOT* put the task on the wake_q.
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+---
+ drivers/tty/tty_io.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-The wake_q will thus be empty and the task does not get woken up. I'm
-presuming someone gets a notification instead somewhere somehow.
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 3959efc717aa..e23e416aae93 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -270,7 +270,7 @@ static int tty_paranoia_check(struct tty_struct *tty, struct inode *inode,
+ }
+ 
+ /* Caller must hold tty_lock */
+-static int check_tty_count(struct tty_struct *tty, const char *routine)
++static void check_tty_count(struct tty_struct *tty, const char *routine)
+ {
+ #ifdef CHECK_TTY_COUNT
+ 	struct list_head *p;
+@@ -290,10 +290,8 @@ static int check_tty_count(struct tty_struct *tty, const char *routine)
+ 	if (tty->count != (count + kopen_count)) {
+ 		tty_warn(tty, "%s: tty->count(%d) != (#fd's(%d) + #kopen's(%d))\n",
+ 			 routine, tty->count, count, kopen_count);
+-		return (count + kopen_count);
+ 	}
+ #endif
+-	return 0;
+ }
+ 
+ /**
+-- 
+2.41.0
 
-I might've been nice to mention some of this somewhere ...
-
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> ---
->  kernel/futex/futex.h    | 4 ++++
->  kernel/futex/requeue.c  | 3 ++-
->  kernel/futex/waitwake.c | 6 +++---
->  3 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
-> index d2949fca37d1..8eaf1a5ce967 100644
-> --- a/kernel/futex/futex.h
-> +++ b/kernel/futex/futex.h
-> @@ -69,6 +69,9 @@ struct futex_pi_state {
->  	union futex_key key;
->  } __randomize_layout;
->  
-> +struct futex_q;
-> +typedef void (futex_wake_fn)(struct wake_q_head *wake_q, struct futex_q *q);
-> +
->  /**
->   * struct futex_q - The hashed futex queue entry, one per waiting task
->   * @list:		priority-sorted list of tasks waiting on this futex
-> @@ -98,6 +101,7 @@ struct futex_q {
->  
->  	struct task_struct *task;
->  	spinlock_t *lock_ptr;
-> +	futex_wake_fn *wake;
->  	union futex_key key;
->  	struct futex_pi_state *pi_state;
->  	struct rt_mutex_waiter *rt_waiter;
