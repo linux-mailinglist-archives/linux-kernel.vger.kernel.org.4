@@ -2,171 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532367506D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6037506FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjGLLtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S233478AbjGLLtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbjGLLsW (ORCPT
+        with ESMTP id S233256AbjGLLtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:48:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D595F26A5;
-        Wed, 12 Jul 2023 04:47:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D49617A5;
-        Wed, 12 Jul 2023 11:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6827AC433C9;
-        Wed, 12 Jul 2023 11:47:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689162475;
-        bh=BL+8Fo9QG0zNtj0y7Lgb/m7HMTTimtNx9krlJ8PROKk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MBDgsatfZpWqdAMwV6qveeIfLQ6N7jrowK9LjuavtymGZJ2RZ2Oc1MpqiENhz3quE
-         3C52w4yN+XHh2R9JtS9d5C82wdCYmJLOyIegf8gaLO9fnbUYfmxOmBAQgyocJctiAI
-         6E59ipQJyxOm+qSbYi3HkSZBX2tCKWY1iP+GjHTkOSnvKhvbhkax3ZarfbH5wu0wKK
-         qx68/+nBANjiNw+aQoV6C1vLW4EDygmSD4fpo+BTkFwtXsm5w2b39Kd49evlvRZIW7
-         KcdjwPLLtdt+TqxuNclA8arYxR3eJ8wd/C5/2IO8CCIn4CiFbVXi916UJQXvZWbBYq
-         HcHdiJ1RRWg+A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-In-Reply-To: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: (subset) [PATCH v2 00/15] spi: Header and core clean up and
- refactoring
-Message-Id: <168916246513.47003.10097115249886306259.b4-ty@kernel.org>
-Date:   Wed, 12 Jul 2023 12:47:45 +0100
+        Wed, 12 Jul 2023 07:49:06 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D842105
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:48:22 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31441dfbf97so7685288f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1689162498; x=1691754498;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Saa7jbAnKv6/aFJ04VhkVrkgcqBc2X3n9e+eP71Ul0=;
+        b=W+m1h90UlA3oYUb3/8IOQdifd8XsTo1zwO6iXBzuAoaxwGzw5vcpBqrzf70aBY14Z3
+         duJX33JDVt/bOavIUTs14hm0hL8HTBzCAivTDyTYGV5f8qIQzdOFawuJzDpwVxsl2R18
+         w1AOZy+OuASSwvB9M22iJnCs51ElmT65kQkvVOFK780opEQP7wDNYP9OWDDoit+CPM6f
+         n2q5XJLkhuQYUgYYhvK8Mx45nZJ5BOOX5cKfUBfTXaqZYJUs4AXm97zbCoiCsgv9qUs9
+         cBQSGEmYugaT7ki5ceYheZ4ZPeeBHRKJL/hsi6/dOmHDMQko3TK5L5ZpGScm/9S3np3D
+         Ae0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689162498; x=1691754498;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0Saa7jbAnKv6/aFJ04VhkVrkgcqBc2X3n9e+eP71Ul0=;
+        b=FxkvfxqSubGOBEnPCf93/w9HNoexTS/HLP8iR/HDOIuinzUmhLYLKd3M4Btql07ITj
+         7iF2OyJxYLYnO2DoPJbsd3lVG87MJgbzWGzc5MI+6F+LHrZcC8sUtDNdjZCOejyVLaSV
+         qmIBuGRfKdu8/7oZyCzIwmzMENxVhOd2312yZzfZNhQjjDJprBGUOVaNR36AP2vTvzCW
+         JujVQU+Bn2KzFYyVkK9DRCu3zBYoS6+pamWQQ4sWe+ny5A3IgtmfRfYOqX0ty3Kbd2l5
+         KOYH315J5bpnx6L2YLclf/Bbb33WZF19YTojLXpEusTxhwrgxWR2ClvIXfmJrmMLoJBb
+         4O3g==
+X-Gm-Message-State: ABy/qLb67BYlN7RFTpTs8hv7WIfh/p0a/3FBeOF1Ao7bCQvgornEDcET
+        GXdj2NIHT9qrWjEGJqNgRSjiog==
+X-Google-Smtp-Source: APBJJlGTxLkm+W+9MJG5o9kxu8f/PALLlF4e4GVIaXopTy0Q6wputWK3KlVi68XyQAGwHQC9oZgiqQ==
+X-Received: by 2002:a5d:5912:0:b0:314:c2a:31c5 with SMTP id v18-20020a5d5912000000b003140c2a31c5mr19304030wrd.19.1689162498000;
+        Wed, 12 Jul 2023 04:48:18 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id j2-20020a5d4482000000b003143867d2ebsm4867463wrq.63.2023.07.12.04.48.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 04:48:17 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH 4/8] hwmon: (pmbus/mp2975) Simplify VOUT code
+Date:   Wed, 12 Jul 2023 13:47:45 +0200
+Message-ID: <20230712114754.500477-4-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
+References: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 18:49:17 +0300, Andy Shevchenko wrote:
-> Various cleanups and refactorings of the SPI header and core parts
-> united in a single series. It also touches drivers under SPI subsystem
-> folder on the pure renaming purposes of some constants.
-> 
-> No functional change intended.
-> 
-> Changelog v2:
-> - added new patches 3,4,5,10,13,14
-> - massaged comment and kernel doc in patch 9
-> - split used to be patch 4 to patches 11,12
-> - covered a few things in SPI core in patch 15
-> - amended commit message for above (Mark)
-> - reshuffled patches in the series for better logical grouping
-> 
-> [...]
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Applied to
+In order to upstream MP2973/MP2971 simplify the code by removing support
+for various VOUT formats. The MP2973 and MP2971 supports all PMBUS
+supported formats for VOUT, while the MP2975 only support DIRECT and
+VID for VOUT.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+In DIRECT mode all chips report the voltage in 1mV/LSB.
 
-Thanks!
+Configure the chip to use DIRECT format for VOUT and drop the code
+conversion code for other formats. The to be added chips MP2973/MP2971
+will be configured to also report VOUT in DIRECT format.
 
-[01/15] spi: Remove unneeded OF node NULL checks
-        commit: fbab5b2c09060e8034fee6ec2df69a62594fb7db
-[02/15] spi: Drop duplicate IDR allocation code in spi_register_controller()
-        commit: 440c47331bdb889e24128c75387c695ca81d9b9b
-[03/15] spi: Replace if-else-if by bitops and multiplications
-        commit: 2b308e7176e366a52a07a49868e3b1a295e56785
-[06/15] spi: Use sysfs_emit() to instead of s*printf()
-        commit: f2daa4667fda1aa951b91da0ae9675a5da9d7716
-[07/15] spi: Sort headers alphabetically
-        commit: edf6a864c996f9a9f5299a3b3e574a37e64000c5
-[08/15] spi: Clean up headers
-        (no commit info)
-[11/15] spi: Get rid of old SPI_MASTER_NO_TX & SPI_MASTER_NO_RX
-        commit: c397f09e5498994790503a64486213ef85e58db9
-[12/15] spi: Get rid of old SPI_MASTER_MUST_TX & SPI_MASTER_MUST_RX
-        commit: 90366cd60133a9f5b6a2f31360367c658585e125
-[13/15] spi: Rename SPI_MASTER_GPIO_SS to SPI_CONTROLLER_GPIO_SS
-        commit: 82238d2cbd99ebd09dda48fb7c1c8802097da6a2
-[14/15] spi: Convert to SPI_CONTROLLER_HALF_DUPLEX
-        commit: 7a2b552c8e0e5bb280558f6c120140f5f06323bc
-[15/15] spi: Fix spelling typos and acronyms capitalization
-        commit: 702ca0269ed56e2d8dae7874a4d8af268e2a382e
+The maximum voltage that can be reported in DIRECT format is 32768mV.
+This is sufficient as the maximum output voltage for VR12/VR13 is
+3040 mV.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/mp2975.c | 54 ++++++------------------------------
+ 1 file changed, 8 insertions(+), 46 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 04778f2dcbdb..ebc9a84b8ad3 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -70,7 +70,6 @@ struct mp2975_data {
+ 	int vref_off[MP2975_PAGE_NUM];
+ 	int vout_max[MP2975_PAGE_NUM];
+ 	int vout_ov_fixed[MP2975_PAGE_NUM];
+-	int vout_format[MP2975_PAGE_NUM];
+ 	int curr_sense_gain[MP2975_PAGE_NUM];
+ };
+ 
+@@ -83,22 +82,6 @@ MODULE_DEVICE_TABLE(i2c, mp2975_id);
+ 
+ #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
+ 
+-static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+-{
+-	switch (reg) {
+-	case PMBUS_VOUT_MODE:
+-		/*
+-		 * Enforce VOUT direct format, since device allows to set the
+-		 * different formats for the different rails. Conversion from
+-		 * VID to direct provided by driver internally, in case it is
+-		 * necessary.
+-		 */
+-		return PB_VOUT_MODE_DIRECT;
+-	default:
+-		return -ENODATA;
+-	}
+-}
+-
+ static int
+ mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
+ 			u16 mask)
+@@ -273,24 +256,6 @@ static int mp2975_read_word_data(struct i2c_client *client, int page,
+ 		ret = DIV_ROUND_CLOSEST(data->vref[page] * 10 - 50 *
+ 					(ret + 1) * data->vout_scale, 10);
+ 		break;
+-	case PMBUS_READ_VOUT:
+-		ret = mp2975_read_word_helper(client, page, phase, reg,
+-					      GENMASK(11, 0));
+-		if (ret < 0)
+-			return ret;
+-
+-		/*
+-		 * READ_VOUT can be provided in VID or direct format. The
+-		 * format type is specified by bit 15 of the register
+-		 * MP2975_MFR_DC_LOOP_CTRL. The driver enforces VOUT direct
+-		 * format, since device allows to set the different formats for
+-		 * the different rails and also all VOUT limits registers are
+-		 * provided in a direct format. In case format is VID - convert
+-		 * to direct.
+-		 */
+-		if (data->vout_format[page] == vid)
+-			ret = mp2975_vid2direct(info->vrm_version[page], ret);
+-		break;
+ 	case PMBUS_VIRT_READ_POUT_MAX:
+ 		ret = mp2975_read_word_helper(client, page, phase,
+ 					      MP2975_MFR_READ_POUT_PK,
+@@ -578,20 +543,18 @@ mp2975_vout_max_get(struct i2c_client *client, struct mp2975_data *data,
+ }
+ 
+ static int
+-mp2975_identify_vout_format(struct i2c_client *client,
+-			    struct mp2975_data *data, int page)
++mp2975_set_vout_format(struct i2c_client *client,
++		       struct mp2975_data *data, int page)
+ {
+ 	int ret;
+ 
+ 	ret = i2c_smbus_read_word_data(client, MP2975_MFR_DC_LOOP_CTRL);
+ 	if (ret < 0)
+ 		return ret;
+-
+-	if (ret & MP2975_VOUT_FORMAT)
+-		data->vout_format[page] = vid;
+-	else
+-		data->vout_format[page] = direct;
+-	return 0;
++	/* Enable DIRECT VOUT format 1mV/LSB */
++	ret &= ~MP2975_VOUT_FORMAT;
++	ret = i2c_smbus_write_word_data(client, MP2975_MFR_DC_LOOP_CTRL, ret);
++	return ret;
+ }
+ 
+ static int
+@@ -650,11 +613,11 @@ mp2975_vout_per_rail_config_get(struct i2c_client *client,
+ 			return ret;
+ 
+ 		/*
+-		 * Get VOUT format for READ_VOUT command : VID or direct.
++		 * Set VOUT format for READ_VOUT command : direct.
+ 		 * Pages on same device can be configured with different
+ 		 * formats.
+ 		 */
+-		ret = mp2975_identify_vout_format(client, data, i);
++		ret = mp2975_set_vout_format(client, data, i);
+ 		if (ret < 0)
+ 			return ret;
+ 
+@@ -689,7 +652,6 @@ static struct pmbus_driver_info mp2975_info = {
+ 		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+ 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+ 		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VIRTUAL,
+-	.read_byte_data = mp2975_read_byte_data,
+ 	.read_word_data = mp2975_read_word_data,
+ };
+ 
+-- 
+2.41.0
 
