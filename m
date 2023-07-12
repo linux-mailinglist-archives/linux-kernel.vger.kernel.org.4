@@ -2,253 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11567504F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B017504FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjGLKlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S232483AbjGLKlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjGLKlL (ORCPT
+        with ESMTP id S230229AbjGLKla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:41:11 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405441FDA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:40:43 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fba74870abso10309258e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:40:43 -0700 (PDT)
+        Wed, 12 Jul 2023 06:41:30 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270A51BCB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:41:02 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b8b2886364so44950755ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1689158421; x=1691750421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dUhc7Y52Rrbuq+8j2ufP7C0LAU2+c26StOhK+4Px2gM=;
-        b=cGVVlogIwchiOyuXJCLRkvZffLKV9InfvvE/qXLdniK5/hjsHoD9lQLjoMRq7dWehu
-         APltVzSuxN4I4GKe6uTW/SVjvMSLMndPCkuFvQjRrdz4ASsnkOaI6OPt+WrOoc82gPn8
-         DMbZq44GGZffjiNtN0QDZJobXCTI6CIkfqJ9eJCJ+ua+jhV02qKfIGJ9+l5kkqe5Fn5f
-         Vo0ZGSZ9ecDUIuBVSKqLZpHfJrPt1mrD0Npq8U4oTkkUZ0WPrqnAdLjt3UxUeT+6QNH7
-         q7DUrs14V8SXWtuZNq1y6/b5842zlow36Qmu6RQxlQOToBFiPBLSzYnfUXcwh5oYht1b
-         bugg==
+        d=linaro.org; s=google; t=1689158460; x=1691750460;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TY2IIjSdcQMjQDDo3NQ71MCDsTeLijaeYYOPQ2zLf6w=;
+        b=vCxDwFOmIhQflnCYq44ljdF6MKjUjZ6+CnmKw6fPoDF9XZw298M0F92PIrfOL/ALm/
+         6oEMbZojofnMnrpH/zatGqrQxDXliOE9tvGoRXWETmnDmQ0VT4du0/1MBfjO2W0L5U2U
+         xxaP+pK6NrqmOBP325RFWqVJpx8ERxTWugGgg5a7PNqnDbFJ0IkLyzWXFT2AYWVzgHv8
+         8M+nTdZ3tyNoqfSsvOLF1IGS5JqGbzjEVGSwhds3sFh1Uo/9V5mSu/4+lLvBTjuLKHRF
+         /T+RhKXbzWWoBQmbCrGJr2YNWEQc/uvLB+T6tqDOPtTaqH+eqREYomcnSHqKKhieY98P
+         swVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689158421; x=1691750421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dUhc7Y52Rrbuq+8j2ufP7C0LAU2+c26StOhK+4Px2gM=;
-        b=cqXE9jMvDvsZa52Lmkpo7eyYiu1c/Su+t/tqsmOVogF+HSd/GQ47/3mwWJ3sBd7crP
-         KFvph983l0IkCapwZgxNe9zDUsaGJE+ZIDxNcAKjXwUC9l39KaFoyIwmPqaGONowmYIp
-         6BkZiJa2tEhidjDEYNVFDg7loxCvbCuxdqQCZdyzptcVLclGUm4YlREPI62XxeWA3BnO
-         HXnybYbUQhSHzw3Tk6drdfoa5dmRS+Z8RvL7XT1juQc2fIyPaKM3TxZi2a1EImGFzPUS
-         uLv8tX38L4u/bY0X64VPtTxvfTa/6lBgggMgphMODHqXHvG6/XWvJhnxKjoM1SNNmqC8
-         fnfw==
-X-Gm-Message-State: ABy/qLbX34IMgh7Nitxoql3zTVE1IiywxbHDkbYZwMdOnEeW34tAg4n0
-        GVhoWJ8tn2vIW4mQZnTk+8X0eGG70j2eJkFhr4iUXQ==
-X-Google-Smtp-Source: APBJJlE9IeZBjKh7SLh9ui2xsrj36Wg37nLeB0ze+giRurG22Ft5tbcz+tRMYOZn7SG6qPSpvdqNcsBqwHWsrXy/gyo=
-X-Received: by 2002:a05:6512:b99:b0:4f8:68a3:38d5 with SMTP id
- b25-20020a0565120b9900b004f868a338d5mr19757463lfv.66.1689158420689; Wed, 12
- Jul 2023 03:40:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689158460; x=1691750460;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TY2IIjSdcQMjQDDo3NQ71MCDsTeLijaeYYOPQ2zLf6w=;
+        b=OCHRlp6cJk1uBTNUu8p8EWEofVTkefkZ2mMw+BPjjp88BftWCvvoz3fWDgFOnyiSx+
+         XlmFlGkTv+fNPXC4M3R3PtKh99/FDfyL4/tafUG6Hnu/CwqwH1r47Ykqy8qygfCrlCd7
+         Ww8DxpjvNvjS1Q/BVDNpffT8sttFQoj0c5F741SYYtaSbMJzJAb9t972MQ/83za1ZrN6
+         NxOxlSqBPriPveJUttO8fkZhr9CiFm6/Z9FauuRK9Pk72gg0YuIADv0zVJjBQuGL+k53
+         YPgLodoVoj42UExD76i8SxLCgdjLZ+85em943EF8EOn+gjGAHt8WJpB6AFVDJq3Z/nls
+         C76A==
+X-Gm-Message-State: ABy/qLZi3bT7NSASNOauV1RrE+LV2FhD+9frwjWuWZgHeYl7X5ypm31B
+        VSHRAogPgn2zEVHB2/ib695/
+X-Google-Smtp-Source: APBJJlGpsk4298IHzDRiGKybvKunOGtnoVa3TJRzFOHhKncevfgX6CMFIS9/1BJAcrUHgTBcXmO9BA==
+X-Received: by 2002:a17:902:d4c3:b0:1b8:1c9e:4453 with SMTP id o3-20020a170902d4c300b001b81c9e4453mr17330818plg.4.1689158459946;
+        Wed, 12 Jul 2023 03:40:59 -0700 (PDT)
+Received: from thinkpad ([117.207.27.131])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902d30500b001b80de83b10sm3590898plc.301.2023.07.12.03.40.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 03:40:59 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 16:10:44 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH 00/14] UFS: Add OPP and interconnect support
+Message-ID: <20230712104044.GA102214@thinkpad>
+References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-References: <20230711153743.1970625-1-heiko@sntech.de> <20230711153743.1970625-5-heiko@sntech.de>
-In-Reply-To: <20230711153743.1970625-5-heiko@sntech.de>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 12 Jul 2023 16:10:09 +0530
-Message-ID: <CAAhSdy2vnrEZxxcmWRr+aZ4aT4kULqED48B3rvAhGsXkq8hJXQ@mail.gmail.com>
-Subject: Re: [PATCH v4 04/12] RISC-V: add vector crypto extension detection
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, conor.dooley@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu,
-        ebiggers@kernel.org, Heiko Stuebner <heiko.stuebner@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 9:09=E2=80=AFPM Heiko Stuebner <heiko@sntech.de> wr=
-ote:
->
-> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->
-> Add detection for some extensions of the vector-crypto specification:
-> - Zvkb: Vector Bit-manipulation used in Cryptography
-> - Zvkg: Vector GCM/GMAC
-> - Zvknha and Zvknhb: NIST Algorithm Suite
-> - Zvkns: AES-128, AES-256 Single Round Suite
-> - Zvksed: ShangMi Algorithm Suite
-> - Zvksh: ShangMi Algorithm Suite
+On Wed, Jul 12, 2023 at 04:01:55PM +0530, Manivannan Sadhasivam wrote:
+> Hi,
+> 
+> This series adds OPP (Operating Points) support to UFSHCD driver and
+> interconnect support to Qcom UFS driver.
+> 
 
-Any plan to allow user-space to detect these extensions via HWPROBE ?
+Missed to cc SCSI folks. Will be resending this series. Sorry for the noise.
 
-Regards,
-Anup
+- Mani
 
->
-> As their use is very specific and will likely be limited to special place=
-s
-> we expect current code to just pre-encode those instructions, so right no=
-w
-> we don't introduce toolchain requirements.
->
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> ---
->  arch/riscv/include/asm/hwcap.h |  9 ++++++
->  arch/riscv/kernel/cpu.c        |  8 ++++++
->  arch/riscv/kernel/cpufeature.c | 50 ++++++++++++++++++++++++++++++++++
->  3 files changed, 67 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
-p.h
-> index b80ca6e77088..0f5172fa87b0 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -64,6 +64,15 @@
->  #define RISCV_ISA_EXT_ZKSED            51
->  #define RISCV_ISA_EXT_ZKSH             52
->  #define RISCV_ISA_EXT_ZKT              53
-> +#define RISCV_ISA_EXT_ZVBB             54
-> +#define RISCV_ISA_EXT_ZVBC             55
-> +#define RISCV_ISA_EXT_ZVKG             56
-> +#define RISCV_ISA_EXT_ZVKNED           57
-> +#define RISCV_ISA_EXT_ZVKNHA           58
-> +#define RISCV_ISA_EXT_ZVKNHB           59
-> +#define RISCV_ISA_EXT_ZVKSED           60
-> +#define RISCV_ISA_EXT_ZVKSH            61
-> +#define RISCV_ISA_EXT_ZVKT             62
->
->  #define RISCV_ISA_EXT_MAX              64
->  #define RISCV_ISA_EXT_NAME_LEN_MAX     32
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 10524322a4c0..925241e25db2 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -227,6 +227,14 @@ static struct riscv_isa_ext_data isa_ext_arr[] =3D {
->         __RISCV_ISA_EXT_DATA(zksed, RISCV_ISA_EXT_ZKSED),
->         __RISCV_ISA_EXT_DATA(zksh, RISCV_ISA_EXT_ZKSH),
->         __RISCV_ISA_EXT_DATA(zkt, RISCV_ISA_EXT_ZKT),
-> +       __RISCV_ISA_EXT_DATA(zvbb, RISCV_ISA_EXT_ZVBB),
-> +       __RISCV_ISA_EXT_DATA(zvbc, RISCV_ISA_EXT_ZVBC),
-> +       __RISCV_ISA_EXT_DATA(zvkg, RISCV_ISA_EXT_ZVKG),
-> +       __RISCV_ISA_EXT_DATA(zvkned, RISCV_ISA_EXT_ZVKNED),
-> +       __RISCV_ISA_EXT_DATA(zvknha, RISCV_ISA_EXT_ZVKNHA),
-> +       __RISCV_ISA_EXT_DATA(zvknhb, RISCV_ISA_EXT_ZVKNHB),
-> +       __RISCV_ISA_EXT_DATA(zvksed, RISCV_ISA_EXT_ZVKSED),
-> +       __RISCV_ISA_EXT_DATA(zvksh, RISCV_ISA_EXT_ZVKSH),
->         __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
->         __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
->         __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
-e.c
-> index 9a872a2007a5..13556fd16bf6 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -343,6 +343,56 @@ void __init riscv_fill_hwcap(void)
->                                 SET_ISA_EXT_MAP("zksh", RISCV_ISA_EXT_ZKS=
-H);
->                                 SET_ISA_EXT_MAP("zkr", RISCV_ISA_EXT_ZKR)=
-;
->                                 SET_ISA_EXT_MAP("zkt", RISCV_ISA_EXT_ZKT)=
-;
-> +                               SET_ISA_EXT_MAP("zvbb", RISCV_ISA_EXT_ZVB=
-B);
-> +                               SET_ISA_EXT_MAP("zvbc", RISCV_ISA_EXT_ZVB=
-C);
-> +                               SET_ISA_EXT_MAP("zvkg", RISCV_ISA_EXT_ZVK=
-G);
-> +                               SET_ISA_EXT_MAP("zvkned", RISCV_ISA_EXT_Z=
-VKNED);
-> +                               SET_ISA_EXT_MAP("zvknha", RISCV_ISA_EXT_Z=
-VKNHA);
-> +                               SET_ISA_EXT_MAP("zvknhb", RISCV_ISA_EXT_Z=
-VKNHB);
-> +                               SET_ISA_EXT_MAP("zvksed", RISCV_ISA_EXT_Z=
-VKSED);
-> +                               SET_ISA_EXT_MAP("zvksh", RISCV_ISA_EXT_ZV=
-KSH);
-> +                               SET_ISA_EXT_MAP("zvkt", RISCV_ISA_EXT_ZVK=
-T);
-> +
-> +                               /* NIST Algorithm Suite */
-> +                               SET_ISA_EXT_MAP("zvkn", RISCV_ISA_EXT_ZVK=
-NED);
-> +                               SET_ISA_EXT_MAP("zvkn", RISCV_ISA_EXT_ZVK=
-NHB);
-> +                               SET_ISA_EXT_MAP("zvkn", RISCV_ISA_EXT_ZVB=
-B);
-> +                               SET_ISA_EXT_MAP("zvkn", RISCV_ISA_EXT_ZVK=
-T);
-> +
-> +                               /* NIST Algorithm Suite with carryless mu=
-ltiply */
-> +                               SET_ISA_EXT_MAP("zvknc", RISCV_ISA_EXT_ZV=
-KNED);
-> +                               SET_ISA_EXT_MAP("zvknc", RISCV_ISA_EXT_ZV=
-KNHB);
-> +                               SET_ISA_EXT_MAP("zvknc", RISCV_ISA_EXT_ZV=
-BB);
-> +                               SET_ISA_EXT_MAP("zvknc", RISCV_ISA_EXT_ZV=
-KT);
-> +                               SET_ISA_EXT_MAP("zvknc", RISCV_ISA_EXT_ZV=
-BC);
-> +
-> +                               /* NIST Algorithm Suite with GCM */
-> +                               SET_ISA_EXT_MAP("zvkng", RISCV_ISA_EXT_ZV=
-KNED);
-> +                               SET_ISA_EXT_MAP("zvkng", RISCV_ISA_EXT_ZV=
-KNHB);
-> +                               SET_ISA_EXT_MAP("zvkng", RISCV_ISA_EXT_ZV=
-BB);
-> +                               SET_ISA_EXT_MAP("zvkng", RISCV_ISA_EXT_ZV=
-KT);
-> +                               SET_ISA_EXT_MAP("zvkng", RISCV_ISA_EXT_ZV=
-KG);
-> +
-> +                               /*  ShangMi Algorithm Suite */
-> +                               SET_ISA_EXT_MAP("zvks", RISCV_ISA_EXT_ZVK=
-SED);
-> +                               SET_ISA_EXT_MAP("zvks", RISCV_ISA_EXT_ZVK=
-SH);
-> +                               SET_ISA_EXT_MAP("zvks", RISCV_ISA_EXT_ZVB=
-B);
-> +                               SET_ISA_EXT_MAP("zvks", RISCV_ISA_EXT_ZVK=
-T);
-> +
-> +                               /* ShangMi Algorithm Suite with carryless=
- multiply */
-> +                               SET_ISA_EXT_MAP("zvksc", RISCV_ISA_EXT_ZV=
-KSED);
-> +                               SET_ISA_EXT_MAP("zvksc", RISCV_ISA_EXT_ZV=
-KSH);
-> +                               SET_ISA_EXT_MAP("zvksc", RISCV_ISA_EXT_ZV=
-BB);
-> +                               SET_ISA_EXT_MAP("zvksc", RISCV_ISA_EXT_ZV=
-KT);
-> +                               SET_ISA_EXT_MAP("zvksc", RISCV_ISA_EXT_ZV=
-BC);
-> +
-> +                               /* ShangMi Algorithm Suite with GCM */
-> +                               SET_ISA_EXT_MAP("zvksg", RISCV_ISA_EXT_ZV=
-KSED);
-> +                               SET_ISA_EXT_MAP("zvksg", RISCV_ISA_EXT_ZV=
-KSH);
-> +                               SET_ISA_EXT_MAP("zvksg", RISCV_ISA_EXT_ZV=
-BB);
-> +                               SET_ISA_EXT_MAP("zvksg", RISCV_ISA_EXT_ZV=
-KT);
-> +                               SET_ISA_EXT_MAP("zvksg", RISCV_ISA_EXT_ZV=
-KG);
-> +
->                         }
->  #undef SET_ISA_EXT_MAP
->                 }
-> --
-> 2.39.2
->
+> Motivation behind adding OPP support is to scale both clocks as well as
+> regulators/performance state dynamically. Currently, UFSHCD just scales
+> clock frequency during runtime with the help of "freq-table-hz" property
+> defined in devicetree. With the addition of OPP tables in devicetree (as
+> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+> both clocks and performance state of power domain which helps in power
+> saving.
+> 
+> For the addition of OPP support to UFSHCD, there are changes required to
+> the OPP framework and devfreq drivers which are also added in this series.
+> 
+> Finally, interconnect support is added to Qcom UFS driver for scaling the
+> interconnect path dynamically. This is required to avoid boot crash in
+> recent SoCs and also to save power during runtime. More information is
+> available in patch 13/13.
+> 
+> Credits
+> =======
+> 
+> This series is a continuation of previous work by Krzysztof Kozlowski [1]
+> and Brian Masney [2]. Ideally, this could've split into two series (OPP
+> and interconnect) but since there will be a dependency in the devicetree,
+> I decided to keep them in a single series.
+> 
+> Testing
+> =======
+> 
+> This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
+> development boards.
+> 
+> Merging Strategy
+> ================
+> 
+> An immutable branch might be required between OPP and SCSI trees because of
+> the API dependency (devfreq too). And I leave it up to the maintainers to
+> decide.
+> 
+> Thanks,
+> Mani
+> 
+> [1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+> [2] https://lore.kernel.org/all/20221117104957.254648-1-bmasney@redhat.com/
+> 
+> Krzysztof Kozlowski (2):
+>   dt-bindings: ufs: common: add OPP table
+>   arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
+> 
+> Manivannan Sadhasivam (12):
+>   dt-bindings: opp: Increase maxItems for opp-hz property
+>   arm64: dts: qcom: sdm845: Add missing RPMh power domain to GCC
+>   arm64: dts: qcom: sdm845: Fix the min frequency of "ice_core_clk"
+>   arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+>   OPP: Introduce dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+>   OPP: Introduce dev_pm_opp_get_freq_indexed() API
+>   PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed()
+>     APIs
+>   scsi: ufs: core: Add OPP support for scaling clocks and regulators
+>   scsi: ufs: host: Add support for parsing OPP
+>   arm64: dts: qcom: sdm845: Add interconnect paths to UFSHC
+>   arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
+>   scsi: ufs: qcom: Add support for scaling interconnects
+> 
+>  .../devicetree/bindings/opp/opp-v2-base.yaml  |   2 +-
+>  .../devicetree/bindings/ufs/ufs-common.yaml   |  34 ++++-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          |  47 ++++--
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi          |  43 ++++--
+>  drivers/devfreq/devfreq.c                     |  14 +-
+>  drivers/opp/core.c                            |  76 ++++++++++
+>  drivers/ufs/core/ufshcd.c                     | 142 ++++++++++++++----
+>  drivers/ufs/host/ufs-qcom.c                   | 131 +++++++++++++++-
+>  drivers/ufs/host/ufs-qcom.h                   |   3 +
+>  drivers/ufs/host/ufshcd-pltfrm.c              | 116 ++++++++++++++
+>  include/linux/pm_opp.h                        |  26 ++++
+>  include/ufs/ufshcd.h                          |   4 +
+>  12 files changed, 574 insertions(+), 64 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
