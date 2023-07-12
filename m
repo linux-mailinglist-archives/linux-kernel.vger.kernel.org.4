@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECB074FCAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A28D74FCAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjGLBUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S231252AbjGLBWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjGLBUf (ORCPT
+        with ESMTP id S231260AbjGLBWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:20:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3892B127;
-        Tue, 11 Jul 2023 18:20:34 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BNL65U009567;
-        Wed, 12 Jul 2023 01:20:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=GPrGagzyehi5r99/BNj5ZC2gGSEXxD98Vjr+tflZjsQ=;
- b=UUdatvcCWYLUt+wRb16Mak7yduoY829ojPQWpBPm0KvA03KHzPV73h5nPKajVKOEUhHb
- IKLRrPuMbjDOahFq3IjY1FYiSvo4aQ2TSYCVRra/mKelak3PLjy6fwYwmb5n7dNup/GH
- K8rQca8HG0eZI9jjdYqKkmKCbixcyVkp7F7DfDDKl1fT6KuzoXu4HuZS5Odd6lkRog85
- RFi2NxmDW0iytjLRUGO1XQ/Al9ZrfJuwuQS106BdHtsSpXkg/P6ci85faPLmVygw8zah
- 5W2kyvnNhP8/ERWdAkbitUInIypA1OeTpJgkpvKZALR2gxqOgplX+2s0JzWdI0L9oMTb Kg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsghjg56j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 01:20:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C1KP08004691
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 01:20:25 GMT
-Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Tue, 11 Jul 2023 18:20:24 -0700
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
-        <andersson@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 5/5] drm/msm/dpu: drop DPU_INTF_DATA_COMPRESS from dpu catalog
-Date:   Tue, 11 Jul 2023 18:20:03 -0700
-Message-ID: <20230712012003.2212-6-quic_abhinavk@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230712012003.2212-1-quic_abhinavk@quicinc.com>
-References: <20230712012003.2212-1-quic_abhinavk@quicinc.com>
+        Tue, 11 Jul 2023 21:22:33 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A03695
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:22:31 -0700 (PDT)
+Received: from [127.0.0.1] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 36C1LPSM3000634
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 11 Jul 2023 18:21:26 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 36C1LPSM3000634
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023061001; t=1689124889;
+        bh=Q/kleWqkapvb6jIEkTnXqkEzyycVCUl2hOfAKKrz2yg=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=WLnhA3yTQLjIXGJ4rBSuohSA3ElMQF9pcR/AFZh7QZY1UKk0dvCO2m5WVVkhFt0k7
+         EedfYIaMlaOEn7dTDOeJ2BMuMUZl900yBK1HBfTGwNdH8vYPBwWOv1m3WOos5zrp+Z
+         OWORtS94GKqXM28WyCkUykHGIL7g7kKHvUJ1wC2EJ1RsxkhIX58PEQsHXdRgMTKOpC
+         3UAWCtMUW3g9QER099Ym9r3GG3zT2IUHHKmotzTU9eqa5m4hZTrgpUCkoBGdOEzfOH
+         rHpVEYWvnmdJlSJfhlRFPW3hjagjlzpveHTNq8Vi47JKzc8BJ9LNQdz8v6xX4foksn
+         AeUzvA0yhYxpA==
+Date:   Tue, 11 Jul 2023 18:21:24 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>, x86@kernel.org
+CC:     Thomas Gleixner <tglx@linutronix.de>, bluca@debian.org,
+        lennart@poettering.net, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        =?ISO-8859-1?Q?Daniel_P_=2E_Berrang=E9?= <berrange@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] x86/boot: add .sbat section to the bzImage
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230711154449.1378385-1-eesposit@redhat.com>
+References: <20230711154449.1378385-1-eesposit@redhat.com>
+Message-ID: <7DF38657-99C7-4C88-8835-7EE28E82C829@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: szwOwlSaZblc9-WbMpTl0jYwALa80Uki
-X-Proofpoint-ORIG-GUID: szwOwlSaZblc9-WbMpTl0jYwALa80Uki
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_14,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- mlxlogscore=946 mlxscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120008
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all usages of DPU_INTF_DATA_COMPRESS have been replaced
-with the dpu core's major revision lets drop DPU_INTF_DATA_COMPRESS
-from the catalog completely.
+On July 11, 2023 8:44:49 AM PDT, Emanuele Giuseppe Esposito <eesposit@redha=
+t=2Ecom> wrote:
+>*Important*: this is just an RFC, as I am not expert in this area and
+>I don't know what's the best way to achieve this=2E
+>
+>v2:
+>* add standard "sbat,1,SBAT Version,=2E=2E=2E" header string
+>
+>The aim of this patch is to add a =2Esbat section to the linux binary
+>(https://github=2Ecom/rhboot/shim/blob/main/SBAT=2Emd)=2E
+>We mainly need SBAT in UKIs (Unified Kernel Images), as we might want
+>to revoke authorizations to specific signed PEs that were initially
+>considered as trusted=2E The reason might be for example a security issue
+>related to a specific linux release=2E
+>
+>A =2Esbat is simply a section containing a string with the component name
+>and a version number=2E This version number is compared with the value in
+>OVMF_VARS, and if it's less than the variable, the binary is not trusted,
+>even if it is correctly signed=2E
+>
+>Right now an UKI is built with a =2Esbat section containing the
+>systemd-stub sbat string (upstream + vendor), we would like to add
+>also a per-component specific string (ie vmlinux has its own sbat,
+>again upstream + vendor, each signed add-on its own and so on)=2E
+>In this way, if a specific kernel version has an issue, we can revoke
+>it without compromising all other UKIs that are using a different
+>kernel with the same stub/initrd/something else=2E
+>
+>Issues with this patch:
+>* the string is added in a file but it is never deleted
+>* if the code is not modified but make is issued again, objcopy will
+>  be called again and will fail because =2Esbat exists already, making
+>  compilation fail
+>* minor display issue: objcopy command is printed in the make logs
+>
+>Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat=2Ecom>
+>---
+> arch/x86/boot/Makefile | 3 +++
+> 1 file changed, 3 insertions(+)
+>
+>diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+>index 9e38ffaadb5d=2E=2E6982a50ba0c0 100644
+>--- a/arch/x86/boot/Makefile
+>+++ b/arch/x86/boot/Makefile
+>@@ -83,6 +83,9 @@ cmd_image =3D $(obj)/tools/build $(obj)/setup=2Ebin $(o=
+bj)/vmlinux=2Ebin \
+>=20
+> $(obj)/bzImage: $(obj)/setup=2Ebin $(obj)/vmlinux=2Ebin $(obj)/tools/bui=
+ld FORCE
+> 	$(call if_changed,image)
+>+	@$(kecho) "sbat,1,SBAT Version,sbat,1,https://github=2Ecom/rhboot/shim/=
+blob/main/SBAT=2Emd" > linux=2Esbat
+>+	@$(kecho) "linux,1,The Linux Developers,linux,$(KERNELVERSION),https://=
+linux=2Eorg" >> linux=2Esbat;
+>+	$(OBJCOPY) --set-section-alignment '=2Esbat=3D512' --add-section =2Esba=
+t=3Dlinux=2Esbat $@;
+> 	@$(kecho) 'Kernel: $@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat =
+=2Eversion`)')'
+>=20
+> OBJCOPYFLAGS_vmlinux=2Ebin :=3D -O binary -R =2Enote -R =2Ecomment -S
 
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 2522e06c5262..3ff07d7cbf4b 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -104,7 +104,7 @@
- 	 BIT(DPU_INTF_STATUS_SUPPORTED) | \
- 	 BIT(DPU_DATA_HCTL_EN))
- 
--#define INTF_SC7280_MASK (INTF_SC7180_MASK | BIT(DPU_INTF_DATA_COMPRESS))
-+#define INTF_SC7280_MASK (INTF_SC7180_MASK)
- 
- #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
- 			 BIT(DPU_WB_UBWC) | \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 98a04a39d333..acfe43f4918c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -181,7 +181,6 @@ enum {
-  * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
-  *                                  than video timing
-  * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
-- * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS register
-  * @DPU_INTF_MAX
-  */
- enum {
-@@ -189,7 +188,6 @@ enum {
- 	DPU_INTF_TE,
- 	DPU_DATA_HCTL_EN,
- 	DPU_INTF_STATUS_SUPPORTED,
--	DPU_INTF_DATA_COMPRESS,
- 	DPU_INTF_MAX
- };
- 
--- 
-2.40.1
-
+Why is this a special section rather than in the kernel_info structure?
