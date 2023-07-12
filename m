@@ -2,113 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A767750804
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78301750806
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjGLMUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S232099AbjGLMUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjGLMUB (ORCPT
+        with ESMTP id S230361AbjGLMUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:20:01 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2118.outbound.protection.outlook.com [40.107.255.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCD29B;
-        Wed, 12 Jul 2023 05:19:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h1YusR6pZFOsHi7luZpS0PbUeRHOg15OMJaqfvkLHd/y29WBV17VqDVCRHqiAwRZUMKY0qpXXB4axT52o/mywG6FbBOhcCmiGgRIfH/L4HxIPzmHaeyOnZSSta/vzI+YrSqdohQ0d+Ki+la2w0xunAX7yxrBywiaTU4WSAvvt3UB/vyE3AhBBOM48KuLmZP3R55WEi7zkCq2iW1MFslAulm0ykUgpRHac83gJ1LWdZq9O1jGWkw/SN8sv+M6hnP0vn2Un0G7+VTssCpsQNgVGr4fiJh+GaMc1zrx5yeTSUMm7cxqsPcJDBTkzm24cr6yb2tBPVquInLpXwlwzTOe0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3KyH18EUJ3vlZfmWiDB66XBTSDqXPUV7j9Li/DHQ5SY=;
- b=VKT6kV1YF8q5iuWstncWSQ84bkhueOD98/OuSdPfs2ZUCl4eLK9JV5BHN4nlmFP96JpfhiY4y9p5qpH5edFhkXI8BLAfCyahb2WA8qypdPJ9FY+kNvgTlF1mXLlActwL/0KuYqAjefZ2y86Jyg/2QRN1D7O66659IfsWCwggs7hNwCFRk7Muz1uKW0BBbnYZklrJlII1STyi3AtfIVCoymHfVwRgDFlbp3KJmf8dl+1eoHh9s/ejZq8S20MHF8zil+q/lH3JbL3JRpQVeqLUInZsPoVyIL/nR4Bfvs+xF1YU+WtOIMVhTzL8Uffkl97Dv7u007GWMcYUcN8jlR1ebA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3KyH18EUJ3vlZfmWiDB66XBTSDqXPUV7j9Li/DHQ5SY=;
- b=gBtA6s+3okNQb5nLE0wU+D5hlZ+B3PEtk7VkiwCnJXgeb0cWETNAQ9l3LH/3SB2SfvuA1EH/FvQxncHS9qBeDCS8R6EPghDgUUvkhr79cbp7CP1DThax/+sRsp+KjU/drkT7/SG2yZJZshFWdnutMKlkXdAxN6sJoK00J3UCtF/+umjztWpIEZOBDDZ+SMOSSM0LXoVDu/F20wQ7vOt/Z247YWCgH3mCKSelibT2G3BjBkBl077m2g0oFqmgDs/SD2CG1Ga/GMPDbpIgxv73/ecFdqlJFq3JJs7+4Lf9gUfiUFxQmN09G1N6Pz66iBG8r1G8fmb1D1kygknEB05CcA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
- SI2PR06MB4393.apcprd06.prod.outlook.com (2603:1096:4:155::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.20; Wed, 12 Jul 2023 12:19:56 +0000
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c]) by SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c%4]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
- 12:19:56 +0000
-From:   Wang Ming <machel@vivo.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com, Wang Ming <machel@vivo.com>
-Subject: [PATCH v2] net:Fix an NULL vs IS_ERR() bug for debugfs_create_dir() in i40e_dbg_init()
-Date:   Wed, 12 Jul 2023 20:19:31 +0800
-Message-Id: <20230712121943.7597-1-machel@vivo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYWP286CA0017.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:178::10) To SG2PR06MB3743.apcprd06.prod.outlook.com
- (2603:1096:4:d0::18)
+        Wed, 12 Jul 2023 08:20:13 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0826A7;
+        Wed, 12 Jul 2023 05:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689164412; x=1720700412;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aHYcX/RpGX8NgxBuDMZyXS2bZgmbpwPq0YBcwOhVdKI=;
+  b=l41VQkqIFAMZ2oOYilNjxoui0QN2ESHzvxiCiOEhQh39VS0wH34U5Fw0
+   f+8O5fJiYE/L3cboBYjJSA9CP1s/4r0Cv9ckZ7EDJxt59y1F53pUMXur8
+   r7oAFkekR8aSXSF0LYYGfGP4ObyfRLVIqc8oUjSjifCd9qni6GIbN+Jd8
+   LRkbyLBcdhomyItutaXzvH4+W8ZvuM6QruhMRoiUk9zYF0rBMFNwlt+oE
+   8txB/HJt+AKVD1zaRcEsD4yYoadGTOH4SyzwPbt8q484JFPQM75lG0HXp
+   oqxL7csNKBYs+wjQ3DKBKV9EVJknp7/sRwJkMp07npyfq6G1XeSnhGNjg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="431007174"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="431007174"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 05:19:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="1052168447"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="1052168447"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 05:19:50 -0700
+Message-ID: <958f3638-f68a-ebec-29cc-816f823b017f@linux.intel.com>
+Date:   Wed, 12 Jul 2023 14:19:47 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|SI2PR06MB4393:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ce59582-ac7a-47f3-ac0d-08db82d24da2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6uK2IOgVA28TSnYz7TLffGKN1bP1b3piaNxw7FJyPY7ArGtFP3Cr2z0DOs7PBUmDiV/Uy4YyzNAW196hr4Zs61EAMYqWE7Ljd+eIo1wGkOaXtSQ8UaOzdBTcz/7bCz1gimqqzBmPUaHdWcN9M8BDp6Tcab4OM2NeDzn2q9Kkk4oIVRFgB2STsrGZ1s4EKhGNCsfgn03T6jOf9FliXiMM0koTKKxtu+jN6tzvzkVVdYsuGb2F0An4E2V0lMB5D5YUCgt6pfxbeChrbhnwFP99QKqCWoGL2EDtQPc/jYdJ/GThxonrrrxrLIINU42w7wLaq5n/h/OjImMPcig1tZnaMCiJ/97L59DhKKGh96wT9XkkqmBnhXwq+4TUBEpATsaaQnCQ/nfAGgsUc4F/HZOX+gN7Z7Ey1ieSiSHruY/jBLxjDPdOw5+zcOeV/HJAt7gvDubSS43ok+T9WQUU13UxQvgQAuxYn0KGGPsL9OoisJtDS7P5LMy+evs55CVh82JLTgUCl9eUmufz2xRxAA7q8yQ23WmiTVCvWsrlggn41hnBKzqyCkdXcVue8QEb1z/9GYPiRk9LuVpHj4Up6zhoYz5lg/F8O4+YIRTvIUDrbtI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199021)(52116002)(6486002)(478600001)(6666004)(110136005)(2616005)(83380400001)(36756003)(86362001)(4744005)(2906002)(66946007)(6506007)(1076003)(26005)(186003)(107886003)(6512007)(38100700002)(38350700002)(8676002)(316002)(66476007)(41300700001)(5660300002)(8936002)(4326008)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/BCe8eoFHgU00OvBjBHJJoqqnD7msQg1JQdMjsMj18An6Ce60Hy2Fy6+moMq?=
- =?us-ascii?Q?o8qY/RqLeFHw7JK6NDxIvBwAS/EdMadfd7TVNHHO3uvIBT8GlzVwOk3SqX4Q?=
- =?us-ascii?Q?+21dESRJFUII2MUYmyayEK8fntowbENbS1Hn3COFcof7EdnJyKvLvf3/tCYI?=
- =?us-ascii?Q?f9qZiOevF06ZefT+PNJS10u3rHzJBi6qqvb7MM1x1tLwyArlQ95YxNkfEhY2?=
- =?us-ascii?Q?lIUSXVcJb18229UF4dWprXkJ9FnDhEIPA5Yf3FhktYB8H9DfTCQ0mWK/VWVa?=
- =?us-ascii?Q?Ahlljm/qvR/PPD2F3H37CyI83cvN3uuvzex6kC2bbyygIwBduk66RvOSc6c4?=
- =?us-ascii?Q?W8gZtzl2r/fr14y4QrYOuVdhcDydmT/H4irLtIl+feYJyCUvT7pVECkUNbPT?=
- =?us-ascii?Q?nONIBvRGdPVBO4VKZqTZvf6aB7rMoSxKPJWW9YiBCvriSd+gtC/l7RjOShxs?=
- =?us-ascii?Q?qeJBzBl8l2upGWb9rYbafFpJfhsloJjdBIflYIb2q7s6wJ9vb87N7lf/BQWt?=
- =?us-ascii?Q?rOOD5IQvEFCWHBFLRdvvKyK51iAAWR8cHLN4MuqcOzADAXEDN/Rc66sZH6ke?=
- =?us-ascii?Q?UEAIWmzmeNv1JPfVSEPoTle+EP/LGbCkUIBqpqVEb1wI/dKkL5r4rRedomd8?=
- =?us-ascii?Q?ORWKAxxY4+yzDDL/2r5wwA8FyeEu8zuIAVU3kOqq8JFhGWmk6sKpGF9kACZh?=
- =?us-ascii?Q?TcIyUrwiFha8cXmCGpx9mmOgXPYf83/5D2Xr2LWuipRO7dtfF9VFuRe9bXr5?=
- =?us-ascii?Q?+m8VvuzehP4gL5U4YCxc8uxvDEn9DwTi01OHuqbO4i3OawFLRMf8XAJVF+pd?=
- =?us-ascii?Q?JO+dmRGG1wGuqEcI1QFa3cWzp9hcQs4U1oPhF0i8z0EpT4ThRAnrAL7zNAj3?=
- =?us-ascii?Q?h4iUZRXpIt7Jd1zcUg7jntQbJx5QVZ5X3+FDByuznaY+ixKlDfr7EGhC5fRZ?=
- =?us-ascii?Q?FBoGIUc3yRv/1DoKaQWY+y4SjzILCPvizRiX9Ianlh+4n+7L8jzLCmfbERty?=
- =?us-ascii?Q?xbhtqy2yNGEKIWVRiXjsK4EyfASvsTRmNHcKBMDQO5rIIGraac3xuzoimsAe?=
- =?us-ascii?Q?Sn/J96aprJJ/dhUUZwiGfJi0IJaLHV29BV6d8CCeRLusrFzpsIPNXNfbtEJu?=
- =?us-ascii?Q?/oy8WqPBz3gQZ5vavkft+uiE/p5nZ5ckOZ1y3JDLvvpv8iOsJntqAMM+24y8?=
- =?us-ascii?Q?KxZY8pRFeVVdT/JC470JIaV0NmVYbJUHc3AQHmZMS1Hf9rNl60w3hTvNXgsy?=
- =?us-ascii?Q?HClz+5RgFS5vWsNU6aUMqfj0cQPassKW3zbTfrD4FVuHHMbYdDV1g8pFAIDv?=
- =?us-ascii?Q?hCEfNW25lRKhkwJpnvnI6JKjS4+bdFXqi8dI2o3iU0OAg29sdN/NnUIxnRSQ?=
- =?us-ascii?Q?cXI1Ajff9Avzcc0PNmnh6KahhrN+tIv00Q5+84w9Oy0uTGHCrxrbmlM9B3I5?=
- =?us-ascii?Q?kIzKHfuctz+/pzzZEbBf3EzdAfgClfQX6OuQnkVH+t3ohF4C03FqxkBBObNt?=
- =?us-ascii?Q?FwYNoGeQj6UfPltQH/EtE837kgA7uKc/WED3aRQ+UFKyQ1l++lYPJoZNCGeU?=
- =?us-ascii?Q?VKv2Py+UwMREUKmkuEwkdaOrHN7En2LK8KCNUnDW?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ce59582-ac7a-47f3-ac0d-08db82d24da2
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 12:19:56.2121
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UMau5IXGzUy5EbptaU6A7b5pqHErLdpGubyvMBuiw6i5F91OMBX8M/W1A3NRZZJTcDIeXULYXgOYUe0260FclQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4393
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 13/13] ASoC: Intel: sst: Convert to PCI device IDs defines
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-14-amadeuszx.slawinski@linux.intel.com>
+ <ZK1oKYW0rro4FnNO@smile.fi.intel.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <ZK1oKYW0rro4FnNO@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,30 +73,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The debugfs_create_dir() function returns error pointers.
-It never returns NULL. Most incorrect error checks were fixed,
-but the one in i40e_dbg_init() was forgotten.
+On 7/11/2023 4:33 PM, Andy Shevchenko wrote:
+> On Tue, Jul 11, 2023 at 02:57:26PM +0200, Amadeusz Sławiński wrote:
+>> Use PCI device IDs from pci_ids.h header.
+> 
+> ...
+> 
+>>   	switch (sst->dev_id) {
+>> -	case SST_MRFLD_PCI_ID:
+>> +	case PCI_DEVICE_ID_INTEL_ADSP_TNG:
+>>   	case SST_BYT_ACPI_ID:
+>>   	case SST_CHV_ACPI_ID:
+> 
+> I think this needs a bit more, i.e. replacing the rest with respective PCI IDs.
+> 
+> All three will be defined with SST prefix, which makes sense to me.
+> 
+> ACPI here is a bit misleading, but correct. The ACPI specification assumes that
+> respective part of the ID space covers 100% of PCI ID space.
+> 
+> I have briefly checked the code and it seems that ID is used externally only
+> for PCI case, so we may simply use the lower 16 bits of the ACPI _HID for the
+> context.
+> 
 
-Fix the remaining error check.
+Do I understand correctly that I should just do:
+#define PCI_DEVICE_ID_INTEL_SST_BYT	0x0F28
+#define PCI_DEVICE_ID_INTEL_SST_CHV	0x22A8
+and use those IDs instead?
 
-Signed-off-by: Wang Ming <machel@vivo.com>
----
- drivers/net/ethernet/intel/i40e/i40e_debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-index 9954493cd448..62497f5565c5 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-@@ -1839,7 +1839,7 @@ void i40e_dbg_pf_exit(struct i40e_pf *pf)
- void i40e_dbg_init(void)
- {
- 	i40e_dbg_root = debugfs_create_dir(i40e_driver_name, NULL);
--	if (!i40e_dbg_root)
-+	if (IS_ERR(i40e_dbg_root))
- 		pr_info("init of debugfs failed\n");
- }
- 
--- 
-2.25.1
+> diff --git a/sound/soc/intel/atom/sst/sst.c b/sound/soc/intel/atom/sst/sst.c
+> index a0d29510d2bc..b1f59604d825 100644
+> --- a/sound/soc/intel/atom/sst/sst.c
+> +++ b/sound/soc/intel/atom/sst/sst.c
+> @@ -222,7 +222,7 @@ static void sst_init_locks(struct intel_sst_drv *ctx)
+>   }
+>   
+>   int sst_alloc_drv_context(struct intel_sst_drv **ctx,
+> -		struct device *dev, unsigned int dev_id)
+> +		struct device *dev, unsigned short dev_id)
+>   {
+>   	*ctx = devm_kzalloc(dev, sizeof(struct intel_sst_drv), GFP_KERNEL);
+>   	if (!(*ctx))
+> diff --git a/sound/soc/intel/atom/sst/sst.h b/sound/soc/intel/atom/sst/sst.h
+> index 4d37d39fd8f4..c04f033e1d5f 100644
+> --- a/sound/soc/intel/atom/sst/sst.h
+> +++ b/sound/soc/intel/atom/sst/sst.h
+> @@ -358,7 +358,7 @@ struct sst_fw_save {
+>   struct intel_sst_drv {
+>   	int			sst_state;
+>   	int			irq_num;
+> -	unsigned int		dev_id;
+> +	unsigned short		dev_id;
+>   	void __iomem		*ddr;
+>   	void __iomem		*shim;
+>   	void __iomem		*mailbox;
+> @@ -523,7 +523,7 @@ int sst_register(struct device *);
+>   int sst_unregister(struct device *);
+>   
+>   int sst_alloc_drv_context(struct intel_sst_drv **ctx,
+> -		struct device *dev, unsigned int dev_id);
+> +		struct device *dev, unsigned short dev_id);
+>   int sst_context_init(struct intel_sst_drv *ctx);
+>   void sst_context_cleanup(struct intel_sst_drv *ctx);
+>   void sst_configure_runtime_pm(struct intel_sst_drv *ctx);
+> 
+> ...
+> 
+>>   /* driver names */
+>>   #define SST_DRV_NAME "intel_sst_driver"
+> 
+>> -#define SST_MRFLD_PCI_ID 0x119A
+>>   #define SST_BYT_ACPI_ID	0x80860F28
+>>   #define SST_CHV_ACPI_ID	0x808622A8
+> 
+> And kill all three!
+> 
 
