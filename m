@@ -2,148 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9C675075E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A5275075F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbjGLMAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S231267AbjGLMAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbjGLMAu (ORCPT
+        with ESMTP id S232483AbjGLMAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Jul 2023 08:00:50 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BA51BEC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:00:27 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 548D21EC0CAF;
-        Wed, 12 Jul 2023 14:00:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1689163225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=J1nbq+Flb3xWaMjMRyH8lLNErBvozlvfas8/OBqBdaA=;
-        b=LUYU17FGQjunOIsffE5Q9g+h6T1HJW+eV9N7ZGpV93yzm55MeXxEtHUxLOT06Ycfs0bE/V
-        qKaIaw6kPuToq72Nnzm/T6VmVfgoRYAF9YPUW1Rc3zFvB/MZYUmclEUqyaswBCTj+cxu4P
-        YRHtaQomlbSMEJGoNAHDDEX7tqXAieg=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eAP0VmbZHX2N; Wed, 12 Jul 2023 12:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1689163222; bh=J1nbq+Flb3xWaMjMRyH8lLNErBvozlvfas8/OBqBdaA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e7ooaicP5bzfGbenwSFp5l/E4k8cNlwbvX7maVZi2+gdzCNZTXJu3DDmekDqm6wW6
-         Rmcd+BH0Yc+Hxc55nVQjtq6HyuErnoNrdYvktJ0ubLBI+eImIfzPCwOii38Y51aVfw
-         Mw91xmjpSvnwKChzy7Y/Ok2XXjPwfgv5t85trmW3M2wKC79440toTOy3ixri0v83MU
-         sWpFsl13SjQMrZNDFGCZoDY5f8G6BTDzZ/Jspc5BQhiHGHvHdRrbc111HvyB8gZnun
-         CLLu5vzVYzrMDZsvVNFKbR1BU555FgdPb/Wi524LadW7VyPSKBrscl0ZXqW57SGgbG
-         d0nkDvPNYG9CjYWSiZHz2zyM7/Ek5SiDJKUmhjgea0yeUU2Bk/xGMFCqaj2VfSjvkV
-         oIKzfMxecGcBQRzhhrTOO5VLZIQ3NN6PX2U/HkPehOYfpQXfS9FXt/Kokl1b9ZXNVy
-         O2Q1EaYNPvqPlLADd5fRJHaDx1sSEel6d/NqBgTJbSgM96isgPycR5TCNPZESH349v
-         wSUx9cVsxpF9KMaVPbJX6hxXBE8HtTXmyeZsYhlXJjAufogAMqFhmLVRILNWFXRMgj
-         G3LiT55Ay7cZPfq0fDOb7y7/gTVzNesSGk0uqSFnIeDite44ZDHX3Se4akzduyDIHc
-         RpRelWVA1MQnUwbREumzEjc4=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4D1980;
+        Wed, 12 Jul 2023 05:00:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 03A9440E0140;
-        Wed, 12 Jul 2023 12:00:06 +0000 (UTC)
-Date:   Wed, 12 Jul 2023 14:00:02 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, bluca@debian.org,
-        lennart@poettering.net, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Daniel P =?utf-8?B?LiBCZXJyYW5nw6k=?= <berrange@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2] x86/boot: add .sbat section to the bzImage
-Message-ID: <20230712120002.GIZK6Vwga6DlJqdjEh@fat_crate.local>
-References: <20230711154449.1378385-1-eesposit@redhat.com>
- <7E9D397B-439F-484C-B950-9094605A7B4D@zytor.com>
- <5e01b6a5-f993-f99d-41a0-ab671ec598f8@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA9876179C;
+        Wed, 12 Jul 2023 12:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EBBC433C9;
+        Wed, 12 Jul 2023 12:00:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689163231;
+        bh=wjMYXDzi7/IsmygrOh/l0Xphf4biwgs5qAk18EMlNIA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DLJhtF2F09V+Nmk0gNVDr4f0z2L4WhjQy0YeMxJtsoIr/mq2PK/GuOxvpAK8iO7xy
+         jKx9vwA0HuKF4AaJK2JrnhYIPAzMOynOrn2HMoDW0F77cStsy0s0b+Ofh304nfC9EO
+         hRaC+AOSp4epElmgts+AaAo/51kVaQGmC2fIG+Mi/RF/w3AKDdXqTtG+ICPJcamO3B
+         dG6wflpsQWAS2aNyoNurtq0j1xSVPwGX3TyFJZTzzFfv3EOY8X3vu/HO3Pf9WiQoDh
+         LpMrKpmyKbHYcgB9oioeBQOQxLTazHROhB3w26utciFwdFH5KHScELS6GG38gKpINM
+         VEBMXLanJJMmA==
+Date:   Wed, 12 Jul 2023 13:00:26 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Fei Shao <fshao@chromium.org>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH] leds: pwm: Fix an error code
+Message-ID: <20230712120026.GD10768@google.com>
+References: <20230711083055.1274409-1-fshao@chromium.org>
+ <CAHp75VfSL5j-ZUYkezELWzq+c_V+CFL6iVQWQ=roPYrZ=h1rSw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5e01b6a5-f993-f99d-41a0-ab671ec598f8@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VfSL5j-ZUYkezELWzq+c_V+CFL6iVQWQ=roPYrZ=h1rSw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 08:19:32AM +0200, Emanuele Giuseppe Esposito wrote:
-> And any comment on the SBAT string itself? I would like to get an
-> agreement on
-> "linux,1,The Linux Developers,linux,$(KERNELVERSION),https://linux.org"
-> before we use it as semplate also for downstream.
+On Tue, 11 Jul 2023, Andy Shevchenko wrote:
 
-Yeah, looks useless to me. With your patch I get:
+> On Tue, Jul 11, 2023 at 11:31 AM Fei Shao <fshao@chromium.org> wrote:
+> >
+> > Use the negated -EINVAL as the error code.
+> 
+> Thank you, it seems Dan had been the first one.
+> 
+> Message ID <a33b981a-b2c4-4dc2-b00a-626a090d2f11@moroto.mountain>
 
-$ cat linux.sbat
-sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
-linux,1,The Linux Developers,linux,6.5.0-rc1,https://linux.org
-
-But my branch is:
-
-$ git describe
-v6.5-rc1-6-g3f01e9fed845
-
-So your thing needs to enable CONFIG_LOCALVERSION_AUTO or so which
-allows for uniquely identifying the build. At least I think it did at
-some point. So that you can do stuff like:
-
-$ file vmlinux
-vmlinux: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, BuildID[sha1]=19f22ac85675ea30042fb703373d97c460bb5a61, with debug_info, not stripped
-
-and you have a build ID sha there.
-
-But not even that works because if I change the source, I still get the
-same sha. So it needs to be an mechanism which identifies the kernel
-image uniquely.
-
-And then why does it have to be a separate section? All those
-requirements need to be written down.
-
-And regardless what you do, this looks like a contract between the
-kernel and userspace tools so it absolutely needs to be documented
-somewhere prominently - not in a commit message with links to flaky URLs
-which would probably change in the future - and explained what the tools
-parse and where one can find that parsing code.
-
-Because if we go and change that, we need to be able to verify whether
-we're not breaking any userspace tools.
-
-Actually, I wouldn't mind even having a small script which does the
-parsing and which we can use to check that we're not breaking things.
-
-Also, while building this says:
-
-objcopy --set-section-alignment '.sbat=512' --add-section .sbat=linux.sbat arch/x86/boot/bzImage;
-objcopy: arch/x86/boot/st2fStm6:.sbat: section below image base
-
-So you need to make it quiet.
-
-And so on and so on...
+I don't know much about how other people operate, but I have no way to
+trivially navigate to this.  Would you be kind enough to use URLs
+please?
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Lee Jones [李琼斯]
