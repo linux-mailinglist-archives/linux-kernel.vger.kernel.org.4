@@ -2,259 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B665750C21
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C4C750C27
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbjGLPQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S233538AbjGLPRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbjGLPQv (ORCPT
+        with ESMTP id S233533AbjGLPRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:16:51 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5531BDC;
-        Wed, 12 Jul 2023 08:16:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-666e64e97e2so4009449b3a.1;
-        Wed, 12 Jul 2023 08:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689175002; x=1691767002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PAhy3IB4is5+53Cfgz4S3Ovfr+OJ4+hbHoYpYABgHdE=;
-        b=RylKbdAUXmcCQa+90CeWC/IM/RY2Pbxdu5zkYXRdJljnel320X9SqmKsDlWuRMuXIk
-         QA+PRvI8BxW4tsJ43MrOcGrIDwtjPPVXiQ0j3dQ9YBUDl6t+enLp79Jpb0D8V9r3i9og
-         IvaSfeollIyJlHAxipeoJ5LedcY9wEytLk5UQPhW8uAPqp46UNLoKlrYbeINCIQCkCw3
-         txsEoSYkbo6/rrfGAdiKdU24t+cE4HtIF3msr6LsrCUiMaoaS4r2ItbHE2e3myXo0+pS
-         D+qXlV9EAzB6aBrD7Ac/qJcgaCmzMSUry2ePWZxAPZHz4eV2B/oFab7YQ/+GHFBqb2bI
-         nlGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689175002; x=1691767002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PAhy3IB4is5+53Cfgz4S3Ovfr+OJ4+hbHoYpYABgHdE=;
-        b=fcTab1/d1IrMClehXcZXaVvmlpZUHNEEE153Py62IPEgQKs7cLyrCyxesNySnZ3feG
-         zcoyjqk6dAvUuxHLFw01b3Xfk6owrwo04vxxW6u6PiWqAC51WFrdRCATX/oDAkF34L8n
-         OBYoAFWc00rOAtoJa44uAFQ9PzIh00MP7NT57t5UinocnrV26bfzDii2HelsGYMnyPWN
-         CZFOI5Y0tUzSIczk+gIay152b5CIZ6T7VI05s/WoD+DHAxWiwRBz9j6SmTwF1/zla+/q
-         CWMeQ262mgnkYexIKtwGyIXKO+eDt41iJAcB5zmSRRSxbV9b+XrryWtK8W9E+xp40Eie
-         aPyA==
-X-Gm-Message-State: ABy/qLZ6FO4R7mim/DTxGYFhW/jTmao5c5cf1TnQKlx8IHp6QLLiqxUt
-        cWSnw3pku3B2Vjep1diH7FeREnHEg8M=
-X-Google-Smtp-Source: APBJJlF2DIK4lShlq1EwSfEqG8LaHBv7UCF/L0LJXieSJjIfg1uOo8L7E5uL/zwzT832MbthaJ7MvA==
-X-Received: by 2002:a05:6a00:1a0b:b0:67a:31b7:456c with SMTP id g11-20020a056a001a0b00b0067a31b7456cmr16435226pfv.9.1689175001922;
-        Wed, 12 Jul 2023 08:16:41 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d18-20020aa78692000000b0067a50223e44sm3764796pfo.74.2023.07.12.08.16.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 08:16:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3034082b-4ec8-2a8d-35a2-2551e9feef34@roeck-us.net>
-Date:   Wed, 12 Jul 2023 08:16:39 -0700
+        Wed, 12 Jul 2023 11:17:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7501733;
+        Wed, 12 Jul 2023 08:16:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A97E6186A;
+        Wed, 12 Jul 2023 15:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DA4C433C9;
+        Wed, 12 Jul 2023 15:16:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689175014;
+        bh=tzjc3WfEvOWzGgi581kQfYcjNZdW4MPFLm5lMgb9iK8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gfO5cXA1MbBH9ib0CuSl0nAkoPIky1l3sXwTGOQRcbavPtBfzmX5wXTINYi9By1CQ
+         LLjYH5BD5pNgnjuhmwAw0YgAL3yrRt0Yap0FX8jnRDwCuPYSCs8LcRgAMOiLrHa2FU
+         /5Zy+B88rsy/BdRMH6+eoEZmnl4lfKIJhzOSvKOA=
+Date:   Wed, 12 Jul 2023 17:16:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [RFC PATCH v1 0/3] docs: stable-kernel-rules: add delayed
+ backporting option and a few tweaks
+Message-ID: <2023071221-blade-reactive-0707@gregkh>
+References: <cover.1689008220.git.linux@leemhuis.info>
+ <2023071002-phrasing-tranquil-49d6@gregkh>
+ <a97a37bf-86b5-cd8e-a8ce-00e38720cee4@leemhuis.info>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] hwmon: Remove strlcpy occurences
-Content-Language: en-US
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     linux-hardening@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Kees Cook <keescook@chromium.org>
-References: <20230712144429.2845940-1-azeemshaikh38@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230712144429.2845940-1-azeemshaikh38@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a97a37bf-86b5-cd8e-a8ce-00e38720cee4@leemhuis.info>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/23 07:44, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with direct assignment.
+On Wed, Jul 12, 2023 at 11:30:30AM +0200, Thorsten Leemhuis wrote:
+> On 10.07.23 21:51, Greg KH wrote:
+> > On Mon, Jul 10, 2023 at 07:10:10PM +0200, Thorsten Leemhuis wrote:
+> >> This is a RFC and a bit rough for now. I only set down to create the
+> >> first of the three patches. But while doing so I noticed a few things
+> >> that seemed odd for me with my background on writing and editing texts.
+> >> So I just quickly performed a few additional changes to fix those to see
+> >> if the stable team would appreciate them, as this document is clearly
+> >> their domain.
+> >>
+> >> If those changes or even the initial patch are not welcomed, I'll simply
+> >> drop them. I'd totally understand this, as texts like these are delicate
+> >> and it's easy to accidentlly change the intent or the meaning while
+> >> adjusting things in good faith.
+> >>
+> >> At the same time I might be willing to do a few more changes, if people
+> >> like the direction this takes and want a bit more fine tuning.
+> > 
+> > I do like it, many thanks for taking the time to do this work, it's much
+> > appreciated.
+> >
+> > If you resend the first 2 as a non-RFC patch, 
 > 
-> strlcpy in this file is used to copy fixed-length strings which can be
-> completely avoided by direct assignment and is safe to do so. strlen()
-> is used to return the length of @tbuf.
+> BTW: thx again for your uplifting feedback! And in case anyone missed
+> it, I send those two patches out yesterday here:
+> https://lore.kernel.org/all/cover.1689056247.git.linux@leemhuis.info/
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
+> > the last one needs some more work as mentioned.
 > 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> ---
->   drivers/hwmon/pmbus/max20730.c |   64 +++++++++++++++++++++--------------------
->   1 file changed, 33 insertions(+), 31 deletions(-)
+> I have that one in a separate branch now and spitted into four patches;
+> the first three basically move text around, which results in a much
+> cleaner diff for the last patch that contains actual content changes.
+> While working on the latter I noticed one more thing:
 > 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index 7bcf27995033..f5ba23f0fed5 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -113,7 +113,8 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   	struct max20730_debugfs_data *psu = to_psu(idxp, idx);
->   	const struct pmbus_driver_info *info;
->   	const struct max20730_data *data;
-> -	char tbuf[DEBUG_FS_DATA_MAX] = { 0 };
-> +	char tbuf[DEBUG_FS_DATA_MAX] = {};
+> ```
+>     .. warning::
+>        The -stable-rc tree is a snapshot in time of the stable-queue
+> tree and
+>        will change frequently, hence will be rebased often. It should
+> only be
+>        used for testing purposes (e.g. to be consumed by CI systems).
+> ```
+> 
+> That sounded a bit odd to me, as it will scare people away that want to
+> test stable -rc's using git;
 
-Unrelated change.
+They are only there for people who _DO_ want to test stable -rc's using
+git.
 
-> +	char *result = tbuf;
->   	u16 val;
-> 
->   	info = pmbus_get_driver_info(psu->client);
-> @@ -148,13 +149,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
-> +			result = "2000\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
-> +			result = "125\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
-> +			result = "62.5\n";
->   		else
-> -			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
-> +			result = "32\n";
->   		break;
->   	case MAX20730_DEBUGFS_INTERNAL_GAIN:
->   		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
-> @@ -163,35 +164,35 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   		if (data->id == max20734) {
->   			/* AN6209 */
->   			if (val == 0)
-> -				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.8\n";
->   			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.2\n";
->   			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.6\n";
->   			else
-> -				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
-> +				result = "6.4\n";
->   		} else if (data->id == max20730 || data->id == max20710) {
->   			/* AN6042 or AN6140 */
->   			if (val == 0)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.9\n";
->   			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.6\n";
->   			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.8\n";
->   			else
-> -				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
-> +				result = "7.2\n";
->   		} else if (data->id == max20743) {
->   			/* AN6042 */
->   			if (val == 0)
-> -				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.45\n";
->   			else if (val == 1)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.8\n";
->   			else if (val == 2)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.9\n";
->   			else
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.6\n";
->   		} else {
-> -			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
-> +			result = "Not supported\n";
->   		}
->   		break;
->   	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
-> @@ -199,26 +200,26 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.6484\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.8984\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
-> +			result = "1.0\n";
->   		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			result = "Invalid\n";
->   		break;
->   	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
->   		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
->   			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
-> +			result = "4\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
-> +			result = "2\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
-> +			result = "1\n";
->   		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			result = "Invalid\n";
->   		break;
->   	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
->   		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
-> @@ -230,13 +231,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.75\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
-> +			result = "1.5\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
-> +			result = "3\n";
->   		else
-> -			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
-> +			result = "6\n";
->   		break;
->   	case MAX20730_DEBUGFS_IMAX:
->   		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
-> @@ -287,9 +288,10 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   				"%d.%d\n", ret / 10000, ret % 10000);
->   		break;
->   	default:
-> -		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +		result = "Invalid\n";
->   	}
-> 
-> +	len = strlen(result);
->   	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
+> and I think it doesn't match current practices.
 
-This still copies tbuf, meaning all those constant strings won't actually
-be reported.
+No, it's pretty correct, what does not match?  It gets rebased all the
+time.
 
+> I'll thus likely
+> change the text to something like this,
+> unless I'm missing something or someone has a better idea:
+> ```
+>   .. warning::
+>      The branches in the -stable-rc tree are rebased each time a new -rc
+>      is released, as they are created by taking the latest release and
+>      applying the patches from the stable-queue on top.
 
->   }
-> 
-> --
-> 2.41.0.255.g8b1d071c50-goog
-> 
-> 
+Yes, that is true, but they are also rebased sometimes in intermediate
+places, before a -rc is released, just to give CI systems a chance to
+test easier.
 
+These are ONLY for CI systems to use, nothing else should be touching
+them.  So I think the current text is correct, what am I missing?
+
+thanks,
+
+greg k-h
