@@ -2,218 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF84C750B37
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACE3750B43
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjGLOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S233055AbjGLOor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjGLOnw (ORCPT
+        with ESMTP id S232927AbjGLOon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:43:52 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA63F1993
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:43:50 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666eb03457cso4219538b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689173030; x=1691765030;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ceMjwisW+ab8NqZ500BBUyHWe9aEsqGZ9FsaMuVtg+Y=;
-        b=jkPcgt5Dy+IC0k/EsLIi7/BcYygeQIjWSbV3+3FmrgcKalXgnhmVXLStYiDmAmpySG
-         CFqzwdTGJs5rP6AR/MAGZMNaDmi0Sxa19w22SHUDVEKNyHGRkpjPh904WKNDQDG0/HSY
-         65KTXNDO4fqdbccpflanCIA2p1sBQzjLgtOf2Zee39crPyJHZzPcklKJmcd2CLu4vJXo
-         mwKg+TFXzpLYNXO/nRbzaxokRzNw0Iz4KzC6uvGhYrfnR2y/9NCfumiFK3A1xvxMvL65
-         dtKG+1Uqo87VGHpMvK7MZSPCZbxkP/mO+MTrVnZNO4cYwKJugMAETlRYG08uU8L4SYY/
-         qasA==
+        Wed, 12 Jul 2023 10:44:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B39C1998
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689173035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C34WsFlKYjYWkTFb9HgsWdoRE76RVrfdGiTYT+vpVqI=;
+        b=gfWUPjjl+cxln4qi/dVrXBYB8tEIaeAo8fgjFWVykJV3EP5RbnGwORQ26j7b4pXtZ+TgiV
+        JfOjbpHd+FESBWiNuLwHAG+af0gbDlojcH1rntulDtzEIOqTNaqe2b6RIEXlp7n3kq/SGR
+        INvqElybSshW4KMN72uYKVLEzgRbOOU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-527-GDEssEVIObSjFK9mCmq9HA-1; Wed, 12 Jul 2023 10:43:53 -0400
+X-MC-Unique: GDEssEVIObSjFK9mCmq9HA-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51e10b6148cso1162539a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:43:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689173030; x=1691765030;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ceMjwisW+ab8NqZ500BBUyHWe9aEsqGZ9FsaMuVtg+Y=;
-        b=KAF0tlOAL5kI1VGuaZ53MG7z49rDxWEswm1LsDsNGrGqYQs2f8Qj585UD+nnD0+Jqk
-         JzsJK/8XXAk9+zdLit2qM9twxE/Ws3tCAUKA7t7wetEM56nZjE8KJyZ4pipmAnMxx+gI
-         5g8muujOvofUqgm845NmKWd60Ll5XSjFhqai4icVK9xwQl/mBpMJ1AiDDyocl4WQ1BEe
-         StRIYXmcFClgzrZojoGKcuLsi0iaXN+2rmcMXLJS2q9jQwrGA9d/lo3+THbbPyTzu3cM
-         5RECVLSoa4pKvccr9TwNHdnU17xnK6Ypz17Ux37YS38YhrQcBuuJIAvz7Msa4Ydj5T/T
-         5GEA==
-X-Gm-Message-State: ABy/qLaIhGr7Prr1oIZeDC/SRGbgKYMQveYkZ+ptg/6LMYrlIsEEVKGU
-        vPvQs7m25or2dTAMv6yHxp8akQ==
-X-Google-Smtp-Source: APBJJlGBwe2qfhUnKQIlzRfXecJ9MpSW3/DQVLGNsTikl9RzTTpPOfZ4GrFHGm0hpMEFF17vPLlNog==
-X-Received: by 2002:a05:6a20:729f:b0:132:7fb3:3325 with SMTP id o31-20020a056a20729f00b001327fb33325mr4105171pzk.59.1689173030066;
-        Wed, 12 Jul 2023 07:43:50 -0700 (PDT)
-Received: from localhost ([50.38.6.230])
-        by smtp.gmail.com with ESMTPSA id d9-20020a639909000000b0054f9936accesm3652942pge.55.2023.07.12.07.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 07:43:49 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 07:43:49 -0700 (PDT)
-X-Google-Original-Date: Wed, 12 Jul 2023 07:43:02 PDT (-0700)
-Subject:     Re: [PATCH V2] riscv: kexec: Fixup synchronization problem between init_mm and active_mm
-In-Reply-To: <95c4e875-02f1-6239-bb62-41b709d21541@ghiti.fr>
-CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
-        bjorn@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     alex@ghiti.fr
-Message-ID: <mhng-5d9d9723-1dc1-4429-a477-eb4ece20bb87@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1689173032; x=1691765032;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C34WsFlKYjYWkTFb9HgsWdoRE76RVrfdGiTYT+vpVqI=;
+        b=g5oswi78Q5ZkhK+HtXFwsSJTbUEAUyQy3d0R6k3waehKFvNyyo87VJrFL7qV2GLMUG
+         mxQuQGv4s2fLQMGaTdYZ7xgjuQBQIaOPn9DnzEkyBplcmVgJZGO0NcIXD47BAphNbTRL
+         zReZ9RtouUZVPadvv3lvEnN53EhKs3wRkrUTDAeeBRrwYzTQXufqiEHFMGrFfHLO/19c
+         Oso/LCnZ2P/LnfNg8V75MtZkfTrJXSe2OLdk5uP75cfhutlywvIelyUP5bjFqTGTd662
+         VyOXVHRHtqyfB5eLRYgTzyYHruqldHqYtIrh/cKQOoY2y2r3FaN7y+uI9Dp5PqC6OVZe
+         CmVw==
+X-Gm-Message-State: ABy/qLatYxpSi8x/9hLXWsTxOEmXuszlQsgTM165ebk1SMhKwnuxRTp0
+        ZREzmuaQG9uS7GaSqcUnJebXr27GcSREnWkJ+UdZ+AB6GKG/vop0bYjkrJJXfefmQpEwoMgslgX
+        7Mm+cjqOVfPjOHwIlk1Zxz1RNqXZF4Rqd
+X-Received: by 2002:a05:6402:5245:b0:51f:c6a1:4355 with SMTP id t5-20020a056402524500b0051fc6a14355mr3025299edd.4.1689173032283;
+        Wed, 12 Jul 2023 07:43:52 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEa35eKJ9IGbLw5gzEbWDSaeBN07RQx+T2XC+mOrnyClSMdlCkLN6eYHK5OBBuZ4tkrEJMU7Q==
+X-Received: by 2002:a05:6402:5245:b0:51f:c6a1:4355 with SMTP id t5-20020a056402524500b0051fc6a14355mr3025281edd.4.1689173032056;
+        Wed, 12 Jul 2023 07:43:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id u7-20020aa7d0c7000000b0051a2d2f82fdsm2877251edo.6.2023.07.12.07.43.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 07:43:51 -0700 (PDT)
+Message-ID: <0f50cb97-0507-bcbb-03c6-e3394690ae80@redhat.com>
+Date:   Wed, 12 Jul 2023 16:43:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 5/8] platform/x86: asus-wmi: don't allow eGPU switching
+ if eGPU not connected
+Content-Language: en-US, nl
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+References: <20230630053552.976579-1-luke@ljones.dev>
+ <20230630053552.976579-6-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230630053552.976579-6-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 04:07:22 PDT (-0700), alex@ghiti.fr wrote:
-> Hi Guo,
->
->
-> On 10/07/2023 07:40, guoren@kernel.org wrote:
->> From: Guo Ren <guoren@linux.alibaba.com>
->>
->> The machine_kexec() uses set_memory_x to modify the direct mapping
->> attributes from RW to RWX. But set_memory_x only changes the init_mm's
->> attributes, not current->active_mm, so when kexec jumps into
->> control_buffer, the instruction page fault happens, and there is no
->> minor_pagefault for it, then panic.
->
->
-> I think it needs more details like this:
->
-> "The current implementation of set_memory_x does not split hugepages in
-> the linear mapping and then when a PGD mapping is used, the whole PGD is
-> marked as executable. But changing the permissions at the PGD level must
-> be propagated to all the page tables."
->
->
->>
->> The bug is found on an MMU_sv39 machine, and the direct mapping used a
->> 1GB PUD, the pgd entries. Here is the bug output:
->>
->>   kexec_core: Starting new kernel
->>   Will call new kernel at 00300000 from hart id 0
->>   FDT image at 747c7000
->>   Bye...
->>   Unable to handle kernel paging request at virtual address ffffffda23b0d000
->>   Oops [#1]
->>   Modules linked in:
->>   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
->>   Hardware name: Sophgo Mango (DT)
->>   epc : 0xffffffda23b0d000
->>    ra : machine_kexec+0xa6/0xb0
->>   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
->>    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
->>    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
->>    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
->>    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
->>    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
->>    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
->>    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
->>    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
->>    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
->>    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
->>   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
->>
->> The solution is to fix machine_kexec() to remap control code page outside
->> the linear mapping.
->
->
-> "Given the current flaw in the set_memory_x implementation, the simplest
-> solution is to ..."
->
->
->>
->> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
->> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> Signed-off-by: Guo Ren <guoren@kernel.org>
->> Cc: Alexandre Ghiti <alex@ghiti.fr>
->> ---
->> Changelog:
->> V2:
->>   - Use vm_map_ram instead of modifying set_memory_x
->>   - Correct Fixes tag
->> ---
->>   arch/riscv/include/asm/kexec.h    |  1 +
->>   arch/riscv/kernel/machine_kexec.c | 14 ++++++++++----
->>   2 files changed, 11 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
->> index 2b56769cb530..17456e91476e 100644
->> --- a/arch/riscv/include/asm/kexec.h
->> +++ b/arch/riscv/include/asm/kexec.h
->> @@ -41,6 +41,7 @@ crash_setup_regs(struct pt_regs *newregs,
->>   struct kimage_arch {
->>   	void *fdt; /* For CONFIG_KEXEC_FILE */
->>   	unsigned long fdt_addr;
->> +	void *control_code_buffer;
->>   };
->>
->>   extern const unsigned char riscv_kexec_relocate[];
->> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
->> index 2d139b724bc8..eeb209775107 100644
->> --- a/arch/riscv/kernel/machine_kexec.c
->> +++ b/arch/riscv/kernel/machine_kexec.c
->> @@ -86,7 +86,14 @@ machine_kexec_prepare(struct kimage *image)
->>
->>   	/* Copy the assembler code for relocation to the control page */
->>   	if (image->type != KEXEC_TYPE_CRASH) {
->> -		control_code_buffer = page_address(image->control_code_page);
->> +		control_code_buffer = vm_map_ram(&image->control_code_page,
->> +						 KEXEC_CONTROL_PAGE_SIZE/PAGE_SIZE,
->> +						 NUMA_NO_NODE);
->> +		if (control_code_buffer == NULL) {
->> +			pr_err("Failed to vm_map control page\n");
->> +			return -ENOMEM;
->> +		}
->> +
->>   		control_code_buffer_sz = page_size(image->control_code_page);
->>
->>   		if (unlikely(riscv_kexec_relocate_size > control_code_buffer_sz)) {
->> @@ -97,8 +104,7 @@ machine_kexec_prepare(struct kimage *image)
->>   		memcpy(control_code_buffer, riscv_kexec_relocate,
->>   			riscv_kexec_relocate_size);
->>
->> -		/* Mark the control page executable */
->> -		set_memory_x((unsigned long) control_code_buffer, 1);
->> +		internal->control_code_buffer = control_code_buffer;
->
->
-> Where is this mapping marked as executable? I see that vm_map_ram() maps
-> the pages as PAGE_KERNEL, which does not set PAGE_EXEC.
->
->
->>   	}
->>
->>   	return 0;
->> @@ -211,7 +217,7 @@ machine_kexec(struct kimage *image)
->>   	unsigned long this_cpu_id = __smp_processor_id();
->>   	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
->>   	unsigned long fdt_addr = internal->fdt_addr;
->> -	void *control_code_buffer = page_address(image->control_code_page);
->> +	void *control_code_buffer = internal->control_code_buffer;
->>   	riscv_kexec_method kexec_method = NULL;
->>
->>   #ifdef CONFIG_SMP
->
->
-> Otherwise, you can add:
->
-> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
-> Thanks,
->
-> Alex
+Hi,
 
-Thanks for looking at this.  Guo: do you have a re-spit that fixes the 
-issues Alex pointed out?  Sorry if I just missed it.
+On 6/30/23 07:35, Luke D. Jones wrote:
+> Check the ASUS_WMI_DEVID_EGPU_CONNECTED method for eGPU connection
+> before allowing the ASUS_WMI_DEVID_EGPU method to run.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+> ---
+>  drivers/platform/x86/asus-wmi.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 0c8a4a46b121..821addb284d7 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -693,6 +693,15 @@ static ssize_t egpu_enable_store(struct device *dev,
+>  	if (enable > 1)
+>  		return -EINVAL;
+>  
+> +	err = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU_CONNECTED);
+> +	if (err < 0)
+> +		return err;
+> +	if (err < 1) {
+> +		err = -ENODEV;
+> +		pr_warn("Failed to set egpu disable: %d\n", err);
+> +		return err;
+> +	}
+> +
+>  	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, enable, &result);
+>  	if (err) {
+>  		pr_warn("Failed to set egpu disable: %d\n", err);
+
