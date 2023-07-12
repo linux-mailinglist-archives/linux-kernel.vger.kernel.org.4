@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ACD750565
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3462975056B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjGLLEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S232969AbjGLLEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbjGLLEM (ORCPT
+        with ESMTP id S232704AbjGLLE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:04:12 -0400
+        Wed, 12 Jul 2023 07:04:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ED31703;
-        Wed, 12 Jul 2023 04:04:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4641BD3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:04:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF4A161757;
-        Wed, 12 Jul 2023 11:04:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70C5C433C7;
-        Wed, 12 Jul 2023 11:04:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E3A261757
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD5ACC433C9;
+        Wed, 12 Jul 2023 11:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689159850;
-        bh=rdm8WjXKH/Znp0e9wHbJbC6k/jQWaZx00+D9CSaZnPU=;
+        s=k20201202; t=1689159860;
+        bh=oDWMj4wCG9sfPHK9CyPPfDOXkRNls71sIrOffbIjbP4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nbz9+/NWkxFQdbyjChz27t9IXpRfWc6BNaglL3SF1Q3Tp8OOTXUBHPjQv4s3LKhow
-         88Z6aWaBoDxnkx6A4QTaGoOEIX9RU98sGOb/RoHe/Ant5XWIkPBgzq9MQzjn8sTl7s
-         d9ycxbbnNuRjm2g+ItMSS30+ynn8eeThv7186OnVGJ8TH/ELq6BL+OBKgEYMP4fw4m
-         Ove5LyP6fG5+sOP+p9MJo+meTYlxgwYwubeE5/0ts5kEwYFI4kRjRDGV9ytJv5K2yb
-         1opDdMrG00jrJBBQ8AihNvSfLQes3j5FZ+W83M1Vtha+1MWLlUxsFatNVLRu+5S8yF
-         dGPQ1j6i6VNGQ==
-Date:   Wed, 12 Jul 2023 13:04:05 +0200
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Alejandro Tafalla <atafalla@dnyon.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH] iio: imu: lsm6dsx: Fix mount matrix retrieval
-Message-ID: <ZK6IpZvG47zsKZFk@lore-rh-laptop>
-References: <12960181.O9o76ZdvQC@alexpc>
+        b=iSPpQNkgmjyHqhJSiEEnc5123jsUgmF7aW73gteBQHaSidd6BZSG4rC/wmz/ahtWF
+         +pxEAsfaqJR66xH/q2VxWgQHqTjrfN4hvB3lxBF+AVL88SIWYaUGWwekrRO2vJWrdn
+         dZNaL/XMPtS5SjcbXpUofDWsMV65VP76cxcFa3B/fvpJUopfL9t5pRz7hUQX65lxZX
+         TYqyDse4z5WkB9pTYMP3m6kJfFq72FYP6XMofI3I2T+FVrnIBPnmILXm68MEkPiFL2
+         gPP7YJZyxAC2xpdVPCeDU8v93wM31x93Su84fNE7nXJygK/3Cf/UL17l531+DplxAD
+         r4wCLsMz+8rzA==
+Date:   Wed, 12 Jul 2023 12:04:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mastan Katragadda <mastan.katragadda@amd.com>
+Cc:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>,
+        alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Arungopal.kondaveeti@amd.com,
+        vsujithkumar.reddy@amd.com, venkataprasad.potturu@amd.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: (subset) [PATCH 1/2] ASoC: SOF: amd: add revision check for
+ sending sha dma completion command
+Message-ID: <26d859b2-f094-4dfa-9352-b71427755d5f@sirena.org.uk>
+References: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
+ <168814485881.50974.4096249135530047142.b4-ty@kernel.org>
+ <cafff012-54ac-2d15-1e76-c5313c01f834@amd.com>
+ <2adeaea7-e3ef-4a58-bdd2-18d3ca3e2519@sirena.org.uk>
+ <ab3c2e81-b7f5-9527-7e32-d332259cdc87@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a1ZHb+yY60egR0aD"
+        protocol="application/pgp-signature"; boundary="iZ85PHxjhEaqtozT"
 Content-Disposition: inline
-In-Reply-To: <12960181.O9o76ZdvQC@alexpc>
+In-Reply-To: <ab3c2e81-b7f5-9527-7e32-d332259cdc87@amd.com>
+X-Cookie: Dammit Jim, I'm an actor, not a doctor.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,62 +79,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---a1ZHb+yY60egR0aD
-Content-Type: text/plain; charset=us-ascii
+--iZ85PHxjhEaqtozT
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-> The function lsm6dsx_get_acpi_mount_matrix should return true when ACPI
-> support is not enabled to allow executing iio_read_mount_matrix in the
-> probe function.
->=20
-> Fixes: dc3d25f22b88 ("iio: imu: lsm6dsx: Add ACPI mount matrix retrieval")
->=20
-> Signed-off-by: Alejandro Tafalla <atafalla@dnyon.com>
-> ---
->  drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c b/drivers/iio/i=
-mu/
-> st_lsm6dsx/st_lsm6dsx_core.c
-> index 6a18b363cf73..62bc3ee783fb 100644
-> --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
-> +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
-> @@ -2687,7 +2687,7 @@ static int lsm6dsx_get_acpi_mount_matrix(struct dev=
-ice=20
-> *dev,
->  static int lsm6dsx_get_acpi_mount_matrix(struct device *dev,
->  					  struct=20
-> iio_mount_matrix *orientation)
->  {
-> -	return false;
-> +	return true;
+On Wed, Jul 12, 2023 at 09:03:30AM +0530, Mastan Katragadda wrote:
+> On 03/07/23 21:40, Mark Brown wrote:
 
-I would say it should return something like -EOPNOTSUPP.
+> > I don't know off hand what that second patch was.  If it wasn't a bug
+> > fix it'll just be waiting till after the merge window.
 
-Regards,
-Lorenzo
+> =A0Do I need to resend the second patch?
 
->  }
-> =20
->  #endif
-> --=20
-> 2.41.0
->=20
->=20
->=20
->=20
+I still don't know what the patch was - if it's not applied probably.
 
---a1ZHb+yY60egR0aD
+--iZ85PHxjhEaqtozT
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZK6IoQAKCRA6cBh0uS2t
-rLw5AP97OM4FyYf1bRULy7a0yrejqbRvsTYgBHpnO3Okk3GF+AEA3xnWcjF4LTAO
-o3VyGdcNfSq9Vx8lFJwnzaZ/MsMAwAc=
-=rqcn
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSuiKwACgkQJNaLcl1U
+h9Bs6wf/XN81h7SzERM55+5Cx7DqpGEatKi/57OSQCLwokUkwIs6auIzbtns//rb
+cZclqQONifzq2uZXlljyIWIi1Xc7yVt4oZT/FFWbIpwT6aJV4UQIXagfjVgV/AEs
+O64hUD/oTdUMK3fWtasmmifHn6ugt1z+ljgSd8vrKWdQKAvveH8NTqR1eyY2NqKY
+bFkSXCeqomRjLq+Mq902ZC6MRKP9Yd3HY7ToGYmFwUis5/nTSPecoN4doM7QPIJ+
+82Ty9dyXQxhd+WYx1HQ0C0wd6XGkIWaWCfwpyDC07s38jjZikMV1hkBAGS0Vi4TJ
+1kvuD8f6P0i8N1hEJL55JrrxYMpAgA==
+=EzFr
 -----END PGP SIGNATURE-----
 
---a1ZHb+yY60egR0aD--
+--iZ85PHxjhEaqtozT--
