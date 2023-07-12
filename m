@@ -2,148 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878A374FD44
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA3C74FD46
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjGLCox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
+        id S231846AbjGLCsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 22:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjGLCou (ORCPT
+        with ESMTP id S230327AbjGLCse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:44:50 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2134.outbound.protection.outlook.com [40.107.215.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97509B;
-        Tue, 11 Jul 2023 19:44:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W+OhjTLB0/HmCuWaPbZoaqHnxIdAE5d2ZdoFPIxhJCgdQnFQ1mZx6Not3ftpejcTx2CmgO1UXW8apVPcKrCapMIeJUzm5M2rtXJFZ/Vy9cgpva4JF3H+YRwR4lZS9+TghwIMTf5rSIVl+UqGKKBTllmuH7fe/o7y5SoPrDdvdbQV2trBxsX/ZcxD6sJwb0JMw2fUGIEaRYu1Q4BvChkDDDyvXcH80kluORNzSOuSRHY7KcHGQvFICl42zIuEqmz582j1Usw0penJARnjLqODeWV3+kuKyAYYWDFzcNazKvjrsm3xqHcgu1n/QjuS3cngpvtVoQMyIWYYjEVCjiKRZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2KYt5yRiQVGWYlu9qqaoU1eLX3GdqPecF7OMPRSEEpg=;
- b=NcgeHciTesNk9EpkSfBeoIRoTy/IOKJ+EYzIuEkSkcS8/zFpuEAwnQNBC/o3Ex2anNTAhDYvg9l5CwWwFrOWYkb/oHStwp2hVTxr6aetam1P18kZehbE976kmZrH9ZOx3VLp9Ij/ksvYU2q0hggrvIrXXcaNlfnqoC14TC6GdQywjaeehHI+ORjR2zV5AryJuNb+Qd3lu2JO3fSAReS0QFSLPhyoqWx2m03LLGNZpihzTieC0FPVr85vhAa4AlCHV8hfvY/Uij3fuaat4TnxkgRfNC3lkRdlnk9EycZc6v05ONE86oAKl9Vuncj3yFaUeE4vCznNmI7UBRsuVm9uig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2KYt5yRiQVGWYlu9qqaoU1eLX3GdqPecF7OMPRSEEpg=;
- b=M7uDQSf5qHFbXtF3CygYZG3ZcBQZ0Rs8FkNtJ6eiuN7btf39OnM+ncY96tdr8e9XZitLa35hwx63CDBO4rCQ/RwNl/crb/oxFydLpndiWmjBPrSzrctWjH8pqpmwGk20SOF8zSOeCW9tsginByqf6BmU5scCCsb7wv8q74Xk7eMpit+pnksL7ExCafFc4TUQdkD2/sjJ63NDk8lDn0sTdRZE5mDqgjOYSzK10fcKucKRhdSoqfd61ofhjCl4hyBaT+mi0Ap7FAmn74hdiembaGqt9YgZETHUFH/Nqly3HcLxbh5+OA9Onr6NhL/VEPTERLEaG6tV364/8NdLwolngQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB4435.apcprd06.prod.outlook.com (2603:1096:820:6d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
- 2023 02:44:39 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 02:44:39 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Lizhi Hou <lizhi.hou@amd.com>, Brian Xu <brian.xu@amd.com>,
-        Raj Kumar Rampelli <raj.kumar.rampelli@amd.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michal Simek <michal.simek@amd.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: xilinx: xdma: Convert to devm_platform_ioremap_resource()
-Date:   Wed, 12 Jul 2023 10:44:21 +0800
-Message-Id: <20230712024421.15005-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0016.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::17) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 11 Jul 2023 22:48:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA361AE;
+        Tue, 11 Jul 2023 19:48:33 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C1QIbV005045;
+        Wed, 12 Jul 2023 02:48:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CsAdAZdLWuI1tfff7Rxs2HPAgmvW1dSZS2GwPKSIfG8=;
+ b=OBqttuAvuKVjoWLtquYByENz8FJwxQh8Jc33fk97MlziFObzoUWoDhA/9OZ9I91EjoYl
+ 1/DsFJytk7EewHrjLDC5LMk9sLVM+cICSBdcmH2dt7pTFibEPJ/C3amNQGGb4ZP68dNO
+ fNqPo+rGk76IMPEE3SMnQhNxToGRg86J3w/IDg9oG8LVhFPXcA6J61ZkMqqy7SghCY+F
+ PwaSUbpFlj88XV5vGB76OiDSzG6qAIhamHw+LAmALIHavqUky2SzMJeo5MwyAGsGgwBu
+ puFkTdfJwdFOEWIzuqFRYJVXiL144jMzBH8x9yNEIf8G0IklOFofoNXOfKY0XTuOCINi pw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf87gctj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 02:48:01 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C2m1E2012927
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 02:48:01 GMT
+Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 19:47:57 -0700
+Message-ID: <9e69158f-1e67-344b-fea9-85bb5e21183f@quicinc.com>
+Date:   Wed, 12 Jul 2023 10:47:55 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4435:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b405eab-9b97-4074-e359-08db8281ef67
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xtjAl1wcMliP1ysLw4RIYAkFsPMjrXBdZKJdVGQHsGgcIE1jUT0lAr5JkH8qhap1Avif+6rAXDrQXIKZxkxus/Tfwxf8PPpyjvYbW7ePemR6W0C/AONeNeJqfkIhfMFAmJbVf/VBa2GVc0Mb+L9UU0Q+Ncz2uoI8YuEBm4woBdv6XX1yUi3c+iGI+lx8RSpwCWMSIONBXuqRj0CRVyq5Tt4LCoTj1Hq2Vnn58S+rLOxj4YvKb2RjVpLWxiHFazPNj+kZNuK31hCHhrnxCpVfijttxid9tnNezOZmV5VdAHRTJ48MzbEcRRNQ7CpwNVgeW3EAA6VOgL/BTCzxAcZHecL842LceRjZWatcdYySbr6oz2OA5qBPSctSYDqPamwETx5Ns+MKnrYjNASkxRZ7FEHyYOQXDZaCRE5npt/V84BfuBkYoVY6jtwpcmHneuTyBEvid4r7YmJsOn1ShYBFK2BNDktjxPuqsZZ1x0HUrClPBCAxlN+D0G09tTbkE4+/wUpsKtTn0ILmIS4CY4+bvHFponPm/VITtrzhvYJFKaHV0ZtdIxLPMTeKd220wT+QOu+p9UeIMf86XDFGrNnU1SotvgD9wOetHTKL9uPX0EK2Q73epB1r78S2Q4MURP6u
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(376002)(136003)(366004)(451199021)(41300700001)(8676002)(8936002)(316002)(6512007)(478600001)(110136005)(66476007)(4326008)(52116002)(66556008)(6486002)(66946007)(6506007)(6666004)(83380400001)(38100700002)(38350700002)(86362001)(36756003)(2906002)(1076003)(26005)(2616005)(5660300002)(186003)(4744005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JlC1e4AbAHBZdbqGSPQkpUk16CDXijD8aOqk9hxqNKPtKGarmeoBcJKfONFy?=
- =?us-ascii?Q?Bd6gmk2gc5I2/yxUCNvOZVqxPFMoiWPST147+7wmyqVPI//jradPHTbk/mzi?=
- =?us-ascii?Q?dAwahDSE2wZvLU56CO2nVOPZeBW+H5n6dhYCAktX40/Du6yLIFmpaZFJN9hB?=
- =?us-ascii?Q?MNinH6utROa+d2U1tgfexlxgtF8/9h6xa5b2rlLe3GoVklVWhBMuOr/8i6Mc?=
- =?us-ascii?Q?vNhleX9B+s/ZH5CM+f1RDw5mJ1yAbGjP2RA5gWwC8v3i9cLg1oKIREt1jeIp?=
- =?us-ascii?Q?bKvpWgopYetUoPi6kiDWgeEcG0njjnXYCeWagdQsfgWg0edVfNcbS13Z0VTf?=
- =?us-ascii?Q?eN8UsXdkbSBBqz7anHbGFS7OLGxfNHamYcJE37osxTljTuVpHWCx3052n6RZ?=
- =?us-ascii?Q?ktfCh7WpcvJ521rlX1d8vjp8bSrsbK3qk0Z7XzgufxFQAb1lFmNAtgajUPOO?=
- =?us-ascii?Q?iU/llzoyyOA81q6WFMMu0nMFKnDeq4rfUPrHhyyBoAWypM69ulkRMCXbDsTK?=
- =?us-ascii?Q?Sr0j7u09faFEK/H8mjacXX8W9Z0Dcm+yETZvjDAxlg9ckI7AQm42PE4V+p6q?=
- =?us-ascii?Q?NmoJjnlVv4RMjBu2/DOC5YqBdhMWxwVC/Uh/YxZ26xjvyHsX8jWAmcbjWMCT?=
- =?us-ascii?Q?2sQ07JN0zjE5m91MDinNuSHaMpuVl6qQqZDGbumnzhHiOmewfi/22cRRCPe9?=
- =?us-ascii?Q?Gj87k2TMEA3Wvxq/AuifULUeVywkTMFk//+c4gMfMd32WHCDOMOE+LlHSWhp?=
- =?us-ascii?Q?tNt15W1XQKLBGtudT9jFr6CXaUtI4UbQD6AwCoj9MlZfomM2p/PiNS3xfmXq?=
- =?us-ascii?Q?AAO9fq6ZLO7M8g67XSn5o/Cxm49ZldKZYP39RRSGdfvg4VGjdcQLbKKz9FHM?=
- =?us-ascii?Q?N4jh5ZQY++UyjwoXeglC8JDXG651s3ZzY7j8FKbxOQXYnW9BS4aSuFVGqrru?=
- =?us-ascii?Q?6KbjjDH7wFQOQ5ezCtHVUbPeyYoTUeEtOtxZ6EsvE1iv0j0H86UQnRAjCuMo?=
- =?us-ascii?Q?i96NCXrHJO1VQGYet+ItFEDxQ15EHzXL1XoKU1uMr09vM+UdOQ/MjM2NLp29?=
- =?us-ascii?Q?6lHQQWxcLka1Y+poRYAZfdvhAvZIqsTzALxY37zhRfghDQKiDvNgaRrWVIiX?=
- =?us-ascii?Q?fu6hujRJzROJffrNxScFYtBYnCORAJ0zTpNTKXEmxte7QlJnsG0K//Ud/git?=
- =?us-ascii?Q?eIFxWuE5O2zI+W/3KWQ8/Ze9cep0Hrjy3SFacW5OEPrGbJOQazkgMFyhLSn7?=
- =?us-ascii?Q?iMP7V4vwfiojhJqeZtsut0qtC9DUJ8Orvyd23tJW1IOJ+ueh2hEvnO+k9aIu?=
- =?us-ascii?Q?/vZptMvmsHp0oarcLIWiS5meBFkCzg79Ea9sttVOkBD5rlJ7V2Nt1yOda506?=
- =?us-ascii?Q?ofI8IlRNWZctki4ScymsrT8CN83lziKW4KU1s/dtto20m2MbwCA6Rgtd0i+8?=
- =?us-ascii?Q?fgl5PQFWuu/uNPxUoUilkYPSIlCWWbyD3VjRamKVenT0stYJVl3+qerrH1E0?=
- =?us-ascii?Q?aLtejZzy1tcEjGiqZEHypfLFOcYQOjbljKycIVomkzhmZ12cf9VZ/vc1MJTI?=
- =?us-ascii?Q?eBTAaYoC5uWpLei4Moo+ofs5hafG/SGBWK3GiI+R?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b405eab-9b97-4074-e359-08db8281ef67
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 02:44:38.5044
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oTMTbOnkRot+2z5D7nAbgXf/M1KCqDo3rVKas2TtG1C/UQ3ZnUd8+diUirzdxpdE0Clo/iDf9s1t3bRnR2Kpbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4435
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <will@kernel.org>, <corbet@lwn.net>, <catalin.marinas@arm.com>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+ <875y6s8bwb.wl-maz@kernel.org>
+ <32f442e3-3d5c-4cec-9791-0da039f88287@quicinc.com>
+ <874jmc8654.wl-maz@kernel.org>
+ <6e07ad52-2629-346e-6217-ec07777ebc5b@quicinc.com>
+ <86lefnvsto.wl-maz@kernel.org>
+ <8a950aa5-fdd8-f983-0411-4b39ade596f4@quicinc.com>
+ <86cz0ywx5p.wl-maz@kernel.org>
+From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+In-Reply-To: <86cz0ywx5p.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: iK6lXty1YSXqhCO3YhCWB5FJqrjyXRAi
+X-Proofpoint-ORIG-GUID: iK6lXty1YSXqhCO3YhCWB5FJqrjyXRAi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_14,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=907 malwarescore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120022
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify code.
+On 7/11/2023 6:38 PM, Marc Zyngier wrote:
+> On Tue, 11 Jul 2023 11:12:48 +0100,
+> "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+>>
+>> For the KVM part, per my understanding, as long as the current feature
+>> id being overriden, the KVM system also get the current vcpu without
+>> the lse atomic feature enabled.
+>> KVM vcpu will read the sys reg from host arm64_ftr_regs which is
+>> already been controled by the idreg_overrides.
+> 
+> You're completely missing the point.
+> 
+> The guest is free to map memory as non-cacheable *and* to use LSE
+> atomics even if the idregs pretend this is not available. At which
+The guest also can have the current linux kernel mechanism of LSE ATOMIC 
+way.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
-patch based on next
- drivers/dma/xilinx/xdma.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
++----------------------------+ 
+ 
 
-diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-index ad5ff63354cf..630927dc90e8 100644
---- a/drivers/dma/xilinx/xdma.c
-+++ b/drivers/dma/xilinx/xdma.c
-@@ -885,15 +885,9 @@ static int xdma_probe(struct platform_device *pdev)
- 	xdev->irq_start = res->start;
- 	xdev->irq_num = res->end - res->start + 1;
+|                            | 
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		xdma_err(xdev, "failed to get io resource");
--		goto failed;
--	}
--
--	reg_base = devm_ioremap_resource(&pdev->dev, res);
-+	reg_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(reg_base)) {
--		xdma_err(xdev, "ioremap failed");
-+		ret = PTR_ERR(reg_base);
- 		goto failed;
- 	}
+
+| Read the cpu feature IDs   | 
  
+
++----------------------------+ 
+ 
+
+ 
+ 
+
+              v 
+ 
+
++----------------------------+         +-------------------+ 
+ 
+
+|                            |  Y      | Use lse atomic ins| 
+ 
+
+| if lse atomic supported    |  --     |                   | 
+ 
+
++----------------------------+         +-------------------+ 
+ 
+
+              v   N 
+ 
+
++----------------------------+ 
+ 
+
+| Use    r/stxr + atomic ins | 
+ 
+
+|                            | 
+ 
+
++----------------------------+ 
+ 
+
+
+Just like other KVM vcpu cpu features, lse atomic can be a feature 
+inherit from the pysical cpu features for the KVM vcpus.
+
+> point the HW throws a fit and the system is dead. Is that acceptable?
+> Of course not.
+> 
+
+The current patchset is try to have the ability to *kind of free* to not 
+make system dead. Since currently linux kernel already have the runtime 
+patching of lse atomic ops, we are trying to have user have option to 
+re-use the switch of system_uses_lse_atomics().
+
+#define __lse_ll_sc_body(op, ...)					\
+({									\
+	system_uses_lse_atomics() ?					\
+		__lse_##op(__VA_ARGS__) :				\
+		__ll_sc_##op(__VA_ARGS__);				\
+})
+
+> So there are two aspects to your problem:
+> 
+> - for Linux, there is nothing to do: the kernel will correctly behave,
+>    and as long as you don't expose non-cacheable memory to userspace.
+>    Out of tree drivers are none of our concern here.
+> 
+
+For Linux kernel, we have provide the In-line patching at runtime, and 
+all third party kernel modules are built with those in-line patching as 
+well.
+if we can have an option, the current system can still run those third 
+party kernel modules without system crash.
+
+/* In-line patching at runtime */
+#define ARM64_LSE_ATOMIC_INSN(llsc, lse)				\
+	ALTERNATIVE(llsc, __LSE_PREAMBLE lse, ARM64_HAS_LSE_ATOMICS)
+
+static __always_inline bool system_uses_lse_atomics(void)
+{
+	return alternative_has_cap_likely(ARM64_HAS_LSE_ATOMICS);
+}
+> - for guests, it looks like the HW doesn't provide the basic
+>    requirements for virtualisation, and you should always disable KVM
+>    on this HW (or even better, enter the kernel at EL1).
+> 
+I can see that KVM can still be supported even if current phisical cpu 
+don't have emulated vcpu features. We can only disable the current vcpu 
+feature which exposed to KVM guest.
+> In both cases, nothing to do in the kernel, which is good news.
+> 
+> 	M.
+> 
+
 -- 
-2.39.0
+Thx and BRs,
+Aiqun(Maria) Yu
 
