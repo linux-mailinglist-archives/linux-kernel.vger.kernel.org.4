@@ -2,163 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DC074FCF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2DE74FCF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjGLCHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S231228AbjGLCMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 22:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGLCHh (ORCPT
+        with ESMTP id S229945AbjGLCML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:07:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B06A171C;
-        Tue, 11 Jul 2023 19:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689127653; x=1720663653;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1AER/hg4m6eo8bpLKQWJXN55oUrvESYpTdy5+jXJsMI=;
-  b=ST7UctAihefb1hJ4VsZnf/Mam0+CAlDAOonk/ZEFnCRLhgcOLKXalE7N
-   Ak5rXdfeYxS2zF18mAGWGqi23inDMafH1pSwdP/BJdpIUxWo8EW88+ukn
-   voxIQyj36E5JMPoTHgvATKVi7KYbsHRrXK699uNHz2w92ApSpgI3rC2UT
-   sft33Yp0WRIm39WDsEOjxpHj7XHdap3+nIWCC7DoPs/4A8qvht42bMxKM
-   8JCTYN0p8ioPMrYUyWHWvDYw1vz1mf9s3pvYt/2j78BKWPq2dAFjHtTBp
-   kgiceyPa7VQfmtwk0BXW2vAiRiLl329wmBJj95pvu+/90TjJrzdLlwGLe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="363644174"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="363644174"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:07:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="721324056"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="721324056"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.60]) ([10.252.187.60])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:07:26 -0700
-Message-ID: <38c31fb0-1068-4855-c896-27d6a2bca747@linux.intel.com>
-Date:   Wed, 12 Jul 2023 10:07:22 +0800
+        Tue, 11 Jul 2023 22:12:11 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BBE11B;
+        Tue, 11 Jul 2023 19:12:09 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4R11TH6rp5z4f3mJ4;
+        Wed, 12 Jul 2023 10:12:03 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP1 (Coremail) with SMTP id cCh0CgDX9jDyC65k9Z0eNA--.18259S2;
+        Wed, 12 Jul 2023 10:12:06 +0800 (CST)
+Subject: Re: [PATCH bpf] bpf: cpumap: Fix memory leak in cpu_map_update_elem
+To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>, Pu Lehui <pulehui@huawei.com>
+References: <20230711115848.2701559-1-pulehui@huaweicloud.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <e065f385-3baf-eacb-7ca5-6ade14491eee@huaweicloud.com>
+Date:   Wed, 12 Jul 2023 10:12:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     baolu.lu@linux.intel.com, "Liu, Yi L" <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/9] iommu: Move iommu fault data to linux/iommu.h
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
- <20230711010642.19707-2-baolu.lu@linux.intel.com>
- <BN9PR11MB5276859ED6825C0A496C9C5E8C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276859ED6825C0A496C9C5E8C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230711115848.2701559-1-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: cCh0CgDX9jDyC65k9Z0eNA--.18259S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrWrAFWrZF1xCFWfAFy7Wrg_yoW5Cr4Dpr
+        Wrtr1DKr48tr4DZw48t3WrGr18Zw1jya4UJrZ3Jr4fAF18G3W8t348GFZ7JFZrZrn8Xry7
+        Jas8t3yvg34DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 14:05, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Tuesday, July 11, 2023 9:07 AM
->> +
->> +enum iommu_fault_reason {
->> +	IOMMU_FAULT_REASON_UNKNOWN = 0,
->> +
->> +	/* Could not access the PASID table (fetch caused external abort) */
->> +	IOMMU_FAULT_REASON_PASID_FETCH,
->> +
->> +	/* PASID entry is invalid or has configuration errors */
->> +	IOMMU_FAULT_REASON_BAD_PASID_ENTRY,
->> +
->> +	/*
->> +	 * PASID is out of range (e.g. exceeds the maximum PASID
->> +	 * supported by the IOMMU) or disabled.
->> +	 */
->> +	IOMMU_FAULT_REASON_PASID_INVALID,
->> +
->> +	/*
->> +	 * An external abort occurred fetching (or updating) a translation
->> +	 * table descriptor
->> +	 */
->> +	IOMMU_FAULT_REASON_WALK_EABT,
->> +
->> +	/*
->> +	 * Could not access the page table entry (Bad address),
->> +	 * actual translation fault
->> +	 */
->> +	IOMMU_FAULT_REASON_PTE_FETCH,
->> +
->> +	/* Protection flag check failed */
->> +	IOMMU_FAULT_REASON_PERMISSION,
->> +
->> +	/* access flag check failed */
->> +	IOMMU_FAULT_REASON_ACCESS,
->> +
->> +	/* Output address of a translation stage caused Address Size fault */
->> +	IOMMU_FAULT_REASON_OOR_ADDRESS,
->> +};
->> +
->> +/**
->> + * struct iommu_fault_unrecoverable - Unrecoverable fault data
->> + * @reason: reason of the fault, from &enum iommu_fault_reason
->> + * @flags: parameters of this fault (IOMMU_FAULT_UNRECOV_* values)
->> + * @pasid: Process Address Space ID
->> + * @perm: requested permission access using by the incoming transaction
->> + *        (IOMMU_FAULT_PERM_* values)
->> + * @addr: offending page address
->> + * @fetch_addr: address that caused a fetch abort, if any
->> + */
->> +struct iommu_fault_unrecoverable {
->> +	__u32	reason;
->> +#define IOMMU_FAULT_UNRECOV_PASID_VALID		(1 << 0)
->> +#define IOMMU_FAULT_UNRECOV_ADDR_VALID		(1 << 1)
->> +#define IOMMU_FAULT_UNRECOV_FETCH_ADDR_VALID	(1 << 2)
->> +	__u32	flags;
->> +	__u32	pasid;
->> +	__u32	perm;
->> +	__u64	addr;
->> +	__u64	fetch_addr;
->> +};
-> 
-> Currently there is no handler for unrecoverable faults.
-> 
-> Both Intel/ARM register iommu_queue_iopf() as the device fault handler.
-> It returns -EOPNOTSUPP for unrecoverable faults.
-> 
-> In your series the common iommu_handle_io_pgfault() also only works
-> for PRQ.
-> 
-> It kinds of suggest above definitions are dead code, though arm-smmu-v3
-> does attempt to set them.
-> 
-> Probably it's right time to remove them.
-> 
-> In the future even if there might be a need of forwarding unrecoverable
-> faults to the user via iommufd, fault reasons reported by the physical
-> IOMMU doesn't make any sense to the guest. Presumably the vIOMMU
-> should walk guest configurations to set a fault reason which makes sense
-> from guest p.o.v.
 
-I am fine to remove unrecoverable faults data. But it was added by Jean,
-so I'd like to know his opinion on this.
 
-Best regards,
-baolu
+On 7/11/2023 7:58 PM, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+>
+> Syzkaller reported a memory leak as follows:
+>
+> BUG: memory leak
+> unreferenced object 0xff110001198ef748 (size 192):
+>   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 4a 19 00 00 80 ad e3 e4 fe ff c0 00  ....J...........
+>     00 b2 d3 0c 01 00 11 ff 28 f5 8e 19 01 00 11 ff  ........(.......
+>   backtrace:
+>     [<ffffffffadd28087>] __cpu_map_entry_alloc+0xf7/0xb00
+>     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
+>     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
+>     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
+>     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
+>     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
+>     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>
+> BUG: memory leak
+> unreferenced object 0xff110001198ef528 (size 192):
+>   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffffadd281f0>] __cpu_map_entry_alloc+0x260/0xb00
+>     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
+>     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
+>     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
+>     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
+>     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
+>     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>
+> BUG: memory leak
+> unreferenced object 0xff1100010fd93d68 (size 8):
+>   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
+>   hex dump (first 8 bytes):
+>     00 00 00 00 00 00 00 00                          ........
+>   backtrace:
+>     [<ffffffffade5db3e>] kvmalloc_node+0x11e/0x170
+>     [<ffffffffadd28280>] __cpu_map_entry_alloc+0x2f0/0xb00
+>     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
+>     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
+>     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
+>     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
+>     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
+>     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>
+> In the cpu_map_update_elem flow, when kthread_stop is called before
+> calling the threadfn of rcpu->kthread, since the KTHREAD_SHOULD_STOP bit
+> of kthread has been set by kthread_stop, the threadfn of rcpu->kthread
+> will never be executed, and rcpu->refcnt will never be 0, which will
+> lead to the allocated rcpu, rcpu->queue and rcpu->queue->queue cannot be
+> released.
+>
+> Calling kthread_stop before executing kthread's threadfn will return
+> -EINTR. We can complete the release of memory resources in this state.
+>
+> Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CPUMAP")
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+
+Acked-by: Hou Tao <houtao1@huawei.com>
 
