@@ -2,57 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C637502FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E29750300
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbjGLJZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S232417AbjGLJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjGLJZT (ORCPT
+        with ESMTP id S232263AbjGLJZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:25:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5C81722;
-        Wed, 12 Jul 2023 02:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NmLMGaJ0xD9NFSfYbMPFqAxqBeFJleZiby5UzzC1nu4=; b=cFMEGB59XB1ge8OAEHdEv6i6DS
-        TdQQUzGerI5UMAOWTq+wdlEi08H/MwTDVI3zcXyXBTspx9hNpU0ZxMVFJAMC5oG7Q5BdOHdu5CC7S
-        Qo87L8zIw60nw6ZmJTbBaz9FH6PN5iOLjr5tYOMVZApWiF1Vx25mq52vHO92cMuMAxHWEVdGjFTxC
-        suF5huH/nNdyUaWgtNLSQPoCgiKq1Q23xIWgAFpO9zveWps94cAy+QfJY/BPr7Vj70SjLDOQPz1jj
-        8Fmu15q1bw0WdE8zBYKWxqRL4MXchaXppPjbie/U9hJS3UNefFmwPcAnzjZXkTjJz2LgQrYDLQ54+
-        QZSHnv0Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJW5z-003bc6-0q;
-        Wed, 12 Jul 2023 09:25:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A7695300222;
-        Wed, 12 Jul 2023 11:25:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8F77724408329; Wed, 12 Jul 2023 11:25:14 +0200 (CEST)
-Date:   Wed, 12 Jul 2023 11:25:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com
-Subject: Re: [PATCH 5/7] futex: make futex_parse_waitv() available as a helper
-Message-ID: <20230712092514.GE3100107@hirez.programming.kicks-ass.net>
-References: <20230712004705.316157-1-axboe@kernel.dk>
- <20230712004705.316157-6-axboe@kernel.dk>
+        Wed, 12 Jul 2023 05:25:28 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199E11D;
+        Wed, 12 Jul 2023 02:25:27 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1689153918teu0uwlk
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Jul 2023 17:25:16 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: 239gR2IZrltKqPhg8ID3o5Pz4jyanvYhDcSzbwRy7HgWu927QkXaP4ef5OeRN
+        qtA9Ik35h1ELNf5DWNXSj7UaPkRlJGClZXDclFLxWUvN7KYVyo83R+DOFY7E3AdM+TNayuy
+        SaxbUW6yO0YCJcRelPEYJCsdW/6qQAEJCIgLIaG6+H7toJ8VV2DoHLkZKcG9NduG5oRIISv
+        KcHn7LkesJ/IKzGbXcvQx3e2SJCFID2ajOR9LQOrwlLP3+LFuGka6gfsl8fE/wSaNB3kQuW
+        6F8sNOemZ2blYajmIvx7sSPXS8XShYwFwvHJbF14LQKNzJqisl7xnvJTpihGc/VfsVCkDxi
+        kQQHgX4gJ/qH+IxomMFe677EKQIx7GjPvFkKvIF1HyBv1/q3lXej7b6FudZP7TvpdOVejS9
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 86389509092924257
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 09/11] tools/nolibc: riscv: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:25:15 +0800
+Message-Id: <29559df55935d61e7ca774bb36fa3c73e2011090.1689150149.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
+References: <cover.1689150149.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230712004705.316157-6-axboe@kernel.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,34 +51,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 06:47:03PM -0600, Jens Axboe wrote:
+move most of the _start operations to _start_c().
 
-> Since we now provide a way to pass in a wake handler and data, ensure we
-> use __futex_queue() to avoid having futex_queue() overwrite our wait
-> data.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-riscv.h | 43 +++++--------------------------
+ 1 file changed, 6 insertions(+), 37 deletions(-)
 
-> diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
-> index 3471af87cb7d..dfd02ca5ecfa 100644
-> --- a/kernel/futex/waitwake.c
-> +++ b/kernel/futex/waitwake.c
-> @@ -446,7 +446,8 @@ static int futex_wait_multiple_setup(struct futex_vector *vs, int count, int *wo
->  			 * next futex. Queue each futex at this moment so hb can
->  			 * be unlocked.
->  			 */
-> -			futex_queue(q, hb);
-> +			__futex_queue(q, hb);
-> +			spin_unlock(&hb->lock);
->  			continue;
->  		}
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index 2b89ea59c5e4..2e3fcf925ae9 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -8,18 +8,7 @@
+ #define _NOLIBC_ARCH_RISCV_H
+ 
+ #include "compiler.h"
+-
+-#if   __riscv_xlen == 64
+-#define PTRLOG "3"
+-#define SZREG  "8"
+-#define REG_L  "ld"
+-#define REG_S  "sd"
+-#elif __riscv_xlen == 32
+-#define PTRLOG "2"
+-#define SZREG  "4"
+-#define REG_L  "lw"
+-#define REG_S  "sw"
+-#endif
++#include "crt.h"
+ 
+ /* Syscalls for RISCV :
+  *   - stack is 16-byte aligned
+@@ -153,40 +142,20 @@
+ 	_arg1;                                                                \
+ })
+ 
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ 		".option push\n"
+ 		".option norelax\n"
+-		"lla   gp, __global_pointer$\n"
++		"lla  gp, __global_pointer$\n"
+ 		".option pop\n"
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"call __stack_chk_init\n"    /* initialize stack protector                          */
++		"call __stack_chk_init\n" /* initialize stack protector                    */
+ #endif
+-		REG_L" a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
+-		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
+-		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
+-		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
+-		"add   a2,a2,a1\n"           /*             + argv                                  */
+-
+-		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
+-		"0:\n"                       /* do {                                                */
+-		REG_L" a4, 0(a3)\n"          /*   a4 = *a3;                                         */
+-		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
+-		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
+-		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
+-		REG_S" a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
+-
+-		"lui   a3, %hi(environ)\n"   /* a3 = &environ (high bits)                           */
+-		REG_S" a2,%lo(environ)(a3)\n"/* store envp(a2) into environ                         */
+-		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
+-		"call  main\n"               /* main() returns the status code, we'll exit with it. */
+-		"li a7, 93\n"                /* NR_exit == 93                                       */
+-		"ecall\n"
++		"mv   a0, sp\n"           /* save stack pointer to a0, as arg1 of _start_c */
++		"andi sp, a0, -16\n"      /* sp must be 16-byte aligned                    */
++		"call _start_c\n"         /* transfer to c runtime                         */
+ 	);
+ 	__builtin_unreachable();
+ }
+-- 
+2.25.1
 
-I'm not following; I even applied all your patches up to this point, but
-futex_queue() still reads:
-
-static inline void futex_queue(struct futex_q *q, struct futex_hash_bucket *hb)
-	__releases(&hb->lock)
-{
-	__futex_queue(q, hb);
-	spin_unlock(&hb->lock);
-}
-
-How would it be different and overwrite anything ?!?
