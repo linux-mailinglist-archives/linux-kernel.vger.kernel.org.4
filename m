@@ -2,98 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0D9750D2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCA2750D20
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbjGLPyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S232752AbjGLPw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbjGLPyK (ORCPT
+        with ESMTP id S233856AbjGLPw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:54:10 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE961BE2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:54:06 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b852785a65so6547685ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689177246; x=1691769246;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vuGfImREI3+vAOMG7Qz0iAJD7LdxEjUxKUaKqmBNQrI=;
-        b=vrFoeYWDsg7YPhr4bqWyPs+29mbupjC5nNCh4GVYf8Vkh0zWSbRgBxhRUp+Ui01t2S
-         A+Bj+AbZFLOizlV8tFhji8+D8hsioUYz8n6Ak7yGE+pEsX2ysSi7Fb7MqmJ9kHrINb1o
-         0cv+ch7z4CNXTxUXLdw9MnQznvJXO45IN91j2NR5HNECOCgzVJrbMKbo8dXifrsmRbK/
-         7MMdleXB7nsa4KJdjY1gLpRENrG6PHAUxp9886g9IOxNtWsNW962QxUBCgqOXRyU8c4t
-         LPLjScfvOgfwmKrVqZwm0ksOhsJ5h2yr4mAtBtpO6mXfD6+BJjBN5peK2ir/cufvfLzi
-         20lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689177246; x=1691769246;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vuGfImREI3+vAOMG7Qz0iAJD7LdxEjUxKUaKqmBNQrI=;
-        b=i00vLejz4fnpm+QaXpjl89QBIkoBaMah35pvT5m9azT1vqjfUHfANF3jerO2WFj9YI
-         brYKs5lekogNXTZN27OsU9HN1zB/IAWvkJCG1RvB45iMZ6I6cc0xx5Tl+F9hipMJHZwB
-         y7UqBmac0Fjq7XkuseON+XsN+D5wCwoDYCWBzxOwg3UOFRlbnfGUqw4lgHczA7TVtnic
-         c2V/gUeIAGly90TpcOkilXuUQTO9dbRVwr2/xAt8c6DpQmwHcrJ/fhfCmILjFC5YOP/G
-         kw7qKLYcE0QZRYwCw07C4JOYcgWFDqb/Lv7CMSMEyjwscJn8HkQpn7C1XUzhsv+oCdkZ
-         OHjQ==
-X-Gm-Message-State: ABy/qLYJUmbcv647ylSa8mZ9UrF6tI5d+Ya3HB8cQuBb8nWZ4e/EvAl/
-        6KlftY0+AjVnJyr2XuAtSEX6RGxrXS9q/A7KQBw=
-X-Google-Smtp-Source: APBJJlHJejJb/aIFBNWoeTp9H1B/RU3lJPZiFXU2xM+nI3CFojsKJRB31oUA/72y1rfIIzU82Di2fg==
-X-Received: by 2002:a17:902:6542:b0:1b9:e9ed:c721 with SMTP id d2-20020a170902654200b001b9e9edc721mr2441743pln.19.1689177245834;
-        Wed, 12 Jul 2023 08:54:05 -0700 (PDT)
-Received: from localhost ([50.38.6.230])
-        by smtp.gmail.com with ESMTPSA id y2-20020a1709029b8200b001b891259eddsm4133317plp.197.2023.07.12.08.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 08:54:05 -0700 (PDT)
-In-Reply-To: <20230709171036.1906-1-jszhang@kernel.org>
-References: <20230709171036.1906-1-jszhang@kernel.org>
-Subject: Re: [PATCH] riscv: mm: fix truncates issue on RV32
-Message-Id: <168917713755.21773.10817207313937867675.b4-ty@rivosinc.com>
-Date:   Wed, 12 Jul 2023 08:52:17 -0700
+        Wed, 12 Jul 2023 11:52:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02AEA2;
+        Wed, 12 Jul 2023 08:52:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D89361888;
+        Wed, 12 Jul 2023 15:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13465C433C8;
+        Wed, 12 Jul 2023 15:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689177174;
+        bh=r+kChX2C24ujI3cqakNo4nQuT6sumweAW1ikpYPWIbQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ovKo+lYenOpY2U9lxPuiwnm+74AOMO9ytQ6D3UE8i+Cirp8VTvzetCoBV71R3Vayq
+         zbRO8JjLmcBKMNDp8ZPTh2xRj722yRDlRbosN7lwkTmAqM0rtZnzqXHfBJkliu17ce
+         u8I0cXNF6M1w64dV1FLCeu4767UzOhKDYwGCQktzcgyu30XpbaKgSl+NEGt0BakcNC
+         JQaqnXmrgBcdcESBQ9vynD6Ch07OkGndL0Zbry2/cMvRwsbORStH1sOTi9j6kPxQHJ
+         xMeVzwAIrBjA/5T84pcpDPs3GqhRS/7K7RY+NbowcNE/RRta17f9lcSO2kk3DQAAXj
+         +p81lS6HYCyEA==
+Date:   Wed, 12 Jul 2023 17:52:50 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/11] i2c: st: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20230712155250.6aageby5dqmep24m@intel.intel>
+References: <20230710063351.17490-1-frank.li@vivo.com>
+ <20230710063351.17490-7-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jisheng Zhang <jszhang@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710063351.17490-7-frank.li@vivo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yangtao,
 
-On Mon, 10 Jul 2023 01:10:36 +0800, Jisheng Zhang wrote:
-> lkp reports below sparse warning when building for RV32:
-> arch/riscv/mm/init.c:1204:48: sparse: warning: cast truncates bits from
-> constant value (100000000 becomes 0)
+On Mon, Jul 10, 2023 at 02:33:46PM +0800, Yangtao Li wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
-> IMO, the reason we didn't see this truncates bug in real world is "0"
-> means MEMBLOCK_ALLOC_ACCESSIBLE in memblock and there's no RV32 HW
-> with more than 4GB memory.
-> 
-> [...]
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Applied, thanks!
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-[1/1] riscv: mm: fix truncates issue on RV32
-      https://git.kernel.org/palmer/c/b690e266dae2
-
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
-
+Andi
