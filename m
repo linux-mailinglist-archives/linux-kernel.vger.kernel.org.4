@@ -2,225 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92FC750211
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C02A750217
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjGLIxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S232879AbjGLIyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGLIx2 (ORCPT
+        with ESMTP id S232864AbjGLIyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:53:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA15127;
-        Wed, 12 Jul 2023 01:53:20 -0700 (PDT)
-X-UUID: 8b9db3ae209111ee9cb5633481061a41-20230712
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=HlvurA2nZ/SG0+FxRG7KN8uoNgcTftvRV2MByWytkds=;
-        b=YRPK1GOthuK2Z7pfpAheO4zqT0VkFvg4XeTmcf8qfpm/SbQXtbblfIMsM7YD5zGKfCggR18huHjx+/PFdgAHyZKtmFRLDH2+ZabpkXCDHsLiRLHpzKa7OR5xwRkyykZhY5VWmF2touzueg+NHgRoWQEJpDEvQRlZ3y2A12QGNO8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.28,REQID:e783e217-789e-47f2-8a3c-10cd0e7c4148,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:176cd25,CLOUDID:d36a250e-c22b-45ab-8a43-3004e9216b56,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO,DKR:0,DKP:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 8b9db3ae209111ee9cb5633481061a41-20230712
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <chris.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 120982536; Wed, 12 Jul 2023 16:53:17 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 12 Jul 2023 16:53:16 +0800
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 12 Jul 2023 16:53:16 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RxN5Fn2PKpVs0OmU1GU1QID9oNGwg23I6JAyYZxbMYBd/wlr1Q3mrUY+/LTSLjdU+WRC+JiOLMbD0IJ+tZmfNN6L7i/1oBX34ah/G5t7wFmNyfmWFJQnThn4DxJOl9tw1XgTLFdo+unLiIwWSVmg4NCO4kUb9Jhb3niOxRgMIdndBcnRUBN6BBmoNPL8Fw+gPoBcIkIGAKeiSIA3bqf0mEAKYvMcAQ7POXM5pAoKtDGIvebI8n2YYk56IbvMVN2BHl+/+LQw11ztF8H1Ih68zH0LV7ghN/5SWA+IfxmHmasJqa86RsvhCCfjhlFtW3mvVS/w7beEaXyybnn+YvhkBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HlvurA2nZ/SG0+FxRG7KN8uoNgcTftvRV2MByWytkds=;
- b=X7BP9p9basQ3CGTiyednk6tSAczFxA4RlLoD2VbCPznw6vOjGtCoKjAc96yjujawjjbLSUOFBJYQcVh+WTSLRpYGAn66IISLdUnfZ6ll9kdUNHigGaieoah6Gs6VUO1aTDthT3wq+3t/5uaYRoX0lpUJQhWJpsbywEHhC3HulhwWqI+y2Z0Am6aG/atbZotE1BPBFrr8IaezvizRjQufY8S9E3zQDqm/dzCzsDI9HJBClj6jH7p6j+HIiKsRUt9YidftYIRuytYEi8JpG552N/9FE/gF0ZGPkNHjm035R6wQ0ljywWMqwHGCcNzv5mBI3DDcG6hNhsX6b+egqnp9wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HlvurA2nZ/SG0+FxRG7KN8uoNgcTftvRV2MByWytkds=;
- b=D80N0pyfUblrM/5WH6tiuefn0CxNrkaQvl0CuX/oVDbaAqTWJMdgxgSgD7t3lwaEnmrBuK2mratuO6mDXrINw9NNEJG6NrbGt77A9PEIXeI/2+v4Ll4DbqioUmH8QKljev3Py7PvC7krunR/RZMOMmUvuh2Xnk1CGkkBPj1z+oI=
-Received: from TYZPR03MB5741.apcprd03.prod.outlook.com (2603:1096:400:72::8)
- by TY0PR03MB6800.apcprd03.prod.outlook.com (2603:1096:400:205::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Wed, 12 Jul
- 2023 08:53:14 +0000
-Received: from TYZPR03MB5741.apcprd03.prod.outlook.com
- ([fe80::8dfd:d707:163c:f0e7]) by TYZPR03MB5741.apcprd03.prod.outlook.com
- ([fe80::8dfd:d707:163c:f0e7%3]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
- 08:53:14 +0000
-From:   =?utf-8?B?Q2hyaXMgTHUgKOmZuOeomuazkyk=?= <Chris.Lu@mediatek.com>
-To:     "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>
-CC:     "marcel@holtmann.org" <marcel@holtmann.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        =?utf-8?B?U3RldmUgTGVlICjmnY7oppboqqAp?= <steve.lee@mediatek.com>,
-        Sean Wang <Sean.Wang@mediatek.com>,
-        =?utf-8?B?QWFyb24gSG91ICjkvq/kv4rku7Ap?= <Aaron.Hou@mediatek.com>,
-        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>
-Subject: Re: [PATCH v3] Bluetooth: btmtk: Fix null pointer when processing
- coredump
-Thread-Topic: [PATCH v3] Bluetooth: btmtk: Fix null pointer when processing
- coredump
-Thread-Index: AQHZtIBo2hc7mLaVO02TO/SF7kFs06+1pnKAgAAtIYA=
-Date:   Wed, 12 Jul 2023 08:53:14 +0000
-Message-ID: <d8f82d97496c73c01521dbbce5455ad23521036c.camel@mediatek.com>
-References: <20230712051857.13812-1-chris.lu@mediatek.com>
-         <0cb29d27-a76f-47f2-86c3-f39ba25e8bc2@molgen.mpg.de>
-In-Reply-To: <0cb29d27-a76f-47f2-86c3-f39ba25e8bc2@molgen.mpg.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR03MB5741:EE_|TY0PR03MB6800:EE_
-x-ms-office365-filtering-correlation-id: 913d0d28-480b-4f1c-b3f8-08db82b56db9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1VuKSEvHwxDTuw0uemf9SAlnuYklNlt2CPPvc5mvSHuHKmFI3ZXEVLJGzFmgyskvRRXMl2npdVEc9t8cv9DuriRhE2Zz8BpeZuPQj+TkH7F6PXWxZdK1uY4sb3aXk/d31S+IDZYnLjAKr3nQLdGX7Ji1ZriBorTyYxOZyvcqoe5RvsSzoFCVlmsZURw3TZV3ZNuVLzFNoBO0iFJ/cSYVzFQpT13H1SwFnWXswA3iHy4mVIoctAPr4svdFlEWbnw2b0oX3UJY2zIqKIX0CEnhh9htgPh4AONzgHaUF5wknG5P05ECwFLiugkwYvhMP5/EdciibWY5ACzL1jkjl6z/Wz5zhVFwHVGxwPnOFkEzPVClk3SZq9D43BpbfVWn/rMs+Nwt/l8BE/pGqXCsBHQz8UPuewScoP/6Oig6f3T4rxS3+2CNluP4YpG/3QHAbfkSzJcHY3wTUMt6AHCBU26Q4RVQvlD/8uiYnLDq/HD//FLz0G279tRk9VOG5zmhr1gsSITtCPMw2En3EQjYK2RAwTXoutVwwLkkFT9o2XiufC8fO5TjRSOqraa7agxE7sB/kkGdNRLOtgQuANeIKznHUpqrWFyEvpfFfUGPAQflfiN8B4JQefp7cxdHc8dYVG40KELJtWTzYC/rEcKLNv6wSRllrb6rp5u6eEpqjdMTpQc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB5741.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(451199021)(86362001)(2906002)(478600001)(54906003)(71200400001)(8936002)(6486002)(85182001)(36756003)(66556008)(66946007)(66446008)(66476007)(76116006)(64756008)(4326008)(41300700001)(6916009)(316002)(6512007)(83380400001)(38100700002)(122000001)(186003)(5660300002)(6506007)(8676002)(38070700005)(2616005)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T2ZoRW5RWmp1YS9sbkdadmZzUDlxc1FNZGRqOFRlQmZUWGpDaVVjNVNnbk5x?=
- =?utf-8?B?Rml2bHYrV1c2KzE5RGtjb1ZNcmFnNkhNUnFVZDhTNEhzb3d5U21Hemo1eWFy?=
- =?utf-8?B?SmJZbUlMdS85eGlYM3h6UEFXSXMwSmtjTGFkdmplWWRmTGo3T2s1QmdQV3RL?=
- =?utf-8?B?VWpyNnZXclhwanNtMHp5RTM5YlZPd0Rub2hsSE9SVUlBWmFIZG1vOUtqdG1h?=
- =?utf-8?B?aC85bGtnL0U0Sk1YY2hEaXFkUkMvME0xeVBzOE1sSUo0cGltUVJUQXU3M295?=
- =?utf-8?B?VUptWTJaZjF6UHArdHVoSEN0N1g0ZVNocFlPWUpmQzRQcFZ2NUxlMlpBQUQx?=
- =?utf-8?B?MzNWU2dEWmM1bXJGM3pIaG5hTkkzTTkxcVNiM0QxaVp3UVVidDJveXA4VjhB?=
- =?utf-8?B?ZCtNTkpteHpRaTBmczhRb08zQU1MRVR0Um5iZGdERk5qaVppZHJ3TzdBajA3?=
- =?utf-8?B?djh3ODNkOCtQdjlVakxMYUhlL3BmY0cycVZXVFhOTkRYdjkwalVpcnA4b0Zk?=
- =?utf-8?B?L0Vsa3RXS3lHNE54U1FveHlxMXZBc0FWNDhPQS9tSTZaZ0RZdzFLblZXMGlF?=
- =?utf-8?B?YmpHUkdlUXUwL0RwTjk3OEs2RmFqUDZBMUZTdVkxZmZ1bUppa0crK0N1cWRs?=
- =?utf-8?B?T2lSRHdTSUdDOFhHQTFncXBkSVU3a25uYWtUeHY2ZXFTbjMrS2VHQUxKVSsw?=
- =?utf-8?B?Y3N1dlRtd25iRkcyZjFsTDZHMlNhUmxjbUFXOXFQUFNWMDNXM2p1Z1dabGpW?=
- =?utf-8?B?UG9zZllMWldyT0xFeUNuUlZyMU1YWXoyaGJPZ3pzd2RrU1JtNDFjODRtR1Qx?=
- =?utf-8?B?M2JLN1RxRGlNcTE5ZzJvMDd1ZDVhcWpDL3pKQk0vaHlZQXl0dk1ValBRdzY4?=
- =?utf-8?B?eE93M1NBS1NSRkV0VHRGNllzSU1wV042YTVhQWgxaUVFaUl3UUhaczdpLzZN?=
- =?utf-8?B?eUhmSXJhdUJSNUo4VldhQjQyRFJiNDlURXpNT01DQnBDVVhtVis5TUg0eERM?=
- =?utf-8?B?dTBJQ0daUXpBSkVFTjBsZis0Tlkvb0FWUzdkZlJHMHBRMThqVGJZV1hsWGJI?=
- =?utf-8?B?MXlmS0ZlQmRlSW1WQ0N4cmZiSXlqL1I5UzdXTXV6YjJBbndvYnVYOEN2amVW?=
- =?utf-8?B?V2hMSDFtRGRNaE9QbjdJUHdQc3k3Y3pxTlFUUnc5LzRWeEh1cHVzWnVLb21l?=
- =?utf-8?B?dm85bUkxSFlUdVZHR0RReGVhN1Y5UTRaQTJQbXVQR3lTMmZQSVh5RUdISUxU?=
- =?utf-8?B?TUpiaFYzTlpqK0M0cGY4bzBxcGlhck5qN2xrK3RhRDVOTU5BV0pqbklwcUN0?=
- =?utf-8?B?b3pWWlE2Nkx0YWUyUVM5SXNSc1pMUGdiLzNTWlY3bytJeFRXVzh6NUc3QmJx?=
- =?utf-8?B?bjRrVFNvRFU0d1FLZGhzMUlsQ1hEMkYzNWJydkFyZ1I1VUNkYlYrdytzaExz?=
- =?utf-8?B?dFBHUEpLb0FaM0NDUTRZR0lYc2t3RXcrRFBFQVliTytRY2k5Y1BFNk1aQmI2?=
- =?utf-8?B?RE1sbFpxb3B0a1pJQzhkT0RZdUZJTG84WXBxd3JRckVBQ084YjlDN2dudWVt?=
- =?utf-8?B?SFlPU09VTHJub29DTXA3UjNWN3NLalA4a3pkeS9TWFBZc0p1YmQwNVhQREtZ?=
- =?utf-8?B?dFJOR0pkU1E2N3hpVnlNMW4vaEE0S1NpWG9MdkZUK0d0UW5INTh0Ujh1TEhQ?=
- =?utf-8?B?M2JNQit3NklLYmdrYmtHZWZCVkNoaVJFSzFmSExjZDFKV3NyUWJBb2dFQ2xw?=
- =?utf-8?B?Z1Rpa3g3SGpZYVkrRGlwcHU2OEpKdVFwaFBkQWhOWFlYT2tlYU1TQmtXTXBW?=
- =?utf-8?B?UUYxMk9IdVRZQ29rMjRjTnM5VUQvUERwL0FjYk1oYk1DTEU4WHRHc1VBT01i?=
- =?utf-8?B?czh6ZUFFK3FrUE5TZ3ZsVEY5MHlxMXNWanRCQkQ5bjVZSGJLTDRoK3FGK1Yr?=
- =?utf-8?B?dlloTTgyVEFlaVNFZDZrT1MrSkdHSVZuamc0UER1NEliTmlvTUZzSHhRdXli?=
- =?utf-8?B?eXgrVXg5Q2YxR0FIalBYSzJHd2hpYXZySVh6andoZGJJN1NkWTZ0VjRaQTAr?=
- =?utf-8?B?RXNDaDN0d2VxZndRQm16MERTTWlFSzdtQ3ZaWDFyazM0WUVEbE5IM0oxOHhD?=
- =?utf-8?B?T1hPSFRZcEF2QXU0TG9qckRoTzV4V1ZqUXh4Tng1ajRlVENhUzh2ckJSS0Vp?=
- =?utf-8?B?bEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F8BBF8E27BD90941BD40B37D318D2751@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 12 Jul 2023 04:54:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C5610C4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:53:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ABB5616FB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:53:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CA4C433C9;
+        Wed, 12 Jul 2023 08:53:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689152034;
+        bh=ofCXvHTPv/zeJHQl2AqWNKHm4kuKx9N/LP5G1kg4FUc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LKSHyU47so0wXvJB56wVHrsUh5CU4XXNxkcWHXnovPYDIe9oPVqNSu5ZY2kVLFeF5
+         Jh9z1n77j5Zj26zXYYEx5fdHL15syJ6QZa9B7GIiDpJh2RqTpMXoYAx/ilKk9ol/6Z
+         46kyJyMamuGJ691fbntFm4e6DM7FDbSR3yg+1EYP0/mRMJXvHR3MC0KVJGUygze7hb
+         mi2Zaam4hXkEkJVEqF6QBlVNHoJXnryznTAa05XfLKPGupi441k+/Paz8M8dGa9Jwm
+         dqPvo6lqqwUn9xsAFRo1C+R4w9S4vI+wrrBx+ks5CzU/Xvcd/EJMcYj7C6Ug1e8OSR
+         8GRbo07ZeYe+A==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qJVbb-00077r-2n;
+        Wed, 12 Jul 2023 10:53:51 +0200
+Date:   Wed, 12 Jul 2023 10:53:51 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Shanker Donthineni <sdonthineni@nvidia.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Oops on /proc/interrupt access with 6.5-rc1
+Message-ID: <ZK5qH7IXZ1KTg9CN@hovoldconsulting.com>
+References: <ZK16bmOPqe4Ev1Hb@hovoldconsulting.com>
+ <86a5w2wc2d.wl-maz@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB5741.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 913d0d28-480b-4f1c-b3f8-08db82b56db9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2023 08:53:14.4111
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PMfURYJej7wKQyDqfkLu1BH38kMa8OarQ0KzS5qvE2GVz1sshpHCr8EBb3y2KYg1W+aJy0zY1eHyG2TtKiqfUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR03MB6800
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <86a5w2wc2d.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA3LTEyIGF0IDA4OjExICswMjAwLCBQYXVsIE1lbnplbCB3cm90ZToNCj4g
-IAkgDQo+IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5vdCBjbGljayBsaW5rcyBvciBvcGVu
-IGF0dGFjaG1lbnRzIHVudGlsDQo+IHlvdSBoYXZlIHZlcmlmaWVkIHRoZSBzZW5kZXIgb3IgdGhl
-IGNvbnRlbnQuDQo+ICBEZWFyIENocmlzLA0KPiANCkRlYXIgUGF1bCwNCg0KVGhhbmtzIGZvciB5
-b3VyIHJldmlldyBhbmQgZmVlZGJhY2sgdG8gTWVkaWF0ZWsncyBCbHVldG9vdGggZHJpdmVyDQpj
-b2RlLg0KDQo+IA0KPiBBbSAxMi4wNy4yMyB1bSAwNzoxOCBzY2hyaWViIENocmlzIEx1Og0KPiA+
-IFRoZXJlIG1heSBiZSBhIHBvdGVudGlhbCBudWxsIHBvaW50ZXIgcmlzayBpZiBvZmZzZXQgdmFs
-dWUgaXMNCj4gPiBsZXNzIHRoYW4gMCB3aGVuIGRvaW5nIG1lbWNtcCBpbiBidG10a19wcm9jZXNz
-X2NvcmVkdW1wKCkuDQo+ID4gQ2hlY2tpbmcgb2Zmc2V0IGlzIHZhbGlkIGJlZm9yZSBkb2luZyBt
-ZW1jbXAuDQo+IA0KPiBVc2UgaW1wZXJhdGl2ZSBtb29kOiBDaGVjayBvZmZzZXQg4oCmDQo+IA0K
-PiA+IFNpZ25lZC1vZmYtYnk6IENocmlzIEx1IDxjaHJpcy5sdUBtZWRpYXRlay5jb20+DQo+ID4g
-Q28tZGV2ZWxvcGVkLWJ5OiBTZWFuIFdhbmcgPHNlYW4ud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4g
-U2lnbmVkLW9mZi1ieTogU2VhbiBXYW5nIDxzZWFuLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IC0t
-LQ0KPiA+IHYyOiBmaXggdHlwbw0KPiA+IHYzOiBmaXggYm90IGNoZWNraW5nIGVycm9yDQo+ID4g
-LS0tDQo+ID4gICBkcml2ZXJzL2JsdWV0b290aC9idG10ay5jIHwgMTYgKysrKysrKystLS0tLS0t
-LQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkN
-Cj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ibHVldG9vdGgvYnRtdGsuYyBiL2RyaXZl
-cnMvYmx1ZXRvb3RoL2J0bXRrLmMNCj4gPiBpbmRleCA3ODZmNzc1MTk2YWUuLjBmMjkwNDMwYWUw
-ZSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2JsdWV0b290aC9idG10ay5jDQo+ID4gKysrIGIv
-ZHJpdmVycy9ibHVldG9vdGgvYnRtdGsuYw0KPiA+IEBAIC0zNzAsNyArMzcwLDcgQEAgRVhQT1JU
-X1NZTUJPTF9HUEwoYnRtdGtfcmVnaXN0ZXJfY29yZWR1bXApOw0KPiA+ICAgaW50IGJ0bXRrX3By
-b2Nlc3NfY29yZWR1bXAoc3RydWN0IGhjaV9kZXYgKmhkZXYsIHN0cnVjdCBza19idWZmDQo+ICpz
-a2IpDQo+ID4gICB7DQo+ID4gICBzdHJ1Y3QgYnRtZWRpYXRla19kYXRhICpkYXRhID0gaGNpX2dl
-dF9wcml2KGhkZXYpOw0KPiA+IC1pbnQgZXJyOw0KPiA+ICtpbnQgZXJyLCBvZmZzZXQ7DQo+ID4g
-ICANCj4gPiAgIGlmICghSVNfRU5BQkxFRChDT05GSUdfREVWX0NPUkVEVU1QKSkNCj4gPiAgIHJl
-dHVybiAwOw0KPiA+IEBAIC0zOTIsMTUgKzM5MiwxNSBAQCBpbnQgYnRtdGtfcHJvY2Vzc19jb3Jl
-ZHVtcChzdHJ1Y3QgaGNpX2Rldg0KPiAqaGRldiwgc3RydWN0IHNrX2J1ZmYgKnNrYikNCj4gPiAg
-IGlmIChlcnIgPCAwKQ0KPiA+ICAgYnJlYWs7DQo+ID4gICBkYXRhLT5jZF9pbmZvLmNudCsrOw0K
-PiA+ICtvZmZzZXQgPSBza2ItPmxlbiAtIHNpemVvZihNVEtfQ09SRURVTVBfRU5EKTsNCj4gDQo+
-IEZvciBgc2l6ZW9mKClgIHNob3VsZG7igJl0IHlvdSB1c2UgYHNpemVfdGA/IEJ1dCB0aGF0IGlz
-IHVuc2lnbmVkIG9mIA0KPiBjb3Vyc2UuIE1heWJlIHNzaXplX3QgdGhlbj8NCj4gDQp5ZXMsIGl0
-J3MgYmV0dGVyIHRvIHVzZSBzc2l6ZV90IG9yIHNpemVfdCwgSSdsbCBjaGFuZ2UgZGVjbGFyYXRp
-bnMgb2YNCm9mZnNldCBmcm9tIGludCB0byBzc2l6ZV90Lg0KDQo+ID4gICANCj4gPiAgIC8qIE1l
-ZGlhdGVrIGNvcmVkdW1wIGRhdGEgd291bGQgYmUgbW9yZSB0aGFuIE1US19DT1JFRFVNUF9OVU0g
-Ki8NCj4gPiAtaWYgKGRhdGEtPmNkX2luZm8uY250ID4gTVRLX0NPUkVEVU1QX05VTSAmJg0KPiA+
-IC0gICAgc2tiLT5sZW4gPiBzaXplb2YoTVRLX0NPUkVEVU1QX0VORCkgJiYNCj4gPiAtICAgICFt
-ZW1jbXAoKGNoYXIgKikmc2tiLT5kYXRhW3NrYi0+bGVuIC0NCj4gc2l6ZW9mKE1US19DT1JFRFVN
-UF9FTkQpXSwNCj4gPiAtICAgIE1US19DT1JFRFVNUF9FTkQsIHNpemVvZihNVEtfQ09SRURVTVBf
-RU5EKSAtIDEpKSB7DQo+ID4gLWJ0X2Rldl9pbmZvKGhkZXYsICJNZWRpYXRlayBjb3JlZHVtcCBl
-bmQiKTsNCj4gPiAtaGNpX2RldmNkX2NvbXBsZXRlKGhkZXYpOw0KPiA+IC19DQo+ID4gK2lmIChk
-YXRhLT5jZF9pbmZvLmNudCA+IE1US19DT1JFRFVNUF9OVU0gJiYgb2Zmc2V0ID4gMCkNCj4gDQo+
-IFdoeSBub3Qga2VlcCBpdCBsaWtlIGJlZm9yZSwgYW5kIGp1c3QgYWRkIHRoZSBjb25kaXRpb24g
-YHNrYi0+bGVuIDwgDQo+IHNpemVvZihNVEtfQ09SRURVTVBfRU5EKWA/IFRoZSBjb21waWxlciBp
-cyBwcm9iYWJseSBnb2luZyB0byBvcHRpbWl6ZQ0KPiBzbyANCj4gdGhlIHZhbHVlIGlzIG5vdCBj
-YWxjdWxhdGVkIHR3aWNlLg0KPiANCj4gDQo+IEtpbmQgcmVnYXJkcywNCj4gDQo+IFBhdWwNCj4g
-DQo+IA0KVGhlIHJlYXNvbiB3aHkgSSBzZW5kIHRoaXMgcGF0Y2ggaXMgd2hlbiBJIGJhY2twb3J0
-IGRldmNvcmVkdW1wIGZlYXR1cmUNCnRvIHNwZWNpZmljIHByb2plY3Qgd2l0aCBvbGRlciBrZXJu
-ZWwgdmVyc2lvbiwgdGhlIGNvbXBpbGVyIG1pZ2h0IG5vdA0Kc28gb3B0aW1pemVkIHRoYXQgaXQg
-d291bGQgY2F1c2Uga2VybmVsIHBhbmljIHdoZW4gcnVuIGludG8gbWVtY21wLg0KQXMgYSByZXN1
-bHQsIG1ha2Ugc3VyZSBgc2tiLT5sZW4gPiBzaXplb2YoTVRLX0NPUkVEVU1QX0VORCkgYCBiZWZv
-cmUNCmRvaW5nIG1lbWNtcCBwYXJ0IGNhbiBhdm9pZCBudWxsIHBvaW50ZXIgaXNzdWUuDQpCZXNp
-ZGVzLCBvbmx5IGluIGNvbmRpdGlvbiAnZGF0YS0+Y2RfaW5mby5jbnQgPiBNVEtfQ09SRURVTVBf
-TlVNICYmDQpvZmZzZXQgPiAwJyBuZWVkIHRvIGRvIG1lbWNtcCB0byBjaGVjayB0aGUgZW5kIG9m
-IGNvcmVkdW1wLiBEcml2ZXIgZG8NCm5vdGluZyB3aXRoIGNvbmRpdGlvbiBgc2tiLT5sZW4gPCBz
-aXplb2YoTVRLX0NPUkVEVU1QX0VORCkgYCB0aGF0DQphZGRpdGlvbmFsIGNvbmRpY3Rpb24gaXMg
-bm90IHJlYWxseSBuZWNlc3NhcnkuDQoNCj4gPiAraWYgKCFtZW1jbXAoKGNoYXIgKikmc2tiLT5k
-YXRhW29mZnNldF0sIE1US19DT1JFRFVNUF9FTkQsDQo+ID4gKyAgICBzaXplb2YoTVRLX0NPUkVE
-VU1QX0VORCkgLSAxKSkgew0KPiA+ICtidF9kZXZfaW5mbyhoZGV2LCAiTWVkaWF0ZWsgY29yZWR1
-bXAgZW5kIik7DQo+ID4gK2hjaV9kZXZjZF9jb21wbGV0ZShoZGV2KTsNCj4gPiArfQ0KPiA+ICAg
-DQo+ID4gICBicmVhazsNCj4gPiAgIH0NCg==
+On Tue, Jul 11, 2023 at 07:14:02PM +0100, Marc Zyngier wrote:
+> On Tue, 11 Jul 2023 16:51:10 +0100,
+> Johan Hovold <johan@kernel.org> wrote:
+
+> > Konrad reported on IRC that he hit a segfault and hang when watch:ing
+> > /proc/interrupts with 6.5-rc1.
+> >=20
+> > I tried simply catting it and hit the below oops immediately with my
+> > X13s (aarch64).
+
+> I wonder if you have a driver that periodically allocates an interrupt
+> and then frees it...
+
+I checked by instrumenting the descriptor allocator, but that does not
+appear to be the case.
+
+> > [ 2546.693932] Unable to handle kernel paging request at virtual addres=
+s ffff80008106bb19
+>=20
+> The VA seems legitimate, and not unusual for a string.
+>=20
+> > [ 2546.695148] Mem abort info:
+> > [ 2546.695562]   ESR =3D 0x0000000096000007
+> > [ 2546.695976]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> > [ 2546.696394]   SET =3D 0, FnV =3D 0
+> > [ 2546.696807]   EA =3D 0, S1PTW =3D 0
+> > [ 2546.697220]   FSC =3D 0x07: level 3 translation fault
+> > [ 2546.697642] Data abort info:
+> > [ 2546.698066]   ISV =3D 0, ISS =3D 0x00000007, ISS2 =3D 0x00000000
+> > [ 2546.698494]   CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
+>=20
+> This is a read, but we don't have any valid syndrome information.
+>=20
+> Could you try and enable KASAN?
+
+Just reproduced it with KASAN enabled. See splat below.
+
+Johan
+
+[  537.007382] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[  537.007536] BUG: KASAN: vmalloc-out-of-bounds in string+0xec/0x1ec
+[  537.007635] Read of size 1 at addr ffff8000813478d0 by task cat/533
+
+[  537.007752] CPU: 6 PID: 533 Comm: cat Not tainted 6.5.0-rc1 #4
+[  537.007836] Hardware name: LENOVO 21BYZ9SRUS/21BYZ9SRUS, BIOS N3HET53W (=
+1.25 ) 10/12/2022
+[  537.007947] Call trace:
+[  537.007984]  dump_backtrace+0x9c/0x11c
+[  537.008042]  show_stack+0x18/0x24
+[  537.008092]  dump_stack_lvl+0x60/0xac
+[  537.008147]  print_address_description.constprop.0+0x84/0x394
+[  537.008231]  kasan_report+0x110/0x144
+[  537.008287]  __asan_load1+0x60/0x6c
+[  537.008338]  string+0xec/0x1ec
+[  537.008386]  vsnprintf+0x224/0x8b8
+[  537.008438]  seq_printf+0x164/0x194
+[  537.008491]  show_interrupts+0x40c/0x5e8
+[  537.008551]  seq_read_iter+0x5d0/0x738
+[  537.008605]  proc_reg_read_iter+0xe8/0x140
+[  537.008668]  vfs_read+0x33c/0x444
+[  537.008720]  ksys_read+0xc4/0x168
+[  537.008770]  __arm64_sys_read+0x44/0x58
+[  537.008827]  invoke_syscall+0x60/0x190
+[  537.008884]  el0_svc_common.constprop.0+0x80/0x154
+[  537.008955]  do_el0_svc+0x38/0xa0
+[  537.009006]  el0_svc+0x44/0x90
+[  537.009053]  el0t_64_sync_handler+0xc0/0xc4
+[  537.009115]  el0t_64_sync+0x190/0x194
+
+[  537.009201] Memory state around the buggy address:
+[  537.009269]  ffff800081347780: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8=
+ f8 f8
+[  537.009365]  ffff800081347800: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8=
+ f8 f8
+[  537.009462] >ffff800081347880: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8=
+ f8 f8
+[  537.009557]                                                  ^
+[  537.009637]  ffff800081347900: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8=
+ f8 f8
+[  537.009733]  ffff800081347980: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8=
+ f8 f8
+[  537.009829] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[  537.009925] Disabling lock debugging due to kernel taint
+[  537.009998] Unable to handle kernel paging request at virtual address ff=
+ff8000813478d0
+[  537.010100] Mem abort info:
+[  537.010139]   ESR =3D 0x0000000096000007
+[  537.010191]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[  537.010261]   SET =3D 0, FnV =3D 0
+[  537.010304]   EA =3D 0, S1PTW =3D 0
+[  537.010347]   FSC =3D 0x07: level 3 translation fault
+[  537.013925] Data abort info:
+[  537.017460]   ISV =3D 0, ISS =3D 0x00000007, ISS2 =3D 0x00000000
+[  537.021044]   CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
+[  537.024609]   GCS =3D 0, Overlay =3D 0, DirtyBit =3D 0, Xs =3D 0
+[  537.028157] swapper pgtable: 4k pages, 48-bit VAs, pgdp=3D000000032ef050=
+00
+[  537.031731] [ffff8000813478d0] pgd=3D10000001000de003, p4d=3D10000001000=
+de003, pud=3D10000001000df003, pmd=3D1000000100f0f003, pte=3D00000000000000=
+00
+[  537.035463] Internal error: Oops: 0000000096000007 [#1] PREEMPT SMP
+[  537.039178] Modules linked in: snd_soc_wsa883x q6prm_clocks q6apm_lpass_=
+dais snd_q6dsp_common q6apm_dai q6prm michael_mic cbc des_generic libdes ec=
+b algif_skcipher md5 algif_hash af_alg ip6_tables xt_LOG nf_log_syslog ipt_=
+REJECT nf_reject_ipv4 xt_tcpudp xt_conntrack snd_q6apm nf_conntrack libcrc3=
+2c nf_defrag_ipv6 nf_defrag_ipv4 iptable_filter r8152 qrtr_mhi mii panel_ed=
+p snd_soc_hdmi_codec fastrpc qrtr_smd venus_dec venus_enc videobuf2_dma_con=
+tig rpmsg_ctrl apr videobuf2_memops rpmsg_char qcom_pm8008_regulator pmic_g=
+link_altmode qcom_battmgr qcom_spmi_adc5 leds_qcom_lpg qcom_spmi_temp_alarm=
+ qcom_pon qcom_spmi_adc_tm5 led_class_multicolor reboot_mode industrialio r=
+tc_pm8xxx qcom_vadc_common nvmem_qcom_spmi_sdam hci_uart msm btqca snd_soc_=
+sc8280xp ath11k_pci snd_soc_qcom_common gpu_sched ath11k bluetooth qcom_pm8=
+008 snd_soc_qcom_sdw regmap_i2c gpio_sbu_mux venus_core ecdh_generic ecc dr=
+m_display_helper snd_soc_wcd938x mac80211 v4l2_mem2mem videobuf2_v4l2 snd_s=
+oc_wcd938x_sdw snd_soc_lpass_tx_macro qcom_stats
+[  537.039382]  snd_soc_lpass_va_macro snd_soc_lpass_rx_macro regmap_sdw sn=
+d_soc_lpass_wsa_macro soundwire_qcom snd_soc_wcd_mbhc snd_soc_lpass_macro_c=
+ommon videodev drm_dp_aux_bus libarc4 qcom_q6v5_pas phy_qcom_edp videobuf2_=
+common snd_soc_core mc qcom_pil_info videocc_sc8280xp snd_compress qcom_com=
+mon snd_pcm icc_bwmon cfg80211 qcom_glink_smem phy_qcom_qmp_combo qcom_q6v5=
+ drm_kms_helper snd_timer rfkill phy_qcom_qmp_usb qcom_sysmon qrtr pmic_gli=
+nk typec mhi snd pinctrl_sc8280xp_lpass_lpi pdr_interface mdt_loader soundw=
+ire_bus phy_qcom_snps_femto_v2 pinctrl_lpass_lpi lpasscc_sc8280xp qmi_helpe=
+rs soundcore pwm_bl socinfo icc_osm_l3 qcom_wdt qcom_rng drm dm_mod ip_tabl=
+es x_tables ipv6 pcie_qcom crc8 phy_qcom_qmp_pcie nvme nvme_core hid_multit=
+ouch i2c_qcom_geni i2c_hid_of i2c_hid i2c_core
+[  537.081081] CPU: 6 PID: 533 Comm: cat Tainted: G    B              6.5.0=
+-rc1 #4
+[  537.086148] Hardware name: LENOVO 21BYZ9SRUS/21BYZ9SRUS, BIOS N3HET53W (=
+1.25 ) 10/12/2022
+[  537.091295] pstate: 404000c5 (nZcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=
+=3D--)
+[  537.096402] pc : string+0xec/0x1ec
+[  537.101518] lr : string+0xec/0x1ec
+[  537.106554] sp : ffff8000802876f0
+[  537.111608] x29: ffff8000802876f0 x28: ffffcfdaf4ef5144 x27: 1ffff000100=
+50f06
+[  537.116753] x26: ffff0a00ffffff04 x25: ffff37069f4a4790 x24: 00000000000=
+00000
+[  537.121933] x23: 00000000ffffffff x22: 1ffff00010050eea x21: ffff37059f4=
+a5000
+[  537.127075] x20: ffff8000813478d0 x19: ffff37059f4a4791 x18: 00000000000=
+00000
+[  537.132149] x17: 0000000000000000 x16: ffffcfdaf413a5d4 x15: 00000000000=
+00000
+[  537.137241] x14: 1ffff00010050dec x13: 0000000041b58ab3 x12: ffff79fb5ec=
+6191d
+[  537.142267] x11: 1ffff9fb5ec6191c x10: ffff79fb5ec6191c x9 : dfff8000000=
+00000
+[  537.147258] x8 : 00008604a139e6e4 x7 : ffffcfdaf630c8e7 x6 : 00000000000=
+00001
+[  537.152222] x5 : ffffcfdaf630c8e0 x4 : ffff79fb5ec6191d x3 : ffffcfdaf41=
+015cc
+[  537.157174] x2 : 0000000000000001 x1 : ffff3705815a4e00 x0 : 00000000000=
+00001
+[  537.162123] Call trace:
+[  537.167016]  string+0xec/0x1ec
+[  537.171904]  vsnprintf+0x224/0x8b8
+[  537.176750]  seq_printf+0x164/0x194
+[  537.181551]  show_interrupts+0x40c/0x5e8
+[  537.186359]  seq_read_iter+0x5d0/0x738
+[  537.191160]  proc_reg_read_iter+0xe8/0x140
+[  537.195983]  vfs_read+0x33c/0x444
+[  537.200785]  ksys_read+0xc4/0x168
+[  537.205557]  __arm64_sys_read+0x44/0x58
+[  537.210342]  invoke_syscall+0x60/0x190
+[  537.215131]  el0_svc_common.constprop.0+0x80/0x154
+[  537.219946]  do_el0_svc+0x38/0xa0
+[  537.224761]  el0_svc+0x44/0x90
+[  537.229569]  el0t_64_sync_handler+0xc0/0xc4
+[  537.234393]  el0t_64_sync+0x190/0x194
+[  537.239204] Code: eb19027f 540000a0 aa1403e0 97d8fc79 (38401697)=20
+[  537.244064] ---[ end trace 0000000000000000 ]---
+[  537.248926] note: cat[533] exited with irqs disabled
+[  537.254196] note: cat[533] exited with preempt_count 1
