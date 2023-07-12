@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C715775052C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EC5750532
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232695AbjGLKxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
+        id S231183AbjGLKyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbjGLKwy (ORCPT
+        with ESMTP id S232489AbjGLKyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:52:54 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088BA199E
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:52:48 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qJXSa-0003DD-Al; Wed, 12 Jul 2023 12:52:40 +0200
-Message-ID: <4da09faa-acb8-7262-b9ae-6cb327cff206@leemhuis.info>
-Date:   Wed, 12 Jul 2023 12:52:39 +0200
+        Wed, 12 Jul 2023 06:54:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D005FE77;
+        Wed, 12 Jul 2023 03:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689159276; x=1720695276;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sgwbJuDsOwUVl2lh42e25SNssLTIeH+vnDdXIxvdlz0=;
+  b=dwnEYjBssP7F6QNFfEOFYsoY25If6jQm3Zy8+OVLjmTs5uD52G8Q8Qqq
+   dTv2xIo5cy4shN0J2uFsf5QBuMBYAnK4mWcr+JZAzXb/B0lToO0eav3nb
+   CVLTvle325zegerKC99MgSv+H2p4K836W++DEXVDiZHcwoEmlJ/5ISxcf
+   MRCeK5imfWQy+OMVtky521d0xyMI1Q5g0gXwpo9t4dptUV96spZhZcQ+x
+   WuxKBk7ngf35HuhDuTnMDsyGWcy7N2m82UuI1cX9d+alMZclmCsrj0uQc
+   1PZ20B4qvDqb36Z4w/4Ef2j4Up5/cDL/NSIGPF1nZ2otpzO3q0kZsgmuF
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="362325000"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="362325000"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 03:54:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="698829108"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="698829108"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 03:54:32 -0700
+Message-ID: <5780dc05-c8cb-7c2c-6e61-6e643e17ea2a@linux.intel.com>
+Date:   Wed, 12 Jul 2023 12:54:30 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3] KVM: arm64: Use BTI for nvhe
-Content-Language: en-US, de-DE
-To:     Marc Zyngier <maz@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Mostafa Saleh <smostafa@google.com>, oliver.upton@linux.dev,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com,
-        will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com,
-        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
-        gshan@redhat.com
-References: <20230530150845.2856828-1-smostafa@google.com>
- <20230704134136.a5znw4jupt5yp5kg@bogus>
- <55bffc21-5f19-765f-9dbc-1b565c880426@leemhuis.info>
- <864jm9wgsn.wl-maz@kernel.org>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <864jm9wgsn.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 03/13] ALSA: hda: Add controller matching macros
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-4-amadeuszx.slawinski@linux.intel.com>
+ <ZK1ayXcoTfIrr18V@smile.fi.intel.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <ZK1ayXcoTfIrr18V@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689159168;1ee3ca76;
-X-HE-SMSGID: 1qJXSa-0003DD-Al
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.07.23 12:44, Marc Zyngier wrote:
-> On Wed, 12 Jul 2023 11:34:51 +0100,
-> "Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info> wrote:
->>
->> [CCing the regression list, as it should be in the loop for regressions:
->> https://docs.kernel.org/admin-guide/reporting-regressions.html]
->>
->> [TLDR: I'm adding this report to the list of tracked Linux kernel
->> regressions; the text you find below is based on a few templates
->> paragraphs you might have encountered already in similar form.
->> See link in footer if these mails annoy you.]
->>
->> On 04.07.23 15:41, Sudeep Holla wrote:
->>> On Tue, May 30, 2023 at 03:08:45PM +0000, Mostafa Saleh wrote:
->>>> CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
->>>> However, the nvhe code doesn't make use of it as it doesn't map any
->>>> pages with Guarded Page(GP) bit.
->>> [...]
->>> I was chasing a bug in linux-next yesterday with protected nVHE(pKVM) and
->>> cpuidle enabled. The system fails to boot. I just bisected the issue to this
->>> patch and also saw this patch landed in the linus tree yesterday/today.
->>> Not sure if this is something to do with the fact that pKVM skips to
->>> __kvm_handle_stub_hvc in __host_hvc.
->>>
->>> Let me know if you want be to try something.
->>
->> Thanks for the report. Seems the fix is slow to progress.
+On 7/11/2023 3:36 PM, Andy Shevchenko wrote:
+>> +#define HDA_CONTROLLER_IN_GPU(pci) (HDA_CONTROLLER_IS_HSW(pci) || \
+>> +		pci_match_id((struct pci_device_id []){ \
+> I think if you start with pci_match_id() and move HDA_CONTROLLER_IS_HSW() at
+> the end it will make this macro aligned with the rest, so easier to get them
+> all at once.
 > 
-> It's not. See [1].
-> 
-> [1] https://lore.kernel.org/r/20230706152240.685684-1-smostafa@google.com
 
-I'm aware of that fix, as one of the regzbot commands in the mail your
-quoted pointed to that mail. But unless I'm missing something that fix
-is now nearly a week old and not yet in -next. That from my point of
-view makes it "slow to progress" and trackworthy.
-
-Ciao, Thorsten
+Ack.
