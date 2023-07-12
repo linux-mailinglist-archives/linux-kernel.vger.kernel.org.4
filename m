@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4035750AF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEDB750AFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbjGLO11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S230233AbjGLO3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbjGLO1L (ORCPT
+        with ESMTP id S231368AbjGLO2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:27:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABF92114
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:26:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD95B617FB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 14:26:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE51C433C7;
-        Wed, 12 Jul 2023 14:26:22 +0000 (UTC)
-Date:   Wed, 12 Jul 2023 10:26:21 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: fix memcpy size when copying stack entries
-Message-ID: <20230712102621.4c588de9@gandalf.local.home>
-In-Reply-To: <20230712101434.4613b3ec@gandalf.local.home>
-References: <20230612160748.4082850-1-svens@linux.ibm.com>
-        <20230612123407.5ebcabdf@gandalf.local.home>
-        <yt9dy1koey7h.fsf@linux.ibm.com>
-        <20230613113737.1e07c892@gandalf.local.home>
-        <yt9dttva8gxt.fsf@linux.ibm.com>
-        <yt9dilap442k.fsf@linux.ibm.com>
-        <20230712101434.4613b3ec@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Jul 2023 10:28:55 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300A91BC1;
+        Wed, 12 Jul 2023 07:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689172130; x=1720708130;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Dzrrn5EIrw6o3x0SNhzJXz19ZnuVag5culodqvUlwH8=;
+  b=Z8Zs/jCuPksAW4xyAH8rf2bznVVAWIit2u2DzXrZTV5EbUF6283hTdKE
+   09Zava4nboxbACCSd3x7GHEWKYnr2tLQLMuHL/pzCJlrtx8eqwkuUwzfo
+   YbCMZzNHeGkSdOXO40pG1mkg3p7R6y3827h3rHsdjO/OMbbaimGMw7DhR
+   vXVqzpBA9pdCabMI6vsWBzTVnHK9JD6c0x++FSXJ3q356UHylJJSeMUqu
+   /GGXELBQDkyIVy3g7el+WBwZ9hFw9Km8Hvm7pjMrER8iOGZ6wrlb3B08s
+   tucIGH4O3XI/cWwa+bNbxROjuAXwUcHpNPYFtgh2MJ7XjAoc9aGcA85Ro
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="362368116"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="362368116"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 07:27:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="895648398"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="895648398"
+Received: from agermosh-mobl1.amr.corp.intel.com ([10.252.43.42])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 07:27:00 -0700
+Date:   Wed, 12 Jul 2023 17:26:58 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Ruihong Luo <colorsu1922@gmail.com>
+cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        luoruihong@xiaomi.com, weipengliang@xiaomi.com,
+        wengjinfei@xiaomi.com
+Subject: Re: [PATCH v3] serial: 8250_dw: Preserve original value of DLF
+ register
+In-Reply-To: <20230630003806.66112-1-colorsu1922@gmail.com>
+Message-ID: <763104-cf9a-5397-b45c-d288d7cbc899@linux.intel.com>
+References: <20230630003806.66112-1-colorsu1922@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jul 2023 10:14:34 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, 30 Jun 2023, Ruihong Luo wrote:
 
-> On Wed, 12 Jul 2023 16:06:27 +0200
-> Sven Schnelle <svens@linux.ibm.com> wrote:
+> Preserve the original value of the Divisor Latch Fraction (DLF) register.
+> When the DLF register is modified without preservation, it can disrupt
+> the baudrate settings established by firmware or bootloader, leading to
+> data corruption and the generation of unreadable or distorted characters.
 > 
-> > > No, still getting the same warning:
-> > >
-> > > [    2.302776] memcpy: detected field-spanning write (size 104) of single field "stack" at kernel/trace/trace.c:3178 (size 64)    
-> > 
-> > BTW, i'm seeing the same error on x86 with current master when
-> > CONFIG_FORTIFY_SOURCE=y and CONFIG_SCHED_TRACER=y:  
+> Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
+
+Add also:
+
+Cc: stable@vger.kernel.org
+
+> Signed-off-by: Ruihong Luo <colorsu1922@gmail.com>
+> ---
+> v3:
+> - modify the commit message
+> - use personal email to sign
+>  drivers/tty/serial/8250/8250_dwlib.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> As I don't know how the fortifier works, nor what exactly it is checking,
-> do you have any idea on how to quiet it?
-> 
-> This is a false positive, as I described before.
+> diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
+> index 75f32f054ebb..d30957722da8 100644
+> --- a/drivers/tty/serial/8250/8250_dwlib.c
+> +++ b/drivers/tty/serial/8250/8250_dwlib.c
+> @@ -244,7 +244,7 @@ void dw8250_setup_port(struct uart_port *p)
+>  	struct dw8250_port_data *pd = p->private_data;
+>  	struct dw8250_data *data = to_dw8250_data(pd);
+>  	struct uart_8250_port *up = up_to_u8250p(p);
+> -	u32 reg;
+> +	u32 reg, orig;
+>  
+>  	pd->hw_rs485_support = dw8250_detect_rs485_hw(p);
+>  	if (pd->hw_rs485_support) {
+> @@ -270,9 +270,11 @@ void dw8250_setup_port(struct uart_port *p)
+>  	dev_dbg(p->dev, "Designware UART version %c.%c%c\n",
+>  		(reg >> 24) & 0xff, (reg >> 16) & 0xff, (reg >> 8) & 0xff);
+>  
+> +	/* Preserve value written by firmware or bootloader  */
+> +	orig = dw8250_readl_ext(p, DW_UART_DLF);
+>  	dw8250_writel_ext(p, DW_UART_DLF, ~0U);
+>  	reg = dw8250_readl_ext(p, DW_UART_DLF);
+> -	dw8250_writel_ext(p, DW_UART_DLF, 0);
+> +	dw8250_writel_ext(p, DW_UART_DLF, orig);
+>  
+>  	if (reg) {
+>  		pd->dlf_size = fls(reg);
 
+The change looks good but I'd prefer the variable to be called old_dlf 
+which is inline how 8250_port names its variables does when it preserves a 
+registers across some auto-detection write.
 
-Hmm, maybe this would work?
+-- 
+ i.
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 4529e264cb86..20122eeccf97 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -3118,6 +3118,7 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
- 	struct ftrace_stack *fstack;
- 	struct stack_entry *entry;
- 	int stackidx;
-+	void *ptr;
- 
- 	/*
- 	 * Add one, for this function and the call to save_stack_trace()
-@@ -3161,9 +3162,25 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
- 				    trace_ctx);
- 	if (!event)
- 		goto out;
--	entry = ring_buffer_event_data(event);
-+	ptr = ring_buffer_event_data(event);
-+	entry = ptr;
-+
-+	/*
-+	 * For backward compatibility reasons, the entry->caller is an
-+	 * array of 8 slots to store the stack. This is also exported
-+	 * to user space. The amount allocated on the ring buffer actually
-+	 * holds enough for the stack specified by nr_entries. This will
-+	 * go into the location of entry->caller. Due to string fortifiers
-+	 * checking the size of the destination of memcpy() it triggers
-+	 * when it detects that size is greater than 8. To hide this from
-+	 * the fortifiers, we use "ptr" and pointer arithmetic to assign caller.
-+	 *
-+	 * The below is really just:
-+	 *   memcpy(&entry->caller, fstack->calls, size);
-+	 */
-+	ptr += offsetof(typeof(*entry), caller);
-+	memcpy(ptr, fstack->calls, size);
- 
--	memcpy(&entry->caller, fstack->calls, size);
- 	entry->size = nr_entries;
- 
- 	if (!call_filter_check_discard(call, entry, buffer, event))
-
-
--- Steve
