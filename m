@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B959F750697
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32C375069A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbjGLLrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S233215AbjGLLrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbjGLLr2 (ORCPT
+        with ESMTP id S233197AbjGLLre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:47:28 -0400
+        Wed, 12 Jul 2023 07:47:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4CF1BE9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:47:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE35211F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:47:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1820B617A2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFABC433C8;
-        Wed, 12 Jul 2023 11:47:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6A1617A5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14356C433C7;
+        Wed, 12 Jul 2023 11:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689162429;
-        bh=MrD10ypRydCEI5x7llBX60wzJIoyt566JqIz24flJbI=;
+        s=k20201202; t=1689162434;
+        bh=f5mVoe34HV5wp/TbZuYdG3O0UtLsVgTcl18qYuE7l1w=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UrclTGnl1R0Z+MjkfclmgIwW+o44bCtTx/pbsEej3kKcmnBEiREyGu3D8OQZbEREV
-         igvMYLhBRCVvBLsjHKDSZJX8npW1uBTzsD7feS761uTcIYMcZoFfy1RmZRqHDA2Pd4
-         XTjYdVrSVq/IEcmV9VzgGBy5dRWp94S0DVOCO9gGfZFTgJjo/1kHk3LfU/GXgsWKC0
-         Yr4M4ZpEBwV/OwJP/7hbMAl2a7LN+1xXLateipXzBFsMv0ZdxQBCcL31Ny4Jj3+t+W
-         cW2FJfZK9doWmMnwXNu4O9gCxxPF+8DlsAKGsU2qV15JUlRdaS+DCdBRXJTxqHUFsy
-         ykwrcjhhAQJww==
+        b=AWhwbFMEKwO+U3c0UHb390l/zu3wCZVhLi5vhf4r7y87X0VeOnfj7pU64j5fIU5wZ
+         aGowduAOLkfml16RD4ZE0whKuPGAIUDKdz7odwTAQLjHOxbntnh0EF6rpBMqJaliFn
+         Booc2XnSGyRNa2bIjkfY7+SDac0nP2uOKpqG2yPvuapUcfTe/NbNl12+I18xdM5B70
+         bXsZWHKQKb1hpguzd9XTZp940FhUdOIm5PgtK7HLQ1hQa+sM4dlt6SsfvQdRRDkIi7
+         M+WFzLe4MGw392dC6RycG1aG+4Nfg/8o6Bza42bO5pbMJn4CNGIlKbSpag6vGauLi/
+         jsKp9ELVW8X3g==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+To:     Mastan Katragadda <Mastan.Katragadda@amd.com>
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, vijendar.mukunda@amd.com,
+        Arungopal.kondaveeti@amd.com, vsujithkumar.reddy@amd.com,
+        venkataprasad.potturu@amd.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org
-In-Reply-To: <20230701044836.18789-1-rdunlap@infradead.org>
-References: <20230701044836.18789-1-rdunlap@infradead.org>
-Subject: Re: [PATCH v2] ASoC: stac9766: fix build errors with REGMAP_AC97
-Message-Id: <168916242817.46574.1012924701910516434.b4-ty@kernel.org>
-Date:   Wed, 12 Jul 2023 12:47:08 +0100
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
+References: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
+Subject: Re: (subset) [PATCH 1/2] ASoC: SOF: amd: add revision check for
+ sending sha dma completion command
+Message-Id: <168916242980.46574.9079979863277488670.b4-ty@kernel.org>
+Date:   Wed, 12 Jul 2023 12:47:09 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,11 +75,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 21:48:36 -0700, Randy Dunlap wrote:
-> Select REGMAP_AC97 to fix these build errors:
-> 
-> ERROR: modpost: "regmap_ac97_default_volatile" [sound/soc/codecs/snd-soc-stac9766.ko] undefined!
-> ERROR: modpost: "__regmap_init_ac97" [sound/soc/codecs/snd-soc-stac9766.ko] undefined!
+On Fri, 30 Jun 2023 12:35:42 +0530, Mastan Katragadda wrote:
+> ACP driver should send SHA DMA completion command to PSP module for RN
+> platform only.
+> Add a revision check for RN platform.
 > 
 > 
 
@@ -71,8 +88,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: stac9766: fix build errors with REGMAP_AC97
-      commit: c70064b96f509daa78f57992aeabcf274fb2fed4
+[2/2] ASoC: SOF: amd: refactor PSP smn_read
+      commit: 2b48d170fb9965dda9d41edcb0bbfc9ee4c6584f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
