@@ -2,137 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20CE7506DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101B97506E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbjGLLtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S233267AbjGLLth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbjGLLs7 (ORCPT
+        with ESMTP id S233375AbjGLLtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:48:59 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2113.outbound.protection.outlook.com [40.107.255.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1261BFE;
-        Wed, 12 Jul 2023 04:48:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dl98D57hJ/5T88oDFw7XmnopbiCK5MM/HA7xhzDdHA03f+7HNxuNlzn1j6GmGsrRY+tF8q+7vBBVynb3pGxjPjc1Tx1n9uZyl93uubz6xw7ohpUJLV66RzgUPQrBXn9TChNtA7biZxP1dHi69Y7YSplRIXNCznYXWfquOoS4+T+TNIrPU7LAKnvuJlQma1xskyI/rkgbcwY/NFeuwnJS2/gW2f6NyCtu/UdltBMDcc1TW4ZpTr3vK0tCBXGFolc2gGE6aQypjrU0U8ZeShMFPb0tq3rLs5tnDPWkxqxNsuJapKuoPEucLvAjcj2hUqltRSY075KO5HZv/O1D6jgT6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RIwbIWF8cEM+VgOSMueWzfiWGwvQNR3AxgeuwoxzVWw=;
- b=k0unNuWXmnge7j4/ycby8bxEFxXpqUIRKdbMVLx6/cyMdFTof/mNjKbh1QKcY2vkV/9W0YFsAiEJH+tQVJETpB1v55u7LkenAwvLypvEeWVrKcSXlEbbQ5Rdb0vueu3T5w1kbG/lSsI6ofz2gtqk401flTV/pqeQVpt0mTS3VwfdlCQqQgt7bPggCWhe6ZAze/MDPkIbNA+eglOdP+7khcHOb2IXSLtBuIrnNppla2srfE/7Tkfgnh0UkpOpk5//VwVhF0/5JGMj43Can7YDAFgE/1GpCiN+zvQtxqOUi1Z2VDEDSlxYzVbqsH+GUQlV2WXQLH/nGs0RgUBHDZw5kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RIwbIWF8cEM+VgOSMueWzfiWGwvQNR3AxgeuwoxzVWw=;
- b=Rnl12+Kqn+2rEbvRgVQhx63/GswOoqhM8c9VV9+uLkaDWtfD73VrKb4sOX8LWaNHApTfZgk8bYbL7Tz1vb4cngW2vHPoXh4Au/8JB+8HdeH4LGgOyl37sFFJM+jqDv9TgormEXl4vK1lGNvz218+ezlpBH6PmW00klu9C354XuyE0XHd985IAF/D9MOfvjAF11v0Prbxaay8nteNZoqBliKPJEvVInOvFPBQKcaDpFIP5qRzYxM3n2OsPEwkRE7/zZ61xdxm6TWnLbV/b7B6MSGd2y/x/WH8RHv4jsyT/L1Bft+8hu9ohybK0bjPOS0AifeeZgOy/tqtFTr+Qn9qjA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
- SI2PR06MB4537.apcprd06.prod.outlook.com (2603:1096:4:153::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.20; Wed, 12 Jul 2023 11:47:56 +0000
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 11:47:56 +0000
-From:   Minjie Du <duminjie@vivo.com>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        linux-wireless@vger.kernel.org (open list:QUALCOMM ATHEROS ATH9K
-        WIRELESS DRIVER), linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
-Subject: [PATCH v1] net: wireless: ath9k: fix parameter check in ath9k_init_debug()
-Date:   Wed, 12 Jul 2023 19:47:40 +0800
-Message-Id: <20230712114740.13226-1-duminjie@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0121.apcprd02.prod.outlook.com
- (2603:1096:4:188::21) To SG2PR06MB5288.apcprd06.prod.outlook.com
- (2603:1096:4:1dc::9)
+        Wed, 12 Jul 2023 07:49:04 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A7C199D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:48:19 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso73914135e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1689162494; x=1691754494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBRkWVB0g8Qm8dyh6//o7Lwn4Q/uU6uVP9gh0M6sy3E=;
+        b=fTIJA5YWg1SqPJuzssiDs0yYHsqNJ66pstFXEt7VlU1tk8rVnITiG8JTQmwgl6hV8a
+         pSBRdwZaQ+pYkTnPGFrXvqEz+lRTDiG8MO4k6cwQYV4EgsNIJhNSKcferBqERRW+LZZE
+         kd3O9+1koszCdxgeP8kAK39Kq/PzenfZSPuF+rBe/vpMRKIWGzyAL+40FTlmqOI3Go5D
+         TO9WAlj//Q2nTbFJQyIS+GoVuevgITahxz53lRKXA2KUbC8IoLTKYV8omFo7KymmqicB
+         d29bf/G5ipf67kPN342AatvB+Z/5HHMT4ENfjMif5A7HM9J5hH6exDsDBPd8LoyyX9Gt
+         M0fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689162494; x=1691754494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aBRkWVB0g8Qm8dyh6//o7Lwn4Q/uU6uVP9gh0M6sy3E=;
+        b=HSf1dqmeHvv7Lih4rFusdtTYPDS9XaVck33/I0u1f2Aoayn7XTSO1s+aX2S04ExRpk
+         wVGAAFAeAu6zTBa7GVDZMfftcItCVKPJuABtevDKgiPQZRW7nqexXu4VT5P+NzWqhaGp
+         4Ooft4P9PvT4f8n18hSlRiNWQugua07OgZZ6yehlVe6SQgaeV9pHDhg8PEjlVys7MHFe
+         9ATVgexvtIeaSp4+ePaWs3OaXCjTB8O4o1Sj5aEeOa237yhAyeizarTZXMi0nerqgEEj
+         stg0PUyKodP/tKDJajknbg2uJ5/YzncVV4SobXdouP75HD4ZEHkQBP3hs5j58uXSq4fx
+         z9ig==
+X-Gm-Message-State: ABy/qLbLpM7jd1G4Wt6M2rOxkzgnUn0/bOQ3qcqeOiW2tGUAKhldr8n4
+        u/XAeJaWP+ITe+KLkAx4oIclnw==
+X-Google-Smtp-Source: APBJJlGcJ3tEr6V0Cb+m/2D2hJhmyD6Y5xsrI4FPimHxiVjapWiwFvDjPqdbTOabDiu5YYe0P/y2oQ==
+X-Received: by 2002:a7b:c7d9:0:b0:3fa:964e:e85 with SMTP id z25-20020a7bc7d9000000b003fa964e0e85mr18987790wmk.5.1689162494106;
+        Wed, 12 Jul 2023 04:48:14 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id j2-20020a5d4482000000b003143867d2ebsm4867463wrq.63.2023.07.12.04.48.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 04:48:13 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH 1/8] hwmon: (pmbus/mp2975) Fix whitespace error
+Date:   Wed, 12 Jul 2023 13:47:42 +0200
+Message-ID: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|SI2PR06MB4537:EE_
-X-MS-Office365-Filtering-Correlation-Id: 668a583d-cb47-4298-f936-08db82cdd513
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vZ06optc2JmWx8v2s+wik1I6zfHg+Llq/0qEAFSF+Yf3VmyDMQ42T6uk5q5VvS5Cy+nDCSVHDPoH+gtIRVh5rP8seIHFMK0tz3plPknj/iBcq9vIeAX9AUIW52nJUyZKw60MRHZBmgwnfymrTHpyD5nwqMqOed9ijnP1WG0BRoLvpC+rPdDuXvvUTi3UAADkv3TdW6v8OMXGxw584cLQZXBaMas7nRSogbXWnQUNwBEpAkgMSSMsDJo5DpgDSaL5G805uyLWstGYC7j7+BbWR5D2g0+U+P4jAlJugHbG/CQKC5k+NLlUBNgGY4Kkz90eRMkkPwirtz0VNkHsVSyyKzwappINmVRQtY4FV8q+MqlqHOr+YOA0X9qcdtWmgAdJ5F4KeRwLHXFf6Rp4kVSNqWbjaa7CI5uwFuBd8jdpFh2baHYgBJpXyckXqStJjnAftdSOwPqckqxKuVBEiplm3KVKgvTkjfTjBqTZfOzePB9UL6nn9If7r6bDSq7+5A18fdyZ3f9SgKWa39EfYHTwnDabJXnVkCFKfvSgEkf7VsemMpRaexLFL4pbIhT9sTK+su6+dJFklT7dh9JMYF6gm/Y60ffGKNy16zMBcgJa9xf0e8ncSbtlkkBwX4QIMSZu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199021)(110136005)(52116002)(6486002)(6666004)(478600001)(1076003)(26005)(6506007)(186003)(107886003)(66946007)(4744005)(2906002)(6512007)(4326008)(316002)(41300700001)(5660300002)(8676002)(66476007)(38350700002)(38100700002)(8936002)(66556008)(86362001)(36756003)(2616005)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2sVH7rGTAB2DzfsfJL3TEADLccoLNn8gQsI64GGg82b7oHsjuEpn7Wh4GQm3?=
- =?us-ascii?Q?yiBoQf/S8yALppJlheD9PMRKcBLNgQ8acoDCWEG/c10PoAV5y9RwVeoulx2o?=
- =?us-ascii?Q?fTvEeRi2TBeGnhX/Hk9toJp6JrNohT5XiQ084DW0yt4pXZSKZp1f4tl8qKGi?=
- =?us-ascii?Q?8nDunszD565/e7ln/GgX3whSiOLnGZDEuWjieCWLAmrmC83p+kmA6h59edRY?=
- =?us-ascii?Q?594Ou3G3nfN2wa6W4XGYvjAdTXpDgMLhxB2wgDj1/VPNao1Ls8/o9tyXuLE9?=
- =?us-ascii?Q?r8185TmEPXu8MNIgcofKD9MPeWDqyWrRg1Hu1dDPRFodn8+zbevuoKQNiTUB?=
- =?us-ascii?Q?iasVcfBhuFaZW94zw51T5rDROa1GSyK7kZqaonIf3M+99AfBIc3TPOlaTy2D?=
- =?us-ascii?Q?KkO2IuRR/+3QULGehpAMzsTgdqcrifvIa6xt+kS8XahEroD7AAWH2Vv0xuAF?=
- =?us-ascii?Q?XjlUfVeWjlb9BYF84u9S+wGsOJ9BT/X+iHjTQLGauduj00bciGCI5FMZwS7b?=
- =?us-ascii?Q?rSQl8BU46E8XYqbv5YkwnD3dIbYyA++kOIguuVQ6h4gKhMi4gEKA6paoiq5Y?=
- =?us-ascii?Q?uzpU0Rc3sV0h0MR4lyCNbJvu/FvhYckjiwGQHCF2PVIPpx0mSXJXD9iTJmI1?=
- =?us-ascii?Q?EtZvwSDAGSfjh/lVdO+HRpbZVvWY5MRmFkjQ2p2VKEnkeWoUVpq1m2g0qR6K?=
- =?us-ascii?Q?KDTgEd6XI/STgkFbJReVSVpE9cSqHTZHfLkPld5MpIFjxxH9Ygl1867Ce/nC?=
- =?us-ascii?Q?rq5Mea8sGpYI4t8uBsGod/VuvEI+pOvktWZ5D38hGTG2cCJUStZomejW5KF8?=
- =?us-ascii?Q?XQhaXt8jLowTLCMRjsdPJUBuIYjoV3c8UQMZCPsfoLdlTPc2JMsVc0gGtTUu?=
- =?us-ascii?Q?YPEMXBgJ8nfxk2HXAGZSc8AVKoNQ1dMa5IP/WdSViTHuKTUdf3cV7Fr3FeVi?=
- =?us-ascii?Q?hVdBy3rkBoX4s8Wyqlw+eiA8EdaSp1Z4vADjAZflgR3P4VQ061qtNyhobXq9?=
- =?us-ascii?Q?m1s601K8npgbpubsL6HHita4bOcy97zwkHdNiK8KJ8MNeFjdgBgNK+lPHEI6?=
- =?us-ascii?Q?kAB1tfr9vB/F6Mvw8jEPDlwNmJYNjhy8/NahuKu6ydF9BvMD0Nwys6qiCCWn?=
- =?us-ascii?Q?/6reAenOdaumZIQQIjD1i6fwgohjn2rS61BxE9wWJf/+3KZF7SefGdnN55zP?=
- =?us-ascii?Q?pruX/u+ffJftlEI8sHTf0nXe7Tc3mUtvAvPirl8xLNjZ6IL0LtJ9ewfITcKN?=
- =?us-ascii?Q?HMQ/9RHOKZjy/3iUsTqVRmFbNZY9tS4DVpmPdj14a/sfxnev1GY28ggmLJbs?=
- =?us-ascii?Q?9opilQPX7LIKysxtwMemAbIrxditDHrpTCAyzWlrdmU7NsEQDejUK1GX9ZPR?=
- =?us-ascii?Q?2jho/4YnZSNZM9BFLJ+3ojQhfb4Pl7ssgKa6+bk0h7pMKNX+TNbzgodd+0Gr?=
- =?us-ascii?Q?Ac+nv0kyTagwAMhFmkLVyRXkvMSi5B/mkl5A+FGAVuvk7TLmz0ZHKDE9fCmj?=
- =?us-ascii?Q?WDmb3gpaSJIovGshFbNkFCjALgkm0GhXiM3cCnzBUyJdee1JR2tyExeLHJM/?=
- =?us-ascii?Q?C1RNPTihVdM8z1HFrJ9cqMfVyQ+3PatFnJy4Ej/A?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 668a583d-cb47-4298-f936-08db82cdd513
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 11:47:55.9458
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8xluMiKJOdCS+ge0MIDRH4qCBjBSP1J1pnD7mMPBOpiD5c6Ffsw6bQn+aUFqjy6x4xgx0Jx5/L9lA3NFXSxf2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4537
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make IS_ERR() judge the debugfs_create_dir() function return
-in ath9k_init_debug()
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Signed-off-by: Minjie Du <duminjie@vivo.com>
+Fix whitespace error reported by checkpatch.pl
+
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- drivers/net/wireless/ath/ath9k/debug.c | 2 +-
+ drivers/hwmon/pmbus/mp2975.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/debug.c b/drivers/net/wireless/ath/ath9k/debug.c
-index fb7a2952d..995c6e705 100644
---- a/drivers/net/wireless/ath/ath9k/debug.c
-+++ b/drivers/net/wireless/ath/ath9k/debug.c
-@@ -1420,7 +1420,7 @@ int ath9k_init_debug(struct ath_hw *ah)
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 2109b0458a8b..130cfde52e42 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -600,7 +600,7 @@ mp2975_vout_ov_scale_get(struct i2c_client *client, struct mp2975_data *data,
+ 	if (ret < 0)
+ 		return ret;
+ 	thres_dev = ret & MP2975_PRT_THRES_DIV_OV_EN ? MP2975_PROT_DEV_OV_ON :
+-	                                               MP2975_PROT_DEV_OV_OFF;
++						       MP2975_PROT_DEV_OV_OFF;
  
- 	sc->debug.debugfs_phy = debugfs_create_dir("ath9k",
- 						   sc->hw->wiphy->debugfsdir);
--	if (!sc->debug.debugfs_phy)
-+	if (IS_ERR(sc->debug.debugfs_phy))
- 		return -ENOMEM;
- 
- #ifdef CONFIG_ATH_DEBUG
+ 	/* Select the gain of remote sense amplifier. */
+ 	ret = i2c_smbus_read_word_data(client, PMBUS_VOUT_SCALE_LOOP);
+
+base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
 -- 
-2.39.0
+2.41.0
 
