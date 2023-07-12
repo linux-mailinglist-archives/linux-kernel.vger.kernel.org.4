@@ -2,112 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62E274FDE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E43174FDF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjGLDml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S231977AbjGLDnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjGLDmi (ORCPT
+        with ESMTP id S231766AbjGLDnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:42:38 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C0010D2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:42:36 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-403b3213d8aso19158911cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689133356; x=1691725356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AGC+6rPypaLJlCQX7D5f9PQLl8/lGoMDODsVm7b1HB0=;
-        b=3GLId8TpPFMbUN9+cqTJNNfvBWQHOwWggxKJsfePx31Keuk7IDA1cPTlVt51od2qSi
-         YDxpkLxjSX5K7RB9R0IMlh54mcS5SYJRZ6P/MzOUrhAILetGevNyuWSehecm0MkkDY4B
-         cGtibi5VjM67BkjWh3puy/uVWENRwqa13UsXS3DU2fV4AZYmAdnfgTUqRuEGYcJEos5i
-         3GK0UELsxf/4Sb87gmmGZVXLaxsYWNHu7nvKWg9GMmPqrKrHBZIuaZzh7JyXtSERo8y4
-         mTUDMdrI4PgfLk7lPMQBVMLpNHTuOXBGIXb1AK9mchDingX0e+fVFsGsAW8sBts2z52d
-         HkIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689133356; x=1691725356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AGC+6rPypaLJlCQX7D5f9PQLl8/lGoMDODsVm7b1HB0=;
-        b=hJJ7zg/IjJ75g7w1gHkqwKrVpe/o1KbXQ8rTlflVr0Wmt2jGK/xcfaE0i5xatXeZQ5
-         a6OPEedm8rz+oXeaMYK0TwkW9QMJ/JoROUB8AED7z+eBDJK+HmX4ZVX4fJPao/JN5Mz7
-         hTmt3LOyH7iVJfeN2jT0546leChs53vBypbrkeq8FtkhnvI5vzeOIrd3rth/oOYAN848
-         3lD8jmVOi2bRYAbtS/xG35QVExhI7wECzSyOCVxk2jDVMcQaypBzJJpRO9jgw+1UNPf0
-         N+X4tTbG/tPA4E+yKA+sFjAO7mxBtnEfgQKHYpyQ8zJ8BvMANZtlLCoczo0GopjJL/GX
-         GSqw==
-X-Gm-Message-State: ABy/qLZJ48NnYvnjX0qcm7MAGE5wDTKxVOIVfxLFKtWlxMpbepSWeWTF
-        H0ebr3PQLfYPVwRmMhmJBxdsLM7W94IadzAWYGEaWA==
-X-Google-Smtp-Source: APBJJlGQk5m4ovyiIS1fPut2mEBR26FBNA+DsJcg5Cn6rSJjDN7JUCMrWohf1AoamlB5EuvcTpqlSalrUzemY5XWjM4=
-X-Received: by 2002:ac8:7c50:0:b0:403:c417:ba9d with SMTP id
- o16-20020ac87c50000000b00403c417ba9dmr1033325qtv.16.1689133355634; Tue, 11
- Jul 2023 20:42:35 -0700 (PDT)
+        Tue, 11 Jul 2023 23:43:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C0B1BC6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:43:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4608615C4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED30C433C7;
+        Wed, 12 Jul 2023 03:43:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689133401;
+        bh=dIblCOHbs5y4iJ94xVrHaATNeAfkHWAz/gZObzXL80Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DgwIEugqA1YFxdmJgYPE1AZYxSpFGEsaPb3N7Qw7pvlpK5shrEalrexuuk0kIJjot
+         fhnNwTpEe7SFMf9vHHW7vb8HpTTPctzuer/Bszwium13eaQ119IQQVIALNaXmC5LvW
+         sR0sPBUKiazgIPOCo+AIu4MP4pvkpP3Z2tb2yYS/cOGPkli+07xYXnQ9xWpzOAoBYt
+         IGSCXSTSXx9lkk7voUgDcA1X0GL18NlETKJDEdYS8lmNndTJKf6OiNzI5R9suL3hl9
+         9HhIFpGsYLrIr+F4qqmT0T6yGALKeIOxlCOgWEvRKUIYjUaV1XneeSPOdFvzNmsof3
+         2Stj3PtXmluLQ==
+Message-ID: <c8c8abb4-51af-9700-722d-049733d13c43@kernel.org>
+Date:   Wed, 12 Jul 2023 13:43:17 +1000
 MIME-Version: 1.0
-References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
- <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
- <ZKNA9Pkg2vMJjHds@ziepe.ca> <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
- <ZKxDZfVAbVHgNgIM@ziepe.ca> <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
- <ZKyZBbKEpmkFkpWV@ziepe.ca> <20230711042708.GA18658@lst.de>
- <20230710215906.49514550@kernel.org> <20230711050445.GA19323@lst.de>
- <ZK1FbjG+VP/zxfO1@ziepe.ca> <20230711090047.37d7fe06@kernel.org>
- <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org> <20230711093224.1bf30ed5@kernel.org>
- <CAHS8izNHkLF0OowU=p=mSNZss700HKAzv1Oxqu2bvvfX_HxttA@mail.gmail.com>
- <20230711133915.03482fdc@kernel.org> <2263ae79-690e-8a4d-fca2-31aacc5c9bc6@kernel.org>
-In-Reply-To: <2263ae79-690e-8a4d-fca2-31aacc5c9bc6@kernel.org>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Tue, 11 Jul 2023 20:42:24 -0700
-Message-ID: <CAHS8izP=k8CqUZk7bGUx4ctm4m2kRC2MyEJv+N4+b0cHVkTQmA@mail.gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-To:     David Ahern <dsahern@kernel.org>,
-        Samiullah Khawaja <skhawaja@google.com>,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        logang@deltatee.com, Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] fs: binfmt_elf_efpic: fix personality for fdpic ELF
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-arm@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, brauner@kernel.org
+References: <20230711133955.483393-1-gerg@kernel.org>
+ <202307110901.7E9A0D0AE5@keescook>
+From:   Greg Ungerer <gerg@kernel.org>
+In-Reply-To: <202307110901.7E9A0D0AE5@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,116 +60,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 2:39=E2=80=AFPM David Ahern <dsahern@kernel.org> wr=
-ote:
->
-> On 7/11/23 2:39 PM, Jakub Kicinski wrote:
-> > On Tue, 11 Jul 2023 10:06:28 -0700 Mina Almasry wrote:
-> >>>> Any reason not to allow an alternative representation for skb frags =
-than
-> >>>> struct page?
-> >>>
-> >>> I don't think there's a hard technical reason. We can make it work.
-> >>
-> >> I also think we can switch the representation for skb frags to
-> >> something else. However - please do correct me if I'm wrong - I don't
-> >> think that is sufficient for device memory TCP. My understanding is
-> >> that we also need to modify any NIC drivers that want to use device
-> >> memory TCP to understand a new memory type, and the page pool as well
-> >> if that's involved. I think in particular modifying the memory type in
-> >> all the NIC drivers that want to do device memory TCP is difficult. Do
-> >> you think this is feasible?
-> >
-> > That's why I was thinking about adding an abstraction between
-> > the page pool and the driver. Instead of feeding driver pages
-> > a new abstraction could feed the driver just an identifier and a PA.
->
-> skb frag is currently a bio_vec. Overloading the 'struct page' address
-> in that struct with another address is easy to do. Requiring a certain
-> alignment on the address gives you a few low bits to use a flags / magic
-> / etc.
->
-> Overloading len and offset is not really possible - way too much code is
-> affected (e.g., iov walking and MSS / TSO segmenting).
->
-> ie., you could overload page address with a pointer to an object in your
-> new abstraction layer and the struct has the other meta data.
->
-> typedef struct skb_frag {
->         union {
->                 struct bio_vec bvec;
->                 struct new_abstraction abs;
->         };
-> } skb_frag_t;
->
-> where
->
-> struct new_abstraction {
->         void *addr,
->         unsigned int len;
->         unsigned int offset;
-> };
->
-> I have been playing with a similar and it co-exists with the existing
-> code quite well with the constraint on location of len and offset.
->
-> >
-> > Whether we want to support fragmentation in that model or not would
-> > have to be decided.
-> >
-> > We can take pages from the page pool and feed them to drivers via
-> > such an API, but drivers need to stop expecting pages.
->
-> yes, drivers would have to be updated to understand the new format. A
-> downside, but again relatively easy to manage.
->
+Hi Kees,
 
-I'm glad to see that you're open to this approach. As far as I
-understand, getting device memory in a struct page form would still be
-preferred, no? And the approach you point to would be a backup plan I
-presume?
+On 12/7/23 02:11, Kees Cook wrote:
+> On Tue, Jul 11, 2023 at 11:39:55PM +1000, Greg Ungerer wrote:
+>> The elf-fdpic loader hard sets the process personality to either
+>> PER_LINUX_FDPIC for true elf-fdpic binaries or to PER_LINUX for
+>> normal ELF binaries (in this case they would be constant displacement
+>> compiled with -pie for example). The problem with that is that it
+>> will lose any other bits that may be in the ELF header personality
+>> (such as the "bug emulation" bits).
+>>
+>> On the ARM architecture the ADDR_LIMIT_32BIT flag is used to signify
+>> a normal 32bit binary - as opposed to a legacy 26bit address binary.
+>> This matters since start_thread() will set the ARM CPSR register as
+>> required based on this flag. If the elf-fdpic loader loses this bit
+>> the process will be mis-configured and crash out pretty quickly.
+>>
+>> Modify elf-fdpic loaders personality setting for ELF binaries so that
+>> it preserves the upper three bytes by using the SET_PERSONALITY macro
+>> to set it. This macro in the generic case sets PER_LINUX but and
+>> preserves the upper bytes. Architectures can override this for their
+>> specific use case, and ARM does exactly this.
+> 
+> Thanks for tracking this down!
+> 
+> There are some twisty macros in use across all the architectures here!
+> 
+> I notice the bare set_personality() call remains, though. Is that right?
+> 
+> For example, ARM (and sh and xtensa) also sets:
+> 
+> #define elf_check_fdpic(x) ((x)->e_ident[EI_OSABI] == ELFOSABI_ARM_FDPIC)
+> 
+> so it's possible the first half of the "if" below could get executed,
+> and ARM (and possibly other architectures) would again lose the other
+> flags, if I'm reading correctly.
 
-Since the good folks on this thread have pointed me to p2pdma to
-address my use case, I've been doing some homework to see if it can
-apply. AFACT so far, it applies, and Willem actually had a prototype
-of it working a while back. The rough approach Willem and I are
-thinking of would be something like:
-
-1. The device memory driver would be the p2pdma provider. It would
-expose a user API which allocates a device memory region, calls
-pci_p2pdma_add_resource() and pci_p2pmem_publish() on it, and returns
-a reference to it to the userspace.
-
-2. The NIC driver would be the p2pdma client and orchestrator. It
-would expose a user API which binds an rxq to a pci device. Prior to
-the bind the user API would check that the pci device has published
-p2p memory (pci_has_p2pmem()), and check the the p2p mem is accessible
-to the driver (pci_p2pdma_distance() I think), etc.
-
-3. The NIC would allocate pages from the p2pdma provider for incoming
-packets, and create devmem skbs, and deliver the devmem skbs to the
-user using the support in my RFC. AFACT all that code need not be
-changed.
-
-AFAICT, all the concerns brought up in this thread are sidestepped by
-using p2pdma. I need not allocate struct pages in the core dma-buf
-code anymore (or anywhere), and I need not allocate pgmaps. I would
-just re-use the p2pdma support.
-
-Anyone see any glaring issues with this approach? I plan on trying to
-implement a PoC and sending an RFC v2.
-
-The only pending concern is integration with the page pool, but we
-already have some ideas on how to solve that.
-
-> >
-> > That's for data buffers only, obviously. We can keep using pages
-> > and raw page pool for headers.
->
-> yes.
+Yes, it is all a little confusing, and the fdpic handling is a little different
+to the standard ELF handling in binfmt_elf.c (with its use of SET_PERSONALITY2).
 
 
+> (And the fact that PER_LINUX is actually 0x0 is oddly handled, leaving
+> it implicit in most architectures.)
+> 
+> What seems perhaps more correct is to remove the "if" entirely and make
+> sure that SET_PERSONALITY() checks the header flags on all architectures?
 
---=20
-Thanks,
-Mina
+I had thought along those same lines as well. Changing it to be something more
+like this:
+
+     SET_PERSONALITY(exec_params.hdr);
+     if (elf_check_fdpic(&exec_params.hdr))
+             current->personality |= FDPIC_FUNCPTRS;
+
+Which I think better handles any arch specifics via the SET_PERSONALITY() use.
+But I chickened out since I can't test fdpic binaries at this time.
+
+
+> But I'm less familiar with this area, so please let me know what I'm
+> missing. :)
+
+Me too :-)
+It is definitely broken for loading standard ELF binaries on a noMMU system
+using binfmt_elf_fdpic.c, which is what led me down this path. It loses the
+ADDR_LIMIT_32BIT bit in the personality and that causes application crashing.
+
+
+>> Signed-off-by: Greg Ungerer <gerg@kernel.org>
+>> ---
+>>
+>> Is anyone out there using elf-fdpic on ARM?
+> 
+> It would seem you're the first? :) (_Should_ it be usable on ARM?)
+
+I was assuming that it must have worked at some time. The binfmt_elf_fdpic
+loader was enabled for ARM in commit 50b2b2e691cd ("ARM: add ELF_FDPIC support")
+by Nicolas Pitre. But that was way back in 2017.
+
+Regards
+Greg
+
+
+> -Kees
+> 
+>> This seems to break it rather badly due to the loss of that ADDR_LIMIT_32BIT
+>> bit from the process personality.
+>>
+>>   fs/binfmt_elf_fdpic.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+>> index a05eafcacfb2..f29ae1d96fd7 100644
+>> --- a/fs/binfmt_elf_fdpic.c
+>> +++ b/fs/binfmt_elf_fdpic.c
+>> @@ -348,7 +348,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+>>   	if (elf_check_fdpic(&exec_params.hdr))
+>>   		set_personality(PER_LINUX_FDPIC);
+>>   	else
+>> -		set_personality(PER_LINUX);
+>> +		SET_PERSONALITY(exec_params.hdr);
+>>   	if (elf_read_implies_exec(&exec_params.hdr, executable_stack))
+>>   		current->personality |= READ_IMPLIES_EXEC;
+>>   
+>> -- 
+>> 2.25.1
+>>
+> 
