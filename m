@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D14574FE05
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99F074FE0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjGLD6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S229931AbjGLEAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjGLD6x (ORCPT
+        with ESMTP id S229674AbjGLEAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:58:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2ACB10EF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:58:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-2640a8ceefdso4707476a91.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:58:51 -0700 (PDT)
+        Wed, 12 Jul 2023 00:00:04 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605F710FC;
+        Tue, 11 Jul 2023 21:00:02 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-5700b15c12fso73697047b3.1;
+        Tue, 11 Jul 2023 21:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689134331; x=1691726331;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UEOY9a4/YWLBUoOg+yf0OlLFQEwXhAnCHNBGem6V3F8=;
-        b=styZZBD34zzOBWH2SU7YeYnvifTmA5S3+v2YspEuc7HDdwOfAU9G7rrmX4hwLfN5Pq
-         VlWajywT8qXISFBMOqOVS7Fs1hDiWxSV9e8EsUei5xmKK6elen2zIuKtXGyYHXbZBdzn
-         17Ru3vxHI8hhYEsv6TBWk+8KGgGpGtmdb9I7qQ5cCvJPAgGBovzrsDmfO5foD27w7cU8
-         XzOuhsdENCEcNvZGC+geQqsRbSbfOd++Gr1Slp5vaaQSP5Cn2hz05J7LyXwgX4DblWCd
-         s3R+XqfpFWQSCjBlKaYQcDnglEF4Sn2jJjGN7UrOMnhzXCUok0ffXJINu/p81ih7hcwp
-         lsrQ==
+        d=gmail.com; s=20221208; t=1689134401; x=1691726401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eny0xuBKQG72aGSs5Mu3wmFEvwBxE580Z/xOyFr0CuQ=;
+        b=op7HJYAUybLgbHbRgPwL6Ng9AlJ0SskqAfEhBoTnyYEaLxj21Yt3tl4LlP7k9a/ASU
+         SkY8M2qfFQoO+10PSA1wNTt86A0Uj4fBtRVC34wNKDsHsBCrDypiFoVSotfye9neyEaj
+         HzBxrETvOavTvtfRBcSUJo0fyQz/9HHMIvUCF0ws8iB3LLaaOFctC+zyX8JHDn29Ii+L
+         iXqCzKDNf4t3QH0bzsGaKxgump/WrIc1i6T0/MXnUnMvlb2hqlrcZN8rdS9OBSIfTwvE
+         oIIB/StEP5oFuteVuydl8+GCWpfaZik4C0xolgGkIpkzp4wuPfs6rHJhauMJkZ48AZkL
+         7JZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689134331; x=1691726331;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UEOY9a4/YWLBUoOg+yf0OlLFQEwXhAnCHNBGem6V3F8=;
-        b=WK/1Hs9yNJJtLMQ1FGbb0QjFjIUk3oISGN5nd89mNvqvx996NQBLgeXbLKE2kYuuz6
-         t8V/+8HqQ2FeCaafnc6NCxB8vU9aVc+Zflu5m0BVJHFslNBDAPwlQ9qqZbOfVAavCNCd
-         73a2Ke8Q8rH4i+sCRSJLln+C1OcORwqr/5z0bzVW2OVACYSm8d+F7zvpMHmGZd/lL+St
-         jLi3CWuKsoYenfaaJDUqTdn22N/5nD3n/9sDVXo1aopQYZPl7yLq/g4asIYp/c6skJkc
-         SC53MZCf9r7CITaelG6y5NLneiprDIHKoCt2Y5+Md2ekfGmfVoWr1r99iqkpOQytkiIb
-         XwQA==
-X-Gm-Message-State: ABy/qLZ+eR3sPntxT3QOw704NzRwfZOFxMeIz7XM9NoqiO7D/f8hMSSB
-        Q5kL2Jrfd6/KbmHpgzY2NYmJRPfePRBi2OX4Q4A=
-X-Google-Smtp-Source: APBJJlGuySQn81JpLv1P3ociE7k0w/G4VfpcKdQF75gIlQj1BUydeqT6E6kg74SfUgLM0KM549cOMw==
-X-Received: by 2002:a17:90b:614:b0:260:fd64:a20 with SMTP id gb20-20020a17090b061400b00260fd640a20mr18186325pjb.9.1689134331055;
-        Tue, 11 Jul 2023 20:58:51 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id z20-20020a17090ab11400b00263e1db8460sm8927872pjq.9.2023.07.11.20.58.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 20:58:50 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: sparc: Don't mark cpufreq callbacks with __init
-Date:   Wed, 12 Jul 2023 09:28:43 +0530
-Message-Id: <94682b1572da4a3c6afd31bddf93b797f73fff5e.1689055100.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        d=1e100.net; s=20221208; t=1689134401; x=1691726401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eny0xuBKQG72aGSs5Mu3wmFEvwBxE580Z/xOyFr0CuQ=;
+        b=PUM+8w1UkYl1KUtxA4M/At/M2dtiUhMxWu7kQhRiZh+WILiOozCbXlvJpyNHzkwfWH
+         cHCHENztOA+hrAUMIGlmx8V4sp+GgW6qrQpts7lTXgUVOofBCWgr6YdySaBmjPBDmIsr
+         NWXpNbTyDE5wdNVET77gd1Ug6w6wR3LI/fpTqOhYmJ9NTOw923m7kNFseQ1JBY6trVVn
+         7UGz6uhh3+0n8JsYIo28Py4pWolV2V8fKIl34ceS42hMBLXzp7PnZJgDnVivr8/Q6rZx
+         i6ovHLgZ8904cRpH7J8XWJPtU4NowUfcGjs9Ho23ycIlL4TWv33lUHQmHystBrGVfoXy
+         7+bQ==
+X-Gm-Message-State: ABy/qLZ0VG8dLQQxJEPN1vPoJBHun91crpZRj743PJvD5scuC4iZsfx0
+        lu5Fk0VeGXDR/IR4MErJovF12sIIQEr4ntE1DLF3CsvNyw5bhg==
+X-Google-Smtp-Source: APBJJlHU5EHELf83jqB7BbL6CQRh3VhxoFOoCDUdNnyoxLdvdK16hKgHkMa7xR11TdoyR1l8mUaH8NkKy6bNPKMF5gI=
+X-Received: by 2002:a81:66d6:0:b0:57a:63f:f760 with SMTP id
+ a205-20020a8166d6000000b0057a063ff760mr16749557ywc.7.1689134401131; Tue, 11
+ Jul 2023 21:00:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230710104834.947884-1-imagedong@tencent.com>
+ <20230710104834.947884-4-imagedong@tencent.com> <20230711232522.54dbqdxkfbjvbvgi@macbook-pro-8.dhcp.thefacebook.com>
+In-Reply-To: <20230711232522.54dbqdxkfbjvbvgi@macbook-pro-8.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 12 Jul 2023 11:59:49 +0800
+Message-ID: <CADxym3Zu1eYTVzprqe7_8zxhzaZHKAvVKKusa-uK150Huq1mnQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND bpf-next v8 3/3] selftests/bpf: add testcase for
+ TRACING with 6+ arguments
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     yhs@meta.com, daniel@iogearbox.net, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, dsahern@kernel.org,
+        jolsa@kernel.org, x86@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +76,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These callbacks can be called again by the cpufreq core after the driver
-is initialized and must be kept around. We currently get section
-mismatch build warnings.
+On Wed, Jul 12, 2023 at 7:25=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Jul 10, 2023 at 06:48:34PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
+> > with 7/11 arguments. As this feature is not supported by arm64 yet, we
+> > disable these testcases for arm64 in DENYLIST.aarch64. We can combine
+> > them with fentry_test.c/fexit_test.c when arm64 is supported too.
+> >
+> > Correspondingly, add bpf_testmod_fentry_test7() and
+> > bpf_testmod_fentry_test11() to bpf_testmod.c
+> >
+> > Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
+> > MODIFY_RETURN with 7 arguments.
+> >
+> > Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
+> > bpf_testmod.c to test the struct in the arguments.
+> >
+> > And the testcases passed on x86_64:
+> >
+> > ./test_progs -t fexit
+> > Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t fentry
+> > Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t modify_return
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t tracing_struct
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > ---
+> > v8:
+> > - split the testcases, and add fentry_many_args/fexit_many_args to
+> >   DENYLIST.aarch64
+> > v6:
+> > - add testcases to tracing_struct.c instead of fentry_test.c and
+> >   fexit_test.c
+> > v5:
+> > - add testcases for MODIFY_RETURN
+> > v4:
+> > - use different type for args in bpf_testmod_fentry_test{7,12}
+> > - add testcase for grabage values in ctx
+> > v3:
+> > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+> >   bpf_testmod_fentry_test{7,12} meanwhile
+> > - get return value by bpf_get_func_ret() in
+> >   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast=
+()
+> >   in this version
+> > ---
+> >  net/bpf/test_run.c                            | 23 ++++++--
+> >  tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
+> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
+> >  .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
+> >  .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
+> >  .../selftests/bpf/prog_tests/modify_return.c  | 20 ++++++-
+> >  .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
+> >  .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
+> >  .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
+> >  .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
+> >  .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
+> >  11 files changed, 358 insertions(+), 14 deletions(-)
+> >  create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.=
+c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
+> >
+> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > index 63b11f7a5392..1c59fa60077b 100644
+> > --- a/net/bpf/test_run.c
+> > +++ b/net/bpf/test_run.c
+> > @@ -565,6 +565,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int =
+*b)
+> >       return a + *b;
+> >  }
+> >
+> > +__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
+> > +                                     void *e, char f, int g)
+> > +{
+> > +     *b +=3D 1;
+> > +     return a + *b + c + d + (long)e + f + g;
+> > +}
+> > +
+> >  int noinline bpf_fentry_shadow_test(int a)
+> >  {
+> >       return a + 1;
+> > @@ -600,9 +607,13 @@ __diag_pop();
+> >
+> >  BTF_SET8_START(bpf_test_modify_return_ids)
+> >  BTF_ID_FLAGS(func, bpf_modify_return_test)
+> > +BTF_ID_FLAGS(func, bpf_modify_return_test2)
+> >  BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
+> >  BTF_SET8_END(bpf_test_modify_return_ids)
+> >
+> > +BTF_ID_LIST(bpf_modify_return_test_id)
+> > +BTF_ID(func, bpf_modify_return_test)
+> > +
+> >  static const struct btf_kfunc_id_set bpf_test_modify_return_set =3D {
+> >       .owner =3D THIS_MODULE,
+> >       .set   =3D &bpf_test_modify_return_ids,
+> > @@ -665,9 +676,15 @@ int bpf_prog_test_run_tracing(struct bpf_prog *pro=
+g,
+> >                       goto out;
+> >               break;
+> >       case BPF_MODIFY_RETURN:
+> > -             ret =3D bpf_modify_return_test(1, &b);
+> > -             if (b !=3D 2)
+> > -                     side_effect =3D 1;
+> > +             if (prog->aux->attach_btf_id =3D=3D *bpf_modify_return_te=
+st_id) {
+> > +                     ret =3D bpf_modify_return_test(1, &b);
+> > +                     if (b !=3D 2)
+> > +                             side_effect =3D 1;
+> > +             } else {
+> > +                     ret =3D bpf_modify_return_test2(1, &b, 3, 4, (voi=
+d *)5, 6, 7);
+> > +                     if (b !=3D 2)
+> > +                             side_effect =3D 1;
+>
+> Patches 1 and 2 look good, but I don't like where this check will lead us=
+:
+> attach_btf_id =3D=3D *bpf_modify_return_test_id...
+>
 
-Don't mark them with __init.
+Yeah, I don't like it either, which makes the code weak.
 
-Fixes: dcfce7c2cee4 ("cpufreq: sparc: Don't allocate cpufreq_driver dynamically")
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Rafael,
+> When Jiri did a conversion of all test func into bpf_testmod.ko I forgot
+> why we couldn't move fmod_ret tests as well.
+> Whatever it was the extra attach_btf_id check will make it worse.
+>
 
-Please apply this for -rc2. Thanks.
+I think it's because the side effect can't be verified
+by the BPF program, which makes it have to be run by
+bpf_prog_test_run_opts().
 
- drivers/cpufreq/sparc-us2e-cpufreq.c | 2 +-
- drivers/cpufreq/sparc-us3-cpufreq.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> For now please think of a way to test fmod_ret when bpf_prog_test_run_tra=
+cing()
+> does something unconditional like:
+>         ret =3D bpf_modify_return_test(1, &b);
+>         if (b !=3D 2)
+>                 side_effect++;
+>         ret =3D bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
 
-diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
-index d3510cfdb3eb..2783d3d55fce 100644
---- a/drivers/cpufreq/sparc-us2e-cpufreq.c
-+++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
-@@ -269,7 +269,7 @@ static int us2e_freq_target(struct cpufreq_policy *policy, unsigned int index)
- 	return smp_call_function_single(cpu, __us2e_freq_target, &index, 1);
- }
- 
--static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
-+static int us2e_freq_cpu_init(struct cpufreq_policy *policy)
- {
- 	unsigned int cpu = policy->cpu;
- 	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
-diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
-index 91d1ed558136..6c3657679a88 100644
---- a/drivers/cpufreq/sparc-us3-cpufreq.c
-+++ b/drivers/cpufreq/sparc-us3-cpufreq.c
-@@ -117,7 +117,7 @@ static int us3_freq_target(struct cpufreq_policy *policy, unsigned int index)
- 	return smp_call_function_single(cpu, update_safari_cfg, &new_bits, 1);
- }
- 
--static int __init us3_freq_cpu_init(struct cpufreq_policy *policy)
-+static int us3_freq_cpu_init(struct cpufreq_policy *policy)
- {
- 	unsigned int cpu = policy->cpu;
- 	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
--- 
-2.31.1.272.g89b43f80a514
+Should it be like this?
 
+ret +=3D bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
+
+Or the return of bpf_modify_return_test() can't be verified.
+
+>         if (b !=3D 2)
+>                 side_effect++;
+
+Thanks!
+Menglong Dong
