@@ -2,160 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408D97501FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208F97501FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjGLItv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S231136AbjGLIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbjGLIts (ORCPT
+        with ESMTP id S230361AbjGLIt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:49:48 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FDFB1;
-        Wed, 12 Jul 2023 01:49:44 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 36C8mjdd097455;
-        Wed, 12 Jul 2023 16:48:45 +0800 (+08)
-        (envelope-from Di.Shen@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4R1BFq1lLMz2MK44l;
-        Wed, 12 Jul 2023 16:47:43 +0800 (CST)
-Received: from bj10906pcu1.spreadtrum.com (10.0.73.63) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 12 Jul 2023 16:48:43 +0800
-From:   Di Shen <di.shen@unisoc.com>
-To:     <lukasz.luba@arm.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xuewen.yan@unisoc.com>, <jeson.gao@unisoc.com>,
-        <orsonzhai@gmail.com>, <zhanglyra@gmail.com>, <di.shen@unisoc.com>
-Subject: [PATCH] Revert "thermal: power allocator: change the 'k_*' always in estimate_pid_constants()"
-Date:   Wed, 12 Jul 2023 16:48:40 +0800
-Message-ID: <20230712084840.3594-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 12 Jul 2023 04:49:26 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09365EA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:49:24 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-765a4ff26cdso622908085a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1689151763; x=1691743763;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6asCIJZfh89X/Pid3ai0oXZDotleMvJEDvS2yZNbiic=;
+        b=BVmcnc4SJ4NNyAlLwbkYhFQsxpIE/2gt8dFBgtENtVwmo5KP/TuO9o+JVHkuWbAqRV
+         rkOvgo+eB6VMX8332YE21U4AXOR1NPYhs/HJOrvrNl6zZtKqi82E0dIV8zuA9NWnEqJu
+         1hlqBFuGx+tz8rmEG8cH77x8GEntkyjJX0qrV5Y9pJyxsPjpASMAJ7MHukrFv9TTa85W
+         dOM+QqJSMSUf3LJozf/rjD/aOQFYdmK/16ZW9MyNLbjQWxh80tKUB81SFmTdWzDzAG0E
+         3ilJ/ic+HknUn8rbAaMJQozGahvbyponRv0CfVi2dLsL7P2HEdqCdQCAwT/q+hTX0J+V
+         hEAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689151763; x=1691743763;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6asCIJZfh89X/Pid3ai0oXZDotleMvJEDvS2yZNbiic=;
+        b=NlrNwzaAJmOUas8bNEswiur/5Vf8zuf05AbpzMiNq5vLCHrooJ0goP9N8PBxD6Cqab
+         5VCLxKU+s84dU0l+hXVENNx4jHbJocYjC2zTBV1gH6zyA1epQid4dZlb29Z4z4TPA5yX
+         L9DbrH+G9mMcEgmLf1P5qfS87wMbFLyRx96XRGK3QF4jC0lUXYFPMh8VO9MRxpRg+6VD
+         7aqR0ENAeyE8sAArf9v34vWrygnoWx9An7SAqpPAZLmuecjd5SD4ZoS+Ca3os+WkOXAV
+         NVSsEvz9p56T/NIxwfx90FRuD5aYacLx05qbyYkLxbEoBFx0SXPxZQiRpgKp7UWOj2Sq
+         5IDw==
+X-Gm-Message-State: ABy/qLaFszgNwbsBlNcBRpKBGQOghXnABhpRmcQQqf8lOqPThv7FJhfx
+        zCfm27fP3mSHxEbBx/kjo8/2oU1b/GItrqHJIwr9BAFJnJzCr/fRpnM=
+X-Google-Smtp-Source: APBJJlF72vy+DxMvN0aXWMy3infWehyApUye86ZMGblUGpIBDBNTDFaMkN4MymHVU2YOFBQEcRz7PWbxFRxdfoCgR7U=
+X-Received: by 2002:ae9:d613:0:b0:765:381a:3487 with SMTP id
+ r19-20020ae9d613000000b00765381a3487mr17442349qkk.57.1689151763171; Wed, 12
+ Jul 2023 01:49:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.73.63]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 36C8mjdd097455
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230711160452.818914-1-Naresh.Solanki@9elements.com> <36752432-52e7-22e1-a2de-332749aa15a1@roeck-us.net>
+In-Reply-To: <36752432-52e7-22e1-a2de-332749aa15a1@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Wed, 12 Jul 2023 10:49:11 +0200
+Message-ID: <CABqG17gswZCgtc7ECZK=AJ8S3=QRQ_HW2ZmS=cLUSrq=63qOSQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] peci: Add Intel Sapphire Rapids support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        iwona.winiarska@intel.com, jdelvare@suse.com,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        openbmc@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 90a996544946d1d4834ec2ec8add586edd905779.
+Hi Guenter,
 
-The commit ensures that the pid constants are updated when
-sustainable_power changes, but it makes it impossible for
-the driver to set the pid constants when the sustainable_power
-is not changed.
+On Tue, 11 Jul 2023 at 21:46, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/11/23 09:04, Naresh Solanki wrote:
+> > Add support for detection of Intel Sapphire Rapids processor based on
+> > CPU family & model.
+> >
+> > Sapphire Rapids Xeon processors with the family set to 6 and the
+> > model set to INTEL_FAM6_SAPPHIRERAPIDS_X. The data field for this entry
+> > is "spr".
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>
+> Please version your patches and provide change logs.
+Yes, I missed that. Will be updated in the next patchset.
+>
+> Guenter
+>
+> > ---
+> >   drivers/peci/cpu.c | 5 +++++
+> >   1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
+> > index de4a7b3e5966..3668a908d259 100644
+> > --- a/drivers/peci/cpu.c
+> > +++ b/drivers/peci/cpu.c
+> > @@ -318,6 +318,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
+> >               .model  = INTEL_FAM6_ICELAKE_X,
+> >               .data   = "icx",
+> >       },
+> > +     { /* Sapphire Rapids Xeon */
+> > +             .family = 6,
+> > +             .model  = INTEL_FAM6_SAPPHIRERAPIDS_X,
+> > +             .data   = "spr",
+> > +     },
+> >       { /* Icelake Xeon D */
+> >               .family = 6,
+> >               .model  = INTEL_FAM6_ICELAKE_D,
+> >
+> > base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
+>
 
-When the driver tries to register a thermal zone device by
-thermal_zone_device_register_with_trips(const char *type,
-	struct thermal_trip *trips, int num_trips, int mask,
-	void *devdata, struct thermal_zone_device_ops *ops,
-	struct thermal_zone_params *tzp, int passive_delay,
-	int polling_delay)
-and passes the private thermal_zone_params structure data,
-
-thermal_zone_devcice_register_with_trips
-	|
-thermal_set_governor
-	|
-bind_to_tz
-	|
-power_allocator_bind
-	|
-estimate_pid_constants
-
-the tzp->k_* will not be the data that driver have given,
-but the data estimated by sustainable_power.
-
-To make it possible for driver to add its own pid constants,
-the 'force' flag is needed to indicate whether the tzp->k_*
-should be estimated by sustainable_power or not.
-
-Signed-off-by: Di Shen <di.shen@unisoc.com>
----
- drivers/thermal/gov_power_allocator.c | 28 ++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 8642f1096b91..f1753291b827 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -116,13 +116,18 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
-  * @sustainable_power:	sustainable power for the thermal zone
-  * @trip_switch_on:	trip point number for the switch on temperature
-  * @control_temp:	target temperature for the power allocator governor
-+ * @force:	whether to force the update of the constants
-  *
-  * This function is used to update the estimation of the PID
-  * controller constants in struct thermal_zone_parameters.
-+ *
-+ * If @force is not set, the values in the thermal zone's parameters
-+ * are preserved if they are not zero.  If @force is set, the values
-+ * in thermal zone's parameters are overwritten.
-  */
- static void estimate_pid_constants(struct thermal_zone_device *tz,
- 				   u32 sustainable_power, int trip_switch_on,
--				   int control_temp)
-+				   int control_temp, bool force)
- {
- 	struct thermal_trip trip;
- 	u32 temperature_threshold = control_temp;
-@@ -144,14 +149,18 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
- 	if (!temperature_threshold)
- 		return;
- 
--	tz->tzp->k_po = int_to_frac(sustainable_power) /
--		temperature_threshold;
-+	if (!tz->tzp->k_po || force)
-+		tz->tzp->k_po = int_to_frac(sustainable_power) /
-+			temperature_threshold;
- 
--	tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
--		temperature_threshold;
-+	if (!tz->tzp->k_pu || force)
-+		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
-+			temperature_threshold;
- 
--	k_i = tz->tzp->k_pu / 10;
--	tz->tzp->k_i = k_i > 0 ? k_i : 1;
-+	if (!tz->tzp->k_i || force) {
-+		k_i = tz->tzp->k_pu / 10;
-+		tz->tzp->k_i = k_i > 0 ? k_i : 1;
-+	}
- 
- 	/*
- 	 * The default for k_d and integral_cutoff is 0, so we can
-@@ -184,7 +193,8 @@ static u32 get_sustainable_power(struct thermal_zone_device *tz,
- 	/* Check if it's init value 0 or there was update via sysfs */
- 	if (sustainable_power != params->sustainable_power) {
- 		estimate_pid_constants(tz, sustainable_power,
--				       params->trip_switch_on, control_temp);
-+				       params->trip_switch_on, control_temp,
-+				       true);
- 
- 		/* Do the estimation only once and make available in sysfs */
- 		tz->tzp->sustainable_power = sustainable_power;
-@@ -662,7 +672,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 		if (!ret)
- 			estimate_pid_constants(tz, tz->tzp->sustainable_power,
- 					       params->trip_switch_on,
--					       trip.temperature);
-+					       trip.temperature, false);
- 	}
- 
- 	reset_pid_controller(params);
--- 
-2.17.1
-
+Regards,
+Naresh
