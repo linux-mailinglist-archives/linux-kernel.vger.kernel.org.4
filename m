@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069187504AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E8A7504AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjGLKfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S232229AbjGLKft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjGLKf2 (ORCPT
+        with ESMTP id S232077AbjGLKfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:35:28 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420A91FCB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:34:55 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-666edfc50deso411551b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:34:55 -0700 (PDT)
+        Wed, 12 Jul 2023 06:35:33 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EA21FF0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:35:07 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6687446eaccso6007332b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689158094; x=1691750094;
+        d=linaro.org; s=google; t=1689158106; x=1691750106;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+PtBZ5U/uPeERQpI5byb7Cw2i1LitARzlq3AxNOTl7Y=;
-        b=UcvrMOqD44a6oWGaldA9ZDq9L47XviiAcTCDMWN12cU3z+dz6lpKTrdWH1GyfO1DBM
-         3yzb3xBTiIvWHYOFCiY5ZhBJx5LCdnPtA6sBKusX0/2Dj7CkFDsPC/5eDYPK3J2qJgVs
-         iLR3jASHUz73b/mDwxfsaavtVJZlufkYFEOuqXlC6iRO/Zqa9r47iHGN6v+aR3zdkrm3
-         4HMMibUVoZIK9agEKlwLA6t2yTlnanQsXcFnujgEE0cysgYQpq3EJgaLj4nNQI9eRh+5
-         W2A97em2isAvZK0PO633CDUhLgMBobwnMsBnr7/FplX/1Uw/XXIg+6BfJyDD0wvhQ48m
-         I8KQ==
+        bh=XaN+I/hkvd3QzA25nZ6WowbgECymtQYUL0zIvSOgjdA=;
+        b=Jyf/llO9zDG95XBi4fykEL2PWj0+zccIkqTmLzo2dX+Ef5w6epDK2uAV7H94PVzhsK
+         niuFYZmdiaHWGo00Fhk3DcywRcZqHQj2jo8eTDDXreAGKvmwBhTPlLQfqxRwdeTb5GVK
+         YkNC3Nj/Uo2lOdas+p0y2EIaAz/+5/PMJeZI5qIoQYRfjb7oA74/J6tAG7uefCVR21rt
+         qUdzVnDAmzQvGN14Aejj24wLU1JuTsSjcFMh1/2AGfzRP9geKckbo/aGvUz1ArwSikPN
+         gDky1uiKJQzKzkRBXFxI3FuQdE4gkKoDrpU8Yx+h4JAoBYIoDXmlVvqQ4hJpZ6g0Jd0S
+         wRxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689158094; x=1691750094;
+        d=1e100.net; s=20221208; t=1689158106; x=1691750106;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+PtBZ5U/uPeERQpI5byb7Cw2i1LitARzlq3AxNOTl7Y=;
-        b=gzX/xaG+mvuM5niuLY7zUVDR5YzrGxub4pUVr1/+YVxT7d4dKZPR4SkQwif6Gs8YLb
-         xfM3bTo3xIUgVFC/0CkeJ3UMhHLdf3odT7Q9gaUSpq96Ay/2M3pAm7wUtXS3/BqH5mLB
-         kS3XWBBN5rW3QVac6iWuG/rW0OXSTxo3ZDtBIXUXTiOMsloWC/vc+iYBWdoSkWkKzthp
-         uFKmP1ji+hr1beDD6LIzy5NjubJ9qPs6V6yEtlxuNn9DdibfBs989LkhGzHTqFH7JWIM
-         lFr6DdmUQvqxbc6TrLQ5ZMl19Llf70xF/itDbzE7b4zKN4rmxGctbmlVWoBE0gN8+/OV
-         MNHA==
-X-Gm-Message-State: ABy/qLY3Ljt1l09i+Tf0mHRRrKHqMLLlXs4UPT9ZtTuW5PsCjTpLlrq4
-        EB/GGvjU74/LziSmzglnhfGi
-X-Google-Smtp-Source: APBJJlHVqMInQEBerhca2pSVCTr7l7KhcpwqkHE7e5PLYOJuX+A2hzqOExPVGFQ0Mvhr8kyHqBz1fQ==
-X-Received: by 2002:a05:6a00:399f:b0:682:edbe:4cbd with SMTP id fi31-20020a056a00399f00b00682edbe4cbdmr1949033pfb.15.1689158094604;
-        Wed, 12 Jul 2023 03:34:54 -0700 (PDT)
+        bh=XaN+I/hkvd3QzA25nZ6WowbgECymtQYUL0zIvSOgjdA=;
+        b=Wqx0WLE7NW7zsYGuzdeLeLS+gr2np+IMiDTwyRc2QHCumClH+cE8cdbZGM/lgbdMZg
+         xHDIl4v6ipPMyDNYwApAO9eqgxKV4bgwquhS4GcKAkB8NLmeC37SVIRpu39NbpnBx3XF
+         0mu4st5VRToncsjB4mI2tvC1Kru9XjYuqDAMI3Rq7KIDCkXczzwOGz4PDAB5NJQFCgym
+         9mreQ2fuSWHC4hSYkO+QSXqiOrTO1ZU+aZ1d1eN0AW3L6lfDlzVN2gBFMmEZL2u/poE+
+         DvkCDb8KgwEKCOoUkDVeUX8trsBBLQ7IxVuK2KvyaJcvav8U4zJov6RRdYcDtIqSS/GJ
+         bMqw==
+X-Gm-Message-State: ABy/qLaS4TAF6sQhBHZwHfgFDCC7qLDjJfJw3odF/i1ewkaNbRFl0rCG
+        RkpV+jd9y3X6qojx76TiRczW
+X-Google-Smtp-Source: APBJJlHiGA6H0kaANzNsWCCi3R27jt8fDpV3Av1v/qRVTqtsSGWR2FfuFiowPVfnA/ydlLHk2sAe4Q==
+X-Received: by 2002:a05:6a20:3ca2:b0:132:87da:5b57 with SMTP id b34-20020a056a203ca200b0013287da5b57mr4375593pzj.59.1689158106553;
+        Wed, 12 Jul 2023 03:35:06 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.34.42
+        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 03:34:54 -0700 (PDT)
+        Wed, 12 Jul 2023 03:35:06 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -64,9 +64,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 10/13] scsi: ufs: host: Add support for parsing OPP
-Date:   Wed, 12 Jul 2023 16:02:06 +0530
-Message-Id: <20230712103213.101770-12-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 11/13] arm64: dts: qcom: sdm845: Add interconnect paths to UFSHC
+Date:   Wed, 12 Jul 2023 16:02:07 +0530
+Message-Id: <20230712103213.101770-13-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
 References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
@@ -75,184 +75,37 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OPP framework can be used to scale the clocks along with other entities
-such as regulators, performance state etc... So let's add support for
-parsing OPP from devicetree. OPP support in devicetree is added through
-the "operating-points-v2" property which accepts the OPP table defining
-clock frequency, regulator voltage, power domain performance state etc...
+UFS host controller requires interconnect path configuration for proper
+working. So let's specify them for SDM845 SoC.
 
-Since the UFS controller requires multiple clocks to be controlled for
-proper working, devm_pm_opp_set_config() has been used which supports
-scaling multiple clocks through custom ufshcd_opp_config_clks() callback.
-
-It should be noted that the OPP support is not compatible with the old
-"freq-table-hz" property. So only one can be used at a time even though
-the UFS core supports both.
-
-Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/ufs/host/ufshcd-pltfrm.c | 116 +++++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-index 0b7430033047..068c22378c88 100644
---- a/drivers/ufs/host/ufshcd-pltfrm.c
-+++ b/drivers/ufs/host/ufshcd-pltfrm.c
-@@ -8,8 +8,10 @@
-  *	Vinayak Holikatti <h.vinayak@samsung.com>
-  */
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index e04a3cbb1017..2ea6eb44953e 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2607,6 +2607,11 @@ ufs_mem_hc: ufshc@1d84000 {
+ 				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
  
-+#include <linux/clk.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
- #include <linux/pm_runtime.h>
- #include <linux/of.h>
+ 			operating-points-v2 = <&ufs_opp_table>;
++
++			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mem_noc SLAVE_EBI1 0>,
++					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
++			interconnect-names = "ufs-ddr", "cpu-ufs";
++
+ 			status = "disabled";
  
-@@ -17,6 +19,8 @@
- #include "ufshcd-pltfrm.h"
- #include <ufs/unipro.h>
- 
-+#include <trace/events/ufs.h>
-+
- #define UFSHCD_DEFAULT_LANES_PER_DIRECTION		2
- 
- static int ufshcd_parse_clock_info(struct ufs_hba *hba)
-@@ -205,6 +209,112 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
- 	}
- }
- 
-+static int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
-+				  struct dev_pm_opp *opp, void *data,
-+				  bool scaling_down)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	struct list_head *head = &hba->clk_list_head;
-+	struct ufs_clk_info *clki;
-+	unsigned long freq;
-+	u8 idx = 0;
-+	int ret;
-+
-+	list_for_each_entry(clki, head, list) {
-+		if (!IS_ERR_OR_NULL(clki->clk)) {
-+			freq = dev_pm_opp_get_freq_indexed(opp, idx++);
-+
-+			/* Do not set rate for clocks having frequency as 0 */
-+			if (!freq)
-+				continue;
-+
-+			ret = clk_set_rate(clki->clk, freq);
-+			if (ret) {
-+				dev_err(dev, "%s: %s clk set rate(%ldHz) failed, %d\n",
-+					__func__, clki->name, freq, ret);
-+				return ret;
-+			}
-+
-+			trace_ufshcd_clk_scaling(dev_name(dev),
-+				(scaling_down ? "scaled down" : "scaled up"),
-+				clki->name, hba->clk_scaling.target_freq, freq);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int ufshcd_parse_operating_points(struct ufs_hba *hba)
-+{
-+	struct device *dev = hba->dev;
-+	struct device_node *np = dev->of_node;
-+	struct dev_pm_opp_config config = {};
-+	struct ufs_clk_info *clki;
-+	const char **clk_names;
-+	int cnt, i, ret;
-+
-+	if (!of_find_property(np, "operating-points-v2", NULL))
-+		return 0;
-+
-+	if (of_find_property(np, "freq-table-hz", NULL)) {
-+		dev_err(dev, "%s: operating-points and freq-table-hz are incompatible\n",
-+			 __func__);
-+		return -EINVAL;
-+	}
-+
-+	cnt = of_property_count_strings(np, "clock-names");
-+	if (cnt <= 0) {
-+		dev_err(dev, "%s: Missing clock-names\n",  __func__);
-+		return -ENODEV;
-+	}
-+
-+	/* OPP expects clk_names to be NULL terminated */
-+	clk_names = devm_kcalloc(dev, cnt + 1, sizeof(*clk_names), GFP_KERNEL);
-+	if (!clk_names)
-+		return -ENOMEM;
-+
-+	/*
-+	 * We still need to get reference to all clocks as the UFS core uses
-+	 * them separately.
-+	 */
-+	for (i = 0; i < cnt; i++) {
-+		ret = of_property_read_string_index(np, "clock-names", i,
-+						    &clk_names[i]);
-+		if (ret)
-+			return ret;
-+
-+		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
-+		if (!clki)
-+			return -ENOMEM;
-+
-+		clki->name = devm_kstrdup(dev, clk_names[i], GFP_KERNEL);
-+		if (!clki->name)
-+			return -ENOMEM;
-+
-+		if (!strcmp(clk_names[i], "ref_clk"))
-+			clki->keep_link_active = true;
-+
-+		list_add_tail(&clki->list, &hba->clk_list_head);
-+	}
-+
-+	config.clk_names = clk_names,
-+	config.config_clks = ufshcd_opp_config_clks;
-+
-+	ret = devm_pm_opp_set_config(dev, &config);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_pm_opp_of_add_table(dev);
-+	if (ret) {
-+		dev_err(dev, "Failed to add OPP table: %d\n", ret);
-+		return ret;
-+	}
-+
-+	hba->use_pm_opp = true;
-+
-+	return 0;
-+}
-+
- /**
-  * ufshcd_get_pwr_dev_param - get finally agreed attributes for
-  *                            power mode change
-@@ -371,6 +481,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 
- 	ufshcd_init_lanes_per_dir(hba);
- 
-+	err = ufshcd_parse_operating_points(hba);
-+	if (err) {
-+		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-+		goto dealloc_host;
-+	}
-+
- 	err = ufshcd_init(hba, mmio_base, irq);
- 	if (err) {
- 		dev_err(dev, "Initialization failed\n");
+ 			ufs_opp_table: opp-table {
 -- 
 2.25.1
 
