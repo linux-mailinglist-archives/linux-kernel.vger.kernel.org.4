@@ -2,218 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610367508F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B7A7508F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjGLM7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
+        id S232930AbjGLNA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjGLM7j (ORCPT
+        with ESMTP id S230035AbjGLNA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:59:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080091736;
-        Wed, 12 Jul 2023 05:59:38 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CCnIVo019048;
-        Wed, 12 Jul 2023 12:59:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gYiOiSiY93zMQf1d40yP6iQ9FTq+pjUOQ8cnmkdfnn4=;
- b=kIBsq8aGz9217a5S7oRQ2n+1UIEZE5Z3NG12/pthsVMTfKXD6BblzjFq7fR6FtXfqFY1
- PFWRHu/jbt/WGYt3AyN3dyPa2i4NI96up/d5+ntA4CdMh8dE719MGrBPhg8w+F764agF
- 2prQvnKv10NZtqquCo8ZMirSWpktRqDqmS4+3lvK+A0gnk48+lu7v91Biy8PnIqKj8Kf
- 07KmH4Wf2UwpvRBTk1M3a+I2Mi2ioEkRzhuzyaT2oPnVnzH3ERKw3k7UwAU8trsXkBJG
- rys7QzaKj1Rcgd9as6DCPsdw/2VtkUSW/OhtoJ3AURlfGXwn6zX3ZODbB+Zxbl6i6/jP YA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgar9c5c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:59:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CCxStr027636
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:59:28 GMT
-Received: from [10.201.3.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
- 2023 05:59:23 -0700
-Message-ID: <a3dba5d9-918f-159f-161c-444a63d4c5b3@quicinc.com>
-Date:   Wed, 12 Jul 2023 18:29:19 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: ipq5332: Add tsens node
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>
-References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
- <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
- <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
- <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
- <538c3d99-a404-6847-dd04-f77a35aa6c77@linaro.org>
-From:   Praveenkumar I <quic_ipkumar@quicinc.com>
-In-Reply-To: <538c3d99-a404-6847-dd04-f77a35aa6c77@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Wed, 12 Jul 2023 09:00:26 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2115.outbound.protection.outlook.com [40.107.255.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92B61981;
+        Wed, 12 Jul 2023 06:00:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZJXyLGQ9gbUfF1xOwBHjwMDWoOuP3WNfEnQGeIlcEQO2XR1OW2DlzOx+oXRPTyqX8pGHAkgk9JJxnlRL5yJsdBBLLpU0Rw4e+Tzdt2Zm5fRVXuKsC3GUsoToKh7P+75Er6WFL+Oy75ipLdzYPGOptGILIJyLseB86HaQ+DbdWqZ8w5MPgJphMKW1MivTsSn5/MY4AiPGUYKxLKWORxQa7+mO3fkZMvC58+G4qLePvOWiBu/ftlF0Rf8yjptGSX7SYbe9S0cMOT//i1mg1UfKVXfSc3cQQUhHy3oBFJ9nFIKRsxUPnIGfni+M31wl9ShpUBgljhl+2GAS31Kg3FsfVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1MsbiiOYH7QAY/DuQbpfGMnAX2rpx/XkuX+WX2ZdLCI=;
+ b=GK8x1ruzMffZs7kwe0QPLOjBdqraiMtxA/lXDPYYpXN1b0WyylFwm6gGhlx7CHZnKybaJpYi1RdLs0DDGItYMaO2p1pXQ5zczIjFroih3HhWJB3Z92nZ6QTvk2fwzepenmvzu8dMxXx1NYRZM5zTxyZhTalq261Svc+pyMr3PIfi8dFO2a6iFp4tXP7sfSxUrMF105Yw/qyM9new3U5X+cquFOuY/pF8gJiAEr+5fylUzGXngGwxD6oXt9Zwj3oKStMaxPe1z1tkhpk6B5yF6qw0Es0oZRnmiofp3DeIL4HpUeyf8QwHlc8N8WeST2kNoRKe0T1oUHwD8fpN1QZ/Fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1MsbiiOYH7QAY/DuQbpfGMnAX2rpx/XkuX+WX2ZdLCI=;
+ b=B0P6TLdkfFA6Roz3Q9inln7v0zAAFrPzTb2MDkWVvo8oICV91wtGrtcLf75SvJ2UHY1Wks2uwF0d4q/uCe1RZSwLxuw4ye6MX14+Ven388/SZS4Fy4ymVbtX/1DXnUdmbsBRc4Ek5j+1nXhmes4ADr7xVM2ug4rI2XRNB5BZEJgXTPx5eawvZGejsfg+iWAvjs+rb3pLHgIe4Zo+4no5P+7om3TumQF0YCRSUXBd5VQHy2k0uoprUlRlW4pmExH7iBBkIt6QBazoGVtxvlNWEowoarjRRw3TygB66d69HPNEAzzboe9PQSBBIOhokNIQsn3iN1HH89PbZbiIrkkMWQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ SEYPR06MB5280.apcprd06.prod.outlook.com (2603:1096:101:81::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.29; Wed, 12 Jul 2023 13:00:16 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 13:00:16 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-wireless@vger.kernel.org (open list:MEDIATEK MT76 WIRELESS LAN
+        DRIVER),
+        linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] drivers: wireless: mt76: fix parameter check in mt76_register_debugfs_fops()
+Date:   Wed, 12 Jul 2023 21:00:05 +0800
+Message-Id: <20230712130005.15809-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T1Z-g5d1QMYtPfv0IL3VJKU8NsDznhuG
-X-Proofpoint-ORIG-GUID: T1Z-g5d1QMYtPfv0IL3VJKU8NsDznhuG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- mlxlogscore=908 spamscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120117
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0062.jpnprd01.prod.outlook.com
+ (2603:1096:404:2b::26) To SG2PR06MB5288.apcprd06.prod.outlook.com
+ (2603:1096:4:1dc::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|SEYPR06MB5280:EE_
+X-MS-Office365-Filtering-Correlation-Id: d9da29cc-3b33-4db1-c8da-08db82d7f046
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: crLjH8PJLuEYMoQFVREH71Pmu/g+O8R5dhQNOfefWHKmJtNCs63IvrAWfwVN3fkpTjUjWPeBU+hMzAu+Vse3VDSbNosnbOSHc450/AGh6JSEn9XVbRCYNX8uClGKdjIVFGC7Qbt8uHLoAMvhgy8xrvZ2Y4YiU4WGETJyqzYPJ8cIFFauTCh6M/KwpL//itfa65LP63R5ZNOBFE7I7hu7ClhucOfP4w0n2j1mVCVurJjXSjlBQcAf8JG5s9wlbH1oPQ5DpekDppjbN4pv6nVQK7zGFeaRB7IyXgqlUIaJzNH7YuaAsllYaz3yn8XTkF4MaUUybNUrwrGTMv2D7uCv/3tHsbbr33jDPJpOkl8qK+ak4UcabgbWZ8+fJKrGuzLN+upbJ93TTA8cT3K8LqUzFdatpNCN4wOU8rSDQgIgd9Rz2WEQ8myqXfipd0e9+Co0o5mfuhTk7ikGEZ2lS4ugHnuVmZIrIAtyex74nBOpd1Hh5fbJyeHtvqZqIyBGfgRwpzEaRBn/rNyf+lWXaLGbl+hJs5LLwMoI82KCdpKos8TkUsOtBWVbt3GsiqBRQr5Fy/7bgsorfQ+kmz+Zh/gj1D1gTYlN6ri7IoRaUl0ztr4lyMQ7LNbgrROy/uNX+/QpNOF0EJx9LGqaFdRNBKJbsnNoXCOswCnQGam6hbMPxxSGTB/FhGL2leVyvEVYzXGd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(376002)(396003)(346002)(136003)(451199021)(4744005)(36756003)(2616005)(2906002)(41300700001)(83380400001)(5660300002)(6506007)(26005)(1076003)(186003)(7416002)(8936002)(8676002)(107886003)(921005)(110136005)(6486002)(66476007)(66556008)(66946007)(52116002)(4326008)(6666004)(86362001)(478600001)(38100700002)(38350700002)(316002)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VBPAhBJfmr0oXceD12EtL8t21jlDUYVWZfYGXrcXgGZRo5GbpzEng8uVbC4u?=
+ =?us-ascii?Q?bIgE/5IoDjCqVMdyROXCUunEAAWfXyNznvU3nsffqLVuDXt5AoQYnxwISCbK?=
+ =?us-ascii?Q?oyGSOCa89SrWBQPylTKFsAK72v/lzlxQmd1KgxqiVW6Ymf6AEex5yMnpMPzQ?=
+ =?us-ascii?Q?5f9rlLttqZt/8BP0uDJvJx78TO5fDHH/83JqEXWTeMPW9LTZ3LvmrfoVOQj4?=
+ =?us-ascii?Q?eEMD6QcmCuUH2WnF/R+WRVmSUIhPo2008Mseyo3gTZZeQ92i5ET55Yd5Y8oR?=
+ =?us-ascii?Q?dngYKfh4JaAjFRNkYU50LVnSoO3t3mlJgA7SMnbhv4k5qfkObBJcN+9yMb4U?=
+ =?us-ascii?Q?/En7dwRX4FTuIwY0y5yMKG6mgUj3XT7m/Grl+H56s/F1o2HTb7FdLXX8Yq5M?=
+ =?us-ascii?Q?slZL2nL48jgmUGrTqgf//zSNswV79ms6hFSICJszKL1B0rxlK9IBmE3LCn7n?=
+ =?us-ascii?Q?mV8ktVoGBGFxWYBFdMtAP+AY1Ba0SQbFcsl+G1kl6gxlPH4XWko5dcYcnQT4?=
+ =?us-ascii?Q?5wJ+SXxI5SIxE+3xjnB/g210aDCczlipI7drjJwuumzGuJM34O4IfwbFKPwE?=
+ =?us-ascii?Q?ho6BAEszXK+RiPE9TFntLFTCKL8BkttG4mz2ymu+9GwZOaYX1E8crsJSplX7?=
+ =?us-ascii?Q?Mp7KzMSCfpZ9tkAT3EsuUHJwySXz0+7lv5fpDXHwbJKqjhuCxkqCUaJg2T8i?=
+ =?us-ascii?Q?rtiWM7hZyic9nIWftAgAUW6ghmjvRim5Jlh4H/AB0vkc/GJOTQsJJpP2kPjA?=
+ =?us-ascii?Q?zv7m0TIa6ec4OaUH1eU5OQlzCMoT78WwKHDBfBH5MuQOwqkR1BuHOYZHeVOm?=
+ =?us-ascii?Q?zQloz7bKUYTIKsZVBuTvkzersp8x3foKDhGB2mqVfcJJsSzhRb94G4PHumyh?=
+ =?us-ascii?Q?M8D6ukV6Yk3gnTzh4hyjBcKF5JKV7pqgDmeK5lwGGzz9+bRqubpYFbh5JAKp?=
+ =?us-ascii?Q?tUiuecAuqXKPtQCCuxYGPMc4srfiQW2xYxr2u9ytnl3jJbxMkFskuQPlDtk5?=
+ =?us-ascii?Q?TKaPTNt7i0eHLzDTVQLZ8T9cBputnLmb9hTnfmmeRMWONl3xeDIEugl2Hq+l?=
+ =?us-ascii?Q?VfuuWp78NtZO+rurrronTVI2HE/dXBUlciFMNnpa6DnIykyuSOjEU6wC5Fw+?=
+ =?us-ascii?Q?eJoz1XVdGRIBzZCHWmsYkdrmEJChBlU3Sav3QQbuyJROt9hGokHFsSuja62E?=
+ =?us-ascii?Q?DLBG1kwr8ILGxO3dfcx9YicdoF1QQFUgW93eEa9h1wFfgDyMkk+kAQDQK8an?=
+ =?us-ascii?Q?d31IoRDaoFQwg3DrfXtdZCESpEjgG0r10M3U5r3/GLkQ+Kn30S/hQnmdhqc1?=
+ =?us-ascii?Q?IQUqaGB315WDtppOliqv7eU5ki1fL+AlfPmlJN8olUrY22m7gJq55LIWqD/T?=
+ =?us-ascii?Q?4AJyN2vsCPnNdmiCYzkrz+ZmK7KaVo/AFJ6ntwyVASNMbTW9ddPAC2y3jah3?=
+ =?us-ascii?Q?eKzjVtxV0XuM4V8Jcvna+4AGzwaeYBtp6Q9zZoSGzXUzmmdcrmedyt9QvR3q?=
+ =?us-ascii?Q?2wnmP5m6SbIQ023qnLe8lhRPUKq+rMCh5kuHscqqsEGA/Sey3iJ1u2YLuRb+?=
+ =?us-ascii?Q?imvli1aXa6plH4HoqIVx7PE6YPcC279hLK09jyG4?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9da29cc-3b33-4db1-c8da-08db82d7f046
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 13:00:16.5826
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IgogDx697GKtcCVRYh7RBK5AxUosryOxxpCf1wjZAhl9dQY7TMeZjV8R/OCAoO/Ac/p2CbyKL/hUsznPaaikow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5280
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Make IS_ERR() judge the debugfs_create_dir() function return
+in mt76_register_debugfs_fops().
 
-On 7/12/2023 6:23 PM, Dmitry Baryshkov wrote:
-> On 12/07/2023 15:48, Praveenkumar I wrote:
->>
->> On 7/12/2023 5:54 PM, Dmitry Baryshkov wrote:
->>> On 12/07/2023 14:35, Praveenkumar I wrote:
->>>> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
->>>> node with nvmem cells for calibration data.
->>>>
->>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>> ---
->>>> [v2]:
->>>>     Included qfprom nodes only for available sensors and removed
->>>>     the offset suffix.
->>>>
->>>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 
->>>> +++++++++++++++++++++++++++
->>>>   1 file changed, 66 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
->>>> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->>>> index 8bfc2db44624..0eef77e36609 100644
->>>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->>>> @@ -150,6 +150,46 @@ qfprom: efuse@a4000 {
->>>>               reg = <0x000a4000 0x721>;
->>>>               #address-cells = <1>;
->>>>               #size-cells = <1>;
->>>> +
->>>> +            tsens_mode: mode@3e1 {
->>>> +                reg = <0x3e1 0x1>;
->>>> +                bits = <0 3>;
->>>> +            };
->>>> +
->>>> +            tsens_base0: base0@3e1 {
->>>> +                reg = <0x3e1 0x2>;
->>>> +                bits = <3 10>;
->>>> +            };
->>>> +
->>>> +            tsens_base1: base1@3e2 {
->>>> +                reg = <0x3e2 0x2>;
->>>> +                bits = <5 10>;
->>>> +            };
->
-> Please order device nodes according to the address. So mode/base 
-> should come after sensors data.
-Sure, will reorder based on the address.
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ drivers/net/wireless/mediatek/mt76/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/wireless/mediatek/mt76/debugfs.c b/drivers/net/wireless/mediatek/mt76/debugfs.c
+index 57fbcc83e..d9ba70013 100644
+--- a/drivers/net/wireless/mediatek/mt76/debugfs.c
++++ b/drivers/net/wireless/mediatek/mt76/debugfs.c
+@@ -109,7 +109,7 @@ mt76_register_debugfs_fops(struct mt76_phy *phy,
+ 	struct dentry *dir;
+ 
+ 	dir = debugfs_create_dir("mt76", phy->hw->wiphy->debugfsdir);
+-	if (!dir)
++	if (IS_ERR(dir))
+ 		return NULL;
+ 
+ 	debugfs_create_u8("led_pin", 0600, dir, &phy->leds.pin);
 -- 
-Thanks,
-Praveenkumar
->
->>>> +
->>>> +            s11: s11@3a5 {
->>>> +                reg = <0x3a5 0x1>;
->>>> +                bits = <4 4>;
->>>> +            };
->>>> +
->>>> +            s12: s12@3a6 {
->>>> +                reg = <0x3a6 0x1>;
->>>> +                bits = <0 4>;
->>>> +            };
->>>> +
->>>> +            s13: s13@3a6 {
->>>> +                reg = <0x3a6 0x1>;
->>>> +                bits = <4 4>;
->>>> +            };
->>>> +
->>>> +            s14: s14@3ad {
->>>> +                reg = <0x3ad 0x2>;
->>>> +                bits = <7 4>;
->>>> +            };
->>>> +
->>>> +            s15: s15@3ae {
->>>> +                reg = <0x3ae 0x1>;
->>>> +                bits = <3 4>;
->>>> +            };
->>>>           };
->>>>             rng: rng@e3000 {
->>>> @@ -159,6 +199,32 @@ rng: rng@e3000 {
->>>>               clock-names = "core";
->>>>           };
->>>>   +        tsens: thermal-sensor@4a9000 {
->>>> +            compatible = "qcom,ipq5332-tsens";
->>>> +            reg = <0x4a9000 0x1000>,
->>>> +                  <0x4a8000 0x1000>;
->>>> +            nvmem-cells = <&tsens_mode>,
->>>> +                      <&tsens_base0>,
->>>> +                      <&tsens_base1>,
->>>> +                      <&s11>,
->>>> +                      <&s12>,
->>>> +                      <&s13>,
->>>> +                      <&s14>,
->>>> +                      <&s15>;
->>>> +            nvmem-cell-names = "mode",
->>>> +                       "base0",
->>>> +                       "base1",
->>>> +                       "s11",
->>>> +                       "s12",
->>>> +                       "s13",
->>>> +                       "s14",
->>>> +                       "s15";
->>>
->>> Previously you had data for other sensors here. Are they not used at 
->>> all, not wired, have no known-good placement? I think it might be 
->>> better to declare all sensors here (and in the driver too) and then 
->>> consider enabling only a pile of them in the thermal-zone node.
->>
->> Remaining sensors are not used at all. It is not wired. Only above 
->> sensors are placed in SoC.
->
-> Ack, thanks for the explanation. Then this is good.
->
->>
->> - Praveenkumar
->>
->>>
->>>> +            interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
->>>> +            interrupt-names = "combined";
->>>> +            #qcom,sensors = <5>;
->>>> +            #thermal-sensor-cells = <1>;
->>>> +        };
->>>> +
->>>>           tlmm: pinctrl@1000000 {
->>>>               compatible = "qcom,ipq5332-tlmm";
->>>>               reg = <0x01000000 0x300000>;
->>>
->
+2.39.0
+
