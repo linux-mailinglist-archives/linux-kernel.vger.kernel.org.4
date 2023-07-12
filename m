@@ -2,141 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008DA750773
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2C67507C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbjGLMEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
+        id S232923AbjGLMMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbjGLMEm (ORCPT
+        with ESMTP id S232255AbjGLMMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:04:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03561993
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:04:38 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-992b27e1c55so836236966b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689163477; x=1691755477;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd8MWhBmnS04Aiq7zVFQ14FEWv2Wo1c1C/C8yhC8Id0=;
-        b=le6F9keT9ljyZRT5LbljxlaxWV9KiNZrUSeA+19dTnDjTdmXMhX81547hhEgNeEDDF
-         VbcmPtnmrFSi79AfNcRSZbQoPngqE2SvJAHz6iKdJdoCm1FKq/9ktwvIfQg+n09vtIcP
-         hV4vqfPMWYvffaGUXXZG+/CSxcJaqZxE1eyEXsL2KA7gJyGqjFYeqEgtXJopeu5ln9UM
-         Nxu6R3QwA/89rDDHwoZa/FObzIDipuAVIaE1TCSKwaEmJ+aurE+Jq2r7W1ggN/HVqOJJ
-         1NQV+twNkAQrdsb73PMisqrTKmyiMIVh8/LEkQKOmkndnbnL27kHHsyDdYeYgcFvF6HN
-         uWug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689163477; x=1691755477;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd8MWhBmnS04Aiq7zVFQ14FEWv2Wo1c1C/C8yhC8Id0=;
-        b=e5CAVTn2VLBalMx78ycFYeuzuqiTHTRaTOf7/Gl+4VuEKIzx/un1RbKyZG0JTNdjxp
-         D2arqBGg6EU/rMEGZW3CFPqezuIOviUNWDrIO7Loym260zCgkY8LqW2UQ43gOQFLTb+M
-         PeXTwAFYxmm46PMJ0hjjb+Q42T56zXctY9LQMvRwkda34779312hDm/815UNh3UtEd8y
-         IUlspdXw9D6w0hpe81/Ui48+w8eKUuRqGzn/kx+Job9ALbXBPZVXUmBndilNaiE05PUn
-         Xzc858sREPPD7/3g1FocsU318xIuWuFH9nEe+h0Azjbze+zSsmEaS+Ixyu83SP/10FKq
-         07Kw==
-X-Gm-Message-State: ABy/qLbWhJzsbZA8IAbWshZ9cBxRg6IGkgkt53X9rqANfvQrDzq+bUvU
-        7Y9wB6540YA+32iVZg4P7gIbmw==
-X-Google-Smtp-Source: APBJJlHnPryYP9w3uG+1r8eDpkL93+kzmPWH5LYuGcs+JVPilF1y9IKiQbU4pJxkZeGKp6ZOswvrYA==
-X-Received: by 2002:a17:906:2202:b0:993:fe68:569c with SMTP id s2-20020a170906220200b00993fe68569cmr10347515ejs.6.1689163477302;
-        Wed, 12 Jul 2023 05:04:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id z25-20020a170906271900b009786c8249d6sm2502172ejc.175.2023.07.12.05.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 05:04:36 -0700 (PDT)
-Message-ID: <13555184-1708-befd-1f2c-5e6f7e04a6ce@linaro.org>
-Date:   Wed, 12 Jul 2023 14:04:28 +0200
+        Wed, 12 Jul 2023 08:12:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6063E5F;
+        Wed, 12 Jul 2023 05:12:02 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBgLvI016373;
+        Wed, 12 Jul 2023 12:12:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=tltQXugxcZeoO8dwlag/RdnQKSKFt0PN5wxaRNpTQLE=;
+ b=IFSoiMmyi9a0TZ4NBySuasNEDApH7Xe3fYRELBYvTq9fZIEQkOQVxE5Q93UsZ2qob+J/
+ CBtRy9DBg8HY8A/cV+7fM6EbtJdrJMrgrkUeQU+I/UjvGPvB0vAsBUhuZJXheQuWwFW0
+ /lednIMbaGXLVgno+J/yFU9oLrjZOGQt5QHheIWz8rQdVCd0nCsk/dNHGIJRoQCVInYb
+ sblQz12vpaOpGeEjvGzqXk8ocNyHfKWBT58vutijw63b36Sn7xWZmyov0xGceFa++aCI
+ UmhGyEUyXYeum3jyMOMV2XJPWVx035A+ZtU1iXF2Yh2ZGrPAK4HCSwF+bJnMviQ2Wq9l Og== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rsuhhrtt5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 12:12:01 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBY54Z020388;
+        Wed, 12 Jul 2023 12:06:58 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rpye59waq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 12:06:58 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36CC6rqw31785322
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jul 2023 12:06:53 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A8632004B;
+        Wed, 12 Jul 2023 12:06:53 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC8A220043;
+        Wed, 12 Jul 2023 12:06:52 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.66])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Jul 2023 12:06:52 +0000 (GMT)
+Date:   Wed, 12 Jul 2023 14:06:51 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mhartmay@linux.ibm.com,
+        nsg@linux.ibm.com, borntraeger@de.ibm.com, nrb@linux.ibm.com
+Subject: Re: [PATCH v2 2/2] KVM: s390: pv: fix index value of replaced ASCE
+Message-ID: <20230712140651.37d84e5d@p-imbrenda>
+In-Reply-To: <e3daf6b9-c7e9-89f3-b6ab-d8cf89de0b86@linux.ibm.com>
+References: <20230705111937.33472-1-imbrenda@linux.ibm.com>
+        <20230705111937.33472-3-imbrenda@linux.ibm.com>
+        <e3daf6b9-c7e9-89f3-b6ab-d8cf89de0b86@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 4/6] arm64: dts: qcom: ipq5332: Add USB related nodes
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
-        geert+renesas@glider.be, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, rafal@milecki.pl,
-        quic_srichara@quicinc.com, quic_varada@quicinc.org,
-        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1689160067.git.quic_varada@quicinc.com>
- <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Shp0wLu6T1-ef94pjMgPiBBL6MSo6_oc
+X-Proofpoint-ORIG-GUID: Shp0wLu6T1-ef94pjMgPiBBL6MSo6_oc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_07,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=918 clxscore=1015 mlxscore=0 phishscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120108
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2023 13:38, Varadarajan Narayanan wrote:
-> Add USB phy and controller nodes.
+On Wed, 12 Jul 2023 13:58:49 +0200
+Janosch Frank <frankja@linux.ibm.com> wrote:
+
+> On 7/5/23 13:19, Claudio Imbrenda wrote:
+> > The index field of the struct page corresponding to a guest ASCE should
+> > be 0. When replacing the ASCE in s390_replace_asce(), the index of the
+> > new ASCE should also be set to 0.
+> > 
+> > Having the wrong index might lead to the wrong addresses being passed
+> > around when notifying pte invalidations, and eventually to validity
+> > intercepts (VM crash) if the prefix gets unmapped and the notifier gets
+> > called with the wrong address.
+> > 
+> > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>  
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v4:
-> 	Change node name
-> 	Remove blank line
-> 	'make CHECK_DTBS=y DT_SCHEMA_FILES=qcom qcom/ipq5332-rdp441.dtb' passed
-> v1:
-> 	Rename phy node
-> 	Change compatible from m31,ipq5332-usb-hsphy -> qcom,ipq5332-usb-hsphy
-> 	Remove 'qscratch' from phy node
-> 	Fix alignment and upper-case hex no.s
-> 	Add clock definition for the phy
-> 	Remove snps,ref-clock-period-ns as it is not used. dwc3_ref_clk_period()
-> 	in dwc3/core.c takes the frequency from ref clock and calculates fladj
-> 	as appropriate.
-> ---
->  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 53 +++++++++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
+> No fixes tag?
+
+oops, you're right
+
+Fixes: faa2f72cb356 ("KVM: s390: pv: leak the topmost page table when
+destroy fails")
+
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> index 8bfc2db..8118356 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> @@ -405,6 +405,59 @@
->  				status = "disabled";
->  			};
->  		};
-> +
-> +		usbphy0: usb-phy@7b000 {
-> +			compatible = "qcom,ipq5332-usb-hsphy";
-> +			reg = <0x0007b000 0x12c>;
-> +
-> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-> +			clock-names = "cfg_ahb";
-> +
-> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb2: usb2@8a00000 {
-
-So you responded to my comments, wait ten minutes and send v2? No need
-to wait for my feedback, right?
-
-No, it's not ok. This is "usb", not "usb2". Are you saying you have
-second device with the same address?
-
-Best regards,
-Krzysztof
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+> 
 
