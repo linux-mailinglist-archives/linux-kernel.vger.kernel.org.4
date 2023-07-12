@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B551750D01
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E72750D0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233777AbjGLPtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S233258AbjGLPuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232137AbjGLPtN (ORCPT
+        with ESMTP id S232835AbjGLPuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:49:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58CAFB;
-        Wed, 12 Jul 2023 08:49:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B57161828;
-        Wed, 12 Jul 2023 15:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07BBCC433C7;
-        Wed, 12 Jul 2023 15:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689176951;
-        bh=1YAOFuwaMu/Dsn1MAvmn/2yPz2GA1fAtcKqHfMv4Q+o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kTbeY9JpRwiaEn4NdoUDv/Q3oPRMBgZA8WgbtoL32W3VUMvCieCTPTvEI+mZAiDsd
-         xYpy6Vc59NLVuUaaQ7T3nglwCveaEahgZ3C5BSWylX8krxGUG38TG4wwcbRyDefUwF
-         mhKDuV+wepOzKvtd2W2Ayave7H+f5O0NnWzl2zuP2LFlwqc8CpaugGCxNE9auAmY3o
-         JJ4kTFxlfSUuYC40JicNhaEv5y/1s8kXuG5KN9u63L8rXIU9jF7aboDnCIABUQ5EBM
-         i9+/k86jFU3Mh+Ap0lhhGCiHEOiGq9l1Rom5wa1I1GL57XzQ6JWUPrFRvcsVhIdVin
-         eETgQ0tzi+LcQ==
-Date:   Wed, 12 Jul 2023 17:49:07 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] i2c: mlxbf: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <20230712154907.zj7qvt5qml4g5khj@intel.intel>
-References: <20230710063351.17490-1-frank.li@vivo.com>
- <20230710063351.17490-4-frank.li@vivo.com>
+        Wed, 12 Jul 2023 11:50:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1851BDA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689176956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bkK/lE9xVUoE2L0I2FE1bsKN4N40S5rUCyjcnz9lCPs=;
+        b=f7JLtL4Nap4buX7ad/9Jc+v8WpUjL/db9pCrxc6MJhg4yu8GRfu+sQHdGH4hZVMZGv0ZUH
+        emSvWdNbYmrY+Z9r480wfBozAhy14gs1h6iHMhuN/vQWF80w+WcrtAzroG4gAkP6RvsMcP
+        VldktcV1UTLZk/Vikpvonw75eEKa7Is=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-278-wvhaUxizMxiP9Jwb6MSV7A-1; Wed, 12 Jul 2023 11:49:15 -0400
+X-MC-Unique: wvhaUxizMxiP9Jwb6MSV7A-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30e3ee8a42eso4162739f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:49:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689176954; x=1691768954;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bkK/lE9xVUoE2L0I2FE1bsKN4N40S5rUCyjcnz9lCPs=;
+        b=QhBNtapunpodthXZ7+iOtuRBsxF/YlNvE2XWJoGYJVQhah1G0iwa8I6o2jSk9e+19k
+         8ep/oY8dokAh2kRlWUfAkOtkQlP+nu2SUCKUeTUzbPXwi8FMBsDQl8A7aHn6UzSx3Nbm
+         iFiBFvixhalqexfk7EyFYnShWV8M+srEQ2GnK+arAub0O7zZm9Q1+U70cVC7kS3bmhu4
+         UGbCzwrrw2gZiGL4eb3Vsq703oOtlwcy5XazZhWIfF6ymutR/qzF8P0lEeiAu3H2ajYZ
+         snIdz7Gq0a1QcpFByoVbySYeJtjYr2IXss9a8B+Q9oiLQqs8ZdvDfmWHQxrYcR/ULMSS
+         CSaA==
+X-Gm-Message-State: ABy/qLanMULQVAv7zJrybWJtRlsn3YbjbIRzhn2WBbXerLvom/5cVXbk
+        /n+Knfce51DdPrrovkI03gXabHnda7zJrB2or0WDr0cdeWLK3D2f30ZUeFvqZE4I3n4zAXsw1Ul
+        2O1DfxW9TXC6V9vL5IltlDp0Ux6VbHMfh
+X-Received: by 2002:a5d:4603:0:b0:315:ad1a:5abc with SMTP id t3-20020a5d4603000000b00315ad1a5abcmr2505859wrq.5.1689176954068;
+        Wed, 12 Jul 2023 08:49:14 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHfZBXzs0WOpOSK4uyREoe1iPHFVtvPrhE48RQBaY4V+m6OOpZMax9BclCH2P9YghADvfsQjA==
+X-Received: by 2002:a5d:4603:0:b0:315:ad1a:5abc with SMTP id t3-20020a5d4603000000b00315ad1a5abcmr2505833wrq.5.1689176953749;
+        Wed, 12 Jul 2023 08:49:13 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id u24-20020a170906069800b009920f18a5f0sm2732141ejb.185.2023.07.12.08.49.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 08:49:13 -0700 (PDT)
+Message-ID: <af2be377-ff04-3b00-62c7-a1ff53dddd16@redhat.com>
+Date:   Wed, 12 Jul 2023 17:49:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230710063351.17490-4-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 0/2] platform/x86: thinkpad_acpi: lockdep support
+Content-Language: en-US, nl
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+Cc:     ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230704-thinkpad_acpi-lockdep-v1-0-60129548a738@weissschuh.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230704-thinkpad_acpi-lockdep-v1-0-60129548a738@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
+Hi,
 
-On Mon, Jul 10, 2023 at 02:33:43PM +0800, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On 7/4/23 23:03, Thomas Weißschuh wrote:
+> Validate locking requirements in thinkpad_acpi through lockdep.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 
 > ---
->  drivers/i2c/busses/i2c-mlxbf.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
+> Thomas Weißschuh (2):
+>       platform/x86: thinkpad_acpi: take mutex for hotkey_mask_{set,get}
+>       platform/x86: thinkpad_acpi: use lockdep annotations
 > 
-> diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-> index ae66bdd1b737..2f60e5532b54 100644
-> --- a/drivers/i2c/busses/i2c-mlxbf.c
-> +++ b/drivers/i2c/busses/i2c-mlxbf.c
-> @@ -1080,13 +1080,7 @@ static int mlxbf_i2c_init_resource(struct platform_device *pdev,
->  	if (!tmp_res)
->  		return -ENOMEM;
->  
-> -	tmp_res->params = platform_get_resource(pdev, IORESOURCE_MEM, type);
-> -	if (!tmp_res->params) {
-> -		devm_kfree(dev, tmp_res);
-> -		return -EIO;
-> -	}
-> -
-> -	tmp_res->io = devm_ioremap_resource(dev, tmp_res->params);
-> +	tmp_res->io = devm_platform_get_and_ioremap_resource(pdev, type, &tmp_res->params);
->  	if (IS_ERR(tmp_res->io)) {
->  		devm_kfree(dev, tmp_res);
-
-In a later patch we could also remove this redundant
-devm_kfree().
-
-Andi
-
->  		return PTR_ERR(tmp_res->io);
-> -- 
-> 2.39.0
+>  drivers/platform/x86/thinkpad_acpi.c | 45 ++++++++++++++++++++++--------------
+>  1 file changed, 28 insertions(+), 17 deletions(-)
+> ---
+> base-commit: 03275585cabd0240944f19f33d7584a1b099a3a8
+> change-id: 20230704-thinkpad_acpi-lockdep-7def9d7f91b5
 > 
+> Best regards,
+
