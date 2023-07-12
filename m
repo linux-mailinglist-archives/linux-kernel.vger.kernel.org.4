@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0EE750B54
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BF0750B64
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbjGLOqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S231734AbjGLOs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGLOqd (ORCPT
+        with ESMTP id S232083AbjGLOsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:46:33 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F69A1992
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:46:31 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b9e8e5b12dso21522255ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689173190; x=1691765190;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3RJlGEMkrK0JJ4Kxd7hYeKyRhV465TrolA6xg6qfxJ8=;
-        b=rkydKRIpQBAKPCJ/OjBL6hiE17WoRL68apriz9iDe8EWclBfKbIdoJm4e9Eq2EPQi0
-         ifoCBc/mQNoqKpsVSFjAvU1zwmLLbcz9gOwTfHqUO7t77dBsUyymCe5IRz40Fg6SDToR
-         Oc6ao8Q3d3m8mD29bYwG3wr4aNSAhk4NRV8IxVo4QDWs5rInTu/wOy/c/e3gbxq1ux8y
-         U2BvPk7NxgGPhtSCzjNCOr4B+wGukwQDT0GS1npIvr9Dq9pIRajUzWQ26doL3oleIJbu
-         48U7KoFPYtHT9bJygROE78+SiMVX5rgurr4XvDfj0iyB6n4M4XuWhzc3I/VD3kVmqxoT
-         6gag==
+        Wed, 12 Jul 2023 10:48:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5451993
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689173252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EIuzB3x3+itiPANCeMD8GY8b1oc0WBnANtFmR+T6S8U=;
+        b=Tr907ov8sGLmcgLIIO+t+H2WLZnwoQuiMlGpvlk+mc01Vja1yPzqq9vr7mv8CdP091k+EI
+        D0Nef3ko5ZWZCWv0bTN/QPwFRch8EdeaLCHlJ+jg5YY5KRvuEpfqxnALDuh1D1Ig/sTfTI
+        fVqEi4yZZeM7SIuujIl1NU/nUEooIOw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-636-rpPW7lqaOXSr_HaXfmjZdQ-1; Wed, 12 Jul 2023 10:47:31 -0400
+X-MC-Unique: rpPW7lqaOXSr_HaXfmjZdQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-993d5006993so352089366b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:47:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689173190; x=1691765190;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3RJlGEMkrK0JJ4Kxd7hYeKyRhV465TrolA6xg6qfxJ8=;
-        b=W33Meuk4nKMgQCSqDexn/kyieD2lliFku9yNPjo7TKnnGA1BHDWG6seFRTXckf5Umr
-         sXjs28Jx/rVkjoL5v4lRnW+sQeBw6hd8xo7bGS0mPDujnsa1hq1EJgcRYESlz6W3hZr4
-         J+AeXPi6oicf1mqrmvQeTqLIOE8fFf1SV9LhkLpIdPY/diJLpxcUp671OREM+mzbgit2
-         LAs+eBo1Tord1txo2beX1Cgk1HBeJR4IH7om/8i29388X+du9aNsYC0EFIpohg9ZBzk3
-         IYJqrIdNUF5Zhwm3jm/3P2U+j8I/qGGB1gmeRh0bOSVw/KaWcbnsBREZ+NGZ/GDadiJ+
-         FcXg==
-X-Gm-Message-State: ABy/qLa3YEHMifRissRfwjS1v3o7ZOZFPDCjbdGJ0r6rxRwMJwtQIj22
-        mBMeBAl50gvqizotOS91GUwysQ==
-X-Google-Smtp-Source: APBJJlHxSmG9jFkJQFDwDAILENgpdtukWjxbKoYhVkmclBMHHMEXiP6I525g1aGIuImZ/nj7vZ2fug==
-X-Received: by 2002:a17:902:ecce:b0:1b9:ebe9:5f01 with SMTP id a14-20020a170902ecce00b001b9ebe95f01mr7747418plh.19.1689173190386;
-        Wed, 12 Jul 2023 07:46:30 -0700 (PDT)
-Received: from localhost ([50.38.6.230])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b001b9e9765d8fsm4027382plp.261.2023.07.12.07.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 07:46:30 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 07:46:30 -0700 (PDT)
-X-Google-Original-Date: Wed, 12 Jul 2023 07:45:43 PDT (-0700)
-Subject:     Re: [PATCH 4/4] vgacon, arch/*: remove unused screen_info definitions
-In-Reply-To: <20230707095415.1449376-4-arnd@kernel.org>
-CC:     tzimmermann@suse.de, javierm@redhat.com,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, dri-devel@lists.freedesktop.org,
-        Ard Biesheuvel <ardb@kernel.org>, deller@gmx.de,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org,
-        bcain@quicinc.com, dinguyen@kernel.org, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        chris@zankel.net, jcmvbkbc@gmail.com, masahiroy@kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     arnd@kernel.org
-Message-ID: <mhng-099c5770-3367-48d7-a068-25762b837196@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        d=1e100.net; s=20221208; t=1689173250; x=1691765250;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EIuzB3x3+itiPANCeMD8GY8b1oc0WBnANtFmR+T6S8U=;
+        b=QqdVoIoN9EZd/8bFfHx9RRGbrm740tn2HngcCaHp9fpECVInPHULJgsQf3qZD7mL0S
+         ow3jAZMx/tSUpHrDrOe9LPOtYt4eLhSeZb1fohebGswjq7wjkKCoJmuMgtDIKbmprlkx
+         rtu6oJZwwoMcQYTxJ3KnfthcXnaDVFglWFUxjtqzDjk2fQW3aWDSk15zkGzS9jWEqKJG
+         ZHCXmVfOPg5p6RsnpmKl92v4WhXyi8+KJxEuctC3JBIuRZOddyNCWRipqk0xq63FbOJA
+         6IcNOrjrB9G0GXcPksirMvo0RI7XPofh4Q2+Znzw6PrU/dP5McRMO+qpcLuqHNy7WiCn
+         8JRA==
+X-Gm-Message-State: ABy/qLZpl/T1Q77+3rNtlZrdXsvj0L55tmdFwUCyQ1iXgJI3G57GPLN+
+        hbg34XVaEVjZ6MJe4punxQA42ROnufbStWGYBoNIkSMhzIAc5JS17FySlPLSxevP6WKr7FGVuSk
+        Be0aiHq7HXo40Xi1j1kiH9OY0
+X-Received: by 2002:a17:906:af65:b0:994:34a2:8724 with SMTP id os5-20020a170906af6500b0099434a28724mr242704ejb.52.1689173250191;
+        Wed, 12 Jul 2023 07:47:30 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGaWvX/O8w27SGpuJdmu612qxbMowaKIYLZTLJgaTMD9S3lDFGlByoIHJEs+K1fptL66r0HIQ==
+X-Received: by 2002:a17:906:af65:b0:994:34a2:8724 with SMTP id os5-20020a170906af6500b0099434a28724mr242695ejb.52.1689173249925;
+        Wed, 12 Jul 2023 07:47:29 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m27-20020a1709060d9b00b009932337747esm2643633eji.86.2023.07.12.07.47.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 07:47:29 -0700 (PDT)
+Message-ID: <7ad305d4-3acb-1447-bdbe-077c83972978@redhat.com>
+Date:   Wed, 12 Jul 2023 16:47:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 6/8] platform/x86: asus-wmi: add safety checks to gpu
+ switching
+Content-Language: en-US, nl
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+References: <20230630053552.976579-1-luke@ljones.dev>
+ <20230630053552.976579-7-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230630053552.976579-7-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,213 +86,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jul 2023 02:52:26 PDT (-0700), arnd@kernel.org wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A number of architectures either kept the screen_info definition for
-> historical purposes as it used to be required by the generic VT code, or
-> they copied it from another architecture in order to build the VGA
-> console driver in an allmodconfig build.
->
-> Now that vgacon no longer builds on these architectures, remove the
-> stale definitions.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/csky/kernel/setup.c          | 12 ------------
->  arch/hexagon/kernel/Makefile      |  2 --
->  arch/hexagon/kernel/screen_info.c |  3 ---
->  arch/nios2/kernel/setup.c         |  5 -----
->  arch/sh/kernel/setup.c            |  5 -----
->  arch/sparc/kernel/setup_32.c      | 13 -------------
->  arch/sparc/kernel/setup_64.c      | 13 -------------
->  arch/xtensa/kernel/setup.c        | 12 ------------
->  8 files changed, 65 deletions(-)
->  delete mode 100644 arch/hexagon/kernel/screen_info.c
->
-> diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-> index 106fbf0b6f3b4..51012e90780d6 100644
-> --- a/arch/csky/kernel/setup.c
-> +++ b/arch/csky/kernel/setup.c
-> @@ -8,22 +8,10 @@
->  #include <linux/of_fdt.h>
->  #include <linux/start_kernel.h>
->  #include <linux/dma-map-ops.h>
-> -#include <linux/screen_info.h>
->  #include <asm/sections.h>
->  #include <asm/mmu_context.h>
->  #include <asm/pgalloc.h>
->
-> -#ifdef CONFIG_DUMMY_CONSOLE
-> -struct screen_info screen_info = {
-> -	.orig_video_lines	= 30,
-> -	.orig_video_cols	= 80,
-> -	.orig_video_mode	= 0,
-> -	.orig_video_ega_bx	= 0,
-> -	.orig_video_isVGA	= 1,
-> -	.orig_video_points	= 8
-> -};
-> -#endif
-> -
->  static void __init csky_memblock_init(void)
->  {
->  	unsigned long lowmem_size = PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
-> diff --git a/arch/hexagon/kernel/Makefile b/arch/hexagon/kernel/Makefile
-> index e73cb321630ec..3fdf937eb572e 100644
-> --- a/arch/hexagon/kernel/Makefile
-> +++ b/arch/hexagon/kernel/Makefile
-> @@ -17,5 +17,3 @@ obj-y += vm_vectors.o
->  obj-$(CONFIG_HAS_DMA) += dma.o
->
->  obj-$(CONFIG_STACKTRACE) += stacktrace.o
-> -
-> -obj-$(CONFIG_VGA_CONSOLE) += screen_info.o
-> diff --git a/arch/hexagon/kernel/screen_info.c b/arch/hexagon/kernel/screen_info.c
-> deleted file mode 100644
-> index 1e1ceb18bafe7..0000000000000
-> --- a/arch/hexagon/kernel/screen_info.c
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -#include <linux/screen_info.h>
-> -
-> -struct screen_info screen_info;
-> diff --git a/arch/nios2/kernel/setup.c b/arch/nios2/kernel/setup.c
-> index 8582ed9658447..da122a5fa43b2 100644
-> --- a/arch/nios2/kernel/setup.c
-> +++ b/arch/nios2/kernel/setup.c
-> @@ -19,7 +19,6 @@
->  #include <linux/memblock.h>
->  #include <linux/initrd.h>
->  #include <linux/of_fdt.h>
-> -#include <linux/screen_info.h>
->
->  #include <asm/mmu_context.h>
->  #include <asm/sections.h>
-> @@ -36,10 +35,6 @@ static struct pt_regs fake_regs = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
->  					0, 0, 0, 0, 0, 0,
->  					0};
->
-> -#ifdef CONFIG_VT
-> -struct screen_info screen_info;
-> -#endif
-> -
->  /* Copy a short hook instruction sequence to the exception address */
->  static inline void copy_exception_handler(unsigned int addr)
->  {
-> diff --git a/arch/sh/kernel/setup.c b/arch/sh/kernel/setup.c
-> index b3da2757faaf3..3d80515298d26 100644
-> --- a/arch/sh/kernel/setup.c
-> +++ b/arch/sh/kernel/setup.c
-> @@ -7,7 +7,6 @@
->   *  Copyright (C) 1999  Niibe Yutaka
->   *  Copyright (C) 2002 - 2010 Paul Mundt
->   */
-> -#include <linux/screen_info.h>
->  #include <linux/ioport.h>
->  #include <linux/init.h>
->  #include <linux/initrd.h>
-> @@ -69,10 +68,6 @@ EXPORT_SYMBOL(cpu_data);
->  struct sh_machine_vector sh_mv = { .mv_name = "generic", };
->  EXPORT_SYMBOL(sh_mv);
->
-> -#ifdef CONFIG_VT
-> -struct screen_info screen_info;
-> -#endif
-> -
->  extern int root_mountflags;
->
->  #define RAMDISK_IMAGE_START_MASK	0x07FF
-> diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
-> index 34ef7febf0d56..e3b72a7b46d37 100644
-> --- a/arch/sparc/kernel/setup_32.c
-> +++ b/arch/sparc/kernel/setup_32.c
-> @@ -17,7 +17,6 @@
->  #include <linux/initrd.h>
->  #include <asm/smp.h>
->  #include <linux/user.h>
-> -#include <linux/screen_info.h>
->  #include <linux/delay.h>
->  #include <linux/fs.h>
->  #include <linux/seq_file.h>
-> @@ -51,18 +50,6 @@
->
->  #include "kernel.h"
->
-> -struct screen_info screen_info = {
-> -	0, 0,			/* orig-x, orig-y */
-> -	0,			/* unused */
-> -	0,			/* orig-video-page */
-> -	0,			/* orig-video-mode */
-> -	128,			/* orig-video-cols */
-> -	0,0,0,			/* ega_ax, ega_bx, ega_cx */
-> -	54,			/* orig-video-lines */
-> -	0,                      /* orig-video-isVGA */
-> -	16                      /* orig-video-points */
-> -};
-> -
->  /* Typing sync at the prom prompt calls the function pointed to by
->   * romvec->pv_synchook which I set to the following function.
->   * This should sync all filesystems and return, for now it just
-> diff --git a/arch/sparc/kernel/setup_64.c b/arch/sparc/kernel/setup_64.c
-> index 6546ca9d4d3f1..6a4797dec34b4 100644
-> --- a/arch/sparc/kernel/setup_64.c
-> +++ b/arch/sparc/kernel/setup_64.c
-> @@ -15,7 +15,6 @@
->  #include <linux/ptrace.h>
->  #include <asm/smp.h>
->  #include <linux/user.h>
-> -#include <linux/screen_info.h>
->  #include <linux/delay.h>
->  #include <linux/fs.h>
->  #include <linux/seq_file.h>
-> @@ -68,18 +67,6 @@
->  DEFINE_SPINLOCK(ns87303_lock);
->  EXPORT_SYMBOL(ns87303_lock);
->
-> -struct screen_info screen_info = {
-> -	0, 0,			/* orig-x, orig-y */
-> -	0,			/* unused */
-> -	0,			/* orig-video-page */
-> -	0,			/* orig-video-mode */
-> -	128,			/* orig-video-cols */
-> -	0, 0, 0,		/* unused, ega_bx, unused */
-> -	54,			/* orig-video-lines */
-> -	0,                      /* orig-video-isVGA */
-> -	16                      /* orig-video-points */
-> -};
-> -
->  static void
->  prom_console_write(struct console *con, const char *s, unsigned int n)
->  {
-> diff --git a/arch/xtensa/kernel/setup.c b/arch/xtensa/kernel/setup.c
-> index aba3ff4e60d85..3f22d0537818d 100644
-> --- a/arch/xtensa/kernel/setup.c
-> +++ b/arch/xtensa/kernel/setup.c
-> @@ -19,7 +19,6 @@
->  #include <linux/init.h>
->  #include <linux/mm.h>
->  #include <linux/proc_fs.h>
-> -#include <linux/screen_info.h>
->  #include <linux/kernel.h>
->  #include <linux/percpu.h>
->  #include <linux/reboot.h>
-> @@ -49,17 +48,6 @@
->  #include <asm/timex.h>
->  #include <asm/traps.h>
->
-> -#if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_DUMMY_CONSOLE)
-> -struct screen_info screen_info = {
-> -	.orig_x = 0,
-> -	.orig_y = 24,
-> -	.orig_video_cols = 80,
-> -	.orig_video_lines = 24,
-> -	.orig_video_isVGA = 1,
-> -	.orig_video_points = 16,
-> -};
-> -#endif
-> -
->  #ifdef CONFIG_BLK_DEV_INITRD
->  extern unsigned long initrd_start;
->  extern unsigned long initrd_end;
+Hi,
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On 6/30/23 07:35, Luke D. Jones wrote:
+> Add safety checking to dgpu_disable, egpu_enable, gpu_mux_mode.
+> 
+> These checks prevent users from doing such things as:
+> - disabling the dGPU while is muxed to drive the internal screen
+> - enabling the eGPU which also disables the dGPU, while muxed to
+>   the internal screen
+> - switching the MUX to dGPU while the dGPU is disabled
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> ---
+>  drivers/platform/x86/asus-wmi.c | 50 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 821addb284d7..602426a7fb41 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -645,6 +645,18 @@ static ssize_t dgpu_disable_store(struct device *dev,
+>  	if (disable > 1)
+>  		return -EINVAL;
+>  
+> +	if (asus->gpu_mux_mode_available) {
+> +		result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_GPU_MUX);
+> +		if (result < 0)
+> +			/* An error here may signal greater failure of GPU handling */
+> +			return result;
+> +		if (!result && disable) {
+> +			err = -ENODEV;
+> +			pr_warn("Can not disable dGPU when the MUX is in dGPU mode: %d\n", err);
+> +			return err;
+> +		}
+> +	}
+> +
+>  	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_DGPU, disable, &result);
+>  	if (err) {
+>  		pr_warn("Failed to set dgpu disable: %d\n", err);
+> @@ -693,7 +705,7 @@ static ssize_t egpu_enable_store(struct device *dev,
+>  	if (enable > 1)
+>  		return -EINVAL;
+>  
+> -	err = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU_CONNECTED);
+> +	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU_CONNECTED);
+>  	if (err < 0)
+>  		return err;
+>  	if (err < 1) {
+
+This seems like a stray and undesired change. I'll drop this err -> result change
+when merging this.
+
+Otherwise looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+
+
+> @@ -702,6 +714,18 @@ static ssize_t egpu_enable_store(struct device *dev,
+>  		return err;
+>  	}
+>  
+> +	if (asus->gpu_mux_mode_available) {
+> +		result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_GPU_MUX);
+> +		if (result < 0)
+> +			/* An error here may signal greater failure of GPU handling */
+> +			return result;
+> +		if (!result && enable) {
+> +			err = -ENODEV;
+> +			pr_warn("Can not enable eGPU when the MUX is in dGPU mode: %d\n", err);
+> +			return err;
+> +		}
+> +	}
+> +
+>  	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, enable, &result);
+>  	if (err) {
+>  		pr_warn("Failed to set egpu disable: %d\n", err);
+> @@ -764,6 +788,30 @@ static ssize_t gpu_mux_mode_store(struct device *dev,
+>  	if (optimus > 1)
+>  		return -EINVAL;
+>  
+> +	if (asus->dgpu_disable_available) {
+> +		result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_DGPU);
+> +		if (result < 0)
+> +			/* An error here may signal greater failure of GPU handling */
+> +			return result;
+> +		if (result && !optimus) {
+> +			err = -ENODEV;
+> +			pr_warn("Can not switch MUX to dGPU mode when dGPU is disabled: %d\n", err);
+> +			return err;
+> +		}
+> +	}
+> +
+> +	if (asus->egpu_enable_available) {
+> +		result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU);
+> +		if (result < 0)
+> +			/* An error here may signal greater failure of GPU handling */
+> +			return result;
+> +		if (result && !optimus) {
+> +			err = -ENODEV;
+> +			pr_warn("Can not switch MUX to dGPU mode when eGPU is enabled: %d\n", err);
+> +			return err;
+> +		}
+> +	}
+> +
+>  	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_MUX, optimus, &result);
+>  	if (err) {
+>  		dev_err(dev, "Failed to set GPU MUX mode: %d\n", err);
+
