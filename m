@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A323E7502BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6777502BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjGLJTJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 05:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S232484AbjGLJTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbjGLJTA (ORCPT
+        with ESMTP id S232603AbjGLJTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Jul 2023 05:19:00 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856EB1992;
-        Wed, 12 Jul 2023 02:18:50 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-bff27026cb0so7556505276.1;
-        Wed, 12 Jul 2023 02:18:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689153529; x=1691745529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kG5q3OE8NA2B1Rd9ySf5DoQyHhC234Q++094p9pDpiY=;
-        b=RbH09Fh2Rwv6i44q4mz6r0oVcyoQAmM6oNtMIiFFXM8FMEcgMyskmz3Tm5oe9glduN
-         IqWw9q6resuXdGdh7FPxWvhQtE2Hs4MEydHvfXDgG8zLVIs1CgOb7B2IIV26ZctgKQkv
-         Z/4OjJM9oki+AhQl/1RlqwpTeqcT0un2SuAH/WoZtgjFJcjDLMAxr7Ybtl6078Lw4/nd
-         3Np3WUiMX/xJ2/zmiRoKAICGUu8Kk/VWWlEeR9GIhkDESuOFtdEcLkUPRtB5KHClxI+I
-         wrmdMjGQQa9/MD/jfjOMmztwvesyEbo4//amxwm9GOqJmSVH33YofGzA3rmvlCLFhE8A
-         yP+Q==
-X-Gm-Message-State: ABy/qLYyo+pKia4zmRJtKbiKpbRDGeTjaZQM1Sme2lFJVvnNv9q+Q4s2
-        FvTaG3BUvfcp7b245UM0zgwDilsuURGXCQ==
-X-Google-Smtp-Source: APBJJlGSFjNRvHJZkkk5bVWMKipJUpBqL7O06x8V3NpRJN+bkNydqcdBtcR9WubwFNCK3NzcOaMKcw==
-X-Received: by 2002:a25:cd85:0:b0:c60:fb80:99f7 with SMTP id d127-20020a25cd85000000b00c60fb8099f7mr15710840ybf.16.1689153529555;
-        Wed, 12 Jul 2023 02:18:49 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id w8-20020a253008000000b00be4f34d419asm860867ybw.37.2023.07.12.02.18.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 02:18:49 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-c84fd44593aso3341486276.0;
-        Wed, 12 Jul 2023 02:18:49 -0700 (PDT)
-X-Received: by 2002:a25:748e:0:b0:c69:b15:3e79 with SMTP id
- p136-20020a25748e000000b00c690b153e79mr17478596ybc.28.1689153528941; Wed, 12
- Jul 2023 02:18:48 -0700 (PDT)
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48BF1998;
+        Wed, 12 Jul 2023 02:18:55 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1689153526tjyf6k0s
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Jul 2023 17:18:45 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: zT6n3Y95oi1Q7MFa1CSS57hNQnv1/10jeqfsHZAQQpZlJ7diAVk+VgwixNHdq
+        pPfLew8XIjf5N6Y6zQDz0VgwQbg0pOxJBb/7Y9Ns4t1fUKIfnMoL+f+OhNv8jE5PinsTe/+
+        6Ob8p8vQ51rivPl6WQQcDxak7bsvxbRn/FzV64sqW7YGjqFKlJfu0iSY89VZ4EYpSizGJer
+        xhB2OPJSGLH8ORqD3cO+8BVNxlKeBfqtdHpI/tdsl2NTFx1tnsjZ4NDuFgwKZdPmSOY0YhE
+        t+BDN0u+0jKvxQQRtxa6rGKCZOdI1hbC+EFpjK2yF6YW6DWYMOL0flgKqqFQAe4MAyRX6Cw
+        ix+dMWsCIoFvThWzd/fk7lpBhbKO9kTk5Saox0V7DiWHElQNs9RRU8A4ZvbexEqFKh42b/7
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11721497453081374856
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 03/11] tools/nolibc: arm: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:18:44 +0800
+Message-Id: <b06c91904facbcc647f7fce9d8f2eba3a59905d3.1689150149.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
+References: <cover.1689150149.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230707074337.3120530-1-quic_rohkumar@quicinc.com>
-In-Reply-To: <20230707074337.3120530-1-quic_rohkumar@quicinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jul 2023 11:18:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXRt_9BzfnaqVJUAS4QdvGBDZk3B+R_cERUykZhyNWtzQ@mail.gmail.com>
-Message-ID: <CAMuHMdXRt_9BzfnaqVJUAS4QdvGBDZk3B+R_cERUykZhyNWtzQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ASoC: dt-bindings: Update maintainer email id
-To:     Rohit kumar <quic_rohkumar@quicinc.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        cychiang@chromium.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rohit,
+move most of the _start operations to _start_c().
 
-Thanks for your patch!
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-arm.h | 43 +++++----------------------------
+ 1 file changed, 6 insertions(+), 37 deletions(-)
 
-On Fri, Jul 7, 2023 at 9:49 AM Rohit kumar <quic_rohkumar@quicinc.com> wrote:
-> [PATCH v2] ASoC: dt-bindings: Update maintainer email id
-
-Thank you for stepping forward to become a maintainer for all ASoC
-DT bindings ;-)
-
-> Updated my mail id to latest quicinc id.
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Rohit kumar <quic_rohkumar@quicinc.com>
-> ---
-> v2: Updated commit header
->
->  .../devicetree/bindings/sound/google,sc7180-trogdor.yaml        | 2 +-
->  Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml     | 2 +-
-
-Oh wait, this is not for all of ASoC...
-
-Please use one-line summaries that reflect the actual changes.
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index ea723596ed23..74773ddcf4ca 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_ARCH_ARM_H
+ 
+ #include "compiler.h"
++#include "crt.h"
+ 
+ /* Syscalls for ARM in ARM or Thumb modes :
+  *   - registers are 32-bit
+@@ -183,49 +184,17 @@
+ 	_arg1;                                                                \
+ })
+ 
+-
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"bl __stack_chk_init\n"       /* initialize stack protector                          */
++		"bl __stack_chk_init\n" /* initialize stack protector                     */
+ #endif
+-		"pop {%r0}\n"                 /* argc was in the stack                               */
+-		"mov %r1, %sp\n"              /* argv = sp                                           */
+-
+-		"add %r2, %r0, $1\n"          /* envp = (argc + 1) ...                               */
+-		"lsl %r2, %r2, $2\n"          /*        * 4        ...                               */
+-		"add %r2, %r2, %r1\n"         /*        + argv                                       */
+-		"ldr %r3, 1f\n"               /* r3 = &environ (see below)                           */
+-		"str %r2, [r3]\n"             /* store envp into environ                             */
+-
+-		"mov r4, r2\n"                /* search for auxv (follows NULL after last env)       */
+-		"0:\n"
+-		"mov r5, r4\n"                /* r5 = r4                                             */
+-		"add r4, r4, #4\n"            /* r4 += 4                                             */
+-		"ldr r5,[r5]\n"               /* r5 = *r5 = *(r4-4)                                  */
+-		"cmp r5, #0\n"                /* and stop at NULL after last env                     */
+-		"bne 0b\n"
+-		"ldr %r3, 2f\n"               /* r3 = &_auxv (low bits)                              */
+-		"str r4, [r3]\n"              /* store r4 into _auxv                                 */
+-
+-		"mov %r3, $8\n"               /* AAPCS : sp must be 8-byte aligned in the            */
+-		"neg %r3, %r3\n"              /*         callee, and bl doesn't push (lr=pc)         */
+-		"and %r3, %r3, %r1\n"         /* so we do sp = r1(=sp) & r3(=-8);                    */
+-		"mov %sp, %r3\n"
+-
+-		"bl main\n"                   /* main() returns the status code, we'll exit with it. */
+-		"movs r7, $1\n"               /* NR_exit == 1                                        */
+-		"svc $0x00\n"
+-		".align 2\n"                  /* below are the pointers to a few variables           */
+-		"1:\n"
+-		".word environ\n"
+-		"2:\n"
+-		".word _auxv\n"
++		"mov %r0, sp\n"         /* save stack pointer to %r0, as arg1 of _start_c */
++		"and ip, %r0, #-8\n"    /* sp must be 8-byte aligned in the callee        */
++		"mov sp, ip\n"
++		"bl  _start_c\n"        /* transfer to c runtime                          */
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
