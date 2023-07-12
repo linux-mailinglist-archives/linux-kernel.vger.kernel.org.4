@@ -2,107 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D822174FD43
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8D874FD58
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjGLCov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        id S231299AbjGLC7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 22:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbjGLCot (ORCPT
+        with ESMTP id S229983AbjGLC7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:44:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676BD1993;
-        Tue, 11 Jul 2023 19:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689129881; x=1720665881;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iWj+6wrVCX+Ik7s49Gkyi64YGWWOKVozpQXtsPYZBfA=;
-  b=Xbve3BMKnyxpZRrsgvG1nZ+XYB2SS6CPEB+SLvZmfXnMxmT2Y7ZU2rus
-   gYyBxcLE1QNP+6SY2TXg7h4pN1vI8xZ640YDz7dcSofD/5xzOl11qteuB
-   3892SOk32cBShh0tNS47txqhd+TPtF1pzphGDS08ZZpp/vE3RQwwv8dTC
-   ElZo/ZTNt9/w3yB3HYnEDcdGxiB+tUHOnJtwIpX4+Y0k9IsK+baItN078
-   eBPQNT+Ht+PqFBPauZA4YEYoujfTdFsjeoi0WZ42oPYpJw7pU2hjo9lUN
-   py0GEgJimiAjs6l9Ti/Fw0IqVsjCcd+RuXyfQvv2a2O2wDbW7DMK/DnPJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="451149380"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="451149380"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:43:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="756592673"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="756592673"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.60]) ([10.252.187.60])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:43:49 -0700
-Message-ID: <c815fa2b-00df-91e1-8353-8258773957e4@linux.intel.com>
-Date:   Wed, 12 Jul 2023 10:43:46 +0800
+        Tue, 11 Jul 2023 22:59:39 -0400
+Received: from n169-112.mail.139.com (n169-112.mail.139.com [120.232.169.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C774E6F;
+        Tue, 11 Jul 2023 19:59:35 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM:                                                                                        
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[183.194.159.125])
+        by rmsmtp-lg-appmail-19-12022 (RichMail) with SMTP id 2ef664ae17086da-de900;
+        Wed, 12 Jul 2023 10:59:22 +0800 (CST)
+X-RM-TRANSID: 2ef664ae17086da-de900
+From:   Shenghao Ding <13916275206@139.com>
+To:     broonie@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com
+Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, liam.r.girdwood@intel.com,
+        mengdong.lin@intel.com, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com, tiwai@suse.de, Shenghao Ding <13916275206@139.com>
+Subject: [PATCH v1] ALSA: hda/tas2781: fix 'fw_entry' is used uninitialized
+Date:   Wed, 12 Jul 2023 10:44:08 +0800
+Message-Id: <20230712024408.316793-1-13916275206@139.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     baolu.lu@linux.intel.com, "Liu, Yi L" <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/9] iommu: Make fault_param generic
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
- <20230711010642.19707-6-baolu.lu@linux.intel.com>
- <BN9PR11MB52763F7A1433C73CF6589F2E8C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52763F7A1433C73CF6589F2E8C31A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 14:14, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Tuesday, July 11, 2023 9:07 AM
->>
->> @@ -299,7 +299,15 @@ static int dev_iommu_get(struct device *dev)
->>   		return -ENOMEM;
->>
->>   	mutex_init(&param->lock);
->> +	param->fault_param = kzalloc(sizeof(*param->fault_param),
->> GFP_KERNEL);
->> +	if (!param->fault_param) {
->> +		kfree(param);
->> +		return -ENOMEM;
->> +	}
->> +	mutex_init(&param->fault_param->lock);
->> +	INIT_LIST_HEAD(&param->fault_param->faults);
->>   	dev->iommu = param;
->> +
->>   	return 0;
->>   }
-> 
-> Upon above changes is it slightly cleaner to call it dev_iommu_init()
-> to better pair with dev_iommu_free()?
+Fix 'fw_entry' is used uninitialized.
 
-dev_iommu_init() was introduced in Jason's series. It's not landed yet.
+Signed-off-by: Shenghao Ding <13916275206@139.com>
 
-https://lore.kernel.org/linux-iommu/0-v3-328044aa278c+45e49-iommu_probe_jgg@nvidia.com/
+Changes in v1:
+ | Reported-by: kernel test robot <lkp@intel.com>
+ | Closes: https://lore.kernel.org/oe-kbuild-all/202307070922.doxi1HFc-lkp@intel.com/
+---
+ sound/soc/codecs/tas2781-fmwlib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sure. Should refine this code after above patches are landed.
+diff --git a/sound/soc/codecs/tas2781-fmwlib.c b/sound/soc/codecs/tas2781-fmwlib.c
+index eb55abae0d7b..0b08e24ed23a 100644
+--- a/sound/soc/codecs/tas2781-fmwlib.c
++++ b/sound/soc/codecs/tas2781-fmwlib.c
+@@ -1908,7 +1908,7 @@ int tas2781_load_calibration(void *context, char *file_name,
+ {
+ 	struct tasdevice_priv *tas_priv = (struct tasdevice_priv *)context;
+ 	struct tasdevice *tasdev = &(tas_priv->tasdevice[i]);
+-	const struct firmware *fw_entry;
++	const struct firmware *fw_entry = NULL;
+ 	struct tasdevice_fw *tas_fmw;
+ 	struct firmware fmw;
+ 	int offset = 0;
+-- 
+2.34.1
 
-Best regards,
-baolu
+
