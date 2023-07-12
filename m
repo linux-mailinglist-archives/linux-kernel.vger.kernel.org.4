@@ -2,231 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788AC750B67
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D29F750B6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjGLOtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
+        id S230252AbjGLOwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjGLOtW (ORCPT
+        with ESMTP id S229473AbjGLOwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:49:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F951BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689173309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1KpSssKMIgC0UPbDdqI0j9HY5oH6D5zOHCu9BHTLLuQ=;
-        b=CO4H/Qg5L6axJ1Bydzn/psSL0YgMkGq+3/EdW1tbghb3asgLzPsR1i16E9LuJuwR7Ct4pd
-        LFdZ7v/slqJgbtzTTUH98r9PB05NOcE/S2ViwTk9eWx8wkHFmGrampvq6NRrXd9+aZ/dwC
-        QhfvV0XkW215VP+T51ng4sxcoMre+78=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-311-7AfMiFblMlacIwmSLvDyAA-1; Wed, 12 Jul 2023 10:48:26 -0400
-X-MC-Unique: 7AfMiFblMlacIwmSLvDyAA-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a34a0b75eso431227166b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:48:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689173305; x=1691765305;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1KpSssKMIgC0UPbDdqI0j9HY5oH6D5zOHCu9BHTLLuQ=;
-        b=YnBg7Ar7utLOar9wsusB/kRzU0OJpKSZ7BeqGO4eGkNdYSKfPCc9PaKjWkyYJ4QaV0
-         /ab8TY0BLAm7iSEz4gHux/OxRcBht0juvt6O8Z/OMVo+Cp0/JWa2BQhIU0Z8Xnxhoy/v
-         ss7muMJIM+4rfOGAJTolNoixxEmEx82pUxjtUXNGqupDFZB7Lohe2+KIvsWvlQEo58lm
-         r86v2jqDvxmommzqUvC5lrSZMP4pn7i/y5N8G/Cn/DTlYeaK4q4nCxmZ7mPzLXIxRuvk
-         SvzyNtgnUsbD1o8W+jMUcqpH+XZIheNgxtZtKLibOrkmXBc00L2hEhQyReBTMSoe8LLs
-         sQ8A==
-X-Gm-Message-State: ABy/qLaXhFYCYO50+4Uffoy0CpwNjaFpcZp2xyvtfQAdLYUU63ol5FKp
-        ucdYFunhpImR3uFuL5TYAzuNR5lpSk5pEctMOY+vBYERhKU7x6S3AjIUk3+R2TzLk8fuWEa3sX8
-        sSoDY26+CPTrSfyb8PRWWKMuH
-X-Received: by 2002:a17:907:b9d1:b0:98e:26ae:9b08 with SMTP id xa17-20020a170907b9d100b0098e26ae9b08mr20214283ejc.58.1689173305320;
-        Wed, 12 Jul 2023 07:48:25 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHikde8vkqS0SQD/NwiyYtXfkqDJSRqFJkWGc88nbjcS4R56JaZ+oynazWWITKiVwPVhTIO8Q==
-X-Received: by 2002:a17:907:b9d1:b0:98e:26ae:9b08 with SMTP id xa17-20020a170907b9d100b0098e26ae9b08mr20214265ejc.58.1689173305031;
-        Wed, 12 Jul 2023 07:48:25 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id d20-20020a17090648d400b00993feabdc6asm2655498ejt.157.2023.07.12.07.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 07:48:24 -0700 (PDT)
-Message-ID: <43985ad2-401c-3632-c045-90049d600217@redhat.com>
-Date:   Wed, 12 Jul 2023 16:48:23 +0200
+        Wed, 12 Jul 2023 10:52:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2025E19A0;
+        Wed, 12 Jul 2023 07:52:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A95E4617F2;
+        Wed, 12 Jul 2023 14:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6BAC433C8;
+        Wed, 12 Jul 2023 14:52:37 +0000 (UTC)
+Date:   Wed, 12 Jul 2023 10:52:35 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH] tracing: Stop FORTIFY_SOURCE complaining about stack trace
+ caller
+Message-ID: <20230712105235.5fc441aa@gandalf.local.home>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 7/8] platform/x86: asus-wmi: support setting mini-LED
- mode
-Content-Language: en-US, nl
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, markgross@kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net
-References: <20230630053552.976579-1-luke@ljones.dev>
- <20230630053552.976579-8-luke@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230630053552.976579-8-luke@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-On 6/30/23 07:35, Luke D. Jones wrote:
-> Support changing the mini-LED mode on some of the newer ASUS laptops.
-> 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+The stack_trace event is an event created by the tracing subsystem to
+store stack traces. It originally just contained a hard coded array of 8
+words to hold the stack, and a "size" to know how many entries are there.
+This is exported to user space as:
 
-Thanks, patch looks good to me:
+name: kernel_stack
+ID: 4
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+	field:int size;	offset:8;	size:4;	signed:1;
+	field:unsigned long caller[8];	offset:16;	size:64;	signed:0;
 
-Regards,
+print fmt: "\t=> %ps\n\t=> %ps\n\t=> %ps\n" "\t=> %ps\n\t=> %ps\n\t=> %ps\n" "\t=> %ps\n\t=> %ps\n",i
+ (void *)REC->caller[0], (void *)REC->caller[1], (void *)REC->caller[2],
+ (void *)REC->caller[3], (void *)REC->caller[4], (void *)REC->caller[5],
+ (void *)REC->caller[6], (void *)REC->caller[7]
 
-Hans
+Where the user space tracers could parse the stack. The library was
+updated for this specific event to only look at the size, and not the
+array. But some older users still look at the array (note, the older code
+still checks to make sure the array fits inside the event that it read.
+That is, if only 4 words were saved, the parser would not read the fifth
+word because it will see that it was outside of the event size).
 
+This event was changed a while ago to be more dynamic, and would save a
+full stack even if it was greater than 8 words. It does this by simply
+allocating more ring buffer to hold the extra words. Then it copies in the
+stack via:
 
-> ---
->  .../ABI/testing/sysfs-platform-asus-wmi       |  9 ++++
->  drivers/platform/x86/asus-wmi.c               | 53 +++++++++++++++++++
->  include/linux/platform_data/x86/asus-wmi.h    |  1 +
->  3 files changed, 63 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> index 878daf7c2036..5624bdef49cb 100644
-> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> @@ -117,3 +117,12 @@ Description:
->  		Show if the egpu (XG Mobile) is correctly connected:
->  			* 0 - False,
->  			* 1 - True
-> +
-> +What:		/sys/devices/platform/<platform>/mini_led_mode
-> +Date:		Jun 2023
-> +KernelVersion:	6.5
-> +Contact:	"Luke Jones" <luke@ljones.dev>
-> +Description:
-> +		Change the mini-LED mode:
-> +			* 0 - Single-zone,
-> +			* 1 - Multi-zone
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 602426a7fb41..1fc9e8afc2f3 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -265,6 +265,7 @@ struct asus_wmi {
->  	bool battery_rsoc_available;
->  
->  	bool panel_overdrive_available;
-> +	bool mini_led_mode_available;
->  
->  	struct hotplug_slot hotplug_slot;
->  	struct mutex hotplug_lock;
-> @@ -1820,6 +1821,54 @@ static ssize_t panel_od_store(struct device *dev,
->  }
->  static DEVICE_ATTR_RW(panel_od);
->  
-> +/* Mini-LED mode **************************************************************/
-> +static ssize_t mini_led_mode_show(struct device *dev,
-> +				   struct device_attribute *attr, char *buf)
-> +{
-> +	struct asus_wmi *asus = dev_get_drvdata(dev);
-> +	int result;
-> +
-> +	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_MINI_LED_MODE);
-> +	if (result < 0)
-> +		return result;
-> +
-> +	return sysfs_emit(buf, "%d\n", result);
-> +}
-> +
-> +static ssize_t mini_led_mode_store(struct device *dev,
-> +				    struct device_attribute *attr,
-> +				    const char *buf, size_t count)
-> +{
-> +	int result, err;
-> +	u32 mode;
-> +
-> +	struct asus_wmi *asus = dev_get_drvdata(dev);
-> +
-> +	result = kstrtou32(buf, 10, &mode);
-> +	if (result)
-> +		return result;
-> +
-> +	if (mode > 1)
-> +		return -EINVAL;
-> +
-> +	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_MINI_LED_MODE, mode, &result);
-> +
-> +	if (err) {
-> +		pr_warn("Failed to set mini-LED: %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	if (result > 1) {
-> +		pr_warn("Failed to set mini-LED mode (result): 0x%x\n", result);
-> +		return -EIO;
-> +	}
-> +
-> +	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "mini_led_mode");
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(mini_led_mode);
-> +
->  /* Quirks *********************************************************************/
->  
->  static void asus_wmi_set_xusb2pr(struct asus_wmi *asus)
-> @@ -3727,6 +3776,7 @@ static struct attribute *platform_attributes[] = {
->  	&dev_attr_fan_boost_mode.attr,
->  	&dev_attr_throttle_thermal_policy.attr,
->  	&dev_attr_panel_od.attr,
-> +	&dev_attr_mini_led_mode.attr,
->  	NULL
->  };
->  
-> @@ -3764,6 +3814,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
->  		ok = asus->throttle_thermal_policy_available;
->  	else if (attr == &dev_attr_panel_od.attr)
->  		ok = asus->panel_overdrive_available;
-> +	else if (attr == &dev_attr_mini_led_mode.attr)
-> +		ok = asus->mini_led_mode_available;
->  
->  	if (devid != -1)
->  		ok = !(asus_wmi_get_devstate_simple(asus, devid) < 0);
-> @@ -4026,6 +4078,7 @@ static int asus_wmi_add(struct platform_device *pdev)
->  	asus->kbd_rgb_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE);
->  	asus->kbd_rgb_state_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_STATE);
->  	asus->panel_overdrive_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PANEL_OD);
-> +	asus->mini_led_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_MINI_LED_MODE);
->  
->  	err = fan_boost_mode_check_present(asus);
->  	if (err)
-> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-> index 2034648f8cdf..ea80361ac6c7 100644
-> --- a/include/linux/platform_data/x86/asus-wmi.h
-> +++ b/include/linux/platform_data/x86/asus-wmi.h
-> @@ -66,6 +66,7 @@
->  #define ASUS_WMI_DEVID_CAMERA		0x00060013
->  #define ASUS_WMI_DEVID_LID_FLIP		0x00060062
->  #define ASUS_WMI_DEVID_LID_FLIP_ROG	0x00060077
-> +#define ASUS_WMI_DEVID_MINI_LED_MODE	0x0005001E
->  
->  /* Storage */
->  #define ASUS_WMI_DEVID_CARDREADER	0x00080013
+	memcpy(&entry->caller, fstack->calls, size);
+
+As the entry is struct stack_entry, that is created by a macro to both
+create the structure and export this to user space, it still had the caller
+field of entry defined as: unsigned long caller[8].
+
+When the stack is greater than 8, the FORTIFY_SOURCE code notices that the
+amount being copied is greater than the source array and complains about
+it. It has no idea that the source is pointing to the ring buffer with the
+required allocation.
+
+To hide this from the FORTIFY_SOURCE logic, pointer arithmetic is used:
+
+	ptr = ring_buffer_event_data(event);
+	entry = ptr;
+	ptr += offsetof(typeof(*entry), caller);
+	memcpy(ptr, fstack->calls, size);
+
+Link: https://lore.kernel.org/all/20230612160748.4082850-1-svens@linux.ibm.com/
+
+Reported-by: Sven Schnelle <svens@linux.ibm.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 4529e264cb86..20122eeccf97 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3118,6 +3118,7 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
+ 	struct ftrace_stack *fstack;
+ 	struct stack_entry *entry;
+ 	int stackidx;
++	void *ptr;
+ 
+ 	/*
+ 	 * Add one, for this function and the call to save_stack_trace()
+@@ -3161,9 +3162,25 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
+ 				    trace_ctx);
+ 	if (!event)
+ 		goto out;
+-	entry = ring_buffer_event_data(event);
++	ptr = ring_buffer_event_data(event);
++	entry = ptr;
++
++	/*
++	 * For backward compatibility reasons, the entry->caller is an
++	 * array of 8 slots to store the stack. This is also exported
++	 * to user space. The amount allocated on the ring buffer actually
++	 * holds enough for the stack specified by nr_entries. This will
++	 * go into the location of entry->caller. Due to string fortifiers
++	 * checking the size of the destination of memcpy() it triggers
++	 * when it detects that size is greater than 8. To hide this from
++	 * the fortifiers, we use "ptr" and pointer arithmetic to assign caller.
++	 *
++	 * The below is really just:
++	 *   memcpy(&entry->caller, fstack->calls, size);
++	 */
++	ptr += offsetof(typeof(*entry), caller);
++	memcpy(ptr, fstack->calls, size);
+ 
+-	memcpy(&entry->caller, fstack->calls, size);
+ 	entry->size = nr_entries;
+ 
+ 	if (!call_filter_check_discard(call, entry, buffer, event))
+-- 
+2.40.1
 
