@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4714D750096
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7A875009F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjGLIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S232244AbjGLIAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjGLIAI (ORCPT
+        with ESMTP id S231260AbjGLIAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:00:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6649519B4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:59:24 -0700 (PDT)
+        Wed, 12 Jul 2023 04:00:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004EF198A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689148763;
+        s=mimecast20190719; t=1689148765;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hgo9YuUU2jqiHTi7UEl9pw/Cu7nUbHUeFZMun2ueh0k=;
-        b=Hha/pPzip5tW473B9u6kl/7Tovl77U0H0NK4X69X4pu7NAoY2ctZ7/ncY09exwndoDXOFK
-        8i2/bBMxcA/QhAQn6Yxj8C0/p4VQ+T2IBSCipitbqdtLLRCOrkuzk/hBK+mO1NsoxzcpU8
-        UE/7svSdcEd9ESWrPRQemuJ3/Jg6Phk=
+        bh=Pvw4j2K8XqOylaArL4/E5ue75t8iqRSsLMUN6UWuxgI=;
+        b=CMj+ygwJznGeplTyxl2PMYuU+DDZwLqYO+2Izi3tLuwIaM++Kb4oEfQXHSYXfC8XN5eSiT
+        XNNVmBuFgVx5r7Uh5wc05cRVpgWz7O04PL7q8l7NobKAVsNHxp51UvndkFtnZKm7TDnSUy
+        iqa8sz31YVhWqR3V5cwTbB5hddFvnlc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-178-7NJDwfmRMBCQ48jNY0ihQQ-1; Wed, 12 Jul 2023 03:59:19 -0400
-X-MC-Unique: 7NJDwfmRMBCQ48jNY0ihQQ-1
+ us-mta-623-8hIItBy_PVCdm0HVPdI0AQ-1; Wed, 12 Jul 2023 03:59:21 -0400
+X-MC-Unique: 8hIItBy_PVCdm0HVPdI0AQ-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E8358EBBA6;
-        Wed, 12 Jul 2023 07:59:19 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 07887800CAF;
+        Wed, 12 Jul 2023 07:59:21 +0000 (UTC)
 Received: from thuth.com (unknown [10.39.193.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA7B4492C13;
-        Wed, 12 Jul 2023 07:59:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A52F5492C13;
+        Wed, 12 Jul 2023 07:59:19 +0000 (UTC)
 From:   Thomas Huth <thuth@redhat.com>
 To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>
 Cc:     linux-kselftest@vger.kernel.org,
         David Matlack <dmatlack@google.com>
-Subject: [PATCH 3/4] KVM: selftests: x86: Use TAP interface in the fix_hypercall test
-Date:   Wed, 12 Jul 2023 09:59:09 +0200
-Message-Id: <20230712075910.22480-4-thuth@redhat.com>
+Subject: [PATCH 4/4] KVM: selftests: x86: Use TAP interface in the userspace_msr_exit test
+Date:   Wed, 12 Jul 2023 09:59:10 +0200
+Message-Id: <20230712075910.22480-5-thuth@redhat.com>
 In-Reply-To: <20230712075910.22480-1-thuth@redhat.com>
 References: <20230712075910.22480-1-thuth@redhat.com>
 MIME-Version: 1.0
@@ -69,44 +69,72 @@ is doing.
 
 Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- .../selftests/kvm/x86_64/fix_hypercall_test.c    | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ .../kvm/x86_64/userspace_msr_exit_test.c      | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-index 0f728f05ea82f..7621942a072ec 100644
---- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-@@ -9,6 +9,7 @@
- #include <linux/stringify.h>
- #include <stdint.h>
+diff --git a/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c b/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
+index 3533dc2fbfeeb..9843528bba0c6 100644
+--- a/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
++++ b/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
+@@ -8,6 +8,7 @@
+ #define _GNU_SOURCE /* for program_invocation_short_name */
+ #include <sys/ioctl.h>
  
 +#include "kselftest_harness.h"
- #include "apic.h"
  #include "test_util.h"
  #include "kvm_util.h"
-@@ -126,10 +127,19 @@ static void test_fix_hypercall(bool disable_quirk)
- 	enter_guest(vcpu);
+ #include "vmx.h"
+@@ -527,7 +528,7 @@ static void run_guest_then_process_ucall_done(struct kvm_vcpu *vcpu)
+ 	process_ucall_done(vcpu);
  }
  
--int main(void)
-+TEST(fix_hypercall)
+-static void test_msr_filter_allow(void)
++TEST(msr_filter_allow)
  {
--	TEST_REQUIRE(kvm_check_cap(KVM_CAP_DISABLE_QUIRKS2) & KVM_X86_QUIRK_FIX_HYPERCALL_INSN);
--
- 	test_fix_hypercall(false);
-+}
-+
-+TEST(fix_hypercall_disable_quirk)
-+{
- 	test_fix_hypercall(true);
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -646,7 +647,7 @@ static void handle_wrmsr(struct kvm_run *run)
+ 	}
  }
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_DISABLE_QUIRKS2) & KVM_X86_QUIRK_FIX_HYPERCALL_INSN);
-+
+ 
+-static void test_msr_filter_deny(void)
++TEST(msr_filter_deny)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -693,7 +694,7 @@ static void test_msr_filter_deny(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_msr_permission_bitmap(void)
++TEST(msr_permission_bitmap)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -786,7 +787,7 @@ static void run_msr_filter_flag_test(struct kvm_vm *vm)
+ }
+ 
+ /* Test that attempts to write to the unused bits in a flag fails. */
+-static void test_user_exit_msr_flags(void)
++TEST(user_exit_msr_flags)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -804,13 +805,5 @@ static void test_user_exit_msr_flags(void)
+ 
+ int main(int argc, char *argv[])
+ {
+-	test_msr_filter_allow();
+-
+-	test_msr_filter_deny();
+-
+-	test_msr_permission_bitmap();
+-
+-	test_user_exit_msr_flags();
+-
+-	return 0;
 +	return test_harness_run(argc, argv);
-+}
+ }
 -- 
 2.39.3
 
