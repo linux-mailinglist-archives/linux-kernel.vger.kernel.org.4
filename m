@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A982F750154
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3269875015C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjGLIXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S232429AbjGLIYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbjGLIWT (ORCPT
+        with ESMTP id S232892AbjGLIXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:22:19 -0400
+        Wed, 12 Jul 2023 04:23:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D77421A;
-        Wed, 12 Jul 2023 01:18:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9326E268C;
+        Wed, 12 Jul 2023 01:19:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BCA0615C3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD93861708;
+        Wed, 12 Jul 2023 08:18:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DD0EC433C7;
         Wed, 12 Jul 2023 08:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF87FC433C9;
-        Wed, 12 Jul 2023 08:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689149909;
-        bh=ScFNHJKoC6BpXI9oEWAZOHBoeKXX3SlhqkfMHYY9sAU=;
+        s=k20201202; t=1689149911;
+        bh=aEbQE/95bLmaIJXD58eaBIN7aIIW9TD36vMUZ0da4Ks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HU4sclBY8YX9MdgHWS+CmlcQRJIHcji3LEX03h/DyMxFrJ9TdFqMRsBwZlfDJmVTD
-         GrEWD2NpRhBa5u0wCQNeD2wHl2k6kNrY9oCUWabqufOX0bRCw+1VO1Jb8R3hTUXyQl
-         M7MZcJERe703a/S7ZeWSmhFVVDfyuhE9fn9Ss8MmKbSBS0vJDqQYEVHqTRcrLHK9Xx
-         ZKatHwqRQquQtWZDyAf0ZXdpfpAQIKYMnE0g9l9EN3f4MA8rO3bkQrEvdkwox41TGv
-         DvpMlve2SOB10b2/Nvk48Vj6sLZwEZsOQd6ZGICUOcHFDv+dL3ANN+3dmgDM/zq3RK
-         +TmBueQoiqV/w==
+        b=bgNauHljB8hl+pCWp/zUNsk0i0/72wyCOEOkux4CCU/8y+D5Ii2xIPdxbL19YAOLi
+         Xj+t2svognh/QreTszJCzcw+fd2Oa0Ylja49QFEQDCK+iAIBNm0Qh7ZxI/1ErTrg8y
+         xk64/BYbvrpns99RSskGsMz/Fk3YbGx3+hJtQ0fGDFBwqtEdT6EjgLkTsn4gqCg/kJ
+         PR32J3FPBQRspkqyxeifoLYbuF51QOilRwvbG2EMMMbBOQFeNS9tlhyUmeR7es1MNd
+         i2y+MLaMV+j/O1Arj6rCg0obhlVdmW+sDYOsSbq4EnkA8Ph7qbNcLVjEgtk4KSZ+6L
+         00kDU+3kImj2w==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH 06/10] serial: make uart_insert_char() accept u8s
-Date:   Wed, 12 Jul 2023 10:18:07 +0200
-Message-ID: <20230712081811.29004-7-jirislaby@kernel.org>
+Subject: [PATCH 07/10] serial: pass state to __uart_start() directly
+Date:   Wed, 12 Jul 2023 10:18:08 +0200
+Message-ID: <20230712081811.29004-8-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230712081811.29004-1-jirislaby@kernel.org>
 References: <20230712081811.29004-1-jirislaby@kernel.org>
@@ -55,41 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both the character and flag are 8-bit values. So switch from unsigned
-ints to u8s. The drivers will be cleaned up in the next round.
+__uart_start() does not need a tty struct. It works only with
+uart_state. So pass the latter directly.
 
 Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 ---
- drivers/tty/serial/serial_core.c | 2 +-
- include/linux/serial_core.h      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/serial_core.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 7e37db9adbd4..bef507cb804c 100644
+index bef507cb804c..306ea1a560e6 100644
 --- a/drivers/tty/serial/serial_core.c
 +++ b/drivers/tty/serial/serial_core.c
-@@ -3486,7 +3486,7 @@ EXPORT_SYMBOL_GPL(uart_handle_cts_change);
-  * @flag: flag for the character (see TTY_NORMAL and friends)
-  */
- void uart_insert_char(struct uart_port *port, unsigned int status,
--		 unsigned int overrun, unsigned int ch, unsigned int flag)
-+		      unsigned int overrun, u8 ch, u8 flag)
+@@ -133,9 +133,8 @@ static void uart_stop(struct tty_struct *tty)
+ 	uart_port_unlock(port, flags);
+ }
+ 
+-static void __uart_start(struct tty_struct *tty)
++static void __uart_start(struct uart_state *state)
  {
- 	struct tty_port *tport = &port->state->port;
+-	struct uart_state *state = tty->driver_data;
+ 	struct uart_port *port = state->uart_port;
+ 	struct serial_port_device *port_dev;
+ 	int err;
+@@ -170,7 +169,7 @@ static void uart_start(struct tty_struct *tty)
+ 	unsigned long flags;
  
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index 14dd85ee849e..105d2cdc0126 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -903,7 +903,7 @@ void uart_handle_dcd_change(struct uart_port *uport, bool active);
- void uart_handle_cts_change(struct uart_port *uport, bool active);
+ 	port = uart_port_lock(state, flags);
+-	__uart_start(tty);
++	__uart_start(state);
+ 	uart_port_unlock(port, flags);
+ }
  
- void uart_insert_char(struct uart_port *port, unsigned int status,
--		      unsigned int overrun, unsigned int ch, unsigned int flag);
-+		      unsigned int overrun, u8 ch, u8 flag);
+@@ -239,7 +238,7 @@ static void uart_change_line_settings(struct tty_struct *tty, struct uart_state
+ 		if (!old_hw_stopped)
+ 			uport->ops->stop_tx(uport);
+ 		else
+-			__uart_start(tty);
++			__uart_start(state);
+ 	}
+ 	spin_unlock_irq(&uport->lock);
+ }
+@@ -619,7 +618,7 @@ static int uart_write(struct tty_struct *tty,
+ 		ret += c;
+ 	}
  
- void uart_xchar_out(struct uart_port *uport, int offset);
- 
+-	__uart_start(tty);
++	__uart_start(state);
+ 	uart_port_unlock(port, flags);
+ 	return ret;
+ }
 -- 
 2.41.0
 
