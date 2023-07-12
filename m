@@ -2,84 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF387501D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872097501D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjGLIjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S232812AbjGLIjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbjGLIim (ORCPT
+        with ESMTP id S232209AbjGLIig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:38:42 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B81CA1998;
-        Wed, 12 Jul 2023 01:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=iqmSU
-        ZwzBw1hM5T9jJOZyxbxjgisyiiptjpGYA/61SM=; b=DlQ4LhKM1FT98BQwQJvww
-        4jSnB2wL+d32M/MHYsISXivV5jvklDzN9hoRXsXvLysrJd/RGGdmF7btwC5YAXzO
-        VKsi5V252l5W3UlVWSfTDLwY5IeB9tshY+hgMlyyqYB/LBZMkQ27pD7tDzsoW5mY
-        VuEgVRiN4t9fJiFDMaWmxc=
-Received: from jbd-ThinkPad-X1-Nano-Gen-2.web.setting (unknown [223.160.228.167])
-        by zwqz-smtp-mta-g5-1 (Coremail) with SMTP id _____wBXbUZXZq5kZhRCAA--.6187S2;
-        Wed, 12 Jul 2023 16:37:44 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     mani@kernel.org, loic.poulain@linaro.org
-Cc:     fabio.porcedda@gmail.com, bhelgaas@google.com, song.fc@gmail.com,
-        duke_xinanwen@163.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] bus: mhi: host: pci_generic: Add support for Dell DW5932e
-Date:   Wed, 12 Jul 2023 16:37:41 +0800
-Message-Id: <20230712083741.7615-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Wed, 12 Jul 2023 04:38:36 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E220EA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:38:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kaNrnckOPyjK4xsZQS7vxEjiGbM0szB5eQ4nRf6qLKq6oEbTpxLglI25UOWukgZKcerDxoXRYsVdZNn+dUBWZM4cKJCs6ld7sNM1M/7UBq42l0Ye7FA3GyyQg2GK6lwd+ZKtmWfo2CRJtpzsQTrhRjQtYtT65dcGjRcBArCqwVndKsrOIJeSGAGZ1Sv9jbtEFhzFYTpm0SsYVwJqfyqR++yDyaFeaicvugqNhV1oLdoPqbyJUTspVTEITMjD8PQ4mkUqWtd70bFaW8otk5jvRD/4MT2kq6Hnaaw8thELx37KRNECbQfogAahm08W/0+OapnnfNGsZE4OQJ4YCyljtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ayzQGPpTA9IamMO8gH/kB8ICvypiXBm12AJV5aJYAA4=;
+ b=BRv/iHZEAV3mEvUJn/BAGsCxN7vd978mLP/Dw8Q2EnHo577hjEvo6Oaeo6hr6ZOPqPUUE/na2OJ3njitb0SQTn8PZTRwA3VPEPSRaKv1Wj4/IOSj0y8o9P0sh+Wi8YtgBkobYXHrNi8Zou5ExJdRaSFsky2v2h7OqZkiA91l2aJqLhZ+GfWi3kh0vvTKr5rVyMwwF1e7thi/2dj3SWaMr2ivQl9lGZ+PrXM+AEkQyQn0X5mjhxnXxrrbxzH6hxzbGqdTF9E5UvbEF6/oNsBdwoQCocXWLyS1IpzD698lObwvhQ+M85VidXQKcszcbUO+5ksRXD8b1oAffWNTY2ip1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ayzQGPpTA9IamMO8gH/kB8ICvypiXBm12AJV5aJYAA4=;
+ b=ADeKCxKmIkCSNHef7aS130x+eX9vITFMAUNEC+of9X52hvtjV4g46BkKpsuu4ZqnSof7nIZZ8b1Y3vzwgHV4lsbjbu6/Xw1ewIx0mXUDtbV1uWkThX6nRVHk0gEbnJWxuMtaNyM3dnYItO7O1GQI+PDzHUYgiyO6CeHaeEpR3y4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CH3PR12MB8402.namprd12.prod.outlook.com (2603:10b6:610:132::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Wed, 12 Jul
+ 2023 08:37:57 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::669f:5dca:d38a:9921]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::669f:5dca:d38a:9921%4]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
+ 08:37:57 +0000
+Message-ID: <e488da74-af52-62eb-d601-0e8a13cf0e87@amd.com>
+Date:   Wed, 12 Jul 2023 10:37:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 3/6] drm/amdgpu: Rework coredump to use memory dynamically
+Content-Language: en-US
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        michel.daenzer@mailbox.org
+References: <20230711213501.526237-1-andrealmeid@igalia.com>
+ <20230711213501.526237-4-andrealmeid@igalia.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230711213501.526237-4-andrealmeid@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXbUZXZq5kZhRCAA--.6187S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrZw1xKry3KF18CFWxJF4xWFg_yoW8Jr4DpF
-        4F934jyF4kJr4jyaykt3yDXas8Wan3Gry7KF4xK34Y9F4qyFWYgr92gry2gF15Ka9Yqa1a
-        qFy8XFWjg3WqkF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUbXowUUUUU=
-X-Originating-IP: [223.160.228.167]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbioxmqZGNfupXBtAAAsS
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0039.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:92::10) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH3PR12MB8402:EE_
+X-MS-Office365-Filtering-Correlation-Id: bbe688ae-f211-46ba-3663-08db82b34af3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b4Men/gH5OeMwfKmN54VxGS2s+bJedHnsZXIl3VCMcp8aAlBRSFJKiKCZ+SFz1ZwVmkcHshBzJ9cWx7NoXIAICysM6CSxdb1/2TjjLGkkpMizvAoZBkck7BdGNXJkNjhNXjslRG/vxAk+at57RoHVz/aoD/0va8GfMA5SPwIIil8XawDy6XOGuQMHMsSB6KbzyUZOEG24keeJWDHaSSMX79XrXTnVZeBfGh06yzbq9d0i30RkttB6sWGFe5j3YLCpHHJa8nGeFb3okib4Zg8SoZaR+3csFsN0N39omXd3qhc4R19OC2vf//0BiqMlkR0iEqmbV8QIze3eQm4ogUptEuUUr/O5dBv/MOx2rrqEalXuoui4c3X4BWqJhrZvXGEu4R3x8s8B1UF6Z8OUf7o6betySF6ROgc1wN3ph04Wtv6rftfqL5fcz9MGY/o3CspOFP65Pw+1d+1iiPQDO7HhOQB4p/z94NSJWjdy3VEurzt8OZi4WOvQj8OktqWuIFutXbS5585v+r+mhctviu1886OxltaijviY2NCdzDy8oQSL2TpRjBN1MjYuKV1fX43abtXIq+gsaUb6Np2i07YaKjVkoIJz9YCtewZxsPILRZZy0YG4NxDbpH++9+6RzOqUkOS00fYz/sw4xZWumGAIA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(8676002)(478600001)(8936002)(316002)(66476007)(31686004)(4326008)(5660300002)(7416002)(2906002)(38100700002)(54906003)(41300700001)(6666004)(66556008)(66946007)(6486002)(86362001)(31696002)(6512007)(6506007)(186003)(36756003)(2616005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZERhUGExTUxuNW45Q0NGb1IrWElHc2VHREhkWVkrUyttcWJGUDdWNzUybm9v?=
+ =?utf-8?B?ZFduS21BM2dHYW9EWE1ZYW1VQlZGOEJjQndHclAyUktsTXhCeG1nL0JZYWRY?=
+ =?utf-8?B?d1ZyVnczVjdBdzAwQTk5dDNrTWU0N0I3cDZOTlg4d3hSZWV0YzhnRGtpQjll?=
+ =?utf-8?B?OU5xWTlMWXNSdW9UTzhWeXkvRGZzTTBQQlVpUEN0OE9zRmJtOTgyWkUvMzc4?=
+ =?utf-8?B?NEVqV3RtSmE4ZGFjQzBEMmVhUGpFL09PaXRiQjY2S2tjeVZ2Z0dWdHpiUmhr?=
+ =?utf-8?B?TTY1MHo0Y21NRWNXblh4UVQxOXZnNU9iOWtkMTZmaDNKQjh2dlprdjJqbkJL?=
+ =?utf-8?B?clo3ZjBWMm4rM0xnbmV5ckxUeXBSLzVCa3FzaGsrcG83WUtOSmsvcXB6bzBt?=
+ =?utf-8?B?RXhHU0JnSjFXSzJpbHhuNUpLZXRoWTRyOTExbzBGYktSOFc2Q0VTRzlRcGQw?=
+ =?utf-8?B?YUdzUFdKYW1lWEIvbEd5SWYya2IwUTF2dFJGSDcwSE9Vb2pYelhqZnd4ZHhY?=
+ =?utf-8?B?QW5RVFQ4Y2lJZE9jVnJ1bTNyRTQvWFRkbVNld3JIbmJJcTRCd0cxUW1iVnFG?=
+ =?utf-8?B?OUZldVVwNzBQN29VL3hoRE94YUU5QUFJcnlGTkhQOEtxNHYwNWl0R010cFor?=
+ =?utf-8?B?K3lXUFZZdjFKRUZmdEVIQml5ZERlNjNIcVAwNFJreWsrTDlOYVgzdlYxNmpZ?=
+ =?utf-8?B?eDZPdEFaRHpCdlNmampONWpPYVhUeHhFeWlKbWovRUpJdGdjYitVS3FvWm9u?=
+ =?utf-8?B?VHZCakdsR0VVci9XVmJNOGx3MTNMZVlOZlU4WUdEeXR0WjNJcGhQZnA0akov?=
+ =?utf-8?B?WlR3RWJmd3JPZ1VZZUpTMTFKNk5iV1Ftc2lSc2xuNjlaUGx5M3VSbExYWnJR?=
+ =?utf-8?B?Tkw5TEd0TDZYVFJnQUpzWXlVSk5oZkoxT1JyN2JRa0Y4U3NMenpyVTVNN0xZ?=
+ =?utf-8?B?R2V0ZFlEQ2w3TVVRdmEzWE9PM3RPNk8zZkFTVTdPUFpMR0I3UHRvOG9ocldU?=
+ =?utf-8?B?dWQrUEhza3dBOFFSZUxJaXNUQ3FFSTk4OUh0elJUaDZHL3cxcE5xZXh2SWVa?=
+ =?utf-8?B?NnlRVWxCSzhiRFFUdWg5VUllTWtvdUNJM0JYN0FVMktJZmtxSmlzM0VLQngv?=
+ =?utf-8?B?RFBVelpFUS92dkxzaytBQXFmaXFpaTNBTFVsT2tsM0VCUGF2cDNSYlFBcDcr?=
+ =?utf-8?B?VnBYUkJlUnBoeXNIZDVqNjJnOEl3dlV4Y2hTRGxPMUZHWUo3TjZYVDV5T084?=
+ =?utf-8?B?TE02ZHdHWWt1RDRFcmJIbStTVFgycDdlUk4xZGpiZUZ4T09penFMTmdUTTNU?=
+ =?utf-8?B?S21sZTRFOVlHYnpQVG5kZnkwNUxqTE9oWkovc1Zza3hPV0ZKemdpcFpFZUVY?=
+ =?utf-8?B?cGo1TkhsUC9SZTNiVXkxeDR5eDd6V3k0YzBjRSs3cXVrazFYa1JBakhVQTRZ?=
+ =?utf-8?B?NVI2VWhhYWExMm9HVmxPV0F0Unl5a0xmNElRQ2J1N0E1UmZHQnR4bVJjd0Jx?=
+ =?utf-8?B?NWRKdk1DdUNLWEFlZWpaR1FqRG0zOFBFYjBJVXpKNHZ6TE8zbkd0bm1UQ0Iw?=
+ =?utf-8?B?Z2Nta0QwTEtaazNud3luaFlrQTZPMldHMWVtd0txZHlLby9MQjVyZTJJbHAy?=
+ =?utf-8?B?d2Z2ZVdHMUxiSDcyWWczUSsvYTBJMitkVDNOK0k4TUFyRXRLcGt3Q1hQVjBM?=
+ =?utf-8?B?c2ZLR0hpVFo2TGJkSUdlalFYMjE5eGlKQVl4eExEZ1NrYVNaK3ltakFyN0Vy?=
+ =?utf-8?B?NDd6YkoreS9tZVVnM3c1WXR2OEl3dXJ5V3lYMTZ5RHozU2l1WlNmMEZiRjNv?=
+ =?utf-8?B?Y3Bzdk9xNUdmUW5BRXVDRmU2VU9UYVNrWGpnaG5QQ3YwM1prM2VqaUErNyt4?=
+ =?utf-8?B?U3BSVFFVaHZGUlFCZnhxRS9jYjFISmMyY0FRWlNCa3RnVDN0bDRoNnlDMnF5?=
+ =?utf-8?B?RURTS1hCRDk1d3NmWVdNMlBSOU9ZNWtORmJ5d1g4V0dvUUp2OVA3WFJya2xh?=
+ =?utf-8?B?MnlNV1JZTDdzVjc2bUg2Wk1qdXBBaEJlYnVCTXhKc0t5bTZwdWVJWkUyMDlq?=
+ =?utf-8?B?cEhEdWdUWXkvMDNhMWtwV011VjhPVE0rZmp1ZmUvdzhNRnU5aDhRdmRHVmY5?=
+ =?utf-8?B?SnpBNngzRGpmMVRGSTVjTGdwZlp4eTZMSUhKK1U3M2p4OEpnY3E3ZnBGVk5H?=
+ =?utf-8?Q?Aohs6/2/vbkeROg9gTBorb3S2PLpIg9BjUkyhXNULB44?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbe688ae-f211-46ba-3663-08db82b34af3
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 08:37:57.3752
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rqtUaVekzPdU/lmOzyWwpmG8sfBrDzSZ0A6GQUZXEZ0gFiRX6wUOb7j3aWuA2d3O
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8402
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DW5932e has 2 variants: eSIM(DW5932e-eSIM) and non-eSIM(DW5932e).
-Both of them are designed based on Qualcomm SDX62 and it will
-align with the Foxconn sdx65 settings.
+Am 11.07.23 um 23:34 schrieb André Almeida:
+> Instead of storing coredump information inside amdgpu_device struct,
+> move if to a proper separated struct and allocate it dynamically. This
+> will make it easier to further expand the logged information.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/bus/mhi/host/pci_generic.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Verry big NAK to this. The problem is that memory allocation isn't 
+allowed during a GPU reset.
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 9ca0dc3a3bfe..07172789b197 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -625,6 +625,12 @@ static const struct pci_device_id mhi_pci_id_table[] = {
- 	/* T99W510 (sdx24), variant 3 */
- 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f2),
- 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx24_info },
-+	/* DW5932e-eSIM (sdx62), With eSIM */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f5),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
-+	/* DW5932e (sdx62), Non-eSIM*/
-+	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f9),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
- 	/* MV31-W (Cinterion) */
- 	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b3),
- 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
--- 
-2.25.1
+What you could do is to allocate the memory with GFP_ATOMIC or similar, 
+but for a large structure that might not be possible.
+
+Regards,
+Christian.
+
+>
+> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu.h        | 14 +++--
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 65 ++++++++++++++--------
+>   2 files changed, 51 insertions(+), 28 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> index dbe062a087c5..e1cc83a89d46 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> @@ -1068,11 +1068,6 @@ struct amdgpu_device {
+>   	uint32_t                        *reset_dump_reg_list;
+>   	uint32_t			*reset_dump_reg_value;
+>   	int                             num_regs;
+> -#ifdef CONFIG_DEV_COREDUMP
+> -	struct amdgpu_task_info         reset_task_info;
+> -	bool                            reset_vram_lost;
+> -	struct timespec64               reset_time;
+> -#endif
+>   
+>   	bool                            scpm_enabled;
+>   	uint32_t                        scpm_status;
+> @@ -1085,6 +1080,15 @@ struct amdgpu_device {
+>   	uint32_t			aid_mask;
+>   };
+>   
+> +#ifdef CONFIG_DEV_COREDUMP
+> +struct amdgpu_coredump_info {
+> +	struct amdgpu_device		*adev;
+> +	struct amdgpu_task_info         reset_task_info;
+> +	struct timespec64               reset_time;
+> +	bool                            reset_vram_lost;
+> +};
+> +#endif
+> +
+>   static inline struct amdgpu_device *drm_to_adev(struct drm_device *ddev)
+>   {
+>   	return container_of(ddev, struct amdgpu_device, ddev);
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index e25f085ee886..23b9784e9787 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -4963,12 +4963,17 @@ static int amdgpu_reset_reg_dumps(struct amdgpu_device *adev)
+>   	return 0;
+>   }
+>   
+> -#ifdef CONFIG_DEV_COREDUMP
+> +#ifndef CONFIG_DEV_COREDUMP
+> +static void amdgpu_coredump(struct amdgpu_device *adev, bool vram_lost,
+> +			    struct amdgpu_reset_context *reset_context)
+> +{
+> +}
+> +#else
+>   static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
+>   		size_t count, void *data, size_t datalen)
+>   {
+>   	struct drm_printer p;
+> -	struct amdgpu_device *adev = data;
+> +	struct amdgpu_coredump_info *coredump = data;
+>   	struct drm_print_iterator iter;
+>   	int i;
+>   
+> @@ -4982,21 +4987,21 @@ static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
+>   	drm_printf(&p, "**** AMDGPU Device Coredump ****\n");
+>   	drm_printf(&p, "kernel: " UTS_RELEASE "\n");
+>   	drm_printf(&p, "module: " KBUILD_MODNAME "\n");
+> -	drm_printf(&p, "time: %lld.%09ld\n", adev->reset_time.tv_sec, adev->reset_time.tv_nsec);
+> -	if (adev->reset_task_info.pid)
+> +	drm_printf(&p, "time: %lld.%09ld\n", coredump->reset_time.tv_sec, coredump->reset_time.tv_nsec);
+> +	if (coredump->reset_task_info.pid)
+>   		drm_printf(&p, "process_name: %s PID: %d\n",
+> -			   adev->reset_task_info.process_name,
+> -			   adev->reset_task_info.pid);
+> +			   coredump->reset_task_info.process_name,
+> +			   coredump->reset_task_info.pid);
+>   
+> -	if (adev->reset_vram_lost)
+> +	if (coredump->reset_vram_lost)
+>   		drm_printf(&p, "VRAM is lost due to GPU reset!\n");
+> -	if (adev->num_regs) {
+> +	if (coredump->adev->num_regs) {
+>   		drm_printf(&p, "AMDGPU register dumps:\nOffset:     Value:\n");
+>   
+> -		for (i = 0; i < adev->num_regs; i++)
+> +		for (i = 0; i < coredump->adev->num_regs; i++)
+>   			drm_printf(&p, "0x%08x: 0x%08x\n",
+> -				   adev->reset_dump_reg_list[i],
+> -				   adev->reset_dump_reg_value[i]);
+> +				   coredump->adev->reset_dump_reg_list[i],
+> +				   coredump->adev->reset_dump_reg_value[i]);
+>   	}
+>   
+>   	return count - iter.remain;
+> @@ -5004,14 +5009,34 @@ static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
+>   
+>   static void amdgpu_devcoredump_free(void *data)
+>   {
+> +	kfree(data);
+>   }
+>   
+> -static void amdgpu_reset_capture_coredumpm(struct amdgpu_device *adev)
+> +static void amdgpu_coredump(struct amdgpu_device *adev, bool vram_lost,
+> +			    struct amdgpu_reset_context *reset_context)
+>   {
+> +	struct amdgpu_coredump_info *coredump;
+>   	struct drm_device *dev = adev_to_drm(adev);
+>   
+> -	ktime_get_ts64(&adev->reset_time);
+> -	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
+> +	coredump = kmalloc(sizeof(*coredump), GFP_KERNEL);
+> +
+> +	if (!coredump) {
+> +		DRM_ERROR("%s: failed to allocate memory for coredump\n", __func__);
+> +		return;
+> +	}
+> +
+> +	memset(coredump, 0, sizeof(*coredump));
+> +
+> +	coredump->reset_vram_lost = vram_lost;
+> +
+> +	if (reset_context->job && reset_context->job->vm)
+> +		coredump->reset_task_info = reset_context->job->vm->task_info;
+> +
+> +	coredump->adev = adev;
+> +
+> +	ktime_get_ts64(&coredump->reset_time);
+> +
+> +	dev_coredumpm(dev->dev, THIS_MODULE, coredump, 0, GFP_KERNEL,
+>   		      amdgpu_devcoredump_read, amdgpu_devcoredump_free);
+>   }
+>   #endif
+> @@ -5119,15 +5144,9 @@ int amdgpu_do_asic_reset(struct list_head *device_list_handle,
+>   					goto out;
+>   
+>   				vram_lost = amdgpu_device_check_vram_lost(tmp_adev);
+> -#ifdef CONFIG_DEV_COREDUMP
+> -				tmp_adev->reset_vram_lost = vram_lost;
+> -				memset(&tmp_adev->reset_task_info, 0,
+> -						sizeof(tmp_adev->reset_task_info));
+> -				if (reset_context->job && reset_context->job->vm)
+> -					tmp_adev->reset_task_info =
+> -						reset_context->job->vm->task_info;
+> -				amdgpu_reset_capture_coredumpm(tmp_adev);
+> -#endif
+> +
+> +				amdgpu_coredump(tmp_adev, vram_lost, reset_context);
+> +
+>   				if (vram_lost) {
+>   					DRM_INFO("VRAM is lost due to GPU reset!\n");
+>   					amdgpu_inc_vram_lost(tmp_adev);
 
