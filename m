@@ -2,180 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BCE7508B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D463B7508B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbjGLMtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S233357AbjGLMto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjGLMte (ORCPT
+        with ESMTP id S233358AbjGLMtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:49:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9461712;
-        Wed, 12 Jul 2023 05:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1689166173; x=1720702173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AHerdfplQxVzMVmIE7yitFw6DX49G+yaoHF+TRw2CtE=;
-  b=qbgxSDGGVLoo1rLxAnKPL69WmAc710bdrbphTuBs0hfEm3dIBUaBmhVK
-   O4D4z9dXZ2EKTwwNQDkxbs/DfSkHj/HkhA2VXxyreRmgZkHaMU1Zc2oLS
-   9Zvqs31NTG3/ZDdm37cz3GePsU+LSiztl7b+mpgfMlqw0uTqV4vHMkosJ
-   qPAcbmCSaSRGL3Pto9w1UggLEUi2fY6veeb48asklWa+XXKi6S8+2Vwvt
-   Dgrk3QWdQUQBk7JNOYdVz+aL4uMHwY4wDCSAt8ks7NjzZBaWmj2oLzDav
-   cQKNCOfY/g3DP0fdfPvvHmCx/VBdbMwWfAc86AaSuIdUaANn4C1Ar25+Z
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="asc'?scan'208";a="161005954"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 05:49:31 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Jul 2023 05:49:31 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 12 Jul 2023 05:49:29 -0700
-Date:   Wed, 12 Jul 2023 13:48:58 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Eric Lin <eric.lin@sifive.com>, <conor@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dslin1010@gmail.com>,
-        Zong Li <zong.li@sifive.com>, <vincent.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Subject: Re: [PATCH 3/3] dt-bindings: riscv: sifive: Add SiFive Private L2
- cache controller
-Message-ID: <20230712-parking-acting-e91f24204467@wendy>
-References: <20230616063210.19063-1-eric.lin@sifive.com>
- <20230616063210.19063-4-eric.lin@sifive.com>
- <2437bda9-bbdb-ad80-7201-1e16e1388890@linaro.org>
- <CAPqJEFoTsmVZ4kvsSB0RkQZaQGyXC96KV6RvdpeC5XxURCOZ0w@mail.gmail.com>
- <8c9ed2d4-83ab-ecc0-a300-e6bc8e2047b6@linaro.org>
- <CAPqJEFqhmxksvEgvC61cJcRGR0DrSWDZxJC3J7tdgcG8UY+sFw@mail.gmail.com>
- <f5275617-d68c-c76b-d799-106f67cc2071@linaro.org>
- <20230712110908.GA23216@hsinchu16>
- <0865b422-d587-c1c7-9463-510832ddddf4@linaro.org>
+        Wed, 12 Jul 2023 08:49:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05D81982
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:49:41 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZHc-0005nV-F2; Wed, 12 Jul 2023 14:49:28 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZHb-00DtNV-FD; Wed, 12 Jul 2023 14:49:27 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZHa-004J0e-B0; Wed, 12 Jul 2023 14:49:26 +0200
+Date:   Wed, 12 Jul 2023 14:49:25 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/27] thermal/drivers/rcar_thermal: Convert to platform
+ remove callback returning void
+Message-ID: <20230712124925.mssqxm3cvvgy2bbc@pengutronix.de>
+References: <20230712081258.29254-1-frank.li@vivo.com>
+ <20230712081258.29254-21-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CU9LDp6QRihEXXU7"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tf26cdgvc5q2g7lq"
 Content-Disposition: inline
-In-Reply-To: <0865b422-d587-c1c7-9463-510832ddddf4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230712081258.29254-21-frank.li@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---CU9LDp6QRihEXXU7
-Content-Type: text/plain; charset=us-ascii
+
+--tf26cdgvc5q2g7lq
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 12, 2023 at 02:30:06PM +0200, Krzysztof Kozlowski wrote:
-> On 12/07/2023 13:09, Eric Lin wrote:
-> > On Sat, Jul 01, 2023 at 10:22:25AM +0200, Krzysztof Kozlowski wrote:
-> >> On 28/06/2023 18:31, Eric Lin wrote:
-> >>
-> >>>>>>
-> >>>>>>> +      - enum:
-> >>>>>>> +          - sifive,pL2Cache0
-> >>>>>>> +          - sifive,pL2Cache1
-> >>>>>>
-> >>>>>> What is "0" and "1" here? What do these compatibles represent? Why=
- they
-> >>>>>> do not have any SoC related part?
-> >>>>>
-> >>>>> The pL2Cache1 has minor changes in hardware, but it can use the same
-> >>>>> pl2 cache driver.
-> >>>>
-> >>>> Then why aren't they compatible?
-> >>>>
-> >>>
-> >>> The pL2Cache1 has removed some unused bits in the register compared to
-> >>> pl2Cache0.
-> >>> From the hardware perspective, they are not compatible but they can
-> >>> share the same pl2 cache driver in software.
-> >>
-> >> So they are compatible... If they were not compatible, you wouldn't be
-> >> able to use the same match in the driver.
-> >>
-> >>> Thus, we would like to keep both. It would be great if you can provide
-> >>> some suggestions. Thanks.
-> >>
-> >> I propose to make them compatible, like every other piece of SoC. I
-> >> don't see any benefit of having them separate.
-> >>
-> > Sorry for the late reply.
-> > The pl2 cache is our internal platform IP and is not part of any SoC.=
-=20
-> >=20
-> > The reason why this driver is compatible with the hardware "pl2cache0" =
-and hardware "pl2cache1"
-> > is that it doesn't program the different parts of the config register
-> > However, our internal software (e.g., bare-metal software) will program=
- these different parts,
-> > so it needs to rely on the different compatible string to identify the =
-hardware.
-> >  =20
-> > Additionally, we would like the compatible strings to reflect which har=
-dware is being used Thanks.
+Hello,
+
+On Wed, Jul 12, 2023 at 04:12:52PM +0800, Yangtao Li wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
 >=20
-> I don't understand how does it contradicts anything I said. So you do
-> agree with me? Or what?
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-I probably should've been keeping a closer eye here, sorry.
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-I assume what Krzysztof means is why do you permit both
-"sifive,pL2Cache0" and "sifive,pL2Cache1" appearing in isolation. IOW,
-both of
-compatible =3D "sifive,pl2cache0";
-and
-compatible =3D "sifive,pl2cache1";
-are valid in your binding.
+Best regards
+Uwe
 
-The hardware for both might be different, and their full featuresets may
-be incompatible, but they implement a compatible subset of features. I
-would expect that the following would be the permitted compatible setups:
-compatible =3D "sifive,pl2cache0";
-and
-compatible =3D "sifive,pl2cache1", "sifive,pl2cache0";
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-A consumer of the DT that does care for the differences should be
-looking for the specific compatible, and OS code that does not care can
-always bind to the "0" version.
-
-Do the "0" & "1" here refer to the IP version, as in
-sifive-blocks-ip-versioning.txt? I didn't think the compatibles
-containing those IP versions were supposed to appear in isolation,
-without a soc-specific one?
-
-Thanks,
-Conor.
-
---CU9LDp6QRihEXXU7
+--tf26cdgvc5q2g7lq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK6hOQAKCRB4tDGHoIJi
-0u6kAQDnxOYwgeV+62r679GBsIIYf5NNa99MaO9EeUMAlI+TNQD9G3vpXDAUE94T
-A/l9b6xBjLKF8+2Ag3R54+tIC9OqEgc=
-=dQpf
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSuoVQACgkQj4D7WH0S
+/k7K5AgAm0/HM7N+Wpid5+g4rZnR/veF450ephm3dGBsVNwsSsSyvzQJ3Vq5FMo/
+imp2YHjJFwmU5XgEt902XhgpOF/ABqWEeQaDUjdPnRTxLbTzhMBZLKx7Rgv1zUQW
+gZcswSMOkE2uFuvm4QbDoVxmIHsSZCrhxHv72Az2CWILdnENO90LjGMRxzxzVhyi
+7syCB+s+usqaKe9f0VNW43/AMGKAP8TywrLFM553EjTKtfNLtGX5uUZOwYIFCr5i
+1Kxvs7VHBAXrtfXO0S6wTQN1fcnsfR4UlqkBqxYu6Qf8kJaziWSN3oA8j4Pea511
+W1hpClUrNd/ira9dnJb5CyUocRlX0g==
+=0C0b
 -----END PGP SIGNATURE-----
 
---CU9LDp6QRihEXXU7--
+--tf26cdgvc5q2g7lq--
