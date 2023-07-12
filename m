@@ -2,204 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A36574FF25
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAF474FF29
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjGLGYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 02:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S231859AbjGLG3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 02:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjGLGYB (ORCPT
+        with ESMTP id S229674AbjGLG3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 02:24:01 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7855810C2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:24:00 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-403b622101bso128621cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689143039; x=1691735039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ogDTocmjdnSJBzO5jS03IkwUPvdzM4qsYFLSfwaNw2c=;
-        b=0wW4+rFZWUn48j1wSeqL+TD0e+Wah6NZ17W0Rk7rtflQOvgc3dzjRQVQo2btFCGgUY
-         +otwdvO8r3nLl7el2+HDA9ZxNvA8mmbOHqhXOW5K2wF5Jm9KLnD32O2Q126QVlJd+DC0
-         iMbz/MKdWmIbYaqKOFKzhMQKDmnXWpI9nBF9r2Cl2Gj7qVs0cz+6q1t6vlVGXgfwyqlu
-         Fz/cJnRJL1STnPDPAHY9WHqIuwSobzOgcOJwMJnWV21ERN7tXyj3SAoixjay2/MBnkzV
-         /CSyaCnF+GqRpVKpZHuA3vAiViYsAs5Bk4z22Bo+iqwBQUcPBtxyCpreYS9huaTbvVU4
-         36Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689143039; x=1691735039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ogDTocmjdnSJBzO5jS03IkwUPvdzM4qsYFLSfwaNw2c=;
-        b=Q3MyakjF07W/SrSFi4tWe0t7QW8kZGHgMpboMyrGATD4QW9zxZQlZ2W2Hl4annZGjG
-         ZeyVI7asFw9yZVBZ+TgAggD2qxVFWwQhPrludYc+dgf3G8OWqV13Fl/iwfPg0VBzAZ00
-         kTYIUYleACA7hUUmt+WJ1Neado90j0ENgKxdSL7c84a5Ylc+fqXKAZuKWP+TjdyJ2dRy
-         QHCbuf78lj193T2iqM8KeSkLfKNKIGv9SQiTmpy4NE5huu0o1BPCESql4OOXPL3Zf/sB
-         E9z/vGwhyiD3iPxqjm3Zueh4S8DB8DfA5/rA49wukm6jJhJULNjYwaRUguKZ+kYiIPrf
-         WEbQ==
-X-Gm-Message-State: ABy/qLasvnr/4gBTZuiQ/c5KeN16e7/7Rz3lveG82QOCrw0J783imVZh
-        c99wVvtjulfstqcPO2ZR/oYjIWjCZA/ec3Thf0vrdw==
-X-Google-Smtp-Source: APBJJlF/wzGEFxsGQuAId1W1Jr0FjvUxt9dmS2lBIZNPtptznWl/zhbQ+mPEOajxg+2S6tHbWJ3gCv8HOBxgULojg3o=
-X-Received: by 2002:ac8:58c3:0:b0:3f9:b81c:3a0f with SMTP id
- u3-20020ac858c3000000b003f9b81c3a0fmr98013qta.17.1689143039538; Tue, 11 Jul
- 2023 23:23:59 -0700 (PDT)
+        Wed, 12 Jul 2023 02:29:12 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2128.outbound.protection.outlook.com [40.107.117.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E96D10D2;
+        Tue, 11 Jul 2023 23:29:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ckafQSFARpsYTkfkiKBiXfaHZZHcmdZssLIXFxdOylN0JAeggNZdLlxJrPpIG3ye66Uy7BRRf9hhJXV+/5ImMvu/fcu1tEWW0/IDSknVAxxfd+BEORL2dvPJLtagNNL0iU2ZUtrSq38nUpMWudtAFV58/MK2JgcV/F85ETtTA5pagvKueXaaoJinr4e/Jml79vy304vp5kZMJChgnU6Js6Oe3lGHre8km8hfc/awNqz3913HTE2cd8oop/F5ATD4VMmQKZscn+LkM1VcST6yYFXGXx+55UjzBGx2heLaoueKhnvow14UkJTSMVhqDKzIfSG80p5fWUpjG7mBL77fPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k83S4Y3tdLmTiBXpT60jdbLyZrj6PLFn6F1UPSbBCPY=;
+ b=cN6qADxEQpV10t8rzBaRUbwl/iWj8Jf8OMWJHaMkBS6k6FirrUGwEt3rU2BIVo03oWRGL8QoTNpAf3mA27oPuCPoBfylEgA1dzYMrJnODC3EI//gW3T6M3jJcWmmJHxZJl/CpBoD40S8eoBYaDYtVkgfJKMAEmpEab/DQ1ybuFNh40upboYnTFYYrkdXZjOKJQeOD81DlrgnmvyyTxRGKJ506hDcdX+SByxu+nqrCAqktvrbanMO+Es7MuIO7MyDXUTIUEnbq4GS+11RooVt7pnGL/sMqV1HgT08buw9j9FeDviwgTCLx17q4CiGXruf9+2MMBOKyVhY4GZP1LwTjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k83S4Y3tdLmTiBXpT60jdbLyZrj6PLFn6F1UPSbBCPY=;
+ b=EhRu69O4AgoF6A7zTkWi2kaoCnr45dvn9zvFcacjmoi5jIAC6lM1wJypuJ5BO90yYJdxh49yny3uwOAYnam7sqQOlmSJas9xF+6rL0l49U5DGFgg5P+SWalBUPqu4SvoSVeZxjz2CcQ88EKfwRZ2GHiNRLTA6kkm0XpH8DpB7PH4IznxMfiqIzu+w/AO6M+IGR09okrc8R9nhWKDt5srvKAk1yJVaXUCzGqmLVHPvURLecaechwr6xIqUK0eyTNZr1Gwkj/yG/Wu9MgvkhBZAmpS2LqYitt3DGdLpC4Au85KLJ/3sq44wKb8o2DJ0PYqOCR5wm41m+7CaMZjVCgM/Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR06MB6687.apcprd06.prod.outlook.com (2603:1096:820:fd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
+ 2023 06:29:07 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 06:29:07 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 01/15] serial: ar933x: Use devm_platform_get_and_ioremap_resource()
+Date:   Wed, 12 Jul 2023 14:28:39 +0800
+Message-Id: <20230712062853.11007-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0024.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-References: <20230712060144.3006358-1-fengwei.yin@intel.com> <20230712060144.3006358-3-fengwei.yin@intel.com>
-In-Reply-To: <20230712060144.3006358-3-fengwei.yin@intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 12 Jul 2023 00:23:23 -0600
-Message-ID: <CAOUHufZQ0EpyRZ_jAMxs8uNSQOz6uAkzVjvvgD+4wBvmgHJoCA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/3] mm: handle large folio when large folio in
- VM_LOCKED VMA range
-To:     Yin Fengwei <fengwei.yin@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, willy@infradead.org, david@redhat.com,
-        ryan.roberts@arm.com, shy828301@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR06MB6687:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a5d9851-df14-4777-5e7b-08db82a14b26
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /DTsC9DId+NtZseeR3+zk3ky5ptfduHj89/11luK/GG2fYG8vcACrmdj1B7YYVDC3HBENtrJeTJQVwIRQL6z19qcMakFor56KpG0X4tS+r3ffVsWPYmwV8gi9wDAt2kAs9IA6dEaQFN33/TjsbCxHJC3bJX+hmxJN7UqIvD4E96qJd79HOCcJ9uehmvst8Tefpj7uleZVAl4VccRg6SZspJFzNFIjguafu+Q2QVWcWLeJd5UGrE8KmsZ4oT3pYBMQq8qciw2j/91v+1pJRYTq25b431BMKMLIlh/IbcsbMDqX88UfKi6qy5Ffj7aVuRQpBEIs7k8Cbtto7uqNt96l2DPOBiQ5FJopghXtcek1DkZzb+DUWE4cM7pODRz6d2uDKkuaBfImEOJ0lEstI+sN4uNDbV9F/O/1TSIv1JHmYyg1A6Kwx3xhzsWUzkvR5kk06rqlGaCmB1JxzHuN5b32VNhr4jSfXP10lAYSw4jjTCdBTbXVOc/9tSn/kt24P46rLeGGWfnWUyJxhejobCjeGHEmhBOfzDVhxkd9v49AOadq0VbwYQf94MIWoDV/snlKICBlGIimUNwB44zvi+8GvvG31z8+wi1qORtOF3upgpP1fXjEIByL5vqhkvw3Wbi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199021)(83380400001)(2616005)(38100700002)(38350700002)(36756003)(86362001)(110136005)(478600001)(186003)(26005)(1076003)(6486002)(6512007)(6666004)(52116002)(5660300002)(8676002)(66946007)(8936002)(66476007)(66556008)(4744005)(2906002)(41300700001)(316002)(4326008)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Id13QsXE+YCpmDQiu9/1ILqFWPctDQPCALCuPbtGq4Z0Z2LXwev7rGYlcu2P?=
+ =?us-ascii?Q?3PqiqmDRXW5vcTB6tJfFtBqTpHsupT6N5UfhkvrS0x2EjHZkg02/ysQga0Ec?=
+ =?us-ascii?Q?HNY2jMVDEZCXvE//tg+G8LP1dRWimQj4StCHdIwj/rKRK5rKyqPi9iFcLtkv?=
+ =?us-ascii?Q?uv6EW7v8Pukv9smeYaNWLvrkvTBwL+zo7hNVklwT0SdgPIjORGh1+0udgT0f?=
+ =?us-ascii?Q?HkN+Svic3PPneXP9ps7sj/POwV8Jk09iUyYb4Hz08JgqEexpXG/utbJKpYjO?=
+ =?us-ascii?Q?Hn2szPgK8fb4S2+nbg+rVVtJ8tRhPBWD00AdBA4s2LIRyt2Ghy693PCkd8CS?=
+ =?us-ascii?Q?YaBLkDnZLnpw7Ll6P0MXgpHk5d5EonBtURYCY3TZHRiPgP8oXgx5clj3L26z?=
+ =?us-ascii?Q?49B97WNWn/sX2FZosAVZWHURgVy80KfBF3wZ3HHIfmrH5wTWpkFI+nPIqcsf?=
+ =?us-ascii?Q?rJlJtxILGYW38Y4pQStXjIznpOiZ7JdKYod5BD35fixKA86kjUg6GWkJ9spU?=
+ =?us-ascii?Q?dHDlvFVECWzes70+zmNzF0U9laL7FntqYvRbzemMLFz1Sfm2IL54gDSeJ9TM?=
+ =?us-ascii?Q?Bx9oIVWmmyegLICZvLhDzDBFxB3hNChtWG63YwTwFEL/8bcD67wFHzI/afX6?=
+ =?us-ascii?Q?2Y0eP+wTNcJPV4dxMO/aMpk9KT6ytIqe9xLyMteitRITxguXQENDvmWWLVHy?=
+ =?us-ascii?Q?qrucICJZjfttsWsVawfjm0eBkyiYpNaMDr997vp+x1a7iTnxyPZ5ApAoZBzX?=
+ =?us-ascii?Q?D5jn/xIT5HIEeo0lBrInrjC4HT2r817h3q3nwg4ljpIa5Y7ZVqLF9f+Wb3L0?=
+ =?us-ascii?Q?GqnysaE437k7zopUbblEyOW8w9do2P+3BdfQZSvgZMCohPrMD3bcMelfVveL?=
+ =?us-ascii?Q?XDgYlqHZMVVg9o+tQDZCjXvpCxnTrYb6h82BBz6sz4IouHZzCT6E5qDv8+AB?=
+ =?us-ascii?Q?d/7SQcPj690NSDX6LSYjtjgrbrFXJfhkuzBIEZV9/z3IjPVkY0h+4CpcEg8O?=
+ =?us-ascii?Q?j66VRT7QbwXrwa/ozBovUGg1/P/eXlcrvC4GzJ64wkbcl2HBp/hEM6nOBn8w?=
+ =?us-ascii?Q?UQFnt65fUCEz+tMVKhctyTQQFRJ1LOrjaxE63PsrWA731Box3goWjOylaYZD?=
+ =?us-ascii?Q?OMlqDv4msTEmW/UJZn9/TTURFVV2LAnAlskIZRPKCYO+V+6AgjYLRh4fiM3u?=
+ =?us-ascii?Q?0pfZifUjMwrQa+fv3AnBc+iPvCyo6k4GAStGTo26lEsDKNXLstVuXu0QCdGt?=
+ =?us-ascii?Q?tgtC6JhzryDcGK8FJIlWOEiH1K+q0V3Z4ozNQqOL52hE2hgSJJv8BuD5Kn5P?=
+ =?us-ascii?Q?ixcIH3rEq2vEAdOyr5B0+nZuZmr6m92Y6ZMVvqey7DHQk7s8Cjn/K7MaLJlf?=
+ =?us-ascii?Q?OQAog3caWDgQdwbYlsdwYFcwE5PGJKGi2gJ4sFvOwplz3fAWrtN+S/kJhSsg?=
+ =?us-ascii?Q?gqs3zLBPraDdrMPRLS6Dc7r9B6pirnZ4HOsIFHC3zAvfEBY+9WfPLybN3cdC?=
+ =?us-ascii?Q?xoB9pMkEj/bHzdiiiVP1RRr6usO8XK89w4Reor5hz1x06F6eBS6SKJYGPZLs?=
+ =?us-ascii?Q?FomIjCnaR9hJYAuN7oMOZ/1/m5ReDgV3HJNTEdj/?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a5d9851-df14-4777-5e7b-08db82a14b26
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 06:29:06.9043
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SDhrTE4G7DEI+5g/4HBIgyiHZe3/rS+KWNPrskWX4/SxNY03czTtLULIrWqPPc3UaIJZ/yg3Mm9ZoVTOqzX2BQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6687
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 12:02=E2=80=AFAM Yin Fengwei <fengwei.yin@intel.com=
-> wrote:
->
-> If large folio is in the range of VM_LOCKED VMA, it should be
-> mlocked to avoid being picked by page reclaim. Which may split
-> the large folio and then mlock each pages again.
->
-> Mlock this kind of large folio to prevent them being picked by
-> page reclaim.
->
-> For the large folio which cross the boundary of VM_LOCKED VMA,
-> we'd better not to mlock it. So if the system is under memory
-> pressure, this kind of large folio will be split and the pages
-> ouf of VM_LOCKED VMA can be reclaimed.
->
-> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-> ---
->  mm/internal.h | 11 ++++++++---
->  mm/rmap.c     | 34 +++++++++++++++++++++++++++-------
->  2 files changed, 35 insertions(+), 10 deletions(-)
->
-> diff --git a/mm/internal.h b/mm/internal.h
-> index c7dd15d8de3ef..776141de2797a 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -643,7 +643,8 @@ static inline void mlock_vma_folio(struct folio *foli=
-o,
->          *    still be set while VM_SPECIAL bits are added: so ignore it =
-then.
->          */
->         if (unlikely((vma->vm_flags & (VM_LOCKED|VM_SPECIAL)) =3D=3D VM_L=
-OCKED) &&
-> -           (compound || !folio_test_large(folio)))
-> +           (compound || !folio_test_large(folio) ||
-> +           folio_in_range(folio, vma, vma->vm_start, vma->vm_end)))
->                 mlock_folio(folio);
->  }
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-This can be simplified:
-1. remove the compound parameter
-2. make the if
-        if (unlikely((vma->vm_flags & (VM_LOCKED|VM_SPECIAL)) =3D=3D VM_LOC=
-KED) &&
-            folio_within_vma())
-                mlock_folio(folio);
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ drivers/tty/serial/ar933x_uart.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> @@ -651,8 +652,12 @@ void munlock_folio(struct folio *folio);
->  static inline void munlock_vma_folio(struct folio *folio,
->                         struct vm_area_struct *vma, bool compound)
+diff --git a/drivers/tty/serial/ar933x_uart.c b/drivers/tty/serial/ar933x_uart.c
+index 4c3d04c6826a..924c1a89347c 100644
+--- a/drivers/tty/serial/ar933x_uart.c
++++ b/drivers/tty/serial/ar933x_uart.c
+@@ -749,8 +749,7 @@ static int ar933x_uart_probe(struct platform_device *pdev)
+ 
+ 	port = &up->port;
+ 
+-	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	port->membase = devm_ioremap_resource(&pdev->dev, mem_res);
++	port->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &mem_res);
+ 	if (IS_ERR(port->membase))
+ 		return PTR_ERR(port->membase);
+ 
+-- 
+2.39.0
 
-Remove the compound parameter here too.
-
->  {
-> -       if (unlikely(vma->vm_flags & VM_LOCKED) &&
-> -           (compound || !folio_test_large(folio)))
-> +       /*
-> +        * To handle the case that a mlocked large folio is unmapped from=
- VMA
-> +        * piece by piece, allow munlock the large folio which is partial=
-ly
-> +        * mapped to VMA.
-> +        */
-> +       if (unlikely(vma->vm_flags & VM_LOCKED))
->                 munlock_folio(folio);
->  }
->
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 2668f5ea35342..455f415d8d9ca 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -803,6 +803,14 @@ struct folio_referenced_arg {
->         unsigned long vm_flags;
->         struct mem_cgroup *memcg;
->  };
-> +
-> +static inline bool should_restore_mlock(struct folio *folio,
-> +               struct vm_area_struct *vma, bool pmd_mapped)
-> +{
-> +       return !folio_test_large(folio) ||
-> +                       pmd_mapped || folio_within_vma(folio, vma);
-> +}
-
-This is just folio_within_vma() :)
-
->  /*
->   * arg: folio_referenced_arg will be passed
->   */
-> @@ -816,13 +824,25 @@ static bool folio_referenced_one(struct folio *foli=
-o,
->         while (page_vma_mapped_walk(&pvmw)) {
->                 address =3D pvmw.address;
->
-> -               if ((vma->vm_flags & VM_LOCKED) &&
-> -                   (!folio_test_large(folio) || !pvmw.pte)) {
-> -                       /* Restore the mlock which got missed */
-> -                       mlock_vma_folio(folio, vma, !pvmw.pte);
-> -                       page_vma_mapped_walk_done(&pvmw);
-> -                       pra->vm_flags |=3D VM_LOCKED;
-> -                       return false; /* To break the loop */
-> +               if (vma->vm_flags & VM_LOCKED) {
-> +                       if (should_restore_mlock(folio, vma, !pvmw.pte)) =
-{
-> +                               /* Restore the mlock which got missed */
-> +                               mlock_vma_folio(folio, vma, !pvmw.pte);
-> +                               page_vma_mapped_walk_done(&pvmw);
-> +                               pra->vm_flags |=3D VM_LOCKED;
-> +                               return false; /* To break the loop */
-> +                       } else {
-
-There is no need for "else", or just
-
-  if (!folio_within_vma())
-    goto dec_pra_mapcount;
-
-> +                               /*
-> +                                * For large folio cross VMA boundaries, =
-it's
-> +                                * expected to be picked  by page reclaim=
-. But
-> +                                * should skip reference of pages which a=
-re in
-> +                                * the range of VM_LOCKED vma. As page re=
-claim
-> +                                * should just count the reference of pag=
-es out
-> +                                * the range of VM_LOCKED vma.
-> +                                */
-> +                               pra->mapcount--;
-> +                               continue;
-> +                       }
->                 }
