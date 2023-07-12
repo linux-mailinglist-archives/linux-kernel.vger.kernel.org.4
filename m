@@ -2,116 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C577507F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB687507FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjGLMRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S231786AbjGLMSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbjGLMQu (ORCPT
+        with ESMTP id S231593AbjGLMSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:16:50 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA07198B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:16:45 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-991f956fb5aso795192766b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:16:44 -0700 (PDT)
+        Wed, 12 Jul 2023 08:18:43 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B3FB0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:18:41 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b63e5f94f1so8904211fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:18:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689164203; x=1691756203;
+        d=linaro.org; s=google; t=1689164320; x=1691756320;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e3tdXiD5wr9JnyQXntDLG7PAW3+GvtZ4ULR/Zqmp97Q=;
-        b=GCdQl6RnbOvQWTWaWhs0iVW9kQZA2bgHR2Fn9V97rdMSEMmQNonrVfJIb+Y9T77v2F
-         3x+EvtoHz5TmhqdxASdYEqvIA/vHqePLvCs8+6PdH+zA554vHgB3GVlvCAZ0HJtNgTxW
-         ZqrITLV0NCkYw6ZlMxz+CVS+RoQyI+28MCxD2PgQzStFIObEfKySIXYsCgk7gAx9JFni
-         bYyy9MvoHbE7dxIRQz9IZ8WN1tzmNCpsSqHFI+4bCYPw05xA+/Mr+XBir1eHuakVJIgx
-         k5cL+THNW7keMTtPb3SSbtcaumy8/eDwkfjR+2t6rXLAivDNhNpMv0H8SiOUPeaky30g
-         czsA==
+        bh=KRzOGtPl93LqwIcit/8B2J8xTg5w549lcCceqtPK13c=;
+        b=tCDrJCD89Wt0gVMdSNhPrGqhUsTLlpFiDzPiy56glkjoByl9oQOJwPYyb4wDnToVd6
+         fi47x/wQz9S3njsxCWSqaRT1P4iwEdtMnD1XcGujLV6u1+RZOSHGwU7JOvYafFzjWdm9
+         SE3t7IhLbEdpCxYM6Cr+mi2OPJenJwUR5tQ/EYLjDLQC5tjhzYQmjG76SEY0g6Fh3l5z
+         nZfkZOpvco9XJg9fL5149zPzCGC0REejpnVteJVrKd1A2n+ueKnLvSMxuue/r3wtb1v8
+         Es+B+rZ0OgrUiPynYJdivI00s+xS5ovkE4J2VyKexlqGsYBr5+sVp8nkrRJmAY/eLkUk
+         QUbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689164203; x=1691756203;
+        d=1e100.net; s=20221208; t=1689164320; x=1691756320;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3tdXiD5wr9JnyQXntDLG7PAW3+GvtZ4ULR/Zqmp97Q=;
-        b=PC6ixxOxXN6BXhD3Ibqs4owu7NfQSF9Bv42BRkuS6Z68kMxsuC7oZ7UmzuaCNumWQH
-         p+iu7Z2aMr3JXdfTeK6rB+cJM5Y513ooPbiGEZ+tRz6WuH86xRkA+mYkg2T8TN094H75
-         Tj/Ga60QdErk/2777o3VlxLPFQ+SnKWoWCu622LjEIvPrr5WB8SEdiSePBK+Jl6y2ULC
-         ulv4Si9jHlX1/U4sSIM8Rtfr/JiRMdpxHsvTfs/PGdP0onnlnhIbWSDQ83RHHL01ou9f
-         Y1Dd7Tq89gOc3JEj6SnX42x85vOKDW9T1xxozfiuguxU7VipL+pLk58pOT/pR51yTOgJ
-         k5LQ==
-X-Gm-Message-State: ABy/qLYF7prtqfeAlIYVZ9mJtjwwSrRRiaxlzAVFkJhIf1X/YjGYCQ2Z
-        40o7+pWquLAW518FWlUZ4djNHQ==
-X-Google-Smtp-Source: APBJJlFx+jrZFyBuraqqdj0Id4oWo944sq2YX36L9OvynOWQaSrVLAOzGb+MkpUtb1189k+Nn2RyJA==
-X-Received: by 2002:a17:907:8001:b0:96a:48ed:5333 with SMTP id ft1-20020a170907800100b0096a48ed5333mr15028000ejc.50.1689164203534;
-        Wed, 12 Jul 2023 05:16:43 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id b19-20020a170906661300b009920e9a3a73sm2490505ejp.115.2023.07.12.05.16.42
+        bh=KRzOGtPl93LqwIcit/8B2J8xTg5w549lcCceqtPK13c=;
+        b=BHl3aayrtMuy6bd7opH1Wxq+YRVGi5B8ROrRe+OgctjEfsaztHGnUYlqvmsJRFC6TM
+         SUuDn3Tv9Qj82wYD3zKKzRVvVSu5YROFr7FUpeVVoaEUzTpSfMJHHcVYElM1ge4BsiSd
+         k5j+UqtH/7+0uWUwMBqk5qLwJLebrkkSXs3mWsmSQXOkRsmjqHHUK9P63h9JLX3lfKl6
+         qOcwcnWPWeRRKjVqCl3yQNcTsO9pKzuSHpYk8yktJItjGZJGgXpeVN4Q6qp1hg9wVhJH
+         GrFGiPgx5EFzxwIEc8lRvQvV+aQFDxq0PkZ7b6DMIWMRPrsWCdr8CU3HrzeWqoU200V8
+         Qsuw==
+X-Gm-Message-State: ABy/qLZiwuIqkdJ8Mpm7AVNUu4Fhaq8OsALMfZhMfSE3Zhwj3Go07tJH
+        ro9w/da9ptl0bM0ZltWNnYNmrg==
+X-Google-Smtp-Source: APBJJlEy3ljbiuF/7Y5CJsnpdfh++Sek1AynGnWFOwY7diqxzJeX/scCNlJvvMlSZusU620MBmKZnw==
+X-Received: by 2002:a2e:9f08:0:b0:2b4:677e:1433 with SMTP id u8-20020a2e9f08000000b002b4677e1433mr706188ljk.5.1689164319762;
+        Wed, 12 Jul 2023 05:18:39 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id y21-20020a2e95d5000000b002b6d4a63cfdsm940990ljh.42.2023.07.12.05.18.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 05:16:43 -0700 (PDT)
-Message-ID: <4747d535-43c5-6054-6823-c708c757fe6b@linaro.org>
-Date:   Wed, 12 Jul 2023 14:16:41 +0200
+        Wed, 12 Jul 2023 05:18:39 -0700 (PDT)
+Message-ID: <3523988f-fa51-ce44-ded7-9f3c7acbf65e@linaro.org>
+Date:   Wed, 12 Jul 2023 15:18:38 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: cypress,cy8c95x0: Add reset
- pin
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 00/14] UFS: Add OPP and interconnect support
+Content-Language: en-GB
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
+References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
+ <20230712104044.GA102214@thinkpad>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230712104044.GA102214@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2023 10:52, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 12/07/2023 13:40, Manivannan Sadhasivam wrote:
+> On Wed, Jul 12, 2023 at 04:01:55PM +0530, Manivannan Sadhasivam wrote:
+>> Hi,
+>>
+>> This series adds OPP (Operating Points) support to UFSHCD driver and
+>> interconnect support to Qcom UFS driver.
+>>
 > 
-> This patch adds support for an optional reset pin.
-> 
-> The reset pin is used to bring the chip into a known state and has an
-> internal pull-down, allowing it to be left floating if not needed.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
-> Changes in V2:
-> - Update subject
-> - Update reset-gpios description.
-> ---
->  .../devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml         | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
-> index 222d57541b65..2fa22160336f 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
-> @@ -51,6 +51,10 @@ properties:
->      description:
->        Optional power supply.
->  
-> +  reset-gpios:
-> +    description: Reference to the GPIO connected to the XRES pin
+> Missed to cc SCSI folks. Will be resending this series. Sorry for the noise.
 
-I asked you to remove redundant part...
+I'd say, there is a need for the resend anyway, the series got duplicate 
+patch indices.
 
-Best regards,
-Krzysztof
+> 
+> - Mani
+> 
+>> Motivation behind adding OPP support is to scale both clocks as well as
+>> regulators/performance state dynamically. Currently, UFSHCD just scales
+>> clock frequency during runtime with the help of "freq-table-hz" property
+>> defined in devicetree. With the addition of OPP tables in devicetree (as
+>> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+>> both clocks and performance state of power domain which helps in power
+>> saving.
+>>
+>> For the addition of OPP support to UFSHCD, there are changes required to
+>> the OPP framework and devfreq drivers which are also added in this series.
+>>
+>> Finally, interconnect support is added to Qcom UFS driver for scaling the
+>> interconnect path dynamically. This is required to avoid boot crash in
+>> recent SoCs and also to save power during runtime. More information is
+>> available in patch 13/13.
+>>
+>> Credits
+>> =======
+>>
+>> This series is a continuation of previous work by Krzysztof Kozlowski [1]
+>> and Brian Masney [2]. Ideally, this could've split into two series (OPP
+>> and interconnect) but since there will be a dependency in the devicetree,
+>> I decided to keep them in a single series.
+>>
+>> Testing
+>> =======
+>>
+>> This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
+>> development boards.
+>>
+>> Merging Strategy
+>> ================
+>>
+>> An immutable branch might be required between OPP and SCSI trees because of
+>> the API dependency (devfreq too). And I leave it up to the maintainers to
+>> decide.
+>>
+>> Thanks,
+>> Mani
+>>
+>> [1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+>> [2] https://lore.kernel.org/all/20221117104957.254648-1-bmasney@redhat.com/
+>>
+>> Krzysztof Kozlowski (2):
+>>    dt-bindings: ufs: common: add OPP table
+>>    arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
+>>
+>> Manivannan Sadhasivam (12):
+>>    dt-bindings: opp: Increase maxItems for opp-hz property
+>>    arm64: dts: qcom: sdm845: Add missing RPMh power domain to GCC
+>>    arm64: dts: qcom: sdm845: Fix the min frequency of "ice_core_clk"
+>>    arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+>>    OPP: Introduce dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+>>    OPP: Introduce dev_pm_opp_get_freq_indexed() API
+>>    PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed()
+>>      APIs
+>>    scsi: ufs: core: Add OPP support for scaling clocks and regulators
+>>    scsi: ufs: host: Add support for parsing OPP
+>>    arm64: dts: qcom: sdm845: Add interconnect paths to UFSHC
+>>    arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
+>>    scsi: ufs: qcom: Add support for scaling interconnects
+>>
+>>   .../devicetree/bindings/opp/opp-v2-base.yaml  |   2 +-
+>>   .../devicetree/bindings/ufs/ufs-common.yaml   |  34 ++++-
+>>   arch/arm64/boot/dts/qcom/sdm845.dtsi          |  47 ++++--
+>>   arch/arm64/boot/dts/qcom/sm8250.dtsi          |  43 ++++--
+>>   drivers/devfreq/devfreq.c                     |  14 +-
+>>   drivers/opp/core.c                            |  76 ++++++++++
+>>   drivers/ufs/core/ufshcd.c                     | 142 ++++++++++++++----
+>>   drivers/ufs/host/ufs-qcom.c                   | 131 +++++++++++++++-
+>>   drivers/ufs/host/ufs-qcom.h                   |   3 +
+>>   drivers/ufs/host/ufshcd-pltfrm.c              | 116 ++++++++++++++
+>>   include/linux/pm_opp.h                        |  26 ++++
+>>   include/ufs/ufshcd.h                          |   4 +
+>>   12 files changed, 574 insertions(+), 64 deletions(-)
+>>
+>> -- 
+>> 2.25.1
+>>
+> 
+
+-- 
+With best wishes
+Dmitry
 
