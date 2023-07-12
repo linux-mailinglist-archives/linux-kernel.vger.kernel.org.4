@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39815750918
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2DC75091E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbjGLNCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
+        id S233536AbjGLNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbjGLNCe (ORCPT
+        with ESMTP id S233399AbjGLNCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:02:34 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBBA1FD2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:02:23 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666e916b880so3454652b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:02:23 -0700 (PDT)
+        Wed, 12 Jul 2023 09:02:42 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7687D1BDF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:02:29 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b711c3ad1fso5690467a34.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689166943; x=1691758943;
-        h=content-transfer-encoding:author:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KMdohCdaLVd4HEOOg6g6eIdW9oFM4ELH5FlH42ryJA4=;
-        b=FO8qnGg64dU7X+U8EMUetFFnalKYf9NpPJ7dptUBQOkNpwc7ZLhwLDh025M7zMlcZH
-         QrHgezV0MJQv6uDJjvMI858+eQbKt98luJKA7Jhm8UfQ/ivd9IQ8/0Il4x1hgFxv4U2P
-         4hJcwADL1GngCelhFCpOAOJ4XSZsmTcDTtgCEXyWYc3rSw6QVA//WnQY9BUan190iJ1E
-         Lf8lebzMdld8H9io6dgAOTL0oqNJKMUl6Y1QMBrgIYSLlTmF7BLJxtSQxDfqIDXqSRW0
-         S8y56T0M4ovrAOWqzDZvFUIDSwd9AZpK7u2/48Os1oxVvgUcpXnCWXYDU3c85rz2MsNn
-         pvYQ==
+        d=linaro.org; s=google; t=1689166948; x=1691758948;
+        h=content-transfer-encoding:author:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9T8piHX0bubTIqR5dsadlL99AD9gpATcetHPEAi8jTU=;
+        b=hIzKop+k4OCTCBWq4j/r6OD7aiiXPsd/rQZ1uF4S9TETD/oKB2rDcKczmsx2A0nJe5
+         NWtDC2qPPGP7IM/wx1RvH78MvjJ6gY/YwivETBUZkh+vDWikLxQdZmap/WtbV5U3p2fE
+         p5OoOEvAFa/9bydOqp6ak9+2bf8q660eCyEzrIC/1SHTOj9MIVPWcntYo5Y0VljtGzHE
+         mgZIlmKBdjkeT3791x7XiE800dSX3/EX7xIgtP5kHtO8nVPlbCyb2u7S6JXlPFNTDwAE
+         UGae6a1Zymrpqo19n1nGtitGuwQJG7H3zK3/7eS7IUQfV708JvhyXubPbr6YmxNuc0TL
+         sKPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689166943; x=1691758943;
-        h=content-transfer-encoding:author:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KMdohCdaLVd4HEOOg6g6eIdW9oFM4ELH5FlH42ryJA4=;
-        b=XmCzHc5euChieyOHrE5DT7TjHSOpDy6B4vP5Y0epj8ApVy9h6U0DCxpLVYKmEbGJM7
-         +A7q7KUjMKm6YK+eOebXEGDk6nVlkN+NFQGwqKYGgXUG5T0RJIazrdaINsJDcEDB335l
-         QEeCdFRUrbqahHg+za+WQ5AcZMRWgc38nI2AVrDD7cb6QvPZKEJ9jJGv39e2x+nOGjrZ
-         b+/+QwlRM/u9dsQuVtR9qUNkY7SxKZWjOO9jXEqiFzK0JbmqSvELEjqfu+2PHchTx9/R
-         vu/jMxeSH+joV/7rMZrgfuN1ywQuDKYiea/8mwBT6xx7N0pTWa/MW4m1e0WfFCETq6re
-         P+Og==
-X-Gm-Message-State: ABy/qLZrI7UwsLEX+WJ2/gkRZZyjRsyd9mH8utLHYXh1XVTrPr+HWGE0
-        VpuBiLugaX4YE5s+8xe8k9a6WQ==
-X-Google-Smtp-Source: APBJJlGxOuD2o+cmEyspcCKwQyh62RpiDLf/OBRMFhKExXiTATvAyj0SSczI6826Fg3XxvXJc/xNQQ==
-X-Received: by 2002:a05:6a20:12d0:b0:129:a9af:7ec6 with SMTP id v16-20020a056a2012d000b00129a9af7ec6mr16897403pzg.56.1689166943112;
-        Wed, 12 Jul 2023 06:02:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689166948; x=1691758948;
+        h=content-transfer-encoding:author:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9T8piHX0bubTIqR5dsadlL99AD9gpATcetHPEAi8jTU=;
+        b=fxDFiowA7cZOLkvxoDLERpMNgL68RU2zMo0dy3rikx4AV5SoIWDwsHpBCliNE4LI96
+         H5O5ZxTZ3LMJaL8l0GyQOGHygcNvMrC3ra0J/fPo07p/uzl2xAph9Jr3sBJKgy5UZzvy
+         QgH0uT3u7ZclhvuhDqV+T2ZidZeGLSlxi26ssRDhq3mJUj4nzXF13Audq77wrQynK3T9
+         qLwAvpbtV15nA4g20i3UVsvbTUFM/VlNlinnrleAo3YDcZH5Ub0bfW8G+o+HTg0qLub/
+         yUQoD/qO9MJWJGKovwmzkVfjDEoEOXoN/QszpmLL24T5hJQaID1xegc6PK0hM852siXE
+         O9QQ==
+X-Gm-Message-State: ABy/qLYiUsPv/TaJEiWHkB9qU0IbfBTqg7G9r9y2BE8x6ghTyMORDOju
+        YeYm/QtCGIMG8s/hU0bTn+D3Yg==
+X-Google-Smtp-Source: APBJJlHMNeteSeTTb43sYC5YqkHocrWysDwQ9MhmzMKypOa+itOUe2NT1zrkO4ZI8Ox9NbZXCTb+1w==
+X-Received: by 2002:a05:6358:341f:b0:135:89d6:22e9 with SMTP id h31-20020a056358341f00b0013589d622e9mr1235888rwd.13.1689166948540;
+        Wed, 12 Jul 2023 06:02:28 -0700 (PDT)
 Received: from x-wing.lan ([49.207.50.231])
-        by smtp.gmail.com with ESMTPSA id p1-20020a639501000000b0054fe07d2f3dsm3417023pgd.11.2023.07.12.06.02.18
+        by smtp.gmail.com with ESMTPSA id p1-20020a639501000000b0054fe07d2f3dsm3417023pgd.11.2023.07.12.06.02.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 06:02:22 -0700 (PDT)
+        Wed, 12 Jul 2023 06:02:28 -0700 (PDT)
 From:   Amit Pundir <amit.pundir@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
@@ -71,47 +72,75 @@ Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         dt <devicetree@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] dt-bindings: display/msm: qcom,sdm845-mdss: add memory-region property
-Date:   Wed, 12 Jul 2023 18:32:14 +0530
-Message-Id: <20230712130215.666924-1-amit.pundir@linaro.org>
+Subject: [PATCH 2/2][v4] arm64: dts: qcom: sdm845-db845c: Mark cont splash memory region as reserved
+Date:   Wed, 12 Jul 2023 18:32:15 +0530
+Message-Id: <20230712130215.666924-2-amit.pundir@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230712130215.666924-1-amit.pundir@linaro.org>
+References: <20230712130215.666924-1-amit.pundir@linaro.org>
 MIME-Version: 1.0
 Author: Amit Pundir <amit.pundir@linaro.org>
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add and document the reserved memory region property
-in the qcom,sdm845-mdss schema.
+Adding a reserved memory region for the framebuffer memory
+(the splash memory region set up by the bootloader).
 
 Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
 ---
- .../devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml    | 5 +++++
- 1 file changed, 5 insertions(+)
+v4: Re-sending this along with a new dt-bindings patch to
+    document memory-region property in qcom,sdm845-mdss
+    schema and keep dtbs_check happy.
 
-diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml
-index 6ecb00920d7f..3ea1dbd7e317 100644
---- a/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml
-@@ -39,6 +39,11 @@ properties:
-   interconnect-names:
-     maxItems: 2
+v3: Point this reserved region to MDSS.
+
+v2: Updated commit message.
+
+There was some dicussion on v1 but it didn't go anywhere,
+https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u.
+The general consensus is that this memory should be freed and be
+made resuable but that (releasing this piece of memory) has been
+tried before and it is not trivial to return the reserved memory
+node to the system RAM pool in this case.
+
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index d6b464cb61d6..f546f6f57c1e 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -101,6 +101,14 @@ hdmi_con: endpoint {
+ 		};
+ 	};
  
-+  memory-region:
-+    maxItems: 1
-+    description:
-+      Phandle to a node describing a reserved memory region.
++	reserved-memory {
++		/* Cont splash region set up by the bootloader */
++		cont_splash_mem: framebuffer@9d400000 {
++			reg = <0x0 0x9d400000 0x0 0x2400000>;
++			no-map;
++		};
++	};
 +
- patternProperties:
-   "^display-controller@[0-9a-f]+$":
-     type: object
+ 	lt9611_1v8: lt9611-vdd18-regulator {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "LT9611_1V8";
+@@ -506,6 +514,7 @@ &i2c14 {
+ };
+ 
+ &mdss {
++	memory-region = <&cont_splash_mem>;
+ 	status = "okay";
+ };
+ 
 -- 
 2.25.1
 
