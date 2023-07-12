@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF967502BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559417502C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbjGLJTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S230482AbjGLJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbjGLJTK (ORCPT
+        with ESMTP id S231578AbjGLJUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:19:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334271A8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:19:09 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1qJVzm-0005QN-Qy; Wed, 12 Jul 2023 11:18:50 +0200
-Message-ID: <d57fdae4-9931-6e37-56e1-9649074b3142@pengutronix.de>
-Date:   Wed, 12 Jul 2023 11:18:48 +0200
+        Wed, 12 Jul 2023 05:20:02 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C89139;
+        Wed, 12 Jul 2023 02:20:00 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1689153591t4m7hhbh
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Jul 2023 17:19:50 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: uGhnJwy6xZIttFNE7Y1G6BS+94JXqZJfIlXFCaabP2xXLECfQZ3BaGBSMm/IR
+        NGCzIYlWnLkXTYKMoCzHgVtI1SBTHE9zAuWjLHH9wKFzqJuFZHLCr4fL45h4/YMd5ju4dIZ
+        5ABy2E/ms4YpCXYwtpJ+Ri6OwV0W0JZNuRO0p78K1tySDRnhvVYkIerPi5oJ+ZrTErnqtZD
+        ldIr8vumsmcR2TGV09ciofi67DbgZjSLpaOSJqhqwD91vpoDD8AQcnJb91AK6VTO/8oOP4v
+        a1cXAFizdBzZHVJJASYpRXPQslKbYvozXKwNbq20vudoZncGqCqkdlEVf0EkQmbUbyzYODd
+        ECJDStT5M2CNQFnqbjA0OLuScaUJhgbCQPcjyTbZh0MH3OJ7iQFb0giFTpN3w==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5769694176344349855
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 04/11] tools/nolibc: aarch64: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:19:50 +0800
+Message-Id: <cf75d6c666fc7110807516e6fa70f706857ab7b4.1689150149.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
+References: <cover.1689150149.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 7/8] dt-bindings: arm: stm32: add extra SiP compatible
- for oct,stm32mp157c-osd32-red
-Content-Language: en-US
-To:     Sean Nyekjaer <sean@geanix.com>,
-        Leonard Goehrs <l.goehrs@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dantuguf14105@gmail.com, Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20230712062954.2194505-1-sean@geanix.com>
- <20230712062954.2194505-7-sean@geanix.com>
- <92f7f4cd-c9cc-8a1a-74c7-39eed955cd6a@pengutronix.de>
- <92C36A18-F359-497E-8267-03E5C62811F6@geanix.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <92C36A18-F359-497E-8267-03E5C62811F6@geanix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.07.23 11:11, Sean Nyekjaer wrote:
->> On 12 Jul 2023, at 10.38, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->> On 12.07.23 08:29, Sean Nyekjaer wrote:
->>> Add binding support for the Octavo OSD32MP1-RED development board.
->>>
->>> General features:
->>> - STM32MP157C
->>> - 512MB DDR3
->>> - CAN-FD
->>> - HDMI
->>> - USB-C OTG
->>> - UART
->>>
->>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
->>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->>
->> Just a heads up: The LXA TAC, another OSD32MP1 board has been merged into
->> stm32-next yesterday, so applying your series onto that tree may result
->> in conflicts. You may want to rebase for v4.
->>
->> Cheers,
->> Ahmad
-> 
-> Thanks, will do :)
-> 
-> Can I get you to look at 4/8, 5/8 and 6/8 in this series? Will they break anything for LXA TAC?
+move most of the _start operations to _start_c().
 
-Leonard, does the LXA TAC have an implicit dependency on any of the rails that Sean is
-now turning off by default?
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-aarch64.h | 26 +++++---------------------
+ 1 file changed, 5 insertions(+), 21 deletions(-)
 
-Cheers,
-Ahmad
-
-> 
-> /Sean
-> 
->>
->>
->>> ---
->>> Documentation/devicetree/bindings/arm/stm32/stm32.yaml | 3 ++-
->>> 1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->>> index 13e34241145b..55e45db1af26 100644
->>> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->>> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->>> @@ -143,7 +143,8 @@ properties:
->>>       - description: Octavo OSD32MP15x System-in-Package based boards
->>>         items:
->>>           - enum:
->>> -              - lxa,stm32mp157c-mc1 # Linux Automation MC-1
->>> +              - lxa,stm32mp157c-mc1       # Linux Automation MC-1
->>> +              - oct,stm32mp157c-osd32-red # Octavo OSD32MP1 RED board
->>>           - const: oct,stm32mp15xx-osd32
->>>           - enum:
->>>               - st,stm32mp157
->>
->> -- 
->> Pengutronix e.K.                           |                             |
->> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
->> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
->> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-> 
-> 
-> 
-> 
-
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 1bf122cd5966..e52fa5a20d71 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_ARCH_AARCH64_H
+ 
+ #include "compiler.h"
++#include "crt.h"
+ 
+ /* Syscalls for AARCH64 :
+  *   - registers are 64-bit
+@@ -143,33 +144,16 @@
+ 	_arg1;                                                                \
+ })
+ 
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"bl __stack_chk_init\n"   /* initialize stack protector                     */
++		"bl __stack_chk_init\n" /* initialize stack protector                    */
+ #endif
+-		"ldr x0, [sp]\n"     /* argc (x0) was in the stack                          */
+-		"add x1, sp, 8\n"    /* argv (x1) = sp                                      */
+-		"lsl x2, x0, 3\n"    /* envp (x2) = 8*argc ...                              */
+-		"add x2, x2, 8\n"    /*           + 8 (skip null)                           */
+-		"add x2, x2, x1\n"   /*           + argv                                    */
+-		"adrp x3, environ\n"          /* x3 = &environ (high bits)                  */
+-		"str x2, [x3, #:lo12:environ]\n" /* store envp into environ                 */
+-		"mov x4, x2\n"       /* search for auxv (follows NULL after last env)       */
+-		"0:\n"
+-		"ldr x5, [x4], 8\n"  /* x5 = *x4; x4 += 8                                   */
+-		"cbnz x5, 0b\n"      /* and stop at NULL after last env                     */
+-		"adrp x3, _auxv\n"   /* x3 = &_auxv (high bits)                             */
+-		"str x4, [x3, #:lo12:_auxv]\n" /* store x4 into _auxv                       */
+-		"and sp, x1, -16\n"  /* sp must be 16-byte aligned in the callee            */
+-		"bl main\n"          /* main() returns the status code, we'll exit with it. */
+-		"mov x8, 93\n"       /* NR_exit == 93                                       */
+-		"svc #0\n"
++		"mov x0, sp\n"          /* save stack pointer to x0, as arg1 of _start_c */
++		"and sp, x0, -16\n"     /* sp must be 16-byte aligned in the callee      */
++		"bl  _start_c\n"        /* transfer to c runtime                         */
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
 
