@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF94750870
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB5D75086A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233324AbjGLMfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S231858AbjGLMfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbjGLMfj (ORCPT
+        with ESMTP id S232767AbjGLMfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:35:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368B810FC;
-        Wed, 12 Jul 2023 05:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1689165337; x=1720701337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XAbpANE/Fng5ECm20P1cz/dS/we/2gWEgl+TdS/1S6M=;
-  b=fVQv6PIbWnX9T9WpHW1d3e0CGWeF+b01Ol+GPCLmskMWXRygvN+ZeNZF
-   hjsxqMGeeKqkZ8DZtneUujBdzvTje0vsbP7JkkrHA0oUDLZ8JCGEaJxes
-   BPWnJeHTIgcN4WfCugdz5jul+e9hE9rpvkqywyFF6hyDtiE0YMmEnxwRr
-   6iSmJXInkPk4gIfxnghbCSImXITb/OKLEN1DRIlE7xd1EwBLSQZT7na+h
-   vgO2sxyD9+GTMtmaAp1IBQHksHe11cvkMmBaBf3XO1YpPtEVsqf8rF+F+
-   SqkMvs+U+NuiTOHu4FpJPFSBOAW2PfPtYxERnlRJ9L1fbzlTsYgAnfgzu
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="asc'?scan'208";a="220004003"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 05:35:36 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Jul 2023 05:35:35 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 12 Jul 2023 05:35:34 -0700
-Date:   Wed, 12 Jul 2023 13:34:57 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <soc@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <workflows@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Documentation/process: maintainer-soc: document
- dtbs_check requirement for Samsung
-Message-ID: <20230712-unfasten-trespass-d57b3ff1f134@wendy>
-References: <20230712084131.127982-1-krzysztof.kozlowski@linaro.org>
- <20230712-skier-ribcage-0d82be7e16fd@wendy>
- <da79ac87-f112-be43-52b2-2293e1a99d9b@linaro.org>
+        Wed, 12 Jul 2023 08:35:05 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAE310F3;
+        Wed, 12 Jul 2023 05:35:03 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4R1HJ11sRdz4f3mn9;
+        Wed, 12 Jul 2023 20:34:57 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCXaK_xna5klTM2Nw--.23925S3;
+        Wed, 12 Jul 2023 20:34:59 +0800 (CST)
+Subject: Re: [PATCH v5 02/11] block: Block Device Filtering Mechanism
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        willy@infradead.org, dlemoal@kernel.org, linux@weissschuh.net,
+        jack@suse.cz, ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+ <20230612135228.10702-3-sergei.shtepa@veeam.com>
+ <f935840e-12a7-c37b-183c-27e2d83990ea@huaweicloud.com>
+ <eca5a778-6795-fc03-7ae0-fe06f514af85@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <2ab36e73-a612-76a8-9c20-f5e11c67bcc3@huaweicloud.com>
+Date:   Wed, 12 Jul 2023 20:34:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oZupxwsk8vse9QyQ"
-Content-Disposition: inline
-In-Reply-To: <da79ac87-f112-be43-52b2-2293e1a99d9b@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <eca5a778-6795-fc03-7ae0-fe06f514af85@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCXaK_xna5klTM2Nw--.23925S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KryDGr4fXrWxZry8WFyUZFb_yoW8Ar48pr
+        95XayUJrWUXFn5Ww1qgF1UtFyFvF1UJw1DZryIqa43JrsFyrnFga17Wr9Y93sxCr48GrW7
+        Zr1jvrsxZwsxJFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUOmhFUUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,54 +73,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---oZupxwsk8vse9QyQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Wed, Jul 12, 2023 at 01:46:20PM +0200, Krzysztof Kozlowski wrote:
-> On 12/07/2023 11:48, Conor Dooley wrote:
-> > On Wed, Jul 12, 2023 at 10:41:31AM +0200, Krzysztof Kozlowski wrote:
-> >> Samsung ARM/ARM64 SoCs (except legacy S5PV210) are also expected not to
-> >> bring any new dtbs_check warnings.  In fact this have been already
-> >> enforced and tested since few release.
-> >>
-> >> Cc: Conor Dooley <conor.dooley@microchip.com>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> ---
-> >=20
-> >> Not sure where to document this. Creating new maintainer profile for
-> >> Samsung SoC would be an overkill. OTOH, more SoCs might want to grow
-> >> this list, so this also scales poor.
-> >=20
-> > To me, this portion of the document was "information to the
-> > submaintainer", which would be you, not information to the contributors
-> > to the platform. Adding the comment about Samsung SoC seems aimed at
-> > contributors?
->=20
-> Yes, I want to document it for contributors, so they won't be surprised.
-> Any hints where to store it? I could put it in the "About" tab of my
-> kernel.org repo, but no one checks this for contribution guidelines.
+在 2023/07/12 18:04, Yu Kuai 写道:
+> Hi,
+> 
+> 在 2023/07/11 10:02, Yu Kuai 写道:
+> 
+>>> +static bool submit_bio_filter(struct bio *bio)
+>>> +{
+>>> +    if (bio_flagged(bio, BIO_FILTERED))
+>>> +        return false;
+>>> +
+>>> +    bio_set_flag(bio, BIO_FILTERED);
+>>> +    return bio->bi_bdev->bd_filter->ops->submit_bio(bio);
+>>> +}
+>>> +
+>>>   static void __submit_bio(struct bio *bio)
+>>>   {
+>>> +    /*
+>>> +     * If there is a filter driver attached, check if the BIO needs 
+>>> to go to
+>>> +     * the filter driver first, which can then pass on the bio or 
+>>> consume it.
+>>> +     */
+>>> +    if (bio->bi_bdev->bd_filter && submit_bio_filter(bio))
+>>> +        return;
+>>> +
+>>>       if (unlikely(!blk_crypto_bio_prep(&bio)))
+>>>           return;
+> 
+> ...
+> 
+>>> +static void __blkfilter_detach(struct block_device *bdev)
+>>> +{
+>>> +    struct blkfilter *flt = bdev->bd_filter;
+>>> +    const struct blkfilter_operations *ops = flt->ops;
+>>> +
+>>> +    bdev->bd_filter = NULL;
+>>> +    ops->detach(flt);
+>>> +    module_put(ops->owner);
+>>> +}
+>>> +
+>>> +void blkfilter_detach(struct block_device *bdev)
+>>> +{
+>>> +    if (bdev->bd_filter) {
+>>> +        blk_mq_freeze_queue(bdev->bd_queue);
+> 
+> And this is not sate as well, for bio-based device, q_usage_counter is
+> not grabbed while submit_bio_filter() is called, hence there is a risk
+> of uaf from submit_bio_filter().
 
-I've not got a better suggestion for where to put this, but under
-something labelled as "Information for (new) Submaintainers" isn't
-where I would be looking as a contributor.
-Is adding to the generic DT documentation that dtbs_check should not add
-any new warnings at W=3D1 too extreme?
-writing-schema.rst has the instructions about how to run dtbs_check while
-writing dt-binding patches, but we don't seem to have any docs about
-running dtbs_check for dts/dtsi changes.
+And there is another question, can blkfilter_detach() from
+del_gendisk/delete_partiton and ioctl concurrent? I think it's a
+problem.
 
---oZupxwsk8vse9QyQ
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
+Kuai
+> 
+> Thanks,
+> Kuai
+> 
+> .
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK6d8QAKCRB4tDGHoIJi
-0lwSAQDBl5SejPpAFmt5bv2VhK+0qeUjxPKk2oF8smIN4o1SmAEA0svDs8omMe+R
-WsZHkfgbSn5tEDE4rofWHvQ8e/QKrgM=
-=b8RU
------END PGP SIGNATURE-----
-
---oZupxwsk8vse9QyQ--
