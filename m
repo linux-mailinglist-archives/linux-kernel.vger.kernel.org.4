@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DF67503FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1366750404
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjGLKAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S231944AbjGLKAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjGLKAC (ORCPT
+        with ESMTP id S232086AbjGLKAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:00:02 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5EE1711
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:00:00 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-314417861b9so6824579f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689155999; x=1691747999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LjfZQU8GBAEUxKy5KWZcG0QEkZLgJT10dbkt0QDjsWA=;
-        b=xQ4OjdWQxYn4IOlz9wzr/uRrprls5W/U9tFMRXel53luWdbbWTvhIY77eVryywk5ao
-         fhdsbdno6F7bTpBx7xv2CYO1B+Dsp/GS14BVJsqr3GhlPGkEavTjOxGlLJ0emo78bRaJ
-         KCHhEZkA6cWoTDEAu6V56qHOLLRzav9Ic+jl2s0Sjif8KJhYQ8XAOEYhYaojpUlcSAm2
-         GcnNI++uQ/RG3svSKjXLSgZrUTj2hjGIPfWJ0Wm2qoCl49NaXKUAlRnyDFVli18/cAVG
-         iXeKE6TNkbnuUZzFLbwhiG8sxM9AKOpeLaPuvw1SPvcoWCxsQjKp4ehANb8+B+XkgYjr
-         4I9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689155999; x=1691747999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LjfZQU8GBAEUxKy5KWZcG0QEkZLgJT10dbkt0QDjsWA=;
-        b=Zh+XvDTS6uWVFr0RxfGpU+yysGJGlG1RApwclnTYlcIUpJt37M1ICutjvK/x7fSPk+
-         egwakYWCo4f6HOeIJzb3HB9qM7qjaLu2o2LMx0yNdQrKvYiYahx+kn+Ec/Dl0UNXPp2c
-         QySdcd7qHzsx6T1uWWqXhg+xAO1GNoWuiXaBgkttKU9SfZrR7dEEG3Kb8n1Bh/QIPk6z
-         +mmIeQgW0mxiCuOT0NTETUl/Lt2j4CZ0D1IUIlvTkrI5KVZYW/j0jusoFE5JMHiVryIJ
-         qBiRwGOCVbeq9osNS6E8BnYuJVfcgtm5kE1NjkgJp/v45FeRy4AxG5dB8y6/ppFtveAb
-         yzUw==
-X-Gm-Message-State: ABy/qLYYBzvaTlY8HFFGGDTy19G200OTymZ38naNfO4sAzXFuv2a6YBH
-        B2qa6s0WQnIVvuIXFIN1iANZ2Q==
-X-Google-Smtp-Source: APBJJlEYwdt7ptG4DpjqIKGbDBB/CDSsxnNVNiR04k8AvT9S0Nu2E9pqkAlD+7TtItabB+OOGt5qqg==
-X-Received: by 2002:a5d:538f:0:b0:313:f1c8:a968 with SMTP id d15-20020a5d538f000000b00313f1c8a968mr17597880wrv.2.1689155998834;
-        Wed, 12 Jul 2023 02:59:58 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d866:9edc:5a2d:f498])
-        by smtp.gmail.com with ESMTPSA id m15-20020adfdc4f000000b003142ea7a661sm4623562wrj.21.2023.07.12.02.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 02:59:57 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] gpiolib: order includes alphabetically in gpiolib.h
-Date:   Wed, 12 Jul 2023 11:59:55 +0200
-Message-Id: <20230712095955.105716-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Wed, 12 Jul 2023 06:00:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F3B1711
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:00:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJWdk-0005na-Uz; Wed, 12 Jul 2023 12:00:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJWdk-00Dr8b-0T; Wed, 12 Jul 2023 12:00:08 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJWdj-004GcS-7o; Wed, 12 Jul 2023 12:00:07 +0200
+Date:   Wed, 12 Jul 2023 12:00:07 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Guiting Shen <aarongt.shen@gmail.com>
+Cc:     claudiu.beznea@microchip.com, thierry.reding@gmail.com,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] pwm: atmel: Enable clk when pwm already enabled in
+ bootloader
+Message-ID: <20230712100007.xltypsvcp7at5gg5@pengutronix.de>
+References: <20230711200905.6464-1-aarongt.shen@gmail.com>
+ <20230711203017.cdfe2nrjx7lt25tm@pengutronix.de>
+ <90830c22-0437-591e-cee0-67b16214bc55@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x4lxesds22p5yidt"
+Content-Disposition: inline
+In-Reply-To: <90830c22-0437-591e-cee0-67b16214bc55@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-After adding the missing notifier.h header, let's order all includes
-alphabetically.
+--x4lxesds22p5yidt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/gpio/gpiolib.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Wed, Jul 12, 2023 at 09:45:08AM +0800, Guiting Shen wrote:
+> On Wed, Jul 12, 2023 at 04:30:17AM GMT+8, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > On Wed, Jul 12, 2023 at 04:09:05AM +0800, Guiting Shen wrote:
+> >> +static int atmel_pwm_enable_clk_if_on(struct atmel_pwm_chip *atmel_pw=
+m)
+> >> +{
+> >> +	unsigned int i;
+> >> +	int err;
+> >> +	u32 sr;
+> >> +
+> >> +	sr =3D atmel_pwm_readl(atmel_pwm, PWM_SR);
+> >> +	if (!sr)
+> >> +		return 0;
+> >> +
+> >> +	for (i =3D 0; i < atmel_pwm->chip.npwm; i++) {
+> >> +		if (!(sr & (1 << i)))
+> >> +			continue;
+> >> +
+> >> +		err =3D clk_enable(atmel_pwm->clk);
+> >> +		if (err) {
+> >> +			dev_err(atmel_pwm->chip.dev,
+> >> +				"failed to enable clock: %pe\n", ERR_PTR(err));
+> >=20
+> > Here you leak possibly a few enables. While it's not likely that the
+> > (say) third enable goes wrong, it's also not that hard to handle?!
+>=20
+> The driver used the enable_count member of struct clk_core to count the
+> PWM channels(4 channels). It will enable hardware clock only when one of
+> the PWM channels becomed on from all PWM channels off which maybe return
+> error. And in second/third/fourth times to clk_enable(), it just
+> increased the enable_count of struct clk_core which would never return
+> error.
+>=20
+> It maybe confused at first time to view the code.
+> Do it need to add something like that: ?
+>=20
+> for (i =3D 0; i < atmel_pwm->chip.npwm; i++) {
+> 	if (!(sr & (1 << i)))
+> 		continue;
+>=20
+> 	err =3D clk_enable(atmel_pwm->clk);
+> 	if (err) {
+> 		dev_err(atmel_pwm->chip.dev,
+> 			"failed to enable clock: %pe\n", ERR_PTR(err));
+>=20
+> 		for (i =3D 0; i < cnt; i++)
+> 			clk_disable(atmel_pwm->clk);
+> 		return err;
+> 	}
+> 	cnt++;
+> }
 
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 1409d52487c0..7c562fbb9fb0 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -9,13 +9,13 @@
- #ifndef GPIOLIB_H
- #define GPIOLIB_H
- 
--#include <linux/gpio/driver.h>
--#include <linux/gpio/consumer.h> /* for enum gpiod_flags */
--#include <linux/err.h>
-+#include <linux/cdev.h>
- #include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h> /* for enum gpiod_flags */
-+#include <linux/gpio/driver.h>
- #include <linux/module.h>
- #include <linux/notifier.h>
--#include <linux/cdev.h>
- #include <linux/rwsem.h>
- 
- #define GPIOCHIP_NAME	"gpiochip"
--- 
-2.39.2
+Yes, that approx. what I thought of. Maybe also mention i in the error
+message? (So something like:
 
+	"failed to enable clock for pwm #%d: %pe\n"
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--x4lxesds22p5yidt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSueaYACgkQj4D7WH0S
+/k7DDAgArfr6U1/KQMuMh67ZiIJfwlHcXpL71T0UiFNHRpl6J78FmaluZRw0oWeF
+cEqKmBHLgUbNsHvss7fm9ZIvr5D4z9B3aX0bDDxzy3G7T1DF2dzUKPPRvxUmjnnE
+4zyPgfmc19/vNG29V5tEA/RuR1N32LAuvEzIfaEr5WlJ+N1NQCazaf+rrzvAuqIb
+NBYH0bX3AV/VgxTG/YQ2spJ1C5hFEiRNaHv7fT2QgqvZ+tX0JjyjNfdukpapVlGu
+Bm2tr7azbaY1+vP4OvwWfwmcdcB1pLf3wjntgKIM2JAxjnNBq3XBFL7LAS1Va2p4
+2tS0FcZHLWko899/jzj5Hn+DRKxLPw==
+=014i
+-----END PGP SIGNATURE-----
+
+--x4lxesds22p5yidt--
