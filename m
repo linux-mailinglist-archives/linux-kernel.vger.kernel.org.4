@@ -2,259 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15167750BAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62AE750BB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjGLPCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        id S233235AbjGLPDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbjGLPCt (ORCPT
+        with ESMTP id S232630AbjGLPDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:02:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3561BC6;
-        Wed, 12 Jul 2023 08:02:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D4EB61838;
-        Wed, 12 Jul 2023 15:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7B0C433C7;
-        Wed, 12 Jul 2023 15:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689174166;
-        bh=6Xg22ZHymwYTmng19kOz5rdixVHrp7FECHVhi5ZVNRY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=RkS9IpV+zDCLI/qcDefAVyreomkcdm4E/iiUhgVEcqGYlU6WR81R4FlrKnfdSn48B
-         QY43TuYTGy7XFAkKfsDb1/oHWn+rYAUHQxfezHdxG/qzeU5lpSRcnYOWGcRA9jtGUX
-         Dk3HbZGDpKp3Bu8EBY7uDDrO6tRgoRMWRcq7dGoWYbV9hyxVey7eRkLZsDBzHbo0q8
-         1NXCLt3mrK8YNy94XyMUtq+Yg+kyq3KxWwBW/vTtMOfibzBq0q8+p8Qcefm4ZiWdey
-         SDh7Cb5SR1nCHYEdWWEZUCISIRfwtzcSRuI6ZFFPT4yGKz5vcE2FsBc0RZz+KEF2p9
-         fCSYxWW4CzhAA==
-From:   bentiss@kernel.org
-Date:   Wed, 12 Jul 2023 17:02:34 +0200
-Subject: [PATCH v2] HID: logitech-hidpp: rework one more time the retries
- attempts
+        Wed, 12 Jul 2023 11:03:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39611BD1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689174165;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kvr3qVn5V77zWJcaKe9AHXcXT+HniwXcgFa7KzwlkrU=;
+        b=MUiYwIw39nK7k6M6tGbYRHxq/xau24PSMttYtddLkry2R/bLX5N6+GgVg9c/D6VBZ088fA
+        VIE+IKZBsocKhWkpZ69vYBRgOa2wMJ0WGfw+j4AdJ29mUhJNxwL10s98NScAJmyDfIfuY/
+        LWA2oyvc6aDwX1870C5pBXnSRzaoEBs=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-6giLTuT6OGielh0qdwSoLg-1; Wed, 12 Jul 2023 11:02:44 -0400
+X-MC-Unique: 6giLTuT6OGielh0qdwSoLg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-76783ba6d62so821944685a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:02:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689174164; x=1691766164;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kvr3qVn5V77zWJcaKe9AHXcXT+HniwXcgFa7KzwlkrU=;
+        b=Q+w04a6bFzRxTxkPBEtnbjWNjsAMtN4KSO+uLLm+kbflSFQd0bqYPexkaUNoDv7Wiz
+         WHMvgqdinKxsOpDTKRIkMAPyBO4pdS+6aFgCUAkBPG9HCewlqrqdWiAQ60HGFhNxjp2A
+         K+UgAujtMeehJAdgzM5kLk8K4ORnMH9Osb8D3TKPtzlSnBtKgE6lxZDsbxj+tkIJ75av
+         GcIwqy+gY++dz8ZQmti5UMcNo22uKnTNYdYcKuCH7mV5euPrB7HvZln08ZgaSsnt07M/
+         BX10mas0/ym7AFJAeIH6O/x9PsRjQu8ZhfpEpsfk/xA51Tl31dmPQe13HTDUa9UTQBtG
+         DifQ==
+X-Gm-Message-State: ABy/qLYXKVVzLqQHIB+FcJ1S8wAdQzL/us6gfMOlbhkYStCFprWuhslp
+        l9XRLK+EKi44sKdfX9RKDsH2ggQyYoOEbE03lZxtzmdU2XWu/U2UAkzNr7lfBhxcN1ZW+U07uEA
+        8QsW38KDsf5mk30rANmTuiGb9
+X-Received: by 2002:a0c:e545:0:b0:636:2169:4298 with SMTP id n5-20020a0ce545000000b0063621694298mr15517849qvm.1.1689174163863;
+        Wed, 12 Jul 2023 08:02:43 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH++qRRrnEHCZes7rTAj13UdiM5e25ZcfTV6Uk9SSKDV/YGCPR9BTbMWih8KQjwtk707jkosQ==
+X-Received: by 2002:a0c:e545:0:b0:636:2169:4298 with SMTP id n5-20020a0ce545000000b0063621694298mr15517822qvm.1.1689174163605;
+        Wed, 12 Jul 2023 08:02:43 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id o6-20020a0ccb06000000b0062ff0dd0332sm2251154qvk.38.2023.07.12.08.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 08:02:43 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [RFC][PATCH] sched: Rename DIE domain
+In-Reply-To: <20230712141056.GI3100107@hirez.programming.kicks-ass.net>
+References: <20230712141056.GI3100107@hirez.programming.kicks-ass.net>
+Date:   Wed, 12 Jul 2023 16:02:38 +0100
+Message-ID: <xhsmh1qhduq9d.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230621-logitech-fixes-v2-1-3635f7f9c8af@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAInArmQC/3WOzQrCMBCEX6Xs2ZX8SMSefA/pYZuuzYI2kpSil
- L67iZ48eJtvmGFmhcxJOEPbrJB4kSxxKmB2DfhA08goQ2EwyljljMZbHGVmH/AqT85IB6/YOSZ
- DA5RST5mxTzT5UGu/6Rp4JP7qtrl0hYPkOabX58Ciq/t3a9Go0Ro+qpO1XvXqnHgINO99vEO3b
- dsbEOsRNM4AAAA=
-To:     =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689174165; l=6340;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=2070mtrzbWq9KfMRTaYvRvQiS5vfxAiTPm79NPC/Fuo=;
- b=Q5UUrM9a43lmJebEn1JjZ1ypKSXWU+c4okJDTVF7PoOOff95alcWbFUJaS86JAgqvChxHRKpL
- Sj7/1yD/h1NDwLEQpDL7l6nYdVdkdFFtFih0r0bsoCBURXehwLJleWX
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+On 12/07/23 16:10, Peter Zijlstra wrote:
+> Hi
+>
+> Thomas just tripped over the x86 topology setup creating a 'DIE' domain
+> for the package mask :-)
+>
+> Since these names are SCHED_DEBUG only, rename them.
+> I don't think anybody *should* be relying on this, but who knows.
+>
 
-Extract the internal code inside a helper function, fix the
-initialization of the parameters used in the helper function
-(`hidpp->answer_available` was not reset and `*response` wasn't either),
-and use a `do {...} while();` loop.
+FWIW I don't care much about the actual name.
 
-Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
-Cc: stable@vger.kernel.org
-Reviewed-by: Bastien Nocera <hadess@hadess.net>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
-as requested by https://lore.kernel.org/all/CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com/
-This is a rewrite of that particular piece of code.
----
-Changes in v2:
-- added __must_hold() for KASAN
-- Reworked the comment describing the functions and their return values
-- Link to v1: https://lore.kernel.org/r/20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com
----
- drivers/hid/hid-logitech-hidpp.c | 115 +++++++++++++++++++++++++--------------
- 1 file changed, 75 insertions(+), 40 deletions(-)
+There are some stray references to DIE in comments - see below. Bit funny
+to see:
+- *  - Package (DIE)
++ *  - Package (PKG)
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 129b01be488d..09ba2086c95c 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -275,21 +275,22 @@ static int __hidpp_send_report(struct hid_device *hdev,
- }
- 
- /*
-- * hidpp_send_message_sync() returns 0 in case of success, and something else
-- * in case of a failure.
-- * - If ' something else' is positive, that means that an error has been raised
-- *   by the protocol itself.
-- * - If ' something else' is negative, that means that we had a classic error
-- *   (-ENOMEM, -EPIPE, etc...)
-+ * Effectively send the message to the device, waiting for its answer.
-+ *
-+ * Must be called with hidpp->send_mutex locked
-+ *
-+ * Same return protocol than hidpp_send_message_sync():
-+ * - success on 0
-+ * - negative error means transport error
-+ * - positive value means protocol error
-  */
--static int hidpp_send_message_sync(struct hidpp_device *hidpp,
-+static int __do_hidpp_send_message_sync(struct hidpp_device *hidpp,
- 	struct hidpp_report *message,
- 	struct hidpp_report *response)
- {
--	int ret = -1;
--	int max_retries = 3;
-+	int ret;
- 
--	mutex_lock(&hidpp->send_mutex);
-+	__must_hold(&hidpp->send_mutex);
- 
- 	hidpp->send_receive_buf = response;
- 	hidpp->answer_available = false;
-@@ -300,47 +301,74 @@ static int hidpp_send_message_sync(struct hidpp_device *hidpp,
- 	 */
- 	*response = *message;
- 
--	for (; max_retries != 0 && ret; max_retries--) {
--		ret = __hidpp_send_report(hidpp->hid_dev, message);
-+	ret = __hidpp_send_report(hidpp->hid_dev, message);
-+	if (ret) {
-+		dbg_hid("__hidpp_send_report returned err: %d\n", ret);
-+		memset(response, 0, sizeof(struct hidpp_report));
-+		return ret;
-+	}
- 
--		if (ret) {
--			dbg_hid("__hidpp_send_report returned err: %d\n", ret);
--			memset(response, 0, sizeof(struct hidpp_report));
--			break;
--		}
-+	if (!wait_event_timeout(hidpp->wait, hidpp->answer_available,
-+				5*HZ)) {
-+		dbg_hid("%s:timeout waiting for response\n", __func__);
-+		memset(response, 0, sizeof(struct hidpp_report));
-+		return -ETIMEDOUT;
-+	}
- 
--		if (!wait_event_timeout(hidpp->wait, hidpp->answer_available,
--					5*HZ)) {
--			dbg_hid("%s:timeout waiting for response\n", __func__);
--			memset(response, 0, sizeof(struct hidpp_report));
--			ret = -ETIMEDOUT;
--			break;
--		}
-+	if (response->report_id == REPORT_ID_HIDPP_SHORT &&
-+	    response->rap.sub_id == HIDPP_ERROR) {
-+		ret = response->rap.params[1];
-+		dbg_hid("%s:got hidpp error %02X\n", __func__, ret);
-+		return ret;
-+	}
- 
--		if (response->report_id == REPORT_ID_HIDPP_SHORT &&
--		    response->rap.sub_id == HIDPP_ERROR) {
--			ret = response->rap.params[1];
--			dbg_hid("%s:got hidpp error %02X\n", __func__, ret);
-+	if ((response->report_id == REPORT_ID_HIDPP_LONG ||
-+	     response->report_id == REPORT_ID_HIDPP_VERY_LONG) &&
-+	    response->fap.feature_index == HIDPP20_ERROR) {
-+		ret = response->fap.params[1];
-+		dbg_hid("%s:got hidpp 2.0 error %02X\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * hidpp_send_message_sync() returns 0 in case of success, and something else
-+ * in case of a failure.
-+ *
-+ * See __do_hidpp_send_message_sync() for a detailed explanation of the returned
-+ * value.
-+ */
-+static int hidpp_send_message_sync(struct hidpp_device *hidpp,
-+	struct hidpp_report *message,
-+	struct hidpp_report *response)
-+{
-+	int ret;
-+	int max_retries = 3;
-+
-+	mutex_lock(&hidpp->send_mutex);
-+
-+	do {
-+		ret = __do_hidpp_send_message_sync(hidpp, message, response);
-+		if (ret != HIDPP20_ERROR_BUSY)
- 			break;
--		}
- 
--		if ((response->report_id == REPORT_ID_HIDPP_LONG ||
--		     response->report_id == REPORT_ID_HIDPP_VERY_LONG) &&
--		    response->fap.feature_index == HIDPP20_ERROR) {
--			ret = response->fap.params[1];
--			if (ret != HIDPP20_ERROR_BUSY) {
--				dbg_hid("%s:got hidpp 2.0 error %02X\n", __func__, ret);
--				break;
--			}
--			dbg_hid("%s:got busy hidpp 2.0 error %02X, retrying\n", __func__, ret);
--		}
--	}
-+		dbg_hid("%s:got busy hidpp 2.0 error %02X, retrying\n", __func__, ret);
-+	} while (--max_retries);
- 
- 	mutex_unlock(&hidpp->send_mutex);
- 	return ret;
- 
- }
- 
-+/*
-+ * hidpp_send_fap_command_sync() returns 0 in case of success, and something else
-+ * in case of a failure.
-+ *
-+ * See __do_hidpp_send_message_sync() for a detailed explanation of the returned
-+ * value.
-+ */
- static int hidpp_send_fap_command_sync(struct hidpp_device *hidpp,
- 	u8 feat_index, u8 funcindex_clientid, u8 *params, int param_count,
- 	struct hidpp_report *response)
-@@ -373,6 +401,13 @@ static int hidpp_send_fap_command_sync(struct hidpp_device *hidpp,
- 	return ret;
- }
- 
-+/*
-+ * hidpp_send_rap_command_sync() returns 0 in case of success, and something else
-+ * in case of a failure.
-+ *
-+ * See __do_hidpp_send_message_sync() for a detailed explanation of the returned
-+ * value.
-+ */
- static int hidpp_send_rap_command_sync(struct hidpp_device *hidpp_dev,
- 	u8 report_id, u8 sub_id, u8 reg_address, u8 *params, int param_count,
- 	struct hidpp_report *response)
+With that:
+Acked-by: Valentin Schneider <vschneid@redhat.com>
 
 ---
-base-commit: 87854366176403438d01f368b09de3ec2234e0f5
-change-id: 20230621-logitech-fixes-a4c0e66ea2ad
-
-Best regards,
--- 
-Benjamin Tissoires <bentiss@kernel.org>
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a80a73909dc2a..190a647534984 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9439,7 +9439,7 @@ static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
+  * can only do it if @group is an SMT group and has exactly on busy CPU. Larger
+  * imbalances in the number of CPUS are dealt with in find_busiest_group().
+  *
+- * If we are balancing load within an SMT core, or at DIE domain level, always
++ * If we are balancing load within an SMT core, or at PKG domain level, always
+  * proceed.
+  *
+  * Return: true if @env::dst_cpu can do with asym_packing load balance. False
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index e9d9cf776b7ab..2cdcfec1d1c89 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1118,7 +1118,7 @@ build_overlap_sched_groups(struct sched_domain *sd, int cpu)
+  *
+  *  - Simultaneous multithreading (SMT)
+  *  - Multi-Core Cache (MC)
+- *  - Package (DIE)
++ *  - Package (PKG)
+  *
+  * Where the last one more or less denotes everything up to a NUMA node.
+  *
+@@ -1140,13 +1140,13 @@ build_overlap_sched_groups(struct sched_domain *sd, int cpu)
+  *
+  * CPU   0   1   2   3   4   5   6   7
+  *
+- * DIE  [                             ]
++ * PKG  [                             ]
+  * MC   [             ] [             ]
+  * SMT  [     ] [     ] [     ] [     ]
+  *
+  *  - or -
+  *
+- * DIE  0-7 0-7 0-7 0-7 0-7 0-7 0-7 0-7
++ * PKG  0-7 0-7 0-7 0-7 0-7 0-7 0-7 0-7
+  * MC	0-3 0-3 0-3 0-3 4-7 4-7 4-7 4-7
+  * SMT  0-1 0-1 2-3 2-3 4-5 4-5 6-7 6-7
+  *
 
