@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D53750BFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5459750C6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbjGLPM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S233643AbjGLP2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjGLPM1 (ORCPT
+        with ESMTP id S233572AbjGLP2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:12:27 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8681BD1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:12:26 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8ad907ba4so37108765ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:12:26 -0700 (PDT)
+        Wed, 12 Jul 2023 11:28:08 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944A71BD5;
+        Wed, 12 Jul 2023 08:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689174746; x=1691766746;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ECiLeGJkNprLw+g0X3L1cAWQ/zU6I6t8+jDfAyzLBrU=;
-        b=RIGQGajl4x6HG/JpHEe5LWkWl3o6uSi4Cjg3mnn+4o9OXlDmdtt2UqZzyDHc+xAdT4
-         oQNrjXrGz2nMqkeH2CaT4iSnqTWd8KrEjetpDXUq757pdI1PKkChxJs21v3IvoWL3kIc
-         MrDVlIST/yShOiyGSgJSotztHQWCPuddqhasHwpsnUrZEfp+8C3s+wasATRGtRN4Rq7B
-         0Y2wnQ9qirTjN8v0GspYswf7TvHxggmPmFIWPxqijq1ha+BFK/rxa7iKtCV61YBhY3tu
-         gFfWei7//QnJuS1grZSJrRTq1XxG9QWjgqYV1tNDq4QTgW1BPPONZY1KW4nTR9HfpetI
-         5kRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689174746; x=1691766746;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ECiLeGJkNprLw+g0X3L1cAWQ/zU6I6t8+jDfAyzLBrU=;
-        b=YfmkZE/h2lLvpANyQ0tKr4TiuVwnmX5yv5CXQHeCK609hmvwPQrPgBEzW76PhWxWEi
-         BjJfAcin7HYylJpb85r/+ivptaamgt4F45M5PRq9n/+AMdLkFxJC42x9tbauiini/6cY
-         t6ZXW/EEgBuQMEBRjkpOoEEvRqqoCqIbrbeKs8cC0s4yHHagetBSIjJoTAo6cy1/Hzg/
-         bq9i2SyjqOz5yftRBTvAVKDZwlbalDW1rMD4oaRYthWEzcmTGEzaa+cfLGCcsjF81xZc
-         irM7BnfjF6rd5f+iqkVW0wt6lL8iODOxuSxqy2znkrbOT32kPP5EWDZuuxZP+AmthgYO
-         Q4bQ==
-X-Gm-Message-State: ABy/qLa5heC1GZ9Ow0G5mmAE5G3ax8lmnLjqVBXGh0vaiU20G3jtliWt
-        CqsrGXFms89NoIGkJNHEwsk=
-X-Google-Smtp-Source: APBJJlEz3x4C9lBqp+zKUm5wncQq7Aa5uekWuoz+qkfaXGKTS3GMvF34BoJ/i79KeHAkK42zScjy7g==
-X-Received: by 2002:a17:902:c246:b0:1b6:ba60:77f0 with SMTP id 6-20020a170902c24600b001b6ba6077f0mr15260373plg.10.1689174745620;
-        Wed, 12 Jul 2023 08:12:25 -0700 (PDT)
-Received: from localhost.localdomain ([113.103.7.132])
-        by smtp.gmail.com with ESMTPSA id g22-20020a170902869600b001b9cea4e8a2sm4064711plo.293.2023.07.12.08.12.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 08:12:25 -0700 (PDT)
-From:   Guiting Shen <aarongt.shen@gmail.com>
-To:     lgirdwood@gmail.com
-Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        sboyd@kernel.org, mripard@kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
-Subject: [PATCH] ASoC: tlv320aic32x4: Fix the divide by zero
-Date:   Wed, 12 Jul 2023 23:11:58 +0800
-Message-Id: <20230712151158.20378-1-aarongt.shen@gmail.com>
-X-Mailer: git-send-email 2.25.1
+  d=axis.com; q=dns/txt; s=axis-central1; t=1689175688;
+  x=1720711688;
+  h=references:from:to:cc:subject:in-reply-to:date:
+   message-id:mime-version;
+  bh=rwAJJHUO0JnZisxLO3+eFKnrpeHeVsnZgdBx2AOpPlA=;
+  b=NQ6s4KOjUS5ga4u+fH6m5CmRjglX2vF2+/ngr+g0pucYk6hI4J5dcIVM
+   8og+YZ9SU3q4TI2Vh1+Tk3xQx73bTn3BkPGkb2vzDEc64vOlxrHJaF1YY
+   Hs8HWtIrziXLxoaLt7iH2oVH0E5XYCpZ1u0qrAXfq3HKKUoU2oqFciEnU
+   BC2XurzRQyiv3vUKAW2ABbDKl55yoABeY6PQNVEgwz5/fZQ2gCsHEgMpw
+   tCInreteLoh70i+G9NegVWtlNuI4bhWWgAQWKNDSlGA9UwXlCntbfXeS9
+   MZjTKx+4Rw1uKjpYcdpT2bx/HDVsAMQs31rPYZ0lonAm4uvo8RoIy/xAl
+   g==;
+References: <cover.1689174736.git.waqar.hameed@axis.com>
+User-agent: a.out
+From:   Waqar Hameed <waqar.hameed@axis.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+CC:     <kernel@axis.com>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 2/3] iio: Add event enums for running period and count
+In-Reply-To: <cover.1689174736.git.waqar.hameed@axis.com>
+Date:   Wed, 12 Jul 2023 17:12:16 +0200
+Message-ID: <206111caec7e4a8ae0e7628fb49b9ac295097177.1689174736.git.waqar.hameed@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail01w.axis.com
+ (10.20.40.7)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,79 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The value of register(NDAC,MDAC,NADC,MADC,BCLKN) maybe zero lead to
-divide by zero in clk_aic32x4_div_recalc_rate().And the rate should be
-divide by 128 if the value was zero in this function according to the
-datasheet.
-Add the macro AIC32X4_DIV_MAX to present the 128 and return 0 if failing
-to read the value of register.
+There are devices (such as Murata IRS-D200 PIR proximity sensor) that
+check the data signal with a running period. I.e. for a specified time,
+they count the number of conditions that have occurred, and then signal
+if that is more than a specified amount.
 
-Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+`IIO_EV_INFO_PERIOD` resets when the condition no longer is true and is
+therefore not suitable for these devices. Add a new `iio_event_info`
+`IIO_EV_INFO_RUNNING_PERIOD` that can be used as a running period. Also
+add a new `IIO_EV_INFO_RUNNING_COUNT` that can be used to specify the
+number of conditions that must occur during this running period.
+
+Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
 ---
- sound/soc/codecs/tlv320aic32x4-clk.c | 16 +++++++++++-----
- sound/soc/codecs/tlv320aic32x4.h     |  5 +++--
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ Documentation/ABI/testing/sysfs-bus-iio | 16 ++++++++++++++++
+ drivers/iio/industrialio-event.c        |  2 ++
+ include/linux/iio/types.h               |  2 ++
+ 3 files changed, 20 insertions(+)
 
-diff --git a/sound/soc/codecs/tlv320aic32x4-clk.c b/sound/soc/codecs/tlv320aic32x4-clk.c
-index c116e82f712d..5c0a76a4a106 100644
---- a/sound/soc/codecs/tlv320aic32x4-clk.c
-+++ b/sound/soc/codecs/tlv320aic32x4-clk.c
-@@ -321,7 +321,7 @@ static int clk_aic32x4_div_set_rate(struct clk_hw *hw, unsigned long rate,
- 	u8 divisor;
- 
- 	divisor = DIV_ROUND_UP(parent_rate, rate);
--	if (divisor > 128)
-+	if (divisor > AIC32X4_DIV_MAX)
- 		return -EINVAL;
- 
- 	return regmap_update_bits(div->regmap, div->reg,
-@@ -334,7 +334,7 @@ static int clk_aic32x4_div_determine_rate(struct clk_hw *hw,
- 	unsigned long divisor;
- 
- 	divisor = DIV_ROUND_UP(req->best_parent_rate, req->rate);
--	if (divisor > 128)
-+	if (divisor > AIC32X4_DIV_MAX)
- 		return -EINVAL;
- 
- 	req->rate = DIV_ROUND_UP(req->best_parent_rate, divisor);
-@@ -345,12 +345,18 @@ static unsigned long clk_aic32x4_div_recalc_rate(struct clk_hw *hw,
- 						unsigned long parent_rate)
- {
- 	struct clk_aic32x4 *div = to_clk_aic32x4(hw);
--
- 	unsigned int val;
-+	int err;
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+index 7140e8e7313f..a2854dc9a839 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio
++++ b/Documentation/ABI/testing/sysfs-bus-iio
+@@ -2163,3 +2163,19 @@ Contact:	linux-iio@vger.kernel.org
+ Description:
+ 		An example format is 16-bytes, 2-digits-per-byte, HEX-string
+ 		representing the sensor unique ID number.
 +
-+	err = regmap_read(div->regmap, div->reg, &val);
-+	if (err)
-+		return 0;
++What:		/sys/.../events/in_proximity_thresh_either_runningperiod
++KernelVersion:	6.6
++Contact:	linux-iio@vger.kernel.org
++Description:
++		A running period of time (in seconds) for which
++		in_proximity_thresh_either_runningcount amount of conditions
++		must occur before an event is generated. If direction is not
++		specified then this period applies to both directions.
++
++What:		/sys/.../events/in_proximity_thresh_either_runningcount
++KernelVersion:	6.6
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Number of conditions that must occur, during a running
++		period, before an event is generated.
+diff --git a/drivers/iio/industrialio-event.c b/drivers/iio/industrialio-event.c
+index f77ce49d4c36..19f7a91157ee 100644
+--- a/drivers/iio/industrialio-event.c
++++ b/drivers/iio/industrialio-event.c
+@@ -252,6 +252,8 @@ static const char * const iio_ev_info_text[] = {
+ 	[IIO_EV_INFO_TIMEOUT] = "timeout",
+ 	[IIO_EV_INFO_RESET_TIMEOUT] = "reset_timeout",
+ 	[IIO_EV_INFO_TAP2_MIN_DELAY] = "tap2_min_delay",
++	[IIO_EV_INFO_RUNNING_PERIOD] = "runningperiod",
++	[IIO_EV_INFO_RUNNING_COUNT] = "runningcount",
+ };
  
--	regmap_read(div->regmap, div->reg, &val);
-+	val &= AIC32X4_DIV_MASK;
-+	if (!val)
-+		val = AIC32X4_DIV_MAX;
+ static enum iio_event_direction iio_ev_attr_dir(struct iio_dev_attr *attr)
+diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
+index 82faa98c719a..117bde7d6ad7 100644
+--- a/include/linux/iio/types.h
++++ b/include/linux/iio/types.h
+@@ -19,6 +19,8 @@ enum iio_event_info {
+ 	IIO_EV_INFO_TIMEOUT,
+ 	IIO_EV_INFO_RESET_TIMEOUT,
+ 	IIO_EV_INFO_TAP2_MIN_DELAY,
++	IIO_EV_INFO_RUNNING_PERIOD,
++	IIO_EV_INFO_RUNNING_COUNT,
+ };
  
--	return DIV_ROUND_UP(parent_rate, val & AIC32X4_DIV_MASK);
-+	return DIV_ROUND_UP(parent_rate, val);
- }
- 
- static const struct clk_ops aic32x4_div_ops = {
-diff --git a/sound/soc/codecs/tlv320aic32x4.h b/sound/soc/codecs/tlv320aic32x4.h
-index 4de5bd9e8cc5..d6101ce73f80 100644
---- a/sound/soc/codecs/tlv320aic32x4.h
-+++ b/sound/soc/codecs/tlv320aic32x4.h
-@@ -223,8 +223,9 @@ int aic32x4_register_clocks(struct device *dev, const char *mclk_name);
- #define AIC32X4_REFPOWERUP_120MS	0x07
- 
- /* Common mask and enable for all of the dividers */
--#define AIC32X4_DIVEN           BIT(7)
--#define AIC32X4_DIV_MASK        GENMASK(6, 0)
-+#define AIC32X4_DIVEN			BIT(7)
-+#define AIC32X4_DIV_MASK		GENMASK(6, 0)
-+#define AIC32X4_DIV_MAX			128
- 
- /* Clock Limits */
- #define AIC32X4_MAX_DOSR_FREQ		6200000
+ #define IIO_VAL_INT 1
 -- 
-2.25.1
+2.30.2
 
