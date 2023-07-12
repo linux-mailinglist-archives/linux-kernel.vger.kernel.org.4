@@ -2,79 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620FD750B71
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33CC750B78
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjGLOzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S231630AbjGLO4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjGLOy7 (ORCPT
+        with ESMTP id S231460AbjGLOz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:54:59 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB4419A0;
-        Wed, 12 Jul 2023 07:54:58 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b701e41cd3so116783451fa.3;
-        Wed, 12 Jul 2023 07:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689173697; x=1691765697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wuD0fZnGZjlCDJR6lREdeMnKB9PqpH7PglGgOZrLCEg=;
-        b=Tzz6c9mBIqg//mIFCbu6eA9gfU+y/sPx3E8LwY3cK/HVRvvinzlWPze5+BuG4ku3rz
-         83M/czrKTdqeBy6anscv2AhyKHM+c/vcq4JglX8Yhgoc7YzclPVsJ6aeVDmE9z7Ph/ZP
-         b7nDU+0ABDLQCk9fEq7RJQogmeLvIbKARHanOIBfkK+10BMl4HWqGvwjTQsltiXfU/SK
-         WJcm7BC5ri8b1duyOVus0l0ZxxRpC0854AUzstDHarkS9mLCZjhU3Pna6LH9Dr53VYPd
-         uOu5JThRGporhr+Ob0zKlhjibVpKLrSwM1sA/iMFv1YzJF2px709q/i2ODjJomt+aMFZ
-         Q+tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689173697; x=1691765697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wuD0fZnGZjlCDJR6lREdeMnKB9PqpH7PglGgOZrLCEg=;
-        b=Jc7x8JaVcP62ci3wDdjgx14Kx2CwoZyqq6gn4bbtakyz5f9aOcCgEM83nAh3iHwxs0
-         wjpBK+Pu94dLbG1UnZ9sS4STcNPCxRvHkB5TjkiwO8ayDAFrkofJp/RRViBk+BAok7dr
-         565f5MqAC5eYWwHS36BYPbXOM2ZH5OqZhWY2nHTgSP9fSdQ0kvgajdJ91wXHLGB3/kXb
-         n9cQFC5IrX6zwszi3cZ7pJ/FqlBUvrs6QX053vXnfuJ92QucJf8TZNYx3YEtygVHckaU
-         r1VER9UhXevD7PCaTo/LO94CWr5RYrW/ZJaYn79mvwABlx0RFtZmi7O+OyUxdU8V8zko
-         18tQ==
-X-Gm-Message-State: ABy/qLZF6uWdAMkw1naVEJPcKy/LdsukVv14sMHu4j2Sg8HQU4KbKAQG
-        +fdbV2JHODt8Osr12MqxP3okcuNComdV+DiIPd8=
-X-Google-Smtp-Source: APBJJlH4O0lOH5eccwckjf8KnT543Xn+pXgLsz4AHnPVeJpRtpL2+8UyhleR2V/eRO7+gDWWZKlw1O6u0iNxdXS/pYQ=
-X-Received: by 2002:a05:651c:104b:b0:2b6:fe75:b8f3 with SMTP id
- x11-20020a05651c104b00b002b6fe75b8f3mr16619412ljm.29.1689173696507; Wed, 12
- Jul 2023 07:54:56 -0700 (PDT)
+        Wed, 12 Jul 2023 10:55:57 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2A7BB;
+        Wed, 12 Jul 2023 07:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=BINkZ1i4PKbO0+fsSVwUWsXVzisxjT4/2QKSssOySGM=; b=QFjAs1WzTxEUF8chDYKA9DlGDT
+        sJN8HV/wvVUFJ/zD7PJtGdfq1i92ZgHRlm5fg55/irDCuSja/uKzralkXH7VLBsgLEZmnQe4zgYlU
+        lN19WBy4XwBfRdY19J53pq29mtBpk2kvNWYzpny1Epr9p1/GdmI8IsU8isimR/DqV40A=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qJbFo-0019Hu-Gx; Wed, 12 Jul 2023 16:55:44 +0200
+Date:   Wed, 12 Jul 2023 16:55:44 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC RESEND v1 pinctrl-next 0/1] add blink and activity
+ functions to SGPIO
+Message-ID: <39b297b0-5266-4f4b-ade6-8ccb95e90411@lunn.ch>
+References: <20230712022250.2319557-1-colin.foster@in-advantage.com>
+ <64ae73ce.050a0220.fe1a6.4b8a@mx.google.com>
 MIME-Version: 1.0
-References: <20230712084746.833965-1-imagedong@tencent.com> <20230712084746.833965-4-imagedong@tencent.com>
-In-Reply-To: <20230712084746.833965-4-imagedong@tencent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 12 Jul 2023 07:54:45 -0700
-Message-ID: <CAADnVQ+YHqQP_p-9iF+pETvoh3VGqOkcSZreDKVZQ5BUZQBOcQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 3/3] selftests/bpf: add testcase for TRACING
- with 6+ arguments
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Yonghong Song <yhs@meta.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, David Ahern <dsahern@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, X86 ML <x86@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64ae73ce.050a0220.fe1a6.4b8a@mx.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,120 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 1:50=E2=80=AFAM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
-> with 7/11 arguments. As this feature is not supported by arm64 yet, we
-> disable these testcases for arm64 in DENYLIST.aarch64. We can combine
-> them with fentry_test.c/fexit_test.c when arm64 is supported too.
->
-> Correspondingly, add bpf_testmod_fentry_test7() and
-> bpf_testmod_fentry_test11() to bpf_testmod.c
->
-> Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
-> MODIFY_RETURN with 7 arguments.
->
-> Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
-> bpf_testmod.c to test the struct in the arguments.
->
-> And the testcases passed on x86_64:
->
-> ./test_progs -t fexit
-> Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
->
-> ./test_progs -t fentry
-> Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
->
-> ./test_progs -t modify_return
-> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> ./test_progs -t tracing_struct
-> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> ---
-> v9:
-> - change the way to test fmod_ret
-> v8:
-> - split the testcases, and add fentry_many_args/fexit_many_args to
->   DENYLIST.aarch64
-> v6:
-> - add testcases to tracing_struct.c instead of fentry_test.c and
->   fexit_test.c
-> v5:
-> - add testcases for MODIFY_RETURN
-> v4:
-> - use different type for args in bpf_testmod_fentry_test{7,12}
-> - add testcase for grabage values in ctx
-> v3:
-> - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
->   bpf_testmod_fentry_test{7,12} meanwhile
-> - get return value by bpf_get_func_ret() in
->   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
->   in this version
-> ---
->  net/bpf/test_run.c                            | 14 ++++-
->  tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
->  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
->  .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
->  .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
->  .../selftests/bpf/prog_tests/modify_return.c  | 10 ++--
->  .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
->  .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
->  .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
->  .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
->  .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
->  11 files changed, 340 insertions(+), 13 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.c
->  create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 63b11f7a5392..7d47f53f20c1 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -565,6 +565,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int *b=
-)
->         return a + *b;
->  }
->
-> +__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
-> +                                       void *e, char f, int g)
-> +{
-> +       *b +=3D 1;
-> +       return a + *b + c + d + (long)e + f + g;
-> +}
-> +
->  int noinline bpf_fentry_shadow_test(int a)
->  {
->         return a + 1;
-> @@ -600,6 +607,7 @@ __diag_pop();
->
->  BTF_SET8_START(bpf_test_modify_return_ids)
->  BTF_ID_FLAGS(func, bpf_modify_return_test)
-> +BTF_ID_FLAGS(func, bpf_modify_return_test2)
->  BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
->  BTF_SET8_END(bpf_test_modify_return_ids)
->
-> @@ -667,7 +675,11 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
->         case BPF_MODIFY_RETURN:
->                 ret =3D bpf_modify_return_test(1, &b);
->                 if (b !=3D 2)
-> -                       side_effect =3D 1;
-> +                       side_effect++;
-> +               b =3D 2;
-> +               ret +=3D bpf_modify_return_test2(1, &b, 3, 4, (void *)5, =
-6, 7);
-> +               if (b !=3D 2)
-> +                       side_effect++;
+On Wed, Jul 12, 2023 at 03:59:10AM +0200, Christian Marangi wrote:
+> On Tue, Jul 11, 2023 at 07:22:49PM -0700, Colin Foster wrote:
+> > Preface (new for resend):
+> > 
+> > This is a resend of a patch I'd sent a couple years back. At that time,
+> > I was told to wait for hardware-offloaded LEDS. It looks like that time
+> > has finally come, so I've changed this from PATCH down to an RFC to make
+> > sure this is the right approach for the framework.
+> > 
+> > Ocelot chips (VSC7511, VSC7512, VSC7513, VSC7514) have support for
+> > hardware-offloaded LEDs based on network activity. This is currenty
+> > managed by way of pinctrl-microchip-sgpio (and this current patch).
+> > 
+> > The purpose of this resend is two-fold. First, to come up with an idea
+> > of how this pinctrl-microchip-sgpio module can fit in with the new
+> > hardware-offloaded netdev triggers Christian Marangi recently added. Is
+> > this something that should be in the pinctrl module itself? Or should
+> > there be a drivers/net/ethernet/mscc/ocelot_leds.c module that I should
+> > add?
+> >
+> 
+> I'm a bit out of the loop on what magic OEM did to make LED work on
+> ocelot but I feel an ocelot_leds submodule is needed.
+> 
+> To correctly supports the hw many API needs to be defined and for switch
+> I would stick with how things are done with qca8k, codewise and DT wise
+> (with how LEDs are defined in DT)
+> 
+> Ideally the feature for MAC will be generilized and added to the DSA ops
+> struct, so having things in the DSA driver would make the migration
+> easier.
 
-Looks better, but now two tests are failing:
-Error: #85 get_func_args_test
-Error: #252 trampoline_count
+`ocelot` is a bit of an odd device, since it is both a DSA device for
+felix and seville and a pure switchdev device for ocelot.
 
-See BPF CI.
+You need some integration with the switch driver, because i expect
+only the switch driver has the knowledge of how LEDs are mapped to
+struct netdev and ports. And in order to offload blinking you need
+that mapping.
 
-I suspect you haven't rerun the whole test_progs after your changes.
-Please do so in the future.
+I have some WIP patches to add a generalized DSA interface for LEDs,
+and support for mv88e6xxx. I would also like to move qca8k over to
+that. So it could be that felix and seville would use that. Ocelot
+would need to do it slightly different, but i expect it is just a
+layer on top of some shared code, much like the rest of ocelot.
+
+Having pinmux in the middle is interesting. I've no idea how that will
+work, but i've not looked at it.
+
+      Andrew
