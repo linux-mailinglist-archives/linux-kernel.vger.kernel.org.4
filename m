@@ -2,219 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29E87505AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC0E7505BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbjGLLNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S233000AbjGLLOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbjGLLNG (ORCPT
+        with ESMTP id S232997AbjGLLOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:13:06 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15F610FC;
-        Wed, 12 Jul 2023 04:13:04 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R1FSq5H8yz1JCVD;
-        Wed, 12 Jul 2023 19:12:27 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 12 Jul
- 2023 19:13:02 +0800
-Subject: Re: [PATCH RFC net-next v4 5/9] libie: add Rx buffer management (via
- Page Pool)
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-CC:     Yunsheng Lin <yunshenglin0825@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        David Christensen <drc@linux.vnet.ibm.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-References: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
- <20230705155551.1317583-6-aleksander.lobakin@intel.com>
- <138b94a7-c186-bdd9-e073-2794760c9454@huawei.com>
- <09a9a9ef-cf77-3b60-2845-94595a42cf3e@intel.com>
- <71a8bab4-1a1d-cb1a-d75c-585a14c6fb2e@gmail.com>
- <b05d1a35-5bc5-b65d-b57d-5cc1b0f898cb@intel.com>
- <2ebd75df-51ff-4c62-2a68-d258dbf32b49@huawei.com>
- <89dc48ab-0800-b12f-7124-cecc709364d7@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <cf7dafbe-decc-623c-6322-d14dd8daee95@huawei.com>
-Date:   Wed, 12 Jul 2023 19:13:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Wed, 12 Jul 2023 07:14:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE96170E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:14:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58E796175C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:14:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A6BC433C8;
+        Wed, 12 Jul 2023 11:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689160488;
+        bh=2fRRg922MXnJBLpH2CG47X7Q6Q7bgdnHX1iBu/puZIQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=iraQp1mIxYKV3l5KzZovLBYKCaXNJsPPeB41XQO7ca+SiByTuhPBWfIQxd2GSHfg8
+         WDr1d1xz/djoxJcHG8ClvVB2OEXRLFZLYp4ghhx+WsbLzitcyr/jq8tod7jW0cOCJA
+         3wpUXnnhEXNmA86v3ZaXPpkarWy0sYEjGz9QTlsl9OyThbF1BPytLTR+pgm5ctWjFX
+         yNwfSlJeMr+nKgOdgEE8BYRJ8PEr1tPEYlyy7YlefDi21B6oZHgjHRZNyvXHELsXd5
+         vVB0Us8Psl6reupDYYciYzr+UPxxDQ7CYLRzEC5kNj+rIdiuUDkozr/EzMcancbNLw
+         gcB18iOk3Go4w==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Wed, 12 Jul 2023 12:14:43 +0100
+Subject: [PATCH] mfd: axp20x: Update to use maple tree register cache
 MIME-Version: 1.0
-In-Reply-To: <89dc48ab-0800-b12f-7124-cecc709364d7@intel.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20230712-mfd-axp20x-maple-v1-1-4df3749107a6@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACKLrmQC/x2N0QrCMAwAf2Xk2UDXogx/RXzI1tQFbC2JjMLYv
+ 9v5eBzH7WCswgb3YQflTUw+pcN4GWBZqbwYJXYG73xwNx8wp4jUqncNM9U3Y5omdtcUYgwj9Gw
+ mY5yVyrKeYSb7sp6iKidp/9fjeRw/hI/7VXsAAAA=
+To:     Lee Jones <lee@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3093; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=2fRRg922MXnJBLpH2CG47X7Q6Q7bgdnHX1iBu/puZIQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkrosmB2pXlV/R2vUT8GIXc9P2UIJYX03Sy26ix
+ wOcVKozqIGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZK6LJgAKCRAk1otyXVSH
+ 0OWfB/sGhYXYQDgikalQDoJmlOuGU746ytp3c0SB/weeQ4xyimY+yAv+PK4LulrU/sIFGCDlBju
+ K6XFtWfNXlb4LDydDhZvVvt4GljBqWIBPoY7lligrn9kfBN6/N8BeTQxaTKOY39JMwghS50Mh6W
+ chgrn+pe/lVd8ykQcbTZQbC1TZLpVKc2n3i/piRL91msEdN5Z1xHSbaarrgYxEMPFGHJGecTmHE
+ ScW8JZCZjeRqrvt9XsKOYvjEFmJnDqBwR+ThnStHiy+lk1cvIAAZS4pZseKYuFMBKZlsqguAfAr
+ 8khUbFrn++GhZQmvQmfqHm1AXiOY5/a2l0W3GQSV8zXa+kFb
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/12 0:37, Alexander Lobakin wrote:
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Tue, 11 Jul 2023 19:39:28 +0800
-> 
->> On 2023/7/10 21:25, Alexander Lobakin wrote:
->>> From: Yunsheng Lin <yunshenglin0825@gmail.com>
->>> Date: Sun, 9 Jul 2023 13:16:33 +0800
->>>
->>>> On 2023/7/7 0:28, Alexander Lobakin wrote:
->>>>> From: Yunsheng Lin <linyunsheng@huawei.com>
->>>>> Date: Thu, 6 Jul 2023 20:47:28 +0800
->>>>>
->>>>>> On 2023/7/5 23:55, Alexander Lobakin wrote:
->>>>>>
->>>>>>> +/**
->>>>>>> + * libie_rx_page_pool_create - create a PP with the default libie settings
->>>>>>> + * @napi: &napi_struct covering this PP (no usage outside its poll loops)
->>>>>>> + * @size: size of the PP, usually simply Rx queue len
->>>>>>> + *
->>>>>>> + * Returns &page_pool on success, casted -errno on failure.
->>>>>>> + */
->>>>>>> +struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
->>>>>>> +					    u32 size)
->>>>>>> +{
->>>>>>> +	struct page_pool_params pp = {
->>>>>>> +		.flags		= PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
->>>>>>> +		.order		= LIBIE_RX_PAGE_ORDER,
->>>>>>> +		.pool_size	= size,
->>>>>>> +		.nid		= NUMA_NO_NODE,
->>>>>>> +		.dev		= napi->dev->dev.parent,
->>>>>>> +		.napi		= napi,
->>>>>>> +		.dma_dir	= DMA_FROM_DEVICE,
->>>>>>> +		.offset		= LIBIE_SKB_HEADROOM,
->>>>>>
->>>>>> I think it worth mentioning that the '.offset' is not really accurate
->>>>>> when the page is split, as we do not really know what is the offset of
->>>>>> the frag of a page except for the first frag.
->>>>>
->>>>> Yeah, this is read as "offset from the start of the page or frag to the
->>>>> actual frame start, i.e. its Ethernet header" or "this is just
->>>>> xdp->data - xdp->data_hard_start".
->>>>
->>>> So the problem seems to be if most of drivers have a similar reading as
->>>> libie does here, as .offset seems to have a clear semantics which is used
->>>> to skip dma sync operation for buffer range that is not touched by the
->>>> dma operation. Even if it happens to have the same value of "offset from
->>>> the start of the page or frag to the actual frame start", I am not sure
->>>> it is future-proofing to reuse it.
->>>
->>> Not sure I'm following :s
->>
->> It would be better to avoid accessing the internal data of the page pool
->> directly as much as possible, as that may be changed to different meaning
->> or removed if the implememtation is changed.
->>
->> If it is common enough that most drivers are using it the same way, adding
->> a helper for that would be great.
-> 
-> How comes page_pool_params is internal if it's defined purely by the
-> driver and then exists read-only :D I even got warned in the adjacent
-> thread that the Page Pool core code shouldn't change it anyhow.
+The maple tree register cache is based on a much more modern data structure
+than the rbtree cache and makes optimisation choices which are probably
+more appropriate for modern systems than those made by the rbtree cache. In
+v6.5 it has also acquired the ability to generate multi-register writes in
+sync operations, bringing performance up to parity with the rbtree cache
+there.
 
-Personally I am not one hundred percent convinced that page_pool_params
-will not be changed considering the discussion about improving/replacing
-the page pool to support P2P case.
+Update the axp20x driver to use the more modern data structure, really it
+should have been fine even without the most recent round of updates.
 
-> 
->>
->>>
->>>>
->>>> When page frag is added, I didn't really give much thought about that as
->>>> we use it in a cache coherent system.
->>>> It seems we might need to extend or update that semantics if we really want
->>>> to skip dma sync operation for all the buffer ranges that are not touched
->>>> by the dma operation for page split case.
->>>> Or Skipping dma sync operation for all untouched ranges might not be worth
->>>> the effort, because it might need a per frag dma sync operation, which is
->>>> more costly than a batched per page dma sync operation. If it is true, page
->>>> pool already support that currently as my understanding, because the dma
->>>> sync operation is only done when the last frag is released/freed.
->>>>
->>>>>
->>>>>>
->>>>>>> +	};
->>>>>>> +	size_t truesize;
->>>>>>> +
->>>>>>> +	pp.max_len = libie_rx_sync_len(napi->dev, pp.offset);
->>>>
->>>> As mentioned above, if we depend on the last released/freed frag to do the
->>>> dma sync, the pp.max_len might need to cover all the frag.
->>>
->>>                                                ^^^^^^^^^^^^
->>>
->>> You mean the whole page or...?
->>
->> If we don't care about the accurate dma syncing, "cover all the frag" means
->> the whole page here, as page pool doesn't have enough info to do accurate
->> dma sync for now.
->>
->>> I think it's not the driver's duty to track all this. We always set
->>> .offset to `data - data_hard_start` and .max_len to the maximum
->>> HW-writeable length for one frame. We don't know whether PP will give us
->>> a whole page or just a piece. DMA sync for device is performed in the PP
->>> core code as well. Driver just creates a PP and don't care about the
->>> internals.
->>
->> There problem is that when page_pool_put_page() is called with a split
->> page, the page pool does not know which frag is freeing too.
->>
->> setting 'maximum HW-writeable length for one frame' only sync the first
->> frag of a page as below:
-> 
-> Maybe Page Pool should synchronize DMA even when !last_frag then?
-> Setting .max_len to anything bigger than the maximum frame size you're
-> planning to receive is counter-intuitive.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
 
-This is simplest way to support dma sync for page frag case, the question
-is if the batching of the dma sync for all frag of a page can even out the
-additional cost of dma sync for dma untouched range of a page.
 
-> All three xdp_buff, xdp_frame and skb always have all info needed to
-> determine which piece of the page we're recycling, it should be possible
-> to do with no complications. Hypothetical forcing drivers to do DMA
-> syncs on their own when they use frags is counter-intuitive as well,
-> Page Pool should be able to handle this itself.
-> 
-> Alternatively, Page Pool may do as follows:
-> 
-> 1. !last_frag -- do nothing, same as today.
-> 2. last_frag -- sync, but not [offset, offset + max_len), but
->    [offset, PAGE_SIZE).
+Signed-off-by: Mark
+---
+ drivers/mfd/axp20x.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-When a frag is free, we don't know if it is the last frag or not for
-now yet.
+diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+index c03bc5cda080..87603eeaa277 100644
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@ -342,7 +342,7 @@ static const struct regmap_config axp152_regmap_config = {
+ 	.wr_table	= &axp152_writeable_table,
+ 	.volatile_table	= &axp152_volatile_table,
+ 	.max_register	= AXP152_PWM1_DUTY_CYCLE,
+-	.cache_type	= REGCACHE_RBTREE,
++	.cache_type	= REGCACHE_MAPLE,
+ };
+ 
+ static const struct regmap_config axp192_regmap_config = {
+@@ -360,7 +360,7 @@ static const struct regmap_config axp20x_regmap_config = {
+ 	.wr_table	= &axp20x_writeable_table,
+ 	.volatile_table	= &axp20x_volatile_table,
+ 	.max_register	= AXP20X_OCV(AXP20X_OCV_MAX),
+-	.cache_type	= REGCACHE_RBTREE,
++	.cache_type	= REGCACHE_MAPLE,
+ };
+ 
+ static const struct regmap_config axp22x_regmap_config = {
+@@ -369,7 +369,7 @@ static const struct regmap_config axp22x_regmap_config = {
+ 	.wr_table	= &axp22x_writeable_table,
+ 	.volatile_table	= &axp22x_volatile_table,
+ 	.max_register	= AXP22X_BATLOW_THRES1,
+-	.cache_type	= REGCACHE_RBTREE,
++	.cache_type	= REGCACHE_MAPLE,
+ };
+ 
+ static const struct regmap_config axp288_regmap_config = {
+@@ -378,7 +378,7 @@ static const struct regmap_config axp288_regmap_config = {
+ 	.wr_table	= &axp288_writeable_table,
+ 	.volatile_table	= &axp288_volatile_table,
+ 	.max_register	= AXP288_FG_TUNE5,
+-	.cache_type	= REGCACHE_RBTREE,
++	.cache_type	= REGCACHE_MAPLE,
+ };
+ 
+ static const struct regmap_config axp313a_regmap_config = {
+@@ -396,7 +396,7 @@ static const struct regmap_config axp806_regmap_config = {
+ 	.wr_table	= &axp806_writeable_table,
+ 	.volatile_table	= &axp806_volatile_table,
+ 	.max_register	= AXP806_REG_ADDR_EXT,
+-	.cache_type	= REGCACHE_RBTREE,
++	.cache_type	= REGCACHE_MAPLE,
+ };
+ 
+ static const struct regmap_config axp15060_regmap_config = {
+@@ -405,7 +405,7 @@ static const struct regmap_config axp15060_regmap_config = {
+ 	.wr_table	= &axp15060_writeable_table,
+ 	.volatile_table	= &axp15060_volatile_table,
+ 	.max_register	= AXP15060_IRQ2_STATE,
+-	.cache_type	= REGCACHE_RBTREE,
++	.cache_type	= REGCACHE_MAPLE,
+ };
+ 
+ #define INIT_REGMAP_IRQ(_variant, _irq, _off, _mask)			\
 
-> 
-> This would also cover non-HW-writeable pieces like 2th-nth frame's
-> headroom and each frame's skb_shared_info, but it's the only alternative
-> to syncing each frag separately.
-> Yes, it's almost the same as to set .max_len to %PAGE_SIZE, but as I
-> said, it feels weird to set .max_len to 4k when you allocate 2k frags.
-> You don't know anyway how much of a page will be used.
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230623-mfd-axp20x-maple-f88e05f3dd31
 
-In that that case, we may need to make it more generic for the case when
-a page is spilt into more than two frags, especially for system with 64K
-page size.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
