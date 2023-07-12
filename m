@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34608750187
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9829C75018C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbjGLIay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S231497AbjGLIbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbjGLIa1 (ORCPT
+        with ESMTP id S232458AbjGLIbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:30:27 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2747826A6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:25:04 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-6-etuMEl9WNcGfDxoRsyEDgg-1; Wed, 12 Jul 2023 09:25:00 +0100
-X-MC-Unique: etuMEl9WNcGfDxoRsyEDgg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 12 Jul
- 2023 09:24:59 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 12 Jul 2023 09:24:59 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Sergei Shtylyov' <sergei.shtylyov@gmail.com>,
-        'John Paul Adrian Glaubitz' <glaubitz@physik.fu-berlin.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Sergey Shtylyov" <s.shtylyov@omp.ru>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-Thread-Topic: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-Thread-Index: AQHZsfHdmuMwibd1MUyQs4RUtwxCnq+1y++Q///y7QCAABHTUA==
-Date:   Wed, 12 Jul 2023 08:24:59 +0000
-Message-ID: <e51e00f3d0194fd688f6baa59fe7fa3d@AcuMS.aculab.com>
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
- <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
- <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
- <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
- <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
- <a0a0d4d06eecc9c3194afe2cee0b61ebed5e0392.camel@physik.fu-berlin.de>
- <c5ad5c59fcfa4888bd03fb8a855c989c@AcuMS.aculab.com>
- <c9483d7f-7f5f-dd29-2bba-5659a1dae7e0@gmail.com>
-In-Reply-To: <c9483d7f-7f5f-dd29-2bba-5659a1dae7e0@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 12 Jul 2023 04:31:09 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E25C2703
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:26:17 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R19n220V5zBS5qm
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 16:26:14 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689150374; x=1691742375; bh=oltV5Rd5AD0T6xUiH4VHdUcjoRX
+        Ryw0tUkvVw8Y4vQY=; b=l0IWnV4ACmHpyX7cI2eWSd4hZuu4q+WvuoJl5Vf0ExK
+        fImaInY2EcoSrQ8NhfTm+6xQHPYEEFNNuw6ztno++J0WaPkCphQrAsRUt2a6xKkM
+        X75ttgsMd5e83BjOcpTsGpeM36bBB1Lu1yXti+h1sBGq1WNFz/sy2B35e0D4FHqO
+        OPa6Iu3DN20plWLY76/lAnJ/mkThpoMv3yclxlDu+SZDENSOBD9CWqeYBVNqshVY
+        0gMjCb64NB9W1G79xz+SP2I+UVG6RkWrVZMEp8cSdOMdB7kM/T9o9ZS6FDiBB5gZ
+        ZpEPbiS+zarATEeE14eblkJnrFB9mUAYwmFn+EszG6A==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id PrTNSIjlc3kE for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 16:26:14 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R19n16GhtzBR5lP;
+        Wed, 12 Jul 2023 16:26:13 +0800 (CST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Wed, 12 Jul 2023 16:26:13 +0800
+From:   shijie001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Fix warnings in pmu.h
+In-Reply-To: <tencent_C12CFA09493ED8DFE9D60EEBEE92C7E82605@qq.com>
+References: <tencent_C12CFA09493ED8DFE9D60EEBEE92C7E82605@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <9ffeb53096b6caf0323e4d7bd452ef76@208suo.com>
+X-Sender: shijie001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Li4uDQo+ICAgIElPVywgdHJ5IGFyZ3Vpbmcgd2l0aCBMaW51cy4gOi0pDQoNCkkgYWx3YXlzIGxv
-c2UgOi0pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
-ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
-dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+The following checkpatch warning is removed:
+WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
 
+Signed-off-by: Jie Shi <shijie001@208suo.com>
+---
+  arch/x86/kvm/pmu.h | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 7d9ba301c090..dbc131b378f2 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -249,7 +249,7 @@ static inline bool pmc_is_globally_enabled(struct 
+kvm_pmc *pmc)
+
+  void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu);
+  void kvm_pmu_handle_event(struct kvm_vcpu *vcpu);
+-int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned pmc, u64 *data);
++int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned int pmc, u64 *data);
+  bool kvm_pmu_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int 
+idx);
+  bool kvm_pmu_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr);
+  int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info);
