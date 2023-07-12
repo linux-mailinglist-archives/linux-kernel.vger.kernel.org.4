@@ -2,278 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A488750544
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D918C750550
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjGLK4X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 06:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
+        id S231784AbjGLK5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjGLK4R (ORCPT
+        with ESMTP id S229660AbjGLK5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:56:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA24E77
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:56:15 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qJXVx-0005cG-C5; Wed, 12 Jul 2023 12:56:09 +0200
-Message-ID: <a5a56eb095d124290b21cfb48fa1a9d002ba0c18.camel@pengutronix.de>
-Subject: Re: [PATCH 3/6] drm/amdgpu: Rework coredump to use memory
- dynamically
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        'Marek =?UTF-8?Q?Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
-        Timur =?ISO-8859-1?Q?Krist=F3f?= <timur.kristof@gmail.com>,
-        michel.daenzer@mailbox.org,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, alexander.deucher@amd.com
-Date:   Wed, 12 Jul 2023 12:56:08 +0200
-In-Reply-To: <3764d627-d632-5754-0bcc-a150c157d9f9@amd.com>
-References: <20230711213501.526237-1-andrealmeid@igalia.com>
-         <20230711213501.526237-4-andrealmeid@igalia.com>
-         <e488da74-af52-62eb-d601-0e8a13cf0e87@amd.com>
-         <0e7f2b0cc29ac77d4a55d0de6a66c477d867fbf7.camel@pengutronix.de>
-         <3764d627-d632-5754-0bcc-a150c157d9f9@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 12 Jul 2023 06:57:51 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2097.outbound.protection.outlook.com [40.107.255.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0790B11D;
+        Wed, 12 Jul 2023 03:57:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jeCA4FjBJFMXnWcSbL8LpAx+FUT21YRqWbHurcEKJwnMKyqTX7HXf11alG68J4b8w0irKhLSfadlDg+JjemCXPq5SHhJ0sJ12ycWr27c6BeNnKFbyABSyUXM167Yf1dswGykCbhhMdO5r/mpT2d7M7MkH1A3Ht1Dse/SihJyIHqCW4pqA/0V2qRTiUrDFoQHlS3VjHyqBc6dKhhL3oVx3tpQw1RhcL3Gb7thopzbpcnIf/E9adGqt6qjBGtPt/2TrJo5YHfvfge/kR0EO6eK74vDsJh+pYtTcaZtzHqjC5IzSpoQG6DZBadseC0iJCMF5xuwLEoQI1IR3ioMh/P7vA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LmHd49cI52kf6d3noQXMef8HaQXtlrzj4/Y4tikKOBA=;
+ b=DEl8zvqGE+g8CcYEAtVdgWLHy8vJgIxa2THAAbDcLJDB4r3/PaFNP2PDAOa4eaKyo7FKJqKwbxxvq6NaEtIh08usjpfbfNABvqP1SnYf6kHH8ADVB8wbFKoxnqkztriR1hoDzC+ip4H/o7TeHmQK5YV2mUCIGPGVldA+JWqmTeoylFNfdw+hqrvGerlpy8l14hV7LsDRfFmPLnWtHNeTO0g4/rrB3iaFKyhHIGdhOm9sRfk0zy6GZo4tO+9Vp32DYhFR8Et5Biwh34415d6hLJnEoco04UAvp8sRmb06Og0YrhnveEBOmKYyr2EQsbRbQ0VnOsUlpahTuAYn/tZchg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LmHd49cI52kf6d3noQXMef8HaQXtlrzj4/Y4tikKOBA=;
+ b=Mx31rD1j1pS1mYvZR/ERgLrpmGjqE22bG+DloyLDZ03qBFmtmVPUR89htFl5guG1HQ8FllTtgRQRtoffunCKnTnvS2IQ0p2xCG7WtsyBtRMxmH0gSg9N0O3N15f8oJqYCkObcyUBCFn2mRLKlPu4jEk97r0WFfWv+atXk4VJabZk+NCcrCdWsJtuqg4AeTfbznBO2C4YaeIqHjE8fY+OTEd+I8oBVMQhXYBxkbLGdwyrM1pnT/HSyrW5vJW35FMxTckq0XJH63hqm52UjWoYhkouUCVgh4g6AnmxixjZp6vpsjDvWmUSf0wjjG12rxyLs5AHdeQt2i5wobk7BdS2Wg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ TYSPR06MB6766.apcprd06.prod.outlook.com (2603:1096:400:473::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.20; Wed, 12 Jul 2023 10:57:46 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 10:57:46 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        linux-wireless@vger.kernel.org (open list:MARVELL MWIFIEX WIRELESS
+        DRIVER), linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] net: wireless: mwifies: fix parameter check in mwifiex_dev_debugfs_init()
+Date:   Wed, 12 Jul 2023 18:57:20 +0800
+Message-Id: <20230712105720.11310-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0038.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::7)
+ To SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|TYSPR06MB6766:EE_
+X-MS-Office365-Filtering-Correlation-Id: f55a48c7-7ad6-4d09-525c-08db82c6d2d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wLpPMoVUIhbfHsdKtGIf+SS9KONyk/dKRK+0sAx/OSH9GDm6XPlQAK2oU1pSl4B2EjU2q2sqRPSZ3JjCdPfXoFxJxX8RiQqFBe3S2n2VvEGwpf257EEhau9cSB7wTfbMKe7TVC713iVFvpdRN9lAmtzaAsVdIjhIMVf1O8EhfTGQ1i4HSl8Awio89tf4jthoi73+Of8DcIAilbIzMXz6gSz5UDrJlYrg1JllbG9s7Q4q8jCN5mSA/NkFJMkiL0cO6Wj1NcjwSBY8wS/m7PGI2bklTYpPJcSrDZwiJcBOroQQ0hLYOvUyYo3scgbGbMvs4RZcjMpQHw3ZAy+vQz7oDr57Wfz4bzlxRkor0vjrAY5tHSoTKMI3+I6seyE6bKHIpc5Ho4T4hnQX1IFLK3pfPFm27fVSTmiAPlhIK5PODxsj2QDQxuWlwC0sEkRPftsI4Mv7JNMp5XV18s4aa7NBEnr1TbicJXZ6vjvc+vqelChXokczTuI2NWhNo5Y/WQmzHc9R89sIj18ctEPr2Cnqz0YwbN84MpYjeyLP5jhFtSIm705uZTc6dgdyj4sz2c5aZCL+fSSg+IpG3qppzcwTTHDTlIwt22KWU6JNOK66zJVHKYviSISQ5YQggQY9Q4og
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199021)(36756003)(186003)(4744005)(26005)(5660300002)(2616005)(2906002)(1076003)(6506007)(83380400001)(107886003)(6666004)(478600001)(110136005)(41300700001)(316002)(6512007)(8676002)(8936002)(66476007)(66556008)(66946007)(4326008)(6486002)(52116002)(86362001)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sKLIkDqPFqNZBo5k8LwBpf/VGB8rAKGmxaeCBlY7GjNKPnTR4/F9GA4hUGSY?=
+ =?us-ascii?Q?7A9z7HnbwwVyj0xx8W0mDDC+/WgAZfijyf/Hbn38v9mfSDVj+ts8LuTqEl66?=
+ =?us-ascii?Q?xgnQQMWMwvTft6AwP7bjIfr4Qa8GoFkS5wLNLXVTX3xKBmuUnHAX6YyYWAsZ?=
+ =?us-ascii?Q?qLW8hZ6vwMJUhebUOMPQiGxtQ/1h156m8YW7+ziCXk76QtT5zs0IYe7S43vg?=
+ =?us-ascii?Q?c3QZauACwRc9lv6wjEaN0hDHcOzhlvcfi1sfIbAxQh81ytTNuLXNKyYVaaOl?=
+ =?us-ascii?Q?K/odvuSEb+NHqyLFuvOalTt8KkST+AECGZlrAdFzHbigBtVWKYuwHYNDsB9I?=
+ =?us-ascii?Q?yQ9dhcHnN+lHV/zwn3Qx8cbmFZFHB8xH2gKXMjXyxNFaKJo39+DkxycRJEfv?=
+ =?us-ascii?Q?0Qu/7xCHRaokofkqiBZZALAoVl0MDkMtAt/7av1trnTjdhPxuPQeKdH6obQL?=
+ =?us-ascii?Q?nCapcRkNxF6O1dIeSPmwFzwbafc5yV/Omrsl8n9a7KAXK7fwMaO1e6fKpg4f?=
+ =?us-ascii?Q?RXMqFx3yCQ3G4EOEvIefVzTQ8YONMaLtJ7ihvaSxJsbwc2DtpH8VCq9tYjIc?=
+ =?us-ascii?Q?urEjT/Qh/8HjyvmsvFOuqWBZe8nrdrmIkAm/L4KyW0pFH2AupzXb8QZkhduf?=
+ =?us-ascii?Q?m9LYE0EdJXovpPx1pzJEhPb/mRi6NkglNnbKs9k+ker1Z5xyJ5goiWkc+kuL?=
+ =?us-ascii?Q?l4MJVtVvITGgzKHhX0YEW6qTcHBHmLRDMVVz0t/PvKFPiPsFrojevDmUAct8?=
+ =?us-ascii?Q?SQ9FmmS9znCLOvCVAuj6junJr8UW+iksazf5SqaJPJO6FgHl4oBYMmGgddi+?=
+ =?us-ascii?Q?TsOSJQEWvfVVjsw8bPDpiJl8BOLAoGorHtJd2s/aIHjtVp0h2h0AAtfDjHeh?=
+ =?us-ascii?Q?UiDtJ8t57CR9fMUdzX53C9jXNKl73bOOBo1UFpHJteeDRCRfflHXQ93B+NGX?=
+ =?us-ascii?Q?gAxJq0XmQrjLcVr7iQQnhhq7u0jRkoWQDNdm+/jcv63soMnqx7itmZEGbbSe?=
+ =?us-ascii?Q?Nn/mFAXn8v20GWi/DmqfnWGUGOLsStIQt3zNyAlZfdGjI7q1LUmIjUaoFZYP?=
+ =?us-ascii?Q?c33AgutQyhyBT+wAUU6ytR6uhxVdhEcvdkuCNbGCeo2a8PxM/YcThu9FuI8d?=
+ =?us-ascii?Q?WW5+7mEcT61hXdOoV18H/ApWvAQEosOLs9lzsLrce7OuZBqf780CMcb0JWKD?=
+ =?us-ascii?Q?i/ri+BvxxbCc+eM30fciKNJBoCWeSgnvLb6BeAWnuOu8zVjy8G1AbREI754Q?=
+ =?us-ascii?Q?7T9RumC9QksAGiN0bszTxKqugzqEs8dyveoEOKm+fL88f1UfthoaVBWES3Wk?=
+ =?us-ascii?Q?gZpwLSlWlbNRqnU6BK78GOOjicu2rQsD8v4rRmyfWbgp3TBKcVSxANwb+U9G?=
+ =?us-ascii?Q?wIKQ8nSX2QTxz2RKU3lUDwtb4LkEp/NiCEd76tejObKjVKhTx1A8Hy6Kmtt3?=
+ =?us-ascii?Q?MV5GY5iBW5MBYEedwHrqGh4N7S/ph25AZOqSvMh/tDFjEEOk08cNJ0uNDR/U?=
+ =?us-ascii?Q?2vX3TRa+kLld+xoYmgnydUdfHKrDljtc2D5myrsvcIuGEkE7kVOf7jsUR00/?=
+ =?us-ascii?Q?qDPGFyj2aPdd7U5tZZktcOKB1l6SHpLGx/NfgGoM?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f55a48c7-7ad6-4d09-525c-08db82c6d2d5
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 10:57:45.6844
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mYMOMFdtP+cF26XIwxH6JKZ941njspNO/R+A2pSC46zy617AUbRsuWerLMsvYNKMtWzhbsN2wrXlurgzf0SWQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6766
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, accidentally hit sent on the previous mail.
+Make IS_ERR() judge the debugfs_create_dir() function return.
 
-Am Mittwoch, dem 12.07.2023 um 12:39 +0200 schrieb Christian König:
-> Am 12.07.23 um 10:59 schrieb Lucas Stach:
-> > Am Mittwoch, dem 12.07.2023 um 10:37 +0200 schrieb Christian König:
-> > > Am 11.07.23 um 23:34 schrieb André Almeida:
-> > > > Instead of storing coredump information inside amdgpu_device struct,
-> > > > move if to a proper separated struct and allocate it dynamically. This
-> > > > will make it easier to further expand the logged information.
-> > > Verry big NAK to this. The problem is that memory allocation isn't
-> > > allowed during a GPU reset.
-> > > 
-> > > What you could do is to allocate the memory with GFP_ATOMIC or similar,
-> > > but for a large structure that might not be possible.
-> > > 
-> > I'm still not fully clear on what the rules are here. In etnaviv we do
-> > devcoredump allocation in the GPU reset path with __GFP_NOWARN |
-> > __GFP_NORETRY, which means the allocation will kick memory reclaim if
-> > necessary, but will just give up if no memory could be made available
-> > easily. This satisfies the forward progress guarantee in the absence of
-> > successful memory allocation, which is the most important property in
-> > this path, I think.
-> > 
-> > However, I'm not sure if the reclaim could lead to locking issues or
-> > something like that with the more complex use-cases with MMU notifiers
-> > and stuff like that. Christian, do you have any experience or
-> > information that would be good to share in this regard?
-> 
-> Yeah, very good question.
-> 
-> __GFP_NORETRY isn't sufficient as far as I know. Reclaim must be 
-> completely suppressed to be able to allocate in a GPU reset handler.
-> 
-> Daniel added lockdep annotation to some of the dma-fence signaling paths 
-> and this yielded quite a bunch of potential deadlocks.
-> 
-> It's not even that reclaim itself waits for dma_fences (that can happen, 
-> but is quite unlikely), but rather that reclaim needs locks and under 
-> those locks we then wait for dma_fences.
-> 
-> We should probably add a define somewhere which documents that 
-> (GFP_ATOMIC | __NO_WARN) should be used in the GPU reset handlers when 
-> allocating memory for coredumps.
-> 
-Hm, if the problem is the direct reclaim path where we might recurse on
-a lock through those indirect dependencies then we should document this
-somewhere. kswapd reclaim should be fine as far as I can see, as we'll
-guarantee progress without waiting for the background reclaim.
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ drivers/net/wireless/marvell/mwifiex/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't think it's appropriate to dip into the atomic allocation
-reserves for a best-effort thing like writing the devcoredump, so I
-think this should be GFP_NOWAIT, which will also avoid the direct
-reclaim path.
-
-Regards,
-Lucas
-
-> Regards,
-> Christian.
-> 
-> > 
-> > Regards,
-> > Lucas
-> > 
-> > > Regards,
-> > > Christian.
-> > > 
-> > > > Signed-off-by: André Almeida <andrealmeid@igalia.com>
-> > > > ---
-> > > >    drivers/gpu/drm/amd/amdgpu/amdgpu.h        | 14 +++--
-> > > >    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 65 ++++++++++++++--------
-> > > >    2 files changed, 51 insertions(+), 28 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > > index dbe062a087c5..e1cc83a89d46 100644
-> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > > @@ -1068,11 +1068,6 @@ struct amdgpu_device {
-> > > >    	uint32_t                        *reset_dump_reg_list;
-> > > >    	uint32_t			*reset_dump_reg_value;
-> > > >    	int                             num_regs;
-> > > > -#ifdef CONFIG_DEV_COREDUMP
-> > > > -	struct amdgpu_task_info         reset_task_info;
-> > > > -	bool                            reset_vram_lost;
-> > > > -	struct timespec64               reset_time;
-> > > > -#endif
-> > > >    
-> > > >    	bool                            scpm_enabled;
-> > > >    	uint32_t                        scpm_status;
-> > > > @@ -1085,6 +1080,15 @@ struct amdgpu_device {
-> > > >    	uint32_t			aid_mask;
-> > > >    };
-> > > >    
-> > > > +#ifdef CONFIG_DEV_COREDUMP
-> > > > +struct amdgpu_coredump_info {
-> > > > +	struct amdgpu_device		*adev;
-> > > > +	struct amdgpu_task_info         reset_task_info;
-> > > > +	struct timespec64               reset_time;
-> > > > +	bool                            reset_vram_lost;
-> > > > +};
-> > > > +#endif
-> > > > +
-> > > >    static inline struct amdgpu_device *drm_to_adev(struct drm_device *ddev)
-> > > >    {
-> > > >    	return container_of(ddev, struct amdgpu_device, ddev);
-> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > > index e25f085ee886..23b9784e9787 100644
-> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > > @@ -4963,12 +4963,17 @@ static int amdgpu_reset_reg_dumps(struct amdgpu_device *adev)
-> > > >    	return 0;
-> > > >    }
-> > > >    
-> > > > -#ifdef CONFIG_DEV_COREDUMP
-> > > > +#ifndef CONFIG_DEV_COREDUMP
-> > > > +static void amdgpu_coredump(struct amdgpu_device *adev, bool vram_lost,
-> > > > +			    struct amdgpu_reset_context *reset_context)
-> > > > +{
-> > > > +}
-> > > > +#else
-> > > >    static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
-> > > >    		size_t count, void *data, size_t datalen)
-> > > >    {
-> > > >    	struct drm_printer p;
-> > > > -	struct amdgpu_device *adev = data;
-> > > > +	struct amdgpu_coredump_info *coredump = data;
-> > > >    	struct drm_print_iterator iter;
-> > > >    	int i;
-> > > >    
-> > > > @@ -4982,21 +4987,21 @@ static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
-> > > >    	drm_printf(&p, "**** AMDGPU Device Coredump ****\n");
-> > > >    	drm_printf(&p, "kernel: " UTS_RELEASE "\n");
-> > > >    	drm_printf(&p, "module: " KBUILD_MODNAME "\n");
-> > > > -	drm_printf(&p, "time: %lld.%09ld\n", adev->reset_time.tv_sec, adev->reset_time.tv_nsec);
-> > > > -	if (adev->reset_task_info.pid)
-> > > > +	drm_printf(&p, "time: %lld.%09ld\n", coredump->reset_time.tv_sec, coredump->reset_time.tv_nsec);
-> > > > +	if (coredump->reset_task_info.pid)
-> > > >    		drm_printf(&p, "process_name: %s PID: %d\n",
-> > > > -			   adev->reset_task_info.process_name,
-> > > > -			   adev->reset_task_info.pid);
-> > > > +			   coredump->reset_task_info.process_name,
-> > > > +			   coredump->reset_task_info.pid);
-> > > >    
-> > > > -	if (adev->reset_vram_lost)
-> > > > +	if (coredump->reset_vram_lost)
-> > > >    		drm_printf(&p, "VRAM is lost due to GPU reset!\n");
-> > > > -	if (adev->num_regs) {
-> > > > +	if (coredump->adev->num_regs) {
-> > > >    		drm_printf(&p, "AMDGPU register dumps:\nOffset:     Value:\n");
-> > > >    
-> > > > -		for (i = 0; i < adev->num_regs; i++)
-> > > > +		for (i = 0; i < coredump->adev->num_regs; i++)
-> > > >    			drm_printf(&p, "0x%08x: 0x%08x\n",
-> > > > -				   adev->reset_dump_reg_list[i],
-> > > > -				   adev->reset_dump_reg_value[i]);
-> > > > +				   coredump->adev->reset_dump_reg_list[i],
-> > > > +				   coredump->adev->reset_dump_reg_value[i]);
-> > > >    	}
-> > > >    
-> > > >    	return count - iter.remain;
-> > > > @@ -5004,14 +5009,34 @@ static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
-> > > >    
-> > > >    static void amdgpu_devcoredump_free(void *data)
-> > > >    {
-> > > > +	kfree(data);
-> > > >    }
-> > > >    
-> > > > -static void amdgpu_reset_capture_coredumpm(struct amdgpu_device *adev)
-> > > > +static void amdgpu_coredump(struct amdgpu_device *adev, bool vram_lost,
-> > > > +			    struct amdgpu_reset_context *reset_context)
-> > > >    {
-> > > > +	struct amdgpu_coredump_info *coredump;
-> > > >    	struct drm_device *dev = adev_to_drm(adev);
-> > > >    
-> > > > -	ktime_get_ts64(&adev->reset_time);
-> > > > -	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
-> > > > +	coredump = kmalloc(sizeof(*coredump), GFP_KERNEL);
-> > > > +
-> > > > +	if (!coredump) {
-> > > > +		DRM_ERROR("%s: failed to allocate memory for coredump\n", __func__);
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	memset(coredump, 0, sizeof(*coredump));
-> > > > +
-> > > > +	coredump->reset_vram_lost = vram_lost;
-> > > > +
-> > > > +	if (reset_context->job && reset_context->job->vm)
-> > > > +		coredump->reset_task_info = reset_context->job->vm->task_info;
-> > > > +
-> > > > +	coredump->adev = adev;
-> > > > +
-> > > > +	ktime_get_ts64(&coredump->reset_time);
-> > > > +
-> > > > +	dev_coredumpm(dev->dev, THIS_MODULE, coredump, 0, GFP_KERNEL,
-> > > >    		      amdgpu_devcoredump_read, amdgpu_devcoredump_free);
-> > > >    }
-> > > >    #endif
-> > > > @@ -5119,15 +5144,9 @@ int amdgpu_do_asic_reset(struct list_head *device_list_handle,
-> > > >    					goto out;
-> > > >    
-> > > >    				vram_lost = amdgpu_device_check_vram_lost(tmp_adev);
-> > > > -#ifdef CONFIG_DEV_COREDUMP
-> > > > -				tmp_adev->reset_vram_lost = vram_lost;
-> > > > -				memset(&tmp_adev->reset_task_info, 0,
-> > > > -						sizeof(tmp_adev->reset_task_info));
-> > > > -				if (reset_context->job && reset_context->job->vm)
-> > > > -					tmp_adev->reset_task_info =
-> > > > -						reset_context->job->vm->task_info;
-> > > > -				amdgpu_reset_capture_coredumpm(tmp_adev);
-> > > > -#endif
-> > > > +
-> > > > +				amdgpu_coredump(tmp_adev, vram_lost, reset_context);
-> > > > +
-> > > >    				if (vram_lost) {
-> > > >    					DRM_INFO("VRAM is lost due to GPU reset!\n");
-> > > >    					amdgpu_inc_vram_lost(tmp_adev);
-> 
+diff --git a/drivers/net/wireless/marvell/mwifiex/debugfs.c b/drivers/net/wireless/marvell/mwifiex/debugfs.c
+index 52b18f4a7..5af49c810 100644
+--- a/drivers/net/wireless/marvell/mwifiex/debugfs.c
++++ b/drivers/net/wireless/marvell/mwifiex/debugfs.c
+@@ -959,7 +959,7 @@ mwifiex_dev_debugfs_init(struct mwifiex_private *priv)
+ 	priv->dfs_dev_dir = debugfs_create_dir(priv->netdev->name,
+ 					       mwifiex_dfs_dir);
+ 
+-	if (!priv->dfs_dev_dir)
++	if (!IS_ERR(priv->dfs_dev_dir))
+ 		return;
+ 
+ 	MWIFIEX_DFS_ADD_FILE(info);
+-- 
+2.39.0
 
