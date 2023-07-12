@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F017509FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C08750A00
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjGLNuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
+        id S232138AbjGLNvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbjGLNur (ORCPT
+        with ESMTP id S232049AbjGLNvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:50:47 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366BD10EA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:50:41 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fba8e2aa52so75233865e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689169839; x=1691761839;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FXHjXkHkEcT/VKHvP9dVmE2MnxLlBstOmDhD8pe0p0s=;
-        b=yIHNIqB8dMyExE+wWlnBK45PTX7y0IlHmgmhJnStPz1lo13JfO/6NqBhwL+Y7txn7O
-         3BpLZmPXi/JTuC5KSGTnYx6M7gu6UflT/dWElMFjvLOMNEUJzDmkYV6enmGFYKvPIo9s
-         WySsxqtRHBDW9ZTruNE5HgEUi/frjLFC8aOG/lBfpQLVXM/QtHbBLV38vWKg7l/rBJe6
-         IBeG3/vhaodu89L6JZHa5KJxMV8aLFRcKJekAe3nXh3SZb4jmA4eCpkDCeJJNYEk8C5b
-         aL6a4tf6QWsBUWF3sPykivmKq4//ovVEedkoEGt4gXlWPh4Ee2iRa+8WOAfStb6bhgJ+
-         bn3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689169839; x=1691761839;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FXHjXkHkEcT/VKHvP9dVmE2MnxLlBstOmDhD8pe0p0s=;
-        b=eeeyj/KosA4WjbYcQmw+k4mSvjSuO4MYV1/8BszuNWvfA8TgvfEsMH2Gk9+7MASIaE
-         al3GJHxkLB1Qp/F9X9taTkLxfA3eHOYLu0uNvle0Qpoc72UL/LRlPvSSNniTHcxgTlCY
-         uimpWAGZ2X2GKRYMi11StpfGJNlb43WlW514jNaNvqovDzLqQY8zReO3w1q5mAxvcO2E
-         zUNmJ6E4dP0gi1f3xoyhIhiEeS0GlIN9fw6OX3hmh2maJ0G7fzs2ByGJF1PZlNvEeVFZ
-         c4ZN2bvBywL5i7dHAqcMiWcY0rSJqKv2716UidFCClsgqyF2wXqLiASoLiY8Z4wZu13W
-         D+9w==
-X-Gm-Message-State: ABy/qLa3khbeFTYrvtX2sCoLsjLQ95x1hejAtPBwVoTNzUiUFXLE9R9z
-        0ziGYdwM7k3ohD/n+OZax8hIvA==
-X-Google-Smtp-Source: APBJJlHmbyD59xTuaLC4sV1zWfo4r2j857GkZpqlDnKRLGDlYNCSRpenzmqG/cIAd/KXGqcKlOMoPA==
-X-Received: by 2002:a05:600c:2251:b0:3f9:c82e:9d87 with SMTP id a17-20020a05600c225100b003f9c82e9d87mr18329639wmm.13.1689169839127;
-        Wed, 12 Jul 2023 06:50:39 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n12-20020adff08c000000b0030ada01ca78sm5181562wro.10.2023.07.12.06.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 06:50:37 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 16:50:34 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Wang Ming <machel@vivo.com>
-Cc:     Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>, ntb@lists.linux.dev,
-        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH v2] ntb:Fix an NULL vs IS_ERR() bug for
- debugfs_create_dir() in tool_setup_dbgfs()
-Message-ID: <138ab604-27de-4ac6-88fb-0886ee8f6b6d@kadam.mountain>
-References: <20230712124035.7981-1-machel@vivo.com>
+        Wed, 12 Jul 2023 09:51:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C9010C7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:51:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61366617E0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 13:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C28CDC433C8;
+        Wed, 12 Jul 2023 13:50:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689169859;
+        bh=kdW9rcGTBy8xaWPezaxcrnjRQsfta6w55AE9h1GG9iU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mJdxJIwRsspor8VKxpXCBekWKR97OYW/aJNe9kkx5vunCim0+cNohGFswrPnf/92G
+         /ZLBQMn8U82GEJnRF+6tKJB65QWmzDv7zorwxoncVWsIRCLMJUSg723iI3FY6XTbyJ
+         KE5AYMJwDR9AecMDj7TML+YUkC89IqC4M6DDNCbx82l3oiconcbI867Bk2vFRXe6Le
+         /VeVkqhWXpjS9dL+SFTopM3QXL1q1q/1+mvkojEfURDgeTdU7KpiyOQatXGZI0L5vx
+         r03AliAVW8lDoDte+wihV70AFCvorJdRL7Tiz65n906W/we7YDVYPtQZS1r0DmMk/d
+         uJZlvr8yQ7e/w==
+Message-ID: <837f1d5f-64fa-2496-6379-09e5e95252f4@kernel.org>
+Date:   Wed, 12 Jul 2023 16:50:55 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230712124035.7981-1-machel@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net] net: ethernet: ti: cpsw_ale: Fix
+ cpsw_ale_get_field()/cpsw_ale_set_field()
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com
+References: <20230712110657.1282499-1-s-vadapalli@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230712110657.1282499-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +60,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 08:39:59PM +0800, Wang Ming wrote:
-> The debugfs_create_dir() function returns error pointers.
-> It never returns NULL. Most incorrect error checks were fixed,
-> but the one in tool_setup_dbgfs() was forgotten.
+
+
+On 12/07/2023 14:06, Siddharth Vadapalli wrote:
+> From: Tanmay Patil <t-patil@ti.com>
 > 
-> Fix the remaining error check.
+> CPSW ALE has 75 bit ALE entries which are stored within three 32 bit words.
+> The cpsw_ale_get_field() and cpsw_ale_set_field() functions assume that the
+> field will be strictly contained within one word. However, this is not
+> guaranteed to be the case and it is possible for ALE field entries to span
+> across up to two words at the most.
 > 
-> Signed-off-by: Wang Ming <machel@vivo.com>
+> Fix the methods to handle getting/setting fields spanning up to two words.
+> 
+> Fixes: db82173f23c5 ("netdev: driver: ethernet: add cpsw address lookup engine support")
+> Signed-off-by: Tanmay Patil <t-patil@ti.com>
+> [s-vadapalli@ti.com: rephrased commit message and added Fixes tag]
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 > ---
->  drivers/ntb/test/ntb_tool.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/net/ethernet/ti/cpsw_ale.c | 24 +++++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/ntb/test/ntb_tool.c b/drivers/ntb/test/ntb_tool.c
-> index eeeb4b1c97d2..4fa69ea4331d 100644
-> --- a/drivers/ntb/test/ntb_tool.c
-> +++ b/drivers/ntb/test/ntb_tool.c
-> @@ -1495,7 +1495,7 @@ static void tool_setup_dbgfs(struct tool_ctx *tc)
+> diff --git a/drivers/net/ethernet/ti/cpsw_ale.c b/drivers/net/ethernet/ti/cpsw_ale.c
+> index 0c5e783e574c..64bf22cd860c 100644
+> --- a/drivers/net/ethernet/ti/cpsw_ale.c
+> +++ b/drivers/net/ethernet/ti/cpsw_ale.c
+> @@ -106,23 +106,37 @@ struct cpsw_ale_dev_id {
 >  
->  	tc->dbgfs_dir = debugfs_create_dir(dev_name(&tc->ntb->dev),
->  					   tool_dbgfs_topdir);
-> -	if (!tc->dbgfs_dir)
-> +	if (IS_ERR(tc->dbgfs_dir))
+>  static inline int cpsw_ale_get_field(u32 *ale_entry, u32 start, u32 bits)
+>  {
+> -	int idx;
+> +	int idx, idx2;
+> +	u32 hi_val = 0;
+>  
+>  	idx    = start / 32;
+> +	idx2 = (start + bits - 1) / 32;
+> +	/* Check if bits to be fetched exceed a word */
+> +	if (idx != idx2) {
+> +		idx2 = 2 - idx2; /* flip */
+> +		hi_val = ale_entry[idx2] << ((idx2 * 32) - start);
+> +	}
+>  	start -= idx * 32;
+>  	idx    = 2 - idx; /* flip */
+> -	return (ale_entry[idx] >> start) & BITMASK(bits);
+> +	return (hi_val + (ale_entry[idx] >> start)) & BITMASK(bits);
 
-No, this will break the driver if debugfs is disabled in the .config.
+Should this be bit-wise OR instead of ADD?
 
-(I haven't checked, it's possible that this code is #ifdeffed out when
-CONFIG_DEBUGFS is disabled so possibly this change is harmless.  But
-either way, this change is wrong).
+>  }
+>  
+>  static inline void cpsw_ale_set_field(u32 *ale_entry, u32 start, u32 bits,
+>  				      u32 value)
+>  {
+> -	int idx;
+> +	int idx, idx2;
+>  
+>  	value &= BITMASK(bits);
+> -	idx    = start / 32;
+> +	idx = start / 32;
+> +	idx2 = (start + bits - 1) / 32;
+> +	/* Check if bits to be set exceed a word */
+> +	if (idx != idx2) {
+> +		idx2 = 2 - idx2; /* flip */
+> +		ale_entry[idx2] &= ~(BITMASK(bits + start - (idx2 * 32)));
+> +		ale_entry[idx2] |= (value >> ((idx2 * 32) - start));
+> +	}
+>  	start -= idx * 32;
+> -	idx    = 2 - idx; /* flip */
+> +	idx = 2 - idx; /* flip */
+>  	ale_entry[idx] &= ~(BITMASK(bits) << start);
+>  	ale_entry[idx] |=  (value << start);
+>  }
 
-Normally this would be the correct change, but debugfs is weird.  It's
-not supposed to be checked for errors in the normal case.  If the
-driver pokes around in the debugfs internals then you might need to
-check but you should avoid doing that and it doesn't apply here.
-
-As I was saying, this change would normally be the correct thing, and it
-used to work.  But we changed it so that now it's impossible to check
-for errors.  Making it impossible to check for errors helps people feel
-better about deleting error checking.
-
-The correct change is to delete this dead code, but it's a headache
-to convince people to it.  It would be better to do it as a mass delete
-so everyone can see the thread.  Trying to convince people one by one
-does not work.
-
-regards,
-dan carpenter
-
+-- 
+cheers,
+-roger
