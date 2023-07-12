@@ -2,103 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0709750B7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998A2750B82
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjGLO5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S231986AbjGLO5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjGLO5L (ORCPT
+        with ESMTP id S231144AbjGLO5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:57:11 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A01FBB;
-        Wed, 12 Jul 2023 07:57:05 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so78652305e9.3;
-        Wed, 12 Jul 2023 07:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689173824; x=1691765824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mJrp5y7emiUiskxEtT6O6KgXmyIwXxE+Vf82XYcN9+M=;
-        b=JTg3PenSA7B5nNFlCA58eU1/tZgLP+HbTzZnZfzLeesLFXId098mracvvveoKZsy/6
-         qnz4yYIVrns/sirnaeejvVQAHzzIKOuWJpRa4BtNBSJgab/DuqwdNubePsJLjkYN4gFn
-         oAQujP9oyLm9G+KMLm0FWFulJO7gFkuIO6tif1T++UChWQvgO3IvXfgtK8yQyYHbUAqC
-         /lwjlDIOzD2mZdPCRonqAeIqgy8kNgR6lPNLMyaicx7DlOb4fP3HYtP7+SWiZC1/zoIT
-         efl+zNV1Elzbacv8spNoNmDmgoHWbSJKJmghh6f9eG9USLacVijw3Nx7X7P2MTYJJYCe
-         z+Zw==
+        Wed, 12 Jul 2023 10:57:33 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC62EBB;
+        Wed, 12 Jul 2023 07:57:32 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3457a3ada84so34763345ab.1;
+        Wed, 12 Jul 2023 07:57:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689173824; x=1691765824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mJrp5y7emiUiskxEtT6O6KgXmyIwXxE+Vf82XYcN9+M=;
-        b=hk5QxxZx66aCiVUgVv9mxIvvwiiflIXhBmpEKEx5ZrM+9VqKZqg5hMIdkeq4T11xwH
-         rcZxYVwCWaLSYIldObdNFdOgfpvKPenUa0fhH6T7G84VLZkVpJVJqpNAtBcVbxFKtz4f
-         XCF4hrsArKT+aC37xiPIdfSNX1/HLcSxEQdr7ljbc6SEw7KdNG4vEkrhmF881pF4tWo9
-         3PuKgnt3kycRtzHWi1LKZyYwVQPpjzh0KrWEkPm31a7nc+4xpDmMv4DJiKK477hHKpns
-         GnUznrdN5XCZ1AsYMEmaIvwOhfNGogCid1ZG8Ed2qw50OqgAZ7nG8zC58UQUvsIn+7Ze
-         kS9Q==
-X-Gm-Message-State: ABy/qLayjPO7ya7irvsofBl9QyGgwo2WXcxw8stCjYaVw5BjrWArUxI8
-        jbuDZ+jg/0MaDSfiwsIorMg=
-X-Google-Smtp-Source: APBJJlEtqBWVxQSl/4H18KOnasubDV3RZX1lpfd0V0GgtfogkuEuhDaqwDNb5GOA4PlOBrdZ84kGiQ==
-X-Received: by 2002:a05:600c:220e:b0:3fb:9ea6:7a73 with SMTP id z14-20020a05600c220e00b003fb9ea67a73mr17101879wml.23.1689173823609;
-        Wed, 12 Jul 2023 07:57:03 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05600c294200b003fbe791a0e8sm5379371wmd.0.2023.07.12.07.57.02
+        d=1e100.net; s=20221208; t=1689173852; x=1691765852;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eQpNG1b7wMLR5twQRHrEFSWGNQ5hbqj3LiEbepk0pAs=;
+        b=Qm9sgB1EyervI+L5tlZZwpLvgCeJPTHC8iOxx/ZKlOnxChlO1JkDCWsuoAY7/bGCQV
+         3sEkgfggHhuMQ4bQj6DFtuoCB3/nJzQOCll63jglYG4Nf1nYNpfsLB6wxM+xAHxkwe8a
+         ldHn7qltksafUnzeHwEMM28IIChTZizKm5tju7YKshzyzyQLj50YiJouZOP2YySXFedd
+         9olufL5b//pmbcuX8yGQCIF5ZCT7t8rmXRHFcStPOaPlvWcvP6pwLlzXmnYtJkq8Ysnj
+         Tj3BpFQ3j9MfmNreAyWTO2xHncrFgt/AEV2R4xTICjb12vkcWG59AzjM3B2EeFwU9I6y
+         xjZg==
+X-Gm-Message-State: ABy/qLYgkK+xldjgZidN5f0TU1osBW7mZNiZXAs4ujg35Z0XtF7v+M6m
+        kNwmB7fx8LuGNf0o39XeYA==
+X-Google-Smtp-Source: APBJJlHhBlEatXy+TeA0p640WcROEFN0Ctcfb+9Lz7BCpURusUfHQ+/RgjXT/eepAKQk9oWG5c9s5A==
+X-Received: by 2002:a92:d201:0:b0:346:b5d:c0ee with SMTP id y1-20020a92d201000000b003460b5dc0eemr16683818ily.0.1689173851928;
+        Wed, 12 Jul 2023 07:57:31 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i10-20020a02b68a000000b0042b3dcb1106sm1289071jam.47.2023.07.12.07.57.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 07:57:02 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] video: fbdev: kyro: make some const read-only arrays static
-Date:   Wed, 12 Jul 2023 15:57:02 +0100
-Message-Id: <20230712145702.460690-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 12 Jul 2023 07:57:31 -0700 (PDT)
+Received: (nullmailer pid 183580 invoked by uid 1000);
+        Wed, 12 Jul 2023 14:57:29 -0000
+Date:   Wed, 12 Jul 2023 08:57:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH] dt-bindings: iio: adi,ad74115: remove ref from -nanoamp
+Message-ID: <168917384908.183505.328888758911691646.robh@kernel.org>
+References: <20230712080512.94964-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230712080512.94964-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the const read-only arrays on the stack but instead
-make them static const. Also makes the object code a little smaller.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/video/fbdev/kyro/STG4000InitDevice.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Wed, 12 Jul 2023 10:05:12 +0200, Krzysztof Kozlowski wrote:
+> dtschema v2023.06 comes with support for properties with -nanoamp
+> suffix, thus bindings should not have a ref for it:
+> 
+>   adi,ad74115.yaml: properties:adi,ext1-burnout-current-nanoamp: '$ref' should not be valid under {'const': '$ref'}
+> 
+> Cc: Cosmin Tanislav <demonsingur@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
 
-diff --git a/drivers/video/fbdev/kyro/STG4000InitDevice.c b/drivers/video/fbdev/kyro/STG4000InitDevice.c
-index edfa0a04854d..bf1ee3addbd0 100644
---- a/drivers/video/fbdev/kyro/STG4000InitDevice.c
-+++ b/drivers/video/fbdev/kyro/STG4000InitDevice.c
-@@ -83,11 +83,11 @@ volatile u32 i,count=0; \
- static u32 InitSDRAMRegisters(volatile STG4000REG __iomem *pSTGReg,
- 			      u32 dwSubSysID, u32 dwRevID)
- {
--	u32 adwSDRAMArgCfg0[] = { 0xa0, 0x80, 0xa0, 0xa0, 0xa0 };
--	u32 adwSDRAMCfg1[] = { 0x8732, 0x8732, 0xa732, 0xa732, 0x8732 };
--	u32 adwSDRAMCfg2[] = { 0x87d2, 0x87d2, 0xa7d2, 0x87d2, 0xa7d2 };
--	u32 adwSDRAMRsh[] = { 36, 39, 40 };
--	u32 adwChipSpeed[] = { 110, 120, 125 };
-+	static const u32 adwSDRAMArgCfg0[] = { 0xa0, 0x80, 0xa0, 0xa0, 0xa0 };
-+	static const u32 adwSDRAMCfg1[] = { 0x8732, 0x8732, 0xa732, 0xa732, 0x8732 };
-+	static const u32 adwSDRAMCfg2[] = { 0x87d2, 0x87d2, 0xa7d2, 0x87d2, 0xa7d2 };
-+	static const u32 adwSDRAMRsh[] = { 36, 39, 40 };
-+	static const u32 adwChipSpeed[] = { 110, 120, 125 };
- 	u32 dwMemTypeIdx;
- 	u32 dwChipSpeedIdx;
- 
--- 
-2.39.2
+Acked-by: Rob Herring <robh@kernel.org>
 
