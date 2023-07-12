@@ -2,274 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5642F7509AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAC97509AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjGLNe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S231658AbjGLNfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjGLNey (ORCPT
+        with ESMTP id S230360AbjGLNfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:34:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5934C199D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689168843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q2nZ5rRt9244MezOOcT292ogqJXieJ4Es/ws7Hk9x3Q=;
-        b=VBLcMKsbo5HhY5mqWDHWRVCppmMZF5VSHhVE0IZPbiVgz2KmD8QQRNEsIfyaLeVdJ8FGpA
-        5iXiOdeiWWo0bkVxHNNeiQPaWshlQPtZdRznG/d60Az9Z4aHnnQ6RG7hXbCU3QKR3QDroS
-        olPMUkuNLZiUuOumrw4PF9xBPqFQv+E=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-kyVCJTC0O6GznBhmYemy5w-1; Wed, 12 Jul 2023 09:34:00 -0400
-X-MC-Unique: kyVCJTC0O6GznBhmYemy5w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B6F43C13514;
-        Wed, 12 Jul 2023 13:33:59 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-165.bos.redhat.com [10.18.17.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28E5AF66D0;
-        Wed, 12 Jul 2023 13:33:59 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Phil Auld <pauld@redhat.com>
-Subject: [PATCH v6 2/2] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
-Date:   Wed, 12 Jul 2023 09:33:57 -0400
-Message-Id: <20230712133357.381137-3-pauld@redhat.com>
-In-Reply-To: <20230712133357.381137-1-pauld@redhat.com>
-References: <20230712133357.381137-1-pauld@redhat.com>
-MIME-Version: 1.0
-Content-type: text/plain
+        Wed, 12 Jul 2023 09:35:36 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D1D1BF5;
+        Wed, 12 Jul 2023 06:35:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=asjlWLXSYPWEoV5E8qO6+wDxQPb6SWpk13yzbb3aarXgg8ewHZC7u/MCJP5Wfiq9F6cfZHp/ZjGZ+j5PEMguuj3gdP4AM+FRhfDESHt/wLrCoi+FV78vcvHZVVmyUimCW6vb653jFR1M8GXCbKIMr6CxHlUGHuSKR5X4iLbrojuUhm60mpKIMmVmghPmBZnKiAOOCJnB58SU+EvLtHDwLnJY53R7CtrHe9YY8AfdNS3xCpxnkxbs05+XeqMftwdEPmUPna74l6QPFwTNYUBB03RX8fzEp0A+J1JnQcp6/dart1LU4fUk9Qn7Mtpxc6sPap5m5XcCJZ2MFhj7dfkqkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r/7f15Miumv6lsb1knN02cXFbY1NtpyZ3gG9Oh6qYjs=;
+ b=mYWppkxWfvxwvJSYzsWUSboVPEkNwuKCJNg6BnnkXw1ffHerLWbIAfILCRPj0TTL5rzz1UhvDLvPmXWKaBFC6udwDgivKqHTB5Nhd5FuniRclEbdTMZWxTi/2D3jkLhMvPv/mgs5QHEvcYD+t36uuJ0vttRgRaeGBLWrsFqYL2tv4e+yrr5+c8//gB3uPOfeJyKXtHA6MaqNBG9r/8qTzHwsCHOr0/lNyzjX3cZ2Fp3WYMnp/WVE9IxE9wvefFm9oEQp7BktCZWoJH6lM9DgcZ4eLcR44j+M3ux7AojJgnGMV08B4eajHp3h6aSncQk0OIe4R71slYrmXim+HrPN9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r/7f15Miumv6lsb1knN02cXFbY1NtpyZ3gG9Oh6qYjs=;
+ b=KVKYm34ydUIx36IB5lDutrI0KLF07gOI8P2FRjEpqZFQmQqxt3mFIiS0mvOqZLKqQKYfRvCSEe/+YYb2PDDytsuxgvzTpvyAqRsFpTXYbHKtiSg58eICirLza4WRGQI5IMccoQhDNXNnbtaSbz4hZwfXY+5SL5p+pqLpff3eNZk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by PH0PR12MB8176.namprd12.prod.outlook.com (2603:10b6:510:290::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Wed, 12 Jul
+ 2023 13:35:24 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::669f:5dca:d38a:9921]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::669f:5dca:d38a:9921%4]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
+ 13:35:23 +0000
+Message-ID: <4f6e62e0-b4c2-9fca-6964-28cfea902de0@amd.com>
+Date:   Wed, 12 Jul 2023 15:35:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        David Ahern <dsahern@kernel.org>,
+        Samiullah Khawaja <skhawaja@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>, logang@deltatee.com,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230711050445.GA19323@lst.de> <ZK1FbjG+VP/zxfO1@ziepe.ca>
+ <20230711090047.37d7fe06@kernel.org>
+ <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
+ <20230711093224.1bf30ed5@kernel.org>
+ <CAHS8izNHkLF0OowU=p=mSNZss700HKAzv1Oxqu2bvvfX_HxttA@mail.gmail.com>
+ <20230711133915.03482fdc@kernel.org>
+ <2263ae79-690e-8a4d-fca2-31aacc5c9bc6@kernel.org>
+ <CAHS8izP=k8CqUZk7bGUx4ctm4m2kRC2MyEJv+N4+b0cHVkTQmA@mail.gmail.com>
+ <20f6cbda-e361-9a81-de51-b395ec13841a@amd.com> <ZK6ktnwIjXIobFIM@ziepe.ca>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <ZK6ktnwIjXIobFIM@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0186.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9f::20) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH0PR12MB8176:EE_
+X-MS-Office365-Filtering-Correlation-Id: c717c573-c3bc-4b5b-6c92-08db82dcd7ed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gCu1P4YhB5vkIS9hHGwaChzMaPDXw2dws2zI1jh+OQ6rKY0TLjZd4N0+h1Wt0zqYTcCCKpO74owWyP9GBOGtFkijlkVR0NaY8zkU76C5xIluxG/xWVAui5wePyFDrGj9uY/OXlFmTOBmqU/4zEXi1xqBbzGBzTE9KdSRfVRwL4p7xoA3SWEbvDTWBHhrzq3hRazl/zyI2Hk5HaiaTJAdfD5oDsntnQfL+sLU1oBWINQZb0TL3ia+3iBCr4ItM6v7t3ZU5g5j+k9L354L2bPXHD9OGfZyoC8SEdf2OLTUoprlq5VLIMsEl1NheiDq+IFSHyOr20pSD22J3NkBDQXcCozZSF4sf7XH/MvJwjXXbHj5JmZZGKhyuO1hYVOY5LcqdrgQAkiGvOZmZfPjONao5tSsTLKL0T3WTQn9yybChaf7RQ8ab2gjd7P0r+VFw1f9ueufuIEl0pIaWPbfmlhHCUeA/YL4DMGSO5yBwciqJKCA6N1pU0gZpbBYMCeM2mrdt8eLJwtQ2o/+T9FKgoGq/MFdG6syThH4CIlUD4rlqbNxUwEssAV6yrqV2ij85aptrVwWx0i0p6Q101Z2S+9nZI1F9lcK2cw5c5KsvdGApfSasFl/dx8xzo5RUgs2zSSjKVbLfMKeQT75djIiUQCCgw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(451199021)(5660300002)(7416002)(7406005)(8676002)(66946007)(66476007)(66556008)(6916009)(316002)(4326008)(2906002)(31686004)(8936002)(6512007)(6486002)(54906003)(6506007)(186003)(41300700001)(2616005)(6666004)(38100700002)(478600001)(36756003)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3ZGcUNrYUhGMlRLT3FFaTNJVW9GZmVRY2lzQ1pQZnVORGQzSlFRVTRxVmEw?=
+ =?utf-8?B?ZngvcnZ1dkRFek51UUYwdXQrbFVzUVNNVnNUZWM4blg5b3QwZnJsVTd0Qnc0?=
+ =?utf-8?B?Mkw1Mk9peXZMaUdRbEJUbmlWS3lRV3ErRWM5aVFFbDJIaC9KTDRXNXJPdEZx?=
+ =?utf-8?B?T1RGWURGaGJ6dW9LVXRpN01nRFhvQkxQa2pRWU9IYnJjelRBNEVvNUZZbWsw?=
+ =?utf-8?B?dWk1elBCb21kblp2aVZ3akR6Y3FNd2k3L0tVV0JSZytKWFFSMmRXbCtMeTQ2?=
+ =?utf-8?B?bjdPU0dCZis3TzJFQzhUM2FrNHVQaE03NEt5bkZnOHU3OThFUzNKeFJ5Ukp3?=
+ =?utf-8?B?Y0hINm1rNmFkeXFMa1dVb041cXY1QkhrS3RLaENVNGZNZlZ2Mm1SOVR5UGVh?=
+ =?utf-8?B?c25aQndjeDFHbEhITmFTZ1UrekRLMlBLTjQ4RzV3UEwzSUsrZ0M4UGFvaS92?=
+ =?utf-8?B?bnEramE5bGRUeHlZTTl5UXh5K2xSM1orY3FNdktycEsxRlYvK1hVN29BdFZY?=
+ =?utf-8?B?Q0xQS3ZjKzAweUxzMEZHZXZJcmtVdGVmTHVpRkVIeXcwcUZ4d1I2S05tSVBR?=
+ =?utf-8?B?RWRNR0s1S2dncEN2cndvL05BS3BQR3ljemNLSmoyYkZ3dDg0THQvZUM1V1c4?=
+ =?utf-8?B?YU9SL2k3cXFXUnhJQlZ3UnNSK1FMWmJuTWVGcXAram5jMm1TMnJlK3I1dUo3?=
+ =?utf-8?B?SWlqd1AyaWdOcUZBbzlkc051VFBGeWxmTm9PTlR6amZGdmlyNzBQbVZYVG16?=
+ =?utf-8?B?a01USW9YSGlUTS8vWTFNY3R6ZXJENGVJZER5Ry9DbUZaelFYYndrVDBKNGhI?=
+ =?utf-8?B?L2lQUUI3MGdlb1orOXdMemIyS1pUdUZLSXByRUxkS2Y5V3VRUVBFeWNaS3JC?=
+ =?utf-8?B?TGlTNUdnWm11bURiUC9CSXBCWC9GWnhMaEdOZG5QYWllZEdwMENBWEZobkhJ?=
+ =?utf-8?B?b1V3MVpCWHd2dUp4Y25DTHljRkFnR0swQVo5K3IwYmRVNGtEZExXcHlkeUd2?=
+ =?utf-8?B?YWdEYXFQZldCMEJZM0ZKSGlDN2p1TzZVNko0UjUzVGZRUDFFS3FjbkJvRGxw?=
+ =?utf-8?B?WnNrSU50bWFBOUFBSGxmRUJHYnk5WlRWQ2d4eUpLeEsrTjk5VzdoN1hNMmx2?=
+ =?utf-8?B?dCtjblJqcTMybUtRTlg0dVcxcFdIdGxBaFRhekluUThxZHpXOC82S3o4b09B?=
+ =?utf-8?B?VHlZSGpCRmYvcTdpMWFqQ0hCMTlObzRlbEFaaDhPMFk0SHJLcXhKRVJLNG9X?=
+ =?utf-8?B?SDUwY0JZUGFXMW9aZWh2QzJFS2UyU2d3bUlRZ3kvK1QzUHZPcEVSNDlzbW4z?=
+ =?utf-8?B?bUxoYy9sbmtyVnRJcUgwNXdJT2Vtak1zb0NWQ3FGUlVFYlRMcDJlVlNFR2JC?=
+ =?utf-8?B?ejVhSDQ5aS96cnBpQnFpVW1NN3R2Tm51WW9Va3BDVzc1T3dPNHdoRHVHTnBa?=
+ =?utf-8?B?RWFlcHAvcTVGTTE4S2M3SEI4a01yREpkYjhqdzN1cmhwT1UyQ1NIWHNnS0Jw?=
+ =?utf-8?B?bTAzTG15T2FPbG1JMytHcXBXRGtGeXd1a0xpRTF6K0VvMndkNWdaQUlaN1pn?=
+ =?utf-8?B?MTE2dmN4bGRSd3FhOTFPdHhpa1dxR05ac3BKclNzVGt4cDRDTHl0WFl3UEMw?=
+ =?utf-8?B?d2JLZDFuazRwSll0N2c0QU45OXU1TW5iL3YvVmpTWGcwKzVyN1lHSWtWREsz?=
+ =?utf-8?B?eUp2U0Y2enZaSTg5RElMRWJFUnpKdGNnMytCUGVsb0VudjkveUE1enVEa09T?=
+ =?utf-8?B?SEtud1BWNGhzR3F0NXJWVG1UM3U1QlY4ODFiOXV4YXNaVDcrTjhtZ2NaemxJ?=
+ =?utf-8?B?OVAxeVI5alBTZmdKSjNLdmZsQTZxV05QakRYMTdNMHFxQVJMV2FpbTRJU2oy?=
+ =?utf-8?B?NVlmRzVwOEFTV213emZRdGM0R1JxVFZERHFTYTJ5VUtYcmxtSjhtb1Rqb1hq?=
+ =?utf-8?B?WW4rakNnYUxHZXBXRCtOMnZmczc5VmNmTVQ0TERCOFNSdkxCK3QzaWIvcFRj?=
+ =?utf-8?B?dUZ5SGNtZHdhZGt2SGdIMG4wL2ZyWWFTQTJEWHhFRTV5SVV6Y1VSWGFYV0d5?=
+ =?utf-8?B?TDdzREJDbGI3WEtxNVVrdzFNZW9TT0tJZXh1bFUrRHh6bGpYek9zN1M0UTR5?=
+ =?utf-8?B?czRqNTdNYnM5YlkraGkwb2xpdzBOeUhJU2xMUU4zOTY0cXBtNWdqeFJXQ1hU?=
+ =?utf-8?Q?kRZQK+tfzhVqGr1m+GVX/KuRg6LhMW4WMTl/0v+NgxJZ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c717c573-c3bc-4b5b-6c92-08db82dcd7ed
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 13:35:23.3507
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UMfo3fYuZ3sTEsKLt9cEM06pCt/TNbq8m3e4r+IvZexo7pZGVJE0QjrYOK47OQ6/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8176
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-can easily run well past their quotas before a remote tick does
-accounting.  This leads to long, multi-period stalls before such
-tasks can run again. Currently, when presented with these conflicting
-requirements the scheduler is favoring nohz_full and letting the tick
-be stopped. However, nohz tick stopping is already best-effort, there
-are a number of conditions that can prevent it, whereas cfs runtime
-bandwidth is expected to be enforced.
+Am 12.07.23 um 15:03 schrieb Jason Gunthorpe:
+> On Wed, Jul 12, 2023 at 09:55:51AM +0200, Christian König wrote:
+>
+>>> Anyone see any glaring issues with this approach? I plan on trying to
+>>> implement a PoC and sending an RFC v2.
+>> Well we already have DMA-buf as user API for this use case, which is
+>> perfectly supported by RDMA if I'm not completely mistaken.
+>>
+>> So what problem do you try to solve here actually?
+> In a nutshell, netdev's design currently needs struct pages to do DMA
+> to it's packet buffers.
+>
+> So it cannot consume the scatterlist that dmabuf puts out
+>
+> RDMA doesn't need struct pages at all, so it is fine.
+>
+> If Mina can go down the path of changing netdev to avoid needing
+> struct pages then no changes to DRM side things.
+>
+> Otherwise a P2P struct page and a co-existance with netmem on a
+> ZONE_DEVICE page would be required. :\
 
-Make the scheduler favor bandwidth over stopping the tick by setting
-TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-runtime limit enabled. We use cfs_b->hierarchical_quota to
-determine if the task requires the tick.
+Uff, depending on why netdev needs struct page (I think I have a good 
+idea why) this isn't really going to work generically either way.
 
-Add check in pick_next_task_fair() as well since that is where
-we have a handle on the task that is actually going to be running.
+What we maybe able to do is to allow copy_file_range() between DMA-buf 
+file descriptor and a TCP socket.
 
-Add check in sched_can_stop_tick() to cover some edge cases such
-as nr_running going from 2->1 and the 1 remains the running task.
+If I'm not completely mistaken that should then end up in DMA-bufs 
+file_operations->copy_file_range callback (maybe with some minor change 
+to allows this).
 
-Add sched_feat HZ_BW (off by default) to control the tick_stop
-behavior.
+The DMA-buf framework could then forward this to the exporter of the 
+memory which owns the backing memory could then do the necessary steps.
 
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
----
-v6: restore check for fair_sched_class
+Regards,
+Christian.
 
-v5: Reworked checks to use newly-fixed cfs_b->hierarchical_quota to
-check for bw
-constraints. 
-
-v4: Made checks for runtime_enabled hierarchical. 
-
-v3: Moved sched_cfs_bandwidth_active() prototype to sched.h outside of
-guards to
-silence -Wmissing-prototypes.
-
-v2:  Ben pointed out that the bit could get cleared in the dequeue path
-if we migrate a newly enqueued task without preempting curr. Added a
-check for that edge case to sched_can_stop_tick. Removed the call to
-sched_can_stop_tick from sched_fair_update_stop_tick since it was
-redundant.
-
- kernel/sched/core.c     | 26 ++++++++++++++++++++++
- kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
- kernel/sched/features.h |  2 ++
- kernel/sched/sched.h    |  1 +
- 4 files changed, 78 insertions(+)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index f80697a79baf..8a2ed4c0b709 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1194,6 +1194,20 @@ static void nohz_csd_func(void *info)
- #endif /* CONFIG_NO_HZ_COMMON */
- 
- #ifdef CONFIG_NO_HZ_FULL
-+static inline bool __need_bw_check(struct rq *rq, struct task_struct *p)
-+{
-+	if (rq->nr_running != 1)
-+		return false;
-+
-+	if (p->sched_class != &fair_sched_class)
-+		return false;
-+
-+	if (!task_on_rq_queued(p))
-+		return false;
-+
-+	return true;
-+}
-+
- bool sched_can_stop_tick(struct rq *rq)
- {
- 	int fifo_nr_running;
-@@ -1229,6 +1243,18 @@ bool sched_can_stop_tick(struct rq *rq)
- 	if (rq->nr_running > 1)
- 		return false;
- 
-+	/*
-+	 * If there is one task and it has CFS runtime bandwidth constraints
-+	 * and it's on the cpu now we don't want to stop the tick.
-+	 * This check prevents clearing the bit if a newly enqueued task here is
-+	 * dequeued by migrating while the constrained task continues to run.
-+	 * E.g. going from 2->1 without going through pick_next_task().
-+	 */
-+	if (sched_feat(HZ_BW) && __need_bw_check(rq, rq->curr)) {
-+		if (cfs_task_bw_constrained(rq->curr))
-+			return false;
-+	}
-+
- 	return true;
- }
- #endif /* CONFIG_NO_HZ_FULL */
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d9b3d4617e16..acd9f317aad1 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6140,6 +6140,46 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
- 	rcu_read_unlock();
- }
- 
-+bool cfs_task_bw_constrained(struct task_struct *p)
-+{
-+	struct cfs_rq *cfs_rq = task_cfs_rq(p);
-+
-+	if (!cfs_bandwidth_used())
-+		return false;
-+
-+	if (cfs_rq->runtime_enabled ||
-+	    tg_cfs_bandwidth(cfs_rq->tg)->hierarchical_quota != RUNTIME_INF)
-+		return true;
-+
-+	return false;
-+}
-+
-+#ifdef CONFIG_NO_HZ_FULL
-+/* called from pick_next_task_fair() */
-+static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
-+{
-+	int cpu = cpu_of(rq);
-+
-+	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
-+		return;
-+
-+	if (!tick_nohz_full_cpu(cpu))
-+		return;
-+
-+	if (rq->nr_running != 1)
-+		return;
-+
-+	/*
-+	 *  We know there is only one task runnable and we've just picked it. The
-+	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
-+	 *  be otherwise able to stop the tick. Just need to check if we are using
-+	 *  bandwidth control.
-+	 */
-+	if (cfs_task_bw_constrained(p))
-+		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
-+}
-+#endif
-+
- #else /* CONFIG_CFS_BANDWIDTH */
- 
- static inline bool cfs_bandwidth_used(void)
-@@ -6182,9 +6222,17 @@ static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
- static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
- static inline void update_runtime_enabled(struct rq *rq) {}
- static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
-+bool cfs_task_bw_constrained(struct task_struct *p)
-+{
-+	return false;
-+}
- 
- #endif /* CONFIG_CFS_BANDWIDTH */
- 
-+#if !defined(CONFIG_CFS_BANDWIDTH) || !defined(CONFIG_NO_HZ_FULL)
-+static inline void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p) {}
-+#endif
-+
- /**************************************************
-  * CFS operations on tasks:
-  */
-@@ -8098,6 +8146,7 @@ done: __maybe_unused;
- 		hrtick_start_fair(rq, p);
- 
- 	update_misfit_status(p, rq);
-+	sched_fair_update_stop_tick(rq, p);
- 
- 	return p;
- 
-diff --git a/kernel/sched/features.h b/kernel/sched/features.h
-index ee7f23c76bd3..6fdf1fdf6b17 100644
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -101,3 +101,5 @@ SCHED_FEAT(LATENCY_WARN, false)
- 
- SCHED_FEAT(ALT_PERIOD, true)
- SCHED_FEAT(BASE_SLICE, true)
-+
-+SCHED_FEAT(HZ_BW, false)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 63822c9238cc..d6d346bc78aa 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -465,6 +465,7 @@ extern void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth
- extern void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b);
- extern void start_cfs_bandwidth(struct cfs_bandwidth *cfs_b);
- extern void unthrottle_cfs_rq(struct cfs_rq *cfs_rq);
-+extern bool cfs_task_bw_constrained(struct task_struct *p);
- 
- extern void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,
- 		struct sched_rt_entity *rt_se, int cpu,
--- 
-2.31.1
+>
+> Jason
 
