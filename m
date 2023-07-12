@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C0C750273
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FA6750277
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbjGLJGE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 05:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S233005AbjGLJGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjGLJFd (ORCPT
+        with ESMTP id S233122AbjGLJFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:05:33 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE0F2724;
-        Wed, 12 Jul 2023 02:04:33 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7679d75940fso584616485a.0;
-        Wed, 12 Jul 2023 02:04:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689152672; x=1691744672;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uIF186mRaGX5BFXMSlH2BgP4u+RcqYufJt4GrXqOpCU=;
-        b=jobu/vNOftR2lpurXpGcQu7ojLTUcBOMfCRPEXoKqu9kWjNUob61h8o22ryYsAwd7H
-         7Np3lCaTj6ZjYzquVWgqCpB2dGGB9JGHPF6UiOlOGbcSl/UNuWKvD8lKk2P+8DCeidAm
-         8DL6YvHiQuzWmx+6yEh2K7/sSCY6zPz8KJRJprzGqktVW9a5aZ951uZ86LuS7+gf27jL
-         R/bFxTn/IYNmMWoZvAZoz7OBkDKYNdNh9+ao5s1eZG7qgLgZ5VkQ5dfmkA414mctQVjp
-         za3jv3IYSHcL64q1ZLjTisjDIML20TTTBUWgsnivvx1YD04y0s73bWb2yxXBihgbuP07
-         EI/g==
-X-Gm-Message-State: ABy/qLaZ3i+Ce/9OSCJBMFCpI+fLLJqSNvyTGY9PX6AaBc0oSmBvHJnd
-        RUqO1l1Y7zRsZODYOQX311KbmUmN6SNJfg==
-X-Google-Smtp-Source: APBJJlHRYOUv25KUCxkJccL53H535+lbcKGBj66auOLOAOuJE3/We/1zfX2OodslL+8fqfxOmJFWLQ==
-X-Received: by 2002:a05:620a:2401:b0:767:30a5:4ca1 with SMTP id d1-20020a05620a240100b0076730a54ca1mr21216067qkn.46.1689152672485;
-        Wed, 12 Jul 2023 02:04:32 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id s2-20020a81bf42000000b0057d24f8278bsm631250ywk.104.2023.07.12.02.04.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 02:04:31 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso7766516276.2;
-        Wed, 12 Jul 2023 02:04:31 -0700 (PDT)
-X-Received: by 2002:a05:6902:28b:b0:c4b:41ce:f68b with SMTP id
- v11-20020a056902028b00b00c4b41cef68bmr16459258ybh.41.1689152670844; Wed, 12
- Jul 2023 02:04:30 -0700 (PDT)
+        Wed, 12 Jul 2023 05:05:42 -0400
+Received: from outbound-smtp42.blacknight.com (outbound-smtp42.blacknight.com [46.22.139.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBA510C2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:05:29 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp42.blacknight.com (Postfix) with ESMTPS id F41711B15
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 10:05:27 +0100 (IST)
+Received: (qmail 12686 invoked from network); 12 Jul 2023 09:05:27 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jul 2023 09:05:27 -0000
+Date:   Wed, 12 Jul 2023 10:05:26 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Arjan Van De Ven <arjan@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <jweiner@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC 2/2] mm: alloc/free depth based PCP high auto-tuning
+Message-ID: <20230712090526.thk2l7sbdcdsllfi@techsingularity.net>
+References: <20230710065325.290366-1-ying.huang@intel.com>
+ <20230710065325.290366-3-ying.huang@intel.com>
+ <ZK060sMG0GfC5gUS@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20230511181931.869812-1-tj@kernel.org> <20230511181931.869812-7-tj@kernel.org>
- <ZF6WsSVGX3O1d0pL@slm.duckdns.org> <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
- <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
- <ZK3MBfPS-3-tJgjO@slm.duckdns.org> <20230712080504.GA3100107@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230712080504.GA3100107@hirez.programming.kicks-ass.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jul 2023 11:04:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUMRS9_nJXp3rrWQrODRQcBQggze0k=0GjSScCknFmmgQ@mail.gmail.com>
-Message-ID: <CAMuHMdUMRS9_nJXp3rrWQrODRQcBQggze0k=0GjSScCknFmmgQ@mail.gmail.com>
-Subject: Re: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2
- 6/7] workqueue: Report work funcs that trigger automatic CPU_INTENSIVE mechanism)
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-rtc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <ZK060sMG0GfC5gUS@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hoi Peter,
+On Tue, Jul 11, 2023 at 01:19:46PM +0200, Michal Hocko wrote:
+> On Mon 10-07-23 14:53:25, Huang Ying wrote:
+> > To auto-tune PCP high for each CPU automatically, an
+> > allocation/freeing depth based PCP high auto-tuning algorithm is
+> > implemented in this patch.
+> > 
+> > The basic idea behind the algorithm is to detect the repetitive
+> > allocation and freeing pattern with short enough period (about 1
+> > second).  The period needs to be short to respond to allocation and
+> > freeing pattern changes quickly and control the memory wasted by
+> > unnecessary caching.
+> 
+> 1s is an ethernity from the allocation POV. Is a time based sampling
+> really a good choice? I would have expected a natural allocation/freeing
+> feedback mechanism. I.e. double the batch size when the batch is
+> consumed and it requires to be refilled and shrink it under memory
+> pressure (GFP_NOWAIT allocation fails) or when the surplus grows too
+> high over batch (e.g. twice as much).  Have you considered something as
+> simple as that?
+> Quite honestly I am not sure time based approach is a good choice
+> because memory consumptions tends to be quite bulky (e.g. application
+> starts or workload transitions based on requests).
+>  
 
-On Wed, Jul 12, 2023 at 10:05 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> On Tue, Jul 11, 2023 at 11:39:17AM -1000, Tejun Heo wrote:
-> > I wonder whether the right thing to do here is somehow scaling the threshold
-> > according to the relative processing power. It's difficult to come up with a
-> > threshold which works well across the latest & fastest and really tiny CPUs.
-> > I'll think about it some more but if you have some ideas, please feel free
-> > to suggest.
->
-> We could scale by BogoMIPS I suppose, it's a bogus measurement, as per
-> the name, but it does have some relation to how fast the machine is.
+I tend to agree. Tuning based on the recent allocation pattern without frees
+would make more sense and also be symmetric with how free_factor works. I
+suspect that time-based may be heavily orientated around the will-it-scale
+benchmark. While I only glanced at this, a few things jumped out
 
-That's gonna fail miserably on e.g. ARM and RISC-V, where BogoMIPS
-depends on some timer frequency.
+1. Time-based heuristics are not ideal. congestion_wait() and
+   friends was an obvious case where time-based heuristics fell apart even
+   before the event it waited on was removed. For congestion, it happened to
+   work for slow storage for a while but that was about it.  For allocation
+   stream detection, it has a similar problem. If a process is allocating
+   heavily, then fine, if it's in bursts of less than a second more than one
+   second apart then it will not adapt. While I do not think it is explicitly
+   mentioned anywhere, my understanding was that heuristics like this within
+   mm/ should be driven by explicit events as much as possible and not time.
 
-R-Car M2-W with 1.5 GHz Cortex-A15: 40.00 BogoMIPS
-R-Car V4H with 1.8 GHz Cortex-A76: 33.33 BogoMIPS
+2. If time was to be used, it would be cheaper to have the simpliest possible
+   state tracking in the fast paths and decay any resizing of the PCP
+   within the vmstat updates (reuse pcp->expire except it applies to local
+   pcps). Even this is less than ideal as the PCP may be too large for short
+   periods of time but it may also act as a backstop for worst-case behaviour
 
-while the real slow 48 MHz VexRiscV gets 128 BogoMIPS.
+3. free_factor is an existing mechanism for detecting recent patterns
+   and adapting the PCP sizes. The allocation side should be symmetric
+   and the events that should drive it are "refills" on the alloc side and
+   "drains" on the free side. Initially it might be easier to have a single
+   parameter that scales batch and high up to a limit
 
-Gr{oetje,eeting}s,
+4. The amount of state tracked seems excessive and increases the size of
+   the per-cpu structure by more than 1 cache line. That in itself may not
+   be a problem but the state is tracked on every page alloc/free that goes
+   through the fast path and it's relatively complex to track.  That is
+   a constant penalty in fast paths that may not may not be relevant to the
+   workload and only sustained bursty allocation streams may offset the
+   cost.
 
-                        Geert
+5. Memory pressure and reclaim activity does not appear to be accounted
+   for and it's not clear if pcp->high is bounded or if it's possible for
+   a single PCP to hide a large number of pages from other CPUs sharing the
+   same node. The max size of the PCP should probably be explicitly clamped.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Mel Gorman
+SUSE Labs
