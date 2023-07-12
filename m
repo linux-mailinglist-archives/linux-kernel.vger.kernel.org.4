@@ -2,118 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25290750032
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD969750037
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbjGLHif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S231625AbjGLHjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjGLHiY (ORCPT
+        with ESMTP id S232073AbjGLHjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:38:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2B01987;
-        Wed, 12 Jul 2023 00:38:20 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id F3DDE225A4;
-        Wed, 12 Jul 2023 07:38:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689147499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=haszkyxt6U9I4qJOD2FSTDPcnP+kRqUlAiag7JbTgA4=;
-        b=RNE4FWJrak2AX66RAbfeLRsBsvGzBpfea8WKV8QtEDBxTN8T53olIOb9pWNQnDqunOBiav
-        xy4dJwUY9IZ+BBsvWHGSQ4uzaSgTPFbICqAprflcrBigmSzHN3D9VPC55te7UI9hZm6Pee
-        n+O+EORlSB26dU6cL30IFpNWnsIkaYs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689147499;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=haszkyxt6U9I4qJOD2FSTDPcnP+kRqUlAiag7JbTgA4=;
-        b=Rc5UN3qAe5VIs3n2Nq5Sctxt/v0pLuAjXYc5vKvTT1HRZGn6Twvn1jGdlJxO0unupY3ebK
-        ivcfaZRjLpX+IHAg==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A59EA2C142;
-        Wed, 12 Jul 2023 07:38:18 +0000 (UTC)
-Date:   Wed, 12 Jul 2023 09:38:17 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] depmod: Handle installing modules under a prefix
-Message-ID: <20230712073817.GE9196@kitsune.suse.cz>
-References: <20230711153126.28876-1-msuchanek@suse.de>
- <20230711153457.29497-1-msuchanek@suse.de>
- <da2fdd15-fae1-2bf6-04e7-568c715372ce@kernel.org>
+        Wed, 12 Jul 2023 03:39:04 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0B219BE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:38:45 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3159adb7cb5so732897f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:38:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689147524; x=1691739524;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oChKme24SZPOA92hTi9VYNZ4RCh0CFOD0OdnxXjwR/I=;
+        b=IjvTPP0bs/cfGsUiAqdR+/jGEZKAdusmhMNed/WwAL5TIxsd0QV5ObIujZ7DNGD+xa
+         7XpaBPyy90aKmZL4BpuhHL+8PvJnJgwVJsX3z/TGvJRn+nmgTpEJmFejIg7KAfjYBc3c
+         gpoi3j+rGOypJgzV1PjJ1GlwlutzmbEku+3kR7coJge54D7xlUJlnyURkP/FpwOFbB9s
+         epTOneTQ58UXJx18p3pw7HAwyVzXroRaZigHjKyBpS/9cxvHPk1DLpupxWwvQDqz0Tv8
+         q5i7KC7dJ3z7UgPGjXhiYj2IWalA8hpc0TbsUMZhbfw9Sabr+6HTLiopwMtaPkOgxxtu
+         KekA==
+X-Gm-Message-State: ABy/qLbgfanzS3c1DxnzBvStfVsrAXweAA1LfB/W5H81N6kHP6+jyeOj
+        UUJwMeP1h9lQhOdds2OFDnQ=
+X-Google-Smtp-Source: APBJJlFGYYhdLQYp1qY5RENlDfGjtleaBJ34hizcHHIjbEHqYhTrPpcNzYFzCgPsLN4VJw3meqaKNA==
+X-Received: by 2002:a5d:4c85:0:b0:314:1d7f:9e9 with SMTP id z5-20020a5d4c85000000b003141d7f09e9mr17797032wrs.0.1689147523663;
+        Wed, 12 Jul 2023 00:38:43 -0700 (PDT)
+Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id f17-20020adffcd1000000b003140fff4f75sm4260000wrs.17.2023.07.12.00.38.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 00:38:43 -0700 (PDT)
+Message-ID: <f0e8de7b-655c-9932-16d4-105decff9a6c@grimberg.me>
+Date:   Wed, 12 Jul 2023 10:38:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da2fdd15-fae1-2bf6-04e7-568c715372ce@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
+ (Samsung SM-953 Datacenter SSD)
+Content-Language: en-US
+To:     Keith Busch <kbusch@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Clemens S." <cspringsguth@gmail.com>,
+        Martin Belanger <martin.belanger@dell.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVMe <linux-nvme@lists.infradead.org>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        =?UTF-8?B?67CV7KeE7ZmY?= <jh.i.park@samsung.com>
+References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
+ <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
+ <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
+ <CGME20230710155902eucas1p2b464a29adc35e983c73b00d18ab5344c@eucas1p2.samsung.com>
+ <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
+ <f0fdf86e-4293-8e07-835d-b5a866252068@samsung.com>
+ <462e0e1e-98ea-0f3c-4aaa-8d44f0a8e664@leemhuis.info>
+ <20230711120609.GB27050@lst.de>
+ <CAHk-=whXh9sgLo24RO02JjfD0m3HE5NADRPWoEd+dW6bruFhVA@mail.gmail.com>
+ <ZK2PgNizcMLW+S/V@kbusch-mbp.dhcp.thefacebook.com>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <ZK2PgNizcMLW+S/V@kbusch-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 07:47:13AM +0200, Jiri Slaby wrote:
-> On 11. 07. 23, 17:34, Michal Suchanek wrote:
-> > Some distributions aim at not shipping any files in / ustside of usr.
-> > 
-> > The path under which kernel modules are instaleld is hardcoded to /lib
-> > which conflicts with this goal.
-> > 
-> > When kmod provides the config command use it to determine the correct
-> > module installation prefix.
-> > 
-> > On kmod that does not provide the command / is used as before.
-> > 
-> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > ---
-> >   Makefile          | 4 +++-
-> >   scripts/depmod.sh | 8 ++++----
-> >   2 files changed, 7 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index 47690c28456a..b05d696f06bd 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1165,7 +1165,9 @@ export INSTALL_DTBS_PATH ?= $(INSTALL_PATH)/dtbs/$(KERNELRELEASE)
-> >   # makefile but the argument can be passed to make if needed.
-> >   #
-> > -MODLIB	= $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
-> > +export KERNEL_MODULE_PREFIX := $(shell kmod config | jq -r .module_prefix)
-> 
-> echo -e 'KERNEL_MODULE_PREFIX := $(shell kmod config | jq -r
-> .module_prefix)\nall:'|make -f -
-> invalid command 'config'
-> parse error: Invalid numeric literal at line 1, column 5
-> 
-> I think you should pipe kmod's 2> /dev/null to support older kmod. Ah, but
-> you'd need 2> /dev/null for jq too. That would not be good as jq might not
-> be installed and a user wouldn't see the error. So instead, I would do:
-> 
-> $(shell kmod config &> /dev/null && kmod config | jq -r .module_prefix)
 
-Yes, that sounds reasonable. Also would cover the potential problem of
-kmod changing the error output into something that is a valid JSON in
-the future.
+>> For example, we have this completely unacceptable garbage:
+>>
+>>          ret = nvme_global_check_duplicate_ids(ctrl->subsys, &info->ids);
+>>          if (ret) {
+>>                  dev_err(ctrl->device,
+>>                          "globally duplicate IDs for nsid %d\n", info->nsid);
+>>                  nvme_print_device_info(ctrl);
+>>                  return ret;
+>>          }
+>>
+>> iow, the code even checks for and *notices* that there are duplicate
+>> IDs, and what does it do? It then errors out.
+> 
+> This check came from a recent half-baked spec feature called "Dispersed
+> Namespaces" that caused breakage and data corruption when used in Linux.
+> Rather than attempt to support that mostly vendor specific feature, the
+> driver attempted to fence that off as unmaintainable. This check wasn't
+> aimed at enforcing "correctness", but it certainly found a lot of that
+> as collatoral damage. Let's see if we can find a better way to detect
+> the difference with a sane fallback as you suggest.
 
-Thanks
+Perhaps we could fallback to what we do in wwid_show()?
 
-Michal
+"nvme.%04x-%*phN-%*phN-%08x\n", subsys->vendor_id, serial_len,
+subsys->serial, model_len, subsys->model, head->ns_id)
