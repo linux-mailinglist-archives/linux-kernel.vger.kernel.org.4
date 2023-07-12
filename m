@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEA174FE77
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFF174FE79
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjGLEqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 00:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S231218AbjGLErg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjGLEqc (ORCPT
+        with ESMTP id S229521AbjGLEre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 00:46:32 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AC81733
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:46:30 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-579ed2829a8so68751737b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:46:30 -0700 (PDT)
+        Wed, 12 Jul 2023 00:47:34 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13180100;
+        Tue, 11 Jul 2023 21:47:33 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b734aea34aso13492621fa.0;
+        Tue, 11 Jul 2023 21:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689137189; x=1691729189;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4LOZtvGEF5g0eQvRdR0fiwT6tMgm62bdW0dz/Hhyqlk=;
-        b=J1OyC/PzRxAcAnxReOGyZoimdKHV4sne6EV+ZF5GnSzIGkj49DIxf8CJZXSiYaLo8O
-         rQDVnXnu0y21FRcOCZP0OeEhb8w1Ae51u8RxjVwTlnPwlHyRZu5pHWxjcdG3sLbNOkgm
-         l9DRu2V+r91JT6sg8uxZ0xdueMEWKHVeYHw/ucTn/rvDkwQeKDUMIXdd66/4pn+ZPDqc
-         bbexzf/2xXArSFmFzEjH5dtsWbOgASWzeyhuG3Z+bgzkYYJreHWjygSN0MaZVhpwfXUc
-         /vz1Ww9YOcG9dsJAekHocNmUdgaeY/Jq/K6dI5tFUgzSXd3eubGhE9SWhC2zJPkylOJH
-         UPbw==
+        d=gmail.com; s=20221208; t=1689137251; x=1691729251;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KwPc8BS7NtCm9mMgLjXyO4ZiPUAKVIu/YEVpLeQJeCM=;
+        b=d4QyILDU2VZw1RN1/Gj/iMRIjLyksBxC8gZZc6G8syRMMufhV4/wCUunj2SMAoxRUd
+         JGxRRMu4VT6L/1nZLf2cVp5PvQscMjqhoXymmjfrFXbUukQAu/uPaBztZK8kexm0OXua
+         HKUTNPjMqYMVKfIDahHjiP4uyePHJvNf4uqlnLi7j7kmX4zH7IjhMAmD4S7ZMsd7JuEy
+         8ukojGkkYAIkmgI4IAn1FdNXOVBKeLmLGyFcKJKlZ/DdJ2/OIGG0uYQzy11Z2Q3b1Kmp
+         ZiJfQFvmtEYT8+y5uwXsxesqy5f7T6TUdnMxv2Wb1afB331jj96B+hmCuh8zLqzQ5nXO
+         8Vsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689137189; x=1691729189;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4LOZtvGEF5g0eQvRdR0fiwT6tMgm62bdW0dz/Hhyqlk=;
-        b=Gy2k/umRA/uSZTczpd1B7Y9Xg6E6JI1RON16q3XMRsjElIgcoPieT5Bxa+XMKtUmk3
-         qvndgF5mYoBxjgrnZd63IM+o0SJyVIJQrzzFKp2k6wCnJrD7ynUnRVLt16O8URZ6sfOM
-         dXLAlTv/vUcsuuGyfb/bB1tJKyGAADiawKKfC2tuDz3ebDSkTHTzvL9mpyGJ7dDKMtaP
-         MDnyX4nQffpLhlicqLSsC17wONygmQvhVj60E/dU+Fah6os3R10w0HQgRgvAMr2Mtqsn
-         u9vDMBZh+JBbaOUo/5LJnimLxa5vusE/0Xw9cGgGcb1pCLvXRO479V7Tu4nYGtUGkYVC
-         0rAA==
-X-Gm-Message-State: ABy/qLZAJPf1+Dt3ylrErTNmNrkZnkUao96l2bbC20wT/XCnHZKzFkan
-        HsRMrlOZTrbCMcSEDRVWTuekZQ==
-X-Google-Smtp-Source: APBJJlGajCIPfwdsjGp7sM9eUSR1neGCrgzZWT479LGOvJujy6hRuJqugeEnCaM3mBFakTQjRwJQ+w==
-X-Received: by 2002:a81:5dd6:0:b0:562:16d7:e6eb with SMTP id r205-20020a815dd6000000b0056216d7e6ebmr17894738ywb.40.1689137189022;
-        Tue, 11 Jul 2023 21:46:29 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id j126-20020a0df984000000b005772e9388cdsm969335ywf.62.2023.07.11.21.46.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 21:46:28 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 21:46:23 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3 13/13] mm/pgtable: notes on pte_offset_map[_lock]()
-In-Reply-To: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
-Message-ID: <b791c3b0-25c6-a263-d785-d564344eb644@google.com>
-References: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
+        d=1e100.net; s=20221208; t=1689137251; x=1691729251;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KwPc8BS7NtCm9mMgLjXyO4ZiPUAKVIu/YEVpLeQJeCM=;
+        b=GZkmQPrcdz/ZLS+nczW7cH9owS4/wv6hSnAR1zSX2KmMt41NWf4DhmQ7NXvmCHMFMA
+         ZzS3jmX+3xpSPGcFMnVoKV0YdiqdZvfPOarObFi+iRd/LgvqJ11dwXOcPpAm3ecUG7as
+         r84NlnwKAy/QHVcY/bW0+5/U+2RJY3K3cQROR5UhcTVjA6xyGdrEQr5V8uBtAG8KG4N3
+         tUatmeKKdfIPNh0r7t385jixmtB/HXwNTXsBlUbS8GQYfEUDi4OCPnAL66iSjEmXse8T
+         5jp+Xzj0pDadBNH51JKyFyoHNBuRjVEPnFbjzwBkoCcYwkohA6g9lhC4YIbu9NxE1dpu
+         S6Yw==
+X-Gm-Message-State: ABy/qLYC4cxhxkoLpb9GytJIQTas2TUpaSPnNyniwLM8WCYhi7fyqrps
+        II8n+pKKLD+hBvd/1OY6O17qs2nd4n+zLhl6+xwgE1Cq04g=
+X-Google-Smtp-Source: APBJJlEkVy2OhrjUteY8ZTlt4SuQ8EcMAzsIWs77xzA6O26UfZ/0XvB4d4SK1mc8zsp1tIa9mBao8k+mynw+chrdoVI=
+X-Received: by 2002:ac2:5b83:0:b0:4f9:cd02:4aec with SMTP id
+ o3-20020ac25b83000000b004f9cd024aecmr14085028lfn.29.1689137250886; Tue, 11
+ Jul 2023 21:47:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20230710104834.947884-1-imagedong@tencent.com>
+ <20230710104834.947884-4-imagedong@tencent.com> <20230711232522.54dbqdxkfbjvbvgi@macbook-pro-8.dhcp.thefacebook.com>
+ <CADxym3Zu1eYTVzprqe7_8zxhzaZHKAvVKKusa-uK150Huq1mnQ@mail.gmail.com>
+In-Reply-To: <CADxym3Zu1eYTVzprqe7_8zxhzaZHKAvVKKusa-uK150Huq1mnQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 11 Jul 2023 21:47:19 -0700
+Message-ID: <CAADnVQKqMXiFscvqdMyZVkMk=dqTLy45Yg8jecYhp3aUwnqPig@mail.gmail.com>
+Subject: Re: [PATCH RESEND bpf-next v8 3/3] selftests/bpf: add testcase for
+ TRACING with 6+ arguments
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Yonghong Song <yhs@meta.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, David Ahern <dsahern@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, X86 ML <x86@kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,69 +84,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a block of comments on pte_offset_map_lock(), pte_offset_map() and
-pte_offset_map_nolock() to mm/pgtable-generic.c, to help explain them.
+On Tue, Jul 11, 2023 at 9:00=E2=80=AFPM Menglong Dong <menglong8.dong@gmail=
+.com> wrote:
+>
+> On Wed, Jul 12, 2023 at 7:25=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Jul 10, 2023 at 06:48:34PM +0800, menglong8.dong@gmail.com wrot=
+e:
+> > > From: Menglong Dong <imagedong@tencent.com>
+> > >
+> > > Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
+> > > with 7/11 arguments. As this feature is not supported by arm64 yet, w=
+e
+> > > disable these testcases for arm64 in DENYLIST.aarch64. We can combine
+> > > them with fentry_test.c/fexit_test.c when arm64 is supported too.
+> > >
+> > > Correspondingly, add bpf_testmod_fentry_test7() and
+> > > bpf_testmod_fentry_test11() to bpf_testmod.c
+> > >
+> > > Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
+> > > MODIFY_RETURN with 7 arguments.
+> > >
+> > > Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
+> > > bpf_testmod.c to test the struct in the arguments.
+> > >
+> > > And the testcases passed on x86_64:
+> > >
+> > > ./test_progs -t fexit
+> > > Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
+> > >
+> > > ./test_progs -t fentry
+> > > Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
+> > >
+> > > ./test_progs -t modify_return
+> > > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > >
+> > > ./test_progs -t tracing_struct
+> > > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > >
+> > > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > > Acked-by: Yonghong Song <yhs@fb.com>
+> > > ---
+> > > v8:
+> > > - split the testcases, and add fentry_many_args/fexit_many_args to
+> > >   DENYLIST.aarch64
+> > > v6:
+> > > - add testcases to tracing_struct.c instead of fentry_test.c and
+> > >   fexit_test.c
+> > > v5:
+> > > - add testcases for MODIFY_RETURN
+> > > v4:
+> > > - use different type for args in bpf_testmod_fentry_test{7,12}
+> > > - add testcase for grabage values in ctx
+> > > v3:
+> > > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+> > >   bpf_testmod_fentry_test{7,12} meanwhile
+> > > - get return value by bpf_get_func_ret() in
+> > >   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_ca=
+st()
+> > >   in this version
+> > > ---
+> > >  net/bpf/test_run.c                            | 23 ++++++--
+> > >  tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
+> > >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
+> > >  .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
+> > >  .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
+> > >  .../selftests/bpf/prog_tests/modify_return.c  | 20 ++++++-
+> > >  .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
+> > >  .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
+> > >  .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
+> > >  .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
+> > >  .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++=
+++
+> > >  11 files changed, 358 insertions(+), 14 deletions(-)
+> > >  create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_arg=
+s.c
+> > >  create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args=
+.c
+> > >
+> > > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > > index 63b11f7a5392..1c59fa60077b 100644
+> > > --- a/net/bpf/test_run.c
+> > > +++ b/net/bpf/test_run.c
+> > > @@ -565,6 +565,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, in=
+t *b)
+> > >       return a + *b;
+> > >  }
+> > >
+> > > +__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int =
+d,
+> > > +                                     void *e, char f, int g)
+> > > +{
+> > > +     *b +=3D 1;
+> > > +     return a + *b + c + d + (long)e + f + g;
+> > > +}
+> > > +
+> > >  int noinline bpf_fentry_shadow_test(int a)
+> > >  {
+> > >       return a + 1;
+> > > @@ -600,9 +607,13 @@ __diag_pop();
+> > >
+> > >  BTF_SET8_START(bpf_test_modify_return_ids)
+> > >  BTF_ID_FLAGS(func, bpf_modify_return_test)
+> > > +BTF_ID_FLAGS(func, bpf_modify_return_test2)
+> > >  BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
+> > >  BTF_SET8_END(bpf_test_modify_return_ids)
+> > >
+> > > +BTF_ID_LIST(bpf_modify_return_test_id)
+> > > +BTF_ID(func, bpf_modify_return_test)
+> > > +
+> > >  static const struct btf_kfunc_id_set bpf_test_modify_return_set =3D =
+{
+> > >       .owner =3D THIS_MODULE,
+> > >       .set   =3D &bpf_test_modify_return_ids,
+> > > @@ -665,9 +676,15 @@ int bpf_prog_test_run_tracing(struct bpf_prog *p=
+rog,
+> > >                       goto out;
+> > >               break;
+> > >       case BPF_MODIFY_RETURN:
+> > > -             ret =3D bpf_modify_return_test(1, &b);
+> > > -             if (b !=3D 2)
+> > > -                     side_effect =3D 1;
+> > > +             if (prog->aux->attach_btf_id =3D=3D *bpf_modify_return_=
+test_id) {
+> > > +                     ret =3D bpf_modify_return_test(1, &b);
+> > > +                     if (b !=3D 2)
+> > > +                             side_effect =3D 1;
+> > > +             } else {
+> > > +                     ret =3D bpf_modify_return_test2(1, &b, 3, 4, (v=
+oid *)5, 6, 7);
+> > > +                     if (b !=3D 2)
+> > > +                             side_effect =3D 1;
+> >
+> > Patches 1 and 2 look good, but I don't like where this check will lead =
+us:
+> > attach_btf_id =3D=3D *bpf_modify_return_test_id...
+> >
+>
+> Yeah, I don't like it either, which makes the code weak.
+>
+> > When Jiri did a conversion of all test func into bpf_testmod.ko I forgo=
+t
+> > why we couldn't move fmod_ret tests as well.
+> > Whatever it was the extra attach_btf_id check will make it worse.
+> >
+>
+> I think it's because the side effect can't be verified
+> by the BPF program, which makes it have to be run by
+> bpf_prog_test_run_opts().
+>
+> > For now please think of a way to test fmod_ret when bpf_prog_test_run_t=
+racing()
+> > does something unconditional like:
+> >         ret =3D bpf_modify_return_test(1, &b);
+> >         if (b !=3D 2)
+> >                 side_effect++;
+> >         ret =3D bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
+>
+> Should it be like this?
+>
+> ret +=3D bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
+>
+> Or the return of bpf_modify_return_test() can't be verified.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- mm/pgtable-generic.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index fa9d4d084291..4fcd959dcc4d 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -315,6 +315,50 @@ pte_t *pte_offset_map_nolock(struct mm_struct *mm, pmd_t *pmd,
- 	return pte;
- }
- 
-+/*
-+ * pte_offset_map_lock(mm, pmd, addr, ptlp), and its internal implementation
-+ * __pte_offset_map_lock() below, is usually called with the pmd pointer for
-+ * addr, reached by walking down the mm's pgd, p4d, pud for addr: either while
-+ * holding mmap_lock or vma lock for read or for write; or in truncate or rmap
-+ * context, while holding file's i_mmap_lock or anon_vma lock for read (or for
-+ * write). In a few cases, it may be used with pmd pointing to a pmd_t already
-+ * copied to or constructed on the stack.
-+ *
-+ * When successful, it returns the pte pointer for addr, with its page table
-+ * kmapped if necessary (when CONFIG_HIGHPTE), and locked against concurrent
-+ * modification by software, with a pointer to that spinlock in ptlp (in some
-+ * configs mm->page_table_lock, in SPLIT_PTLOCK configs a spinlock in table's
-+ * struct page).  pte_unmap_unlock(pte, ptl) to unlock and unmap afterwards.
-+ *
-+ * But it is unsuccessful, returning NULL with *ptlp unchanged, if there is no
-+ * page table at *pmd: if, for example, the page table has just been removed,
-+ * or replaced by the huge pmd of a THP.  (When successful, *pmd is rechecked
-+ * after acquiring the ptlock, and retried internally if it changed: so that a
-+ * page table can be safely removed or replaced by THP while holding its lock.)
-+ *
-+ * pte_offset_map(pmd, addr), and its internal helper __pte_offset_map() above,
-+ * just returns the pte pointer for addr, its page table kmapped if necessary;
-+ * or NULL if there is no page table at *pmd.  It does not attempt to lock the
-+ * page table, so cannot normally be used when the page table is to be updated,
-+ * or when entries read must be stable.  But it does take rcu_read_lock(): so
-+ * that even when page table is racily removed, it remains a valid though empty
-+ * and disconnected table.  Until pte_unmap(pte) unmaps and rcu_read_unlock()s
-+ * afterwards.
-+ *
-+ * pte_offset_map_nolock(mm, pmd, addr, ptlp), above, is like pte_offset_map();
-+ * but when successful, it also outputs a pointer to the spinlock in ptlp - as
-+ * pte_offset_map_lock() does, but in this case without locking it.  This helps
-+ * the caller to avoid a later pte_lockptr(mm, *pmd), which might by that time
-+ * act on a changed *pmd: pte_offset_map_nolock() provides the correct spinlock
-+ * pointer for the page table that it returns.  In principle, the caller should
-+ * recheck *pmd once the lock is taken; in practice, no callsite needs that -
-+ * either the mmap_lock for write, or pte_same() check on contents, is enough.
-+ *
-+ * Note that free_pgtables(), used after unmapping detached vmas, or when
-+ * exiting the whole mm, does not take page table lock before freeing a page
-+ * table, and may not use RCU at all: "outsiders" like khugepaged should avoid
-+ * pte_offset_map() and co once the vma is detached from mm or mm_users is zero.
-+ */
- pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
- 			     unsigned long addr, spinlock_t **ptlp)
- {
--- 
-2.35.3
-
+Fine by me.
+As long as attach_btf_id check is removed. It's good.
