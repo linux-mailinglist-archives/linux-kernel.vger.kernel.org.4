@@ -2,259 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0698774FEF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921AD74FEEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjGLGDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 02:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S231893AbjGLGBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 02:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjGLGDS (ORCPT
+        with ESMTP id S231855AbjGLGBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 02:03:18 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E724F1BD5;
-        Tue, 11 Jul 2023 23:03:04 -0700 (PDT)
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R16Y6074hzPkG3;
-        Wed, 12 Jul 2023 14:00:41 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.2) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 12 Jul 2023 14:03:01 +0800
-From:   Junxian Huang <huangjunxian6@hisilicon.com>
-To:     <jgg@nvidia.com>, <leon@kernel.org>
-CC:     <linux-rdma@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <huangjunxian6@hisilicon.com>
-Subject: [PATCH for-rc 3/3] RDMA/hns: Add check and adjust for function resource values
-Date:   Wed, 12 Jul 2023 14:00:33 +0800
-Message-ID: <20230712060033.15961-4-huangjunxian6@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230712060033.15961-1-huangjunxian6@hisilicon.com>
-References: <20230712060033.15961-1-huangjunxian6@hisilicon.com>
+        Wed, 12 Jul 2023 02:01:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A90BC0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689141703; x=1720677703;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NLp00fEtLzfAThjLKM31DTKLIpo3OIAVoOoRd7xeCPc=;
+  b=c95HR/XKp8oU7FciF8FWYKEoXkFccaQ/jrABs0pZZPZ+erUKZ+8Cg0Wi
+   OJXIQ/TRwUBYNtOuqRmfIsZggGf0qtJAWhMfShJhAyeS7yfw8efvucOaZ
+   tNFdtCLRXF2XMYl6dqgapmtazIoQ8afTJrhN1tPbXRRE8vVKydb8L6FJu
+   CZpPxvzHV1KAzKupwSX1dZZV55VGDzN49ajME8RViPCB7qTbfJFDMSGty
+   SlaZpNFfbaWemvdLg/j9/wdzAZskKSdzrgvJWeudwdUUvBeQuzHankIIL
+   2KkGCK3OqepfXwRTG65MFxLC1aa7LBpnPAFRc9WC/UlewA7Gdmw6QpQCk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349662698"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="349662698"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 23:01:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="751039738"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="751039738"
+Received: from fyin-dev.sh.intel.com ([10.239.159.32])
+  by orsmga008.jf.intel.com with ESMTP; 11 Jul 2023 23:01:39 -0700
+From:   Yin Fengwei <fengwei.yin@intel.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, yuzhao@google.com, willy@infradead.org,
+        david@redhat.com, ryan.roberts@arm.com, shy828301@gmail.com
+Cc:     fengwei.yin@intel.com
+Subject: [RFC PATCH v2 0/3] support large folio for mlock
+Date:   Wed, 12 Jul 2023 14:01:41 +0800
+Message-Id: <20230712060144.3006358-1-fengwei.yin@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.2]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500006.china.huawei.com (7.221.188.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, RoCE driver gets function resource values from firmware
-without validity check. As these resources are mostly related to memory,
-an invalid value may lead to serious consequence such as kernel panic.
+Yu mentioned at [1] about the mlock() can't be applied to large folio.
 
-This patch adds check for these resource values and adjusts the invalid
-ones.
+I leant the related code and here is my understanding:
+- For RLIMIT_MEMLOCK related, there is no problem. Becuase the
+  RLIMIT_MEMLOCK statistics is not related underneath page. That means
+  underneath page mlock or munlock doesn't impact the RLIMIT_MEMLOCK
+  statistics collection which is always correct.
 
-Signed-off-by: Junxian Huang <huangjunxian6@hisilicon.com>
----
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 116 ++++++++++++++++++++-
- drivers/infiniband/hw/hns/hns_roce_hw_v2.h |  37 +++++++
- 2 files changed, 149 insertions(+), 4 deletions(-)
+- For keeping the page in RAM, there is no problem either. At least,
+  during try_to_unmap_one(), once detect the VMA has VM_LOCKED bit
+  set in vm_flags, the folio will be kept whatever the folio is
+  mlocked or not.
 
-diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-index c4b92d8bd98a..dae0e6959fa0 100644
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-@@ -1650,6 +1650,98 @@ static int hns_roce_config_global_param(struct hns_roce_dev *hr_dev)
- 	return hns_roce_cmq_send(hr_dev, &desc, 1);
- }
- 
-+static const struct hns_roce_bt_num {
-+	u32 res_offset;
-+	u32 min;
-+	u32 max;
-+	enum hns_roce_res_invalid_flag invalid_flag;
-+	enum hns_roce_res_revision revision;
-+	bool vf_support;
-+} bt_num_table[] = {
-+	{RES_OFFSET_IN_CAPS(qpc_bt_num), 1,
-+	 MAX_QPC_BT_NUM, QPC_BT_NUM_INVALID_FLAG, RES_FOR_ALL, true},
-+	{RES_OFFSET_IN_CAPS(srqc_bt_num), 1,
-+	 MAX_SRQC_BT_NUM, SRQC_BT_NUM_INVALID_FLAG, RES_FOR_ALL, true},
-+	{RES_OFFSET_IN_CAPS(cqc_bt_num), 1,
-+	 MAX_CQC_BT_NUM, CQC_BT_NUM_INVALID_FLAG, RES_FOR_ALL, true},
-+	{RES_OFFSET_IN_CAPS(mpt_bt_num), 1,
-+	 MAX_MPT_BT_NUM, MPT_BT_NUM_INVALID_FLAG, RES_FOR_ALL, true},
-+	{RES_OFFSET_IN_CAPS(sl_num), 1,
-+	 MAX_SL_NUM, QID_NUM_INVALID_FLAG, RES_FOR_ALL, true},
-+	{RES_OFFSET_IN_CAPS(sccc_bt_num), 1,
-+	 MAX_SCCC_BT_NUM, SCCC_BT_NUM_INVALID_FLAG, RES_FOR_ALL, true},
-+	{RES_OFFSET_IN_CAPS(qpc_timer_bt_num), 1,
-+	 MAX_QPC_TIMER_BT_NUM, QPC_TIMER_BT_NUM_INVALID_FLAG,
-+	 RES_FOR_ALL, false},
-+	{RES_OFFSET_IN_CAPS(cqc_timer_bt_num), 1,
-+	 MAX_CQC_TIMER_BT_NUM, CQC_TIMER_BT_NUM_INVALID_FLAG,
-+	 RES_FOR_ALL, false},
-+	{RES_OFFSET_IN_CAPS(gmv_bt_num), 1,
-+	 MAX_GMV_BT_NUM, GMV_BT_NUM_INVALID_FLAG,
-+	 RES_FOR_HIP09, true},
-+	{RES_OFFSET_IN_CAPS(smac_bt_num), 1,
-+	 MAX_SMAC_BT_NUM, SMAC_BT_NUM_INVALID_FLAG,
-+	 RES_FOR_HIP08, true},
-+	{RES_OFFSET_IN_CAPS(sgid_bt_num), 1,
-+	 MAX_SGID_BT_NUM, SGID_BT_NUM_INVALID_FLAG,
-+	 RES_FOR_HIP08, true},
-+};
-+
-+static inline bool check_res_is_supported(struct hns_roce_dev *hr_dev,
-+					  struct hns_roce_bt_num *bt_num_entry)
-+{
-+	if (!bt_num_entry->vf_support && hr_dev->is_vf)
-+		return false;
-+
-+	if (bt_num_entry->revision == RES_FOR_HIP09 &&
-+	    hr_dev->pci_dev->revision <= PCI_REVISION_ID_HIP08)
-+		return false;
-+
-+	if (bt_num_entry->revision == RES_FOR_HIP08 &&
-+	    hr_dev->pci_dev->revision >= PCI_REVISION_ID_HIP09)
-+		return false;
-+
-+	return true;
-+}
-+
-+static inline void adjust_eqc_bt_num(struct hns_roce_caps *caps,
-+				     u16 *invalid_flag)
-+{
-+	if (caps->eqc_bt_num < caps->num_comp_vectors + caps->num_aeq_vectors ||
-+	    caps->eqc_bt_num > MAX_EQC_BT_NUM) {
-+		caps->eqc_bt_num = caps->eqc_bt_num > MAX_EQC_BT_NUM ?
-+				   MAX_EQC_BT_NUM : caps->num_comp_vectors +
-+						    caps->num_aeq_vectors;
-+		*invalid_flag |= 1 << EQC_BT_NUM_INVALID_FLAG;
-+	}
-+}
-+
-+static u16 adjust_res_caps(struct hns_roce_dev *hr_dev)
-+{
-+	struct hns_roce_caps *caps = &hr_dev->caps;
-+	u16 invalid_flag = 0;
-+	u32 min, max;
-+	u32 *res;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(bt_num_table); i++) {
-+		if (!check_res_is_supported(hr_dev, &bt_num_table[i]))
-+			continue;
-+
-+		res = (u32 *)((void *)caps + bt_num_table[i].res_offset);
-+		min = bt_num_table[i].min;
-+		max = bt_num_table[i].max;
-+		if (*res < min || *res > max) {
-+			*res = *res < min ? min : max;
-+			invalid_flag |= 1 << bt_num_table[i].invalid_flag;
-+		}
-+	}
-+
-+	adjust_eqc_bt_num(caps, &invalid_flag);
-+
-+	return invalid_flag;
-+}
-+
- static int load_func_res_caps(struct hns_roce_dev *hr_dev, bool is_vf)
- {
- 	struct hns_roce_cmq_desc desc[2];
-@@ -1730,11 +1822,19 @@ static int hns_roce_query_pf_resource(struct hns_roce_dev *hr_dev)
- 	}
- 
- 	ret = load_pf_timer_res_caps(hr_dev);
--	if (ret)
-+	if (ret) {
- 		dev_err(dev, "failed to load pf timer resource, ret = %d.\n",
- 			ret);
-+		return ret;
-+	}
- 
--	return ret;
-+	ret = adjust_res_caps(hr_dev);
-+	if (ret)
-+		dev_warn(dev,
-+			 "invalid resource values have been adjusted, invalid_flag = 0x%x.\n",
-+			 ret);
-+
-+	return 0;
- }
- 
- static int hns_roce_query_vf_resource(struct hns_roce_dev *hr_dev)
-@@ -1743,10 +1843,18 @@ static int hns_roce_query_vf_resource(struct hns_roce_dev *hr_dev)
- 	int ret;
- 
- 	ret = load_func_res_caps(hr_dev, true);
--	if (ret)
-+	if (ret) {
- 		dev_err(dev, "failed to load vf res caps, ret = %d.\n", ret);
-+		return ret;
-+	}
- 
--	return ret;
-+	ret = adjust_res_caps(hr_dev);
-+	if (ret)
-+		dev_warn(dev,
-+			 "invalid resource values have been adjusted, invalid_flag = 0x%x.\n",
-+			 ret);
-+
-+	return 0;
- }
- 
- static int __hns_roce_set_vf_switch_param(struct hns_roce_dev *hr_dev,
-diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-index d9693f6cc802..c2d46383c88c 100644
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-@@ -972,6 +972,43 @@ struct hns_roce_func_clear {
- #define CFG_GLOBAL_PARAM_1US_CYCLES CMQ_REQ_FIELD_LOC(9, 0)
- #define CFG_GLOBAL_PARAM_UDP_PORT CMQ_REQ_FIELD_LOC(31, 16)
- 
-+enum hns_roce_res_invalid_flag {
-+	QPC_BT_NUM_INVALID_FLAG,
-+	SRQC_BT_NUM_INVALID_FLAG,
-+	CQC_BT_NUM_INVALID_FLAG,
-+	MPT_BT_NUM_INVALID_FLAG,
-+	EQC_BT_NUM_INVALID_FLAG,
-+	SMAC_BT_NUM_INVALID_FLAG,
-+	SGID_BT_NUM_INVALID_FLAG,
-+	QID_NUM_INVALID_FLAG,
-+	SCCC_BT_NUM_INVALID_FLAG,
-+	GMV_BT_NUM_INVALID_FLAG,
-+	QPC_TIMER_BT_NUM_INVALID_FLAG,
-+	CQC_TIMER_BT_NUM_INVALID_FLAG,
-+};
-+
-+enum hns_roce_res_revision {
-+	RES_FOR_HIP08,
-+	RES_FOR_HIP09,
-+	RES_FOR_ALL,
-+};
-+
-+#define RES_OFFSET_IN_CAPS(res) \
-+	(offsetof(struct hns_roce_caps, res))
-+
-+#define MAX_QPC_BT_NUM 2048
-+#define MAX_SRQC_BT_NUM 512
-+#define MAX_CQC_BT_NUM 512
-+#define MAX_MPT_BT_NUM 512
-+#define MAX_EQC_BT_NUM 512
-+#define MAX_SMAC_BT_NUM 256
-+#define MAX_SGID_BT_NUM 256
-+#define MAX_SL_NUM 8
-+#define MAX_SCCC_BT_NUM 512
-+#define MAX_GMV_BT_NUM 256
-+#define MAX_QPC_TIMER_BT_NUM 1728
-+#define MAX_CQC_TIMER_BT_NUM 1600
-+
- /*
-  * Fields of HNS_ROCE_OPC_QUERY_PF_RES, HNS_ROCE_OPC_QUERY_VF_RES
-  * and HNS_ROCE_OPC_ALLOC_VF_RES
+So the function of mlock for large folio works. But it's not optimized
+because the page reclaim needs scan these large folio and may split
+them.
+
+This series identified the large folio for mlock to two types:
+  - The large folio is in VM_LOCKED VMA range
+  - The large folio cross VM_LOCKED VMA boundary
+
+For the first type, we mlock large folio so page relcaim will skip it.
+For the second type, we don't mlock large folio. It's allowed to be
+picked by page reclaim and be split. So the pages not in VM_LOCKED VMA
+range are allowed to be reclaimed/released.
+
+patch1 introduce API to check whether large folio is in VMA range.
+patch2 make page reclaim/mlock_vma_folio/munlock_vma_folio support
+large folio mlock/munlock.
+patch3 make mlock/munlock syscall support large folio.
+
+testing done:
+  - kernel selftest. No extra failure introduced
+
+Matthew commented on v1 that the large folio should be split if it
+crosses the VMA boundaries. But there is no obvious correct method
+to handle split failure and it's a common issue for mprotect,
+mlock, mremap, munmap....
+
+So I keep v1 behaivor (not split folio if it crosses VMA boundaries)
+in v2.
+
+[1] https://lore.kernel.org/linux-mm/CAOUHufbtNPkdktjt_5qM45GegVO-rCFOMkSh0HQminQ12zsV8Q@mail.gmail.com/
+
+Changes from v1:
+  patch1:
+    - Add new function folio_within_vma() based on folio_in_range()
+      per Yu's suggestion
+
+  patch2:
+    - Update folio_referenced_one() to skip the entries which are
+      out of VM_LOCKED VMA range if the large folio cross VMA
+      boundaries per Yu's suggestion
+
+  patch3:
+    - Simplify the changes in mlock_pte_range() by introduing two
+      helper functions should_mlock_folio() and get_folio_mlock_step()
+      per Yu's suggestion
+
+
+Yin Fengwei (3):
+  mm: add functions folio_in_range() and folio_within_vma()
+  mm: handle large folio when large folio in VM_LOCKED VMA range
+  mm: mlock: update mlock_pte_range to handle large folio
+
+ mm/internal.h |  43 +++++++++++++++++++--
+ mm/mlock.c    | 104 +++++++++++++++++++++++++++++++++++++++++++++++---
+ mm/rmap.c     |  34 +++++++++++++----
+ 3 files changed, 166 insertions(+), 15 deletions(-)
+
 -- 
-2.30.0
+2.39.2
 
