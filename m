@@ -2,157 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C325C74FCB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D18A74FCB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjGLBbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S231189AbjGLBdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjGLBbN (ORCPT
+        with ESMTP id S229489AbjGLBdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:31:13 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB4E69;
-        Tue, 11 Jul 2023 18:31:11 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R10WP1bJQzPkGV;
-        Wed, 12 Jul 2023 09:28:49 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 12 Jul 2023 09:31:08 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <mhiramat@kernel.org>,
-        <zhengyejian1@huawei.com>
-Subject: [PATCH v4] ftrace: Fix possible warning on checking all pages used in ftrace_process_locs()
-Date:   Wed, 12 Jul 2023 09:31:03 +0800
-Message-ID: <20230712013103.3021978-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230711095802.71406422@gandalf.local.home>
-References: <20230711095802.71406422@gandalf.local.home>
+        Tue, 11 Jul 2023 21:33:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E19CF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:33:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5F2D615D3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D65C433C8;
+        Wed, 12 Jul 2023 01:33:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689125629;
+        bh=2S6wbnljUFNSm7ROG4giIHQvf1V+Wm4CNR7UiKL6Wp8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NkniyM1QqJrEVjZXIwSmV55WRRuUt+bvS7kEncVAPpwPW3SmCif/MhisyuH0NcuaV
+         MFk1ijI4+Nzz8Kx321MHmncS/OGlQl1yDyTjmOZpnzE1GTt98HxwLJH99Ak6t9LNI+
+         PS0wXGoSpb0ipsboJbPSSJuozLmnJGpYNLkka44Oc33dwlC+LYcyc10chHkDiPuik0
+         KVWdEnM3HArRbQmo0F/w+bk74ic/EaW1+SE6qgzp3CdKHcaamsnNi+X4Lkm9iMyV/l
+         GjwYQBgfwpohywDMtmjSp0fPkGC8lnpH5HucQV3zJPL9wxVx/aZMWMXvqpcPtHVj8M
+         m7eSwACqOZj6A==
+Message-ID: <330c96f7-fbad-dd17-6368-f1378b3b5375@kernel.org>
+Date:   Wed, 12 Jul 2023 09:33:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: do not issue small discard commands
+ during checkpoint
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Daejun Park <daejun7.park@samsung.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230613203947.2745943-1-jaegeuk@kernel.org>
+ <ZInmkgjDnAUD5Nk0@google.com>
+ <50d5fa8c-4fe9-8a03-be78-0b5383e55b62@kernel.org>
+ <ZKP6EJ5dZ4f4wScp@google.com>
+ <65143701-4c19-ab66-1500-abd1162639cd@kernel.org>
+ <ZKWovWZDiHjMavtB@google.com>
+ <cadfb8d7-f5d0-a3ec-cafb-a0c06ad7d290@kernel.org>
+ <ZK2FT9CUjxXvQ2K5@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZK2FT9CUjxXvQ2K5@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As comments in ftrace_process_locs(), there may be NULL pointers in
-mcount_loc section:
- > Some architecture linkers will pad between
- > the different mcount_loc sections of different
- > object files to satisfy alignments.
- > Skip any NULL pointers.
+On 2023/7/12 0:37, Jaegeuk Kim wrote:
+> On 07/06, Chao Yu wrote:
+>> On 2023/7/6 1:30, Jaegeuk Kim wrote:
+>>> On 07/04, Chao Yu wrote:
+>>>> On 2023/7/4 18:53, Jaegeuk Kim wrote:
+>>>>> On 07/03, Chao Yu wrote:
+>>>>>> On 2023/6/15 0:10, Jaegeuk Kim wrote:
+>>>>>>> If there're huge # of small discards, this will increase checkpoint latency
+>>>>>>> insanely. Let's issue small discards only by trim.
+>>>>>>>
+>>>>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>>>>>> ---
+>>>>>>>
+>>>>>>>      Change log from v1:
+>>>>>>>       - move the skip logic to avoid dangling objects
+>>>>>>>
+>>>>>>>      fs/f2fs/segment.c | 2 +-
+>>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>>>>>> index 8c7af8b4fc47..0457d620011f 100644
+>>>>>>> --- a/fs/f2fs/segment.c
+>>>>>>> +++ b/fs/f2fs/segment.c
+>>>>>>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+>>>>>>>      			len = next_pos - cur_pos;
+>>>>>>>      			if (f2fs_sb_has_blkzoned(sbi) ||
+>>>>>>> -			    (force && len < cpc->trim_minlen))
+>>>>>>> +					!force || len < cpc->trim_minlen)
+>>>>>>>      				goto skip;
+>>>>>>
+>>>>>> Sorry for late reply.
+>>>>>>
+>>>>>> We have a configuration for such case, what do you think of setting
+>>>>>> max_small_discards to zero? otherwise, w/ above change, max_small_discards
+>>>>>> logic may be broken?
+>>>>>>
+>>>>>> What:           /sys/fs/f2fs/<disk>/max_small_discards
+>>>>>> Date:           November 2013
+>>>>>> Contact:        "Jaegeuk Kim" <jaegeuk.kim@samsung.com>
+>>>>>> Description:    Controls the issue rate of discard commands that consist of small
+>>>>>>                    blocks less than 2MB. The candidates to be discarded are cached until
+>>>>>>                    checkpoint is triggered, and issued during the checkpoint.
+>>>>>>                    By default, it is disabled with 0.
+>>>>>>
+>>>>>> Or, if we prefer to disable small_discards by default, what about below change:
+>>>>>
+>>>>> I think small_discards is fine, but need to avoid long checkpoint latency only.
+>>>>
+>>>> I didn't get you, do you mean we can still issue small discard by
+>>>> fstrim, so small_discards functionality is fine?
+>>>
+>>> You got the point.
+>>
+>> Well, actually, what I mean is max_small_discards sysfs entry's functionality
+>> is broken. Now, the entry can not be used to control number of small discards
+>> committed by checkpoint.
+> 
+> Could you descrbie this problem first?
 
-After commit 20e5227e9f55 ("ftrace: allow NULL pointers in mcount_loc"),
-NULL pointers will be accounted when allocating ftrace pages but skipped
-before adding into ftrace pages, this may result in some pages not being
-used. Then after commit 706c81f87f84 ("ftrace: Remove extra helper
-functions"), warning may occur at:
-  WARN_ON(pg->next);
+Oh, alright, actually, I've described this problem literally, but maybe it's not
+clear, let me give some examples as below:
 
-To fix it, only warn for case that no pointers skipped but pages not used
-up, then free those unused pages after releasing ftrace_lock.
+echo 0 > /sys/fs/f2fs/vdb/max_small_discards
+xfs_io -f /mnt/f2fs/file -c "pwrite 0 2m" -c "fsync"
+xfs_io /mnt/f2fs/file -c "fpunch 0 4k"
+sync
+cat /proc/fs/f2fs/vdb/discard_plist_info |head -2
 
-Fixes: 706c81f87f84 ("ftrace: Remove extra helper functions")
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
-Changes v3 [3] => v4:
-  - Keep the upside-down-xmas-tree format as Steve suggested.
-    Link: https://lore.kernel.org/all/20230711095802.71406422@gandalf.local.home/
+echo 100 > /sys/fs/f2fs/vdb/max_small_discards
+rm /mnt/f2fs/file
+xfs_io -f /mnt/f2fs/file -c "pwrite 0 2m" -c "fsync"
+xfs_io /mnt/f2fs/file -c "fpunch 0 4k"
+sync
+cat /proc/fs/f2fs/vdb/discard_plist_info |head -2
 
-Changes v2 [2] => v3:
-  - Check NULL for 'pg->next' before assigning it to variable 'pg_unuse'.
+Before the patch:
 
-Changes v1 [1] => v2:
-  - As Steve suggested, only warn for case that no pointers skipped
-    but pages not used up then free those unused pages. But I move
-    the free process after releasing ftrace_lock.
-    Link: https://lore.kernel.org/all/20230710104625.421c851a@gandalf.local.home/
-  - Update commit messages about the new solution.
+Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
+   0         .       .       .       .       .       .       .       .
 
-[1] https://lore.kernel.org/all/20230710212958.274126-1-zhengyejian1@huawei.com/
-[2] https://lore.kernel.org/all/20230711201630.1837109-1-zhengyejian1@huawei.com/
-[3] https://lore.kernel.org/all/20230711112752.2595316-1-zhengyejian1@huawei.com/
+Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
+   0         3       1       .       .       .       .       .       .
 
- kernel/trace/ftrace.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+After the patch:
+Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
+   0         .       .       .       .       .       .       .       .
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 3740aca79fe7..6fc238f6ef3e 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6471,9 +6471,11 @@ static int ftrace_process_locs(struct module *mod,
- 			       unsigned long *start,
- 			       unsigned long *end)
- {
-+	struct ftrace_page *pg_unuse = NULL;
- 	struct ftrace_page *start_pg;
- 	struct ftrace_page *pg;
- 	struct dyn_ftrace *rec;
-+	unsigned long skipped = 0;
- 	unsigned long count;
- 	unsigned long *p;
- 	unsigned long addr;
-@@ -6536,8 +6538,10 @@ static int ftrace_process_locs(struct module *mod,
- 		 * object files to satisfy alignments.
- 		 * Skip any NULL pointers.
- 		 */
--		if (!addr)
-+		if (!addr) {
-+			skipped++;
- 			continue;
-+		}
- 
- 		end_offset = (pg->index+1) * sizeof(pg->records[0]);
- 		if (end_offset > PAGE_SIZE << pg->order) {
-@@ -6551,8 +6555,10 @@ static int ftrace_process_locs(struct module *mod,
- 		rec->ip = addr;
- 	}
- 
--	/* We should have used all pages */
--	WARN_ON(pg->next);
-+	if (pg->next) {
-+		pg_unuse = pg->next;
-+		pg->next = NULL;
-+	}
- 
- 	/* Assign the last page to ftrace_pages */
- 	ftrace_pages = pg;
-@@ -6574,6 +6580,20 @@ static int ftrace_process_locs(struct module *mod,
-  out:
- 	mutex_unlock(&ftrace_lock);
- 
-+	/* We should have used all pages unless we skipped some */
-+	if (pg_unuse) {
-+		WARN_ON(!skipped);
-+		while (pg_unuse) {
-+			pg = pg_unuse;
-+			pg_unuse = pg->next;
-+			if (pg->records) {
-+				free_pages((unsigned long)pg->records, pg->order);
-+				ftrace_number_of_pages -= 1 << pg->order;
-+			}
-+			kfree(pg);
-+			ftrace_number_of_groups--;
-+		}
-+	}
- 	return ret;
- }
- 
--- 
-2.25.1
+Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
+   0         .       .       .       .       .       .       .       .
 
+So, now max_small_discards can not be used to control small discard number
+cached by checkpoint.
+
+Thanks,
+
+> 
+>>
+>> I think there is another way to achieve "avoid long checkpoint latency caused
+>> by committing huge # of small discards", the way is we can set max_small_discards
+>> to small value or zero, w/ such configuration, it will take checkpoint much less
+>> time or no time to committing small discard due to below control logic:
+>>
+>> f2fs_flush_sit_entries()
+>> {
+>> ...
+>> 			if (!(cpc->reason & CP_DISCARD)) {
+>> 				cpc->trim_start = segno;
+>> 				add_discard_addrs(sbi, cpc, false);
+>> 			}
+>> ...
+>> }
+>>
+>> add_discard_addrs()
+>> {
+>> ...
+>> 	while (force || SM_I(sbi)->dcc_info->nr_discards <=
+>> 				SM_I(sbi)->dcc_info->max_discards) {
+>>
+>> It will break the loop once nr_discards is larger than max_discards, if
+>> max_discards is set to zero, checkpoint won't take time to handle small discards.
+>>
+>> ...
+>> 		if (!de) {
+>> 			de = f2fs_kmem_cache_alloc(discard_entry_slab,
+>> 						GFP_F2FS_ZERO, true, NULL);
+>> 			de->start_blkaddr = START_BLOCK(sbi, cpc->trim_start);
+>> 			list_add_tail(&de->list, head);
+>> 		}
+>> ...
+>> 	}
+>> ...
+>>
+>> Thanks,
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>>>
+>>>>>>    From eb89d9b56e817e3046d7fa17165b12416f09d456 Mon Sep 17 00:00:00 2001
+>>>>>> From: Chao Yu <chao@kernel.org>
+>>>>>> Date: Mon, 3 Jul 2023 09:06:53 +0800
+>>>>>> Subject: [PATCH] Revert "f2fs: enable small discard by default"
+>>>>>>
+>>>>>> This reverts commit d618ebaf0aa83d175658aea5291e0c459d471d39 in order
+>>>>>> to disable small discard by default, so that if there're huge number of
+>>>>>> small discards, it will decrease checkpoint's latency obviously.
+>>>>>>
+>>>>>> Also, this patch reverts 9ac00e7cef10 ("f2fs: do not issue small discard
+>>>>>> commands during checkpoint"), due to it breaks small discard feature which
+>>>>>> may be configured via sysfs entry max_small_discards.
+>>>>>>
+>>>>>> Fixes: 9ac00e7cef10 ("f2fs: do not issue small discard commands during checkpoint")
+>>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>>>> ---
+>>>>>>     fs/f2fs/segment.c | 4 ++--
+>>>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>>>>> index 14c822e5c9c9..0a313368f18b 100644
+>>>>>> --- a/fs/f2fs/segment.c
+>>>>>> +++ b/fs/f2fs/segment.c
+>>>>>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+>>>>>>     			len = next_pos - cur_pos;
+>>>>>>
+>>>>>>     			if (f2fs_sb_has_blkzoned(sbi) ||
+>>>>>> -					!force || len < cpc->trim_minlen)
+>>>>>> +			    (force && len < cpc->trim_minlen))
+>>>>>>     				goto skip;
+>>>>>>
+>>>>>>     			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
+>>>>>> @@ -2269,7 +2269,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
+>>>>>>     	atomic_set(&dcc->queued_discard, 0);
+>>>>>>     	atomic_set(&dcc->discard_cmd_cnt, 0);
+>>>>>>     	dcc->nr_discards = 0;
+>>>>>> -	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
+>>>>>> +	dcc->max_discards = 0;
+>>>>>>     	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
+>>>>>>     	dcc->min_discard_issue_time = DEF_MIN_DISCARD_ISSUE_TIME;
+>>>>>>     	dcc->mid_discard_issue_time = DEF_MID_DISCARD_ISSUE_TIME;
+>>>>>> -- 
+>>>>>> 2.40.1
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>      			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
