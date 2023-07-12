@@ -2,221 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681CD750703
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959DF7506FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjGLLuG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 07:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S233483AbjGLLtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbjGLLtP (ORCPT
+        with ESMTP id S233286AbjGLLtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:49:15 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3B02103;
-        Wed, 12 Jul 2023 04:48:31 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-94ea38c90ccso191471966b.1;
-        Wed, 12 Jul 2023 04:48:31 -0700 (PDT)
+        Wed, 12 Jul 2023 07:49:14 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB843212D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:48:27 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so1472519a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689162501; x=1691754501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C0bqqbnM1vgDHL4/44kvm6PkazY/QumMJkjW1vAAr6k=;
+        b=fBm0+QsqoMQJ2GVY6BROKP/9+appv6LnzytHflrEjt1WEsk9yjwyEugEeO6R+mfsiE
+         QwuLZZhzv3qU1mY9xvDFDgAB69vJvDWk0f1fBsSzKgVEKz1GXKbSsrpStisdQ+Sf030j
+         qYrAQrsE4RG0owCp5UaLOFXxm0TYZzF54ryoPAkrgXCPdjb9IhhUf6v4emNvEdN+yh0x
+         ltZouG3eNA4dXbM97im675FZFTjws+bGPLDYS3Yrp3eiUlvAj8fCH3LnTPuRWcrq+FpC
+         z6+6w66Cd1ynF/NqsOBhYMGcuH9+Wi5B9tzubuUDDgoIEu2zg2cZ0HzbVdQDoanlCTuV
+         PClQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689162503; x=1691754503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SoXCY3sAAcBrdVqEWi7uKArR+tI/RlCQx6kJCdISvsg=;
-        b=PdG/0T7XNFox0hRyfG/idCR3WMjuf/RNKSjS1AEKAfymWTYt4MDySd5m9M5TexqS4f
-         VI/HBBapuvG0R0eMt0+DB2oh2YjMHUtLCJPGPZErQbQ7C9wfLHR0ZxCayzbb6c0P84fn
-         066XcCnF3T0UQ0x2P56/KCqjBxEJy7FeBculJT6j3ePEYVrELE/zyFmAiuEDU7g/U1qF
-         NLr1/ghK9P3uFYvzowVNa8ARa8BEkfdrbNELX1ZsBbBleKIgTj91/SIhtI45QMmyobcS
-         fcF0YvbcK7xVnksuiJEyoKxQzmYzTALPG4Gy+02B3PgrD4IC6ZdV+T7R22Zuurn0T5xU
-         8r9w==
-X-Gm-Message-State: ABy/qLaAUCWIBR4VFqUPSpIe4GimtVKEK6unTqp1nHPAgdnuE3yxwp5/
-        dxn24CYczI8byU+ViaFz1JQLMbW4D9M37qptgEg=
-X-Google-Smtp-Source: APBJJlHOQkU1ZmDQsnarqITjpg/7awZ+GZY2vErAj+o094OvmfF5lgPs4W86rGgS1a4K2aEJN7z0eJCyTB9ZiA5CcN0=
-X-Received: by 2002:a17:906:7490:b0:993:d5e7:80f8 with SMTP id
- e16-20020a170906749000b00993d5e780f8mr14433741ejl.7.1689162502796; Wed, 12
- Jul 2023 04:48:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689162501; x=1691754501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0bqqbnM1vgDHL4/44kvm6PkazY/QumMJkjW1vAAr6k=;
+        b=W3l6n+99ngeNQS8FmuauLjhdD471Hk50tBeYLx1rUJmLPnEHcNjJpWZbBmmk/458h/
+         VASYbfA8rvx93CdyELuhB8bNDn9gAsoagbDahdmarEc+1gtkiWUYgZxf1pvgP5pbU3Lf
+         q2pTV73YL3uDfDdw8EdBKt59mz7v3f0eBWcPuyIUgNzlS8G3SEgz0ai5VFKjy4aaTH4Z
+         IvbrV4Kf8rs/mrYgcnj+mB3HaarbCtBpAVgTbLi6RATc8lpRXLqq3OIGdiTUlwoEx4pI
+         Ma+y8oPx9xnLypi6tuYqmj3nznLHszup1BYdUVxf6GADmXWQ2/Q+9tY5fuGU4DesDxZx
+         C/hQ==
+X-Gm-Message-State: ABy/qLbzMPqDqC1wAzbFR3XvV9F8eGG0XvY/F/Z8+lDTbP0lSQO7Wzgp
+        W5QM+uIUYUIKVoNljzEe1yhJ/A==
+X-Google-Smtp-Source: APBJJlFQeZHKAi2oBkRMSAzPMEDSRrsxv9NhvgIUeOOAkRmLUgBAxAXBv0sRJvJUaA9FbKHwlb2a6A==
+X-Received: by 2002:a05:6402:358c:b0:51e:443a:25df with SMTP id y12-20020a056402358c00b0051e443a25dfmr2043522edc.19.1689162501273;
+        Wed, 12 Jul 2023 04:48:21 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id x19-20020aa7dad3000000b0051e28d315a2sm2637235eds.78.2023.07.12.04.48.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 04:48:20 -0700 (PDT)
+Message-ID: <0ce7d468-c0f5-e29f-d4cc-3bdcfcc2bff4@linaro.org>
+Date:   Wed, 12 Jul 2023 13:48:19 +0200
 MIME-Version: 1.0
-References: <20230711005325.1499-3-mario.limonciello@amd.com> <20230711221427.GA250962@bhelgaas>
-In-Reply-To: <20230711221427.GA250962@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jul 2023 13:48:11 +0200
-Message-ID: <CAJZ5v0hmDVkUz8QbE3Jx0kLqDfB6hEuQjhd_u8Kjj2hyZYpZGA@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] PCI: Don't put non-power manageable PCIe root
- ports into D3
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Iain Lane <iain@orangesquash.org.uk>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 2/3] dt-bindings: gnss: u-blox: add "reset-gpios" binding
+Content-Language: en-US
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Johan Hovold <johan@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230712113731.3306-1-wsa+renesas@sang-engineering.com>
+ <20230712113731.3306-3-wsa+renesas@sang-engineering.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230712113731.3306-3-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 12:14 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Andy, Intel MID stuff]
->
-> On Mon, Jul 10, 2023 at 07:53:25PM -0500, Mario Limonciello wrote:
-> > Since commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> > PCIe ports from modern machines (>2015) are allowed to be put into D3 by
-> > storing a flag in the `struct pci_dev` structure.
->
-> It looks like >= 2015 (not >2015).  I think "a flag" refers to
-> "bridge_d3".
->
-> > pci_power_manageable() uses this flag to indicate a PCIe port can enter D3.
-> > pci_pm_suspend_noirq() uses the return from pci_power_manageable() to
-> > decide whether to try to put a device into its target state for a sleep
-> > cycle via pci_prepare_to_sleep().
-> >
-> > For devices that support D3, the target state is selected by this policy:
-> > 1. If platform_pci_power_manageable():
-> >    Use platform_pci_choose_state()
-> > 2. If the device is armed for wakeup:
-> >    Select the deepest D-state that supports a PME.
-> > 3. Else:
-> >    Use D3hot.
-> >
-> > Devices are considered power manageable by the platform when they have
-> > one or more objects described in the table in section 7.3 of the ACPI 6.4
-> > specification.
->
-> No point in citing an old version, so please cite ACPI r6.5, sec 7.3.
->
-> The spec claims we only need one object from the table for a device to
-> be "power-managed", but in reality, it looks like the only things that
-> actually *control* power are _PRx (the _ON/_OFF methods of Power
-> Resources) and _PSx (ironically only mentioned parenthically).
->
-> This matches up well with acpi_pci_power_manageable(), which returns
-> true if a device has either _PR0 or _PS0.
->
->   Per ACPI r6.5, sec 7.3, ACPI control of device power states uses
->   Power Resources (i.e., the _ON/_OFF methods of _PRx) or _PSx
->   methods.  Hence acpi_pci_power_manageable() checks for the presence
->   of _PR0 or _PS0.
->
-> Tangent unrelated to *this* patch: I don't know how to think about the
-> pci_use_mid_pm() in platform_pci_power_manageable() because I haven't
-> seen a MID spec.  pci_use_mid_pm() isn't dependent on "dev", so we
-> claim *all* PCI devices, even external ones, are power manageable by
-> the platform, which doesn't seem right.
+On 12/07/2023 13:37, Wolfram Sang wrote:
+> Needed to enable this chip on a Renesas KingFisher board. Description
+> copied over from the Mediatek driver which already supports it.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
+> index 4835a280b3bf..8f6992b97ca6 100644
+> --- a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
+> +++ b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
+> @@ -41,6 +41,12 @@ properties:
+>      description: >
+>        Backup voltage regulator
+>  
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description: >
+> +      An optional reset line, with names such as RESET or NRESET.
+> +      If the line is active low it should be flagged with GPIO_ACTIVE_LOW.
+> +
+>  required:
+>    - compatible
+>    - vcc-supply
+> @@ -54,5 +60,6 @@ examples:
+>              compatible = "u-blox,neo-8";
+>              v-bckp-supply = <&gnss_v_bckp_reg>;
+>              vcc-supply = <&gnss_vcc_reg>;
+> +            reset-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
 
-No, we don't.
+This should complain with errors, because of missing header for the
+defines, so usual disclaimer:
 
-This only means that PCI devices may be power manageable by the
-platform and so the platform code should be invoked to check that.
-AFAICS, intel_mid_pwr_get_lss_id(() will return an error for a device
-without platform PM support.
+It does not look like you tested the bindings, at least after quick
+look. Please run `make dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Maybe you need to update your dtschema and yamllint.
 
-> > At suspend Linux puts PCIe root ports that are not power manageable by
-> > the platform into D3hot. Windows only puts PCIe root ports into D3 when
-> > they are power manageable by the platform.
-> >
-> > The policy selected for Linux to put non-power manageable PCIe root ports
-> > into D3hot at system suspend doesn't match anything in the PCIe or ACPI
-> > specs.
-> >
-> > Linux shouldn't assume PCIe root ports support D3 just because
-> > they're on a machine newer than 2015, the ports should also be considered
-> > power manageable by the platform.
-> >
-> > Add an extra check for PCIe root ports to ensure D3 isn't selected for
-> > them if they are not power-manageable through platform firmware.
-> > This will avoid pci_pm_suspend_noirq() changing the power state
-> > via pci_prepare_to_sleep().
-> >
-> > The check is focused on PCIe root ports because they are part of
-> > the platform.  Other PCIe bridges may be connected externally and thus
-> > cannot impose platform specific limitations.
-> >
-> > Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mgmt/device-power-management-objects.html [1]
-> > Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> > Reported-by: Iain Lane <iain@orangesquash.org.uk>
-> > Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-> > Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> > Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> > v6->v7:
-> > * revert back to v5 code, rewrite commit message to specific examples
-> >   and be more generic
-> > ---
-> >  drivers/pci/pci.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index f916fd76eba79..4be8c6f8f4ebe 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -3041,6 +3041,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
-> >       if (dmi_check_system(bridge_d3_blacklist))
-> >               return false;
-> >
-> > +     /*
-> > +      * It's not safe to put root ports that aren't power manageable
-> > +      * by the platform into D3.
->
-> Does this refer specifically to D3cold?
->
-> I assume that if we were talking about D3hot, we wouldn't need to
-> check for ACPI support because D3hot behavior should be fully covered
-> by the PCIe spec.
->
-> Let's be specific about D3hot vs D3cold whenever possible.
+Best regards,
+Krzysztof
 
-Amen.
-
-However, even though by the PCIe spec it should be possible to program
-PCIe ports without ACPI PM support into D3hot via PMCSR, I'm not
-actually sure how that works in practice, especially as far as PCIe
-Root Ports are concerned.
-
-Hardware designs usually don't allow Root Ports to be power managed
-individually, so I suppose that programming them into D3hot (or D1 or
-D2 for that matter) could be treated by the Host Bridge as dropping
-references to them or something similar and I can imagine that this
-may not work on some platforms and so maybe it should be avoided in
-general.
-
-When there is ACPI PM support, though, it can at least be assumed that
-the platform designer has taken Root Port D3hot into account.
-
-> > +     if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
-> > +         !platform_pci_power_manageable(bridge))
-> > +             return false;
->
-> If ACPI says a device is not power-manageable, i.e., ACPI doesn't know
-> how to put it in D0, it makes sense to return "false" here so we don't
-> try to put it in D3cold.
->
-> But I don't understand the ROOT_PORT check.  We may have a Switch
-> described via ACPI, and the ROOT_PORT check means we can return "true"
-> (it's OK to use D3cold) even if the Switch Port is not power-manageable
-> via ACPI.
-
-My understanding is that it is related to the remark above: It is
-generally unclear how Root Port power management without ACPI support
-is supposed to work, so they are kind of a special case.
-
-> >       /*
-> >        * It should be safe to put PCIe ports from 2015 or newer
-> >        * to D3.
-> > --
-> > 2.34.1
-> >
