@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4BC75020E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B46475020F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjGLIwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S232762AbjGLIws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjGLIwn (ORCPT
+        with ESMTP id S232350AbjGLIwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:52:43 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC875A9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:52:41 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso68397535e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:52:41 -0700 (PDT)
+        Wed, 12 Jul 2023 04:52:44 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C71CF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:52:42 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3159d5e409dso288217f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689151960; x=1691743960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3KQT6tn3IkIMgWvQdIWn/fFTIkPGq6wDM785k0TXyQ4=;
-        b=fCk/E7k6Bn7G1jB3D236SgDCOfp+FSKoiEbYUigL0ygKoT2l/c5FpK4FVwFC+1vZsH
-         NXRb3uv1hnEZ1dP0Tg2Et9reupONnDU2Pl+GetssCAHcVDagCq0PdxeMmq3ayNdX4hxn
-         3gM7rBzfmGWoyWNj5Hx+ajHD9Ov2Stl2GlPzikjkUpLZnafn9qsNr/lYC9YjQ4taEyTm
-         1T/sC+/Uw4c5c6S5PcTr/ooObNTzQR6MbuZCwTJJLWoRkhv+CUaXJIF38LllSGoenFes
-         weXA2qDI9KOXrhAhAOInpjN/PD3MJsjTuQ+GiS6AgjuswjO1uhmtxVjUVxz9lxb+OKVK
-         n+0Q==
+        d=9elements.com; s=google; t=1689151961; x=1691743961;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3v4UNOf4OnfSq8XVP7LewFMWvi4W/OrdiQXVKL6e3Lc=;
+        b=gUfcmiPg4rS4fTc3XWbclJkCLK94142Yok+PgMSFvS9QoQ/dEWGV6ca5v3qfeDOnTf
+         8QBOHIZQReFJ+xq5u3vEznEihYKmvcNtwBFVTEtMZjKy/0/zM3ryGxSngIyiqn61cZz9
+         farTq0Xj6zruO7R5whaOzcQyDVI9nAE3c+Mx0eg9HbY7tRgCBAsid84zLeIbMbiZjuOB
+         cT8sWILoM3rdAK99M/3b+Rfuqf/J86czQr6XGh6ZL/SkypNPL6lZZ5D8aL2DdyG+cBMt
+         IcAGxdhY+DqUDUt2OCMy4YMIGQ4414JZ9sYO8l1qByzfyvRZSob6i29Pbrnvyqn3o0pj
+         sN7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689151960; x=1691743960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3KQT6tn3IkIMgWvQdIWn/fFTIkPGq6wDM785k0TXyQ4=;
-        b=MylfsuON7zPglTzaisik7XvCjoASs5ADJY92cborhwWSd1zqSwv7VKS+Vx08YXULd6
-         VmGWjciCEeFNqjUmLwko4ov37GaIvE1NBm1O2ohhMmURi4cHwSPdvZ/JFjsVq7sqV5o3
-         Z5ew0c2k3e6AHFxmcCxLF/L2CPGL7qDffmFYfrvkE/dgAChgoi+z1CVL+Kv4OlKT/GFp
-         IlE0dUp0JYKypmLkvH4B/gfWDd9EVp3FeoEktxtUgWTC+LPjDjw5I56NstfQtBb4Gkux
-         ht4JSOCImV/J1GmPCDRMDdBGWCncY89Y1k8Zk+SRfyTdUwfuIC3iaCX8MYe8CjBMo8pq
-         CW/w==
-X-Gm-Message-State: ABy/qLakZeaYtoZn9r4cx0P/fMQdRRKWdXM/HD1CwwrgfuqGtlK3jWGB
-        +w63sLnOs0XWW/HE8raECsL4zw==
-X-Google-Smtp-Source: APBJJlFyrNrVeGP+d5vQvvHiSEn3WlxIabBLopJEroWzR+YQwwdTDNSSb+n7pHkTmK1IDPvNwSMoLQ==
-X-Received: by 2002:a5d:45d1:0:b0:314:321a:4bc7 with SMTP id b17-20020a5d45d1000000b00314321a4bc7mr16268948wrs.15.1689151960309;
-        Wed, 12 Jul 2023 01:52:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689151961; x=1691743961;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3v4UNOf4OnfSq8XVP7LewFMWvi4W/OrdiQXVKL6e3Lc=;
+        b=IyU6gP5imZ0Kt/i8W9cXFbLTWzji5zeozMiYWoKkJD1vVB1oTXtg4AmTb7YuwgH0yv
+         UBBO9XdsAVzT5s7vj2waijT9WH4ptehxmplRy+lHS7RRmyjZsyoGNnGHsjw0EB4AQ0b8
+         /tDV5PkCWBN4YEtXqA2n/C8wNukLeZMUdfEiE+/z6My5dAj6ZqO11bEJiflMSwQ58oeX
+         ozYQzLifuxG8scpeLJWp6EERA2uTij1etKdAAI0pQxaYCJICy0QFLakTNUnLumqhF8QC
+         SNS9AjebzX3itMZ5jsWEze6bZtSmmNFcXLE5JKAyuS0jC1ghxZlEF86BhMjABo0E7X96
+         jdHA==
+X-Gm-Message-State: ABy/qLZSFOHzmBoYYzvWPxkSJuXTkfi6mHDo6ZGxTQ8nUzK4vKRkYFwC
+        kwYKCzTefepNpBoA0t0lN7h/Uw==
+X-Google-Smtp-Source: APBJJlGGeF9HoB77N7GwO+Hyr+ddV1M8ABtSNq/dkr/65Ht2wVGC7PINcIdawjEEC/C8z59wqiPM6Q==
+X-Received: by 2002:adf:e651:0:b0:312:849d:acc8 with SMTP id b17-20020adfe651000000b00312849dacc8mr1202100wrn.9.1689151961390;
+        Wed, 12 Jul 2023 01:52:41 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id t9-20020a5d5349000000b003143b7449ffsm4475140wrv.25.2023.07.12.01.52.39
+        by smtp.gmail.com with ESMTPSA id t9-20020a5d5349000000b003143b7449ffsm4475140wrv.25.2023.07.12.01.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 01:52:39 -0700 (PDT)
+        Wed, 12 Jul 2023 01:52:41 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Linus Walleij <linus.walleij@linaro.org>
 Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: pinctrl: cypress,cy8c95x0: Add reset pin
-Date:   Wed, 12 Jul 2023 10:52:34 +0200
-Message-ID: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/2] pinctrl: cy8c95x0: Add reset support
+Date:   Wed, 12 Jul 2023 10:52:35 +0200
+Message-ID: <20230712085236.2496651-2-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
+References: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,38 +76,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-This patch adds support for an optional reset pin.
+This patch adds support for an optional "reset" GPIO pin in the cy8c95x0
+pinctrl driver. On probe, the reset pin is pulled low to bring chip out
+of reset. The reset pin has an internal pull-down and can be left
+floating if not required.
 
-The reset pin is used to bring the chip into a known state and has an
-internal pull-down, allowing it to be left floating if not needed.
+The datasheet doesn't mention any timing related to the reset pin.
+
+Based on empirical tests, it was found that the chip requires a
+delay of 250 milliseconds before accepting I2C transfers after driving
+the reset pin low. Therefore, a delay of 250ms is added before
+proceeding with I2C transfers.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
 Changes in V2:
-- Update subject
-- Update reset-gpios description.
+- None
 ---
- .../devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml         | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pinctrl/pinctrl-cy8c95x0.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
-index 222d57541b65..2fa22160336f 100644
---- a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
-@@ -51,6 +51,10 @@ properties:
-     description:
-       Optional power supply.
+diff --git a/drivers/pinctrl/pinctrl-cy8c95x0.c b/drivers/pinctrl/pinctrl-cy8c95x0.c
+index 2ecc96691c55..58ca6fac7849 100644
+--- a/drivers/pinctrl/pinctrl-cy8c95x0.c
++++ b/drivers/pinctrl/pinctrl-cy8c95x0.c
+@@ -164,6 +164,7 @@ struct cy8c95x0_pinctrl {
+ 	struct pinctrl_desc pinctrl_desc;
+ 	char name[32];
+ 	unsigned int tpin;
++	struct gpio_desc *gpio_reset;
+ };
  
-+  reset-gpios:
-+    description: Reference to the GPIO connected to the XRES pin
-+    maxItems: 1
+ static const struct pinctrl_pin_desc cy8c9560_pins[] = {
+@@ -1383,6 +1384,20 @@ static int cy8c95x0_probe(struct i2c_client *client)
+ 		chip->regulator = reg;
+ 	}
+ 
++	/* bring the chip out of reset if reset pin is provided */
++	chip->gpio_reset = devm_gpiod_get_optional(&client->dev, "reset", GPIOD_OUT_HIGH);
++	if (IS_ERR(chip->gpio_reset)) {
++		ret = dev_err_probe(chip->dev, PTR_ERR(chip->gpio_reset),
++				    "Failed to get GPIO 'reset'\n");
++		goto err_exit;
++	} else if (chip->gpio_reset) {
++		usleep_range(1000, 2000);
++		gpiod_set_value_cansleep(chip->gpio_reset, 0);
++		usleep_range(250000, 300000);
 +
- patternProperties:
-   '-pins$':
-     type: object
-
-base-commit: 3bc551a3007a751a53bfba5b37fa16157f4fb861
++		gpiod_set_consumer_name(chip->gpio_reset, "CY8C95X0 RESET");
++	}
++
+ 	chip->regmap = devm_regmap_init_i2c(client, &cy8c95x0_i2c_regmap);
+ 	if (IS_ERR(chip->regmap)) {
+ 		ret = PTR_ERR(chip->regmap);
 -- 
 2.41.0
 
