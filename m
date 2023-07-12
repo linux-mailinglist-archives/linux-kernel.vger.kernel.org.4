@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68E275067D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F24750680
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjGLLnr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 07:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S232304AbjGLLo1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 07:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjGLLnp (ORCPT
+        with ESMTP id S230229AbjGLLoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:43:45 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D08D1980;
-        Wed, 12 Jul 2023 04:43:44 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57712d00cc1so80686747b3.3;
-        Wed, 12 Jul 2023 04:43:44 -0700 (PDT)
+        Wed, 12 Jul 2023 07:44:25 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576221980;
+        Wed, 12 Jul 2023 04:44:24 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-57012b2973eso80724067b3.2;
+        Wed, 12 Jul 2023 04:44:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689162223; x=1691754223;
+        d=1e100.net; s=20221208; t=1689162263; x=1691754263;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZFaa1eey2gFBEkQTz4+FvOqjiuJjKAg/tTkqzXxKkMw=;
-        b=AxMhJcDjOzPhmC8jTZE4lggCg763BS+rLs49ypbyQLRgnl4CCboi+S0WsrbwE9Zdow
-         Y2goESZX6RVk7Gst5+m4eHW+uAczxPq1TKKBMKdbUMqIpgpLgZ/XB043h6UbV1ZeGfS9
-         4ZCxAB5p5UgSf2p0QV45oU0rm2ahLesM4JDRWQ/VjWW4RqJidTpDviMnBsVpDC2FDLNV
-         OH3YYXOYcgPJaHgBHfElJlKGbqvZ/wi3A8YMjRaAfdqhERenwCyaarkoUS1Czr414Utf
-         4jwpY5mIA8UsesEHcakviOoNZZFJmALp4pkVLR/IFimfdq7+F2RZFflQ9oq+y2NWT5V7
-         vNIw==
-X-Gm-Message-State: ABy/qLZGwMy4vnbL5TCzb6XHfZpnyznicrdE96kBT5aQd4iFw3oEtmcK
-        D68b8Xe+sSDHFYJigdOuYFKO16RWvW1EHQ==
-X-Google-Smtp-Source: APBJJlGMIyJ2PM9Ugkvat2OdD8kl7nbkrUSZTKe+vV0IuzVh3mUiWX4qcTm1eQ/TYxVFXlAssSuvbg==
-X-Received: by 2002:a0d:ce43:0:b0:57a:f72:ebf8 with SMTP id q64-20020a0dce43000000b0057a0f72ebf8mr22549179ywd.28.1689162223181;
-        Wed, 12 Jul 2023 04:43:43 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id o123-20020a0dfe81000000b0057069c60799sm1116366ywf.53.2023.07.12.04.43.42
+        bh=aF4ThrLAOR5pV4olgrzmKlUGMJqxGnKjvfxu8NIqT5g=;
+        b=LDNEP21URBpW+Tn1rG7yA5XgZCB2BVcFxu93lBeV5wSp+WIMafk/KVIMiwydLYhoCb
+         xFHIdWyGncwHH5T8UYht+ircQrCTLtb9CYjonAqxquzGDHwGS+g87HILxLMMnG1U23dX
+         bWhzSCooItrz8q2ZB8WijHALfvLQxHTl2bMrfFBDtzNPBTfSh1o1XbtVA3y0ThrEPsql
+         ecxHdcgLpqaNjO6slQuUZmaZroPCRjv9mGISGPpCIMpwkK/V8amTWJGob0rBcynICRR5
+         OT9oGl49IdO9FXOYUf3/SjB+mlr5wdWTeiiJbDM1ArHujvrbZJzEChpzR1VTVJ/XiKcM
+         kJ0g==
+X-Gm-Message-State: ABy/qLbbDhRPYgo5rfm5HZrztvVuOnVYIizfg5jNzimBL3MhwMJlsxXA
+        V/p16ClT2Wjt1isXZdMueBw5nHnXmjwzVA==
+X-Google-Smtp-Source: APBJJlFwBSHY+GgvRaTVPogOlXiuAMO7u0aTdjAYWsaAZKUO6tZDdK9ku3H5wMIdKmXifyszwiXqMQ==
+X-Received: by 2002:a0d:c342:0:b0:57a:8de9:16a3 with SMTP id f63-20020a0dc342000000b0057a8de916a3mr6973487ywd.8.1689162263272;
+        Wed, 12 Jul 2023 04:44:23 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id p186-20020a8174c3000000b00573898fb12bsm1105077ywc.82.2023.07.12.04.44.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 04:43:42 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-c49777d6e7aso7876166276.1;
-        Wed, 12 Jul 2023 04:43:42 -0700 (PDT)
-X-Received: by 2002:a25:68ca:0:b0:c85:a84:d87e with SMTP id
- d193-20020a2568ca000000b00c850a84d87emr8445978ybc.10.1689162221895; Wed, 12
- Jul 2023 04:43:41 -0700 (PDT)
+        Wed, 12 Jul 2023 04:44:22 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c7a5600d04dso4732400276.3;
+        Wed, 12 Jul 2023 04:44:22 -0700 (PDT)
+X-Received: by 2002:a25:c343:0:b0:c16:8d80:228b with SMTP id
+ t64-20020a25c343000000b00c168d80228bmr15366379ybf.37.1689162262807; Wed, 12
+ Jul 2023 04:44:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230712081258.29254-1-frank.li@vivo.com> <20230712081258.29254-21-frank.li@vivo.com>
-In-Reply-To: <20230712081258.29254-21-frank.li@vivo.com>
+References: <20230712081258.29254-1-frank.li@vivo.com> <20230712081258.29254-4-frank.li@vivo.com>
+In-Reply-To: <20230712081258.29254-4-frank.li@vivo.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jul 2023 13:43:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWiAnN0a3wKGekvLSR7Gxh2kp-Bvmyb9o8EaxFWK8GC+Q@mail.gmail.com>
-Message-ID: <CAMuHMdWiAnN0a3wKGekvLSR7Gxh2kp-Bvmyb9o8EaxFWK8GC+Q@mail.gmail.com>
-Subject: Re: [PATCH 21/27] thermal/drivers/rcar_thermal: Convert to platform
- remove callback returning void
+Date:   Wed, 12 Jul 2023 13:44:09 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWbA9FxAo3f08rQ6eiOrLJcTxDqEq0BuYK4g_SnpSJYuA@mail.gmail.com>
+Message-ID: <CAMuHMdWbA9FxAo3f08rQ6eiOrLJcTxDqEq0BuYK4g_SnpSJYuA@mail.gmail.com>
+Subject: Re: [PATCH 04/27] drivers/thermal/rcar_gen3_thermal: Convert to
+ platform remove callback returning void
 To:     Yangtao Li <frank.li@vivo.com>
 Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -74,7 +74,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 10:23 AM Yangtao Li <frank.li@vivo.com> wrote:
+On Wed, Jul 12, 2023 at 10:16 AM Yangtao Li <frank.li@vivo.com> wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
