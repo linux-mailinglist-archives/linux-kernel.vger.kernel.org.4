@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B10B750449
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8E0750412
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjGLKUP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 06:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S231602AbjGLKFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjGLKUN (ORCPT
+        with ESMTP id S230361AbjGLKEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:20:13 -0400
-X-Greylist: delayed 1193 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Jul 2023 03:20:12 PDT
-Received: from hygieia.sysophe.eu (hygieia.sysophe.eu [IPv6:2a01:4f8:c17:3977::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C089B4;
-        Wed, 12 Jul 2023 03:20:11 -0700 (PDT)
-Received: from hemera.lan.sysophe.eu (unknown [IPv6:2001:a18:2c5:a501:fa75:a4ff:fe28:fe3a])
-        by smtp.sysophe.eu (Postfix) with ESMTPSA id 1A675260A610;
-        Wed, 12 Jul 2023 11:43:42 +0200 (CEST)
-Date:   Wed, 12 Jul 2023 11:43:35 +0200
-From:   Bruno =?UTF-8?B?UHLDqW1vbnQ=?= <bonbons@linux-vserver.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, javierm@redhat.com, linux-sh@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
-        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH 10/17] hid/picolcd: Remove flag FBINFO_FLAG_DEFAULT from
- fbdev driver
-Message-ID: <20230712114335.42644eab@hemera.lan.sysophe.eu>
-In-Reply-To: <20230710130113.14563-11-tzimmermann@suse.de>
-References: <20230710130113.14563-1-tzimmermann@suse.de>
- <20230710130113.14563-11-tzimmermann@suse.de>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Wed, 12 Jul 2023 06:04:41 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B2410F2;
+        Wed, 12 Jul 2023 03:04:40 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fb8574a3a1so10530269e87.1;
+        Wed, 12 Jul 2023 03:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689156278; x=1691748278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tg3PIZLxcmLPbTTz3barqLxpgo7A/s+2KALDE1Wf9vU=;
+        b=ooerHfqDoFsg4m/SdmiYQ0dnFloeSITdEKTng/HddATq2I/D/J6ZC+Kn/GhSINvKz1
+         KCfJUEG3kl8uPA7khfxmjtwUsaMV+pb55KaIUergK+sB2zLaQSydH31fkK9wyAZ9qPtO
+         WlaBK2gZD5sDEp2lEMZxVnsRqCUL6pKaDafT+4y59vLar23tFKSc6KMGq+R9boYvcaLn
+         WN0QOWGjlIXGG8KJl3XLKpUUtsWaRML4qu2iMmVeMFSIAen6H85GcTAKP3r9Lh2tKmoC
+         lckAQPTaAYKxNuarzDG+EzRwls+IYDQ+pDOcMadp4w582zV71e5ILwKlIEz+f4bysOlq
+         iFKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689156278; x=1691748278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tg3PIZLxcmLPbTTz3barqLxpgo7A/s+2KALDE1Wf9vU=;
+        b=ANOTbmVRpO+KmtprdCza/q5hX//jnWGt0lp84C2xzL0J38LYkEkl+e3uNGyvqhvRRG
+         AHv9we1bLopV0HeaU8fd0uPQUKaSneJPK8hF9NLDyjEMX/55SEt6bVgIk6nCi4X5GhrK
+         R13FURqoXcKh6oUOOJYhO0xykYStNMyfOVciV23Ycu5aLbJkPyVuCK21y4kF2VyApFWL
+         Q+B2SVsIjnylmbB35m/OtFsFcVjoNFWL6+BHWGUOyorlk96/PO/sRTkoGGAzFpTZ93fu
+         rrJ1OURjNLqn/9zJucjrSUoMFvZ+pWeNITOJibTnIH3QjOZk4p+R4MOcELDrSDNiIff/
+         NHrg==
+X-Gm-Message-State: ABy/qLYA/8vAoN9rv0Talk9dNl16uskAYWy2h6F+6ozkWeGZU+WqZFGy
+        /nYtzENG7Gkkwx0nibPZrnu2z1dfZYoRzcdCgBI=
+X-Google-Smtp-Source: APBJJlHCb1OyVyj4iCM3rCz4GjPXUmdoYSdObwbNJFLAhqgHTrXSad/in6TH4twTTTCDSnlGaEVe2nIl0pINFk+BJZo=
+X-Received: by 2002:a05:6512:1108:b0:4f4:dbcc:54da with SMTP id
+ l8-20020a056512110800b004f4dbcc54damr17321858lfg.27.1689156277984; Wed, 12
+ Jul 2023 03:04:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230712094857.218105-1-alex@shruggie.ro>
+In-Reply-To: <20230712094857.218105-1-alex@shruggie.ro>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 12 Jul 2023 13:04:01 +0300
+Message-ID: <CAHp75VenLV_+LMvxRcpdRGN5eBK9+ZBoGLaOox+XpOvaUP5Csw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: 74xx-mmio: remove unneeded platform_set_drvdata() call
+To:     Alexandru Ardelean <alex@shruggie.ro>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, andy@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 14:50:14 +0200 Thomas Zimmermann wrote:
-> The flag FBINFO_FLAG_DEFAULT is 0 and has no effect, as struct
-> fbinfo.flags has been allocated to zero by framebuffer_alloc(). So do
-> not set it.
-> 
-> Flags should signal differences from the default values. After cleaning
-> up all occurences of FBINFO_FLAG_DEFAULT, the token can be removed.
-> 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: "Bruno Prémont" <bonbons@linux-vserver.org>
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+On Wed, Jul 12, 2023 at 12:49=E2=80=AFPM Alexandru Ardelean <alex@shruggie.=
+ro> wrote:
+>
+> The platform_set_drvdata() was needed when the driver had an explicit
+> remove function.
+> That function got removed a while back, so we don't need to keep a pointe=
+r
+> (on 'dev->driver_data') for the private data of the driver anymore.
 
-Acked-by: Bruno Prémont <bonbons@linux-vserver.org>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Cheers,
-Bruno
-
-
+> Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
 > ---
->  drivers/hid/hid-picolcd_fb.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/hid/hid-picolcd_fb.c b/drivers/hid/hid-picolcd_fb.c
-> index dabcd054dad9..d726aaafb146 100644
-> --- a/drivers/hid/hid-picolcd_fb.c
-> +++ b/drivers/hid/hid-picolcd_fb.c
-> @@ -527,7 +527,6 @@ int picolcd_init_framebuffer(struct picolcd_data *data)
->  	info->var = picolcdfb_var;
->  	info->fix = picolcdfb_fix;
->  	info->fix.smem_len   = PICOLCDFB_SIZE*8;
-> -	info->flags = FBINFO_FLAG_DEFAULT;
->  
->  	fbdata = info->par;
->  	spin_lock_init(&fbdata->lock);
+>  drivers/gpio/gpio-74xx-mmio.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-74xx-mmio.c b/drivers/gpio/gpio-74xx-mmio.=
+c
+> index 0464f1ecd20d..c7ac5a9ffb1f 100644
+> --- a/drivers/gpio/gpio-74xx-mmio.c
+> +++ b/drivers/gpio/gpio-74xx-mmio.c
+> @@ -135,8 +135,6 @@ static int mmio_74xx_gpio_probe(struct platform_devic=
+e *pdev)
+>         priv->gc.ngpio =3D MMIO_74XX_BIT_CNT(priv->flags);
+>         priv->gc.owner =3D THIS_MODULE;
+>
+> -       platform_set_drvdata(pdev, priv);
+> -
+>         return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
+>  }
+>
+> --
+> 2.40.1
+>
 
+
+--=20
+With Best Regards,
+Andy Shevchenko
