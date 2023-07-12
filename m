@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C3774FD3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8AC74FD3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjGLCm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S231857AbjGLCmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 22:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGLCmY (ORCPT
+        with ESMTP id S231830AbjGLCml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:42:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CFB1991;
-        Tue, 11 Jul 2023 19:42:00 -0700 (PDT)
+        Tue, 11 Jul 2023 22:42:41 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BE31BF1;
+        Tue, 11 Jul 2023 19:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1689129720; x=1720665720;
+  t=1689129732; x=1720665732;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pHxkiGzF9VPXSQvgp2n2DJMy1QJNtdMeN99YBfrrG0w=;
-  b=cMPCnMlYNgQs+rG5P5kFuBJr2A34u2MlYsQtDQMEim8PgePldiT05Bwb
-   aGu/YJbnzbUBw/v0dCQQHhLQn03px1l96e73xExtRuj5KnOjdjriN9fND
-   fvdGjbK7xPCHbYyBYxgSrzmEtMlqi6UB3qKw24LooHnBygiV11hRFgpJW
-   2KlBe5ldbGV+QME7K79QXjsslZGQxE5owgoSsgO/ppC2nnSRpv/OfJY+H
-   i+PciPvnNGyUrTyLOj/UB6WD7W3rwypFEjfKlZGGhwNsKXlqprd852Iql
-   G5qWQhAJHKSHkaIEVQv8YOD5QFPVmVa/vnnWAR14yJs8tvFrFLeln0u2W
-   w==;
+  bh=y8YGmAB0FJO0Fr02vL7F8m2+XfFscr3FdF3PNYJmVZ4=;
+  b=ecUYlMH4Xbse7PPPSNI730dp4kcZDW5NHwH+In7utWdwIUZQ54dxW+Zj
+   aePmxECJg1bJpNs/Tv5pyH5hsszk3Tq5YfG3iEsmtMFlAKxKmq89MsJIP
+   iiIHyLTrTRHtWJafDDpbNPGexieeopz8lNZfaJ382uc/iJLNpHX75o4kW
+   r52pRMlA+KVk2p6//fV7/srqmoTo0jqONhRgtYrFEmXcMAeaH0MTcBPYg
+   kB/QNtVWebTHwz4c8Siz7FAGb8N8GhTkdGC8Emf9p70d55cZHTzriHNvP
+   31TUXiM6foUf1B/DJDkPy0fdSfQqc34BY491w+hfm/C/mvENKLKsvduKN
+   A==;
 X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="219936201"
+   d="scan'208";a="223259467"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jul 2023 19:41:53 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jul 2023 19:42:03 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Jul 2023 19:41:45 -0700
+ 15.1.2507.21; Tue, 11 Jul 2023 19:41:53 -0700
 Received: from che-lt-i67131.amer.actel.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 11 Jul 2023 19:41:36 -0700
+ 15.1.2507.21 via Frontend Transport; Tue, 11 Jul 2023 19:41:45 -0700
 From:   Manikandan Muralidharan <manikandan.m@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
@@ -54,11 +54,10 @@ CC:     <Hari.PrasathGE@microchip.com>,
         <Durai.ManickamKR@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
         <Dharma.B@microchip.com>, <Varshini.Rajendran@microchip.com>,
         <Balakrishnan.S@microchip.com>,
-        Manikandan Muralidharan <manikandan.m@microchip.com>,
-        Durai Manickam KR <durai.manickamkr@microchip.com>
-Subject: [PATCH v2 7/9] drm: atmel-hlcdc: add DPI mode support for XLCDC
-Date:   Wed, 12 Jul 2023 08:10:15 +0530
-Message-ID: <20230712024017.218921-8-manikandan.m@microchip.com>
+        Manikandan Muralidharan <manikandan.m@microchip.com>
+Subject: [PATCH v2 8/9] drm: atmel-hlcdc: add vertical and horizontal scaling support for XLCDC
+Date:   Wed, 12 Jul 2023 08:10:16 +0530
+Message-ID: <20230712024017.218921-9-manikandan.m@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230712024017.218921-1-manikandan.m@microchip.com>
 References: <20230712024017.218921-1-manikandan.m@microchip.com>
@@ -76,89 +75,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Display Pixel Interface (DPI) Compatible Mode
-support in atmel-hlcdc driver for XLCDC IP along with legacy
-pixel mapping.DPI mode BIT is configured in LCDC_CFG5 register.
+update the LCDC_HEOCFG30 and LCDC_HEOCFG31 registers of XLCDC IP which
+supports vertical and horizontal scaling with Bilinear and Bicubic
+co-efficients taps for Chroma and Luma componenets of the Pixel.
 
 Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
-[durai.manickamkr@microchip.com: update DPI mode bit using is_xlcdc flag]
-Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
 ---
- .../gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.c    | 22 ++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |  2 ++
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.h  |  4 ++++
+ .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   | 20 +++++++++++++++++++
+ 3 files changed, 26 insertions(+)
 
-diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.c b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.c
-index 27f86cea8bff..c0a1d2d31ed2 100644
---- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.c
-+++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.c
-@@ -30,10 +30,12 @@
-  *
-  * @base: base CRTC state
-  * @output_mode: RGBXXX output mode
-+ * @dpi: output DPI mode
+diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c
+index d30aec174aa2..ae3e1a813482 100644
+--- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c
++++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c
+@@ -536,6 +536,8 @@ static const struct atmel_hlcdc_layer_desc atmel_xlcdc_sam9x75_layers[] = {
+ 			.general_config = 12,
+ 			.csc = 16,
+ 			.scaler_config = 23,
++			.vxs_config = 30,
++			.hxs_config = 31,
+ 		},
+ 		.clut_offset = 0x1300,
+ 	},
+diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.h b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.h
+index 8b05a54b5fd0..27074a4c5aec 100644
+--- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.h
++++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.h
+@@ -198,6 +198,8 @@
+  * @disc_pos: discard area position register
+  * @disc_size: discard area size register
+  * @csc: color space conversion register
++ * @vxs_config: vertical scalar filter taps control register
++ * @hxs_config: horizontal scalar filter taps control register
   */
- struct atmel_hlcdc_crtc_state {
- 	struct drm_crtc_state base;
- 	unsigned int output_mode;
-+	bool dpi;
+ struct atmel_hlcdc_layer_cfg_layout {
+ 	int xstride[ATMEL_HLCDC_LAYER_MAX_PLANES];
+@@ -217,6 +219,8 @@ struct atmel_hlcdc_layer_cfg_layout {
+ 	int disc_pos;
+ 	int disc_size;
+ 	int csc;
++	int vxs_config;
++	int hxs_config;
  };
  
- static inline struct atmel_hlcdc_crtc_state *
-@@ -138,6 +140,8 @@ static void atmel_hlcdc_crtc_mode_set_nofb(struct drm_crtc *c)
- 
- 	state = drm_crtc_state_to_atmel_hlcdc_crtc_state(c->state);
- 	cfg = state->output_mode << 8;
-+	if (crtc->dc->desc->is_xlcdc)
-+		cfg |= state->dpi << 11;
- 
- 	if (!crtc->dc->desc->is_xlcdc && (adj->flags & DRM_MODE_FLAG_NVSYNC))
- 		cfg |= ATMEL_HLCDC_VSPOL;
-@@ -150,7 +154,9 @@ static void atmel_hlcdc_crtc_mode_set_nofb(struct drm_crtc *c)
- 			   ATMEL_HLCDC_VSPDLYS | ATMEL_HLCDC_VSPDLYE |
- 			   ATMEL_HLCDC_DISPPOL | ATMEL_HLCDC_DISPDLY |
- 			   ATMEL_HLCDC_VSPSU | ATMEL_HLCDC_VSPHO |
--			   ATMEL_HLCDC_GUARDTIME_MASK | ATMEL_HLCDC_MODE_MASK,
-+			   ATMEL_HLCDC_GUARDTIME_MASK |
-+			   (crtc->dc->desc->is_xlcdc ? ATMEL_XLCDC_MODE_MASK |
-+			   ATMEL_XLCDC_DPI : ATMEL_HLCDC_MODE_MASK),
- 			   cfg);
- 
- 	clk_disable_unprepare(crtc->dc->hlcdc->sys_clk);
-@@ -348,7 +354,15 @@ static int atmel_hlcdc_crtc_select_output_mode(struct drm_crtc_state *state)
- 
- 	hstate = drm_crtc_state_to_atmel_hlcdc_crtc_state(state);
- 	hstate->output_mode = fls(output_fmts) - 1;
--
-+	if (crtc->dc->desc->is_xlcdc) {
-+		/* check if MIPI DPI bit needs to be set */
-+		if (fls(output_fmts) > 3) {
-+			hstate->output_mode -= 4;
-+			hstate->dpi = true;
-+		} else {
-+			hstate->dpi = false;
-+		}
+ /**
+diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
+index 81f103b1a51f..b68075259053 100644
+--- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
++++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
+@@ -978,6 +978,26 @@ static void xlcdc_csc_init(struct atmel_hlcdc_plane *plane,
+ 	atmel_hlcdc_layer_write_cfg(&plane->layer,
+ 				    desc->layout.csc + 6,
+ 				    0x00000007);
++
++	if (desc->layout.vxs_config && desc->layout.hxs_config) {
++		/*
++		 * Updating vxs.config and hxs.config fixes the
++		 * Green Color Issue in SAM9X7 EGT Video Player App
++		 */
++		atmel_hlcdc_layer_write_cfg(&plane->layer,
++					    desc->layout.vxs_config,
++					    ATMEL_XLCDC_LAYER_VXSYCFG_ONE |
++					    ATMEL_XLCDC_LAYER_VXSYTAP2_ENABLE |
++					    ATMEL_XLCDC_LAYER_VXSCCFG_ONE |
++					    ATMEL_XLCDC_LAYER_VXSCTAP2_ENABLE);
++
++		atmel_hlcdc_layer_write_cfg(&plane->layer,
++					    desc->layout.hxs_config,
++					    ATMEL_XLCDC_LAYER_HXSYCFG_ONE |
++					    ATMEL_XLCDC_LAYER_HXSYTAP2_ENABLE |
++					    ATMEL_XLCDC_LAYER_HXSCCFG_ONE |
++					    ATMEL_XLCDC_LAYER_HXSCTAP2_ENABLE);
 +	}
- 	return 0;
  }
  
-@@ -452,7 +466,7 @@ static struct drm_crtc_state *
- atmel_hlcdc_crtc_duplicate_state(struct drm_crtc *crtc)
- {
- 	struct atmel_hlcdc_crtc_state *state, *cur;
--
-+	struct atmel_hlcdc_crtc *c = drm_crtc_to_atmel_hlcdc_crtc(crtc);
- 	if (WARN_ON(!crtc->state))
- 		return NULL;
- 
-@@ -463,6 +477,8 @@ atmel_hlcdc_crtc_duplicate_state(struct drm_crtc *crtc)
- 
- 	cur = drm_crtc_state_to_atmel_hlcdc_crtc_state(crtc->state);
- 	state->output_mode = cur->output_mode;
-+	if (c->dc->desc->is_xlcdc)
-+		state->dpi = cur->dpi;
- 
- 	return &state->base;
- }
+ static int atmel_hlcdc_plane_init_properties(struct atmel_hlcdc_plane *plane)
 -- 
 2.25.1
 
