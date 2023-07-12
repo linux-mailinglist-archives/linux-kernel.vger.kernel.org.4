@@ -2,86 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7559750B14
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554E1750B16
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjGLOcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S233206AbjGLOcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbjGLOcQ (ORCPT
+        with ESMTP id S233165AbjGLOco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:32:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2DFB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:32:11 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CEH6V5002753;
-        Wed, 12 Jul 2023 14:32:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=yGwM2rdpDP9tzfPzKMoWWdYJTnVokAF6g9Z7mFwK+00=;
- b=U7vEwP49IeQ+TNqFmFc36hKZA3WpgXAWMylt7803WBHHsmYk8u+/b0rjg7/HdVP7vXIE
- pqIFNtsvcVndMzlU4Zz3sP36srRkHJKItJPhjOHGTJGpuIt+U6+bwPz8dbG3lwJ5Hz7w
- ds50ohRbmBxwrjALhV6OKdcgNXO3K0pKWh0qk2O8UjEm8Ij/dxPZBg78Ipxd4H52JRd4
- 5xdAHLzRI7+dQyTWRyhVtAEFX6gBLRjv9fnIVAHHDrpULPKbtqiXH47+rI26gv56ky0E
- TmyK91i8vfLychA2kw6m1GPKqs1gvlwwVPS2RcRPremYfQfaryuoPXLo/a4ls0OezlBv 1Q== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rswt38m10-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 14:32:09 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36C21QjP011130;
-        Wed, 12 Jul 2023 14:32:07 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3rpye5aphr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 14:32:07 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36CEW5sD24314478
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jul 2023 14:32:05 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F05ED2004B;
-        Wed, 12 Jul 2023 14:32:04 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C927D20043;
-        Wed, 12 Jul 2023 14:32:04 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 12 Jul 2023 14:32:04 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: fix memcpy size when copying stack entries
-References: <20230612160748.4082850-1-svens@linux.ibm.com>
-        <20230612123407.5ebcabdf@gandalf.local.home>
-        <yt9dy1koey7h.fsf@linux.ibm.com>
-        <20230613113737.1e07c892@gandalf.local.home>
-        <yt9dttva8gxt.fsf@linux.ibm.com> <yt9dilap442k.fsf@linux.ibm.com>
-        <20230712101434.4613b3ec@gandalf.local.home>
-        <20230712102621.4c588de9@gandalf.local.home>
-Date:   Wed, 12 Jul 2023 16:32:04 +0200
-In-Reply-To: <20230712102621.4c588de9@gandalf.local.home> (Steven Rostedt's
-        message of "Wed, 12 Jul 2023 10:26:21 -0400")
-Message-ID: <yt9dwmz5dwuz.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Wed, 12 Jul 2023 10:32:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788081992;
+        Wed, 12 Jul 2023 07:32:37 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R1Ks24TxHzPkB8;
+        Wed, 12 Jul 2023 22:30:14 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 12 Jul 2023 22:32:34 +0800
+Subject: Re: [PATCH 2/5] perf evlist: Add evlist__findnew_tracking_event()
+ helper
+To:     Adrian Hunter <adrian.hunter@intel.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <irogers@google.com>,
+        <kan.liang@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>
+References: <20230704074217.240939-1-yangjihong1@huawei.com>
+ <20230704074217.240939-3-yangjihong1@huawei.com>
+ <5882e592-641f-71cc-7a91-66f66b58d5a6@intel.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <e77cf128-b8d2-9866-a80f-23ec46e2245b@huawei.com>
+Date:   Wed, 12 Jul 2023 22:32:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _yR29c0e9sJOxiIdr0UaKyYKkLuZS6MM
-X-Proofpoint-ORIG-GUID: _yR29c0e9sJOxiIdr0UaKyYKkLuZS6MM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_09,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 clxscore=1015 bulkscore=0
- suspectscore=0 spamscore=0 phishscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120131
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <5882e592-641f-71cc-7a91-66f66b58d5a6@intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,60 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+Hello,
 
-Steven Rostedt <rostedt@goodmis.org> writes:
+On 2023/7/11 21:13, Adrian Hunter wrote:
+> On 4/07/23 10:42, Yang Jihong wrote:
+>> Currently, intel-bts, intel-pt, and arm-spe may add a dummy event for
+>> tracking to the evlist. We may need to search for the dummy event for
+>> some settings. Therefore, add evlist__findnew_tracking_event() helper.
+>>
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>   tools/perf/builtin-record.c | 11 +++--------
+>>   tools/perf/util/evlist.c    | 17 +++++++++++++++++
+>>   tools/perf/util/evlist.h    |  1 +
+>>   3 files changed, 21 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+>> index aec18db7ff23..8872cd037f2c 100644
+>> --- a/tools/perf/builtin-record.c
+>> +++ b/tools/perf/builtin-record.c
+>> @@ -1295,14 +1295,9 @@ static int record__open(struct record *rec)
+>>   	 */
+>>   	if (opts->target.initial_delay || target__has_cpu(&opts->target) ||
+>>   	    perf_pmus__num_core_pmus() > 1) {
+>> -		pos = evlist__get_tracking_event(evlist);
+>> -		if (!evsel__is_dummy_event(pos)) {
+>> -			/* Set up dummy event. */
+>> -			if (evlist__add_dummy(evlist))
+>> -				return -ENOMEM;
+>> -			pos = evlist__last(evlist);
+>> -			evlist__set_tracking_event(evlist, pos);
+>> -		}
+>> +		pos = evlist__findnew_tracking_event(evlist);
+>> +		if (!pos)
+>> +			return -ENOMEM;
+>>   
+>>   		/*
+>>   		 * Enable the dummy event when the process is forked for
+>> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+>> index 7ef43f72098e..4621ddaeb8f3 100644
+>> --- a/tools/perf/util/evlist.c
+>> +++ b/tools/perf/util/evlist.c
+>> @@ -1694,6 +1694,23 @@ void evlist__set_tracking_event(struct evlist *evlist, struct evsel *tracking_ev
+>>   	tracking_evsel->tracking = true;
+>>   }
+>>   
+>> +struct evsel *evlist__findnew_tracking_event(struct evlist *evlist)
+>> +{
+>> +	struct evsel *evsel;
+>> +
+>> +	evsel = evlist__get_tracking_event(evlist);
+>> +	if (!evsel__is_dummy_event(evsel)) {
+>> +		/* Set up dummy event. */
+>> +		if (evlist__add_dummy(evlist))
+> 
+> evlist__add_dummy() does not exclude_kernel so it
+> will end up relying on evsel__fallback() to work in
+> cases where the user does not have kernel access.
+> 
+> evlist__add_aux_dummy() is probably better suited.
+> Consequently perhaps pass system_wide as
+> a parameter to evlist__findnew_tracking_event() and
+> deal with that all inside evlist__findnew_tracking_event()
+> 
+OK. These two points will be modified in the next version.
 
->> As I don't know how the fortifier works, nor what exactly it is checking,
->> do you have any idea on how to quiet it?
->> 
->> This is a false positive, as I described before.
->
->
-> Hmm, maybe this would work?
->
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 4529e264cb86..20122eeccf97 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -3118,6 +3118,7 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
->  	struct ftrace_stack *fstack;
->  	struct stack_entry *entry;
->  	int stackidx;
-> +	void *ptr;
->  
->  	/*
->  	 * Add one, for this function and the call to save_stack_trace()
-> @@ -3161,9 +3162,25 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
->  				    trace_ctx);
->  	if (!event)
->  		goto out;
-> -	entry = ring_buffer_event_data(event);
-> +	ptr = ring_buffer_event_data(event);
-> +	entry = ptr;
-> +
-> +	/*
-> +	 * For backward compatibility reasons, the entry->caller is an
-> +	 * array of 8 slots to store the stack. This is also exported
-> +	 * to user space. The amount allocated on the ring buffer actually
-> +	 * holds enough for the stack specified by nr_entries. This will
-> +	 * go into the location of entry->caller. Due to string fortifiers
-> +	 * checking the size of the destination of memcpy() it triggers
-> +	 * when it detects that size is greater than 8. To hide this from
-> +	 * the fortifiers, we use "ptr" and pointer arithmetic to assign caller.
-> +	 *
-> +	 * The below is really just:
-> +	 *   memcpy(&entry->caller, fstack->calls, size);
-> +	 */
-> +	ptr += offsetof(typeof(*entry), caller);
-> +	memcpy(ptr, fstack->calls, size);
->  
-> -	memcpy(&entry->caller, fstack->calls, size);
->  	entry->size = nr_entries;
->  
->  	if (!call_filter_check_discard(call, entry, buffer, event))
->
->
-
-I just sent about the same thing without the nice comment. So yes, this
-works. :-)
+Thanks,
+Yang
