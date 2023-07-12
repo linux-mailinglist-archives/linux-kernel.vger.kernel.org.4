@@ -2,263 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CBF750509
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994F9750513
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjGLKqd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 06:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S232626AbjGLKrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjGLKqb (ORCPT
+        with ESMTP id S230344AbjGLKra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:46:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3BA12F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:46:29 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qJXMU-0004Hy-Ge; Wed, 12 Jul 2023 12:46:22 +0200
-Message-ID: <1a3f07cb473c520dcd23c4d214f3503441cd7a71.camel@pengutronix.de>
-Subject: Re: [PATCH 3/6] drm/amdgpu: Rework coredump to use memory
- dynamically
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        'Marek =?UTF-8?Q?Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
-        Timur =?ISO-8859-1?Q?Krist=F3f?= <timur.kristof@gmail.com>,
-        michel.daenzer@mailbox.org,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, alexander.deucher@amd.com
-Date:   Wed, 12 Jul 2023 12:46:20 +0200
-In-Reply-To: <3764d627-d632-5754-0bcc-a150c157d9f9@amd.com>
-References: <20230711213501.526237-1-andrealmeid@igalia.com>
-         <20230711213501.526237-4-andrealmeid@igalia.com>
-         <e488da74-af52-62eb-d601-0e8a13cf0e87@amd.com>
-         <0e7f2b0cc29ac77d4a55d0de6a66c477d867fbf7.camel@pengutronix.de>
-         <3764d627-d632-5754-0bcc-a150c157d9f9@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 12 Jul 2023 06:47:30 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0592E5C;
+        Wed, 12 Jul 2023 03:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1689158848; x=1720694848;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eg3Yhl4xTw7Lb75TuOgry5+TIFDwfov1q444wJVYbMs=;
+  b=Wnj0dFFGdCgByJgs50HNhReylnoeVFWltgOlqynuB65oagvf+N6xSAco
+   YHjh7jQ8nPmQLXN9oQBj69s6aSBwjs7v75mhBjMi/URF52muZl2vdI1dC
+   1I8wfyRSv3fAbjW8owXri+gLW8V5CwBJIdyHFTdS2RgxZ5RPpnGO2J3gX
+   VqRJHcd8cd6iE23PMh8V3lkUtKxXjDka0YbS2YGXcZSgbsIIoHdjX4Oxb
+   iMO2ffZ6R885/vFeJaFyP0XKHaddOH804XZm+69xlSu9v/jixWHgLP4nX
+   2S9BW2opz0L2Yp9Wnc0sg3mlBG8v20qPxGDF4BYf6RY2mqrCnUX7+SVUV
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="asc'?scan'208";a="222586915"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 03:47:27 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 12 Jul 2023 03:47:26 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 12 Jul 2023 03:47:23 -0700
+Date:   Wed, 12 Jul 2023 11:46:52 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Samuel Ortiz <sameo@rivosinc.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>,
+        "Hongren (Zenithal) Zheng" <i@zenithal.me>, <linux@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Evan Green <evan@rivosinc.com>, <devicetree@vger.kernel.org>,
+        <sorear@fastmail.com>, Jiatai He <jiatai2021@iscas.ac.cn>
+Subject: Re: [PATCH v4 1/4] RISC-V: Add Bitmanip/Scalar Crypto parsing from DT
+Message-ID: <20230712-antibody-cried-1a6a68332c78@wendy>
+References: <20230712084134.1648008-1-sameo@rivosinc.com>
+ <20230712084134.1648008-2-sameo@rivosinc.com>
+ <20230712-bulldozer-affected-199042dc3afd@wendy>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="AsRqXf6ZZALH1kUr"
+Content-Disposition: inline
+In-Reply-To: <20230712-bulldozer-affected-199042dc3afd@wendy>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 12.07.2023 um 12:39 +0200 schrieb Christian König:
-> Am 12.07.23 um 10:59 schrieb Lucas Stach:
-> > Am Mittwoch, dem 12.07.2023 um 10:37 +0200 schrieb Christian König:
-> > > Am 11.07.23 um 23:34 schrieb André Almeida:
-> > > > Instead of storing coredump information inside amdgpu_device struct,
-> > > > move if to a proper separated struct and allocate it dynamically. This
-> > > > will make it easier to further expand the logged information.
-> > > Verry big NAK to this. The problem is that memory allocation isn't
-> > > allowed during a GPU reset.
-> > > 
-> > > What you could do is to allocate the memory with GFP_ATOMIC or similar,
-> > > but for a large structure that might not be possible.
-> > > 
-> > I'm still not fully clear on what the rules are here. In etnaviv we do
-> > devcoredump allocation in the GPU reset path with __GFP_NOWARN |
-> > __GFP_NORETRY, which means the allocation will kick memory reclaim if
-> > necessary, but will just give up if no memory could be made available
-> > easily. This satisfies the forward progress guarantee in the absence of
-> > successful memory allocation, which is the most important property in
-> > this path, I think.
-> > 
-> > However, I'm not sure if the reclaim could lead to locking issues or
-> > something like that with the more complex use-cases with MMU notifiers
-> > and stuff like that. Christian, do you have any experience or
-> > information that would be good to share in this regard?
-> 
-> Yeah, very good question.
-> 
-> __GFP_NORETRY isn't sufficient as far as I know. Reclaim must be 
-> completely suppressed to be able to allocate in a GPU reset handler.
-> 
-> Daniel added lockdep annotation to some of the dma-fence signaling paths 
-> and this yielded quite a bunch of potential deadlocks.
-> 
-> It's not even that reclaim itself waits for dma_fences (that can happen, 
-> but is quite unlikely), but rather that reclaim needs locks and under 
-> those locks we then wait for dma_fences.
-> 
-> We should probably add a define somewhere which documents that 
-> (GFP_ATOMIC | __NO_WARN) should be used in the GPU reset handlers when 
-> allocating memory for coredumps.
-> 
-> Regards,
-> Christian.
-> 
-> > 
-> > Regards,
-> > Lucas
-> > 
-> > > Regards,
-> > > Christian.
-> > > 
-> > > > Signed-off-by: André Almeida <andrealmeid@igalia.com>
-> > > > ---
-> > > >    drivers/gpu/drm/amd/amdgpu/amdgpu.h        | 14 +++--
-> > > >    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 65 ++++++++++++++--------
-> > > >    2 files changed, 51 insertions(+), 28 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > > index dbe062a087c5..e1cc83a89d46 100644
-> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > > @@ -1068,11 +1068,6 @@ struct amdgpu_device {
-> > > >    	uint32_t                        *reset_dump_reg_list;
-> > > >    	uint32_t			*reset_dump_reg_value;
-> > > >    	int                             num_regs;
-> > > > -#ifdef CONFIG_DEV_COREDUMP
-> > > > -	struct amdgpu_task_info         reset_task_info;
-> > > > -	bool                            reset_vram_lost;
-> > > > -	struct timespec64               reset_time;
-> > > > -#endif
-> > > >    
-> > > >    	bool                            scpm_enabled;
-> > > >    	uint32_t                        scpm_status;
-> > > > @@ -1085,6 +1080,15 @@ struct amdgpu_device {
-> > > >    	uint32_t			aid_mask;
-> > > >    };
-> > > >    
-> > > > +#ifdef CONFIG_DEV_COREDUMP
-> > > > +struct amdgpu_coredump_info {
-> > > > +	struct amdgpu_device		*adev;
-> > > > +	struct amdgpu_task_info         reset_task_info;
-> > > > +	struct timespec64               reset_time;
-> > > > +	bool                            reset_vram_lost;
-> > > > +};
-> > > > +#endif
-> > > > +
-> > > >    static inline struct amdgpu_device *drm_to_adev(struct drm_device *ddev)
-> > > >    {
-> > > >    	return container_of(ddev, struct amdgpu_device, ddev);
-> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > > index e25f085ee886..23b9784e9787 100644
-> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > > @@ -4963,12 +4963,17 @@ static int amdgpu_reset_reg_dumps(struct amdgpu_device *adev)
-> > > >    	return 0;
-> > > >    }
-> > > >    
-> > > > -#ifdef CONFIG_DEV_COREDUMP
-> > > > +#ifndef CONFIG_DEV_COREDUMP
-> > > > +static void amdgpu_coredump(struct amdgpu_device *adev, bool vram_lost,
-> > > > +			    struct amdgpu_reset_context *reset_context)
-> > > > +{
-> > > > +}
-> > > > +#else
-> > > >    static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
-> > > >    		size_t count, void *data, size_t datalen)
-> > > >    {
-> > > >    	struct drm_printer p;
-> > > > -	struct amdgpu_device *adev = data;
-> > > > +	struct amdgpu_coredump_info *coredump = data;
-> > > >    	struct drm_print_iterator iter;
-> > > >    	int i;
-> > > >    
-> > > > @@ -4982,21 +4987,21 @@ static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
-> > > >    	drm_printf(&p, "**** AMDGPU Device Coredump ****\n");
-> > > >    	drm_printf(&p, "kernel: " UTS_RELEASE "\n");
-> > > >    	drm_printf(&p, "module: " KBUILD_MODNAME "\n");
-> > > > -	drm_printf(&p, "time: %lld.%09ld\n", adev->reset_time.tv_sec, adev->reset_time.tv_nsec);
-> > > > -	if (adev->reset_task_info.pid)
-> > > > +	drm_printf(&p, "time: %lld.%09ld\n", coredump->reset_time.tv_sec, coredump->reset_time.tv_nsec);
-> > > > +	if (coredump->reset_task_info.pid)
-> > > >    		drm_printf(&p, "process_name: %s PID: %d\n",
-> > > > -			   adev->reset_task_info.process_name,
-> > > > -			   adev->reset_task_info.pid);
-> > > > +			   coredump->reset_task_info.process_name,
-> > > > +			   coredump->reset_task_info.pid);
-> > > >    
-> > > > -	if (adev->reset_vram_lost)
-> > > > +	if (coredump->reset_vram_lost)
-> > > >    		drm_printf(&p, "VRAM is lost due to GPU reset!\n");
-> > > > -	if (adev->num_regs) {
-> > > > +	if (coredump->adev->num_regs) {
-> > > >    		drm_printf(&p, "AMDGPU register dumps:\nOffset:     Value:\n");
-> > > >    
-> > > > -		for (i = 0; i < adev->num_regs; i++)
-> > > > +		for (i = 0; i < coredump->adev->num_regs; i++)
-> > > >    			drm_printf(&p, "0x%08x: 0x%08x\n",
-> > > > -				   adev->reset_dump_reg_list[i],
-> > > > -				   adev->reset_dump_reg_value[i]);
-> > > > +				   coredump->adev->reset_dump_reg_list[i],
-> > > > +				   coredump->adev->reset_dump_reg_value[i]);
-> > > >    	}
-> > > >    
-> > > >    	return count - iter.remain;
-> > > > @@ -5004,14 +5009,34 @@ static ssize_t amdgpu_devcoredump_read(char *buffer, loff_t offset,
-> > > >    
-> > > >    static void amdgpu_devcoredump_free(void *data)
-> > > >    {
-> > > > +	kfree(data);
-> > > >    }
-> > > >    
-> > > > -static void amdgpu_reset_capture_coredumpm(struct amdgpu_device *adev)
-> > > > +static void amdgpu_coredump(struct amdgpu_device *adev, bool vram_lost,
-> > > > +			    struct amdgpu_reset_context *reset_context)
-> > > >    {
-> > > > +	struct amdgpu_coredump_info *coredump;
-> > > >    	struct drm_device *dev = adev_to_drm(adev);
-> > > >    
-> > > > -	ktime_get_ts64(&adev->reset_time);
-> > > > -	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
-> > > > +	coredump = kmalloc(sizeof(*coredump), GFP_KERNEL);
-> > > > +
-> > > > +	if (!coredump) {
-> > > > +		DRM_ERROR("%s: failed to allocate memory for coredump\n", __func__);
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	memset(coredump, 0, sizeof(*coredump));
-> > > > +
-> > > > +	coredump->reset_vram_lost = vram_lost;
-> > > > +
-> > > > +	if (reset_context->job && reset_context->job->vm)
-> > > > +		coredump->reset_task_info = reset_context->job->vm->task_info;
-> > > > +
-> > > > +	coredump->adev = adev;
-> > > > +
-> > > > +	ktime_get_ts64(&coredump->reset_time);
-> > > > +
-> > > > +	dev_coredumpm(dev->dev, THIS_MODULE, coredump, 0, GFP_KERNEL,
-> > > >    		      amdgpu_devcoredump_read, amdgpu_devcoredump_free);
-> > > >    }
-> > > >    #endif
-> > > > @@ -5119,15 +5144,9 @@ int amdgpu_do_asic_reset(struct list_head *device_list_handle,
-> > > >    					goto out;
-> > > >    
-> > > >    				vram_lost = amdgpu_device_check_vram_lost(tmp_adev);
-> > > > -#ifdef CONFIG_DEV_COREDUMP
-> > > > -				tmp_adev->reset_vram_lost = vram_lost;
-> > > > -				memset(&tmp_adev->reset_task_info, 0,
-> > > > -						sizeof(tmp_adev->reset_task_info));
-> > > > -				if (reset_context->job && reset_context->job->vm)
-> > > > -					tmp_adev->reset_task_info =
-> > > > -						reset_context->job->vm->task_info;
-> > > > -				amdgpu_reset_capture_coredumpm(tmp_adev);
-> > > > -#endif
-> > > > +
-> > > > +				amdgpu_coredump(tmp_adev, vram_lost, reset_context);
-> > > > +
-> > > >    				if (vram_lost) {
-> > > >    					DRM_INFO("VRAM is lost due to GPU reset!\n");
-> > > >    					amdgpu_inc_vram_lost(tmp_adev);
-> 
+--AsRqXf6ZZALH1kUr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jul 12, 2023 at 11:39:16AM +0100, Conor Dooley wrote:
+> Hey Samuel, Evan,
+>=20
+> On Wed, Jul 12, 2023 at 10:41:17AM +0200, Samuel Ortiz wrote:
+> > From: "Hongren (Zenithal) Zheng" <i@zenithal.me>
+> >=20
+> > Parse Zb/Zk related string from DT and output them to cpuinfo.
+>=20
+> One thing that has sprung to mind is that this is not limited to DT
+> anymore, since the information could in theory come from ACPI too.
+> Ditto the title I guess.
+>=20
+> > It is worth noting that the Scalar Crypto extension defines "zk" as a
+> > shorthand for the Zkn, Zkr and Zkt extensions. Since the Zkn one also
+> > implies the Zbkb, Zbkc and Zbkx extensions, simply passing the valid
+> > "zk" extension name through a DT will enable all of the  Zbkb, Zbkc,
+> > Zbkx, Zkn, Zkr and Zkt extensions.
+> >=20
+> > Also, since there currently is no mechanism to merge all enabled
+> > extensions, the generated cpuinfo output could be relatively large.
+> > For example, setting the "riscv,isa" DT property to "rv64imafdc_zk_zks"
+> > will generate the following cpuinfo output:
+> > "rv64imafdc_zbkb_zbkc_zbkx_zknd_zkne_zknh_zkr_zksed_zksh_zkt".
+>=20
+> On that note, I've created another version of what checking for
+> supersets could look like, since it'll be needed either by my series or
+> this one, depending on what gets merged first. I've yet to test the
+> dedicated extensions part of it, but I wanted to get this out before I
+> went looking at other fixes in the area.
+>=20
+> Evan, since it was you that commented on this stuff last time around,
+> could you take another look? I'm still not keen on the "subset_of"
+> arrays, but they're an improvement on what I had last time around for
+> sure.
+
+I would rather use the "property" member, renaming it to "properties",
+but I didn't get the macro right in the bit of time I had this morning.
+I'll try to think of a cleaner way...
+
+Thanks,
+Conor.
+
+> (I took authorship since only the #defines & part of the commit
+> message came from the original commit)
+>=20
+> -- >8 --
+> From 2351c46fd1c9f6de312463875a4887f03d365b76 Mon Sep 17 00:00:00 2001
+> From: Conor Dooley <conor.dooley@microchip.com>
+> Date: Wed, 12 Jul 2023 11:25:36 +0100
+> Subject: [PATCH] RISC-V: add detection of scalar crypto extensions
+>=20
+> It is worth noting that the Scalar Crypto extension defines "zk" as a
+> shorthand for the Zkn, Zkr and Zkt extensions. Since the Zkn one also
+> implies the Zbkb, Zbkc and Zbkx extensions, simply passing the valid
+> "zk" extension name through a DT shold enable all of the Zbkb, Zbkc,
+> Zbkx, Zkn, Zkr and Zkt extensions.
+> For example, setting the "riscv,isa" DT property to "rv64imafdc_zk"
+> should generate the following cpuinfo output:
+> "rv64imafdc_zicntr_zicsr_zifencei_zihpm_zbkb_zbkc_zbkx_zknd_zkne_zknh_zkr=
+_zkt"
+>=20
+> riscv_isa_ext_data grows a pair of new members, to permit searching for
+> supersets of the extension in question, both while parsing the ISA
+> string and the new dedicated extension properties.
+>=20
+> Co-developed-by: Hongren (Zenithal) Zheng <i@zenithal.me>
+> Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
+> Co-developed-by: Samuel Ortiz <sameo@rivosinc.com>
+> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/include/asm/hwcap.h | 13 +++++
+>  arch/riscv/kernel/cpufeature.c | 95 +++++++++++++++++++++++++++++-----
+>  2 files changed, 94 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
+p.h
+> index b7b58258f6c7..46d54f31e162 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -58,6 +58,17 @@
+>  #define RISCV_ISA_EXT_ZICSR		40
+>  #define RISCV_ISA_EXT_ZIFENCEI		41
+>  #define RISCV_ISA_EXT_ZIHPM		42
+> +#define RISCV_ISA_EXT_ZBC		43
+> +#define RISCV_ISA_EXT_ZBKB		44
+> +#define RISCV_ISA_EXT_ZBKC		45
+> +#define RISCV_ISA_EXT_ZBKX		46
+> +#define RISCV_ISA_EXT_ZKND		47
+> +#define RISCV_ISA_EXT_ZKNE		48
+> +#define RISCV_ISA_EXT_ZKNH		49
+> +#define RISCV_ISA_EXT_ZKR		50
+> +#define RISCV_ISA_EXT_ZKSED		51
+> +#define RISCV_ISA_EXT_ZKSH		52
+> +#define RISCV_ISA_EXT_ZKT		53
+> =20
+>  #define RISCV_ISA_EXT_MAX		64
+> =20
+> @@ -77,6 +88,8 @@ struct riscv_isa_ext_data {
+>  	const unsigned int id;
+>  	const char *name;
+>  	const char *property;
+> +	const unsigned int superset_count;
+> +	const char **subset_of;
+>  };
+> =20
+>  extern const struct riscv_isa_ext_data riscv_isa_ext[];
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 5945dfc5f806..e862958d5495 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -103,8 +103,22 @@ static bool riscv_isa_extension_check(int id)
+>  	.name =3D #_name,				\
+>  	.property =3D #_name,			\
+>  	.id =3D _id,				\
+> +	.superset_count =3D 0,			\
+> +	.subset_of =3D NULL,			\
+>  }
+> =20
+> +#define __RISCV_ISA_EXT_DATA_SUBSET(_name, _id, _subset_of) {	\
+> +	.name =3D #_name,						\
+> +	.property =3D #_name,					\
+> +	.id =3D _id,						\
+> +	.superset_count =3D ARRAY_SIZE(_subset_of),		\
+> +	.subset_of =3D _subset_of,				\
+> +}
+> +
+> +static const char * const riscv_subset_of_zbk[] =3D { "zk", "zkn", "zks"=
+ };
+> +static const char * const riscv_subset_of_zkn[] =3D { "zk", "zkn" };
+> +static const char * const riscv_subset_of_zk[]  =3D { "zk" };
+> +static const char * const riscv_subset_of_zks[] =3D { "zks" };
+>  /*
+>   * The canonical order of ISA extension names in the ISA string is defin=
+ed in
+>   * chapter 27 of the unprivileged specification.
+> @@ -167,7 +181,18 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D {
+>  	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
+>  	__RISCV_ISA_EXT_DATA(zba, RISCV_ISA_EXT_ZBA),
+>  	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+> +	__RISCV_ISA_EXT_DATA(zbc, RISCV_ISA_EXT_ZBC),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zbkb, RISCV_ISA_EXT_ZBKB, riscv_subset_of_z=
+bk),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zbkc, RISCV_ISA_EXT_ZBKC, riscv_subset_of_z=
+bk),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zbkx, RISCV_ISA_EXT_ZBKX, riscv_subset_of_z=
+bk),
+>  	__RISCV_ISA_EXT_DATA(zbs, RISCV_ISA_EXT_ZBS),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zknd, RISCV_ISA_EXT_ZKND, riscv_subset_of_z=
+kn),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zkne, RISCV_ISA_EXT_ZKNE, riscv_subset_of_z=
+kn),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zknh, RISCV_ISA_EXT_ZKNH, riscv_subset_of_z=
+kn),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zkr, RISCV_ISA_EXT_ZKR, riscv_subset_of_zk),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zksed, RISCV_ISA_EXT_ZKSED, riscv_subset_of=
+_zks),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zksh, RISCV_ISA_EXT_ZKSH, riscv_subset_of_z=
+ks),
+> +	__RISCV_ISA_EXT_DATA_SUBSET(zkt, RISCV_ISA_EXT_ZKT, riscv_subset_of_zk),
+>  	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+>  	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+>  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> @@ -179,6 +204,31 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D {
+> =20
+>  const size_t riscv_isa_ext_count =3D ARRAY_SIZE(riscv_isa_ext);
+> =20
+> +static inline int __init riscv_try_match_extension(const char *name, con=
+st unsigned int bit,
+> +						   const char *ext, const char *ext_end,
+> +						   struct riscv_isainfo *isainfo)
+> +{
+> +	if ((ext_end - ext =3D=3D strlen(name)) && !strncasecmp(ext, name, strl=
+en(name)) &&
+> +	    riscv_isa_extension_check(bit)) {
+> +		set_bit(bit, isainfo->isa);
+> +		return 0;
+> +	}
+> +
+> +	return -ENOENT;
+> +}
+> +
+> +static inline void __init riscv_try_match_supersets(struct riscv_isa_ext=
+_data ext_data,
+> +						    const char *ext, const char *ext_end,
+> +						    struct riscv_isainfo *isainfo)
+> +{
+> +	for (int i =3D 0; i < ext_data.superset_count; i++) {
+> +		const char *superset =3D ext_data.subset_of[i];
+> +		const int bit =3D ext_data.id;
+> +
+> +		riscv_try_match_extension(superset, bit, ext, ext_end, isainfo);
+> +	}
+> +}
+> +
+>  static void __init riscv_parse_isa_string(unsigned long *this_hwcap, str=
+uct riscv_isainfo *isainfo,
+>  					  unsigned long *isa2hwcap, const char *isa)
+>  {
+> @@ -310,16 +360,9 @@ static void __init riscv_parse_isa_string(unsigned l=
+ong *this_hwcap, struct risc
+>  		if (*isa =3D=3D '_')
+>  			++isa;
+> =20
+> -#define SET_ISA_EXT_MAP(name, bit)						\
+> -		do {								\
+> -			if ((ext_end - ext =3D=3D sizeof(name) - 1) &&		\
+> -			     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
+> -			     riscv_isa_extension_check(bit))			\
+> -				set_bit(bit, isainfo->isa);			\
+> -		} while (false)							\
+> -
+>  		if (unlikely(ext_err))
+>  			continue;
+> +
+>  		if (!ext_long) {
+>  			int nr =3D tolower(*ext) - 'a';
+> =20
+> @@ -327,12 +370,21 @@ static void __init riscv_parse_isa_string(unsigned =
+long *this_hwcap, struct risc
+>  				*this_hwcap |=3D isa2hwcap[nr];
+>  				set_bit(nr, isainfo->isa);
+>  			}
+> -		} else {
+> +
+>  			for (int i =3D 0; i < riscv_isa_ext_count; i++)
+> -				SET_ISA_EXT_MAP(riscv_isa_ext[i].name,
+> -						riscv_isa_ext[i].id);
+> +				riscv_try_match_supersets(riscv_isa_ext[i], ext, ext_end, isainfo);
+> +		} else {
+> +			for (int i =3D 0; i < riscv_isa_ext_count; i++) {
+> +				const char *name =3D riscv_isa_ext[i].name;
+> +				const int bit =3D riscv_isa_ext[i].id;
+> +				int ret;
+> +
+> +				ret =3D riscv_try_match_extension(name, bit, ext, ext_end, isainfo);
+> +				if (ret && riscv_isa_ext[i].superset_count)
+> +					riscv_try_match_supersets(riscv_isa_ext[i], ext,
+> +								  ext_end, isainfo);
+> +			}
+>  		}
+> -#undef SET_ISA_EXT_MAP
+>  	}
+>  }
+> =20
+> @@ -434,8 +486,23 @@ static int __init riscv_fill_hwcap_from_ext_list(uns=
+igned long *isa2hwcap)
+>  			continue;
+> =20
+>  		for (int i =3D 0; i < riscv_isa_ext_count; i++) {
+> -			if (of_property_match_string(cpu_node, "riscv,isa-extensions",
+> -						     riscv_isa_ext[i].property) < 0)
+> +			struct riscv_isa_ext_data ext =3D riscv_isa_ext[i];
+> +			int ret;
+> +
+> +			ret =3D of_property_match_string(cpu_node, "riscv,isa-extensions",
+> +						       ext.property);
+> +
+> +			if (ret < 0 && ext.superset_count) {
+> +				for (int j =3D 0; j < ext.superset_count; j++) {
+> +					ret =3D of_property_match_string(cpu_node,
+> +								       "riscv,isa-extensions",
+> +								       ext.subset_of[j]);
+> +					if (ret >=3D 0)
+> +						break;
+> +				}
+> +			}
+> +
+> +			if (ret < 0)
+>  				continue;
+> =20
+>  			if (!riscv_isa_extension_check(riscv_isa_ext[i].id))
+> --=20
+> 2.40.1
+>=20
+>=20
+
+
+
+--AsRqXf6ZZALH1kUr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK6EnAAKCRB4tDGHoIJi
+0tbGAQDnSDSU1lq7BTxERE11vJ0dhtnFz98B90DT3lBZOdZ/iwEAyjY1NCAZJKaZ
+UBDG20HfoCDwWorQPTHqj0EGsR892Q8=
+=B9vd
+-----END PGP SIGNATURE-----
+
+--AsRqXf6ZZALH1kUr--
