@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899187509F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60E2750A01
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbjGLNtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S233145AbjGLNvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGLNs7 (ORCPT
+        with ESMTP id S229720AbjGLNvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:48:59 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70632E8;
-        Wed, 12 Jul 2023 06:48:58 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b8b318c5a7so51431055ad.3;
-        Wed, 12 Jul 2023 06:48:58 -0700 (PDT)
+        Wed, 12 Jul 2023 09:51:10 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153C119A7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:51:04 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-557790487feso5044681a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689169738; x=1691761738;
+        d=smartx-com.20221208.gappssmtp.com; s=20221208; t=1689169863; x=1691761863;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6EgqmrzSssssNh5CkkOVdmZdM6BNgW/wAfPysQBcRX8=;
-        b=L9RMDDVBjIHOcoJEG/ZxYxyaiskEgXuIehhsGQXBhous/f5f3MU6IbJ7NkfVB10QlQ
-         ZZq12PRQgr2t7PupMacJMJSjszILlrEts32rXU0GkAfYJIWGD1sYS8aHLJzDUXt7Flet
-         LNBSlwDZ4XzHBWZTYlLwhysbF+2NwcSW2Vx+IMeQogCrAJuJfy572dXmDZLhr9LNsQjW
-         FF5rOaXsXcHH3LBqE+bLd44O4oMwDl+kqNEaCG1/KhLbGTRYbtGTs3fzumhQr5ChpbVr
-         kxHMP4eQ3jI8U9w2RCDqbgPzwIwbrnr0XCmMc7I+DDrVaJQs+5RkxpvIIrhqKXwTs/eI
-         PYkw==
+        bh=TI/9mwThD0EXzG5gjilsVwhp7evcdhgh2WPnV+bXJ78=;
+        b=WYz07NOSDuwXlaS5UfuI97CPUuXEDwuHLQr2p9Yo+QesQBOp4bUNaSJgHczx3tvfVP
+         LPWQ0fQ2xTMLbWaNHIlRWdkXIs/5NQTVb6nInndk/ARdW2BC35vHj/5HaZkWFAK+m9D1
+         eyF3yoCKz25XW21nC2U6G0jN/RJOiYptQ5W9zBmEsWfh+Jh0+MxjJfdU6Bf/XDR9u0Wy
+         cSaH037a4O4YlAHWacFwZP/cHoBMEF2D0E+s8hyAu4wtyHthB6X6sP4Bq1q6EBKegKfi
+         FHnUxn+RYEBE1uiU+4dfI772eM0PMlRua6CuyReOyFIpN0aKcIqgXIQWF/ilGHviKR/O
+         vjvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689169738; x=1691761738;
+        d=1e100.net; s=20221208; t=1689169863; x=1691761863;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6EgqmrzSssssNh5CkkOVdmZdM6BNgW/wAfPysQBcRX8=;
-        b=LrZAG1pwqtEP4VS2Z7gohHWgCbAXFyUaeUiFS4OYI0QNlk8YpnmZGhQ489WGobz68D
-         9L8NCdaPtMlDSq2qHtfMoElY6ufU8xxQoiUN6mpgXOd+pKT+Hb3WfK19cefKOR1HPXim
-         sJZN+OXHY1sRm5CRvRlv+3RhLJu7noGLj35h1KnZ+i4Q5x62s2MNC4E+ctFLkvtYkmMN
-         FH8PRXHcY8g15l7wdUjtX98vF5wIfpUWEyUdseLRKUpww7lFxpSupfzh/VdIo+HWwFb+
-         vzRTgsH6BZtoa/C2Za3nVAxLdBRf3ZiyXzfjpI0PNOBUmKkbkiX6sUMD8wvY1fuo/99Q
-         io4w==
-X-Gm-Message-State: ABy/qLZyiNO31w1C39L4C4xMRONXkw0PKV7Knd/LPF5K9JGDVgixoM8y
-        HMk3yzE40eq5+QoB1kiFMKU=
-X-Google-Smtp-Source: APBJJlHOSCfGhYLwqA5z3fJZpDC8GXQCZmzvrmDeWgOiSWiSZCuktVSP6duGm1O5HJGFvWfGLbuaqw==
-X-Received: by 2002:a17:903:41c7:b0:1ac:aba5:7885 with SMTP id u7-20020a17090341c700b001acaba57885mr20664253ple.47.1689169737927;
-        Wed, 12 Jul 2023 06:48:57 -0700 (PDT)
-Received: from fedora.. ([125.118.239.175])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902a50b00b001b53be3d956sm3982225plq.167.2023.07.12.06.48.56
+        bh=TI/9mwThD0EXzG5gjilsVwhp7evcdhgh2WPnV+bXJ78=;
+        b=B47fviCb2drIx8a/qZt09ZcrrPlygjzqwscJJzeSK8nNWGOVoAwlUdwj4KM/moTJ9e
+         8+ojTB8u4P7ne7DcJjSdYoHM2yvfgjyah59sSOA8R0jXDUwcNSJFDhtMYhlmplv+rfxD
+         hvQgf5nDBCi+8JdZsF7AtCUPMp2rnuQTMAtp6lQHkZGyC6T8x+8G60DbekWxlHhKcbfq
+         tJ78h8wwkpsNgKiv0UYQBtcg6Plb8Tm90cp1YvGRBD5F6N3eIhSvn+FIvc8cYpZ4dXqZ
+         yNuh8omT2GL3WmrMxVVqKbKoIjruj1FQGiBJI7yHTYBE5YnLfFC60fzkQbAYeWlbvEi0
+         uPKg==
+X-Gm-Message-State: ABy/qLbnQH4sIK2YPFQoEP7YCqd/X4pTOnU/Ptu9Q+9803AxvPQKNdTH
+        puF2H4Rm4MwHJkHwBGkama04LA==
+X-Google-Smtp-Source: APBJJlH4Ln66xJcSv96ugiUVmv3fe6pFBvSRRTt4u7Q/TWI6JScqGRDdsTmf1STJac/9OI8O6BecOw==
+X-Received: by 2002:a17:90a:f182:b0:263:312:611f with SMTP id bv2-20020a17090af18200b002630312611fmr18585171pjb.3.1689169863331;
+        Wed, 12 Jul 2023 06:51:03 -0700 (PDT)
+Received: from localhost.localdomain ([47.75.78.161])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a17090aab8a00b00262e604724dsm9996047pjq.50.2023.07.12.06.51.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 06:48:57 -0700 (PDT)
-From:   Wenchao Hao <haowenchao22@gmail.com>
-X-Google-Original-From: Wenchao Hao <haowenchao2@huawei.com>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wenchao Hao <haowenchao2@huawei.com>
-Subject: [PATCH] NFS: Fix memleak in nfs_sysfs_move_sb_to_server
-Date:   Wed, 12 Jul 2023 21:48:53 +0800
-Message-Id: <20230712134853.1044134-1-haowenchao2@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 12 Jul 2023 06:51:03 -0700 (PDT)
+From:   Xueshi Hu <xueshi.hu@smartx.com>
+To:     akpm@linux-foundation.org, mhocko@suse.com,
+        quic_charante@quicinc.com, david@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Xueshi Hu <xueshi.hu@smartx.com>
+Subject: [PATCH] mm: remove clear_page_idle()
+Date:   Wed, 12 Jul 2023 21:49:59 +0800
+Message-Id: <20230712134959.145373-1-xueshi.hu@smartx.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-call kfree() to free memory allocated in kasprintf() to fix
-memleak. It's easy to recurrent this memleak, just mount and
-remount nfs at NFS client.
+All callers have now been converted to call folio_clear_idle().
 
-The bug is detected by kmemleak with following stack:
-unreferenced object 0xffffa31a91fdf2c0 (size 16):
-  comm "mount.nfs", pid 960, jiffies 4294724478 (age 111892.067s)
-  hex dump (first 16 bytes):
-    73 65 72 76 65 72 2d 30 00 f2 fd 91 1a a3 ff ff  server-0........
-  backtrace:
-    [<00000000de9b21a9>] create_object+0x11/0x17
-    [<00000000ed17aa96>] kmemleak_alloc+0x6c/0x7a
-    [<000000009f4acc69>] slab_post_alloc_hook.constprop.0+0x81/0x99
-    [<00000000d2446455>] __kmem_cache_alloc_node+0x10c/0x13a
-    [<00000000eca4a704>] __kmalloc_node_track_caller+0x83/0xb7
-    [<0000000076cdb22f>] kvasprintf+0x65/0xc3
-    [<00000000f6f2e879>] kasprintf+0x4e/0x69
-    [<00000000e49d03be>] nfs_sysfs_move_sb_to_server+0x24/0x5f
-    [<0000000039127597>] nfs_kill_super+0x25/0x49
-    [<00000000e6ecf809>] deactivate_locked_super+0x35/0x74
-    [<000000003b9c3350>] deactivate_super+0x3c/0x44
-    [<00000000777c86be>] cleanup_mnt+0x6c/0xe7
-    [<000000009f181749>] __cleanup_mnt+0x12/0x18
-    [<00000000a709602e>] task_work_run+0x75/0x8c
-    [<0000000075da06ba>] exit_to_user_mode_prepare+0x79/0x102
-    [<0000000093a53d48>] syscall_exit_to_user_mode+0x1c/0x30
-
-Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
+Signed-off-by: Xueshi Hu <xueshi.hu@smartx.com>
 ---
- fs/nfs/sysfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/page_idle.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/fs/nfs/sysfs.c b/fs/nfs/sysfs.c
-index acda8f033d30..bf378ecd5d9f 100644
---- a/fs/nfs/sysfs.c
-+++ b/fs/nfs/sysfs.c
-@@ -345,8 +345,10 @@ void nfs_sysfs_move_sb_to_server(struct nfs_server *server)
- 	int ret = -ENOMEM;
- 
- 	s = kasprintf(GFP_KERNEL, "server-%d", server->s_sysfs_id);
--	if (s)
-+	if (s) {
- 		ret = kobject_rename(&server->kobj, s);
-+		kfree(s);
-+	}
- 	if (ret < 0)
- 		pr_warn("NFS: rename sysfs %s failed (%d)\n",
- 					server->kobj.name, ret);
+diff --git a/include/linux/page_idle.h b/include/linux/page_idle.h
+index 5cb7bd2078ec..d8f344840643 100644
+--- a/include/linux/page_idle.h
++++ b/include/linux/page_idle.h
+@@ -144,9 +144,4 @@ static inline void set_page_idle(struct page *page)
+ {
+ 	folio_set_idle(page_folio(page));
+ }
+-
+-static inline void clear_page_idle(struct page *page)
+-{
+-	folio_clear_idle(page_folio(page));
+-}
+ #endif /* _LINUX_MM_PAGE_IDLE_H */
 -- 
-2.35.3
+2.40.1
 
