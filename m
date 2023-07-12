@@ -2,64 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3025F74FCCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1731174FCD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjGLBoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S231540AbjGLBo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbjGLBoS (ORCPT
+        with ESMTP id S230180AbjGLBo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:44:18 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633D1717;
-        Tue, 11 Jul 2023 18:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689126253; x=1720662253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5pOQqiTYbjzWAxv1kjdZf1mILm6585ylD9tNeo1102Q=;
-  b=HinER0FtY39VlryagLkTp11tzXWI0/HhcYwH3i0CoMDPD+ey9C+IO0wc
-   bXq5SwbnC+gR7YKBTjZpnWcgkNQ2zh/Doopbdlms43Zo9lz1+6/FK1HcU
-   8wYU27S6JVb6hBVotep9SONKqfYObZhh1SU6d2syP7kDr284LDOrQUnod
-   Jj9ETLS7vJFCyylM8NZcBvopgWUKIohuKzSAgXsUBFQQPooyRtwipqamg
-   /ppSMkrfFhO1V6nfF75KXydycSdYW9iWYRnaW3qqfCNxzb1O5z0MxwClA
-   0lJT2dfNAoVB3yE2qpDEfUgcyLbir63DsuIRLB3G9CtfxrxJyYEfUvBMc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349629565"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="349629565"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 18:44:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="834931580"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="834931580"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Jul 2023 18:44:11 -0700
-Date:   Wed, 12 Jul 2023 09:42:41 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, frank.li@vivo.com
-Cc:     Yangtao Li <frank.li@vivo.com>, Moritz Fischer <mdf@kernel.org>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Alan Tull <atull@opensource.altera.com>,
-        Moritz Fischer <moritz.fischer@ettus.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] fpga: socfpga-a10: Fix incorrect return value of
- devm_regmap_init_mmio
-Message-ID: <ZK4FEdv6j+83+7nV@yilunxu-OptiPlex-7050>
-References: <20230710133830.65631-1-frank.li@vivo.com>
- <20230710133830.65631-3-frank.li@vivo.com>
- <2023071010-anatomy-paying-3e3e@gregkh>
+        Tue, 11 Jul 2023 21:44:57 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 12A141712;
+        Tue, 11 Jul 2023 18:44:55 -0700 (PDT)
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 66A6F60672098;
+        Wed, 12 Jul 2023 09:44:41 +0800 (CST)
+Message-ID: <284c0843-b749-00c8-95bc-6a0b220d9421@nfschina.com>
+Date:   Wed, 12 Jul 2023 09:44:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023071010-anatomy-paying-3e3e@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH net-next v2 03/10] net: ppp: Remove unnecessary (void*)
+ conversions
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     mostrows@earthlink.net, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, xeb@mail.ru,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+X-MD-Sfrom: yunchuan@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   yunchuan <yunchuan@nfschina.com>
+In-Reply-To: <ZK2Wf4man0H4e9Zz@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,26 +46,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-10 at 16:11:35 +0200, Greg Kroah-Hartman wrote:
-> On Mon, Jul 10, 2023 at 09:38:30PM +0800, Yangtao Li wrote:
-> > When devm_regmap_init_mmio fails, we should return PTR_ERR(priv->regmap)
-> > instead of -ENODEV.
-> > 
-> > Fixes: acbb910ae04b ("fpga-manager: Add Socfpga Arria10 support")
-> 
-> Why are you not also including a cc: stable@ tag here?
+On 2023/7/12 01:50, Simon Horman wrote:
+>> -	struct sock *sk = (struct sock *)chan->private;
+>> +	struct sock *sk = chan->private;
+>>   	struct pppox_sock *po = pppox_sk(sk);
+>>   	struct net_device *dev = po->pppoe_dev;
+> Hi,
+>
+> Please don't break reverse xmas tree ordering - longest line to shortest -
+> of local variable declarations in Networking code.
 
-The change is to propagate the error number produced by regmap, instead
-of using a fixed error number.
+Hi,
 
-I think this is more of an improvement, not a bug fix. So no need to
-merge to stable? And the changelog should be improved to avoid
-confusing.
+This can't be reversed because it depends on the first declaration.
+Should I change it like this?
 
-Thanks,
-Yilun
+-	struct sock *sk = (struct sock *)chan->private;
+- 	struct pppox_sock *po = pppox_sk(sk);
++	struct pppox_sock *po = pppox_sk(chan->private);
+  	struct net_device *dev = po->pppoe_dev;
++	struct sock *sk = chan->private;
 
-> 
-> thanks,
-> 
-> greg k-h
+But this seems to be bad. As the advice of Andrew[1] and Dan[2]:
+
+"
+
+When dealing with existing broken reverse Christmas tree, please don't
+make it worse with a change. But actually fixing it should be in a
+different patch.
+
+We want patches to be obviously correct. By removing the cast and
+moving variables around, it is less obvious it is correct, than having
+two patches.
+
+"
+
+Wu Yunchuan
+
+[1] 
+https://lore.kernel.org/all/23e98085-8f07-4ee2-8487-8e3b439b69f4@lunn.ch/
+[2] 
+https://lore.kernel.org/all/45519aec-6ec8-49e5-b5b2-1b52d336288c@kadam.mountain/
+>
