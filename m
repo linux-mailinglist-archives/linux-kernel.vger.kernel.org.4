@@ -2,168 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E43174FDF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5762D74FDF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjGLDnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S231221AbjGLDnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjGLDnb (ORCPT
+        with ESMTP id S231753AbjGLDna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:43:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C0B1BC6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:43:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4608615C4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED30C433C7;
-        Wed, 12 Jul 2023 03:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689133401;
-        bh=dIblCOHbs5y4iJ94xVrHaATNeAfkHWAz/gZObzXL80Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DgwIEugqA1YFxdmJgYPE1AZYxSpFGEsaPb3N7Qw7pvlpK5shrEalrexuuk0kIJjot
-         fhnNwTpEe7SFMf9vHHW7vb8HpTTPctzuer/Bszwium13eaQ119IQQVIALNaXmC5LvW
-         sR0sPBUKiazgIPOCo+AIu4MP4pvkpP3Z2tb2yYS/cOGPkli+07xYXnQ9xWpzOAoBYt
-         IGSCXSTSXx9lkk7voUgDcA1X0GL18NlETKJDEdYS8lmNndTJKf6OiNzI5R9suL3hl9
-         9HhIFpGsYLrIr+F4qqmT0T6yGALKeIOxlCOgWEvRKUIYjUaV1XneeSPOdFvzNmsof3
-         2Stj3PtXmluLQ==
-Message-ID: <c8c8abb4-51af-9700-722d-049733d13c43@kernel.org>
-Date:   Wed, 12 Jul 2023 13:43:17 +1000
+        Tue, 11 Jul 2023 23:43:30 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75246198B;
+        Tue, 11 Jul 2023 20:43:20 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id D850A21C4255; Tue, 11 Jul 2023 20:43:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D850A21C4255
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1689133399;
+        bh=AQSDwVr//PWnanNDVqJOKnFjTzDXsVxMzaz8VzfLX9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gd86CwrooCUzTzLtcrbfpPja1MDbDSHeRi2drRdRHQKEr7+MeHUdPmo1OYofl8LO5
+         /BxTBXcBx+61KNVGQwmn84+RCmceckkYRqDvUCBubBwyfYCe0o4LvKZoEff8AP92wV
+         PLwJXBucI4r1Hv+6Ky15fLjo3Ox/F0xK3pPqj7RM=
+Date:   Tue, 11 Jul 2023 20:43:19 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, eparis@redhat.com,
+        paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
+ signature data via LSM hook
+Message-ID: <20230712034319.GA17642@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
+ <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
+ <ZKgm+ffQbdDTxrg9@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] fs: binfmt_elf_efpic: fix personality for fdpic ELF
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-arm@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, brauner@kernel.org
-References: <20230711133955.483393-1-gerg@kernel.org>
- <202307110901.7E9A0D0AE5@keescook>
-From:   Greg Ungerer <gerg@kernel.org>
-In-Reply-To: <202307110901.7E9A0D0AE5@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKgm+ffQbdDTxrg9@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On Fri, Jul 07, 2023 at 10:53:45AM -0400, Mike Snitzer wrote:
+Thanks for the review!
 
-On 12/7/23 02:11, Kees Cook wrote:
-> On Tue, Jul 11, 2023 at 11:39:55PM +1000, Greg Ungerer wrote:
->> The elf-fdpic loader hard sets the process personality to either
->> PER_LINUX_FDPIC for true elf-fdpic binaries or to PER_LINUX for
->> normal ELF binaries (in this case they would be constant displacement
->> compiled with -pie for example). The problem with that is that it
->> will lose any other bits that may be in the ELF header personality
->> (such as the "bug emulation" bits).
->>
->> On the ARM architecture the ADDR_LIMIT_32BIT flag is used to signify
->> a normal 32bit binary - as opposed to a legacy 26bit address binary.
->> This matters since start_thread() will set the ARM CPSR register as
->> required based on this flag. If the elf-fdpic loader loses this bit
->> the process will be mis-configured and crash out pretty quickly.
->>
->> Modify elf-fdpic loaders personality setting for ELF binaries so that
->> it preserves the upper three bytes by using the SET_PERSONALITY macro
->> to set it. This macro in the generic case sets PER_LINUX but and
->> preserves the upper bytes. Architectures can override this for their
->> specific use case, and ARM does exactly this.
+> On Wed, Jun 28 2023 at  5:09P -0400,
+> Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> Thanks for tracking this down!
+> > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > 
+> > dm-verity provides a strong guarantee of a block device's integrity. As
+> > a generic way to check the integrity of a block device, it provides
+> > those integrity guarantees to its higher layers, including the filesystem
+> > level.
+> > 
+> > An LSM that control access to a resource on the system based on the
+> > available integrity claims can use this transitive property of
+> > dm-verity, by querying the underlying block_device of a particular
+> > file.
+> > 
+> > The digest and signature information need to be stored in the block
+> > device to fulfill the next requirement of authorization via LSM policy.
+> > This will enable the LSM to perform revocation of devices that are still
+> > mounted, prohibiting execution of files that are no longer authorized
+> > by the LSM in question.
+> > 
+> > This patch added two security hook calls in dm-verity to save the
+> > dm-verity roothash and the roothash signature to LSM blobs.
+> > 
+> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> > ---
+...
+> > diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+> > index 4836508ea50c..33165dd7470f 100644
+> > --- a/drivers/md/dm-verity-verify-sig.c
+> > +++ b/drivers/md/dm-verity-verify-sig.c
+> > @@ -9,6 +9,9 @@
+> >  #include <linux/verification.h>
+> >  #include <keys/user-type.h>
+> >  #include <linux/module.h>
+> > +#include <linux/security.h>
+> > +#include <linux/dm-verity.h>
+> > +#include "dm-core.h"
 > 
-> There are some twisty macros in use across all the architectures here!
+> Why are you including dm-core.h here?
+This is used to get the complete definition of struct mapped_device to extract
+the struct block_device from it.
+
 > 
-> I notice the bare set_personality() call remains, though. Is that right?
+> >  #include "dm-verity.h"
+> >  #include "dm-verity-verify-sig.h"
+> >  
+> > @@ -97,14 +100,17 @@ int verity_verify_sig_parse_opt_args(struct dm_arg_set *as,
+> >   * verify_verify_roothash - Verify the root hash of the verity hash device
+> >   *			     using builtin trusted keys.
+> >   *
+> > + * @bdev: block_device representing the device-mapper created block device.
+> > + *	  Used by the security hook, to set information about the block_device.
+> >   * @root_hash: For verity, the roothash/data to be verified.
+> >   * @root_hash_len: Size of the roothash/data to be verified.
+> >   * @sig_data: The trusted signature that verifies the roothash/data.
+> >   * @sig_len: Size of the signature.
+> >   *
+> >   */
+> > -int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+> > -			    const void *sig_data, size_t sig_len)
+> > +int verity_verify_root_hash(struct block_device *bdev, const void *root_hash,
+> > +			    size_t root_hash_len, const void *sig_data,
+> > +			    size_t sig_len)
+> >  {
+> >  	int ret;
+> >  
+> > @@ -126,8 +132,12 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+> >  				NULL,
+> >  #endif
+> >  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+> > +	if (ret)
+> > +		return ret;
+> >  
+> > -	return ret;
+> > +	return security_bdev_setsecurity(bdev,
+> > +					 DM_VERITY_SIGNATURE_SEC_NAME,
+> > +					 sig_data, sig_len);
+> >  }
+> >  
+> >  void verity_verify_sig_opts_cleanup(struct dm_verity_sig_opts *sig_opts)
 > 
-> For example, ARM (and sh and xtensa) also sets:
+> Both of your calls to security_bdev_setsecurity() to set your blobs in
+> the bdev are suspect because you're doing so from the verity_ctr().
+> The mapped_device has 2 dm_table slots (active and inactive).  The
+> verity_ctr() becomes part of the inactive slot, there is an extra step
+> to bind the inactive table to the active table.
 > 
-> #define elf_check_fdpic(x) ((x)->e_ident[EI_OSABI] == ELFOSABI_ARM_FDPIC)
+> This leads to you changing the blobs in the global bdev _before_ the
+> table is actually active.  It is possible that the inactive table will
+> simply be removed and the DM verity device put back in service;
+> leaving your blob(s) in the bdev inconsistent.
 > 
-> so it's possible the first half of the "if" below could get executed,
-> and ARM (and possibly other architectures) would again lose the other
-> flags, if I'm reading correctly.
-
-Yes, it is all a little confusing, and the fdpic handling is a little different
-to the standard ELF handling in binfmt_elf.c (with its use of SET_PERSONALITY2).
-
-
-> (And the fact that PER_LINUX is actually 0x0 is oddly handled, leaving
-> it implicit in most architectures.)
+> This issue has parallels to how we need to defer changing the global
+> queue_limits associated with a request_queue until _after_ all table
+> loading is settled and then the update is done just before resuming
+> the DM device (mapped_device) -- see dm_table_set_restrictions().
 > 
-> What seems perhaps more correct is to remove the "if" entirely and make
-> sure that SET_PERSONALITY() checks the header flags on all architectures?
-
-I had thought along those same lines as well. Changing it to be something more
-like this:
-
-     SET_PERSONALITY(exec_params.hdr);
-     if (elf_check_fdpic(&exec_params.hdr))
-             current->personality |= FDPIC_FUNCPTRS;
-
-Which I think better handles any arch specifics via the SET_PERSONALITY() use.
-But I chickened out since I can't test fdpic binaries at this time.
-
-
-> But I'm less familiar with this area, so please let me know what I'm
-> missing. :)
-
-Me too :-)
-It is definitely broken for loading standard ELF binaries on a noMMU system
-using binfmt_elf_fdpic.c, which is what led me down this path. It loses the
-ADDR_LIMIT_32BIT bit in the personality and that causes application crashing.
-
-
->> Signed-off-by: Greg Ungerer <gerg@kernel.org>
->> ---
->>
->> Is anyone out there using elf-fdpic on ARM?
+> Unfortunately, this feels like it may require a new hook in the
+> target_type struct (e.g. ->finalize())
 > 
-> It would seem you're the first? :) (_Should_ it be usable on ARM?)
+> Mike
+Thanks for pointing out this issue. We were calling security_bdev_setsecurity()
+because the roothash signature data is only available in verity_ctr()
+and it is discarded after verity_ctr() finishes.
+After digging deeper into the table_load, I realized that we were indeed
+wrong here.
 
-I was assuming that it must have worked at some time. The binfmt_elf_fdpic
-loader was enabled for ARM in commit 50b2b2e691cd ("ARM: add ELF_FDPIC support")
-by Nicolas Pitre. But that was way back in 2017.
+Based on my understanding of your suggestion, it seems that the correct
+approach would be to save the roothash signature into the struct dm_target
+and then invoke security_bdev_setsecurity() before activating
+the inactive table in the __bind function (where dm_table_set_restrictions is called).
 
-Regards
-Greg
+To facilitate this process, it seems appropriate to introduce a new hook
+called finalize() within the struct target_type. This hook would enable
+targets to define tasks that need to be completed before activating
+a new table.
 
+In our specific case, we would add a finalize hook to the dm-verity module,
+allowing us to call security_bdev_setsecurity() and associate the roothash
+information in the struct dm_target with the struct block_device of
+the struct mapped_device. Is this correct?
 
-> -Kees
-> 
->> This seems to break it rather badly due to the loss of that ADDR_LIMIT_32BIT
->> bit from the process personality.
->>
->>   fs/binfmt_elf_fdpic.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
->> index a05eafcacfb2..f29ae1d96fd7 100644
->> --- a/fs/binfmt_elf_fdpic.c
->> +++ b/fs/binfmt_elf_fdpic.c
->> @@ -348,7 +348,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
->>   	if (elf_check_fdpic(&exec_params.hdr))
->>   		set_personality(PER_LINUX_FDPIC);
->>   	else
->> -		set_personality(PER_LINUX);
->> +		SET_PERSONALITY(exec_params.hdr);
->>   	if (elf_read_implies_exec(&exec_params.hdr, executable_stack))
->>   		current->personality |= READ_IMPLIES_EXEC;
->>   
->> -- 
->> 2.25.1
->>
-> 
+Thanks,
+- Fan
+
