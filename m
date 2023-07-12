@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B78F750435
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B8C750439
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjGLKPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S232644AbjGLKPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjGLKPA (ORCPT
+        with ESMTP id S232890AbjGLKPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:15:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332811991
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:15:00 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJWrv-0008Pi-Ch; Wed, 12 Jul 2023 12:14:47 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJWrt-00DrcU-UX; Wed, 12 Jul 2023 12:14:45 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJWrt-004Haj-8R; Wed, 12 Jul 2023 12:14:45 +0200
-Date:   Wed, 12 Jul 2023 12:14:45 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 06/27] thermal/drivers/mediatek/lvts_thermal: Convert to
- platform remove callback returning void
-Message-ID: <20230712101445.bci4qkcf33wkr66d@pengutronix.de>
-References: <20230712081258.29254-1-frank.li@vivo.com>
- <20230712081258.29254-6-frank.li@vivo.com>
+        Wed, 12 Jul 2023 06:15:18 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2174E19A6;
+        Wed, 12 Jul 2023 03:15:14 -0700 (PDT)
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id BE9606076583E;
+        Wed, 12 Jul 2023 18:15:09 +0800 (CST)
+Message-ID: <5194f82f-12d6-05aa-33b7-69c88923e455@nfschina.com>
+Date:   Wed, 12 Jul 2023 18:15:09 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bzvs6qosiovvxhrt"
-Content-Disposition: inline
-In-Reply-To: <20230712081258.29254-6-frank.li@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/virtio: remove some redundant code
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     airlied@redhat.com, kraxel@redhat.com, gurchetansingh@chromium.org,
+        olvaffe@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+In-Reply-To: <b82057bf-3126-4721-87f5-79ca3682cee4@kadam.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/7/12 14:36, Dan Carpenter wrote:
 
---bzvs6qosiovvxhrt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Jul 12, 2023 at 09:18:42AM +0800, Su Hui wrote:
+>> On 2023/7/11 19:13, Dan Carpenter wrote:
+>>> On Tue, Jul 11, 2023 at 05:00:31PM +0800, Su Hui wrote:
+>>>> virtio_gpu_get_vbuf always be successful,
+>>>> so remove the error judgment.
+>>>>
+>>> No, just ignore the static checker false positive in this case.  The
+>>> intent of the code is clear that if it did have an error it should
+>>> return an error pointer.
+>> Hi, Dan,
+>>
+>> Function "virtio_gpu_get_vbuf" call "kmem_cache_zalloc (vgdev->vbufs,
+>> GFP_KERNEL | __GFP_NOFAIL)" to
+>> allocate memory. Adding the " __GFP_NOFAIL”flag make sure it won't fail. And
+>> "virtio_gpu_get_vbuf" never
+>> return an error code, so I think this is not a false positive.
+> We all see this and agree.
+>
+> However the check for if (IS_ERR()) is written deliberately because we
+> might change the code to return error pointers in the future.  Static
+> checkers are looking for code that does something unintentional but in
+> this case the code was written that way deliberately.
+Got it ,  I shouldn't remove it because the check may be useful in the 
+future.
+Thanks for your explanation.
 
-On Wed, Jul 12, 2023 at 04:12:37PM +0800, Yangtao Li wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+Su Hui
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-While I like like you picking up the quest of converting drivers, I'd
-like to have some coordination in place to not let us do duplicate work.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---bzvs6qosiovvxhrt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSufRQACgkQj4D7WH0S
-/k5CGwf+J9LZL39gNGaKLsIHlIqVcOPuaffvlQEbuDPEk+NXzDuFe8zPPMp2Q47i
-u53yJb74c9cR03QdbMMAmLI5Z348gpIamQtynQ7gHIwOrHNeY5cLRrdyXhrRVg5z
-W7w9/KR+QlKenZogcWWIjoQHS2CHbQ8O4THEYn0SH6YIOfhT19vZtdz5DHSiH0xr
-8FiJxXBzBBlpY+oGkLw58t0tkJCKlBj5AtR8LWWt320FiRPBgbGiNzfBvOaSXd5y
-DWD+19p5HzYJkaKgtXmGKTOQ4DGS5zCHPxAK43BgNVguwma9ZM7baQjKnfv6AY3T
-dZzKa7Yyfq6vuvAxHq4OgAIOyDnYdw==
-=8PTH
------END PGP SIGNATURE-----
-
---bzvs6qosiovvxhrt--
+>
+> regards,
+> dan carpenter
+>
