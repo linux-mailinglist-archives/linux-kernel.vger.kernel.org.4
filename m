@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B21A75060B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F37750617
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjGLL2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S232165AbjGLLal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjGLL2b (ORCPT
+        with ESMTP id S229506AbjGLLaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:28:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9289E19BC;
-        Wed, 12 Jul 2023 04:28:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 12 Jul 2023 07:30:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CDA8F;
+        Wed, 12 Jul 2023 04:30:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 46CF31F8D9;
-        Wed, 12 Jul 2023 11:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689161302; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tgkraBCStp4uHjw1DiSUtNsshJCrMml+0ZZ0JzhB5IE=;
-        b=E4rRGYvqiKIfG/O6lN9f+QQkBO51fLIHYOixzLbRWb8whpiZtJxnT2xIsPwX90RN5fuD32
-        2DyWH+kj133Mtaxn6RwfU+HGN4did0uLh6cEt8YpvRbu0cSgeZtHl4vMUinRBCT2aFdq8W
-        E7GdXQKPJ0qH0dejfPFgMVscYt+Q2Io=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689161302;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tgkraBCStp4uHjw1DiSUtNsshJCrMml+0ZZ0JzhB5IE=;
-        b=g1Ago2G6rHfRTsq7TgtoTyYEOrMGpGzHvA3vlsEa7vhvv3N867hahCAkUEY9Mw3ABNo+oT
-        34sK4jYT9ZG6yyCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26B0F133DD;
-        Wed, 12 Jul 2023 11:28:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2KcCCVaOrmSQLAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 12 Jul 2023 11:28:22 +0000
-Date:   Wed, 12 Jul 2023 13:28:21 +0200
-Message-ID: <871qhdl67e.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Amadeusz =?ISO-8859-2?Q?S=B3awi=F1ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 08/13] ALSA: hda: Convert to PCI device IDs defines
-In-Reply-To: <ec8bf2d3-6db0-bb9e-0964-fadcf8fa654d@linux.intel.com>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
-        <20230711125726.3509391-9-amadeuszx.slawinski@linux.intel.com>
-        <ZK1iES4aIwr9o29F@smile.fi.intel.com>
-        <ec8bf2d3-6db0-bb9e-0964-fadcf8fa654d@linux.intel.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-2
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B9E61711;
+        Wed, 12 Jul 2023 11:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA6AC433C7;
+        Wed, 12 Jul 2023 11:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689161437;
+        bh=NDBF8dBjRANnGKRrDvxMqE+Lw2noCTWhhXn22ig51mw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nitfw/gukMrGiwHAYDuudY/3e4DHA8NJmkYTP8Q7dop1CW1NxeeznW324UIqfv43f
+         dYVaPb/7BdTXYEVN0uvmzSxqgtzIFZ3Zu+a3eSjnZqXAO0DcIgi5H/vWtklOlmIQMo
+         wgaXO4V+MPqMaCAaSiV2h+R+XiaHteqGlieK2TANbz7KQKrPpbb+hCOCATC79pN1WL
+         cRgV60JsxR615B5ZQt1lfab8XmsuCrRycs5C+xq+6CyYm29wOt0cUbVXUslfq40Ouc
+         YzmsIgCOPsTt6DDRgfk1m8VCrgG8T1gmVMZlmWRTP6aj6QZgI3rvJNTExb0rmI9v2J
+         vVzxB5LPGdeuQ==
+Date:   Wed, 12 Jul 2023 17:00:33 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yangtao Li <frank.li@vivo.com>, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH 1/5] dmaengine: qcom: gpi: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZK6O2b88Nz6J2JeN@matsya>
+References: <20230705081856.13734-1-frank.li@vivo.com>
+ <168909383153.208679.15343948792914219046.b4-ty@kernel.org>
+ <c3373ebe-2f52-bed7-7f59-98e1268c9af2@linux-m68k.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3373ebe-2f52-bed7-7f59-98e1268c9af2@linux-m68k.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,24 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jul 2023 13:22:22 +0200,
-Amadeusz S³awiñski wrote:
+On 12-07-23, 11:33, Geert Uytterhoeven wrote:
+> 	Hi Vinod,
 > 
-> On 7/11/2023 4:07 PM, Andy Shevchenko wrote:
-> > I know that AMD owns ATI, but wouldn't make sense to group by company?
-> > Maybe as a separate (preparatory?) patch.
+> On Tue, 11 Jul 2023, Vinod Koul wrote:
+> > On Wed, 05 Jul 2023 16:18:52 +0800, Yangtao Li wrote:
+> > > Convert platform_get_resource(), devm_ioremap_resource() to a single
+> > > call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> > > what this function does.
+> > > 
+> > > 
 > > 
+> > Applied, thanks!
+> > 
+> > [1/5] dmaengine: qcom: gpi: Use devm_platform_get_and_ioremap_resource()
+> >      commit: d9313d9f1fbc14cae5147c5130bea54aa76ad65f
+> > [2/5] dmaengine: qcom_hidma: Use devm_platform_get_and_ioremap_resource()
+> >      commit: a189107deb574fd08018bbf2fe5cd86450a54b13
+> > [3/5] dmaengine: qcom: hidma_mgmt: Use devm_platform_get_and_ioremap_resource()
+> >      commit: fe6c2622473f3756a09bd6c42cffca6fbdce391c
+> > [4/5] dmaengine: shdmac: Convert to devm_platform_ioremap_resource()
+> >      commit: 0976421c5a339b1b1a89cfba4471a6de761130ed
+> > [5/5] dmaengine: stm32-dma: Use devm_platform_get_and_ioremap_resource()
+> >      commit: b402a7eeaa35aaa3300a4ba6bd5b381112ae183c
 > 
-> It seems to be sorted this way because first are Generic ATI and AMD
-> HDA cards, followed by ATI HDMI ones. I would just leave it as it is
-> unless Takashi also prefers it to be reordered?
+> I noticed all your new dmaengine[1] and phy[2] commits contain a
+> "Message-ID:" tag.  Presumable you added a git hook for that?
 
-Yes, these are some logical grouping :)
+Thanks for pointing that out, yes something is messed up for me.
+> 
+> However, the standard way is to add a Link: tag pointing to lore
+> instead, cfr. [3].
 
-We may want to sort differently in future, but let's do it after all
-things settle down.
+Yep and if you look at the dmaengine and phy commits for 6.4 they have
+"Link" in them, so something is not working, let me fix that up.
 
-
-thanks,
-
-Takashi
+-- 
+~Vinod
