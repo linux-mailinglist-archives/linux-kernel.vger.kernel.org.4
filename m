@@ -2,347 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94198750917
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D256B75088B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbjGLNCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S232319AbjGLMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbjGLNCd (ORCPT
+        with ESMTP id S230022AbjGLMnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:02:33 -0400
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9971F198B;
-        Wed, 12 Jul 2023 06:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=kNMrFGES7NPyloTYFnGi6EEQKp1AtpDzCVH9fxreOdQ=; b=zrYR3XF1TnQnweFsLg5cGVJ0PI
-        H6p6De9H2pCyJ1jX616+PKXugFR/u0TaHUuWzLx9WEXDWQQVRTs5629HTlFvahNLoOuLK8U79cAWZ
-        kb0c8f7XaS4Y8XbQQwFbeWG34QCwE+OJSzt9O8HthuRjMXuEfTWLHAof6zuUyvNhKQmxJH3/S+PuK
-        IhG6y8gkjXpNPoxNPzsm9se696XM8zdHuhEkjzV+eUViT5NxtBaAsQAk3Mdu5PoQ/LZ3OPxpQN4Jd
-        VvWnIukW97m8tkWGlAVINqhET1oFtM10G1Sj4ghc7XaPtwjN4B+BK85aKaGgtjKsdTIxG25VztrjJ
-        OSY7rLmA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sean@geanix.com>)
-        id 1qJZBk-000NNx-VB; Wed, 12 Jul 2023 14:43:24 +0200
-Received: from [185.17.218.86] (helo=zen..)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sean@geanix.com>)
-        id 1qJZBk-000L9W-B3; Wed, 12 Jul 2023 14:43:24 +0200
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     l.goehrs@pengutronix.de, a.fatoum@pengutronix.de,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Sean Nyekjaer <sean@geanix.com>, dantuguf14105@gmail.com,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 9/9] ARM: dts: stm32: Add Octavo OSD32MP1-RED board
-Date:   Wed, 12 Jul 2023 14:42:47 +0200
-Message-Id: <20230712124248.2400862-9-sean@geanix.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230712124248.2400862-1-sean@geanix.com>
-References: <20230712124248.2400862-1-sean@geanix.com>
-MIME-Version: 1.0
+        Wed, 12 Jul 2023 08:43:14 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2107.outbound.protection.outlook.com [40.107.215.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A09170E;
+        Wed, 12 Jul 2023 05:43:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QG8sYAr0tH+TDVcOCwGZaoLHMRRM/ALCzqoY4tYmmBzpg5jnCXhr9J4du8Xt/nJvWvTnKxhgaNmsStuv0IdqBpNb7fFHUg5ZzPv3slFcMdN8gnJc8VLA8dIwj8qytyLNnR7ZD0jtAngXwbLxjSlBY2gYCCuvMob7jHqzxydeyt1MA7DbQiD+TcaThKBUYIhah79WcFIg36LO/IcnT5bmnqFKilawzgC19Z6Tbaau0d2/s7bKzjVZcPadStwUP87h39vko0ZVwCbSfo+fQ2hvk1uD83jwAgY2OBNmY+l8lQeR1iTY3qeztq8jMcwadgs8EHU7khsNa/3NMCdLFR37Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5EVOZKXMZxhfK9UpSac8+y7UzW/hCctbY1qEz2iOzRk=;
+ b=Dmnvk7mQUdSUxkBN/Q7xrZ08CDc2FpJluQLdNzxH2asYVoMkJGOaQBff/RCbU5VZUml4xiMHEe+UQEwwARvs0Iyp7khQNEe8YS7TGdyXMUFwBIxDg+psWrhvDY4+Zo+IhC2+vzl7BbYxdRZqn8JDLqgEIybwtp4utdwftGKoHD9b1w6mW8TsTHorgFXizsWINsxn/CogCtsRzd9MemGtisClWaFWNnmYHdjaWwefTIXDlctqcbIUCxWBf+S5Xu8srDuHrCvL8k2cTQyHHCzb0nOs6/NZfzs45xDNogcDKOKYSjL1iT7mE9F6p6wXlQktspBS0D64XeApPsGXn3f/TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5EVOZKXMZxhfK9UpSac8+y7UzW/hCctbY1qEz2iOzRk=;
+ b=djWXzpidAojFSqjaHyPFKQK/nQjn/G/3ryA/Qp4Xmr3XNIVsruQWgkmyDxiyTrI/G+qjhgZ5p2AGq8/wmlR9sA/VnNWZah9WTMo5yHtOQcfOzxCWPyeaeL7IxJ7gVRWFKp0SRR64Z++bi+8QdEuL+wE+mJJY5x6Cg3LgkSBDc8vGTs9cf2dE07okJU0/MBV7tZChHoL1QeluitgGPrdfdx/bI9Xlxxmkd9Vdp4TdVLntI1GpAxXifeUMpaHgZ1q+pp5uWvFXVtnRcdkKkGPk6WTHYZ+ntp7veW02RIwPHf/m0BfbBqsEcDTZTmYJcBtn1PpLSruUYpMuLPHHj0H4DQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ SEYPR06MB6359.apcprd06.prod.outlook.com (2603:1096:101:140::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
+ 2023 12:43:09 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 12:43:09 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        linux-wireless@vger.kernel.org (open list:ATHEROS ATH5K WIRELESS DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] drivers: wireless: ath5k: fix parameter check in ath5k_debug_init_device
+Date:   Wed, 12 Jul 2023 20:42:59 +0800
+Message-Id: <20230712124259.15096-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: sean@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26967/Wed Jul 12 09:28:32 2023)
+Content-Type: text/plain
+X-ClientProxiedBy: TYWP286CA0004.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:178::6) To SG2PR06MB5288.apcprd06.prod.outlook.com
+ (2603:1096:4:1dc::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|SEYPR06MB6359:EE_
+X-MS-Office365-Filtering-Correlation-Id: 52aa9fb8-3257-44fe-a19a-08db82d58c29
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +TKKS/O9lmo/dWlDs0VNWGTlbmaERW2utaZSDRkIRgImW6wf6WvZmov6I0fEt5c+dhX+cqIMiD3PIjKUYsRBKksABSl/Ni3scRD11JT8NyzMgLVz11Ge4gJ5110yLmCILtNzTMeXzkeE0XxFhuYeQyLD0R+xQxWa4Szl6Jjejy0SLj4FDKG2DSO9aarGBVCPsqIWB+d1Hr7bm/fZ7cFlKhq/I+thANDRqc5qUtEaMplimpIQks3nYylddoZayhTvBJjhSGg+vZlAx1WPYqWQgUOz83WoDK3HrIJzUoQEIIEiQot3dfMt/mUjxi52ddikt6/iGe8KLBPDBhQzXiIHEkzZlkZmEpnSXuWFZmYwXC6/YsC28uU7hxw+5rBj0cepyKv2hDet4SW0YmeJmVS+07Jzc06mXCf+03hFnYWblzoC4vT1PFpDol1SMOISOHm1NI4GDoMn0zZHsYWmVUBSuw3Fxrzuu4XndfT0u1zKvh16v3kZuH3cGqIHfjRUBPPcPr2pIUpwJWLOwJOo4TM5I/VBiRPKdb97XtB8z/P7ynXVXngAGxwBvFhV3W9OX6pD2yGqBnd8y6w/9X8osJoOKrgyiaiPo7fTgbhKP1sIXxEgmo13HiSzBhRj/yde4z/06h1FAzbArA8mpQw2DFMU+g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(451199021)(6486002)(6512007)(52116002)(6666004)(26005)(6506007)(1076003)(186003)(83380400001)(36756003)(2616005)(86362001)(38350700002)(38100700002)(107886003)(5660300002)(8676002)(8936002)(4326008)(66556008)(66476007)(316002)(41300700001)(66946007)(2906002)(4744005)(478600001)(110136005)(32563001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DSuGf+HYb0GXl2a5e1XIdg1Je7orM5qh4QGU0r/Zuv4DdR+xJNPKyCwFMhCv?=
+ =?us-ascii?Q?A9O3dmzbU01Jl7BOcXNg1ZSf0FcPK6p479bFCQOwAhW+0zYHDUMdbLkwtKqt?=
+ =?us-ascii?Q?bWAWpyXJjfC1wi3qYEKMbpmA0SG95zvi7ElvFmmTvURcRagSwk6BZ54+3L5H?=
+ =?us-ascii?Q?d4XpTXzbIPZi6hEHq14rqGWq+pLSvViXvQzwqnmd/bFIyY24Th8b04EmEckS?=
+ =?us-ascii?Q?jmkL/H/PpytG5zoKbDdtElK1fzWBcHKVKXTDe3SxoJkQSVkB/2Dn1XVwtbvq?=
+ =?us-ascii?Q?yB5EXiLbYzeCS7QIM17InRz0TqHQuCGCLWr8ghiI+CoIjkiDaEBwvjzmZs69?=
+ =?us-ascii?Q?CkGbTxhRkXMBibfUlTMNeSOBbhoXyTsaazG7Tp4OAJLxHPtR0D4GHaVHV3Kq?=
+ =?us-ascii?Q?3aNnS01hLjUhD96cCfvQictpUH3cR5DAtBmHlwXML2ZRJEHuobAsINlOy3Jw?=
+ =?us-ascii?Q?Hf0SNaLCbyDmEooBISFPbP0YXY70Y/RRMwbDJxPL51jZN/R5PDdZoVXrPj0m?=
+ =?us-ascii?Q?z5liM/lNtjK5E/KzKu+8wNWe7V02e1qoGHb5TdMhSM4QSiV9Sur9ocpwUQT8?=
+ =?us-ascii?Q?2ktENlbokQWqPqi8O9WKuKYv74CeH3a17k4zgAk5OVG0aaQwe6ga0Kg50HFP?=
+ =?us-ascii?Q?Z567AUIZdenxdbDSKcQ/VUepodLmSi7ZQy9okGguqvz4Pz2OhEQy3jA9vshx?=
+ =?us-ascii?Q?7L3JxNUHf8cn/HwNDwcS7Zute/Gs/gOGV07kEE3QbGOzmEKDSlSOPX498Esg?=
+ =?us-ascii?Q?v+X7ENA2m26iAgOldWIG2QChsFjXq+D9JwId4s4EZYtSQ2Ac0vSRDPNr/vXw?=
+ =?us-ascii?Q?1V1NPTEA10J66cX8XJee9znzSoTpHlUEKeMGfSAY3G6Y+3lBIKrv9xqwLuag?=
+ =?us-ascii?Q?y+LjC9NNJLdfn5CBn5t6EeP7aOqAn7WQXOaknFWf3GKQVFGQKicf99k+vHl0?=
+ =?us-ascii?Q?FwZwSR/Dm6q4FSfWP+PJTFtG2h9r4ADmrcEQRgeScimkPSknIEp7T5HJ4b7J?=
+ =?us-ascii?Q?wmRKvUmEDl6qQAvhYdpqYLYomBtrhcfbvImqqVnT1+6jAAEt1W5jSTRgiEIK?=
+ =?us-ascii?Q?iMBHTUtpvW5th356YjR4Ibr+ypjpf/WeNj3PSuGCv2PdkqmhyCSBfIB5H9hh?=
+ =?us-ascii?Q?CbZ3N2BYK/8RZn1GuoBdh8mbrSDIHo2W6N/UacuqzhzMudybD1GKIQfy5zw1?=
+ =?us-ascii?Q?BjAi6ZM9s87d5bd250T4508AbJLj6ahj1TPPN4IU7EjyU3gk7/19s4BLgYPT?=
+ =?us-ascii?Q?ZLUPFRoWGxHOT3LuR7cpZkVD9rKhFndxidT8OAbp7qvXfkgcZHpP6gB144QX?=
+ =?us-ascii?Q?AL6G1uTB7qbPKNKiQSG0ewb26uciK3jWNhbjA0bcuAAP6jCpBf4tnZozQCLH?=
+ =?us-ascii?Q?i0wYTl51GtCOIm8vnZgG0E7MP0LD7DkcOrnHo8ny8KHtaSx3f05i7NB7Jmkg?=
+ =?us-ascii?Q?8NuCE3Wy5XJrUO47Xrx0fHIUFHR6RaWxONVziAVMjvpGNbFr4U8Tqh7ngGDC?=
+ =?us-ascii?Q?BMz8ALBq7HDt5fvOT8MaWPWcO96fu9KMnq15WGrTQMw5E+AmdQVkUtFhWz0r?=
+ =?us-ascii?Q?mW4ds+KAz1A9OIcGUoqWQHW//8q/FGr0avkHJeY4?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52aa9fb8-3257-44fe-a19a-08db82d58c29
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 12:43:09.7356
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K2a/Z5iL7PEOjn/HN7lJiROMc1aEjuuu7vQY7muEcGOViReeARA0LxpdI3ZMOsCse2o8sNwjK8eWYvlBPIVe+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6359
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Octavo OSD32MP1-RED development board.
+Make IS_ERR() judge the debugfs_create_dir() function return
+in ath5k_debug_init_device().
 
-General features:
- - STM32MP157C
- - 512MB DDR3
- - CAN-FD
- - HDMI
- - USB-C OTG
- - UART
-
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Reviewed-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Signed-off-by: Minjie Du <duminjie@vivo.com>
 ---
-Changes since v1:
- - Fixed comments from Ahmad
+ drivers/net/wireless/ath/ath5k/debug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v2:
- - Reordered phandles alfabetically
- - Added devicetree to Makefile
-
-Changes since v3:
- - Explained the dma disable
- - Removed the status ok for hdmi-transmitter
-
- arch/arm/boot/dts/st/Makefile                 |   3 +-
- .../boot/dts/st/stm32mp157c-osd32mp1-red.dts  | 226 ++++++++++++++++++
- 2 files changed, 228 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-
-diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
-index 44b264c399ec..94feb1f1d569 100644
---- a/arch/arm/boot/dts/st/Makefile
-+++ b/arch/arm/boot/dts/st/Makefile
-@@ -59,7 +59,8 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157c-lxa-tac-gen1.dtb \
- 	stm32mp157c-lxa-tac-gen2.dtb \
- 	stm32mp157c-odyssey.dtb \
--	stm32mp157c-phycore-stm32mp1-3.dtb
-+	stm32mp157c-phycore-stm32mp1-3.dtb \
-+	stm32mp157c-osd32mp1-red.dtb
- dtb-$(CONFIG_ARCH_U8500) += \
- 	ste-snowball.dtb \
- 	ste-hrefprev60-stuib.dtb \
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts b/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-new file mode 100644
-index 000000000000..2e2751a62aaf
---- /dev/null
-+++ b/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-@@ -0,0 +1,226 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) Geanix ApS 2023 - All Rights Reserved
-+ * Author: Sean Nyekjaer <sean@geanix.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "stm32mp157.dtsi"
-+#include "stm32mp15xc.dtsi"
-+#include "stm32mp15xx-osd32.dtsi"
-+#include "stm32mp15xxac-pinctrl.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/stm32-pinfunc.h>
-+
-+/ {
-+	model = "Octavo OSD32MP1 RED board";
-+	compatible = "oct,stm32mp157c-osd32-red", "oct,stm32mp15xx-osd32", "st,stm32mp157";
-+
-+	aliases {
-+		serial0 = &uart4;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	led-controller-0 {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			label = "heartbeat";
-+			gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+};
-+
-+&crc1 {
-+	status = "okay";
-+};
-+
-+&dts {
-+	status = "okay";
-+};
-+
-+&ethernet0 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&ethernet0_rgmii_pins_a>;
-+	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_a>;
-+	phy-mode = "rgmii-id";
-+	max-speed = <1000>;
-+	phy-handle = <&phy0>;
-+	st,eth-clk-sel;
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		phy0: ethernet-phy@3 {
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+&iwdg2 {
-+	timeout-sec = <32>;
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c1_pins_a>;
-+	pinctrl-1 = <&i2c1_sleep_pins_a>;
-+	status = "okay";
-+	i2c-scl-rising-time-ns = <100>;
-+	i2c-scl-falling-time-ns = <7>;
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+
-+	hdmi-transmitter@39 {
-+		compatible = "sil,sii9022";
-+		reg = <0x39>;
-+		reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
-+		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-parent = <&gpiog>;
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&ltdc_pins_e>;
-+		pinctrl-1 = <&ltdc_sleep_pins_e>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				sii9022_in: endpoint {
-+					remote-endpoint = <&ltdc_ep0_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				sii9022_tx_endpoint: endpoint {
-+					remote-endpoint = <&i2s2_endpoint>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&i2s2 {
-+	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc CK_PER>, <&rcc PLL3_R>;
-+	clock-names = "pclk", "i2sclk", "x8k", "x11k";
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2s2_pins_b>;
-+	pinctrl-1 = <&i2s2_sleep_pins_b>;
-+	status = "okay";
-+
-+	i2s2_port: port {
-+		i2s2_endpoint: endpoint {
-+			remote-endpoint = <&sii9022_tx_endpoint>;
-+			format = "i2s";
-+			mclk-fs = <256>;
-+		};
-+	};
-+};
-+
-+&ltdc {
-+	status = "okay";
-+
-+	port {
-+		ltdc_ep0_out: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&sii9022_in>;
-+		};
-+	};
-+};
-+
-+&m_can1 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&m_can1_pins_d>;
-+	pinctrl-1 = <&m_can1_sleep_pins_d>;
-+	status = "okay";
-+};
-+
-+&pwr_regulators {
-+	vdd-supply = <&vdd>;
-+	vdd_3v3_usbfs-supply = <&vdd_usb>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&sdmmc1 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-+	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-+	cd-gpios = <&gpioe 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+	disable-wp;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&v3v3>;
-+	status = "okay";
-+};
-+
-+&sdmmc2 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_d>;
-+	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_d>;
-+	non-removable;
-+	no-sd;
-+	no-sdio;
-+	st,neg-edge;
-+	bus-width = <8>;
-+	vmmc-supply = <&v3v3>;
-+	vqmmc-supply = <&vdd>;
-+	mmc-ddr-3_3v;
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	pinctrl-names = "default", "sleep", "idle";
-+	pinctrl-0 = <&uart4_pins_a>;
-+	pinctrl-1 = <&uart4_sleep_pins_a>;
-+	pinctrl-2 = <&uart4_idle_pins_a>;
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "okay";
-+};
-+
-+&usbh_ehci {
-+	phys = <&usbphyc_port0>;
-+	phy-names = "usb";
-+	status = "okay";
-+};
-+
-+&usbh_ohci {
-+	phys = <&usbphyc_port0>;
-+	phy-names = "usb";
-+	status = "okay";
-+};
-+
-+&usbotg_hs {
-+	vbus-supply = <&vbus_otg>;
-+};
-+
-+&usbphyc {
-+	status = "okay";
-+};
-+
-+&usbphyc_port0 {
-+	phy-supply = <&vdd_usb>;
-+};
-+
-+&usbphyc_port1 {
-+	phy-supply = <&vdd_usb>;
-+};
+diff --git a/drivers/net/wireless/ath/ath5k/debug.c b/drivers/net/wireless/ath/ath5k/debug.c
+index 4b41160e5..08058b3f7 100644
+--- a/drivers/net/wireless/ath/ath5k/debug.c
++++ b/drivers/net/wireless/ath/ath5k/debug.c
+@@ -982,7 +982,7 @@ ath5k_debug_init_device(struct ath5k_hw *ah)
+ 	ah->debug.level = ath5k_debug;
+ 
+ 	phydir = debugfs_create_dir("ath5k", ah->hw->wiphy->debugfsdir);
+-	if (!phydir)
++	if (IS_ERR(phydir))
+ 		return;
+ 
+ 	debugfs_create_file("debug", 0600, phydir, ah, &fops_debug);
 -- 
-2.40.0
+2.39.0
 
