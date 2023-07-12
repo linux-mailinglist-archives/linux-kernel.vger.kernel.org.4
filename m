@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17D874FEA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DD674FEAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjGLFT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 01:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S229843AbjGLFYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 01:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjGLFTW (ORCPT
+        with ESMTP id S229714AbjGLFYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 01:19:22 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B31A6;
-        Tue, 11 Jul 2023 22:19:17 -0700 (PDT)
-X-UUID: a3a99a6c207311ee9cb5633481061a41-20230712
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=HFjVLrSlHIovITeC28nKCrvDmOrnc0uXGtIt3SR2nPc=;
-        b=Yg1bBEQRniF8y4SsvuJtDogNbDaqCPswW9n2NCkH/waEuXzu84JOa75IZXbuy2FNNXlCbY9QoMZ7v7Ysr2J910+8wLVcVddfWCgB+dswkJuOZRYCB3nBUhDo1sMFZdyXsbVJpJTY1Rtdadh2JxGjwPuhHe7bkWkR3IXZkCx5few=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.28,REQID:fd91dbcc-ccc0-47c2-9abf-1c4e56ec9467,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:176cd25,CLOUDID:514a2268-314d-4083-81b6-6a74159151eb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO,DKR:0,DKP:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: a3a99a6c207311ee9cb5633481061a41-20230712
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <chris.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1545327841; Wed, 12 Jul 2023 13:19:13 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 12 Jul 2023 13:19:12 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 12 Jul 2023 13:19:12 +0800
-From:   Chris Lu <chris.lu@mediatek.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Von Dentz <luiz.dentz@gmail.com>
-CC:     Sean Wang <sean.wang@mediatek.com>,
-        Aaron Hou <aaron.hou@mediatek.com>,
-        Steve Lee <steve.lee@mediatek.com>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Chris Lu <chris.lu@mediatek.com>
-Subject: [PATCH v3] Bluetooth: btmtk: Fix null pointer when processing coredump
-Date:   Wed, 12 Jul 2023 13:18:58 +0800
-Message-ID: <20230712051857.13812-1-chris.lu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 12 Jul 2023 01:24:38 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A96A6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 22:24:33 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R15lC20nSzBR5lJ
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 13:24:23 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689139461; x=1691731462; bh=WK8J9dWxI+4aAEoTHQJfscjTnby
+        xuTPgDNC5E/Kjg+E=; b=yn3w+DDp7mZQsf0OnehCBNyx6jw8HAt9jMiAv2MIHbE
+        xRW5PYvKJCIRb5csC284dGfUmjAuYj3IbzrIJ7117GG9zWD9fA0fxk2p+W3CJ0o4
+        NOJVMAjICb3VkSaZG9VjJf2lDXM7AYctyP0KLv1RIqA6yVITGuj3ktz5/v8OuH1L
+        enJAZVsCq5ZwZGnfB765c9Sb6uR7tW1jCnCT3PqDGe2D8jz4DDwxmuGHCQRYyFwL
+        Oc4nnN+iLZiUJ0cMPjy6R2vQdSuhdqxs3Xq5QkgpoLYAqDie5e6Il6y/1J5serB5
+        BwOoH0seK3ibi9qJUfDU+nMOJymy1v1xVX5sTg1HJoA==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id M8UydZeL7A3g for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 13:24:21 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R15l91b4kzBR5l6;
+        Wed, 12 Jul 2023 13:24:21 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 12 Jul 2023 13:24:21 +0800
+From:   shijie001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Fix warnings in mtrr.c
+In-Reply-To: <tencent_62384F83F25EFE76B71058AF970646526108@qq.com>
+References: <tencent_62384F83F25EFE76B71058AF970646526108@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <e8ed03d11ad8e485a316649b487c1bf4@208suo.com>
+X-Sender: shijie001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There may be a potential null pointer risk if offset value is
-less than 0 when doing memcmp in btmtk_process_coredump().
-Checking offset is valid before doing memcmp.
+The following checkpatch warnings are removed:
+WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+WARNING: Block comments should align the * on each line
 
-Signed-off-by: Chris Lu <chris.lu@mediatek.com>
-Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Jie Shi <shijie001@208suo.com>
 ---
-v2: fix typo
-v3: fix bot checking error
----
- drivers/bluetooth/btmtk.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+  arch/x86/kvm/mtrr.c | 14 +++++++-------
+  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-index 786f775196ae..0f290430ae0e 100644
---- a/drivers/bluetooth/btmtk.c
-+++ b/drivers/bluetooth/btmtk.c
-@@ -370,7 +370,7 @@ EXPORT_SYMBOL_GPL(btmtk_register_coredump);
- int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
- {
- 	struct btmediatek_data *data = hci_get_priv(hdev);
--	int err;
-+	int err, offset;
- 
- 	if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
- 		return 0;
-@@ -392,15 +392,15 @@ int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
- 		if (err < 0)
- 			break;
- 		data->cd_info.cnt++;
-+		offset = skb->len - sizeof(MTK_COREDUMP_END);
- 
- 		/* Mediatek coredump data would be more than MTK_COREDUMP_NUM */
--		if (data->cd_info.cnt > MTK_COREDUMP_NUM &&
--		    skb->len > sizeof(MTK_COREDUMP_END) &&
--		    !memcmp((char *)&skb->data[skb->len - sizeof(MTK_COREDUMP_END)],
--			    MTK_COREDUMP_END, sizeof(MTK_COREDUMP_END) - 1)) {
--			bt_dev_info(hdev, "Mediatek coredump end");
--			hci_devcd_complete(hdev);
--		}
-+		if (data->cd_info.cnt > MTK_COREDUMP_NUM && offset > 0)
-+			if (!memcmp((char *)&skb->data[offset], MTK_COREDUMP_END,
-+				    sizeof(MTK_COREDUMP_END) - 1)) {
-+				bt_dev_info(hdev, "Mediatek coredump end");
-+				hci_devcd_complete(hdev);
-+			}
- 
- 		break;
- 	}
--- 
-2.18.0
+diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+index 3eb6e7f47e96..cda5f79f3f2e 100644
+--- a/arch/x86/kvm/mtrr.c
++++ b/arch/x86/kvm/mtrr.c
+@@ -39,7 +39,7 @@ static struct kvm_mtrr_range 
+*var_mtrr_msr_to_range(struct kvm_vcpu *vcpu,
+      return &vcpu->arch.mtrr_state.var_ranges[index];
+  }
 
+-static bool msr_mtrr_valid(unsigned msr)
++static bool msr_mtrr_valid(unsigned int msr)
+  {
+      switch (msr) {
+      case MTRRphysBase_MSR(0) ... MTRRphysMask_MSR(KVM_NR_VAR_MTRR - 1):
+@@ -60,7 +60,7 @@ static bool msr_mtrr_valid(unsigned msr)
+      return false;
+  }
+
+-static bool valid_mtrr_type(unsigned t)
++static bool valid_mtrr_type(unsigned int t)
+  {
+      return t < 8 && (1 << t) & 0x73; /* 0, 1, 4, 5, 6 */
+  }
+@@ -135,11 +135,11 @@ static u8 mtrr_disabled_type(struct kvm_vcpu 
+*vcpu)
+  }
+
+  /*
+-* Three terms are used in the following code:
+-* - segment, it indicates the address segments covered by fixed MTRRs.
+-* - unit, it corresponds to the MSR entry in the segment.
+-* - range, a range is covered in one memory cache type.
+-*/
++ * Three terms are used in the following code:
++ * - segment, it indicates the address segments covered by fixed MTRRs.
++ * - unit, it corresponds to the MSR entry in the segment.
++ * - range, a range is covered in one memory cache type.
++ */
+  struct fixed_mtrr_segment {
+      u64 start;
+      u64 end;
