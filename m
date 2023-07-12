@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DCF750962
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AD875096F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbjGLNQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S230263AbjGLNRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbjGLNQA (ORCPT
+        with ESMTP id S233232AbjGLNRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:16:00 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38141999
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:15:58 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b72161c6e9so9577021fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689167757; x=1691759757;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dn4rYyKdwTQMplFvM1YHg3Gp1VPxwOyOuPdjDZ4oTQs=;
-        b=MjXeUH9brINWRIL75SFSSvwFmVJG2jUS3gyV+2SmtbAKX/SQCvWGhRcT87fnTJmuiE
-         yMG3yUecRAAinZBdsfwGWunFL90IVP7OCaKSigAJzC66J5dq7lKbBHSjx0ts327vTI79
-         R6FrVsk6YWv4AUH45Vs+/hBbxAW4p9zlnVgkrsZCdNnZ2D2Rx4CM/y6xd3AyNpSg2Ghk
-         ViLO6OpihgDYF0R6FVEYVrhdXeOw0bOWgdZlkK+WA7ZX8c5gpscpLSWQhMOtt1yEaBUA
-         PfmaYmejlQt3Bhy0/On7Mv5QoUuB82vM32cdVkduN+DbKN3fPzntcD8r3hBE8SqLn4vS
-         Z4YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689167757; x=1691759757;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dn4rYyKdwTQMplFvM1YHg3Gp1VPxwOyOuPdjDZ4oTQs=;
-        b=NWAF66yHfWSbJSLD62grxU8gtK3gwNMaVNeugXlYwcsmcC2xy1RAKxYqSaDGeB1JrQ
-         RMHlRRd1yJLSGJ7kRI0mOAPXWn4rZ9Qp8X6+Otl4WHGpFAqhXQIUByjRMQPWQ1CoIEr0
-         K1B8eejeNXVrxnf9QLAST9UI38fAwY0qYBUFanUCFHxoG62gmfDDzMwgKq6o8/EavCeK
-         k1PlB0CUxk2+tXaKdI5fvnePPkbAqnFw9Rb4swKFlqJZDzVai0T9C5eHjmNfRFzNM3C3
-         CzeRYS+8RvkCY19HevXlc0LQ3vfxj4q7lQfEKRuIFtlptqS2WpGQiHNjX8VSpz/QPiug
-         jgyA==
-X-Gm-Message-State: ABy/qLZIpbaB5Mwz64MeOsrTFDpGP2UC7tHm86oXVx8A/Z2Xr1/c4QW3
-        lBU4SyH5ZuoTcwHajA9ANjBGlg==
-X-Google-Smtp-Source: APBJJlF3SgFBdLW73ntgGd2gci24bmcZ/SHaaJOixefWrDQ+G8QUUfyYVuY0X5Z36wtyT5cVzOllFQ==
-X-Received: by 2002:a2e:7d14:0:b0:2b6:d0fa:7023 with SMTP id y20-20020a2e7d14000000b002b6d0fa7023mr792416ljc.24.1689167757034;
-        Wed, 12 Jul 2023 06:15:57 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id p9-20020a2e8049000000b002b6ebc61e85sm962698ljg.54.2023.07.12.06.15.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 06:15:56 -0700 (PDT)
-Message-ID: <3b677200-a201-680b-391f-fbf73064496a@linaro.org>
-Date:   Wed, 12 Jul 2023 16:15:56 +0300
+        Wed, 12 Jul 2023 09:17:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528A81999
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689167786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YdW3jXa75uZifOOTp5ZtJFJJaNTXIh3AfAYdiE+BpGY=;
+        b=Cmp0XKQWfdBj4LO4I+4SASPp+SXG+fO5FcLxEOfHjUjDCbyWo7qlDxGgECo5SltOAfVtV0
+        IcSs6bBl1QE/VBP2S2RIXBf/liHJGW7AojELmO81Q1+m884c86BYUxVkmiqhfyUiJPf9r5
+        EZfwT8Ic9kmx241eOYaE3N0ZLUvh+Xk=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-6xGLn3mlMKuJeIXdR53l4w-1; Wed, 12 Jul 2023 09:16:25 -0400
+X-MC-Unique: 6xGLn3mlMKuJeIXdR53l4w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6E9C23C0C491;
+        Wed, 12 Jul 2023 13:16:24 +0000 (UTC)
+Received: from ovpn-8-25.pek2.redhat.com (ovpn-8-25.pek2.redhat.com [10.72.8.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F33FC4087C73;
+        Wed, 12 Jul 2023 12:38:00 +0000 (UTC)
+Date:   Wed, 12 Jul 2023 21:16:11 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-nvme@lists.infradead.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        Wen Xiong <wenxiong@linux.ibm.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] blk-mq: add blk_mq_max_nr_hw_queues()
+Message-ID: <ZK6nm2koR+TfeMcs@ovpn-8-25.pek2.redhat.com>
+References: <20230712125455.1986455-1-ming.lei@redhat.com>
+ <20230712125455.1986455-2-ming.lei@redhat.com>
+ <20230712130017.GA12417@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: display/msm: qcom,sdm845-mdss: add
- memory-region property
-Content-Language: en-GB
-To:     Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Bryan Donoghue <bryan.odonoghue@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230712130215.666924-1-amit.pundir@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230712130215.666924-1-amit.pundir@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230712130017.GA12417@lst.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2023 16:02, Amit Pundir wrote:
-> Add and document the reserved memory region property
-> in the qcom,sdm845-mdss schema.
+On Wed, Jul 12, 2023 at 03:00:17PM +0200, Christoph Hellwig wrote:
+> On Wed, Jul 12, 2023 at 08:54:48PM +0800, Ming Lei wrote:
+> > +/* Max nr_hw_queues for each hw queue type */
+> > +unsigned int blk_mq_max_nr_hw_queues(void)
+> > +{
+> > +	if (is_kdump_kernel())
+> > +		return 1;
+> > +	return nr_cpu_ids;
 > 
-> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> ---
->   .../devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml    | 5 +++++
->   1 file changed, 5 insertions(+)
+> Again, these is_kdump_kernel hacks don't make any sense.   The amount
+> of maximum available CPU needs to come through a proper API, and we
+> need to use it, not add hacks like this.
 > 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml
-> index 6ecb00920d7f..3ea1dbd7e317 100644
-> --- a/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml
-> @@ -39,6 +39,11 @@ properties:
->     interconnect-names:
->       maxItems: 2
->   
-> +  memory-region:
-> +    maxItems: 1
-> +    description:
-> +      Phandle to a node describing a reserved memory region.
-> +
+> The only thing that makes sense here is to find the last CPU
+> in cpu_possible_mask, and for kdump kernels to ensure that number
+> is 1 or whatever low value they want.
 
-Please add it to mdss-common.yaml instead
+It doesn't matter how many cpus are available, given at least one
+cpu is online.
 
->   patternProperties:
->     "^display-controller@[0-9a-f]+$":
->       type: object
+The problem is that blk_mq_alloc_tag_set() forces to set nr_hw_queues
+as 1 for kdump kernel, that is why blk_mq_max_nr_hw_queues() has to
+return 1 for kdump kernel.
 
--- 
-With best wishes
-Dmitry
+We have to tell driver that blk-mq only supports 1 queue for kdump
+kernel.
+
+Or:
+
+Thomas, can we disable managed irq for kdump kernel and switch to
+non-managed irq? Then we can avoid driver's change. I'd suggest
+this way if it is possible.
+
+Thanks,
+Ming
 
