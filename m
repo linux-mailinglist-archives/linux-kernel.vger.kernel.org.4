@@ -2,171 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DBA74FBF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 01:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547D474FBFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 02:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjGKX5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 19:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S230150AbjGLACO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 20:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbjGKX5C (ORCPT
+        with ESMTP id S229551AbjGLACN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 19:57:02 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D24E1716
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:57:00 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3a3e1152c23so4491320b6e.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 16:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689119819; x=1691711819;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=leJKi4u06YRTzo0lBrUW1GjV6mczJ561dFwtREQL+Dg=;
-        b=DXK8WidcvmvzjeVYH/6WijviZ73toBOmyVp9mIOd03ZD+R3rHWdoxQSvE5e9wD1KCJ
-         9mK/DDwssbLXSnouE8MAwnVDe+VkRcpQSrinJNmyu0FnYmd+CKVNA1F34dvSGu5lfZwy
-         cyr25JKjczwfRObdI7oARPE9gHghtmOAegQpocDq/APkFl+1PNSXGJo1xP2SNdGpJGtv
-         /nEQL7vqxVxYsTwIY7luylFSj8xoTEsYM9t5cm2HxYfPwTnzx8rs4qClhieKHRjwL54Q
-         8sya8gM8UB4rmOcx/i0v01+HlH4cbtNGlO2x9kzZaZUcFmUL9dtfGxX7fDRkv+FMzf1u
-         InjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689119819; x=1691711819;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=leJKi4u06YRTzo0lBrUW1GjV6mczJ561dFwtREQL+Dg=;
-        b=lhr3eq9p7sflQlS+gmeDqGizZAvL7UW00R9lL5ygpYTVzoF76cKdXyqw4+XDXbVfxK
-         5Gn0COJBFnriMOPJ/IrEFYQzgr6xdb7hMGCXEw8H01gqxJALVRjEio5uC8ex+laUoYiz
-         AGybvpasFDRGdKllbk44ZzJOJ4EJwT5ltYkW0grjC2Wjg/Qg94J6m/Z8iG686j9rnQ5d
-         +JsiuW83KcKk4STT/p6ROsKxB6pD5TgS9r1VGr7oTBhSy9L6w30vsO0+zGwcdIMI7eks
-         JDwEryaLjfr8SC4JTEw9Jayj3tAztWItWSmf4YMoBmkqeZ4MNejGkSlqjyibMg+1dBrl
-         Pgdg==
-X-Gm-Message-State: ABy/qLaK1qim5AyoTUvTVvD7gBTJcieRU181nz4BJnDIK9ix7hFlqpgg
-        wiYyfVcEJh4VcGSXRpcbtj0gJg==
-X-Google-Smtp-Source: APBJJlHPVDwycmPbbNO1kwHaGDMrzsNQAmVLFppzVomF/d82yUMQJxrek5vJqs3gAPlID0cxcW6lxg==
-X-Received: by 2002:a05:6808:11cf:b0:3a3:fa64:b543 with SMTP id p15-20020a05680811cf00b003a3fa64b543mr9841890oiv.12.1689119819344;
-        Tue, 11 Jul 2023 16:56:59 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id x11-20020a63b34b000000b005533c53f550sm1952223pgt.45.2023.07.11.16.56.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 16:56:58 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qJNE0-000KOY-Hj;
-        Tue, 11 Jul 2023 20:56:56 -0300
-Date:   Tue, 11 Jul 2023 20:56:56 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mina Almasry <almasrymina@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <ZK3sSMSVWM5EbHLG@ziepe.ca>
-References: <ZKyZBbKEpmkFkpWV@ziepe.ca>
- <20230711042708.GA18658@lst.de>
- <20230710215906.49514550@kernel.org>
- <20230711050445.GA19323@lst.de>
- <ZK1FbjG+VP/zxfO1@ziepe.ca>
- <20230711090047.37d7fe06@kernel.org>
- <ZK2Gh2qGxlpZexCM@ziepe.ca>
- <20230711100636.63b0a88a@kernel.org>
- <ZK2k9YQiXTtcGhp0@ziepe.ca>
- <20230711133420.5df88f02@kernel.org>
+        Tue, 11 Jul 2023 20:02:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D686DA9;
+        Tue, 11 Jul 2023 17:02:11 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BNgCZt016694;
+        Wed, 12 Jul 2023 00:01:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jTeqAFlCLv+oA4IEJ6lncMyInSn/hwY65e4xFEskncs=;
+ b=eEFiOkbIvJwmFZVvX8HrtUagIs/ZFjwMRereS5FHcSN07k4CyNXYMkrSMXV9riZ8DEZl
+ SygegICUqKTVY5dvIqe8aLRUA09c8VfxQY8VbC1bCiiUh7XlUupM0nM76C747f3X90SL
+ mHw/OLebApUBZeUGI/YgNskRR1b0O4V3Is5Zmg6uLaVsYDWKMmQ7aPgqU2ed18i9U4Rp
+ cSbQlqxTflg4XXvMfDXInR+s4OsMJzS1h+15U+W4tHOutbAVOxtXzZrfRzHd4g/Iicvc
+ jt1Xbrx5rSmQm/tCPfcJDxJ81pZv3ruPQ4F4ujTBxOSEWfAZvwpgLd6hvHLmkN0EI0Ux PA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgar82ky-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 00:01:44 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C01hC3006897
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 00:01:43 GMT
+Received: from [10.71.109.168] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 17:01:42 -0700
+Message-ID: <f2a50fb0-f9d3-d884-8f67-28591413e935@quicinc.com>
+Date:   Tue, 11 Jul 2023 17:01:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711133420.5df88f02@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH RFC v4 7/7] drm/msm/dpu: Use DRM solid_fill property
+Content-Language: en-US
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <quic_abhinavk@quicinc.com>, <contact@emersion.fr>,
+        <laurent.pinchart@ideasonboard.com>, <sebastian.wick@redhat.com>,
+        <ville.syrjala@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>,
+        <wayland-devel@lists.freedesktop.org>
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+ <20230404-solid-fill-v4-7-f4ec0caa742d@quicinc.com>
+ <20230630112649.263331b4@eldfell> <20230703104246.7226953a@eldfell>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <20230703104246.7226953a@eldfell>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oFwOyZwqsZYVkYdAEu2o9Yhp6v4rLfha
+X-Proofpoint-ORIG-GUID: oFwOyZwqsZYVkYdAEu2o9Yhp6v4rLfha
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_13,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110219
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 01:34:20PM -0700, Jakub Kicinski wrote:
 
-> > Yep. At the high end open standards based ethernet has also notably
-> > "failed" as well. Every switch vendor now offers their own proprietary
-> > ecosystem on a whole bunch of different axis. They all present
-> > "ethernet" toward the host but the host often needs to work in a
-> > special way to really take full advantage of the proprietary fabric
-> > behaviors.
+
+On 7/3/2023 12:42 AM, Pekka Paalanen wrote:
+> On Fri, 30 Jun 2023 11:26:49 +0300
+> Pekka Paalanen <ppaalanen@gmail.com> wrote:
 > 
-> I'm not familiar with "high end open standards based on ethernet", would
-> those be some RDMA / storage things? For TCP/IP networks pretty much
-> the only things that matter in a switch are bandwidth, size of buffers,
-> power... Implementation stuff.
+>> On Thu, 29 Jun 2023 17:25:06 -0700
+>> Jessica Zhang <quic_jesszhan@quicinc.com> wrote:
+>>
+>>> Drop DPU_PLANE_COLOR_FILL_FLAG and check the DRM solid_fill property to
+>>> determine if the plane is solid fill. In addition drop the DPU plane
+>>> color_fill field as we can now use drm_plane_state.solid_fill instead,
+>>> and pass in drm_plane_state.alpha to _dpu_plane_color_fill_pipe() to
+>>> allow userspace to configure the alpha value for the solid fill color.
+>>>
+>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 21 +++++++++++++++------
+>>>   1 file changed, 15 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>>> index 4476722f03bb..11d4fb771a1f 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>>> @@ -42,7 +42,6 @@
+>>>   #define SHARP_SMOOTH_THR_DEFAULT	8
+>>>   #define SHARP_NOISE_THR_DEFAULT	2
+>>>   
+>>> -#define DPU_PLANE_COLOR_FILL_FLAG	BIT(31)
+>>>   #define DPU_ZPOS_MAX 255
+>>>   
+>>>   /*
+>>> @@ -82,7 +81,6 @@ struct dpu_plane {
+>>>   
+>>>   	enum dpu_sspp pipe;
+>>>   
+>>> -	uint32_t color_fill;
+>>>   	bool is_error;
+>>>   	bool is_rt_pipe;
+>>>   	const struct dpu_mdss_cfg *catalog;
+>>> @@ -606,6 +604,17 @@ static void _dpu_plane_color_fill_pipe(struct dpu_plane_state *pstate,
+>>>   	_dpu_plane_setup_scaler(pipe, fmt, true, &pipe_cfg, pstate->rotation);
+>>>   }
+>>>   
+>>> +static uint32_t _dpu_plane_get_fill_color(struct drm_solid_fill solid_fill)
+>>> +{
+>>> +	uint32_t ret = 0;
+>>> +
+>>> +	ret |= ((uint8_t) solid_fill.b) << 16;
+>>> +	ret |= ((uint8_t) solid_fill.g) << 8;
+>>> +	ret |= ((uint8_t) solid_fill.r);
+>>
+>> solid_fill.r, g and b are uint32_t, yes?
+>>
+>> What's the value encoding in the UAPI? That doc was missing.
 
-I would say when you are getting into ethernet deployments with 25 or
-51 Tbps switches directly connected to hosts running at >100G you are
-getting into the high end side of things.
+Hi Pekka,
 
-These are very expensive networks. They run complex congestion
-provoking workloads. They have sophisticated multi-pathing. They often
-use use a non-blocking topology. Congestion management is important.
+The solid fill blob will accept an RGB323232 value -- will document this 
+in the drm_solid_fill_info struct
 
-Making this work with good utilization, and low tail latency is a
-really hard problem. Many of the solutions come with switch features
-supporting it.
+>>
+>> I wouldn't expect the UAPI to use 32-bit variables if it was
+>> essentially 8-bit, so this conversion looks wrong.
+>>
+>> Nominal color value 1.0 in u8 is 0xff. The same in u32 is probably
+>> 0xffffffff? So a simple cast to u8 won't work. You'd want to take the
+>> upper 8 bits instead.
 
-You'd proably say these are not TCP focused networks, even though they
-are based on ethernet and IP.
+Acked.
 
-So I think of them as high end "standards based" ethernet and IP
-looking networks that have proprietary elements mixed in throughout.
+>>
+>>
+>> Thanks,
+>> pq
+>>
+>>> +
+>>> +	return ret;
+> 
+> Btw. if your driver format is ABGR, then this function leaves alpha as
+> zero. That's confusing.
+> 
+> It would be nice to mention the exact pixel format in the function name
+> so the consistency is easier to check in both here and in callers.
 
-Right now there is a bit of a press war between vendors on 'ethernet
-for AI'. Both Broadcom and NVIDIA are taking techonlogies that were
-originally built for TCP ethernet networks and remixing/speeding them
-up to run roce workloads effectively. There is alot more information
-available now without NDA that shows some detail on this space.
+Acked.
 
-AWS's SRD multipathing, Broadcom "AI Ethernet" and NVIDIA's Spectrum-X
-spring to mind as topical to what these sorts of ethernet networks
-are.
+Thanks,
 
-> A lot of "standardization" efforts are just attempts to prove to 
-> a buyers that an ecosystem exists.
+Jessica Zhang
 
-Heh, that was probably more true years ago. These days it seems like
-some standardization is also being done so the large hyperscalers can
-improve their Approved Vendors List.
-
-I suppose as long as the result is something we can implement openly
-in Linux the motivation for standardization is less important.
-
-Jason
+> 
+> 
+> Thanks,
+> pq
+> 
+>>> +}
+>>> +
+>>>   /**
+>>>    * _dpu_plane_color_fill - enables color fill on plane
+>>>    * @pdpu:   Pointer to DPU plane object
+>>> @@ -977,9 +986,9 @@ void dpu_plane_flush(struct drm_plane *plane)
+>>>   	if (pdpu->is_error)
+>>>   		/* force white frame with 100% alpha pipe output on error */
+>>>   		_dpu_plane_color_fill(pdpu, 0xFFFFFF, 0xFF);
+>>> -	else if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG)
+>>> -		/* force 100% alpha */
+>>> -		_dpu_plane_color_fill(pdpu, pdpu->color_fill, 0xFF);
+>>> +	else if (drm_plane_solid_fill_enabled(plane->state))
+>>> +		_dpu_plane_color_fill(pdpu, _dpu_plane_get_fill_color(plane->state->solid_fill),
+>>> +				plane->state->alpha);
+>>>   	else {
+>>>   		dpu_plane_flush_csc(pdpu, &pstate->pipe);
+>>>   		dpu_plane_flush_csc(pdpu, &pstate->r_pipe);
+>>> @@ -1024,7 +1033,7 @@ static void dpu_plane_sspp_update_pipe(struct drm_plane *plane,
+>>>   	}
+>>>   
+>>>   	/* override for color fill */
+>>> -	if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG) {
+>>> +	if (drm_plane_solid_fill_enabled(plane->state)) {
+>>>   		_dpu_plane_set_qos_ctrl(plane, pipe, false);
+>>>   
+>>>   		/* skip remaining processing on color fill */
+>>>    
+>>
+> 
