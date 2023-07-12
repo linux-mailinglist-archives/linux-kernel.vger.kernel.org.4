@@ -2,146 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3C874FDCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7395874FDBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjGLDcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S231398AbjGLDaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGLDcQ (ORCPT
+        with ESMTP id S229931AbjGLDaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:32:16 -0400
-Received: from out0-207.mail.aliyun.com (out0-207.mail.aliyun.com [140.205.0.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053381BF5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:32:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047207;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.TrdHx8q_1689132719;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.TrdHx8q_1689132719)
-          by smtp.aliyun-inc.com;
-          Wed, 12 Jul 2023 11:32:00 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "=?UTF-8?B?bWFpbnRhaW5lcjpYODYgQVJDSElURUNUVVJFIDMyLUJJVCBBTkQgNjQtQklU?=" 
-        <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH RFC 7/7] x86/sme: Build the code in mem_encrypt_identity.c as PIE
-Date:   Wed, 12 Jul 2023 11:30:11 +0800
-Message-Id: <80367ca39ed736b6fc839c5de99a006f54182c45.1689130310.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1689130310.git.houwenlong.hwl@antgroup.com>
-References: <cover.1689130310.git.houwenlong.hwl@antgroup.com>
+        Tue, 11 Jul 2023 23:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6AD10C2;
+        Tue, 11 Jul 2023 20:30:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FAD4616CC;
+        Wed, 12 Jul 2023 03:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6047EC433CA;
+        Wed, 12 Jul 2023 03:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689132621;
+        bh=nf8s+njeK8OMoPoLEn08q8t0z0oB7UZlF/uGzfV+kxQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uxU3r6W9obyLdEo5Qg2fFf+Yr/eImZxrHX8NjSw7HPFSShWnwX+JhEpvb/5V589qT
+         jYNimClhQOiN5TLD7OasoZTeSwZYArJexemm4XQOJLCnCBsESSj1zbpt7qKn935un0
+         y/u5xlRhi3lqB57AFG13I6Hr104tf6nCWI+FwEZwXivW+gLjUybX5CRDJAONvSNBNm
+         uNzGIp8Wf//cTSX+Fb4oWHcfEWB5ukjF39qgCDIGSWtMq0Qp4O3Ooc9X43yy+avi4Z
+         GGAYMWEmsi1NvSjWaRolqaYs1pzUWcz0xaZRAJ8GmAy5TSnVnbnLsUYk3noD9oW8Y3
+         UhewL4cmnqeog==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 46137E4D006;
+        Wed, 12 Jul 2023 03:30:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next] MAINTAINERS: Add another mailing list for QUALCOMM
+ ETHQOS ETHERNET DRIVER
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168913262128.27250.10319125912738064702.git-patchwork-notify@kernel.org>
+Date:   Wed, 12 Jul 2023 03:30:21 +0000
+References: <20230710195240.197047-1-ahalaney@redhat.com>
+In-Reply-To: <20230710195240.197047-1-ahalaney@redhat.com>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        mcoquelin.stm32@gmail.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, joabreu@synopsys.com,
+        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
+        bhupesh.sharma@linaro.org, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to head64.c, all the code in mem_encrypt_identity.c runs in
-identity address. However, it uses inline assembly to use RIP-relative
-reference for some globals. Therefore, build the code as PIE to force
-the compiler to generate RIP-relative reference, allowing for all inline
-assembly to be removed.
+Hello:
 
-Suggested-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
----
-The changes have not been tested on AMD SME.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
- arch/x86/mm/Makefile               |  3 +++
- arch/x86/mm/mem_encrypt_identity.c | 31 +++++-------------------------
- 2 files changed, 8 insertions(+), 26 deletions(-)
+On Mon, 10 Jul 2023 14:50:57 -0500 you wrote:
+> linux-arm-msm is the list most people subscribe to in order to receive
+> updates about Qualcomm related drivers. Make sure changes for the
+> Qualcomm ethernet driver make it there.
+> 
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index c80febc44cd2..f5d7b22c5f1b 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -32,6 +32,9 @@ obj-y				+= pat/
- # Make sure __phys_addr has no stackprotector
- CFLAGS_physaddr.o		:= -fno-stack-protector
- CFLAGS_mem_encrypt_identity.o	:= -fno-stack-protector
-+CFLAGS_mem_encrypt_identity.o 	+= -fPIE -include $(srctree)/include/linux/hidden.h
-+
-+CFLAGS_REMOVE_mem_encrypt_identity.o += -mcmodel=kernel
+Here is the summary with links:
+  - [net-next] MAINTAINERS: Add another mailing list for QUALCOMM ETHQOS ETHERNET DRIVER
+    https://git.kernel.org/netdev/net/c/e522c1bd0ab4
 
- CFLAGS_fault.o := -I $(srctree)/$(src)/../include/asm/trace
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index 72aeb0f3dec6..2f292ab4e6a9 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -343,13 +343,7 @@ void __head sme_encrypt_kernel(struct boot_params *bp)
- 	}
- #endif
-
--	/*
--	 * We're running identity mapped, so we must obtain the address to the
--	 * SME encryption workarea using rip-relative addressing.
--	 */
--	asm ("lea sme_workarea(%%rip), %0"
--	     : "=r" (workarea_start)
--	     : "p" (sme_workarea));
-+	workarea_start = (unsigned long)(void *)sme_workarea;
-
- 	/*
- 	 * Calculate required number of workarea bytes needed:
-@@ -505,7 +499,7 @@ void __head sme_encrypt_kernel(struct boot_params *bp)
-
- void __head sme_enable(struct boot_params *bp)
- {
--	const char *cmdline_ptr, *cmdline_arg, *cmdline_on, *cmdline_off;
-+	const char *cmdline_ptr;
- 	unsigned int eax, ebx, ecx, edx;
- 	unsigned long feature_mask;
- 	bool active_by_default;
-@@ -578,21 +572,6 @@ void __head sme_enable(struct boot_params *bp)
- 		goto out;
- 	}
-
--	/*
--	 * Fixups have not been applied to phys_base yet and we're running
--	 * identity mapped, so we must obtain the address to the SME command
--	 * line argument data using rip-relative addressing.
--	 */
--	asm ("lea sme_cmdline_arg(%%rip), %0"
--	     : "=r" (cmdline_arg)
--	     : "p" (sme_cmdline_arg));
--	asm ("lea sme_cmdline_on(%%rip), %0"
--	     : "=r" (cmdline_on)
--	     : "p" (sme_cmdline_on));
--	asm ("lea sme_cmdline_off(%%rip), %0"
--	     : "=r" (cmdline_off)
--	     : "p" (sme_cmdline_off));
--
- 	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT))
- 		active_by_default = true;
- 	else
-@@ -601,12 +580,12 @@ void __head sme_enable(struct boot_params *bp)
- 	cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
- 				     ((u64)bp->ext_cmd_line_ptr << 32));
-
--	if (cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer)) < 0)
-+	if (cmdline_find_option(cmdline_ptr, sme_cmdline_arg, buffer, sizeof(buffer)) < 0)
- 		return;
-
--	if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
-+	if (!strncmp(buffer, sme_cmdline_on, sizeof(buffer)))
- 		sme_me_mask = me_mask;
--	else if (!strncmp(buffer, cmdline_off, sizeof(buffer)))
-+	else if (!strncmp(buffer, sme_cmdline_off, sizeof(buffer)))
- 		sme_me_mask = 0;
- 	else
- 		sme_me_mask = active_by_default ? me_mask : 0;
---
-2.31.1
 
