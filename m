@@ -2,157 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EA17502BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF967502BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbjGLJTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S232292AbjGLJTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbjGLJTA (ORCPT
+        with ESMTP id S232409AbjGLJTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:19:00 -0400
-Received: from outbound-smtp19.blacknight.com (outbound-smtp19.blacknight.com [46.22.139.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F4F1986
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:18:49 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp19.blacknight.com (Postfix) with ESMTPS id BA66D1C3872
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 10:18:47 +0100 (IST)
-Received: (qmail 30399 invoked from network); 12 Jul 2023 09:18:47 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jul 2023 09:18:47 -0000
-Date:   Wed, 12 Jul 2023 10:18:45 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv14 5/9] efi: Add unaccepted memory support
-Message-ID: <20230712091845.hahda3xgvegv5hgf@techsingularity.net>
-References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
- <20230606142637.5171-6-kirill.shutemov@linux.intel.com>
- <20230703132518.3ukqyolnes47i5r3@techsingularity.net>
- <20230704143740.bgimyg3bqsgxbm47@box.shutemov.name>
+        Wed, 12 Jul 2023 05:19:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334271A8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:19:09 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1qJVzm-0005QN-Qy; Wed, 12 Jul 2023 11:18:50 +0200
+Message-ID: <d57fdae4-9931-6e37-56e1-9649074b3142@pengutronix.de>
+Date:   Wed, 12 Jul 2023 11:18:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230704143740.bgimyg3bqsgxbm47@box.shutemov.name>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 7/8] dt-bindings: arm: stm32: add extra SiP compatible
+ for oct,stm32mp157c-osd32-red
+Content-Language: en-US
+To:     Sean Nyekjaer <sean@geanix.com>,
+        Leonard Goehrs <l.goehrs@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        dantuguf14105@gmail.com, Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20230712062954.2194505-1-sean@geanix.com>
+ <20230712062954.2194505-7-sean@geanix.com>
+ <92f7f4cd-c9cc-8a1a-74c7-39eed955cd6a@pengutronix.de>
+ <92C36A18-F359-497E-8267-03E5C62811F6@geanix.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <92C36A18-F359-497E-8267-03E5C62811F6@geanix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 05:37:40PM +0300, Kirill A. Shutemov wrote:
-> On Mon, Jul 03, 2023 at 02:25:18PM +0100, Mel Gorman wrote:
-> > On Tue, Jun 06, 2023 at 05:26:33PM +0300, Kirill A. Shutemov wrote:
-> > > efi_config_parse_tables() reserves memory that holds unaccepted memory
-> > > configuration table so it won't be reused by page allocator.
-> > > 
-> > > Core-mm requires few helpers to support unaccepted memory:
-> > > 
-> > >  - accept_memory() checks the range of addresses against the bitmap and
-> > >    accept memory if needed.
-> > > 
-> > >  - range_contains_unaccepted_memory() checks if anything within the
-> > >    range requires acceptance.
-> > > 
-> > > Architectural code has to provide efi_get_unaccepted_table() that
-> > > returns pointer to the unaccepted memory configuration table.
-> > > 
-> > > arch_accept_memory() handles arch-specific part of memory acceptance.
-> > > 
-> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> > > Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-> > 
-> > By and large, this looks ok from the page allocator perspective as the
-> > checks for unaccepted are mostly after watermark checks. However, if you
-> > look in the initial fast path, you'll see this
-> > 
-> >         /* 
-> >          * Forbid the first pass from falling back to types that fragment
-> >          * memory until all local zones are considered.
-> >          */     
-> >         alloc_flags |= alloc_flags_nofragment(ac.preferred_zoneref->zone, gfp);
-> > 
-> > While checking watermarks should be fine from a functional perspective and
-> > the fast paths are unaffected, there is a risk of premature fragmentation
-> > until all memory has been accepted. Meeting watermarks does not necessarily
-> > mean that fragmentation is avoided as pageblocks can get mixed while still
-> > meeting watermarks.
+On 12.07.23 11:11, Sean Nyekjaer wrote:
+>> On 12 Jul 2023, at 10.38, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>> On 12.07.23 08:29, Sean Nyekjaer wrote:
+>>> Add binding support for the Octavo OSD32MP1-RED development board.
+>>>
+>>> General features:
+>>> - STM32MP157C
+>>> - 512MB DDR3
+>>> - CAN-FD
+>>> - HDMI
+>>> - USB-C OTG
+>>> - UART
+>>>
+>>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Just a heads up: The LXA TAC, another OSD32MP1 board has been merged into
+>> stm32-next yesterday, so applying your series onto that tree may result
+>> in conflicts. You may want to rebase for v4.
+>>
+>> Cheers,
+>> Ahmad
 > 
-> Could you elaborate on this scenario?
+> Thanks, will do :)
 > 
-> Current code checks the watermark, if it is met, try rmqueue().
-> 
-> If rmqueue() fails anyway, try to accept more pages and retry the zone if
-> it is successful.
-> 
-> I'm not sure how we can get to the 'if (no_fallback) {' case with any
-> unaccepted memory in the allowed zones.
-> 
+> Can I get you to look at 4/8, 5/8 and 6/8 in this series? Will they break anything for LXA TAC?
 
-Lets take an extreme example and assume that the low watermark is lower
-than 2MB (one pageblock). Just before the watermark is reached (free
-count between 1MB and 2MB), it is unlikely that all free pages are within
-pageblocks of the same migratetype (e.g. MIGRATE_MOVABLE). If there is an
-allocation near the watermark of a different type (e.g. MIGRATE_UNMOVABLE)
-then the page allocation could fallback to a different pageblock and now
-it is mixed.  It's a condition that is only obvious if you are explicitly
-checking for it via tracepoints.  This can happen in the normal case, but
-unaccepted memory makes it worse because the "pageblock mixing" could have
-been avoided if the "no_fallback" case accepted at least one new pageblock
-instead of mixing pageblocks.
+Leonard, does the LXA TAC have an implicit dependency on any of the rails that Sean is
+now turning off by default?
 
-That is an extreme example but the same logic applies when the free
-count is at or near MIGRATE_TYPES*pageblock_nr_pages as it is not
-guaranteed that the pageblocks with free pages are a migratetype that
-matches the allocation request.
+Cheers,
+Ahmad
 
-Hence, it may be more robust from a fragmentation perspective if
-ALLOC_NOFRAGMENT requests accept memory if it is available and retries
-before clearing ALLOC_NOFRAGMENT and mixing pageblocks before the watermarks
-are reached.
-
-> I see that there's preferred_zoneref and spread_dirty_pages cases, but
-> unaccepted memory seems change nothing for them.
 > 
-
-preferred_zoneref is about premature zone exhaustion and
-spread_dirty_pages is about avoiding premature stalls on a node/zone due
-to an imbalance in the number of pages waiting for writeback to
-complete. There is an arguement to be made that they also should accept
-memory but it's less clear how much of a problem this is. Both are very
-obvious when they "fail" and likely are covered by the existing
-watermark checks. Premature pageblock mixing is more subtle as the final
-impact (root cause of a premature THP allocation failure) is harder to
-detect.
+> /Sean
+> 
+>>
+>>
+>>> ---
+>>> Documentation/devicetree/bindings/arm/stm32/stm32.yaml | 3 ++-
+>>> 1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>>> index 13e34241145b..55e45db1af26 100644
+>>> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>>> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>>> @@ -143,7 +143,8 @@ properties:
+>>>       - description: Octavo OSD32MP15x System-in-Package based boards
+>>>         items:
+>>>           - enum:
+>>> -              - lxa,stm32mp157c-mc1 # Linux Automation MC-1
+>>> +              - lxa,stm32mp157c-mc1       # Linux Automation MC-1
+>>> +              - oct,stm32mp157c-osd32-red # Octavo OSD32MP1 RED board
+>>>           - const: oct,stm32mp15xx-osd32
+>>>           - enum:
+>>>               - st,stm32mp157
+>>
+>> -- 
+>> Pengutronix e.K.                           |                             |
+>> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+>> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+>> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> 
+> 
+> 
+> 
 
 -- 
-Mel Gorman
-SUSE Labs
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
