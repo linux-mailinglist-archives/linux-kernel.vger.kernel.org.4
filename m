@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15BA750BF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DCF750BFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbjGLPLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S233322AbjGLPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbjGLPLS (ORCPT
+        with ESMTP id S231727AbjGLPL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:11:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FD51BF9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:11:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B570616F9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 15:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732A2C433C9;
-        Wed, 12 Jul 2023 15:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689174670;
-        bh=14O7n2R2+7nNC4LbsLJJcewFwSSDuHOWK7ERMRXoOZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fskZKUksnspUBCgemFrZDIWNaDnzIfkZgYFHwYXYknfNl6jXAkpKSaFh7K+jPWXNP
-         3CyzEHMtfIhJo/ZnBtE9Cfoc8kkiK68ONECk/c1OUb5tGxKzGtLB2K6IOA2nin+4jn
-         6njFOAyI9H+1QgSHFqX+BB9fBXFoZcOrhtkgH/aI=
-Date:   Wed, 12 Jul 2023 17:11:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Gangurde, Abhijit" <abhijit.gangurde@amd.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>
-Subject: Re: [PATCH 3/4] cdx: create sysfs resource files
-Message-ID: <2023071231-drinking-unskilled-3c00@gregkh>
-References: <20230711121027.936487-1-abhijit.gangurde@amd.com>
- <20230711121027.936487-4-abhijit.gangurde@amd.com>
- <2023071148-grievance-gulf-0841@gregkh>
- <DM4PR12MB776565FAF9F3797643C9AFA78F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
+        Wed, 12 Jul 2023 11:11:56 -0400
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00291BC9;
+        Wed, 12 Jul 2023 08:11:55 -0700 (PDT)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-57eb0df5265so6570407b3.3;
+        Wed, 12 Jul 2023 08:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689174715; x=1691766715;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/H+XFKPC8Y5xjjIB6z4jmZFgXWxD1qGfV/usqzcEesQ=;
+        b=dtEjciHriK4KjQp+DlWxxLcpdalO4+DHz0p937NjJhg6WKGJpgAlHNykZ5TeX8KWpI
+         qzh88l5BUG6AxEXlgT2XTvQHcx4TEN4aHpnat6+KnmyhX8lUlTenPKi28VbqOC8gy/i3
+         o7u1SxLb3u1DzUfmiBTRsi94vgmDSkpICCpO733O7uFralwEtGIZ6cigg4Y003mc6uDt
+         lDDLeXdsMwPq4FaBxhlC+OQ1663VrkGGDFy17xni8zzHhgt/W7MNknT7lt9rcndjQfRw
+         e2OHi9dfE10ZFH9DF4MEbGgLpZDRkgfv2EAP/Z5ocd+tp8kTddq8lzRpGF7QKTnhM2yu
+         rrzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689174715; x=1691766715;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/H+XFKPC8Y5xjjIB6z4jmZFgXWxD1qGfV/usqzcEesQ=;
+        b=RdfALDmN35/QqO6EQxXTgy5bw1RBl7EkSTLfXGtHLNJk5zVtrXi2Ju8edDnlH45x4O
+         mQ3dqiWbFNTchv8T1Y43VnikAxwigS/1sTKO5/eRVXEFo43GhMAD4aeS968kSYJcVpDY
+         xXzOjqkSTiLhnp+loIbge01UiH1fLbU3Y64wp2rxmFl/ciJtEV2XDzm73XXxbgHF09UQ
+         mCWyXuNvQLYtUP3KHAFoaDquMHv3Cg80LeSNjK3M8MtAYggn6BGErt2WocpMsTkxSKUG
+         bFjzNhsPJ+q4SRWGgB9y7UKBEguDp0gYiu0GRAslUwsUdynfTaq/HlsutAsy9O3J2zcg
+         Zq6A==
+X-Gm-Message-State: ABy/qLYqdJAYW1dCS+2UrbWpclVJooGd1OrLsIKbKPPjcvYT9gmBUJoJ
+        1J5b4c2Zall9l6fH0XbUNXJ1xSvKBuuRT2YpgtU=
+X-Google-Smtp-Source: APBJJlGpeoro6Vbke/rk0B8kRn2QGwgrQpDLdHIadb2NCaVwr6MqzdSeGpljXFgSQulaafdbN+CSygkQ4RNuf27Eq1c=
+X-Received: by 2002:a5b:b8e:0:b0:c60:bd1a:fea1 with SMTP id
+ l14-20020a5b0b8e000000b00c60bd1afea1mr14933532ybq.57.1689174714649; Wed, 12
+ Jul 2023 08:11:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB776565FAF9F3797643C9AFA78F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230712084746.833965-1-imagedong@tencent.com>
+ <20230712084746.833965-4-imagedong@tencent.com> <CAADnVQ+YHqQP_p-9iF+pETvoh3VGqOkcSZreDKVZQ5BUZQBOcQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+YHqQP_p-9iF+pETvoh3VGqOkcSZreDKVZQ5BUZQBOcQ@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 12 Jul 2023 23:11:43 +0800
+Message-ID: <CADxym3YhoNcsPzHLzW0XBLtTW0KjTF4YViAwmboeYyS1cwMwaQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 3/3] selftests/bpf: add testcase for TRACING
+ with 6+ arguments
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Yonghong Song <yhs@meta.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, David Ahern <dsahern@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, X86 ML <x86@kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,66 +83,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 01:23:28PM +0000, Gangurde, Abhijit wrote:
-> [AMD Official Use Only - General]
-> 
-> > > Resource files provides the basic MMIO regions info to the
-> > > user-space. Also, resources<x> devices can be used to mmap the
-> > > MMIO regions in the user-space.
-> > >
-> > > Co-developed-by: Puneet Gupta <puneet.gupta@amd.com>
-> > > Signed-off-by: Puneet Gupta <puneet.gupta@amd.com>
-> > > Co-developed-by: Nipun Gupta <nipun.gupta@amd.com>
-> > > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> > > Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-> > > Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-
-> > vuuren@amd.com>
-> > > Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-bus-cdx |  15 +++
-> > >  drivers/cdx/cdx.c                       | 139 +++++++++++++++++++++++-
-> > >  include/linux/cdx/cdx_bus.h             |  10 ++
-> > >  3 files changed, 163 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-bus-cdx
-> > b/Documentation/ABI/testing/sysfs-bus-cdx
-> > > index d9e00058471d..6ca47b6442ce 100644
-> > > --- a/Documentation/ABI/testing/sysfs-bus-cdx
-> > > +++ b/Documentation/ABI/testing/sysfs-bus-cdx
-> > > @@ -76,3 +76,18 @@ Description:
-> > >             For example::
-> > >
-> > >               # echo 1 > /sys/bus/cdx/devices/.../remove
-> > > +
-> > > +What:              /sys/bus/cdx/devices/.../resource
-> > > +Date:              July 2023
-> > > +Contact:   puneet.gupta@amd.com
-> > > +Description:
-> > > +           The resource file contains host addresses of CDX device
-> > > +           resources. Each line of the resource file describes a region
-> > > +           with start, end, and flag fields.
+On Wed, Jul 12, 2023 at 10:54=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Jul 12, 2023 at 1:50=E2=80=AFAM <menglong8.dong@gmail.com> wrote:
 > >
-> > If you documented what this file looked like here, it would be obvious
-> > that this is not an acceptable sysfs file in any sense of the word.
+> > From: Menglong Dong <imagedong@tencent.com>
 > >
-> > Please do so, and then fix the patch to not do that at all.
-> 
-> Similar interface exist for pci and we intended to keep it same way. Could you please elaborate on this.
-> 
-> # cat /sys/bus/pci/devices/0000\:01\:00.0/resource
-> 0x0000000092100000 0x00000000921fffff 0x000000000014220c
-> 0x0000000000000000 0x0000000000000000 0x0000000000000000
+> > Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
+> > with 7/11 arguments. As this feature is not supported by arm64 yet, we
+> > disable these testcases for arm64 in DENYLIST.aarch64. We can combine
+> > them with fentry_test.c/fexit_test.c when arm64 is supported too.
+> >
+> > Correspondingly, add bpf_testmod_fentry_test7() and
+> > bpf_testmod_fentry_test11() to bpf_testmod.c
+> >
+> > Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
+> > MODIFY_RETURN with 7 arguments.
+> >
+> > Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
+> > bpf_testmod.c to test the struct in the arguments.
+> >
+> > And the testcases passed on x86_64:
+> >
+> > ./test_progs -t fexit
+> > Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t fentry
+> > Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t modify_return
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t tracing_struct
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > ---
+> > v9:
+> > - change the way to test fmod_ret
+> > v8:
+> > - split the testcases, and add fentry_many_args/fexit_many_args to
+> >   DENYLIST.aarch64
+> > v6:
+> > - add testcases to tracing_struct.c instead of fentry_test.c and
+> >   fexit_test.c
+> > v5:
+> > - add testcases for MODIFY_RETURN
+> > v4:
+> > - use different type for args in bpf_testmod_fentry_test{7,12}
+> > - add testcase for grabage values in ctx
+> > v3:
+> > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+> >   bpf_testmod_fentry_test{7,12} meanwhile
+> > - get return value by bpf_get_func_ret() in
+> >   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast=
+()
+> >   in this version
+> > ---
+> >  net/bpf/test_run.c                            | 14 ++++-
+> >  tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
+> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
+> >  .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
+> >  .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
+> >  .../selftests/bpf/prog_tests/modify_return.c  | 10 ++--
+> >  .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
+> >  .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
+> >  .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
+> >  .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
+> >  .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
+> >  11 files changed, 340 insertions(+), 13 deletions(-)
+> >  create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.=
+c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
+> >
+> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > index 63b11f7a5392..7d47f53f20c1 100644
+> > --- a/net/bpf/test_run.c
+> > +++ b/net/bpf/test_run.c
+> > @@ -565,6 +565,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int =
+*b)
+> >         return a + *b;
+> >  }
+> >
+> > +__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
+> > +                                       void *e, char f, int g)
+> > +{
+> > +       *b +=3D 1;
+> > +       return a + *b + c + d + (long)e + f + g;
+> > +}
+> > +
+> >  int noinline bpf_fentry_shadow_test(int a)
+> >  {
+> >         return a + 1;
+> > @@ -600,6 +607,7 @@ __diag_pop();
+> >
+> >  BTF_SET8_START(bpf_test_modify_return_ids)
+> >  BTF_ID_FLAGS(func, bpf_modify_return_test)
+> > +BTF_ID_FLAGS(func, bpf_modify_return_test2)
+> >  BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
+> >  BTF_SET8_END(bpf_test_modify_return_ids)
+> >
+> > @@ -667,7 +675,11 @@ int bpf_prog_test_run_tracing(struct bpf_prog *pro=
+g,
+> >         case BPF_MODIFY_RETURN:
+> >                 ret =3D bpf_modify_return_test(1, &b);
+> >                 if (b !=3D 2)
+> > -                       side_effect =3D 1;
+> > +                       side_effect++;
+> > +               b =3D 2;
+> > +               ret +=3D bpf_modify_return_test2(1, &b, 3, 4, (void *)5=
+, 6, 7);
+> > +               if (b !=3D 2)
+> > +                       side_effect++;
+>
+> Looks better, but now two tests are failing:
+> Error: #85 get_func_args_test
+> Error: #252 trampoline_count
+>
+> See BPF CI.
+>
+> I suspect you haven't rerun the whole test_progs after your changes.
+> Please do so in the future.
 
-Please don't propagate incorrect decisions in the past.
+......Yes, I didn't run the whole tests, and it seems that
+some other test cases also use the bpf_modify_return_test().
 
-Why do you need all of these "resources" in userspace?  What tool is
-going to read and parse them and do something with them?
+I'll run the whole test_progs, sorry for the bother......
 
-This really violates the "one value per file" sysfs rule, you are going
-to have to have a huge reason why this is not applicable here, AND you
-are going to have to document it very very well and get everyone to
-agree with it.
-
-thanks,
-
-greg k-h
+Thanks!
+Menglong Dong
