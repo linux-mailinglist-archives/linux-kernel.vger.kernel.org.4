@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5218F7507EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E027507F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjGLMQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
+        id S232191AbjGLMRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbjGLMQb (ORCPT
+        with ESMTP id S232473AbjGLMQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:16:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CF51BFA;
-        Wed, 12 Jul 2023 05:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689164183; x=1720700183;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+tlum6euBaSBSYRCVrhu1uXmmTQNXoNiIGldL0XknoY=;
-  b=iU+m2wSSJO193dl2juVgi/UO744S25s9OY2fH6Z75GkYyuOJcYM/mglW
-   2FpFOhefrxt99+xiSCGJiSi4M/KCq3ui1oSr7jnVJoORvyzqKrsQyuQjw
-   Ca95AXHqce+/3JQVLGbZrJAVj1gyhNzY9xXNXDctuH7nGIUC/gEPSemN+
-   QUyuwSMvfS6kx87Qtrwl/gxt0ZtX+G1XpXl4S5CXb7mEkJYYbx6OPK0Ca
-   dR4KjNpzhJkNifB7JjwEWggpR71YG33MBy1+hC4Md1ocvz4RdOuLCPvnF
-   pfe0c6GsaUgaOGMyqjSISnr4kOiLM6tIao233+qMcgnWo4IEnXyn7iLUn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="428610619"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="428610619"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 05:16:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="811551375"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="811551375"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 05:16:19 -0700
-Message-ID: <ec6a8f88-ae94-21a5-ec01-013c68fd8feb@linux.intel.com>
-Date:   Wed, 12 Jul 2023 14:16:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 12/13] ASoC: SOF: Intel: Convert to PCI device IDs defines
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
- <20230711125726.3509391-13-amadeuszx.slawinski@linux.intel.com>
- <ZK1kPXm+FieJ+vya@smile.fi.intel.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <ZK1kPXm+FieJ+vya@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 12 Jul 2023 08:16:49 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9F4173C;
+        Wed, 12 Jul 2023 05:16:42 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7835e5fa459so237485539f.2;
+        Wed, 12 Jul 2023 05:16:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689164202; x=1691756202;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YRfuEf8QvPMdA6+TuyHkkBUYH2h9XWzRNhgHoDqrdDk=;
+        b=USBixVWepPjrRE4rMcZ73maneDArQ0YIoGi6rNAd3c7iCEOYSLxxKjuVZyJ7kGnK4b
+         R3feBmisyrp0ofCPnfVnHGdUXff08tn7vjxsV/YJkWuzW/VO7zKPr3x7OUsrwCfTYa4w
+         DvWN3ZmHAthnqE8Z1gTx49KqaPZnzHsrmz3ILmOoLa77MJh1anqfK7yc3F61+/u5NV+7
+         RGDM9ZJc1mRrHvv/8j7kYJf36IsaAo5buU8WWjmVpRhRDJ8AI3j1YhQS15xaGHpG+sEb
+         zHt0r/rSicbUz6wzojHz93XPgmJ0XqAsLDKL+gthvSOvO5NrchVG5mwzWBYkG5hpF7X7
+         va3A==
+X-Gm-Message-State: ABy/qLaiEwiYaBd+5gubOKMnR2BhOk6yqchFJD2FCfaWyxQHnXSqY5iL
+        PqfnZrv9to6+zPlY2SojwA==
+X-Google-Smtp-Source: APBJJlHq/CeB5FNhXo+hvT0Ni2TOesVAeCW0bTRMn/zJugXXm3vQ2S8xupO8XpJFxby9VWQyKB/OUQ==
+X-Received: by 2002:a5d:8894:0:b0:760:e308:107e with SMTP id d20-20020a5d8894000000b00760e308107emr17856368ioo.0.1689164201781;
+        Wed, 12 Jul 2023 05:16:41 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id dm26-20020a0566023b9a00b0077a1d1029fcsm1308179iob.28.2023.07.12.05.16.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 05:16:41 -0700 (PDT)
+Received: (nullmailer pid 4079137 invoked by uid 1000);
+        Wed, 12 Jul 2023 12:16:39 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230712113731.3306-3-wsa+renesas@sang-engineering.com>
+References: <20230712113731.3306-1-wsa+renesas@sang-engineering.com>
+ <20230712113731.3306-3-wsa+renesas@sang-engineering.com>
+Message-Id: <168916419973.4079096.16108131261602732302.robh@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: gnss: u-blox: add "reset-gpios"
+ binding
+Date:   Wed, 12 Jul 2023 06:16:39 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/2023 4:16 PM, Andy Shevchenko wrote:
-> On Tue, Jul 11, 2023 at 02:57:25PM +0200, Amadeusz Sławiński wrote:
->> Use PCI device IDs from pci_ids.h header and while at it change to using
->> PCI_DEVICE_DATA() macro, to simplify declarations.
+
+On Wed, 12 Jul 2023 13:37:30 +0200, Wolfram Sang wrote:
+> Needed to enable this chip on a Renesas KingFisher board. Description
+> copied over from the Mediatek driver which already supports it.
 > 
-> FWIW,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Oh, additional remark below.
-> 
->> Acked-by: Mark Brown <broonie@kernel.org>
->> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
->> ---
->>   sound/soc/sof/intel/pci-apl.c |  9 +++----
->>   sound/soc/sof/intel/pci-cnl.c | 15 ++++--------
->>   sound/soc/sof/intel/pci-icl.c | 12 ++++------
->>   sound/soc/sof/intel/pci-mtl.c |  3 +--
->>   sound/soc/sof/intel/pci-skl.c |  6 ++---
->>   sound/soc/sof/intel/pci-tgl.c | 45 ++++++++++++-----------------------
->>   sound/soc/sof/intel/pci-tng.c |  3 +--
->>   7 files changed, 31 insertions(+), 62 deletions(-)
->>
->> diff --git a/sound/soc/sof/intel/pci-apl.c b/sound/soc/sof/intel/pci-apl.c
->> index 69cad5a6bc72..083659ddfe6b 100644
->> --- a/sound/soc/sof/intel/pci-apl.c
->> +++ b/sound/soc/sof/intel/pci-apl.c
->> @@ -85,12 +85,9 @@ static const struct sof_dev_desc glk_desc = {
->>   
->>   /* PCI IDs */
->>   static const struct pci_device_id sof_pci_ids[] = {
->> -	{ PCI_DEVICE(0x8086, 0x5a98), /* BXT-P (ApolloLake) */
->> -		.driver_data = (unsigned long)&bxt_desc},
->> -	{ PCI_DEVICE(0x8086, 0x1a98),/* BXT-T */
->> -		.driver_data = (unsigned long)&bxt_desc},
->> -	{ PCI_DEVICE(0x8086, 0x3198), /* GeminiLake */
->> -		.driver_data = (unsigned long)&glk_desc},
->> +	{ PCI_DEVICE_DATA(INTEL, HDA_APL, &bxt_desc) },
->> +	{ PCI_DEVICE_DATA(INTEL, HDA_APL_T, &bxt_desc) },
-> 
-> Have we ever had APL-T? What is that? I remember that we have had two or
-> three BXTs inside, and then products become for Broxton and Apollo Lake
-> SoC codenames. I never have heard about -T...
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
 
-I've talked a bit with Cezary and it seems that 0x1a98 is BXT-M (not -T) 
-and it's an RVP, BXT-M B0 to be specific. From what we know no BXT is 
-available on market. Perhaps we can just remove it?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/gnss/u-blox,neo-6m.example.dts:23.40-41 syntax error
+FATAL ERROR: Unable to parse input tree
+make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/gnss/u-blox,neo-6m.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1500: dt_binding_check] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230712113731.3306-3-wsa+renesas@sang-engineering.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
