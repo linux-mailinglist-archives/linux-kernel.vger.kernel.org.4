@@ -2,115 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA2E74FE16
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D515374FE27
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjGLEIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 00:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S231533AbjGLETo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGLEIn (ORCPT
+        with ESMTP id S230202AbjGLETj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 00:08:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC05E69;
-        Tue, 11 Jul 2023 21:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=YChG1L30DPI1h5Tm1ppaAui5qRCoxqDSfR5uw5XSFq4=; b=DIFtzDM7DrG7bi3/cIyX1Qkmmq
-        /JVbO6spNTRVUG2Dxh8j+cxiBRVwVbcRF0YGOtdlaKPnP0Se4nfMLyzxP1IIggBvN5ciMAMJcS+pg
-        hlt+fwpEvXBj87n+BL2IXG+KSh1lXAZG61I/XFDYiPVpuKOOL40v1+BTujTcniJWq+FUARkvn+G9A
-        gnOvXrqFqfB5EUS+TS4aJXYKjeNp821BOEdri/3/zoNoh90mSp53EPkS7HM5CPClyDZuVChjc/G5/
-        votszxxw5DJjuphyNPpG0Iu65T9fPnm2qYfAlTFxs9KMkXnHWipgHqFbO4DdcGO0PTHJsrSM2wATr
-        plw6SWcg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJR9d-00GSqU-1O;
-        Wed, 12 Jul 2023 04:08:41 +0000
-Message-ID: <74f05266-e659-bd2f-e8be-1dc62d82084c@infradead.org>
-Date:   Tue, 11 Jul 2023 21:08:40 -0700
+        Wed, 12 Jul 2023 00:19:39 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEF610F2;
+        Tue, 11 Jul 2023 21:19:38 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C39m9u023449;
+        Wed, 12 Jul 2023 04:19:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=P53F3bKmJw9gIHpLGgywYcmek8nzoZGy0V9cJLyXAXQ=;
+ b=mX6x8IwoO/93ePo75tmjcTC7pVgDGfTZEjle3bpJFeoHU2EAqvaaOgNMzh28xsQ3yotQ
+ MBkQeZUgAGm0/koTSJwBBfbF0NkJSznUeFeyBQi2RDFZvLaWr2V3iuaLmXiQamEpBLd1
+ KviKlwSmiBC9TF013yOD0pQPcDC179wPX58fo0d8ZnJ7K4LF5VA4y5UcjLnxECn0Hi9A
+ oUlsDiwR276AL2md2AO2q8lmHSKzaep6MDlvplmv34UD4JwfsBZ272xX47pqY/kdqrsm
+ q598bH9O5LpYiLSvYM3kqvXrru1yIngOjw+prh1kMstaqJVD3tON+KcS9Vw6b3KeVIdf /g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgd38d7m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 04:19:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C4JSKQ023807
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 04:19:28 GMT
+Received: from hu-kathirav-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 11 Jul 2023 21:19:25 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_saahtoma@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V2 0/2] Drop the IPQ5019 SoC ID
+Date:   Wed, 12 Jul 2023 09:49:10 +0530
+Message-ID: <20230712041912.398724-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] cpufreq: sparc: Don't mark cpufreq callbacks with __init
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-References: <94682b1572da4a3c6afd31bddf93b797f73fff5e.1689055100.git.viresh.kumar@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <94682b1572da4a3c6afd31bddf93b797f73fff5e.1689055100.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -Yn3xnYjPceThnFmNfIe5jdHRxKREKaZ
+X-Proofpoint-GUID: -Yn3xnYjPceThnFmNfIe5jdHRxKREKaZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_02,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 mlxlogscore=433 priorityscore=1501
+ impostorscore=0 bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120037
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kathiravan T (2):
+  dt-bindings: arm: qcom,ids: drop the IPQ5019 SoC ID
+  soc: qcom: socinfo: drop the IPQ5019 SoC ID
 
-
-On 7/11/23 20:58, Viresh Kumar wrote:
-> These callbacks can be called again by the cpufreq core after the driver
-> is initialized and must be kept around. We currently get section
-> mismatch build warnings.
-> 
-> Don't mark them with __init.
-> 
-> Fixes: dcfce7c2cee4 ("cpufreq: sparc: Don't allocate cpufreq_driver dynamically")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
-> ---
-> Rafael,
-> 
-> Please apply this for -rc2. Thanks.
-> 
->  drivers/cpufreq/sparc-us2e-cpufreq.c | 2 +-
->  drivers/cpufreq/sparc-us3-cpufreq.c  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
-> index d3510cfdb3eb..2783d3d55fce 100644
-> --- a/drivers/cpufreq/sparc-us2e-cpufreq.c
-> +++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
-> @@ -269,7 +269,7 @@ static int us2e_freq_target(struct cpufreq_policy *policy, unsigned int index)
->  	return smp_call_function_single(cpu, __us2e_freq_target, &index, 1);
->  }
->  
-> -static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
-> +static int us2e_freq_cpu_init(struct cpufreq_policy *policy)
->  {
->  	unsigned int cpu = policy->cpu;
->  	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
-> diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
-> index 91d1ed558136..6c3657679a88 100644
-> --- a/drivers/cpufreq/sparc-us3-cpufreq.c
-> +++ b/drivers/cpufreq/sparc-us3-cpufreq.c
-> @@ -117,7 +117,7 @@ static int us3_freq_target(struct cpufreq_policy *policy, unsigned int index)
->  	return smp_call_function_single(cpu, update_safari_cfg, &new_bits, 1);
->  }
->  
-> -static int __init us3_freq_cpu_init(struct cpufreq_policy *policy)
-> +static int us3_freq_cpu_init(struct cpufreq_policy *policy)
->  {
->  	unsigned int cpu = policy->cpu;
->  	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
+ drivers/soc/qcom/socinfo.c         | 1 -
+ include/dt-bindings/arm/qcom,ids.h | 1 -
+ 2 files changed, 2 deletions(-)
 
 -- 
-~Randy
+2.34.1
+
