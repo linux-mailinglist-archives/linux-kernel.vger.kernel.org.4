@@ -2,179 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564FD75098B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4DD750998
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbjGLNYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S231901AbjGLN3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbjGLNYB (ORCPT
+        with ESMTP id S231144AbjGLN3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:24:01 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A3D1736
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:24:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XcqoiRxnls1/i4ohdH8CNSgxhlN25bJDV7TWCTg4pyeF5DD9ZU50Eh8LOIBpufDav+Mhv28rLkLwE4UTjHovog6Imc7OQ760dnw5pLizkVeXNVeyaboZlElbiLOO37jiDzlO7JBRZSQGRfNe+GuJkn+kFP5+onpxwb/ysvXO6r5836C8s51PDPt3Pan0Q8o8OPQnQpxviIUhA5Y4v6sT+/o36bgzrYtAgPZCwkBLWpvraYJtkkVYnE5brnnntc+HVKWYbgNDeVnqIv8kPfXGXEgfYVOFdzjuDr6vpkUSxIzbi7Cs7hyGg+vvilZgqCRwvfxd8uqe+EQrGL8NJA0hbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R1YORnNONHStUHIGjrg0oPm++i7IRRq2x16vnHNKrME=;
- b=PxbNIK48H+JNdzZTeBCKK/lFRukp5Za/vupAd944LMSQYoSqnHy+JfGF3V6XrKb2hoP1cvSbQfvVNQhcuAGatt17ldchlmhNZyJ2PlqzKJDw0DMFCT7kzL1cGKZyZtewjauZxbaDlW64eMN4JBuLtPJLgQgEM9+SVlddxbwL5vbaQvwNAV29MuYl2sgDLByGUzITUQUDrKKk0HM8kWy7wgBRnPoQq0G+xFMaPeqksLKGlqV6Z33RRNx6dIEZhc1DrCp23kD15k2ym2nyshYy6ecaWQJGQtPa8yb3qO1TpKlOWz/hp/jT/ZMZtHuoLhSBjf/spYxvSNcKJAlR5aSrVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R1YORnNONHStUHIGjrg0oPm++i7IRRq2x16vnHNKrME=;
- b=SgPBzzwjVStmjgi/UbyZbZ4QJecYRBLLM/+8tfNeaY3c9iW3g1xT8eYi+1lHCncW0ExMutbEnVANUdmVYd8rsbUetH62DcNhQ5GmjknZK6yq3XJk2PHsJKT3gnCWuauzktRK5zSO/rImdTyXJl4q8LVgprUn19rxrwJayFzZIeo=
-Received: from DM4PR12MB7765.namprd12.prod.outlook.com (2603:10b6:8:102::7) by
- DM4PR12MB6303.namprd12.prod.outlook.com (2603:10b6:8:a3::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.32; Wed, 12 Jul 2023 13:23:58 +0000
-Received: from DM4PR12MB7765.namprd12.prod.outlook.com
- ([fe80::8d98:f5c2:35b:e9ff]) by DM4PR12MB7765.namprd12.prod.outlook.com
- ([fe80::8d98:f5c2:35b:e9ff%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 13:23:57 +0000
-From:   "Gangurde, Abhijit" <abhijit.gangurde@amd.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>
-Subject: RE: [PATCH 4/4] cdx: add sysfs for subsystem, class and revision
-Thread-Topic: [PATCH 4/4] cdx: add sysfs for subsystem, class and revision
-Thread-Index: AQHZs/EtE5KWIbDMMki7B114CBd4nq+0mMIAgAF/UTA=
-Date:   Wed, 12 Jul 2023 13:23:57 +0000
-Message-ID: <DM4PR12MB7765D5B3FC16399E7A1428898F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
-References: <20230711121027.936487-1-abhijit.gangurde@amd.com>
- <20230711121027.936487-5-abhijit.gangurde@amd.com>
- <2023071144-reason-defraud-b8b5@gregkh>
-In-Reply-To: <2023071144-reason-defraud-b8b5@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=80781d6e-b78b-4928-ab47-78059514ec32;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-07-12T12:54:22Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB7765:EE_|DM4PR12MB6303:EE_
-x-ms-office365-filtering-correlation-id: 62909a12-65de-459b-aca5-08db82db3f8c
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FABeJYf/1QqqJkSZwQEFEC8DppI8KRpnjZNGmWvUxKCYMkzA5Bxfhj3/9JhvTmrs3hb08iqZU4TDxYENR3hmXm6k1KLdai/4QbkYbdY0DqF3lxZkNv2F1/7VLCY1djaXD2dPMJ1Mr+hDqC69w08M19GPosc2g485NR7+NZwg7csDFylQT7PkgbYFcUGb6Lxb0HWH/oT+qDgO1PINS7WwEF2JkI2AftmjgPtwAISRDdKeuWNkNTKxxxJZannMt1XsA1AW+g0EZclwC1dUgu/2oibpG7XuKOiPWE0KaBnpqLoBl5NdklrJSi+7M1DaBEfA2df25YKEMWa3n4DTiH/XFq+hWBXFx+gLvcVyBR9ddIYeC9Rr9RizUz7rv4+LrK8mv0RfD6VYmm/993Rv0BcFafior+hswnEEuDQtnOPP6T+pzWutuKKb66nEAyXaltpjWy1NOlT2PY7a1WbJdwncngYkQtI8CRmeO4QYzUFuxkRbdgFE+1DysM5/5I9m8Yuxv70s5YU828wO9mn4bvW4JzuE69L2sekOmXXlWaEZZH8Oc1Eq1yZWH6J3gRqxqYix5uk2XVKbI5B+czhXOHhy0MYfQzLp7Ghoynlxsk2rWLgT+kvfLfIo0uaaZNvjap8r
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB7765.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(451199021)(71200400001)(186003)(9686003)(478600001)(316002)(54906003)(76116006)(66946007)(7696005)(66556008)(66476007)(64756008)(66446008)(4326008)(6916009)(41300700001)(8936002)(8676002)(55016003)(86362001)(6506007)(52536014)(5660300002)(33656002)(83380400001)(38070700005)(122000001)(38100700002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+tescV2k4oVM+UgQdGeFHr8lIHIuo5Xcxa4x2N51I7Vxu88WRaS25TyzxjT6?=
- =?us-ascii?Q?Jx8BT3AvmfMdL+ad6tAFDKO6pU39AepsPgv/f5WjgmZXo0MH5vK8pZAsmGw/?=
- =?us-ascii?Q?WFTX0dYDgW4azfOSFaTyz0pUXWKOUDpOdQRD6BVmmN0YY0uu6jura0uW7Z4o?=
- =?us-ascii?Q?5FAI9FYcwHLTa6QBRBcaOLoC0Brqv/nzg0pd6lcXymcXbMIbpCqqOR9AYrRu?=
- =?us-ascii?Q?m2urjn8FqAh1fkV2wuNUT5oARGZ3G4RJWAGe6TXB5gT/CdVha5GW5RtUVGlY?=
- =?us-ascii?Q?7LFBlAGpYtg5K7wAFdljq5HcQZ54JVMrYRLXR3avyQz91EEewCvxynKSY5xh?=
- =?us-ascii?Q?47UO+TprQRAaMZ5i1zUCn9/5XA/bGotj5+wiF4UwHkiyVKr78GCRfwds29w9?=
- =?us-ascii?Q?DiHD1ik6OkaIoYdPPGu3D5R8pXIgGL9CO5axk8I+WpayPjA9SBFzaON7PtvG?=
- =?us-ascii?Q?9Qad/HhHTTnu4yBV7Gbvw20SKV9d9ewT4CK7ZKtG+9sOls01GnAjy6ILRF+j?=
- =?us-ascii?Q?KJkb2196GDq1BzrzijBjWQ+GcnJiLRii7D5CQFhJe8Myw8GiAhWqHyrA7CK/?=
- =?us-ascii?Q?IJesd2wvjJL2Ckw/EXv0zZUtC2WJ5/T7vNIhle3r3VmIUyxQUHET1YHMx7Ur?=
- =?us-ascii?Q?wlvXoXq5eM3MUlxY6YjaDYY8n3sIJQZ5yV1qcxCEMD0Ce0QQYRSBT4yS9Thc?=
- =?us-ascii?Q?g5B7nVAaxcD5rhRrZS8F+muto6GrwpGBTYZW3VPB0h/IjLm09fn990QCA0eY?=
- =?us-ascii?Q?QQJUNwfS3Xa4oZh1ZccMpNeZt7OMxkTy5HvL8Y5L/0r+JEqlUAO7r0vi0eG6?=
- =?us-ascii?Q?gQL3n1Uldt/QTK4I0XUdtBPXeSIEQZ1CKWKSQjXt1kxuh9e/Tppflqh0wa6h?=
- =?us-ascii?Q?D6vOoZk8DN6RLhxwsu3SJBRdsobonWrxr3KKjgQEX8Ors/kqsoJUK+OGklB6?=
- =?us-ascii?Q?Asclhw3dohfP0wOD/+YaIwy1oRSlXiHV8Fc3GFuEoF74DcwfIlTgabx6LhQ5?=
- =?us-ascii?Q?IepAChYmfQxQhM0lxiYmqkEJzFsd/xv2BdKqeaRjFKWk4+qmIStZaH5ycOZB?=
- =?us-ascii?Q?dUbXJH5dwYicvq/pBoBVJgVtIMADrdEFji/5CoIhuKO/MKmZh+bPcaAnYXMH?=
- =?us-ascii?Q?16R7fbQg77/zpU3OiWWGhRYDWEC5mcCKKvMIzXVbHHDODgKYstQyJB8Obr0S?=
- =?us-ascii?Q?L+HoF/7OsCIWmz0IfxKjZFe6s8GqdBOoI4NsNLVmuLswhNJ5qSrAsIvzjJHi?=
- =?us-ascii?Q?8YkVMy/Qtqtea90u4u8FFS26+pLCkg7HUqyW6kXSKXEBOaF13gNLbF1V42aR?=
- =?us-ascii?Q?Yvb/hdyPCUDxsB8BRqBUVLzxzCBpDd6UwhUxV4DCPU3rtqh4TC7YxdqtgcbL?=
- =?us-ascii?Q?hmPijTm1DGGvaUzlLb54t0hZrGvTkbBjkIwg+BV87Y2Zuszmr4au81iYpSj6?=
- =?us-ascii?Q?ngiDtUctT+RNbrbL43ks5QzDIWgABXc/c2i2C+mC/vb97uVTuGfMPuCRIJ/h?=
- =?us-ascii?Q?4H2vyOmFu1YLGKzg6BOppmxdJAO1iDNSZXHTlbxPhvBWwjPBxddWhtLZ+rFH?=
- =?us-ascii?Q?jSLAJPYd25UZrM+KEoPV248ynBbHDn+jsIoi4F61OqrZBertf+1LzFC/Zny2?=
- =?us-ascii?Q?A77ltSkgssTSqshhrIB5Mtg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 12 Jul 2023 09:29:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AD10E2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:29:05 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 102041EC0786;
+        Wed, 12 Jul 2023 15:29:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1689168544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=urjcaXfcwZ1Tr6JZLkw9hFxO9aeIb41RCqU808DqpwQ=;
+        b=q/nlb74QBXh8EuHez5gAiQF5EDsb6VUgSOSK4dejt399UMV41VJJnHabwRU7fZjjcRIdpN
+        yDjhlm+3wqEGx06oF2hLrjwIhxBAFoOBHc5Hy88EGfxB/bpibhlj8iJil0rWehlDWLG6Yw
+        RWcTnL69q3tjmmclZpLd2z7UaCg6icY=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+        reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id LNt6mIcYUUaC; Wed, 12 Jul 2023 13:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1689168540; bh=1zRxPT6tvLexT98aandMWUc4rA5xRBynPKdz28wI3cc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e78SZE7SkRjFjLsyps5wuTN/p42IF9z+mFnAyoH0lgtqLDmSI6zpLAmKZTQNRi1L6
+         OTmhEoH2tclrfW2CPWiepwj2FdLfe2IkgzOiX7hxKkRVVIqRtHyYfS2JTptaFAW2wB
+         kR3ybPueVqh4uustYl9ylqf7z1FYiyi8VwyUa9vqxshCE0dLxRxLPfZejSLYjqM9PR
+         D7eJUqvg7WBBxJdp1b2J0tT7y3Qn2gI3ubBA8Yo4/eplIgf0TkYKvpDPIE/LLXEBJT
+         3lcm0zf9VlzaTQ2mnr9s5dv1KXo2vCc4A4qitbdegPeDJ6BR8Ve0fOOIj5Jl92Tcos
+         AX8ScY8TiAIX0vqGWMCpswHmtmsGdNwnqGj09v9my3p/VshMtc1DC6OoPVnB9cjnqi
+         Fe8Q6v7+QKvhqOxKMjzHHFFNVkHKa+oRo0DM9096l4FCRShgt/trfBNvf1Lx8bfasU
+         eSfxvQoxgJMGyGN7zGZOtNkNRKeQda6jn/bimN50IX1mwW2VUdwc7+hI54PHqn5LII
+         3+mcibVOVSWpksie2W2Zyw5/p3OYPiCFoOFBERI4cr5VGQKxmz4H8Cma5n9STSJgw1
+         aRYijjqcnaWlKP304oWB7wEdgS8juOK5DD7oGKGeiCgh7wM5wWDS7yG6KCO5ZCCzWB
+         Eqi5rae31z0yMZUxd5DGRoDQ=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2D95F40E0140;
+        Wed, 12 Jul 2023 13:28:45 +0000 (UTC)
+Date:   Wed, 12 Jul 2023 15:28:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
+Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, bluca@debian.org,
+        lennart@poettering.net, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] x86/boot: add .sbat section to the bzImage
+Message-ID: <20230712132840.GKZK6qiK70m1O90jFL@fat_crate.local>
+References: <20230711154449.1378385-1-eesposit@redhat.com>
+ <7E9D397B-439F-484C-B950-9094605A7B4D@zytor.com>
+ <5e01b6a5-f993-f99d-41a0-ab671ec598f8@redhat.com>
+ <20230712120002.GIZK6Vwga6DlJqdjEh@fat_crate.local>
+ <ZK6hLZcuAH9jXKuL@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB7765.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62909a12-65de-459b-aca5-08db82db3f8c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2023 13:23:57.8638
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mHN1Fuh3fHzupjZ1UO3jS46CUUJbRwF8GzC/FwqxyeQwBSwfJl08Hiovlmv6iJ+AumqdKatmF0WM0fxvLpapUQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6303
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZK6hLZcuAH9jXKuL@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On Wed, Jul 12, 2023 at 01:48:45PM +0100, Daniel P. Berrang=C3=A9 wrote:
+> That doesn't make it useless, as the 3rd/4th/5th fields in the SBAT
+> file are just human targetted metadata. The validation process just
+> works off the 1st/2nd field.
 
-> > RPU provides subsystem_vendor, subsystem_device, class and revision
-> > info of the device.
->
-> What is "RPU"?
+It's a good thing I asked - feels like I'm just scratching the surface
+on what this thing actually is and the commit message is not explaining
+any of that.
 
-RPU is the remote processor on which firmware runs(controller). Will update=
- the patch description in v2.
+First, second field, that's what, "linux,1"?
 
->
-> > Use the Subsystem vendor id, device id and class
-> > to match the cdx device. Subsystem vendor and device combination
-> > can be used to identify the card. This identification would be useful
-> > for cdx device driver for card specific operations.
->
-> Why aren't you binding devices to drivers based on this like all other
-> bus types do?
+> From a functional POV, it doesn't have to be unique identified,
+> as it is just a human targetted metadata field. A friendly git
+> version as from 'git describe' is more appropriate than a build
+> ID sha.
 
-We are using similar binding to match the device to driver. Would update th=
-e patch description in v2.
+So can you explain what exactly that version is supposed to describe?
+Exact kernel sources the kernel was built from? Or a random, increasing
+number which tools can use to mark as bad?
 
-<snip>
+How do you prevent people from binary-editing that section? Secure boot
+does that because that changes the signed kernel image?
 
-> >  /**
-> >   * struct cdx_ops - Callbacks supported by CDX controller.
-> > @@ -84,6 +99,10 @@ struct cdx_controller {
-> >   * @cdx: CDX controller associated with the device
-> >   * @vendor: Vendor ID for CDX device
-> >   * @device: Device ID for CDX device
-> > + * @subsystem_vendor: Subsystem Vendor ID for CDX device
-> > + * @subsystem_device: Subsystem Device ID for CDX device
-> > + * @class: Class for the CDX device
-> > + * @revision: Revision of the CDX device
-> >   * @bus_num: Bus number for this CDX device
-> >   * @dev_num: Device number for this device
-> >   * @res: array of MMIO region entries
-> > @@ -101,6 +120,10 @@ struct cdx_device {
-> >     struct cdx_controller *cdx;
-> >     u16 vendor;
-> >     u16 device;
-> > +   u16 subsystem_vendor;
-> > +   u16 subsystem_device;
-> > +   u32 class;
->
-> What endian are these attributes?  Please be specific for all of them
-> (also for vendor and device, right?)
->
+> > And then why does it have to be a separate section? All those
+> > requirements need to be written down.
 
-Will update this in v2.
+You missed this question.
 
-Thanks,
-Abhijit
+> More precisely this is a contract between 'shim' and any other
+> EFI binary that is intended to be validated by 'shim' during EFI
+> boot, with SecureBoot enabled. Normally 'shim' would be loading
+> a bootloader like 'grub', but with unified kernel images (vmlinuz+
+> cmdline+initrd bundled in one EFI binary), there's a desire to
+> load the kernels directly from shim without an intermediate
+> bootloader. IIUC, the sbat info against the kernel would actually
+> be relevant even if grub is loading the kernel, as grub would still
+> call back into shim todo validation of the binary for secureboot
+> compliance.
+>=20
+> The shim project has defined this format, and the linked git repo
+> provided URL is the canonical location for where this is documented.
+>=20
+> The first doc gives the background and design approach
+>=20
+>   https://github.com/rhboot/shim/blob/main/SBAT.md
+
+Yeah, tried reading that. That section explaining the prior to
+disclosure, after disclosure numbers incrementing is a mess waiting to
+happen.
+
+> The first line just identifies the file format and should
+> never change:
+>=20
+>   sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/S=
+BAT.md
+
+Why do you even need it then?
+
+> The second line identifies the kernel generation
+>=20
+>   linux,1,The Linux Developers,linux,6.5.0-rc1,https://linux.org
+>=20
+> The first field 'linux' should never change once decided upon, as it is
+> the name of the upstream project's EFI component - in this case the
+> linux kernel.
+>=20
+> The second field '1' is the most important one, as it is the mechanism
+> through which revokation takes places, and the only one a human upstrea=
+m
+> maintainer should manually change.
+
+Hold on, how often are those things going to change? And who's going to
+change them? I sure hope we won't start getting patches constantly
+updating those numbers?
+
+> If there is discovered a flaw in Linux that allows the Secure Boot chai=
+n
+> to be broken (eg some flaw allowed linux to be exploited as a mechanism
+> to load an unsigned binary), then this 'generation' number would need
+> to be incremented when a fix is provided in upstream Linux trees.
+
+Oh boy, there it is. And then when those fixes need to be backported to
+stable, then those patches updating that number would need to be
+backported too. I can already see the mess on the horizon.
+
+> The SBAT config for shim would be updated to say 'linux,2' was the new
+> baseline, at which point it would refuse to load any binaries that stil=
+l
+> had 'linux,1' in their sbat PE section.
+
+Ok, I fetch the latest upstream kernel, it has "linux,1", shim refuses
+to load. I go, edit the sources, increment that to "linux,234" and secure
+boot works. No fixes applied.
+
+So either I'm missing something but if not, that number thing is really
+silly.
+
+> When a downstream vendor builds the kernel they would actually add a
+> third record, where they append a vendor identifier to the 'linux'
+> component name, so the .sbat PE section might say.
+>=20
+>  $ cat linux.sbat
+>  sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SB=
+AT.md
+>  linux,1,The Linux Developers,linux,6.5.0-rc1,https://linux.org
+>  linux.fedora,1,The Fedora Project,linux,6.5.0-rc1,https://fedoraprojec=
+t.org
+>=20
+> this allows Fedora to deal with revokation if they make a downstream
+> only mistake that compromises SecureBoot.
+
+What does that mean, "allows Fedora to deal with revokation"?
+
+Anyway, thanks for taking the time to explain.
+
+In any case, I think this does not belong in the upstream kernel as this
+will turn us into CVE trackers. Distros sure, ofc, that's more along the
+lines of what they do but not the upstream kernel.
+
+And there must be a better way to map "fixes present in the tree" to
+a number which shim verifies.
+
+Thx.
+
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
