@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AEB75078B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058EC75078E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjGLMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S232665AbjGLMHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbjGLMHP (ORCPT
+        with ESMTP id S233163AbjGLMHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:07:15 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2105.outbound.protection.outlook.com [40.107.117.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11161173C;
-        Wed, 12 Jul 2023 05:07:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m1mefHQf2ze1DYiZQBOsxcYR1z/nBePr2HgVePpiMQbjIGjemk9WEa0HiPBRK2C++3tVR+RJ76mQc3grE3rfBdIM4ORyiluRZqNk5Mu3l4G8P41GNds2k4XjhQWW5cFtDFPyeFqLtyYMOK+BZPoB4rCvGBw0+rpq91xnfDQI8C24AE0SmsVrEzl0JdOinynknluQx1YUY8YC4YBfrX9Y+b3VfxCFH4mGeu3wRpLvFJvhq/oEo777Ss3JLZHhqZ9Va7yKUbHRTthzpfK+1RAFnhXHqIc66lO1eNvJO/oy6xHFGJlPWY0VQJPo+dumW2bdbSiSclNOb7N1jjK/faqw6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EQ12MmXPB3KdD8MCgOW11tcx022XEmxLtG9ABgJaaAc=;
- b=N9lxx0O3jABtaT5EwlICEbZZ2BO2iseVWCJFmqjOLNb36HiegNdir9puY1NErloknvHhVM58jvKn0xAByHS5XxcKJlFj8gSL/5c9di/LfuuH+li9qK2U9r4dXyYqa3gdsX5F0RhV3wRL1eMBuLxxNwLE7w9qBGg49q0HKlvWg2rEIV5Dtv3KiOXoKsltGg46X+q3xbALeDCn9ppLFJhedYu3JFIhfVIGsnKBatTigiOXYur8pmGJezWBVkn3aqkakQhVrRjDfTf7BbuOIfZCky1b3DQYMx/HhfxknHYOU9Iizje1Uoey0WIPsy9Q0MzV4kkQSSZeBVY4zpZxedIKjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EQ12MmXPB3KdD8MCgOW11tcx022XEmxLtG9ABgJaaAc=;
- b=o423FxQobLmHOJ+YkTa4TJBNZWCB0YBGpEZGcusPETfLcLn7RKbjU0Kg9pB9OhCijpkd8PUhZXHpFgc9Pl3HcZN02lSaDgkuGmrBp43SaAsMF6TUM0hhOWjOwUfqBGraachIsCuChQwMij8HstnNCU2XmGBhznbEA7NjFOdtLIlM1aUvV3xJw4dLWNxpERHmKAqo7SLkPkQog+/tC8Mk3zaZfSe7Jx2E9X8K3MP8jrk2I5dopdsgFrQxH7WVLOYhkLHOziO5SvIWNuZptpPyBfHYttWviaUt5fScGzehVvIHgrjXogDYBX8HpOUJfk2QqoLiqqnGUSgI/s2rB8e79A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
- TYZPR06MB6499.apcprd06.prod.outlook.com (2603:1096:400:462::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.32; Wed, 12 Jul 2023 12:07:11 +0000
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 12:07:10 +0000
-From:   Minjie Du <duminjie@vivo.com>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        megaraidlinux.pdl@broadcom.com (open list:MEGARAID SCSI/SAS DRIVERS),
-        linux-scsi@vger.kernel.org (open list:MEGARAID SCSI/SAS DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
-Subject: [PATCH v1] drivers: scsi : fix parameter check in two func
-Date:   Wed, 12 Jul 2023 20:07:02 +0800
-Message-Id: <20230712120702.14054-1-duminjie@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0120.apcprd03.prod.outlook.com
- (2603:1096:4:91::24) To SG2PR06MB5288.apcprd06.prod.outlook.com
- (2603:1096:4:1dc::9)
+        Wed, 12 Jul 2023 08:07:32 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE2C1FD8;
+        Wed, 12 Jul 2023 05:07:22 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-78372625badso307750639f.3;
+        Wed, 12 Jul 2023 05:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689163641; x=1691755641;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=js9A+LroJpKyjly1c+m3wIj1/hOhy81EZTbGk7lLc9w=;
+        b=QJDFf6a2qcjPXjiPm97eZlxkt0nwP+Cy792/OnHUSjEnI5bVgRJOZlFiDEhc9oPi6V
+         8Ukf3UAhhORVbhHiJLowqUCvznS3tlqmqp+oI2JYlf1FRg/EVkPBXdub7EjPGyE8LFcQ
+         vJY4YUMoSH/dFomzmMcsTFyx0k/FBuivXQWCR9tm6o33eGWo8GmiSO8lRHiZDWPKVnc1
+         34Kl8LzDooi5FS626w9o36EXvlrHFUt4EOMEg3wWkSxeC7szYcDl6zD0/II0YC5WkiLP
+         eLrjT4FAVw7NGfD33CKrdeg86PxkCNS24anRmf7ctv8V9cgolZXJlFBrEDyeLw+TMIBz
+         Al9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689163641; x=1691755641;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=js9A+LroJpKyjly1c+m3wIj1/hOhy81EZTbGk7lLc9w=;
+        b=D5+kt8vnrSibkZrgsUEwWRNPs+5KNPjftDgWWqEIRMi/l0HREd3SxmjNwJgtYRCDKv
+         3J42NIcCa8C3ON3oqH2XF2OcMFVJPg/qWgt3e39DE1yhToK3AyuWVFiIPr5SUMP4IKs4
+         /uHdEPr28LR7cDUGwvGMsJ9Lm89L3vlxURKGnnZCZUf8vMoQ55m4Zbo6JCvNGIpE1n6G
+         e4rVjs3JLY+LomLF9a+7KoFk0znW3w8rdVWNLMojHfYRXU1OuSA5eYt8fBHDiynhoEAR
+         6FJGYt1jfKHckn1DKjjlGel6ZN2c3kpMELIUQD063SipnjqOs7phhtm9meAziHWxKW74
+         ZfCw==
+X-Gm-Message-State: ABy/qLaOw0Mi/aRgggHCs5ovZ3ci++OdKgziDYvqw6NqnWyzDyJ94vCC
+        GMAJIj26wXmYHrwmCEq+Xrjui8FspLXegWDhHbQ=
+X-Google-Smtp-Source: APBJJlETKzUMF2OAd9kTWv7lkEdSNYU4Mqa9EYSDW3Wz3B8ikNrnIT5lFXObmJx47ZNPP7nh7b1m66J9NjVwYTQm1Zg=
+X-Received: by 2002:a5d:8848:0:b0:783:606b:740f with SMTP id
+ t8-20020a5d8848000000b00783606b740fmr18734048ios.15.1689163641507; Wed, 12
+ Jul 2023 05:07:21 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|TYZPR06MB6499:EE_
-X-MS-Office365-Filtering-Correlation-Id: eae128bf-0042-49cb-a7d3-08db82d0857d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s+tgjhjE59LUNO72wTJXprohVTXL2FTlrq+mSkyB5WdTFETM++MEK8z1P/357UTczvylEwSC+m38I5lPGJ3U/4exr1IjbCIsuwQMmbEC/X4DJ+MHgdsFYDPYSl0F8l/z5T8nRBEX7OC30di0reuOIqGeMbbPn3TjrAASjBSnFA/ldxn4zsDkNfj4mSIbwvxe7DPeqvD8DH5HFea7bDuZ0SFbkI68tRinGCTyeWx+D5hZUdlRseEHzF8J9BZrsb2BwUW7S1rJaEemMHiYmuUTJ81YIViWA9ecw1DVSR90kGnOxHAxgnhBvM2UkjPFMHGCu9jZhr2R/YeOn9uQkHHYVmFsMHHmV5X6FtyShpmF4CU6Fd39S5u/gWQtpwqajGnDA2DwZEFxtrxkKaF4en4I+pNo488m907C1in7wUwOaO9phC5lgfVafZHvno48AV0TNFra50vygumCpqriN6gCzRN16VrCN1JyahOEG3buQQppSDLrbmlPLlKUX/BcPLIiKzuzwir3o7hRqST2JLIJseTcxdJ6QJFnk//uFt9ocZmpiN9OV4h0bcv2FCMg8MojAkf/LODC4ZjXWIrHI+ABkCd7TJXLXg605D78Xk3CU0V5I5EHWOVNZKet7cSyaneO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(396003)(376002)(346002)(366004)(136003)(451199021)(52116002)(6486002)(478600001)(6666004)(110136005)(2616005)(83380400001)(36756003)(86362001)(2906002)(186003)(26005)(6506007)(1076003)(107886003)(6512007)(38350700002)(38100700002)(66946007)(4326008)(66476007)(66556008)(316002)(41300700001)(8936002)(8676002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aeZ/YOnoJpaW0iVmFqsVZjtmUcbU9o03PAtmCtFvKIrp+6h3nO/8CIHdpfKm?=
- =?us-ascii?Q?HmdWbeSPMzFgnIL/AeUwnrEKtTIhGRQZhPrXzS4iLOXBKTG94A5HbLRtctMj?=
- =?us-ascii?Q?si9V7GtHouywtej8RXNfI4ZRx8YJhUJZJYJLB93zWSazREjHuwe4T0kqUG9Y?=
- =?us-ascii?Q?4gCoo9Ze0pahSJnROflA2WwN8+72o9g27JaZ7lKtP3qjRYIrK0UxCyg+XX2F?=
- =?us-ascii?Q?eLA/n5r6DepvyMTDcuQ7FW3FHorSeqsCkbxLy4B4YUcUlGuVFgTrW3MO3N36?=
- =?us-ascii?Q?ujt7+oAU9X3XUzbdKtaToFSXKAX6AtymlesOT+DbF6c7mq1dYYH3eN9373qg?=
- =?us-ascii?Q?892lkzJSaqVQOaz38+u7mirPRzLuB8vVNrCDnprF0ye1NULwY14MonEgm8dp?=
- =?us-ascii?Q?U95e1tRbgKejkiLwi7cF2j2ngjPz/LRKA4f4Wm6YEPnZ3/r7ie0vWy7JmjHV?=
- =?us-ascii?Q?XlDNcWNU8y/NXA4ZBeBfcXvURQaCoO0NVZmiDUY6VCZUwSjhSHpx4DM7oC6r?=
- =?us-ascii?Q?OR9Of6MKFJ0savl1YL0OjKzv0X22za3HVD27D8PuoMTU+B0fnqz4wBRShCGU?=
- =?us-ascii?Q?VYdjooyA4xBi5GK2rg9zvtrF8TS5iP2SDL215L82mjEJ5mWGLQEAiay5Iip1?=
- =?us-ascii?Q?E67qjoBYnGOObuptZVylfE8RqsS+qMKGKpKtl3TZ+0Jz79zpKHLY4906f7dr?=
- =?us-ascii?Q?mmVSniJ8xX5bLmsVpGwTQVdD66HgswagdQh6KPQmTMWuEaqdwNbcBQBQm9ZU?=
- =?us-ascii?Q?p+HRnhRNENYU2ouaVZr06v8CYsT7Y10UsxYGsdzo8F0dm8Hw3IjToFEFDzvn?=
- =?us-ascii?Q?IypVCHQz3L2EMROHuWPkaFWMZvL1r7NoS7A9wum+/x+xsGKgO/jQ2TfyU05e?=
- =?us-ascii?Q?gMrT5a77yhdvsaufFdG1f/URb/8GdDuWz+5+r2B2d2lf8pRG/7etBDriOzqK?=
- =?us-ascii?Q?x/PJ5KR3mghyhB6uSW5fbc81jKSDRpPwOBNljlQyVnyClxH8DEd4GuiM59N3?=
- =?us-ascii?Q?PWLldQVIc+2PI/YRED6zzEhJ95t6QNtD6xk1I6KfQKQq8LPNShIAW7cElKUQ?=
- =?us-ascii?Q?ls99t16V1SOfwOpetJyeiV9uILw4ZOJ8iX2EauY5it9a2p/ZACGjUmadjlMy?=
- =?us-ascii?Q?kelspUapLPNRjVpMLSD8YmFCjZGuCOeiO39hYo5jDn33VMJ/agellCRkdJ/2?=
- =?us-ascii?Q?c5ajVRR8dNt7WrgyEqoNyBTrMyU1y68uibxrWPrGVlOxAflvc4hEV2p/xpWo?=
- =?us-ascii?Q?qETh1vjAQM4Vda4pspD79aan5UntVDAUE7eiIu6zHvOY4FD1K1iUgxfbghUa?=
- =?us-ascii?Q?2Rega9U6UI/JUgJnAcZYxhPq5Ds2vzuCbIovNBvDoB3wQVqJz0lfQFckKaeA?=
- =?us-ascii?Q?ZUaADAjO6TcDliR1ZUAvBkLh1x8NhUHgTXqTfJ5QFUz1ogQwYHBFyDxs1pD/?=
- =?us-ascii?Q?OzM6eqVyOWaKCclTxjDI1jN7GOPZUvgFsGj1orbqoESNn2tdqWoa+3rlYT3k?=
- =?us-ascii?Q?ZZrJ+8dO97rVoIzaFNEv8HZ9eHFpoS9/LXb3Q8LDsrb/1Gq5n7EO4itPsX6V?=
- =?us-ascii?Q?U8um5pL2ECP/R8klcQWFn0XQA8BBjl08KRFRsbUE?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eae128bf-0042-49cb-a7d3-08db82d0857d
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 12:07:10.8882
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hmHLcf+6bZwWriy17PoE8TcFtgmDqq9FLXyVRHML7MsWwfBiBCZZ6srs5CUaar9weQzQZZXEZePvzZH2CKBwig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6499
+References: <20230607151127.1542024-1-pavacic.p@gmail.com> <20230607151127.1542024-4-pavacic.p@gmail.com>
+ <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com>
+ <CAO9szn00vRFm+iM1m7KgkW0WRuKyJEgVU4tVx4f5tF6KPnE=2w@mail.gmail.com>
+ <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com>
+ <CAO9szn29A0qCABG0ACni42UGpsGKLwG7OT1y_ho3DgQ0WLvfmw@mail.gmail.com>
+ <CACRpkdYXtQwmZR1u-1fwmyC_8Yq4bMkjDBcUCfuGqSz_UhXWJQ@mail.gmail.com>
+ <CAO9szn0OuKW+-JZMs3TPUHiwLCe6cUPcsUq+og64K2utMyZpqQ@mail.gmail.com>
+ <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com>
+ <CAO9szn3oTzrrwiyr91H14ep7OPUkA-SDST3CSQAQHvFFnkJWfA@mail.gmail.com>
+ <0d43e653-32cd-b25e-40fa-6f0571048467@denx.de> <CAO9szn20RY3uBDceyUJ1S+gb=FN8Hd5qqMfOSbitHFyFCZ+iLg@mail.gmail.com>
+ <8b0ae1d1-c769-1f55-0452-4bbc62da133b@denx.de>
+In-Reply-To: <8b0ae1d1-c769-1f55-0452-4bbc62da133b@denx.de>
+From:   Paulo Pavacic <pavacic.p@gmail.com>
+Date:   Wed, 12 Jul 2023 14:07:10 +0200
+Message-ID: <CAO9szn1QdB5WGshuyCOGqb0qbBWHqoikeiMkk+bNGhAF5TX5ew@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
+To:     Marek Vasut <marex@denx.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,36 +85,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make IS_ERR() judge the debugfs_create_dir() function return
-in megasas_init_debugfs() and megasas_setup_debugfs.
+Hello all,
 
-Signed-off-by: Minjie Du <duminjie@vivo.com>
----
- drivers/scsi/megaraid/megaraid_sas_debugfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+sub, 8. srp 2023. u 14:53 Marek Vasut <marex@denx.de> napisao je:
+>
+> On 7/7/23 17:26, Paulo Pavacic wrote:
+> > Hello Marek,
+>
+> Hi,
+>
+> > =C4=8Det, 6. srp 2023. u 17:26 Marek Vasut <marex@denx.de> napisao je:
+> >>
+> >> On 7/6/23 17:18, Paulo Pavacic wrote:
+> >>> Hello Linus,
+> >>>
+> >>> =C4=8Det, 22. lip 2023. u 10:22 Linus Walleij <linus.walleij@linaro.o=
+rg> napisao je:
+> >>>>
+> >>>> On Wed, Jun 21, 2023 at 5:09=E2=80=AFPM Paulo Pavacic <pavacic.p@gma=
+il.com> wrote:
+> >>>>
+> >>>>> A lot of modifications to st7701 are required. I believe it would
+> >>>>> result in a driver that doesn't look or work the same. e.g compare
+> >>>>> delays between initialization sequences of panel-fannal-c3004 and
+> >>>>> panel-st7701. I think it would be optimal to create st7701s driver =
+and
+> >>>>> have special handling for st7701s panels. If there was a flag for
+> >>>>> whether panel is st7701 or st7701s it would end up looking like a
+> >>>>> mess.
+> >>>>
+> >>>> What matters is if the original authors of the old st7701 driver are
+> >>>> around and reviewing and testing patches at all. What we need is
+> >>>> active maintainers. (Added Jagan, Marek & Maya).
+> >>>>
+> >>>> I buy the reasoning that the st7701s is perhaps substantially differ=
+ent
+> >>>> from st7701.
+> >>>>
+> >>>> If st7701s is very different then I suppose it needs a separate driv=
+er,
+> >>>> then all we need to to name the driver properly, i.e.
+> >>>> panel-sitronix-st7701s.c.
+> >>>
+> >>> I had in person talk with Paul Kocialkowski and I have concluded that
+> >>> this is the best solution.
+> >>> I believe I should rename it to st7701s due to the hardware changes. =
+I
+> >>> would like to create V5 patch with driver renamed to st7701s.
+> >>> Please let me know if you agree / disagree.
+> >>
+> >> If I recall it right, the ST7701 and ST7701S are basically the same
+> >> chip, aren't they ?
+> >
+> > I'm currently exploring all the differences. There aren't a lot of
+> > differences, but there are some.
+> > So far I can see that default register values are different, new
+> > previously unused registers are now used and there has been some
+> > reordering of how info is placed in registers [1] (data bits are in
+> > different order). Moreover, instructions to some commands have been
+> > changed and meaning of what data bits mean [2][3]. Also, new features
+> > have been added [2]; there is now PCLKS 3 for example.
+> >
+> > You can see few differences in following images. Same images were
+> > attached in this mail:
+> > [1] https://ibb.co/NmgbZmy - GAMACTRL_st7701.png
+> > [2] https://ibb.co/G79y235 - PCLKS2.png
+>
+> Ouch. I wonder if this is still something that can be abstracted out
+> with some helper accessor functions like:
+>
+> if (model =3D=3D ST7701)
+>    write something
+> else
+>    write the other layout
+>
+> Or whether it makes sense to outright have a separate driver. The later
+> would introduce duplication, but maybe that much duplication is OK.
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_debugfs.c b/drivers/scsi/megaraid/megaraid_sas_debugfs.c
-index c69760775..b8b66d590 100644
---- a/drivers/scsi/megaraid/megaraid_sas_debugfs.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_debugfs.c
-@@ -102,7 +102,7 @@ static const struct file_operations megasas_debugfs_raidmap_fops = {
- void megasas_init_debugfs(void)
- {
- 	megasas_debugfs_root = debugfs_create_dir("megaraid_sas", NULL);
--	if (!megasas_debugfs_root)
-+	if (IS_ERR(megasas_debugfs_root))
- 		pr_info("Cannot create debugfs root\n");
- }
- 
-@@ -132,7 +132,7 @@ megasas_setup_debugfs(struct megasas_instance *instance)
- 		if (!instance->debugfs_root) {
- 			instance->debugfs_root =
- 				debugfs_create_dir(name, megasas_debugfs_root);
--			if (!instance->debugfs_root) {
-+			if (IS_ERR(instance->debugfs_root)) {
- 				dev_err(&instance->pdev->dev,
- 					"Cannot create per adapter debugfs directory\n");
- 				return;
--- 
-2.39.0
+I would like to create new driver because panel-st7701 seems to be
+outdated and is using non-standard macro (ST7701_WRITE()) and for me
+it is crashing kernel 5.15.
+Does anyone have similar issues with it?
 
+Br,
+Paulo
