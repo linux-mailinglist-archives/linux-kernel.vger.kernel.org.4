@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC82575093B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D9975094B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233427AbjGLNIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S232562AbjGLNMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbjGLNH6 (ORCPT
+        with ESMTP id S229536AbjGLNMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:07:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0571982;
-        Wed, 12 Jul 2023 06:07:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC2B9617CF;
-        Wed, 12 Jul 2023 13:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CBFDC433BB;
-        Wed, 12 Jul 2023 13:07:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689167275;
-        bh=vMW1ZsFAhoE8lYwPBVV9W01svxaLeOjXsMzAPBL29Mk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hd/P402SCaE6/5pqtisHoEnJrzDqC4etX21mp8Sq+1iMAnXqW0M1K0e82Y4OCEX/V
-         ss82SswEOPPlTYpmm9r57YFh1mepIVM/3lVn35MpoWgYbol0SnzHShuUZUekt0fNBA
-         GTBk/hddzkrV20+rbpvIvgGg0nKQ2CjGZ3RAl4tTYgCfqOXTt6nAlPYsraq2okdZB2
-         JoeIVJgjsaqst/65FywS5JnV7D99n2zodhNSeVEnu1YGOCd9+5NANDUWQRNg48n2LQ
-         XqutJK5JhyBIp6hddomSe79JMEAo+U/Iedh1WXiWdHqAqg7bmpTVRH4w2rCu6+XA7b
-         Olp4KUf6Xj0mw==
-Date:   Wed, 12 Jul 2023 14:07:50 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Fei Shao <fshao@chromium.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [PATCH] leds: pwm: Fix an error code
-Message-ID: <20230712130750.GE10768@google.com>
-References: <20230711083055.1274409-1-fshao@chromium.org>
- <CAHp75VfSL5j-ZUYkezELWzq+c_V+CFL6iVQWQ=roPYrZ=h1rSw@mail.gmail.com>
- <20230712120026.GD10768@google.com>
- <CAHp75Vd4cuNEQUotVZb8Xu+JMC9KKUk_Gg5N_YsA2KoEANwBKw@mail.gmail.com>
+        Wed, 12 Jul 2023 09:12:01 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F76198B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:11:59 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-48137084a84so171467e0c.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689167518; x=1691759518;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mMTX55rsuAtxs8eoTMF0zmRGfyj0Pb2SnfXciWnbDRk=;
+        b=oODGvdD932AIbLChg31AWvPktzZ4m7FTZ6aQ1gLyUuWlnI3wXkOvvrIbbIi8uCqd6K
+         2DqwWEDw/fQbtPRvLRedVPOOzTHHsf/4HRHxNFxP2Pk6AD3zGU495vP9iEFnx3zwtWlR
+         2U9wGjnFkQAVowaGRwGExOWZmczAT6UqND7v5XIqWbDiLIB4+pd1kEjNyEUPRXB2t+cd
+         KSbQccVpwUXW9MgFExadDhAfNc6PtxFhlmkd9Qf3Xr8zxwO/yEbyTLdJSY2y1F+sI6hw
+         OZ0Z6hSly9/ApfbBL7ai06kUQFpp3+K3Qd325h0IqPNZ3Q4h3cKxEYPBZU3Hr9g2pzfX
+         0XEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689167518; x=1691759518;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mMTX55rsuAtxs8eoTMF0zmRGfyj0Pb2SnfXciWnbDRk=;
+        b=JErEbn7ZZyu1HZDUTXW0xcQngj4LdPJWW2p85/HlDtoR+/GefsUomWDc9KvzTfMnEW
+         VOE/fxJp9znWSOBgdZ8/+YlPsa5DD9hJ0If+NgT3sDDKLrCBEfRYMLuVil2jqilrDYPH
+         2bl3zxTcS9Wu73ce3MXaXMrRLbafjK4yJ+IWArlgDUxdv7yzG/urdcgAOa3637BaFdf8
+         c8KkQ0OwvXePQj+KhXWlES100EPy6zdaaQess3q8NnipzoyceKKMy+EwL3KWGoJwHafm
+         3Cv9cMECbem2Urq27sChLjdb0KXpiKuFl5ibU2MCiQFrR+M1c+d914dJvgbgnulcXMjP
+         eDBw==
+X-Gm-Message-State: ABy/qLYlUUzKCj00/N7qpwDhQ8fhbhiueajNhaPIOTcqYAuyulHYHRI3
+        UTnpnM7XHAR2DsL+lOHpaALSc/j9x7gdTd3cK9wXPQ==
+X-Google-Smtp-Source: APBJJlHszP/BzjPgRktgE9ZmebvyBVKr6pfvWwTZjRe8dSb5sh4qROzT6nYqpk/0QxLKUnz2CT1ElQ7dwOmGZ7kEQMc=
+X-Received: by 2002:a1f:3fd0:0:b0:481:2ff5:c9a9 with SMTP id
+ m199-20020a1f3fd0000000b004812ff5c9a9mr938260vka.13.1689167518233; Wed, 12
+ Jul 2023 06:11:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75Vd4cuNEQUotVZb8Xu+JMC9KKUk_Gg5N_YsA2KoEANwBKw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230709203826.141774942@linuxfoundation.org> <CA+G9fYtEr-=GbcXNDYo3XOkwR+uYgehVoDjsP0pFLUpZ_AZcyg@mail.gmail.com>
+ <20230711201506.25cc464d@kernel.org> <ZK5k7YnVA39sSXOv@duo.ucw.cz>
+In-Reply-To: <ZK5k7YnVA39sSXOv@duo.ucw.cz>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 12 Jul 2023 18:41:46 +0530
+Message-ID: <CA+G9fYvEJgcNhvJk6pvdQOkaS_+x105ZgSM1BVvYy0RRW+1TvA@mail.gmail.com>
+Subject: Re: [PATCH 6.4 0/6] 6.4.3-rc2 review
+To:     Jakub Kicinski <kuba@kernel.org>, Netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org, Qingfang DENG <qingfang.deng@siflower.com.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
+        Masahide NAKAMURA <nakam@linux-ipv6.org>,
+        Ville Nuorvala <vnuorval@tcs.hut.fi>,
+        Arnd Bergmann <arnd@arndb.de>, Pavel Machek <pavel@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jul 2023, Andy Shevchenko wrote:
-
-> On Wed, Jul 12, 2023 at 3:00 PM Lee Jones <lee@kernel.org> wrote:
-> > On Tue, 11 Jul 2023, Andy Shevchenko wrote:
+On Wed, 12 Jul 2023 at 14:01, Pavel Machek <pavel@denx.de> wrote:
+>
+> Hi!
+>
+> > >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+> > >   git_sha: 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
 > >
-> > > On Tue, Jul 11, 2023 at 11:31 AM Fei Shao <fshao@chromium.org> wrote:
-> > > >
-> > > > Use the negated -EINVAL as the error code.
-> > >
-> > > Thank you, it seems Dan had been the first one.
-> > >
-> > > Message ID <a33b981a-b2c4-4dc2-b00a-626a090d2f11@moroto.mountain>
-> >
-> > I don't know much about how other people operate, but I have no way to
-> > trivially navigate to this.  Would you be kind enough to use URLs
-> > please?
-> 
-> Use this pattern:
->   https://lore.kernel.org/r/$MSG_ID
-> where $MSG_ID is a33b981a-b2c4-4dc2-b00a-626a090d2f11@moroto.mountain
-> in this case.
-> 
-> Hence, the URL:
-> https://lore.kernel.org/r/a33b981a-b2c4-4dc2-b00a-626a090d2f11@moroto.mountain
-> 
-> Easier way is simply run `b4 mbox $MSG_ID` and open the loaded mbox
-> with your preferred MUA.
+> > I can't find this sha :( Please report back if you can still repro this
+> > and how we get get the relevant code
+>
+> That sha seems to be:
+>
+> commit 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
+> Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Date:   Sun Jul 9 22:38:22 2023 +0200
+>
+>     Linux 6.4.3-rc2
 
-Right, I'm aware that I can manually manipulate the lore URL in this way.
+That is the commit id from stable-rc tree.
 
-However I, like many, do not have a way to do this easily from my mailer.
+I have re-tested the reported issues multiple times and
+it seems that it is intermittently reproducible.
+Following list of links shows kernel crashes while testing
+selftest net pmtu.sh
 
-This is why directly navigatable / clickable URLs were invented. :)
+1)
+Unable to handle kernel paging request at virtual address
+https://lkft.validation.linaro.org/scheduler/job/6579624#L4648
 
-Please could you use full / clickable URLs to messages?
 
--- 
-Lee Jones [李琼斯]
+2)
+include/net/neighbour.h:302 suspicious rcu_dereference_check() usage!
+
+https://lkft.validation.linaro.org/scheduler/job/6579625#L7500
+https://lkft.validation.linaro.org/scheduler/job/6579626#L7509
+https://lkft.validation.linaro.org/scheduler/job/6579622#L7537
+https://lkft.validation.linaro.org/scheduler/job/6579623#L7469
+
+- Naresh
