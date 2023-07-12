@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F8D7505B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBBA75056A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbjGLLNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S232748AbjGLLEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232985AbjGLLNU (ORCPT
+        with ESMTP id S232477AbjGLLEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:13:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEA019BA;
-        Wed, 12 Jul 2023 04:13:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5ECF61779;
-        Wed, 12 Jul 2023 11:13:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C9E8C433C8;
-        Wed, 12 Jul 2023 11:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689160397;
-        bh=OiQLH0Ur4QsXIAElfzydLwPQ911lsGirTGBgpfbRwNo=;
-        h=From:Date:Subject:To:Cc:From;
-        b=frwEyun0JjpXRLfmgWx0EACB4r65Sw09om/Zwr++gjKoYfMXPVF3mmiOTNO38vXQi
-         RxVgyPE9939/BrBImyl7agITWYf/NzY+sIr+9m1tmDVns19ViQZyfDAoVAELL+bPcN
-         nA8Ui96r54vn7fHnPXuLwGTvdDwhVRkbohbN4zaSGJaRulx+6Q66ab7HRmVmH69IfY
-         NPmDZNEvRnP4XX7ImKLcCa8+6sFi+s2CrHkc+cVW0RupWBfHOiTom1iQNL4shdiJ++
-         9xm3xJwh9ZfYdIouZ2erBUZ8NPIoMBxKEhuzhFAwA7Is7oYuYcVn4O2JIQkVReAw5H
-         bgh+tJz234QGw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 12 Jul 2023 12:02:57 +0100
-Subject: [PATCH v2] PCI: dwc: Provide deinit callback for i.MX
+        Wed, 12 Jul 2023 07:04:24 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3881BCA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:04:20 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-668704a5b5bso6051002b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689159859; x=1691751859;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C066j8+9OqPKeXyj3bfl8U68n9ZB9W8Lq5zG3Pmt0vc=;
+        b=thXJh3IZOc/iwIXY0mkcg9tHoTkxeIigWWMNmihKQ2AyofInEYh4hKNj/xgsaBqNla
+         kwEdjNB53sB+Ji45sznXAgSmVzoZdLvxzNeIuto/MaG267FQKmL5pfN88D6jSbST7ZYQ
+         RVinxbqukeLrV2KEfYcYyNoxkQmsYqQal2Z0XdplbtUr2D7DzK2HxFqmMyeT2/87ozrz
+         Q+mjKGgihMixJ2dhvFYjKjEPubHuxiJ4cpLdryUsEPv8AJcrZTGDeFnEDwr9xE+YzF+6
+         +xCyipY32MKoGq34HtRU2rhNjf11mpoE/2zFijFPdkamW5CXlfWSzhsCssm0rDMSOiQV
+         vX2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689159859; x=1691751859;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C066j8+9OqPKeXyj3bfl8U68n9ZB9W8Lq5zG3Pmt0vc=;
+        b=c5Yg8XTo2HOML2SSz6MseiQ6opQW951FwRnUrtLeAqpaJJm2U20ZWUaF/MZZnfSgsJ
+         F1icW2JZV0fZdgvk62svVu9SQy0baidtay/4vSIaPrhRNq2XBp+D2xFhi5B1HeTgwnKp
+         m3/bp1HHN6MhFic1Jqic+9pG1zVwV/t0bRQ+3imeX6ASOzIGd9HS2mnezBefXUXiGiIx
+         eG8ypifPRLJ0XuWFabm9+yCD7wiCRhkScCCyI8rCIbfKKSwuigjPf5BjwTBG/pH0Eddb
+         SVcpEQVtEqySf4xDqSdv/RIAI1e06oOMzYlMACXIbk4QJDW5K8ZrcGLNv+zr3hXlCI7P
+         8OvQ==
+X-Gm-Message-State: ABy/qLbodFg9byTCt082WiH+rdDRWJD0j6Wm6LpW+6xQCP85moIPCps6
+        56FA2E7nzhjMVMja9mew6f+s
+X-Google-Smtp-Source: APBJJlEumOiYoWYoICB8e/oNkTZqTMI6x6HJ3CGrLma4L8XSLhE1BTaahWbqrQxktnIBz8ws+sldrw==
+X-Received: by 2002:a05:6a00:3a14:b0:668:8705:57cf with SMTP id fj20-20020a056a003a1400b00668870557cfmr21660438pfb.25.1689159859368;
+        Wed, 12 Jul 2023 04:04:19 -0700 (PDT)
+Received: from thinkpad ([117.207.27.131])
+        by smtp.gmail.com with ESMTPSA id i13-20020aa787cd000000b00674364577dasm3331941pfo.203.2023.07.12.04.04.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 04:04:19 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 16:34:03 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH 04/14] arm64: dts: qcom: sdm845: Fix the min frequency of
+ "ice_core_clk"
+Message-ID: <20230712110403.GR102214@thinkpad>
+References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
+ <20230712103213.101770-5-manivannan.sadhasivam@linaro.org>
+ <4cc0156e-4324-9f15-089e-9946148753c9@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230712-pci-imx-regulator-cleanup-v2-1-3b1f6e9d26bc@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGCIrmQC/42OQQ6CMBBFr2K6dkxbghhX3sOwmJYBJmAhU0EM4
- e4WTuDy/eS//1cVSZiiup9WJTRz5CEksOeT8i2GhoCrxMpqm+lCZzB6Bn4tINRMPb4HAd8Thmk
- ENIW/1ZXJyecq9R1GAicYfLsbPoN0ezwK1bwck88yccsxWb7Hg9ns6T9jswED7up1rpGsw+rRk
- QTqL4M0qty27Qdfb40P2gAAAA==
-To:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1930; i=broonie@kernel.org;
- h=from:subject:message-id; bh=OiQLH0Ur4QsXIAElfzydLwPQ911lsGirTGBgpfbRwNo=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkrorJKTA/UiZOQu2QjSLqMPDCl2ntv4BxjlidDeA1
- pVC3nv2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZK6KyQAKCRAk1otyXVSH0O7xB/
- 0cHgeV5ZgxdoKAdgQwqd6a27YiNNWVV3qVMsJjh20gE7aNaYp/aSY1Er9yDsbc5FlC312XFzcCjJVC
- BaEyhOfctl9Z5SgqQLF7ZYBNHpYjqGciw/mdbxzJ/0g15lKkFbORaX2Of8vL7BnOEqq+T2u5fMWHIt
- Uj1wPvRRsKroRaiWst34CCcyv3nuIp3D/ylAAlfbnOFsRV3uxK+Z0vw4A1smU2tAKWjV4WS+2/7UAH
- ZoSJHJADoqAJtLOn2ySpyRCdkmhyzdan3zplqJA6gSYOVB4cy/SsaeaEtw3pNJTWHN9me6KO6i9mJK
- xjQa0i2nIPnrk8iFpK019lIg5q90Gp
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4cc0156e-4324-9f15-089e-9946148753c9@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX integration for the DesignWare PCI controller has a _host_exit()
-operation which undoes everything that the _host_init() operation does but
-does not wire this up as the host_deinit callback for the core, or call it
-in any path other than suspend. This means that if we ever unwind the
-initial probe of the device, for example because it fails, the regulator
-core complains that the regulators for the device were left enabled:
+On Wed, Jul 12, 2023 at 12:45:40PM +0200, Konrad Dybcio wrote:
+> On 12.07.2023 12:31, Manivannan Sadhasivam wrote:
+> > Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
+> > downstream vendor devicetree. So fix it!
+> > 
+> > https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > 
+> > Fixes: cc16687fbd74 ("arm64: dts: qcom: sdm845: add UFS controller")
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> Would it make sense to move the ICE to the new bindings instead?
+> 
 
-imx6q-pcie 33800000.pcie: iATU: unroll T, 4 ob, 4 ib, align 64K, limit 16G
-imx6q-pcie 33800000.pcie: Phy link never came up
-imx6q-pcie 33800000.pcie: Phy link never came up
-imx6q-pcie: probe of 33800000.pcie failed with error -110
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 46 at drivers/regulator/core.c:2396 _regulator_put+0x110/0x128
+That can be done later if required. Fixing the frequency just in this patch
+allows it to get backported to stable.
 
-Wire up the callback so that the core can clean up after itself.
+> Can sdm845's ICE also work with the sdcard slot?
+> 
 
-Reviewed-by: Richard Zhu <hongxing.zhu@nxp.com>
-Tested-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
-Changes in v2:
-- Rebase onto v6.5-rc1.
-- Link to v1: https://lore.kernel.org/r/20230703-pci-imx-regulator-cleanup-v1-1-b6c050ae2bad@kernel.org
----
- drivers/pci/controller/dwc/pci-imx6.c | 1 +
- 1 file changed, 1 insertion(+)
+I do not have any info on this.
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 27aaa2a6bf39..a18c20085e94 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -1040,6 +1040,7 @@ static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
- 
- static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
- 	.host_init = imx6_pcie_host_init,
-+	.host_deinit = imx6_pcie_host_exit,
- };
- 
- static const struct dw_pcie_ops dw_pcie_ops = {
+- Mani
 
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230703-pci-imx-regulator-cleanup-a17c8fd15ec5
+> Konrad
+> >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > index 9ed74bf72d05..89520a9fe1e3 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
+> >  				<0 0>,
+> >  				<0 0>,
+> >  				<0 0>,
+> > -				<0 300000000>;
+> > +				<75000000 300000000>;
+> >  
+> >  			status = "disabled";
+> >  		};
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
-
+மணிவண்ணன் சதாசிவம்
