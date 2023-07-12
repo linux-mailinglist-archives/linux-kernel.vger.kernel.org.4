@@ -2,69 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AE574FF72
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8348874FF74
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjGLGem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 02:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
+        id S231856AbjGLGgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 02:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbjGLGeN (ORCPT
+        with ESMTP id S231641AbjGLGgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 02:34:13 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DE72D40
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:32:31 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4036bd4fff1so134501cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:32:31 -0700 (PDT)
+        Wed, 12 Jul 2023 02:36:22 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7912D2704;
+        Tue, 11 Jul 2023 23:34:16 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-98e39784a85so85573166b.1;
+        Tue, 11 Jul 2023 23:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689143550; x=1691735550;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1689143629; x=1691735629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zZpxFys7nJdvmBPjIJ49j1uiao8v048XzoTDU+vGGrY=;
-        b=uyGuYrzeVa5Bc8Dj1mPDQiSMBckJ1dcgG3j7LVGxZ1wlmcdmZsHIo6jNJnlYit7fJ1
-         xH2BVbT3dBlHskg1w8DmNVmZuIpItmo6RTWYbvXMg3vGtbEGJ+e4yYK0Iq7BFv5dnVA7
-         uGG3nK4TiJRvLJYoz6sV8EYvCNUpyCpm16/SjGJRR4qXZ055HeFwRZBs15YdtKKEpCxF
-         UcVH3luQlSPFkvH9WeRTBoLWMoFL+gquZx3y0z/vvV2sR+l9z7TtXgHLJcOywowfc6VW
-         FfYLSi4aDV6S1trmPRat3youSjdpEcp/id5GxR4cLAVkvhm5pzfnXJyjCCFKvBtsrHYm
-         1aKw==
+        bh=56MvB/3J+JBad1W9kmthsh6h04x3MOa3xhholvgYzw0=;
+        b=kz0Icblc2nOJf9B6GXFsVTBSIi4xIXs1OfAGvyjNu6s3gUpwbZmbRCF7OZVFq9ZGwm
+         4xBrIC8eYWetaUj9dS7qC1kEfFeG9/M5rFR7h6aUjkDunzPBBn3hWhH8nncb6iodBKE1
+         f9wIwa7zddZsQTfQe0S2yQ1vHtAarEENPTdzQhZnBnHP+mi0Md6jEzNWbRbociSCW/Mc
+         KXcAHhDfmueBCzh52I2MlG/K9Tqym047xSCQr2T4nYMr7KSCfZam0W3CT3zKNP/gPjlI
+         amnf+BqIVUd7g1AeyYgRMSljANqYd1KEb+6ZM1BjIH8G2ud5oOsi3cAG0OvGGMJ33FRR
+         pLVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689143550; x=1691735550;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1689143629; x=1691735629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zZpxFys7nJdvmBPjIJ49j1uiao8v048XzoTDU+vGGrY=;
-        b=enIFthliQlYqaBIbZ1wfYpyTYzVURGxajoaJ6yOFFypi2C4CgaOwLq/itcxdGm9XgA
-         loJxW2k4m8FSQInqpT624xVCthGwW0Q96yD40g0clIZ4cmhAtaLcvFvLL5eARSDovLQy
-         Yf2SwXy6qCC1HdcyY+wzkhrLwpMIgqn+OBUi5cQ+GzH6L9H4SaIflhVLOzZYAQ1ieSMA
-         e2mEUMlsHyFw9wMSNbn1J3mCNvCibbrz0+2EwLvhymk12fQNn+I16+5Ahn+oE0KB8YXv
-         TJLNZ+W49lwZWWe7XTbGiT8J4Vh07tCaYXJvh5/1wcq1jt+N168jMapAGsJYyq7yeg0o
-         AkLg==
-X-Gm-Message-State: ABy/qLaMfhEU1nOgoe+fLZ8heMcUsaPLV+qdb6jgqMszzDsBwqcOxDDH
-        Z1C8uWrHXi349Sdb88znLKPAIuJqO4Cvm/jrY3aPMP4NpvZDKhyMT+eZmJR0
-X-Google-Smtp-Source: APBJJlHitQTlvL6I4z82gB03QXe0/JP5JePZh/j6YDTLZIyn9YFxONiiRnRDGZg9nAyqPQvt4Prx16OpGyUGDkeOfEI=
-X-Received: by 2002:a05:622a:1898:b0:403:b242:3e30 with SMTP id
- v24-20020a05622a189800b00403b2423e30mr80006qtc.1.1689143550478; Tue, 11 Jul
- 2023 23:32:30 -0700 (PDT)
+        bh=56MvB/3J+JBad1W9kmthsh6h04x3MOa3xhholvgYzw0=;
+        b=crG1YDlF8AmV6AldEw8j1gkA75yltgvM1QhtW9PXNcF8Btk+A+YsgOGlyx+ex1JvVY
+         rbpUuj82NZusZTSKqH7UoRGtfDnK1+hx5bFDxXP5qdGD5ufU/w4xaAEiDcun67aMOUll
+         cy+2Jk51hljJn49wr3jl8CvQYIf6SDsB7RzhNcbzRhYggyeZlKGyjK1h1/XPPDmn0tiG
+         gL3w+YPSR3IEEso/00ZHzxiGzO8LWqpwpEbNHe+CNheW7WcY4mOngA+t/SmnRBvhy+Bl
+         ewA4EmwknVOvluqtotKVPwQZ5Ecx+24y+VBSmftQkq6LmVrnf/vaZ5T8EiY1W338WdcB
+         v3Jg==
+X-Gm-Message-State: ABy/qLbzXSVl5LFm1Rx2mcgKH2pfte4hrm9ke/Yguex3tv1RAGzjb6TY
+        5Vr5aULT4B0s8j1aeB8wbYw=
+X-Google-Smtp-Source: APBJJlHT05ZQoF6ZT6j4+rJSGyHdyiBTHn+vCRN6hsRI1moTFmRe6AdNpPaWo4xB4RhTr9H53qu+6A==
+X-Received: by 2002:a17:906:11e:b0:988:15f4:fdba with SMTP id 30-20020a170906011e00b0098815f4fdbamr1360656eje.14.1689143628737;
+        Tue, 11 Jul 2023 23:33:48 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id qw5-20020a170906fca500b00992ed412c74sm2080021ejb.88.2023.07.11.23.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 23:33:48 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id D86C527C0054;
+        Wed, 12 Jul 2023 02:33:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 12 Jul 2023 02:33:45 -0400
+X-ME-Sender: <xms:SUmuZKdRNrlikRoDL6d4xzhJPu2aBW0sjgx-UKpTil8dXeAFVpqYtw>
+    <xme:SUmuZEPqZgn_lKhliYAHjYphQGWslgFVikemg2ivHYjP0_87siAwanTta5iU3CA-_
+    wEtFwEKkMgKl_n6zA>
+X-ME-Received: <xmr:SUmuZLhIbn7SkpR_RaRAtLPaZiNQynUZfZkj3VtMcajPgmKITMEukXxhNjM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfedugddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpefhtedvgfdtueekvdekieetieetjeeihedvteehuddujedvkedtkeefgedv
+    vdehtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
+    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
+    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:SUmuZH-yzci95aWcFY3r11zLGVkKuBRj7UxDmNO7weaHddrtQquyIg>
+    <xmx:SUmuZGveSjnSs5n85ud5xfcE9k2hgtXxfP8I00kzL6dwAZ-kwgSlTw>
+    <xmx:SUmuZOFxP_5KMekgJCIKmjKfoxXFKVNE2q8x6staJ0WIflHfn9fY9g>
+    <xmx:SUmuZHHvWlvbEMvwcL_uTy_sA4Odrd62iCoSB4X4tQ1TQmjPPadvEQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Jul 2023 02:33:44 -0400 (EDT)
+Date:   Tue, 11 Jul 2023 23:33:42 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     rust-for-linux@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: Re: [PATCH 3/9] workqueue: introduce `__INIT_WORK_WITH_KEY`
+Message-ID: <ZK5JRhXsV7RHey9V@Boquns-Mac-mini.home>
+References: <20230711093303.1433770-1-aliceryhl@google.com>
+ <20230711093303.1433770-4-aliceryhl@google.com>
 MIME-Version: 1.0
-References: <20230712060144.3006358-1-fengwei.yin@intel.com> <20230712060144.3006358-4-fengwei.yin@intel.com>
-In-Reply-To: <20230712060144.3006358-4-fengwei.yin@intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 12 Jul 2023 00:31:54 -0600
-Message-ID: <CAOUHufYef--8MxFettL6fOGjVx2vyZHZQU6EEaTCoW0XBvuC8Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] mm: mlock: update mlock_pte_range to handle
- large folio
-To:     Yin Fengwei <fengwei.yin@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, willy@infradead.org, david@redhat.com,
-        ryan.roberts@arm.com, shy828301@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711093303.1433770-4-aliceryhl@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,187 +107,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 12:02=E2=80=AFAM Yin Fengwei <fengwei.yin@intel.com=
-> wrote:
->
-> Current kernel only lock base size folio during mlock syscall.
-> Add large folio support with following rules:
->   - Only mlock large folio when it's in VM_LOCKED VMA range
->
->   - If there is cow folio, mlock the cow folio as cow folio
->     is also in VM_LOCKED VMA range.
->
->   - munlock will apply to the large folio which is in VMA range
->     or cross the VMA boundary.
->
-> The last rule is used to handle the case that the large folio is
-> mlocked, later the VMA is split in the middle of large folio
-> and this large folio become cross VMA boundary.
->
-> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+On Tue, Jul 11, 2023 at 09:32:57AM +0000, Alice Ryhl wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+> 
+> A Rust helper (introduced in a later patch) needs to call
+> `__INIT_WORK` with a passed key, rather than define one in place.
+> 
+> In order to do that, this moves the initialization code from
+> the `__INIT_WORK` macro into a new `__INIT_WORK_WITH_KEY` macro
+> which takes the key as an extra parameter.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 > ---
->  mm/mlock.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 99 insertions(+), 5 deletions(-)
->
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index 0a0c996c5c214..f49e079066870 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -305,6 +305,95 @@ void munlock_folio(struct folio *folio)
->         local_unlock(&mlock_fbatch.lock);
->  }
->
-> +static inline bool should_mlock_folio(struct folio *folio,
-> +                                       struct vm_area_struct *vma)
-> +{
-> +       if (vma->vm_flags & VM_LOCKED)
-> +               return (!folio_test_large(folio) ||
-> +                               folio_within_vma(folio, vma));
-> +
-> +       /*
-> +        * For unlock, allow munlock large folio which is partially
-> +        * mapped to VMA. As it's possible that large folio is
-> +        * mlocked and VMA is split later.
-> +        *
-> +        * During memory pressure, such kind of large folio can
-> +        * be split. And the pages are not in VM_LOCKed VMA
-> +        * can be reclaimed.
-> +        */
-> +
-> +       return true;
+> Taken from [1]. Wedson's email updated at Wedson's request. Tejun's
+> Acked-by taken from [2].
+> 
+> [1]: https://lore.kernel.org/rust-for-linux/20220802015052.10452-7-ojeda@kernel.org/
+> [2]: https://lore.kernel.org/rust-for-linux/Yvq3IfK4+C94AeE2@slm.duckdns.org/
+> 
+>  include/linux/workqueue.h | 31 +++++++++++++++++++------------
+>  1 file changed, 19 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+> index 3992c994787f..c91a84a4723d 100644
+> --- a/include/linux/workqueue.h
+> +++ b/include/linux/workqueue.h
+> @@ -221,24 +221,31 @@ static inline unsigned int work_static(struct work_struct *work) { return 0; }
+>   * to generate better code.
+>   */
+>  #ifdef CONFIG_LOCKDEP
+> +#define __INIT_WORK_WITH_KEY(_work, _func, _onstack, _key)		\
+> +	do {								\
+> +		__init_work((_work), _onstack);				\
+> +		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
+> +		lockdep_init_map(&(_work)->lockdep_map, "(work_completion)"#_work, _key, 0); \
 
-Looks good, or just
+The lock class name is generated as static string via C macro
+"(work_completion)"#_work, and since Rust side helper will wrap it as
+a function, so all work items in Rust will have the same lock class name
+i.e. "(work_completion)work". ;-) 
 
-should_mlock_folio() // or whatever name you see fit, can_mlock_folio()?
-{
-  return !(vma->vm_flags & VM_LOCKED) || folio_within_vma();
-}
+Those names are for lockdep report readers to locate which lock class
+cause the problem, so it make senses to have different names for
+different work item types. Maybe change the C side function as what I
+suggested[1], and use `core::any::typename::<Self>()` as the name? (Self
+is `Work` since it's called in `Work::new`).
 
-> +}
-> +
-> +static inline unsigned int get_folio_mlock_step(struct folio *folio,
-> +                       pte_t pte, unsigned long addr, unsigned long end)
-> +{
-> +       unsigned int nr;
-> +
-> +       nr =3D folio_pfn(folio) + folio_nr_pages(folio) - pte_pfn(pte);
-> +       return min_t(unsigned int, nr, (end - addr) >> PAGE_SHIFT);
-> +}
-> +
-> +void mlock_folio_range(struct folio *folio, struct vm_area_struct *vma,
-> +               pte_t *pte, unsigned long addr, unsigned int nr)
-> +{
-> +       struct folio *cow_folio;
-> +       unsigned int step =3D 1;
-> +
-> +       mlock_folio(folio);
-> +       if (nr =3D=3D 1)
-> +               return;
-> +
-> +       for (; nr > 0; pte +=3D step, addr +=3D (step << PAGE_SHIFT), nr =
--=3D step) {
-> +               pte_t ptent;
-> +
-> +               step =3D 1;
-> +               ptent =3D ptep_get(pte);
-> +
-> +               if (!pte_present(ptent))
-> +                       continue;
-> +
-> +               cow_folio =3D vm_normal_folio(vma, addr, ptent);
-> +               if (!cow_folio || cow_folio =3D=3D folio) {
-> +                       continue;
-> +               }
-> +
-> +               mlock_folio(cow_folio);
-> +               step =3D get_folio_mlock_step(folio, ptent,
-> +                               addr, addr + (nr << PAGE_SHIFT));
-> +       }
-> +}
-> +
-> +void munlock_folio_range(struct folio *folio, struct vm_area_struct *vma=
-,
-> +               pte_t *pte, unsigned long addr, unsigned int nr)
-> +{
-> +       struct folio *cow_folio;
-> +       unsigned int step =3D 1;
-> +
-> +       munlock_folio(folio);
-> +       if (nr =3D=3D 1)
-> +               return;
-> +
-> +       for (; nr > 0; pte +=3D step, addr +=3D (step << PAGE_SHIFT), nr =
--=3D step) {
-> +               pte_t ptent;
-> +
-> +               step =3D 1;
-> +               ptent =3D ptep_get(pte);
-> +
-> +               if (!pte_present(ptent))
-> +                       continue;
-> +
-> +               cow_folio =3D vm_normal_folio(vma, addr, ptent);
-> +               if (!cow_folio || cow_folio =3D=3D folio) {
-> +                       continue;
-> +               }
-> +
-> +               munlock_folio(cow_folio);
-> +               step =3D get_folio_mlock_step(folio, ptent,
-> +                               addr, addr + (nr << PAGE_SHIFT));
-> +       }
-> +}
+[1]: https://lore.kernel.org/rust-for-linux/ZHoZuIz97JN1VSBf@boqun-archlinux/
 
-I'll finish the above later.
+Regards,
+Boqun
 
->  static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
->                            unsigned long end, struct mm_walk *walk)
->
-> @@ -314,6 +403,7 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long =
-addr,
->         pte_t *start_pte, *pte;
->         pte_t ptent;
->         struct folio *folio;
-> +       unsigned int step =3D 1;
->
->         ptl =3D pmd_trans_huge_lock(pmd, vma);
->         if (ptl) {
-> @@ -329,24 +419,28 @@ static int mlock_pte_range(pmd_t *pmd, unsigned lon=
-g addr,
->                 goto out;
->         }
->
-> -       start_pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-> +       pte =3D start_pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, =
-&ptl);
->         if (!start_pte) {
->                 walk->action =3D ACTION_AGAIN;
->                 return 0;
->         }
-> -       for (pte =3D start_pte; addr !=3D end; pte++, addr +=3D PAGE_SIZE=
-) {
+> +		INIT_LIST_HEAD(&(_work)->entry);			\
+> +		(_work)->func = (_func);				\
+> +	} while (0)
 > +
-> +       for (; addr !=3D end; pte +=3D step, addr +=3D (step << PAGE_SHIF=
-T)) {
-> +               step =3D 1;
->                 ptent =3D ptep_get(pte);
->                 if (!pte_present(ptent))
->                         continue;
->                 folio =3D vm_normal_folio(vma, addr, ptent);
->                 if (!folio || folio_is_zone_device(folio))
->                         continue;
-> -               if (folio_test_large(folio))
-> +               if (!should_mlock_folio(folio, vma))
->                         continue;
+>  #define __INIT_WORK(_work, _func, _onstack)				\
+>  	do {								\
+>  		static struct lock_class_key __key;			\
+> -									\
+> -		__init_work((_work), _onstack);				\
+> -		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
+> -		lockdep_init_map(&(_work)->lockdep_map, "(work_completion)"#_work, &__key, 0); \
+> -		INIT_LIST_HEAD(&(_work)->entry);			\
+> -		(_work)->func = (_func);				\
+> +		__INIT_WORK_WITH_KEY(_work, _func, _onstack, &__key);	\
+>  	} while (0)
+>  #else
+> +#define __INIT_WORK_WITH_KEY(_work, _func, _onstack, _key)		\
+> +	do {								\
+> +		__init_work((_work), _onstack);				\
+> +		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
+> +		INIT_LIST_HEAD(&(_work)->entry);			\
+> +		(_work)->func = (_func);				\
+> +	} while (0)
 > +
-> +               step =3D get_folio_mlock_step(folio, ptent, addr, end);
->                 if (vma->vm_flags & VM_LOCKED)
-> -                       mlock_folio(folio);
-> +                       mlock_folio_range(folio, vma, pte, addr, step);
->                 else
-> -                       munlock_folio(folio);
-> +                       munlock_folio_range(folio, vma, pte, addr, step);
->         }
->         pte_unmap(start_pte);
->  out:
-
-Looks good.
+>  #define __INIT_WORK(_work, _func, _onstack)				\
+> -	do {								\
+> -		__init_work((_work), _onstack);				\
+> -		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
+> -		INIT_LIST_HEAD(&(_work)->entry);			\
+> -		(_work)->func = (_func);				\
+> -	} while (0)
+> +	__INIT_WORK_WITH_KEY(_work, _func, _onstack, NULL)
+>  #endif
+>  
+>  #define INIT_WORK(_work, _func)						\
+> -- 
+> 2.41.0.255.g8b1d071c50-goog
+> 
