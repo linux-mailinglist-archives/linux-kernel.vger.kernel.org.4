@@ -2,189 +2,753 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F92750002
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2676A750004
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjGLHWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S231853AbjGLHWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjGLHWB (ORCPT
+        with ESMTP id S229987AbjGLHWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:22:01 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2073.outbound.protection.outlook.com [40.107.7.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8E1E49;
-        Wed, 12 Jul 2023 00:21:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UliDnoODM9IRpV4FkghTWfLcCHQffF2bcV1KVLKcR/GgzKvqV47OvQ9QwdJsfpumtDc/vnyXm/z5kRNg6IGz3LaKCpu6eREkHKivjRZAu1XoKIeiR9EQT9eblKToVrOS1OWCauNKLCFbZdS9eNuduiSNxNDvLdbXzlkiUNrN2SDKt58IzSHyVW9fTKLr4SnYLkig6UA58Xym6Jlt07i0ijnNhORX2dqkiHZBWSsvCENCPC++aIq4+r9bHHYUMpLRfRIC4XHA/u4NQiqn7eeto1u3+b3Im+OHxmmnDS2oeAMUe1YsLf4azOEl5ifANApxovm4+SYzmFCil+Zpjupt+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S2gqtwjfdjibzSMjtncdI4n2YrcP8m1Xj2QL4XqozZE=;
- b=GHNhpC3ozP28ySDZeVVzgH6WkbG9kNc2GlavVS96Sl97luwjfWhGawg85L+JpAHTthzz9zaiEzyjeYiSTc9sniWN7He/YwRyWUlbcbKfzrfHGefy0BmVW6DgCVGnZT2pIFH3Rfmwvng+jjeFMnl2KRO4pP+a+3Ek9BQhdrtqnWfcbexDT0RNuJMh/9F7jwxzVceteEgxbK8wQ0DskAsM3wPiGsecJL7LZEILb8J9pc8f5jBdcQxgqxfREidkM6tXSXt4X+4DHdG6j+/Me6AzZKHSa5VQWw8QIEVXj7fOHkrskhRbkX9EPyeL4UFdrUicCt6rU+tBMpNa04586sQ2Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S2gqtwjfdjibzSMjtncdI4n2YrcP8m1Xj2QL4XqozZE=;
- b=o4VxsF19W0pcJEmKgcm+z29OJIj52hsxqvivEoKvwcN7Q3fqZ5lMGlL6CjfXccOEPTr5arjRwHNHtf4lsKUIQ2hkvLbBmCVQVEecbnuJNpSWkOvZ0lHvPdSSzpJzWgUdOam3V5OIL4EQfRMOWST5FQ43BYdm4tUGsRafCx+lB1ElT6RN0xxBpBLp9W8HthfLlWTTHL6C7fpdWTv6RVjcDiNGQQMs7Uiww0i0BjuTw8/at2QHHg6EvUKkNTDeTy4Js1j/1g4HThGxvYtY8EqZEHmdhhoOG3nxRYeO6oPn1P46ubpCKHub4YrA2s0ZkVzHrswm/7NdRsOItat5lZGaDg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by DB8PR10MB3242.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:f9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
- 2023 07:21:53 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 07:21:53 +0000
-Date:   Wed, 12 Jul 2023 09:21:47 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     Tobias Schaffner <tobias.schaffner@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH 2/2] platform/x86: simatic-ipc: add auto-loading of
- hwmon modules
-Message-ID: <20230712092147.061009b2@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20230711120842.30044-3-henning.schild@siemens.com>
-References: <20230711120842.30044-1-henning.schild@siemens.com>
-        <20230711120842.30044-3-henning.schild@siemens.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0015.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::13) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Wed, 12 Jul 2023 03:22:35 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5DBBE;
+        Wed, 12 Jul 2023 00:22:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9891c73e0fbso95537566b.1;
+        Wed, 12 Jul 2023 00:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689146552; x=1691738552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1O+adpsrErkIVvuF2SVkEMRayf8LwqWQOvu+nTClFM=;
+        b=lLqTAbJLACQCRXSfGjTRhejf76/75k+GLyzXP7Jk9Bc2QCjZWIy8T+DcuEMQGpJ9Oe
+         8AAEs3sDt0pzWUAGI4ohSXaZLYziycCWa/bmQ26oFROPuwdnr91wzECx8Z5uPj5+pS1O
+         ej8cZwx0x9gucuibpR47jjBDvHAeODzcCopTrhr8DbBO5vlZ6XwptgYgbFjOGuRkOsh8
+         zc/61tb4SwJcZkCKxLZNLeIac/csCiUtNMlvVbdBfvwTVZZb8tpGXWJD18R9dvoWYCNM
+         afDcW0DEPj3eQwko3ra5CVFoW91CE5wuHaGjeEDEC7iNgZfhLgAXYpaTgIg5ZRT9LNwq
+         q6Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689146552; x=1691738552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s1O+adpsrErkIVvuF2SVkEMRayf8LwqWQOvu+nTClFM=;
+        b=EBR42WL+FdKnwJ7r6F/53lJg2AoejmNhSNcmQfagi6s/tbNUw/ZWOJzt14qB3WNlwA
+         QuwrXn0ZV35cOjvRG/iIzJJJkD1EywQN2iNRCNNScWvJ8wcQhPiQuhxjIYqf3USDctMg
+         062GePWzKvthBueXwSXyigkaANse/NGQDuJ0f2l8siJTP2fFIO1QvjUKU6EvuM6yfyvb
+         205p2mgpK3MvpY5v+Ra1jPEL+b9RcgcUZ/nVHjyMzeJGEgVpOW8CpKhfMI+MOhQP1c2w
+         jBj3ir082kCGZNc5fmtwk2752YM60YYm4x93+ox3r4KzlCI1vrMrFohqYyLkzDdfOE3C
+         Obmw==
+X-Gm-Message-State: ABy/qLatBkQu7JF6dCjpKzxGXGTxXbHXIvWhiEIHwEHNp4h/PdQvDXzP
+        fNfIuOuOHkM1hBjHZVXZXVc=
+X-Google-Smtp-Source: APBJJlG6sZiDX5JGNcg59gfAI+AHlAPRXYBCbtoxB3/1slOrL49P374kJJuAP0m5TMMEtjj9yOj1zA==
+X-Received: by 2002:a17:907:1b28:b0:953:834d:899b with SMTP id mp40-20020a1709071b2800b00953834d899bmr1401078ejc.29.1689146551435;
+        Wed, 12 Jul 2023 00:22:31 -0700 (PDT)
+Received: from lab.hqhome163.com ([194.183.10.152])
+        by smtp.gmail.com with ESMTPSA id t10-20020a1709066bca00b00993a37aebc5sm2135602ejs.50.2023.07.12.00.22.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 00:22:30 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 07:21:59 +0000
+From:   Alessandro Carminati <alessandro.carminati@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bristot@kernel.org,
+        vmalik@redhat.com, Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] scripts/link-vmlinux.sh: Add alias to duplicate symbols
+ for kallsyms
+Message-ID: <ZK5Ul78A3qTv67Jt@lab.hqhome163.com>
+References: <20230711151925.1092080-1-alessandro.carminati@gmail.com>
+ <20230712093131.7832fdf6b7130328e58e85b6@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|DB8PR10MB3242:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1127f031-a1f5-4286-8444-08db82a8aaa6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yelzulfM6Re42/uo9o+M0bTYoEiQVQ1UrXQJdjeATcKoOpy383e/f0FBRsoltY+ULj8XMxEC5p17JWBorRZEGRERRARVcYc+CV3ku5vzaEtWEpR6q9F0wFiFP4hA07HCYi1fzwPidUag6XW1dzkpP4gs4BM+OzyPdOir+YsQQUQBBUFenwll7aU3aKPmiAjR9RzjxG0NbmHxWKtXNrtxaMkVcxhGNbHNIYjQcZkHS3vAFpxp3NUOpIYZI7Gp3PQl4SC5GEsXtW38cf2bQhHGPOwmH/w/GKLVd4vB4dAQusDVHVF6gdb7k5qHFgd9y+yuQZwc4YlOU/NX/QAZJujHNDT9dVNdb6rfyJ5MPdT3GrUIhD0vqgll9bInCg46lwZ6/JibnkAge7D0YAsLYxiqdw/xRgbTBzTa/lHBGNCcO6NIAGiKp2lY9fdSHKIIiMeY1QnQsIZxRyDkMg0fPw/BYPx6b0pvoePCOxH9OdiTacZa1tYOKpuEWDIOLjzUU7qdXXrZBnUGIaS5DJPP0HyRkg1Jgz6Le99td/5QDFz0K21QuX4paQME/+QOfFpBQk4O
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199021)(2906002)(6512007)(82960400001)(38100700002)(83380400001)(186003)(107886003)(1076003)(9686003)(86362001)(6506007)(5660300002)(8936002)(8676002)(44832011)(110136005)(54906003)(6666004)(6486002)(478600001)(41300700001)(66556008)(66946007)(66476007)(316002)(4326008)(66899021);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9/aOym190VjTk3ctHl7+XUX9xpRbSB6RtgIxiSvLCguaeUiUsuW8Tz2zbujS?=
- =?us-ascii?Q?T9vmeH7THrT8DWi9eI0rvSgtRTNXjrI6gLMlnE255yEDHD5qaE+R411NTJot?=
- =?us-ascii?Q?K2zBL6A8M71hH84yPFAJP9gx7US4OiPpUex+gB5gSFk5YdkZkLVenM2nH+t1?=
- =?us-ascii?Q?+AlzdcN9uwreULXSx2Kii6GidCrj5D7PdRNHHQGHjCYGsmedt9e8U7hdHd5q?=
- =?us-ascii?Q?jFVjaGf/R8iPp41Kq40OJE5RTXsXAVYaCIhxRVxHCtYky6rFa80Df3fGxyY1?=
- =?us-ascii?Q?y+wLMY+Y44lXGZVspuBQ9WQ6ao6Zz+9dwBaChCDHBNvwyB3Dx+T/+KiMiYDU?=
- =?us-ascii?Q?VnfhGTkaU9rgRlOy2g578xPjwcce7DvMU/uoineWDQcCog+diAoj9m2AYixK?=
- =?us-ascii?Q?r1UdIjOlYPA3ANLrNM94yqqgz9RE5kgo5yMeDAYsWftECapb7TTKX/6nBpOr?=
- =?us-ascii?Q?z+UbPvWjqm7h12n4105MGE10Ef9bWXohe45/1T7cIIdUAZz2RP/fmnCFUbE1?=
- =?us-ascii?Q?stO9wWNwm0NaOIi28O7becv+xPxTn8dQz21lcFuHjWLps7yj8YFQag5YQ6H4?=
- =?us-ascii?Q?2XNOKqORloH8C+3euxrp6LQh/iK0lI/Xjhh5TGDOKoBvhZcIT1g6a20JW1Gy?=
- =?us-ascii?Q?JtdXl9F0yvvzpjtiWxcVOx0JwyBqu2wNq8jJqrKKAguqsuvjGFbCA5Wvr872?=
- =?us-ascii?Q?gYXvksvtdowZ7CEy+WivquB+NaBVyvSYIFXS1GFce21TFiyVN2iX7ucunJLk?=
- =?us-ascii?Q?uL1i2VJQXmYM6LL9pUyRSEuYcEORVxiWy69V8Ccd5J5Nb0wy8Ef0Eg3DupyK?=
- =?us-ascii?Q?RzfozMAxpsj3NCyLzEdHa5kewZhvQGLdfxPqDByTpXE7Aton6vQbQ4rD8hT5?=
- =?us-ascii?Q?C/HrTWLS1ODAH/frCArYBkzPMoH0BCoFUroReaExkXTw1i/dlKkYZtvcxezz?=
- =?us-ascii?Q?mLqHdDUX5BkW8stKk34YgELwvblJAq0kBvhsrZ+1RQBhxgWVz1JWdszdAt4j?=
- =?us-ascii?Q?C0Xa69ZM76xE37r5cuHvkLa7MLuzxqtLltp8TeNbCiolMEA/KyAz53LCfgHt?=
- =?us-ascii?Q?LFzMD9eIcTkvoPiL+newdWP0sXsoBh9DcbLOa+7hc+K4aEPwWiXYt0ptq+vB?=
- =?us-ascii?Q?99KdhB1aj3V81djjLu4vKZZkMf8lNSKLVHRCxXp+NoURKwdAkY/TJhGfM444?=
- =?us-ascii?Q?5mWDUkq//PaRm2FW8urV8K1SG0IWiAIGyvEWY79sepVN+OtUbwD082c+G7lj?=
- =?us-ascii?Q?8CMqx8raSjmD6vpeFSxZAwwB+KGZY6oquyrp+8Mc4yT1/AzhWAfA7/m6HvL0?=
- =?us-ascii?Q?zKqcrJ+g73DaTVRyrt8GBN1YvhxDjJ+RKG6u91NlFU1FVDYAbIJwEWu4vnSd?=
- =?us-ascii?Q?N4oZWKKu9Mr6nP87+VD/dPc9G91ru1Rbz2p5EvZC3d8V/fGsedKHkOEo0a05?=
- =?us-ascii?Q?kP6+JR5/L+bTA+gObbyNlT4qi+LTi8UKLw11E7XkzKLxg2IdfnpY+Fise6KO?=
- =?us-ascii?Q?pjUOWLEJPpUOoNXK+P9hOfQHXZJLMbLNb/SirFisZsghSavOgvlnDLS5k+XV?=
- =?us-ascii?Q?pvwG7UPHtxiJmLECHo/3FcVKP7naPoESjYwt6VgCBEVatqg580QOUSeWx5Zq?=
- =?us-ascii?Q?PVIEIGtUGSRY1hGP9oyVjAQTixlbEQDlRl7z+Gs1WJCbNN63C+7FID7NVB6V?=
- =?us-ascii?Q?SSd3uQ=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1127f031-a1f5-4286-8444-08db82a8aaa6
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 07:21:53.3361
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FgIJjsdTvbRFG5ENSeCAeaL/kUcE4iZKm7BYI3GtdMucOr21qlkCMj77TWzQrfqiJuDmVghtGracyO9ZgPE+5uuyxh1vvnrG4+/4n3IRt5o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3242
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230712093131.7832fdf6b7130328e58e85b6@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Tue, 11 Jul 2023 14:08:42 +0200
-schrieb Henning Schild <henning.schild@siemens.com>:
-
-> In order to know which hwmon modules to load one would have to usually
-> first probe from user-land i.e. with sensors-detect and create a
-> config for each machine. But here we know exactly what machines we
-> are dealing with, so we can request those howmon modules without
-> user-mode detection and config files.
+On Wed, Jul 12, 2023 at 09:31:31AM +0900, Masami Hiramatsu wrote:
+> On Tue, 11 Jul 2023 15:19:25 +0000
+> Alessandro Carminati <alessandro.carminati@gmail.com> wrote:
 > 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/platform/x86/simatic-ipc.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> > It is not uncommon for drivers or modules related to similar peripherals
+> > to have symbols with the exact same name.
+> > While this is not a problem for the kernel's binary itself, it becomes an
+> > issue when attempting to trace or probe specific functions using
+> > infrastructure like ftrace or kprobe.
+> > 
+> > The tracing subsystem relies on the `nm -n vmlinux` output, which provides
+> > symbol information from the kernel's ELF binary. However, when multiple
+> > symbols share the same name, the standard nm output does not differentiate
+> > between them. This can lead to confusion and difficulty when trying to
+> > probe the intended symbol.
+> > 
+> > ~ # cat /proc/kallsyms | grep " name_show"
+> > ffffffff8c4f76d0 t name_show
+> > ffffffff8c9cccb0 t name_show
+> > ffffffff8cb0ac20 t name_show
+> > ffffffff8cc728c0 t name_show
+> > ffffffff8ce0efd0 t name_show
+> > ffffffff8ce126c0 t name_show
+> > ffffffff8ce1dd20 t name_show
+> > ffffffff8ce24e70 t name_show
+> > ffffffff8d1104c0 t name_show
+> > ffffffff8d1fe480 t name_show
+> > 
+> > **kas_alias** addresses this challenge by extending the symbol names with
+> > unique suffixes during the kernel build process.
+> > The newly created aliases for these duplicated symbols are unique names
+> > that can be fed to the tracefs interface. By doing so, it enables
+> > previously unreachable symbols to be probed.
+> > 
+> > ~ # cat /proc/kallsyms | grep " name_show"
+> > ffffffff974f76d0 t name_show
+> > ffffffff974f76d0 t name_show__alias__6340
+> > ffffffff979cccb0 t name_show
+> > ffffffff979cccb0 t name_show__alias__6341
+> > ffffffff97b0ac20 t name_show
+> > ffffffff97b0ac20 t name_show__alias__6342
+> > ffffffff97c728c0 t name_show
+> > ffffffff97c728c0 t name_show__alias__6343
+> > ffffffff97e0efd0 t name_show
+> > ffffffff97e0efd0 t name_show__alias__6344
+> > ffffffff97e126c0 t name_show
+> > ffffffff97e126c0 t name_show__alias__6345
+> > ffffffff97e1dd20 t name_show
+> > ffffffff97e1dd20 t name_show__alias__6346
+> > ffffffff97e24e70 t name_show
+> > ffffffff97e24e70 t name_show__alias__6347
+> > ffffffff981104c0 t name_show
+> > ffffffff981104c0 t name_show__alias__6348
+> > ffffffff981fe480 t name_show
+> > ffffffff981fe480 t name_show__alias__6349
+> > ~ # echo "p:kprobes/evnt1 name_show__alias__6349" \
+> > > >/sys/kernel/tracing/kprobe_events
+> > ~ # cat /sys/kernel/tracing/kprobe_events
+> > p:kprobes/evnt1 name_show__alias__6349
 > 
-> diff --git a/drivers/platform/x86/simatic-ipc.c
-> b/drivers/platform/x86/simatic-ipc.c index 71487216d33f..403dc231bef7
-> 100644 --- a/drivers/platform/x86/simatic-ipc.c
-> +++ b/drivers/platform/x86/simatic-ipc.c
-> @@ -153,6 +153,21 @@ static int register_platform_devices(u32
-> station_id) return 0;
->  }
->  
-> +static void request_additional_modules(u32 station_id)
-> +{
-> +	switch (station_id) {
-> +	case SIMATIC_IPC_IPC227G:
-> +	case SIMATIC_IPC_IPC277G:
-> +	case SIMATIC_IPC_IPCBX_39A:
-> +	case SIMATIC_IPC_IPCPX_39A:
-> +		request_module("nct6775");
-> +		break;
-> +	default:
-> +		request_module("emc1403");
-> +		break;
+> This is a nice feature. I found one issue with padding symbols (and CFI) With
+> those options, kernel will make '__cfi_' or '___pfx_' prefixed symbols for each
+> function on some arch. But those generated symbols are not executed but for
+> padding or storing integrity data. So you don't need to make aliases for those
+> symbols.
+> 
+> ffffffff8102c770 t __cfi_event_show
+> ffffffff8102c770 t __cfi_event_show__alias__498
+> ffffffff8102c780 t event_show
+> ffffffff8102c780 t event_show__alias__1505
+> ffffffff8102c7b0 t __cfi_umask_show
+> ffffffff8102c7b0 t __cfi_umask_show__alias__736
+> ffffffff8102c7c0 t umask_show
+> ffffffff8102c7c0 t umask_show__alias__4217
+> ffffffff8102c7f0 t __cfi_edge_show
+> ffffffff8102c7f0 t __cfi_edge_show__alias__484
+> ffffffff8102c800 t edge_show
+> ffffffff8102c800 t edge_show__alias__1478
+> ffffffff8102c830 t __cfi_inv_show
+> ffffffff8102c830 t __cfi_inv_show__alias__528
+> ffffffff8102c840 t inv_show
+> ffffffff8102c840 t inv_show__alias__1789
+> ffffffff8102c870 t __cfi_cmask_show
+> ffffffff8102c870 t __cfi_cmask_show__alias__439
+> ffffffff8102c880 t cmask_show
+> ffffffff8102c880 t cmask_show__alias__1257
+> 
+> Can you skip aliases for __cfi_ or __pfx_ symbols?
+> 
+> Thank you,
+> 
+Hi Masami,
 
-This one will be hard to maintain since every new model would choose
-the default path. Requesting emc1403 on a device where that would not
-do anything is not a problem, but still. And people might forget to
-even look at this and maybe name a module that should be used instead.
+Right, I will do that in the v2 (and I will also add the script maintainers as
+suggested by steven)
 
-I will send a v2 where an array of module names will become part of
-device_modes. The array would hold all additional modules which do not
-autoload. Then the module w83627hf_wdt used for some models can also be
-part of that and no longer be modeled with wdtmode.
+Thanks!
 
-Should anyone have objections on the whole idea of requesting additional
-modules, please already speak up.
-
-Henning
-
-> +	}
-> +}
-> +
->  static int __init simatic_ipc_init_module(void)
->  {
->  	const struct dmi_system_id *match;
-> @@ -170,6 +185,8 @@ static int __init simatic_ipc_init_module(void)
->  		return 0;
->  	}
->  
-> +	request_additional_modules(station_id);
-> +
->  	return register_platform_devices(station_id);
->  }
->  
-
+> > 
+> > Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+> > ---
+> >  init/Kconfig                        |  17 ++
+> >  scripts/Makefile                    |   4 +
+> >  scripts/kas_alias/Makefile          |   4 +
+> >  scripts/kas_alias/duplicates_list.c |  70 +++++++++
+> >  scripts/kas_alias/duplicates_list.h |  15 ++
+> >  scripts/kas_alias/item_list.c       | 230 ++++++++++++++++++++++++++++
+> >  scripts/kas_alias/item_list.h       |  26 ++++
+> >  scripts/kas_alias/kas_alias.c       | 112 ++++++++++++++
+> >  scripts/link-vmlinux.sh             |   6 +-
+> >  9 files changed, 483 insertions(+), 1 deletion(-)
+> >  create mode 100644 scripts/kas_alias/Makefile
+> >  create mode 100644 scripts/kas_alias/duplicates_list.c
+> >  create mode 100644 scripts/kas_alias/duplicates_list.h
+> >  create mode 100644 scripts/kas_alias/item_list.c
+> >  create mode 100644 scripts/kas_alias/item_list.h
+> >  create mode 100644 scripts/kas_alias/kas_alias.c
+> > 
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index f7f65af4ee12..a67b7b1c604b 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1737,6 +1737,23 @@ config KALLSYMS_BASE_RELATIVE
+> >  	  time constants, and no relocation pass is required at runtime to fix
+> >  	  up the entries based on the runtime load address of the kernel.
+> >  
+> > +config KALLSYMS_ALIAS
+> > +	bool "Produces alias for duplicated symbols" if EXPERT
+> > +	depends on KALLSYMS
+> > +	help
+> > +	  It is not uncommon for drivers or modules related to similar
+> > +	  peripherals to have symbols with the exact same name.
+> > +	  While this is not a problem for the kernel's binary itself, it
+> > +	  becomes an issue when attempting to trace or probe specific
+> > +	  functions using infrastructure like ftrace or kprobe.
+> > +
+> > +	  This option addresses this challenge by extending the symbol names
+> > +	  with unique suffixes during the kernel build process.
+> > +	  The newly created aliases for these duplicated symbols are unique
+> > +	  names that can be fed to the ftrace sysfs interface. By doing so, it
+> > +	  enables previously unreachable symbols to be probed.
+> > +
+> > +
+> >  # end of the "standard kernel features (expert users)" menu
+> >  
+> >  # syscall, maps, verifier
+> > diff --git a/scripts/Makefile b/scripts/Makefile
+> > index 32b6ba722728..65fafe17cfe5 100644
+> > --- a/scripts/Makefile
+> > +++ b/scripts/Makefile
+> > @@ -49,3 +49,7 @@ subdir-$(CONFIG_SECURITY_SELINUX) += selinux
+> >  
+> >  # Let clean descend into subdirs
+> >  subdir-	+= basic dtc gdb kconfig mod
+> > +
+> > +# KALLSyms alias
+> > +subdir-$(CONFIG_KALLSYMS_ALIAS) += kas_alias
+> > +
+> > diff --git a/scripts/kas_alias/Makefile b/scripts/kas_alias/Makefile
+> > new file mode 100644
+> > index 000000000000..523fa3441013
+> > --- /dev/null
+> > +++ b/scripts/kas_alias/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +hostprogs-always-$(CONFIG_KALLSYMS_ALIAS)    += kas_alias
+> > +
+> > +kas_alias-objs        := duplicates_list.o item_list.o kas_alias.o
+> > diff --git a/scripts/kas_alias/duplicates_list.c b/scripts/kas_alias/duplicates_list.c
+> > new file mode 100644
+> > index 000000000000..e7a3d2917937
+> > --- /dev/null
+> > +++ b/scripts/kas_alias/duplicates_list.c
+> > @@ -0,0 +1,70 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +#include <stdint.h>
+> > +#include <stdio.h>
+> > +#include <string.h>
+> > +#include <stdlib.h>
+> > +#include <stdbool.h>
+> > +
+> > +#include "item_list.h"
+> > +#include "duplicates_list.h"
+> > +
+> > +struct duplicate_item *find_duplicates(struct item *list)
+> > +{
+> > +	struct duplicate_item *current_duplicate = NULL;
+> > +	struct duplicate_item *duplicates = NULL;
+> > +	struct duplicate_item *new_duplicate;
+> > +	struct item *current_item = list;
+> > +	bool prev_was_duplicate = false;
+> > +	struct item *prev_item = NULL;
+> > +
+> > +	while (current_item) {
+> > +		if ((prev_item && (strcmp(current_item->symb_name, prev_item->symb_name) == 0)) ||
+> > +		    prev_was_duplicate) {
+> > +			if (!duplicates) {
+> > +				duplicates = malloc(sizeof(struct duplicate_item));
+> > +				if (!duplicates)
+> > +					return NULL;
+> > +
+> > +				duplicates->original_item = prev_item;
+> > +				duplicates->next = NULL;
+> > +				current_duplicate = duplicates;
+> > +			} else {
+> > +				new_duplicate = malloc(sizeof(struct duplicate_item));
+> > +				if (!new_duplicate) {
+> > +					free_duplicates(&duplicates);
+> > +					return NULL;
+> > +				}
+> > +
+> > +				new_duplicate->original_item = prev_item;
+> > +				new_duplicate->next = NULL;
+> > +				current_duplicate->next = new_duplicate;
+> > +				current_duplicate = new_duplicate;
+> > +
+> > +				if ((strcmp(current_item->symb_name, prev_item->symb_name) != 0) &&
+> > +				    (prev_was_duplicate))
+> > +					prev_was_duplicate = false;
+> > +				else
+> > +					prev_was_duplicate = true;
+> > +			}
+> > +		}
+> > +
+> > +		prev_item = current_item;
+> > +		current_item = current_item->next;
+> > +	}
+> > +
+> > +	return duplicates;
+> > +}
+> > +
+> > +void free_duplicates(struct duplicate_item **duplicates)
+> > +{
+> > +	struct duplicate_item *duplicates_iterator = *duplicates;
+> > +	struct duplicate_item *app;
+> > +
+> > +	while (duplicates_iterator) {
+> > +		app = duplicates_iterator;
+> > +		duplicates_iterator = duplicates_iterator->next;
+> > +		free(app);
+> > +	}
+> > +
+> > +	*duplicates = NULL;
+> > +}
+> > diff --git a/scripts/kas_alias/duplicates_list.h b/scripts/kas_alias/duplicates_list.h
+> > new file mode 100644
+> > index 000000000000..76aa73e584bc
+> > --- /dev/null
+> > +++ b/scripts/kas_alias/duplicates_list.h
+> > @@ -0,0 +1,15 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> > +#ifndef DUPLICATES_LIST_H
+> > +#define DUPLICATES_LIST_H
+> > +
+> > +#include "item_list.h"
+> > +
+> > +struct duplicate_item {
+> > +	struct item *original_item;
+> > +	struct duplicate_item *next;
+> > +};
+> > +
+> > +struct duplicate_item *find_duplicates(struct item *list);
+> > +void free_duplicates(struct duplicate_item **duplicates);
+> > +
+> > +#endif
+> > diff --git a/scripts/kas_alias/item_list.c b/scripts/kas_alias/item_list.c
+> > new file mode 100644
+> > index 000000000000..7c9d5aecca9a
+> > --- /dev/null
+> > +++ b/scripts/kas_alias/item_list.c
+> > @@ -0,0 +1,230 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +#include <stdio.h>
+> > +#include <stdlib.h>
+> > +#include <stdint.h>
+> > +#include <string.h>
+> > +#include <stdbool.h>
+> > +#include <assert.h>
+> > +#include "item_list.h"
+> > +
+> > +#define CHECK_ORDER_BY_ADDRESS(sort_by, current, temp, op) \
+> > +	((sort_by) == BY_ADDRESS && (current)->addr op (temp)->addr)
+> > +#define CHECK_ORDER_BY_NAME(sort_by, current, temp, op) \
+> > +	((sort_by) == BY_NAME && strcmp((current)->symb_name, (temp)->symb_name) op 0)
+> > +
+> > +struct item *list_index[96] = {0};
+> > +
+> > +void build_index(struct item *list)
+> > +{
+> > +	char current_first_letter = ' ';
+> > +	struct item *current = list;
+> > +
+> > +	while (current) {
+> > +		if (current->symb_name[0] != current_first_letter) {
+> > +			current_first_letter = current->symb_name[0];
+> > +			list_index[current_first_letter - 32] = current;
+> > +		}
+> > +		current = current->next;
+> > +	}
+> > +}
+> > +
+> > +struct item *add_item(struct item **list, const char *name, char stype, uint64_t addr)
+> > +{
+> > +	struct item *new_item;
+> > +	struct item *current;
+> > +
+> > +	new_item = malloc(sizeof(struct item));
+> > +	if (!new_item)
+> > +		return NULL;
+> > +
+> > +	strncpy(new_item->symb_name, name, MAX_NAME_SIZE);
+> > +	new_item->symb_name[MAX_NAME_SIZE - 1] = '\0';
+> > +	new_item->addr = addr;
+> > +	new_item->stype = stype;
+> > +	new_item->next = NULL;
+> > +
+> > +	if (!(*list)) {
+> > +		*list = new_item;
+> > +	} else {
+> > +		current = *list;
+> > +		while (current->next)
+> > +			current = current->next;
+> > +
+> > +		current->next = new_item;
+> > +	}
+> > +	return new_item;
+> > +}
+> > +
+> > +void sort_list(struct item **list, int sort_by)
+> > +{
+> > +	struct item *current = *list;
+> > +	struct item *sorted = NULL;
+> > +	struct item *next_item;
+> > +	struct item *temp;
+> > +
+> > +	if (!(*list) || !((*list)->next))
+> > +		return;
+> > +
+> > +	while (current) {
+> > +		next_item = current->next;
+> > +		if (!sorted ||
+> > +		   (CHECK_ORDER_BY_ADDRESS(sort_by, current, sorted, <) ||
+> > +		    CHECK_ORDER_BY_NAME(sort_by, current, sorted, >=))) {
+> > +			current->next = sorted;
+> > +			sorted = current;
+> > +		} else {
+> > +			temp = sorted;
+> > +			while (temp->next &&
+> > +			      (CHECK_ORDER_BY_ADDRESS(sort_by, current, temp->next, >=) ||
+> > +			       CHECK_ORDER_BY_NAME(sort_by, current, temp->next, >=)))
+> > +				temp = temp->next;
+> > +
+> > +			current->next = temp->next;
+> > +			temp->next = current;
+> > +		}
+> > +		current = next_item;
+> > +	}
+> > +
+> > +	*list = sorted;
+> > +}
+> > +
+> > +struct item *merge(struct item *left, struct item *right, int sort_by)
+> > +{
+> > +	struct item *current = NULL;
+> > +	struct item *result = NULL;
+> > +
+> > +	if (!left)
+> > +		return right;
+> > +	if (!right)
+> > +		return left;
+> > +
+> > +	if (sort_by == BY_NAME) {
+> > +		if (strcmp(left->symb_name, right->symb_name) <= 0) {
+> > +			result = left;
+> > +			left = left->next;
+> > +		} else {
+> > +			result = right;
+> > +			right = right->next;
+> > +		}
+> > +	} else {
+> > +		if (sort_by == BY_ADDRESS) {
+> > +			if (left->addr <= right->addr) {
+> > +				result = left;
+> > +				left = left->next;
+> > +			} else {
+> > +				result = right;
+> > +				right = right->next;
+> > +			}
+> > +		}
+> > +	}
+> > +
+> > +	current = result;
+> > +
+> > +	while (left && right) {
+> > +		if (sort_by == BY_NAME) {
+> > +			if (strcmp(left->symb_name, right->symb_name) <= 0) {
+> > +				current->next = left;
+> > +				left = left->next;
+> > +			} else {
+> > +				current->next = right;
+> > +				right = right->next;
+> > +			}
+> > +		} else {
+> > +			if (sort_by == BY_ADDRESS) {
+> > +				if (left->addr <= right->addr) {
+> > +					current->next = left;
+> > +					left = left->next;
+> > +				} else {
+> > +					current->next = right;
+> > +					right = right->next;
+> > +				}
+> > +			}
+> > +		}
+> > +
+> > +		current = current->next;
+> > +	}
+> > +
+> > +	if (left) {
+> > +		current->next = left;
+> > +	} else {
+> > +		if (right)
+> > +			current->next = right;
+> > +	}
+> > +
+> > +	return result;
+> > +}
+> > +
+> > +struct item *merge_sort(struct item *head, int sort_by)
+> > +{
+> > +	struct item *right;
+> > +	struct item *slow;
+> > +	struct item *fast;
+> > +	struct item *left;
+> > +
+> > +	if (!head || !head->next)
+> > +		return head;
+> > +
+> > +	slow = head;
+> > +	fast = head->next;
+> > +
+> > +	while (fast && fast->next) {
+> > +		slow = slow->next;
+> > +		fast = fast->next->next;
+> > +	}
+> > +
+> > +	left = head;
+> > +	right = slow->next;
+> > +	slow->next = NULL;
+> > +
+> > +	left = merge_sort(left, sort_by);
+> > +	right = merge_sort(right, sort_by);
+> > +
+> > +	return merge(left, right, sort_by);
+> > +}
+> > +
+> > +void sort_list_m(struct item **head, int sort_by)
+> > +{
+> > +	if (!(*head) || !((*head)->next))
+> > +		return;
+> > +
+> > +	*head = merge_sort(*head, sort_by);
+> > +}
+> > +
+> > +int insert_after(struct item *list, const uint64_t search_addr,
+> > +		 const char *name, uint64_t addr, char stype)
+> > +{
+> > +	struct item *new_item;
+> > +	struct item *current;
+> > +	int ret = 0;
+> > +
+> > +	current = (list_index[name[0] - 32]) ? list_index[name[0] - 32] : list;
+> > +	while (current) {
+> > +		if (current->addr == search_addr) {
+> > +			new_item = malloc(sizeof(struct item));
+> > +			if (!new_item)
+> > +				return ret;
+> > +			strncpy(new_item->symb_name, name, MAX_NAME_SIZE);
+> > +			new_item->symb_name[MAX_NAME_SIZE - 1] = '\0';
+> > +			new_item->addr = addr;
+> > +			new_item->stype = stype;
+> > +			new_item->next = current->next;
+> > +			current->next = new_item;
+> > +			ret = 1;
+> > +			break;
+> > +		}
+> > +		current = current->next;
+> > +	}
+> > +	return ret;
+> > +}
+> > +
+> > +void free_items(struct item **head)
+> > +{
+> > +	struct item *app, *item_iterator = *head;
+> > +
+> > +	while (item_iterator) {
+> > +		app = item_iterator;
+> > +		item_iterator = item_iterator->next;
+> > +		free(app);
+> > +	}
+> > +	*head = NULL;
+> > +}
+> > diff --git a/scripts/kas_alias/item_list.h b/scripts/kas_alias/item_list.h
+> > new file mode 100644
+> > index 000000000000..b4891cb088ee
+> > --- /dev/null
+> > +++ b/scripts/kas_alias/item_list.h
+> > @@ -0,0 +1,26 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> > +#ifndef ITEM_LIST_H
+> > +#define ITEM_LIST_H
+> > +#include <stdint.h>
+> > +
+> > +#define MAX_NAME_SIZE 256
+> > +#define BY_ADDRESS 1
+> > +#define BY_NAME 2
+> > +
+> > +struct item {
+> > +	char		symb_name[MAX_NAME_SIZE];
+> > +	uint64_t	addr;
+> > +	char		stype;
+> > +	struct item	*next;
+> > +};
+> > +
+> > +void build_index(struct item *list);
+> > +struct item *add_item(struct item **list, const char *name, char stype, uint64_t addr);
+> > +void sort_list(struct item **list, int sort_by);
+> > +struct item *merge(struct item *left, struct item *right, int sort_by);
+> > +struct item *merge_sort(struct item *head, int sort_by);
+> > +void sort_list_m(struct item **head, int sort_by);
+> > +int insert_after(struct item *list, const uint64_t search_addr,
+> > +		 const char *name, uint64_t addr, char stype);
+> > +void free_items(struct item **head);
+> > +#endif
+> > diff --git a/scripts/kas_alias/kas_alias.c b/scripts/kas_alias/kas_alias.c
+> > new file mode 100644
+> > index 000000000000..d47cfec9f1f3
+> > --- /dev/null
+> > +++ b/scripts/kas_alias/kas_alias.c
+> > @@ -0,0 +1,112 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +#include <stdio.h>
+> > +#include <stdlib.h>
+> > +#include <stdint.h>
+> > +#include <string.h>
+> > +#include <stdbool.h>
+> > +#include <stdarg.h>
+> > +
+> > +#include "item_list.h"
+> > +#include "duplicates_list.h"
+> > +
+> > +int suffix_serial;
+> > +
+> > +static inline void verbose_msg(bool verbose, const char *fmt, ...)
+> > +{
+> > +	va_list args;
+> > +
+> > +	va_start(args, fmt);
+> > +	if (verbose)
+> > +		printf(fmt, args);
+> > +
+> > +	va_end(args);
+> > +}
+> > +
+> > +static void create_suffix(const char *name, char *output_suffix)
+> > +{
+> > +	sprintf(output_suffix, "%s__alias__%d", name, suffix_serial++);
+> > +}
+> > +
+> > +int main(int argc, char *argv[])
+> > +{
+> > +	char t, sym_name[MAX_NAME_SIZE], new_name[MAX_NAME_SIZE + 15];
+> > +	struct duplicate_item  *duplicate_iterator;
+> > +	struct duplicate_item *duplicate;
+> > +	struct item *head = {NULL};
+> > +	bool need_2_process = true;
+> > +	struct item *last = {NULL};
+> > +	struct item  *current;
+> > +	int verbose_mode = 0;
+> > +	uint64_t address;
+> > +	FILE *fp;
+> > +
+> > +	if (argc < 2 || argc > 3) {
+> > +		printf("Usage: %s <nmfile> [-verbose]\n", argv[0]);
+> > +		return 1;
+> > +	}
+> > +
+> > +	if (argc == 3 && strcmp(argv[2], "-verbose") == 0)
+> > +		verbose_mode = 1;
+> > +
+> > +	verbose_msg(verbose_mode, "Scanning nm data(%s)\n", argv[1]);
+> > +
+> > +	fp = fopen(argv[1], "r");
+> > +	if (!fp) {
+> > +		printf("Can't open input file.\n");
+> > +		return 1;
+> > +	}
+> > +
+> > +	while (fscanf(fp, "%lx %c %99s\n", &address, &t, sym_name) == 3) {
+> > +		if (strstr(sym_name, "__alias__1") != NULL) {
+> > +			if (verbose_mode && need_2_process)
+> > +				printf("Already processed\n");
+> > +			need_2_process = false;
+> > +			}
+> > +		last = add_item(&last, sym_name, t, address);
+> > +		if (!last) {
+> > +			printf("Error in allocate memory\n");
+> > +			free_items(&head);
+> > +			return 1;
+> > +		}
+> > +
+> > +		if (!head)
+> > +			head = last;
+> > +	}
+> > +
+> > +	fclose(fp);
+> > +
+> > +	if (need_2_process) {
+> > +		verbose_msg(verbose_mode, "Sorting nm data\n");
+> > +		sort_list_m(&head, BY_NAME);
+> > +		verbose_msg(verbose_mode, "Scanning nm data for duplicates\n");
+> > +		duplicate = find_duplicates(head);
+> > +		if (!duplicate) {
+> > +			printf("Error in duplicates list\n");
+> > +			return 1;
+> > +		}
+> > +
+> > +		verbose_msg(verbose_mode, "Applying suffixes\n");
+> > +		build_index(head);
+> > +		duplicate_iterator = duplicate;
+> > +		while (duplicate_iterator) {
+> > +			create_suffix(duplicate_iterator->original_item->symb_name, new_name);
+> > +			if (!insert_after(head, duplicate_iterator->original_item->addr, new_name,
+> > +					  duplicate_iterator->original_item->addr,
+> > +					  duplicate_iterator->original_item->stype))
+> > +				return 1;
+> > +			duplicate_iterator = duplicate_iterator->next;
+> > +		}
+> > +
+> > +		sort_list_m(&head, BY_ADDRESS);
+> > +	}
+> > +	current = head;
+> > +	while (current) {
+> > +		printf("%08lx %c %s\n", current->addr, current->stype, current->symb_name);
+> > +		current = current->next;
+> > +	}
+> > +
+> > +	free_items(&head);
+> > +	free_duplicates(&duplicate);
+> > +
+> > +	return 0;
+> > +}
+> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > index a432b171be82..4e3dea3ac2df 100755
+> > --- a/scripts/link-vmlinux.sh
+> > +++ b/scripts/link-vmlinux.sh
+> > @@ -161,7 +161,11 @@ kallsyms()
+> >  	fi
+> >  
+> >  	info KSYMS ${2}
+> > -	scripts/kallsyms ${kallsymopt} ${1} > ${2}
+> > +	if is_enabled CONFIG_KALLSYMS_ALIAS; then
+> > +		ALIAS=".alias"
+> > +		scripts/kas_alias/kas_alias ${1} >${1}${ALIAS}
+> > +		fi
+> > +	scripts/kallsyms ${kallsymopt} ${1}${ALIAS} > ${2}
+> >  }
+> >  
+> >  # Perform one step in kallsyms generation, including temporary linking of
+> > -- 
+> > 2.34.1
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--
+Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
