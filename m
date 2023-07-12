@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9057774FD18
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F65774FD1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjGLCgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S231438AbjGLChU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 22:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjGLCgP (ORCPT
+        with ESMTP id S231528AbjGLChM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:36:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6DC171F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 19:36:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D10EC61682
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31D1C433C8;
-        Wed, 12 Jul 2023 02:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689129373;
-        bh=VYr7MuBjRdIhnSEWu/wTQUTN1+a4AfWfJ0ZfmkkFI08=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sjsuANP96xKKQMLvqafjbftM4PlZqLC15IbHO1zlGlRmW8ed/QEKj5cYI/1Yu14PL
-         XqcJeZf/NuQ09kqrnjBmI9q8cmHv3Z6TQNmXdJ2eTLW2IqcuS7d7rqcjL6C68XgKFN
-         u91sQZKvXYfvIVWTGtAf29oW5BOsLKyud52WBAwwJ3+4qQ57uoosbmnZHf+1vPDBMN
-         NRq/W0Usk9+oczI8uOj6oQmQwmEJdwxlE9+vy6wTOWkQ1CrhMOJ9zERtbZ4SMiaO0S
-         nVhC2GgHoqTbBPaKu1Aca3JDIPn1/jNNXsTCgKqIlmTd92CSOIIR9szT4vERNY44Tn
-         73preDOI8+uug==
-Date:   Tue, 11 Jul 2023 19:36:12 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        David Ahern <dsahern@kernel.org>
-Subject: Re: [RFC PATCH net-next] tcp: add a tracepoint for
- tcp_listen_queue_drop
-Message-ID: <20230711193612.22c9bc04@kernel.org>
-In-Reply-To: <20230711043453.64095-1-ivan@cloudflare.com>
-References: <20230711043453.64095-1-ivan@cloudflare.com>
+        Tue, 11 Jul 2023 22:37:12 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BEF1733;
+        Tue, 11 Jul 2023 19:37:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689129431; x=1720665431;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iMf8JNcoSyGQ7ckXfjvHnpCeOzm0RVCB8bPfuDgzuMc=;
+  b=YR2WvjwcgdqY7aMBWt5FMN1Wk+9qfVcpNQDhBqNAzSQHggHbU3z0jMQa
+   7BndTDwhwc3sO+lo9DfepVb0/GTycV7ZkFZf+69uDTDtyqt5IPI5Le11i
+   MXbTzg903kOnncccOm8/Lweg+86nZh22N+8Mkoe1SPWK40LmVLt/YKVgr
+   WsovUj3kax0TZF1lB+30D+jQounwmqp3t+pGh8eEPx87bTl4jdJEeiya6
+   D+SDy3/oemvKUcCkTU1Mxmyw2CzUL+JbheXAVxl2XVuZv0EXwCGuZdeYz
+   PtopMtwsCsgRNRMxu1u6nKkti0MphqjkDtguZo5X7Ki1WDEm1Ym+YZ23k
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349636888"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="349636888"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:37:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="751003044"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="751003044"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.60]) ([10.252.187.60])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:37:06 -0700
+Message-ID: <0438aba6-650b-9b9f-21d1-dc355759fd65@linux.intel.com>
+Date:   Wed, 12 Jul 2023 10:37:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/9] iommu: Add common code to handle IO page faults
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
+ <20230711010642.19707-4-baolu.lu@linux.intel.com>
+ <20230711135056.4b1fd94a@jacob-builder>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230711135056.4b1fd94a@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,18 +73,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 21:34:52 -0700 Ivan Babrou wrote:
-> There's already a way to count the overall numbers of queue overflows:
+On 2023/7/12 4:50, Jacob Pan wrote:
+> Hi Lu,
 > 
->     $ sudo netstat -s | grep 'listen queue'
->     4 times the listen queue of a socket overflowed
+> On Tue, 11 Jul 2023 09:06:36 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+> wrote:
 > 
-> However, it's too coarse for monitoring and alerting when a user wants to
-> track errors per socket and route alerts to people responsible for those
-> sockets directly. For UDP there's udp_fail_queue_rcv_skb, which fills
-> a similar need for UDP sockets. This patch adds a TCP equivalent.
+>> The individual iommu drivers report iommu faults by calling
+>> iommu_report_device_fault(), where a pre-registered device fault handler
+>> is called to route the fault to another fault handler installed on the
+>> corresponding iommu domain.
+>>
+>> The pre-registered device fault handler is static and won't be dynamic
+>> as the fault handler is eventually per iommu domain. Replace the device
+>> fault handler with a static common code to avoid unnecessary code.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/iommu.c | 24 +++++++++++++++++++++++-
+>>   1 file changed, 23 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index da340f11c5f5..41328f03e8b4 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -1278,6 +1278,28 @@ int iommu_unregister_device_fault_handler(struct
+>> device *dev) }
+>>   EXPORT_SYMBOL_GPL(iommu_unregister_device_fault_handler);
+>>   
+>> +static int iommu_handle_io_pgfault(struct device *dev,
+>> +				   struct iommu_fault *fault)
+>> +{
+>> +	struct iommu_domain *domain;
+>> +
+>> +	if (fault->type != IOMMU_FAULT_PAGE_REQ)
+>> +		return -EINVAL;
+>> +
+>> +	if (fault->prm.flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID)
+>> +		domain = iommu_get_domain_for_dev_pasid(dev,
+>> fault->prm.pasid, 0);
+>> +	else
+>> +		domain = iommu_get_domain_for_dev(dev);
+> we don't support IOPF w/o PASID yet, right?
 
-Makes me want to revert your recent UDP tracepoint to be honest :(
-We can play whack a mole like this. You said that kfree_skb fires
-too often, why is that? Maybe it's an issue of someone using
-kfree_skb() when they should be using consume_skb() ?
+It's the individual driver that decides whether iopf w/o pasid is
+supported or not. The iommu core doesn't need to make such assumption.
+
+> 
+>> +
+>> +	if (!domain || !domain->iopf_handler)
+>> +		return -ENODEV;
+>> +
+>> +	if (domain->iopf_handler == iommu_sva_handle_iopf)
+>> +		return iommu_queue_iopf(fault, dev);
+> Just wondering why have a special treatment for SVA domain. Can
+> iommu_queue_iopf() be used as SVA domain->iopf_handler?
+
+Yes. I will make this change according to Kevin's suggestion in this
+thread.
+
+> 
+>> +
+>> +	return domain->iopf_handler(fault, dev, domain->fault_data);
+>> +}
+>> +
+>>   /**
+>>    * iommu_report_device_fault() - Report fault event to device driver
+>>    * @dev: the device
+>> @@ -1320,7 +1342,7 @@ int iommu_report_device_fault(struct device *dev,
+>> struct iommu_fault_event *evt) mutex_unlock(&fparam->lock);
+>>   	}
+>>   
+>> -	ret = fparam->handler(&evt->fault, fparam->data);
+>> +	ret = iommu_handle_io_pgfault(dev, &evt->fault);
+>>   	if (ret && evt_pending) {
+>>   		mutex_lock(&fparam->lock);
+>>   		list_del(&evt_pending->list);
+> 
+> 
+> Thanks,
+> 
+> Jacob
+> 
+
+Best regards,
+baolu
