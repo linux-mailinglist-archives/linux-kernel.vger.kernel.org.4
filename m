@@ -2,167 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A3C75030D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A109175030C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbjGLJ2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S232819AbjGLJ1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbjGLJ17 (ORCPT
+        with ESMTP id S232772AbjGLJ1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:27:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75654139
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689154041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0yxfOZOJtDRYGe4/9MKRDlesJmocqo4vTSXNb7waQqE=;
-        b=d2I67wZJ31WnN9XjGsBiOT772ZFv/uwtkGxqFy1VZ9emjrhcGwIYfmq43bvW1Dv19qIQUX
-        CHDdFieUNXKIDxmtE0QLojPdw1nFw6nWX9dXiV8hJQhUz9/tl7/ca/YXrqbqh3StPEoLUh
-        dpwAe8vSZCzFZC//vyPqEGdfU2mot0E=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-550-uXPIjshcPWOEh7o_PeF_yA-1; Wed, 12 Jul 2023 05:27:14 -0400
-X-MC-Unique: uXPIjshcPWOEh7o_PeF_yA-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-767564705f5so785488585a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:27:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689154033; x=1691746033;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0yxfOZOJtDRYGe4/9MKRDlesJmocqo4vTSXNb7waQqE=;
-        b=GyfH2mhF/Qv/RrbMMCV65vxkXeYsvCuGmlJtGRLozHzCVJTDklZYO9KUI/3w/yT9vW
-         czlrIvtnuv+j4iOoiPZ81iA6JKzPU4k0UpSZpsrduChbupb5W1TtV2hlkXC8TO0VmZvz
-         4s/aW0oIFkDv6IOeEaZn/uDSzRYnoqq/dsz84o7TSov8n6t7kHwOVL99zo+9Ob/3MHcu
-         7d5jtPV8lknBFZ1GL9ZKeh1RzD2tEMpcAzzJPwR1DjVeFRSfVWpyYGnpt4E2Zky825Yp
-         ZoaPQjdeDTZQxi/+vGbLtCyecYHsNaAmysQ319NXVHM6Wc0VBX5xLkwiW2oUh9aC15fJ
-         u9RQ==
-X-Gm-Message-State: ABy/qLZ0xYxSElA9KAsPoKSISDBz34pd/v0iSPORHTctMMqR/T5gC5rs
-        T4ueST6rK65pohbbBeUHQuRmNKtbPa9fRPyq4nBJV88/lO/PelRXzuB6SmCJA4vUSDufBDyBA5m
-        OV9bwZXU6GBKBejhKvZ9uuJWO
-X-Received: by 2002:a05:620a:3729:b0:75b:23a1:8345 with SMTP id de41-20020a05620a372900b0075b23a18345mr21053566qkb.64.1689154033739;
-        Wed, 12 Jul 2023 02:27:13 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHcuT+LWLJMRYybWHS7tPBaDEHbi3bklMy3/Ye0pN5/67siO1tvIx6/T8qfyB8/qG8b3OiHYQ==
-X-Received: by 2002:a05:620a:3729:b0:75b:23a1:8345 with SMTP id de41-20020a05620a372900b0075b23a18345mr21053545qkb.64.1689154033514;
-        Wed, 12 Jul 2023 02:27:13 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id g7-20020ae9e107000000b0075cd80fde9esm1984023qkm.89.2023.07.12.02.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 02:27:12 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tim Chen <tim.c.chen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: Re: [Patch v3 2/6] sched/topology: Record number of cores in sched
- group
-In-Reply-To: <0b20535f4bd6908942c91be86bd17bc3c07514f2.camel@linux.intel.com>
-References: <cover.1688770494.git.tim.c.chen@linux.intel.com>
- <04641eeb0e95c21224352f5743ecb93dfac44654.1688770494.git.tim.c.chen@linux.intel.com>
- <xhsmhedlfv74k.mognet@vschneid.remote.csb>
- <0b20535f4bd6908942c91be86bd17bc3c07514f2.camel@linux.intel.com>
-Date:   Wed, 12 Jul 2023 10:27:08 +0100
-Message-ID: <xhsmh4jm9v5sj.mognet@vschneid.remote.csb>
+        Wed, 12 Jul 2023 05:27:42 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6CBFB;
+        Wed, 12 Jul 2023 02:27:40 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1689154051tknq755c
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Jul 2023 17:27:30 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: 0nVv8wOro77vy4UoA7x+7BKA4KP17B5ePOoos9KdPSu4lX3g/jQWX5p5bQe81
+        uk1rep7yGkn3ZK0WeEiENotC+WSBpA+y8mcpeQu3yRB++8mz9Q3eEoyOGCpryRpqclGX02t
+        HIcCXYxqyTQNggTEnh3RXxIsofcYfY6euv7vve37dHQqnzwtngwneexKq0EHaruHVpN9otS
+        jgBXB4djg1LSLZaTH27xE+gT4zzs58Cn31MvRCJCAuNWMIOqQj9A1471dpCZ2ZXrcykWVuT
+        yUng3g53nFtiz8gty0yP5fvvsCGj1Sqm1R2eATEWObbRnWtOtdpTD563Vh2B2KJqbV9Nm1H
+        p+K7+VK+6CIsHrlobIXJKohHySC/XHgdUIUZCKFvo//cV0jMrTZb75KpH2y+Id00uE7CPPJ
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8164517920057648241
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 11/11] tools/nolibc: arch-*.h: add missing space after ','
+Date:   Wed, 12 Jul 2023 17:27:26 +0800
+Message-Id: <fe980d56a21c254c0355c1e5f2a3355a4cc5fe50.1689150149.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
+References: <cover.1689150149.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/23 15:13, Tim Chen wrote:
-> On Mon, 2023-07-10 at 21:33 +0100, Valentin Schneider wrote:
->> On 07/07/23 15:57, Tim Chen wrote:
->> > From: Tim C Chen <tim.c.chen@linux.intel.com>
->> >
->> > When balancing sibling domains that have different number of cores,
->> > tasks in respective sibling domain should be proportional to the number
->> > of cores in each domain. In preparation of implementing such a policy,
->> > record the number of tasks in a scheduling group.
->> >
->> > Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
->> > ---
->> >  kernel/sched/sched.h    |  1 +
->> >  kernel/sched/topology.c | 10 +++++++++-
->> >  2 files changed, 10 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
->> > index 3d0eb36350d2..5f7f36e45b87 100644
->> > --- a/kernel/sched/sched.h
->> > +++ b/kernel/sched/sched.h
->> > @@ -1860,6 +1860,7 @@ struct sched_group {
->> >       atomic_t		ref;
->> >
->> >       unsigned int		group_weight;
->> > +	unsigned int		cores;
->> >       struct sched_group_capacity *sgc;
->> >       int			asym_prefer_cpu;	/* CPU of highest priority in group */
->> >       int			flags;
->> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
->> > index 6d5628fcebcf..6b099dbdfb39 100644
->> > --- a/kernel/sched/topology.c
->> > +++ b/kernel/sched/topology.c
->> > @@ -1275,14 +1275,22 @@ build_sched_groups(struct sched_domain *sd, int cpu)
->> >  static void init_sched_groups_capacity(int cpu, struct sched_domain *sd)
->> >  {
->> >       struct sched_group *sg = sd->groups;
->> > +	struct cpumask *mask = sched_domains_tmpmask2;
->> >
->> >       WARN_ON(!sg);
->> >
->> >       do {
->> > -		int cpu, max_cpu = -1;
->> > +		int cpu, cores = 0, max_cpu = -1;
->> >
->> >               sg->group_weight = cpumask_weight(sched_group_span(sg));
->> >
->> > +		cpumask_copy(mask, sched_group_span(sg));
->> > +		for_each_cpu(cpu, mask) {
->> > +			cores++;
->> > +			cpumask_andnot(mask, mask, cpu_smt_mask(cpu));
->> > +		}
->>
->>
->> This rekindled my desire for an SMT core cpumask/iterator. I played around
->> with a global mask but that's a headache: what if we end up with a core
->> whose SMT threads are split across two exclusive cpusets?
->
-> Peter and I pondered that for a while.  But it seems like partitioning
-> threads in a core between two different sched domains is not a very
-> reasonable thing to do.
->
-> https://lore.kernel.org/all/20230612112945.GK4253@hirez.programming.kicks-ass.net/
->
+Fix up such errors reported by scripts/checkpatch.pl:
 
-Thanks for the link. I'll poke at this a bit more, but regardless:
+    ERROR: space required after that ',' (ctx:VxV)
+    #148: FILE: tools/include/nolibc/arch-aarch64.h:148:
+    +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+                             ^
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+    ERROR: space required after that ',' (ctx:VxV)
+    #148: FILE: tools/include/nolibc/arch-aarch64.h:148:
+    +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+                                      ^
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-aarch64.h   | 2 +-
+ tools/include/nolibc/arch-arm.h       | 2 +-
+ tools/include/nolibc/arch-i386.h      | 2 +-
+ tools/include/nolibc/arch-loongarch.h | 2 +-
+ tools/include/nolibc/arch-mips.h      | 2 +-
+ tools/include/nolibc/arch-riscv.h     | 2 +-
+ tools/include/nolibc/arch-s390.h      | 2 +-
+ tools/include/nolibc/arch-x86_64.h    | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index e52fa5a20d71..c94fdca9ace6 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -145,7 +145,7 @@
+ })
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 74773ddcf4ca..5f8bfc24e9c7 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -185,7 +185,7 @@
+ })
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index f0d0f5c364b8..915f0e77629e 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -162,7 +162,7 @@
+  * 2) The deepest stack frame should be set to zero
+  *
+  */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index 9db70d6f2c31..6edec94538e0 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -151,7 +151,7 @@
+ #endif
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index b1c070c5b24a..36d4bf0c6aaa 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -175,7 +175,7 @@
+ })
+ 
+ /* startup code, note that it's called __start on MIPS */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
+ {
+ 	__asm__ volatile (
+ 		".set push\n"
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index 2e3fcf925ae9..043e2fd85ab0 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -143,7 +143,7 @@
+ })
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ 		".option push\n"
+diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
+index 051f3f4ed19b..705576d8fd15 100644
+--- a/tools/include/nolibc/arch-s390.h
++++ b/tools/include/nolibc/arch-s390.h
+@@ -139,7 +139,7 @@
+ })
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ 		"lgr	%r2, %r15\n"          /* save stack pointer to %r2, as arg1 of _start_c */
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index 0048adf6b11f..f5614a67f05a 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -161,7 +161,7 @@
+  * 2) The deepest stack frame should be zero (the %rbp).
+  *
+  */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
++void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-- 
+2.25.1
 
