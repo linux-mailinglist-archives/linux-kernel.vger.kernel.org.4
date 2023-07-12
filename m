@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C19F75002A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0271475002C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjGLHiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S231852AbjGLHiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGLHiB (ORCPT
+        with ESMTP id S229505AbjGLHiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:38:01 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2057.outbound.protection.outlook.com [40.107.215.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF680B8;
-        Wed, 12 Jul 2023 00:37:59 -0700 (PDT)
+        Wed, 12 Jul 2023 03:38:18 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2051.outbound.protection.outlook.com [40.107.215.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E11F1998;
+        Wed, 12 Jul 2023 00:38:14 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R+24UoDG888S6sV3AFHQY4i6IU5RLtdey+376FW0XqGsbN8oX5wDXFlgWsYtNiA7PSJhh8hAQN6AwiY4IbUrib2WorN7GbVkbDAz0//Xf84gA982ae6EDfdDuaoXTaaz+4jdF/JUnXpzkTAv/y9z9t+23BuGdOc6JTk+TTkdtJcNxsytfA6T/67l0iU+JntDzl6OvHC5A0IFIj1bruJJ67YEJkkHxqWk+V1VV1bZzU3mCwyG0GHKPueu4+dfCjoJxKOpoto2F9U+cJhcvx3H/weR/RwrudQnjrdjjKwxRgm14AcKfuepTylBWY3T6kotpbpFCpt7AkiBgui53HksRQ==
+ b=Tc3ZbXLSRomcssE9erEDik111eHQbLAbJZoVixxFn2DJArLZMtSeBRJ4gMNB32Bs0r/4bSNmbe/1h3VmADuFiyvGFnxe5hozzIAcXVmczPSpZslTVkWeQ3Ymy1aXyZxCFBi35+vDxEahUC1E1inym+WRqR6intJsPFqsE1J/0Za24NvijFmbS3cmlPi7z4RgEddp9cFvhVGL3sQVVezCb0VqC8/xNquDygjaqx3ut50v1au14caEC9FgimnKyW9Z1QdV+kroMiioOIHf30EE5v9LxL5FDNImqcYMsjTDb5Oa0H38gq7riU8Xpx8KutyZmrTuhUla98qK+aw2G8owDw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q/h4VecOtrX80GUo5VeK3hXPo189rFbY324b/DYS9V4=;
- b=EjRBqjNtC+zihzAYMuGhIg2GxGBXDEde1Ce/0SVmsJfWLUwX/R/NZhHC1DP1Jbpmk5F1NWpjpHoXywZQzwhoYfYpfn/iGHxMyOLUAfpQOon28SHZUY/qgEf9VIhX+L9m+Ud8LwnBv8JJPzaNCBdCvwkHKtobXiI8ZbwJLCG4eAqVldYKM2FTvRK5zXYWHXm5Bzqtj3YVhlQwtkkig33iwxDLC5AtZfgZdYmBUaWafhl5Nyi0KaDPFUO1eADXfWi7Tda89ZidPd6xfBFACuBI0Y9S7LZRZrqnoRVRisZsPZV92yfK1D5gAKCJnWWBpQRhidJEdrEL3i/GP4gbFudFdw==
+ bh=FvwKzWDypqFoyT/5pNg4W+cTRPm+3P1A9+KTXwD9dYc=;
+ b=PX1G7NiNPOFo3QDdMt1eSedQINOxQCNoTN2inPEvw3Q3fJ2/sOOpBs1u7XiNM5ygaEsGBEJoa009ju11JCiKVf+BZoPbTeM7Jg8HWEuCZXcWi5Rp1b5aRsuMRXPaYQBLyrwL2l8FE2nSDeixjDcpD1wfsxkCvPflJTjQxk6S5TrOfgxQRQsZS1Gh9aHCNWzd4vCoglZazlBauafSFrIUsMTZ1JVfgnX/aaxex5LwvKAg4QN1rTFFZmUC2itJD0vRRiLCiwzifVt5hZzSt4H+ln5InBUZJdTQaNTaK4533ZZAmmoVIvijLqsqYUSKjRKP6EC3PMhuN9SE6tIY1kcyrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
  211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
  (p=quarantine sp=quarantine pct=100) action=quarantine
@@ -29,17 +29,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q/h4VecOtrX80GUo5VeK3hXPo189rFbY324b/DYS9V4=;
- b=tHnsmtfRK2V12QS0Ury0BkOpjLWU69/uJnQ3JEl/zzgJs7orq+eCmhSkCeOk11gKBjBSKK3zaLtivnGHt3TtTdbi60gQf29n3v1SWGOTh5V3RKVK+OncdHtRKimGemTOMgjcQuSmLj7JgKutAd9/arOB+nvkSr60YrqCjAVTxMCXHfIniRKIHkw5S/dhSbWgTUo+F8kGtpr/cwiGW8pPPSgn/+u/rAsst89JJMiYfKhX/TneSkYaheG8CSmgtL6kJJF/4R0uLr1KELJdzrhkJh9iA616x2v4yTzYCVCv4OETe53DKhn1u/WDYXDXCj0yDIek3mwkhfRIXuePyn1UfQ==
-Received: from SG3P274CA0002.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::14) by
- SI2PR04MB4361.apcprd04.prod.outlook.com (2603:1096:4:fd::10) with Microsoft
+ bh=FvwKzWDypqFoyT/5pNg4W+cTRPm+3P1A9+KTXwD9dYc=;
+ b=JS0rLzpCw51h2WlG6lPG57jExA9USLaGqvkSMpi7B+DbYTjgHNtiHnR1GxTyjpqNdDXDnPG8HpLpQ+A8FqZ2rbHeK8gweWfH1C9cORUZjX2GecoezgUMj7pI+otwMyAmePCNDGzKeioKXXcuJ3LwBK84ACsyJsWMNdD3Di4EhdP38QL2eyMhvdxT9wnCzyacLkZO8n6IhBrFNyCuCbXEk+g1oKTIyc+h/hIkQnQKqlylJ47qbzcVQwU7L0NbMyNw+/QGGfYZx/q5s+o/xOhO61bi8ehAfus4FBNejPAca+5KcaIfwZihKptkB03NfWKx9lqiBIloK0yafhQgOhYXyg==
+Received: from SG3P274CA0023.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::35) by
+ SEZPR04MB6705.apcprd04.prod.outlook.com (2603:1096:101:f3::11) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.20; Wed, 12 Jul 2023 07:37:57 +0000
+ 15.20.6588.20; Wed, 12 Jul 2023 07:38:06 +0000
 Received: from HK3PEPF0000021C.apcprd03.prod.outlook.com
- (2603:1096:4:be:cafe::c4) by SG3P274CA0002.outlook.office365.com
- (2603:1096:4:be::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32 via Frontend
- Transport; Wed, 12 Jul 2023 07:37:56 +0000
+ (2603:1096:4:be:cafe::f5) by SG3P274CA0023.outlook.office365.com
+ (2603:1096:4:be::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20 via Frontend
+ Transport; Wed, 12 Jul 2023 07:38:05 +0000
 X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
  smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
@@ -48,49 +48,49 @@ Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
  client-ip=211.20.1.79; helo=localhost.localdomain;
 Received: from localhost.localdomain (211.20.1.79) by
  HK3PEPF0000021C.mail.protection.outlook.com (10.167.8.38) with Microsoft SMTP
- Server id 15.20.6588.22 via Frontend Transport; Wed, 12 Jul 2023 07:37:56
+ Server id 15.20.6588.22 via Frontend Transport; Wed, 12 Jul 2023 07:38:04
  +0000
 From:   Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To:     patrick@stwcx.xyz
-Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     patrick@stwcx.xyz, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         soc@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] Add Facebook Yosemite V4 (AST2600) BMC
-Date:   Wed, 12 Jul 2023 15:37:48 +0800
-Message-Id: <20230712073752.54624-1-Delphine_CC_Chiu@wiwynn.com>
+Subject: [PATCH v1 1/2] dt-bindings: arm: aspeed: add Facebook Yosemite V4 board
+Date:   Wed, 12 Jul 2023 15:37:49 +0800
+Message-Id: <20230712073752.54624-2-Delphine_CC_Chiu@wiwynn.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230712073752.54624-1-Delphine_CC_Chiu@wiwynn.com>
+References: <20230712073752.54624-1-Delphine_CC_Chiu@wiwynn.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF0000021C:EE_|SI2PR04MB4361:EE_
+X-MS-TrafficTypeDiagnostic: HK3PEPF0000021C:EE_|SEZPR04MB6705:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 180164b9-7601-463b-3721-08db82aae8e5
+X-MS-Office365-Filtering-Correlation-Id: e78bad10-1d8f-4b5f-ad3a-08db82aaee0b
 X-MS-Exchange-AtpMessageProperties: SA
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xcfe0E/ytnrx1tmOke7lyFj4ttEFElAge6z2wFQq2qOHYp+veSBAQEtBNZ4+f0jtmsuAFgoUi9BKYEZIav9D5jqJS1ornltTUPVBwK0w1xQ8xJI76lisC9OAr3ZxrD3rFuEB46q+02AEphYw5sU8cQ3b1amsLfBDEFF9psqASA75QEtsyBULb9/TfiUj829ucigHMQ5KM0Xv/AoJNATempKbPQOeFS8mYLmIMPx6ERcvfJ137EAV9gqCUFqvH7cIUATpBNrpKcJkzBSyq1h2LymvfusJG2dnoTsnDnI30kdy+jPS/NciG0I2esBggTKf6XfBTc1G+bzS2oY6W2nL/YJPF0wvtf6xvoqCXpuPPqzyXQUCvajBc52wFbgeoP0RU/JGKD+3xtqtqW8Ny0ABqfVlAc7w9o63ZKGPHjwhqxXV7bFLHpS68D8Te9BEcEpFQB4S1eCJKRHw0KOoe3Vk50GJUieNFMYr7WQ6s7yo61Mx7wIrNmMe8VL9rXq8FvjVakEF99yHRvWt1OBFGW9Moc0E+YuKFr8xxvGqwgWfTVKn6WHTZVXIx6Pzt5FRYWzD9XGKyfIW7xdpawSaL8BniDUs/lqeb00Yzu69PUkfF/6WVY+OvqKDPH9WVLflflncHysp0/jc7pwK9NA5V5qALb15RabR9N5rieRpLVfYHa1ooi8n8NrvGfXV5MptNETT+z4HDJKsfrtwVv/ALEe4qg==
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230028)(6069001)(4636009)(346002)(136003)(39860400002)(376002)(396003)(47680400002)(451199021)(46966006)(36840700001)(2906002)(82310400005)(81166007)(356005)(6512007)(82740400003)(336012)(47076005)(2616005)(956004)(186003)(26005)(1076003)(40480700001)(36860700001)(86362001)(6506007)(5660300002)(8936002)(8676002)(4744005)(36756003)(7416002)(54906003)(6666004)(6486002)(478600001)(41300700001)(9316004)(70206006)(316002)(70586007)(4326008)(36736006)(6916009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: bwV+vCtsfnCRKG3UqVlCy38H9rQz7DohdBls88DT7BgPduqvho+64KVb7NPEbTGFXivNhDHqlYmgf0IyGZBr1wA6raa+KaWgDcEWc25UH2PRaz0CcXQjDR5myk7Jo11xdKa+c+iNg65IhiiyMaygk45QErigzPchLozppoIdVN+EaNpV0f4fGqslnqqqCzYwVcnVO1rLFv803GoRr3bf4I709RdposDFsg76HB6jHtbPSuSrNagSiRulsSem+UolpgW7Va71RBMF9kwskCojCwJ4aFaLFkr2s6wiM6Bx5UYU7GJtPufkxwQWN4yePxsPkwEnN2YUTua1J+FTrrv6ko96sQNBoPZ6LibCZGN43Kyq6XJxEy4tjS2fiADOv5lWFTqVVoNW1dOZ0HeZDGxA/BTY46DbWfvziXOeUOpXg8emZ5VhLRPIr9NI5c7NGUvuNnIclDrcH296fE/6gRMQimP38AlJtBIL850gNancKrGPeHMd2/vJo+atxsUU7MvGuWpIv8e4/EvhkczQj0Fbsrj1sFg1xWXr7SieUDQfsJS0OrX6NbcViJjL72ZEuUOu3h4ZvzQzKHQgNxWSynTFoQXUUUI3cjFzzz+Ow2YfIl5v9Hi7Mb9Gcq7FOXgmI5eN4uQy1MwXKtE7gBsLIPJAwGFGJGKKbqJu+Ie9TlwmkHtA/snvTosRjFp9Rrkwrgb1++ggdydPwlIoHP471E2lwA==
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230028)(6069001)(4636009)(376002)(396003)(346002)(136003)(39860400002)(47680400002)(451199021)(46966006)(36840700001)(336012)(9316004)(186003)(40480700001)(2616005)(956004)(110136005)(81166007)(54906003)(82740400003)(356005)(5660300002)(8936002)(6666004)(6486002)(8676002)(86362001)(478600001)(316002)(36860700001)(41300700001)(36736006)(2906002)(4326008)(70586007)(70206006)(4744005)(7416002)(1076003)(6506007)(26005)(6512007)(36756003)(47076005)(82310400005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 07:37:56.3631
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 07:38:04.9726
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 180164b9-7601-463b-3721-08db82aae8e5
+X-MS-Exchange-CrossTenant-Network-Message-Id: e78bad10-1d8f-4b5f-ad3a-08db82aaee0b
 X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
 X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF0000021C.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR04MB4361
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB6705
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,18 +99,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 - Add Facebook Yosemite V4 (AST2600) BMC
+Document the new compatibles used on Facebook Yosemite V4.
 
-Delphine CC Chiu (2):
-  dt-bindings: arm: aspeed: add Facebook Yosemite V4 board
-  ARM: dts: aspeed: yosemitev4: add Facebook Yosemite V4 BMC
+Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+---
+ Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/arm/aspeed/aspeed.yaml           |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/aspeed-bmc-facebook-yosemitev4.dts    | 570 ++++++++++++++++++
- 3 files changed, 572 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev4.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+index e0eff4c05879..2ef6821e3648 100644
+--- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
++++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+@@ -79,6 +79,7 @@ properties:
+               - facebook,elbert-bmc
+               - facebook,fuji-bmc
+               - facebook,greatlakes-bmc
++              - facebook,yosemitev4-bmc
+               - ibm,everest-bmc
+               - ibm,rainier-bmc
+               - ibm,tacoma-bmc
 -- 
 2.25.1
 
