@@ -2,167 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D9A74FE32
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988E474FE35
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjGLEaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 00:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S231520AbjGLEbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjGLEan (ORCPT
+        with ESMTP id S231512AbjGLEa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 00:30:43 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDA71726;
-        Tue, 11 Jul 2023 21:30:42 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b698937f85so106449941fa.2;
-        Tue, 11 Jul 2023 21:30:42 -0700 (PDT)
+        Wed, 12 Jul 2023 00:30:58 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2344E1738
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:30:55 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-c5f98fc4237so6097721276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689136240; x=1691728240;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8FEG/oH6gh544Z3hupFRjyPw2jcIZbPPkJZIsg/itb0=;
-        b=mGbit/QZhR5zf5HHGqic70EOrefPwZyYsBYoUr1mMVgh5v7Qbr7zEhj2GoCeJqxgPl
-         Qb4UEyX5X059JCyQ6NJeoxIkqvMTZGePS8sW5CcPoELai4x+2XvU9jp1bDVpBMS/tEhO
-         gccopfMxyVSXXqXO59N+wtSmFooWumUnHOTtN/j/FvDtgRrXR49WRLrAweqEGUL94z3y
-         uK8KxwShzNK32Em0GlE51szEsnfNw+2pwMgeHP/zJteEJ3I45pKjDMMEiz8Zt1wKUKG9
-         fz6J/AyU2j3lsmJplI9gpp48fiB98Ib75zpyTMN1ldMyQ6MJBhjNk3hMfIfTJSQNM59t
-         fqpg==
+        d=google.com; s=20221208; t=1689136254; x=1691728254;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lih86tpYDD3J7zG12H/yvKEagSCLBGtcWN3xnGIcrQ8=;
+        b=RBETceKTxUIdE5Wthq5VyXl1iuewXFCZtvj7DAV2aR3XnxKua3oR4hmOqLeBfiK+Bo
+         QX5kHPh+nmkLT9qkicOsu2l1qxImFf+42zqUi71fI6EVfsz6Wd8j8qUrewGd84C27fQF
+         z08YkGvSrNifDm+H1bjPb9jqoZlNdzHFdJ/PGyx79rM0dM13MzFCo6oGzmwGF3H2DHxK
+         jhmvYEXUAQ46tN3PfeVxdIIezDCwRgqWW3fiTQ5gpTM5B8KutupuJmp6cYEM5cSz9f5W
+         fLAc5DNp+0Wj3x5T2KO5EPXVkVyBxsI6lOPcm2rzPIqTF2kKG/dKpgqnKRkoKETZyp95
+         sIwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689136240; x=1691728240;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8FEG/oH6gh544Z3hupFRjyPw2jcIZbPPkJZIsg/itb0=;
-        b=OFaB+mkRZL9atWqL9dysaTXXthj73ekkoJPIOfg0PAPMRiaLtHnrvHZLXhKVDQFQY4
-         GQSjc3Pzf62FltMmjQbuKhyiNdPA7lVHJP+7f+YUaoXWJJf9VeJZQtDM0ZesiRUqb+BY
-         NCmwAk/au4Suqf9X/AlkxNT71ZnqH15gFJEp6Z7FzgPqAl9qJv4jzatyBnV7shZQX/e7
-         2CG7d9yO7tlWrstd6bYQXrCvmRIDa0VhZr8NosoLqJ0c9SQtwa6wgX3/sEnxjy5oycbm
-         /G+Mhi05+fu9LvKilTbdfdVf+VvKHDNO79dvULEwCcN8ok5yMU0ptmiUls9B4Z1QCg9V
-         upqg==
-X-Gm-Message-State: ABy/qLbykYMjrL3WTwBDzl5/Yj0js6OK0U936DFFAlOaujGzRNwPtSEb
-        27xnqqv74bo6/uYsSkR54uUrelHGgoRu0O0cVcg=
-X-Google-Smtp-Source: APBJJlE40OEhJ2PYH91T4HIq5pcd6q70yeow9XhxzdrP/Z+spXJCkguhiExdfD1Jt8YBmYRMzz3wtEuVM4cmaQLivS8=
-X-Received: by 2002:a2e:99d4:0:b0:2b4:765b:f6ee with SMTP id
- l20-20020a2e99d4000000b002b4765bf6eemr14552766ljj.41.1689136240040; Tue, 11
- Jul 2023 21:30:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689136254; x=1691728254;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lih86tpYDD3J7zG12H/yvKEagSCLBGtcWN3xnGIcrQ8=;
+        b=NeFuw/BeqgLXk2rj3ylVoMMKapl2ydtKrMjd7jPlx4v5z4U5pFy00VXQmuEnXx0Wms
+         T/dhO6s5HKAwplALaIcaqQRa8LS6xK4Kmkwo+p528lJQalJKREhoki7bcLXuNhsUb366
+         ris59f/WCyCG1GXV4Uv/Hmv2/a/wfrJQKK9zEuJRlK7/D566zm1br23gtgOBEW6prdlT
+         igKVhfOHhVLAST5NJPbG0mHLwJA1QM2dklQCTp04LNfbJPoIMfH2yA5yHS2zCw28pbeN
+         BMHq1BnhURCX9UlRzXqvO4Aha3CFX75MUDiu5jNGuG+m5z+MnIWFgiLkE3HL047VGiC8
+         F0Hw==
+X-Gm-Message-State: ABy/qLYGJwVQB8H8XuuNXwx92go0mFkc/VLY2gi9Wn/zIohVLfi5OIR+
+        JjYaDryqMvp+TDuPf6/MliI6zQ==
+X-Google-Smtp-Source: APBJJlG+aqkZgSinL0H+vGhJ8SPTaMZTSfjnzUjRq5ezvCFkxr+RV56UV3ToUF/QNi8B1m8dggx9Pw==
+X-Received: by 2002:a25:8a06:0:b0:c3d:25af:45ec with SMTP id g6-20020a258a06000000b00c3d25af45ecmr14975706ybl.41.1689136254058;
+        Tue, 11 Jul 2023 21:30:54 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id b8-20020a252e48000000b00c61af359b15sm750774ybn.43.2023.07.11.21.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 21:30:53 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 21:30:40 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3 01/13] mm/pgtable: add rcu_read_lock() and
+ rcu_read_unlock()s
+In-Reply-To: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
+Message-ID: <d3b01da5-2a6-833c-6681-67a3e024a16f@google.com>
+References: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
 MIME-Version: 1.0
-References: <ZK3h3+dHBGONHt+S@work>
-In-Reply-To: <ZK3h3+dHBGONHt+S@work>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 11 Jul 2023 23:30:28 -0500
-Message-ID: <CAH2r5msw8i2Bx4NxWPWei6WGjusAHPSgm4s7c-haTtD+O9z4mQ@mail.gmail.com>
-Subject: Re: [PATCH] smb: client: Fix -Wstringop-overflow issues
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tentatively merged into cifs-2.6.git for-next pending testing
+Before putting them to use (several commits later), add rcu_read_lock()
+to pte_offset_map(), and rcu_read_unlock() to pte_unmap().  Make this a
+separate commit, since it risks exposing imbalances: prior commits have
+fixed all the known imbalances, but we may find some have been missed.
 
-On Tue, Jul 11, 2023 at 6:20=E2=80=AFPM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> pSMB->hdr.Protocol is an array of size 4 bytes, hence when the compiler
-> analyzes this line of code
->
->         parm_data =3D ((char *) &pSMB->hdr.Protocol) + offset;
->
-> it legitimately complains about the fact that offset points outside the
-> bounds of the array. Notice that the compiler gives priority to the objec=
-t
-> as an array, rather than merely the address of one more byte in a structu=
-re
-> to wich offset should be added (which seems to be the actual intention of
-> the original implementation).
->
-> Fix this by explicitly instructing the compiler to treat the code as a
-> sequence of bytes in struct smb_com_transaction2_spi_req, and not as an
-> array accessed through pointer notation.
->
-> Notice that ((char *)pSMB) + sizeof(pSMB->hdr.smb_buf_length) points to
-> the same address as ((char *) &pSMB->hdr.Protocol), therefore this result=
-s
-> in no differences in binary output.
->
-> Fixes the following -Wstringop-overflow warnings when built s390
-> architecture with defconfig (GCC 13):
->   CC [M]  fs/smb/client/cifssmb.o
-> In function 'cifs_init_ace',
->     inlined from 'posix_acl_to_cifs' at fs/smb/client/cifssmb.c:3046:3,
->     inlined from 'cifs_do_set_acl' at fs/smb/client/cifssmb.c:3191:15:
-> fs/smb/client/cifssmb.c:2987:31: warning: writing 1 byte into a region of=
- size 0 [-Wstringop-overflow=3D]
->  2987 |         cifs_ace->cifs_e_perm =3D local_ace->e_perm;
->       |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-> In file included from fs/smb/client/cifssmb.c:27:
-> fs/smb/client/cifspdu.h: In function 'cifs_do_set_acl':
-> fs/smb/client/cifspdu.h:384:14: note: at offset [7, 11] into destination =
-object 'Protocol' of size 4
->   384 |         __u8 Protocol[4];
->       |              ^~~~~~~~
-> In function 'cifs_init_ace',
->     inlined from 'posix_acl_to_cifs' at fs/smb/client/cifssmb.c:3046:3,
->     inlined from 'cifs_do_set_acl' at fs/smb/client/cifssmb.c:3191:15:
-> fs/smb/client/cifssmb.c:2988:30: warning: writing 1 byte into a region of=
- size 0 [-Wstringop-overflow=3D]
->  2988 |         cifs_ace->cifs_e_tag =3D  local_ace->e_tag;
->       |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-> fs/smb/client/cifspdu.h: In function 'cifs_do_set_acl':
-> fs/smb/client/cifspdu.h:384:14: note: at offset [6, 10] into destination =
-object 'Protocol' of size 4
->   384 |         __u8 Protocol[4];
->       |              ^~~~~~~~
->
-> This helps with the ongoing efforts to globally enable
-> -Wstringop-overflow.
->
-> Link: https://github.com/KSPP/linux/issues/310
-> Fixes: dc1af4c4b472 ("cifs: implement set acl method")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  fs/smb/client/cifssmb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
-> index 19f7385abeec..9dee267f1893 100644
-> --- a/fs/smb/client/cifssmb.c
-> +++ b/fs/smb/client/cifssmb.c
-> @@ -3184,7 +3184,7 @@ int cifs_do_set_acl(const unsigned int xid, struct =
-cifs_tcon *tcon,
->         param_offset =3D offsetof(struct smb_com_transaction2_spi_req,
->                                 InformationLevel) - 4;
->         offset =3D param_offset + params;
-> -       parm_data =3D ((char *) &pSMB->hdr.Protocol) + offset;
-> +       parm_data =3D ((char *)pSMB) + sizeof(pSMB->hdr.smb_buf_length) +=
- offset;
->         pSMB->ParameterOffset =3D cpu_to_le16(param_offset);
->
->         /* convert to on the wire format for POSIX ACL */
-> --
-> 2.34.1
->
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ include/linux/pgtable.h | 4 ++--
+ mm/pgtable-generic.c    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 5063b482e34f..5134edcec668 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -99,7 +99,7 @@ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
+ 	((pte_t *)kmap_local_page(pmd_page(*(pmd))) + pte_index((address)))
+ #define pte_unmap(pte)	do {	\
+ 	kunmap_local((pte));	\
+-	/* rcu_read_unlock() to be added later */	\
++	rcu_read_unlock();	\
+ } while (0)
+ #else
+ static inline pte_t *__pte_map(pmd_t *pmd, unsigned long address)
+@@ -108,7 +108,7 @@ static inline pte_t *__pte_map(pmd_t *pmd, unsigned long address)
+ }
+ static inline void pte_unmap(pte_t *pte)
+ {
+-	/* rcu_read_unlock() to be added later */
++	rcu_read_unlock();
+ }
+ #endif
+ 
+diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+index 4d454953046f..400e5a045848 100644
+--- a/mm/pgtable-generic.c
++++ b/mm/pgtable-generic.c
+@@ -236,7 +236,7 @@ pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+ {
+ 	pmd_t pmdval;
+ 
+-	/* rcu_read_lock() to be added later */
++	rcu_read_lock();
+ 	pmdval = pmdp_get_lockless(pmd);
+ 	if (pmdvalp)
+ 		*pmdvalp = pmdval;
+@@ -250,7 +250,7 @@ pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+ 	}
+ 	return __pte_map(&pmdval, addr);
+ nomap:
+-	/* rcu_read_unlock() to be added later */
++	rcu_read_unlock();
+ 	return NULL;
+ }
+ 
+-- 
+2.35.3
 
---=20
-Thanks,
-
-Steve
