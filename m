@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A8E750B11
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57F3750B12
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbjGLObP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S233013AbjGLObb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbjGLObJ (ORCPT
+        with ESMTP id S233163AbjGLObZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:31:09 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43B01FCE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:31:03 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36CEUfoY100560;
-        Wed, 12 Jul 2023 09:30:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1689172241;
-        bh=TiLqi4neIdvMeEx8Ey6rTDMm0EpgMumbzJlmjzZnhwg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=j4C3mfTmX8qUzHGtNgo/ymBZyr6iSoVYDcw/xkb/7dJ8mdrZboq4vYk4a/otIPQdj
-         Lnkjr/O1P4wpi1eqCm7SA9/ps6gK8JlacJIdbpAxfiQtnr08icCw9fUqwZL7y1HBUQ
-         c/XK+9XCsF1wLUYi1HLQG/+k/Z7piKMmCWaDJBT4=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36CEUf9Z027673
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 12 Jul 2023 09:30:41 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
- Jul 2023 09:30:41 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 12 Jul 2023 09:30:41 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36CEUeKD091182;
-        Wed, 12 Jul 2023 09:30:40 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     Francesco Dolcini <francesco@dolcini.it>,
-        Wadim Egorov <w.egorov@phytec.de>, <vigneshr@ti.com>,
-        <d-gole@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH V2] firmware: ti_sci: Use system_state to determine polling
-Date:   Wed, 12 Jul 2023 09:30:40 -0500
-Message-ID: <168917222090.2072307.1618544954491297567.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230620130329.4120443-1-nm@ti.com>
-References: <20230620130329.4120443-1-nm@ti.com>
+        Wed, 12 Jul 2023 10:31:25 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D60519A3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:31:22 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CEI4gM029482;
+        Wed, 12 Jul 2023 14:31:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=0qN++vhps9D5skRw+Cc5as9g/U/Qqcn/uH+KXdz/GVQ=;
+ b=nIkV2VNC1mW4CJwNQMwuQnKK1J94whQsfeKo9MPbKqrXy3gXr/BR1+3sFweDlyf8AcsA
+ OBPYZeFUUd72h0VknC1r9SsY5LhP4NFhH8UzTnq0J8E98Ef125/+lM84KZ2pAcBnmOu9
+ 5Ui6U6YPdgGEe7lynKCfD5J+5apPp/OLZ3AzOYTDk9IBDyao39FGH1fXM94nUXKHEKMd
+ cBaNP+yEB9fFzTzVOUrvRu6DI/l6ETZpaXp6khyLhC9ZmNiLlVxKQosx6nykxLarrfRZ
+ kY7tIIApuHOKhj2A5CVPgLb9HkuLMxA+RQSBMeGIqg+/ceHkB7/7E5+zT/Age5n/HGMZ ow== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rswp4rttp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 14:31:20 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36CD4aBQ022897;
+        Wed, 12 Jul 2023 14:31:18 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3rpye51xw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 14:31:18 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36CEVFdL65077622
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jul 2023 14:31:15 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C3BEF20043;
+        Wed, 12 Jul 2023 14:31:15 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A6FFA20040;
+        Wed, 12 Jul 2023 14:31:15 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 12 Jul 2023 14:31:15 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org
+Subject: Re: [PATCH] tracing: fix memcpy size when copying stack entries
+References: <20230612160748.4082850-1-svens@linux.ibm.com>
+        <20230612123407.5ebcabdf@gandalf.local.home>
+        <yt9dy1koey7h.fsf@linux.ibm.com>
+        <20230613113737.1e07c892@gandalf.local.home>
+        <yt9dttva8gxt.fsf@linux.ibm.com> <yt9dilap442k.fsf@linux.ibm.com>
+        <20230712101434.4613b3ec@gandalf.local.home>
+Date:   Wed, 12 Jul 2023 16:31:15 +0200
+In-Reply-To: <20230712101434.4613b3ec@gandalf.local.home> (Steven Rostedt's
+        message of "Wed, 12 Jul 2023 10:14:34 -0400")
+Message-ID: <yt9d1qhdfbgs.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8ZT9y_7ALEkLt0YNj7x2bVMUVm73bxzI
+X-Proofpoint-GUID: 8ZT9y_7ALEkLt0YNj7x2bVMUVm73bxzI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_09,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
+Hi Steven,
 
-On Tue, 20 Jun 2023 08:03:29 -0500, Nishanth Menon wrote:
-> Commit b9e8a7d950ff ("firmware: ti_sci: Switch transport to polled
-> mode during system suspend") aims to resolve issues with tisci
-> operations during system suspend operation. However, the system may
-> enter a no_irq stage in various other usage modes, including power-off
-> and restart. To determine if polling mode is appropriate, use the
-> system_state instead.
-> 
-> [...]
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+> On Wed, 12 Jul 2023 16:06:27 +0200
+> Sven Schnelle <svens@linux.ibm.com> wrote:
+>
+>> > No, still getting the same warning:
+>> >
+>> > [    2.302776] memcpy: detected field-spanning write (size 104) of single field "stack" at kernel/trace/trace.c:3178 (size 64)  
+>> 
+>> BTW, i'm seeing the same error on x86 with current master when
+>> CONFIG_FORTIFY_SOURCE=y and CONFIG_SCHED_TRACER=y:
+>
+> As I don't know how the fortifier works, nor what exactly it is checking,
+> do you have any idea on how to quiet it?
+>
+> This is a false positive, as I described before.
 
-[1/1] firmware: ti_sci: Use system_state to determine polling
-      commit: 9225bcdedf16297a346082e7d23b0e8434aa98ed
+The "problem" is that struct stack_entry is
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+struct stack_entry {
+       int size;
+       unsigned long caller[8];
+};
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+So, as you explained, the ringbuffer code allocates some space after the
+struct for additional entries:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+struct stack_entry 1;
+<additional space for 1>
+struct stack_entry 2;
+<additional space for 2>
+...
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+But the struct member that is passed to memcpy still has the type
+information 'caller is an array with 8 members of 8 bytes', so memcpy
+fortify complains. I'm not sure whether we can blame the compiler or
+the fortify code here.
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+One (ugly and whitespace damaged) workaround is:
 
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 35b11f5a9519..31acd8a6b97e 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3170,7 +3170,8 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
+                goto out;
+        entry = ring_buffer_event_data(event);
+ 
+-       memcpy(&entry->caller, fstack->calls, size);
++       void *p = entry + offsetof(struct stack_entry, caller);
++       memcpy(p, fstack->calls, size);
+        entry->size = nr_entries;
+ 
+        if (!call_filter_check_discard(call, entry, buffer, event))
+
+
+So with that offsetof calculation the compiler doesn't know about the 8
+entries * 8 bytes limitation. Adding Kees to the thread, maybe he knows
+some way.
