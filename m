@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4E57509A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5642F7509AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbjGLNez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S232279AbjGLNe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjGLNey (ORCPT
+        with ESMTP id S229649AbjGLNey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Jul 2023 09:34:54 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E48A19A6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5934C199D
         for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1689168843;
@@ -21,23 +21,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VYppUyZNyU3xBWqK0PQPx+kzMBZVFwAxWyQZb36l+P0=;
-        b=C1ypnuuFSEXJww2N3SLoiES1UfD2U0eTQbuguoH6j4GIygxjktBR0eCl2/rhOg084Ccj9u
-        pr4Ve7L7GmOo2/cAC3oxWb43pDUGkXOl/vsLlsI/x72qQxh2IlUwajc7FW7l1xWU4cRYQJ
-        uncrjChhESlkfMLqBkGdbQofhUDHC0A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-7eoBJSkGNha3kaBHlgn_-w-1; Wed, 12 Jul 2023 09:33:59 -0400
-X-MC-Unique: 7eoBJSkGNha3kaBHlgn_-w-1
+        bh=Q2nZ5rRt9244MezOOcT292ogqJXieJ4Es/ws7Hk9x3Q=;
+        b=VBLcMKsbo5HhY5mqWDHWRVCppmMZF5VSHhVE0IZPbiVgz2KmD8QQRNEsIfyaLeVdJ8FGpA
+        5iXiOdeiWWo0bkVxHNNeiQPaWshlQPtZdRznG/d60Az9Z4aHnnQ6RG7hXbCU3QKR3QDroS
+        olPMUkuNLZiUuOumrw4PF9xBPqFQv+E=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-516-kyVCJTC0O6GznBhmYemy5w-1; Wed, 12 Jul 2023 09:34:00 -0400
+X-MC-Unique: kyVCJTC0O6GznBhmYemy5w-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2085F88D0F7;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B6F43C13514;
         Wed, 12 Jul 2023 13:33:59 +0000 (UTC)
 Received: from pauld.bos.com (dhcp-17-165.bos.redhat.com [10.18.17.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B14AAF66D1;
-        Wed, 12 Jul 2023 13:33:58 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28E5AF66D0;
+        Wed, 12 Jul 2023 13:33:59 +0000 (UTC)
 From:   Phil Auld <pauld@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
@@ -51,9 +51,9 @@ Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
         Mel Gorman <mgorman@suse.de>,
         Frederic Weisbecker <frederic@kernel.org>,
         Tejun Heo <tj@kernel.org>, Phil Auld <pauld@redhat.com>
-Subject: [PATCH v2 1/2] sched, cgroup: Restore meaning to hierarchical_quota
-Date:   Wed, 12 Jul 2023 09:33:56 -0400
-Message-Id: <20230712133357.381137-2-pauld@redhat.com>
+Subject: [PATCH v6 2/2] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
+Date:   Wed, 12 Jul 2023 09:33:57 -0400
+Message-Id: <20230712133357.381137-3-pauld@redhat.com>
 In-Reply-To: <20230712133357.381137-1-pauld@redhat.com>
 References: <20230712133357.381137-1-pauld@redhat.com>
 MIME-Version: 1.0
@@ -70,22 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cgroupv2 cfs_b->hierarchical_quota is set to -1 for all task
-groups due to the previous fix simply taking the min.  It should
-reflect a limit imposed at that level or by an ancestor. Even
-though cgroupv2 does not require child quota to be less than or
-equal to that of its ancestors the task group will still be
-constrained by such a quota so this should be shown here. Cgroupv1
-continues to set this correctly.
+CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+can easily run well past their quotas before a remote tick does
+accounting.  This leads to long, multi-period stalls before such
+tasks can run again. Currently, when presented with these conflicting
+requirements the scheduler is favoring nohz_full and letting the tick
+be stopped. However, nohz tick stopping is already best-effort, there
+are a number of conditions that can prevent it, whereas cfs runtime
+bandwidth is expected to be enforced.
 
-In both cases, add initialization when a new task group is created
-based on the current parent's value (or RUNTIME_INF in the case of
-root_task_group). Otherwise, the field is wrong until a quota is
-changed after creation and __cfs_schedulable() is called.
+Make the scheduler favor bandwidth over stopping the tick by setting
+TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+runtime limit enabled. We use cfs_b->hierarchical_quota to
+determine if the task requires the tick.
 
-Fixes: c53593e5cb69 ("sched, cgroup: Don't reject lower cpu.max on ancestors")
+Add check in pick_next_task_fair() as well since that is where
+we have a handle on the task that is actually going to be running.
+
+Add check in sched_can_stop_tick() to cover some edge cases such
+as nr_running going from 2->1 and the 1 remains the running task.
+
+Add sched_feat HZ_BW (off by default) to control the tick_stop
+behavior.
+
 Signed-off-by: Phil Auld <pauld@redhat.com>
-Reviewed-by: Ben Segall <bsegall@google.com>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Vincent Guittot <vincent.guittot@linaro.org>
@@ -94,101 +102,174 @@ Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc: Valentin Schneider <vschneid@redhat.com>
 Cc: Ben Segall <bsegall@google.com>
 Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>
 ---
+v6: restore check for fair_sched_class
 
-v2: Improve comment about how setting hierarchical_quota correctly
+v5: Reworked checks to use newly-fixed cfs_b->hierarchical_quota to
+check for bw
+constraints. 
 
-helps the scheduler. Remove extra parens.
- kernel/sched/core.c  | 13 +++++++++----
- kernel/sched/fair.c  |  7 ++++---
- kernel/sched/sched.h |  2 +-
- 3 files changed, 14 insertions(+), 8 deletions(-)
+v4: Made checks for runtime_enabled hierarchical. 
+
+v3: Moved sched_cfs_bandwidth_active() prototype to sched.h outside of
+guards to
+silence -Wmissing-prototypes.
+
+v2:  Ben pointed out that the bit could get cleared in the dequeue path
+if we migrate a newly enqueued task without preempting curr. Added a
+check for that edge case to sched_can_stop_tick. Removed the call to
+sched_can_stop_tick from sched_fair_update_stop_tick since it was
+redundant.
+
+ kernel/sched/core.c     | 26 ++++++++++++++++++++++
+ kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
+ kernel/sched/features.h |  2 ++
+ kernel/sched/sched.h    |  1 +
+ 4 files changed, 78 insertions(+)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a68d1276bab0..f80697a79baf 100644
+index f80697a79baf..8a2ed4c0b709 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -9904,7 +9904,7 @@ void __init sched_init(void)
- 		ptr += nr_cpu_ids * sizeof(void **);
+@@ -1194,6 +1194,20 @@ static void nohz_csd_func(void *info)
+ #endif /* CONFIG_NO_HZ_COMMON */
  
- 		root_task_group.shares = ROOT_TASK_GROUP_LOAD;
--		init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
-+		init_cfs_bandwidth(&root_task_group.cfs_bandwidth, NULL);
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- #ifdef CONFIG_RT_GROUP_SCHED
- 		root_task_group.rt_se = (struct sched_rt_entity **)ptr;
-@@ -11038,11 +11038,16 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
+ #ifdef CONFIG_NO_HZ_FULL
++static inline bool __need_bw_check(struct rq *rq, struct task_struct *p)
++{
++	if (rq->nr_running != 1)
++		return false;
++
++	if (p->sched_class != &fair_sched_class)
++		return false;
++
++	if (!task_on_rq_queued(p))
++		return false;
++
++	return true;
++}
++
+ bool sched_can_stop_tick(struct rq *rq)
+ {
+ 	int fifo_nr_running;
+@@ -1229,6 +1243,18 @@ bool sched_can_stop_tick(struct rq *rq)
+ 	if (rq->nr_running > 1)
+ 		return false;
  
- 		/*
- 		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
--		 * always take the min.  On cgroup1, only inherit when no
--		 * limit is set:
-+		 * always take the non-RUNTIME_INF min.  On cgroup1, only
-+		 * inherit when no limit is set. In cgroup2 this is used
-+		 * by the scheduler to determine if a given CFS task has a
-+		 * bandwidth constraint at some higher level.
- 		 */
- 		if (cgroup_subsys_on_dfl(cpu_cgrp_subsys)) {
--			quota = min(quota, parent_quota);
-+			if (quota == RUNTIME_INF)
-+				quota = parent_quota;
-+			else if (parent_quota != RUNTIME_INF)
-+				quota = min(quota, parent_quota);
- 		} else {
- 			if (quota == RUNTIME_INF)
- 				quota = parent_quota;
++	/*
++	 * If there is one task and it has CFS runtime bandwidth constraints
++	 * and it's on the cpu now we don't want to stop the tick.
++	 * This check prevents clearing the bit if a newly enqueued task here is
++	 * dequeued by migrating while the constrained task continues to run.
++	 * E.g. going from 2->1 without going through pick_next_task().
++	 */
++	if (sched_feat(HZ_BW) && __need_bw_check(rq, rq->curr)) {
++		if (cfs_task_bw_constrained(rq->curr))
++			return false;
++	}
++
+ 	return true;
+ }
+ #endif /* CONFIG_NO_HZ_FULL */
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..d9b3d4617e16 100644
+index d9b3d4617e16..acd9f317aad1 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6005,13 +6005,14 @@ static enum hrtimer_restart sched_cfs_period_timer(struct hrtimer *timer)
- 	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
+@@ -6140,6 +6140,46 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+ 	rcu_read_unlock();
  }
  
--void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
-+void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent)
- {
- 	raw_spin_lock_init(&cfs_b->lock);
- 	cfs_b->runtime = 0;
- 	cfs_b->quota = RUNTIME_INF;
- 	cfs_b->period = ns_to_ktime(default_cfs_period());
- 	cfs_b->burst = 0;
-+	cfs_b->hierarchical_quota = parent ? parent->hierarchical_quota : RUNTIME_INF;
++bool cfs_task_bw_constrained(struct task_struct *p)
++{
++	struct cfs_rq *cfs_rq = task_cfs_rq(p);
++
++	if (!cfs_bandwidth_used())
++		return false;
++
++	if (cfs_rq->runtime_enabled ||
++	    tg_cfs_bandwidth(cfs_rq->tg)->hierarchical_quota != RUNTIME_INF)
++		return true;
++
++	return false;
++}
++
++#ifdef CONFIG_NO_HZ_FULL
++/* called from pick_next_task_fair() */
++static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
++{
++	int cpu = cpu_of(rq);
++
++	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
++		return;
++
++	if (!tick_nohz_full_cpu(cpu))
++		return;
++
++	if (rq->nr_running != 1)
++		return;
++
++	/*
++	 *  We know there is only one task runnable and we've just picked it. The
++	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
++	 *  be otherwise able to stop the tick. Just need to check if we are using
++	 *  bandwidth control.
++	 */
++	if (cfs_task_bw_constrained(p))
++		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
++}
++#endif
++
+ #else /* CONFIG_CFS_BANDWIDTH */
  
- 	INIT_LIST_HEAD(&cfs_b->throttled_cfs_rq);
- 	hrtimer_init(&cfs_b->period_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
-@@ -6168,7 +6169,7 @@ static inline int throttled_lb_pair(struct task_group *tg,
- 	return 0;
- }
+ static inline bool cfs_bandwidth_used(void)
+@@ -6182,9 +6222,17 @@ static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+ static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+ static inline void update_runtime_enabled(struct rq *rq) {}
+ static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
++bool cfs_task_bw_constrained(struct task_struct *p)
++{
++	return false;
++}
  
--void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-+void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent) {}
+ #endif /* CONFIG_CFS_BANDWIDTH */
  
- #ifdef CONFIG_FAIR_GROUP_SCHED
- static void init_cfs_rq_runtime(struct cfs_rq *cfs_rq) {}
-@@ -12373,7 +12374,7 @@ int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
++#if !defined(CONFIG_CFS_BANDWIDTH) || !defined(CONFIG_NO_HZ_FULL)
++static inline void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p) {}
++#endif
++
+ /**************************************************
+  * CFS operations on tasks:
+  */
+@@ -8098,6 +8146,7 @@ done: __maybe_unused;
+ 		hrtick_start_fair(rq, p);
  
- 	tg->shares = NICE_0_LOAD;
+ 	update_misfit_status(p, rq);
++	sched_fair_update_stop_tick(rq, p);
  
--	init_cfs_bandwidth(tg_cfs_bandwidth(tg));
-+	init_cfs_bandwidth(tg_cfs_bandwidth(tg), tg_cfs_bandwidth(parent));
+ 	return p;
  
- 	for_each_possible_cpu(i) {
- 		cfs_rq = kzalloc_node(sizeof(struct cfs_rq),
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c76bd3..6fdf1fdf6b17 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -101,3 +101,5 @@ SCHED_FEAT(LATENCY_WARN, false)
+ 
+ SCHED_FEAT(ALT_PERIOD, true)
+ SCHED_FEAT(BASE_SLICE, true)
++
++SCHED_FEAT(HZ_BW, false)
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ec7b3e0a2b20..63822c9238cc 100644
+index 63822c9238cc..d6d346bc78aa 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -460,7 +460,7 @@ extern void unregister_fair_sched_group(struct task_group *tg);
- extern void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
- 			struct sched_entity *se, int cpu,
- 			struct sched_entity *parent);
--extern void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b);
-+extern void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent);
- 
+@@ -465,6 +465,7 @@ extern void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth
  extern void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b);
  extern void start_cfs_bandwidth(struct cfs_bandwidth *cfs_b);
+ extern void unthrottle_cfs_rq(struct cfs_rq *cfs_rq);
++extern bool cfs_task_bw_constrained(struct task_struct *p);
+ 
+ extern void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,
+ 		struct sched_rt_entity *rt_se, int cpu,
 -- 
 2.31.1
 
