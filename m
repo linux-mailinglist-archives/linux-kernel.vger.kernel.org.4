@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7125774FFDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A437874FFDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjGLHFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S231924AbjGLHFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbjGLHFE (ORCPT
+        with ESMTP id S230241AbjGLHFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:05:04 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20626B1;
-        Wed, 12 Jul 2023 00:05:01 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id C9A2081A;
-        Wed, 12 Jul 2023 09:04:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1689145496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C9iTjSBQ2cpJHR0/fytksLWYvIlt9SMZkZq0e9WtOSg=;
-        b=vmi5gQZlxACiaeV0fWn2byFIQWIzZn2z/GpeBZChBrd+vzpmczq1+qYJ/8Ftm/xi5Aj13G
-        8Y23dxmxM6RyGnDCAZC4XyUeRr1X6GHXWe8Hcn/4Oa5R2wBwz1PGRPdz4hgqXDGviTxSoZ
-        C2GfLvpIlVxAe2Owj0/5cPSrgZyp4qWQ75iw6XoYePUGgGH6TUFHUl2iQ64VyyNnfdxx2R
-        xo7ksN3xbUpriRIdg7tMWg1rNahN9X3VBYATJwNXxtSZSQkQoHcrxwo5b/9xRaNE8HZaP8
-        N33ETMJThiD3AafqpHWV7wzIi3y2HvsHU+pXlsD8pM0UORn9sA+/8I4L7HnIQQ==
+        Wed, 12 Jul 2023 03:05:52 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8E2136
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1689145550; x=1720681550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0h/r3Ic5J67vhkzH+wtbnxSNtw8GW9VDflyBgQaHVzk=;
+  b=z5Y/OPq6L1DlMPLJeBbdngnqY/LPVTEjQd40123JAjMqAa6QCQHW7v4c
+   m9WrV0iHFFXw27Pc5KX9e95dkbl5e3VGwlQYDGMxr3v8AJaI6Gs+M9Mp8
+   Tm+w2F1iysCvIYEoKBUxtDyipvBlLOfbSB+2tKvCTxGvy8pk9AY8k5sZQ
+   /OZLfoiN4EgGW4BS7auSRkX/4aWxH3yPmR9e8EBSUo8gVjSTpKEARNc1C
+   iRiYHHSo2A1irmjZCaV9uUaxtGgg/LL4Ad2fxl4y/gTQoiJAt0gREuigJ
+   yCqDgzbzNPGWD0YoHcAagMgGBIszuuH3DVq5Fir366nXRTsVdlMzvr1i2
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="asc'?scan'208";a="222552791"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 00:05:49 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 12 Jul 2023 00:05:49 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 12 Jul 2023 00:05:48 -0700
+Date:   Wed, 12 Jul 2023 08:05:16 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrea Parri <parri.andrea@gmail.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] riscv,mmio: Use the generic implementation for the
+ I/O accesses
+Message-ID: <20230712-lesser-deflector-d18f7991477b@wendy>
+References: <20230711133348.151383-1-parri.andrea@gmail.com>
+ <20230711133348.151383-3-parri.andrea@gmail.com>
 MIME-Version: 1.0
-Date:   Wed, 12 Jul 2023 09:04:56 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] mtd: spi-nor: Correct flags for Winbond w25q128
-In-Reply-To: <20230712-spi-nor-winbond-w25q128-v1-1-f78f3bb42a1c@linaro.org>
-References: <20230712-spi-nor-winbond-w25q128-v1-1-f78f3bb42a1c@linaro.org>
-Message-ID: <46d0846850df455901cf3d11c66c5a90@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lbqRmB5GpIRDGyZA"
+Content-Disposition: inline
+In-Reply-To: <20230711133348.151383-3-parri.andrea@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,96 +70,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--lbqRmB5GpIRDGyZA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Am 2023-07-12 00:02, schrieb Linus Walleij:
-> The Winbond W25Q128 (actual vendor name W25Q128JV)
+On Tue, Jul 11, 2023 at 03:33:48PM +0200, Andrea Parri wrote:
+> The current implementation of readX(), writeX() and their "relaxed"
+> variants, readX_relaxed() and writeX_relaxed(), matches the generic
+> implementation; remove the redundant code.
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
 
-Not necessarily see below. Do you know what part numbers is
-written on your flash?
+This fails to build for (64-bit, I didn't check 32-bit) nommu:
+arch/riscv/include/asm/timex.h:20:16: error: implicit declaration of functi=
+on 'readq_relaxed' [-Werror=3Dimplicit-function-declaration]
+include/asm-generic/io.h:342:23: error: conflicting types for 'readq_relaxe=
+d'; have 'u64(const volatile void *)' {aka 'long long unsigned int(const vo=
+latile void *)'}
 
-> has exactly the same flags as the sibling device
-> w25q128fw. The devices both require unlocking and
-> support dual and quad SPI transport.
-> 
-> The actual product naming between devices:
-> 
-> 0xef4018: "w25q128"   W25Q128JV-IM/JM
-> 0xef7018: "w25q128fw" W25Q128JV-IN/IQ/JQ
+Cheers,
+Conor.
 
-Where do you get that string? from winbond.c? Because,
-then it's incorrect. For 0xef7018 its actually w25q128jv.
-
-But that being said, Winbond is known to reuse the IDs among its
-flashes. From a quick look at various datasheets:
-
-0x60 seems to be DW, FW and NW(Q) series
-0x70 seems to be JV(M)
-0x80 seems to be NW(M)
-0x40 seems to be BV, JV(Q), "V" (probably the first [1])
-
-(Q) denotes the fixed quad enable bit.
-
-Now 0x40 are the first ones who where added back in the days. I'm
-not sure, what kind of winbond devices there were and if they
-support dual/quad read.
-
-Normally, you'd use a .fixups (see w25q256_fixups for example) to
-dynamically detect the newer flash type and then refine the flags.
-But because we don't know how the older flashes look like, that
-would be just guessing :/ Although, I've once thought about
-fingerprinting the SFDP tables eg. by some hash. But that would
-assume the SFDP data is not changing a lot on a given device. Not
-sure if that is the case, we just began to collect SFDP tables
-of various devices.
-
-If it turns out that only SPI_NOR_HAS_LOCK and SPI_NOR_HAS_TB
-is needed, I'm leaning towards just adding these flags to the
-w25q128 entry. According to [1] this was already supported
-back in the days.
-
-> The latter device, "w25q128fw" supports features
-> named DTQ and QPI, otherwise it is the same.
-> 
-> Not having the right flags has the annoying side
-> effect that write access does not work.
-
-This should only apply to FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB).
-
-I'd guess your flash supports SFDP, then the NO_SFDP_FLAGS should be
-automatically detected. Could you please dump the SFDP tables
-(described in [2])?
-
-> After this patch I can write to the flash on the
-> Inteno XG6846 router.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->  drivers/mtd/spi-nor/winbond.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/winbond.c 
-> b/drivers/mtd/spi-nor/winbond.c
-> index 834d6ba5ce70..a67e1d4206f3 100644
-> --- a/drivers/mtd/spi-nor/winbond.c
-> +++ b/drivers/mtd/spi-nor/winbond.c
-> @@ -121,7 +121,9 @@ static const struct flash_info winbond_nor_parts[] 
-> = {
->  	{ "w25q80bl", INFO(0xef4014, 0, 64 * 1024,  16)
->  		NO_SFDP_FLAGS(SECT_4K) },
->  	{ "w25q128", INFO(0xef4018, 0, 64 * 1024, 256)
-> -		NO_SFDP_FLAGS(SECT_4K) },
-> +		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
-> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-> +			      SPI_NOR_QUAD_READ) },
+>  arch/riscv/include/asm/mmio.h | 68 ++++-------------------------------
+>  1 file changed, 6 insertions(+), 62 deletions(-)
+>=20
+> diff --git a/arch/riscv/include/asm/mmio.h b/arch/riscv/include/asm/mmio.h
+> index 4c58ee7f95ecf..116b898fe969d 100644
+> --- a/arch/riscv/include/asm/mmio.h
+> +++ b/arch/riscv/include/asm/mmio.h
+> @@ -80,72 +80,16 @@ static inline u64 __raw_readq(const volatile void __i=
+omem *addr)
+>  #endif
+> =20
+>  /*
+> - * Unordered I/O memory access primitives.  These are even more relaxed =
+than
+> - * the relaxed versions, as they don't even order accesses between succe=
+ssive
+> - * operations to the I/O regions.
+> - */
+> -#define readb_cpu(c)		({ u8  __r =3D __raw_readb(c); __r; })
+> -#define readw_cpu(c)		({ u16 __r =3D le16_to_cpu((__force __le16)__raw_r=
+eadw(c)); __r; })
+> -#define readl_cpu(c)		({ u32 __r =3D le32_to_cpu((__force __le32)__raw_r=
+eadl(c)); __r; })
+> -
+> -#define writeb_cpu(v, c)	((void)__raw_writeb((v), (c)))
+> -#define writew_cpu(v, c)	((void)__raw_writew((__force u16)cpu_to_le16(v)=
+, (c)))
+> -#define writel_cpu(v, c)	((void)__raw_writel((__force u32)cpu_to_le32(v)=
+, (c)))
+> -
+> -#ifdef CONFIG_64BIT
+> -#define readq_cpu(c)		({ u64 __r =3D le64_to_cpu((__force __le64)__raw_r=
+eadq(c)); __r; })
+> -#define writeq_cpu(v, c)	((void)__raw_writeq((__force u64)cpu_to_le64(v)=
+, (c)))
+> -#endif
+> -
+> -/*
+> - * Relaxed I/O memory access primitives. These follow the Device memory
+> - * ordering rules but do not guarantee any ordering relative to Normal m=
+emory
+> - * accesses.  These are defined to order the indicated access (either a =
+read or
+> - * write) with all other I/O memory accesses to the same peripheral. Sin=
+ce the
+> - * platform specification defines that all I/O regions are strongly orde=
+red on
+> - * channel 0, no explicit fences are required to enforce this ordering.
+> - */
+> -/* FIXME: These are now the same as asm-generic */
+> -#define __io_rbr()		do {} while (0)
+> -#define __io_rar()		do {} while (0)
+> -#define __io_rbw()		do {} while (0)
+> -#define __io_raw()		do {} while (0)
+> -
+> -#define readb_relaxed(c)	({ u8  __v; __io_rbr(); __v =3D readb_cpu(c); _=
+_io_rar(); __v; })
+> -#define readw_relaxed(c)	({ u16 __v; __io_rbr(); __v =3D readw_cpu(c); _=
+_io_rar(); __v; })
+> -#define readl_relaxed(c)	({ u32 __v; __io_rbr(); __v =3D readl_cpu(c); _=
+_io_rar(); __v; })
+> -
+> -#define writeb_relaxed(v, c)	({ __io_rbw(); writeb_cpu((v), (c)); __io_r=
+aw(); })
+> -#define writew_relaxed(v, c)	({ __io_rbw(); writew_cpu((v), (c)); __io_r=
+aw(); })
+> -#define writel_relaxed(v, c)	({ __io_rbw(); writel_cpu((v), (c)); __io_r=
+aw(); })
+> -
+> -#ifdef CONFIG_64BIT
+> -#define readq_relaxed(c)	({ u64 __v; __io_rbr(); __v =3D readq_cpu(c); _=
+_io_rar(); __v; })
+> -#define writeq_relaxed(v, c)	({ __io_rbw(); writeq_cpu((v), (c)); __io_r=
+aw(); })
+> -#endif
+> -
+> -/*
+> - * I/O memory access primitives.  Reads are ordered relative to any foll=
+owing
+> - * Normal memory read and delay() loop.  Writes are ordered relative to =
+any
+> - * prior Normal memory write.  The memory barriers here are necessary as=
+ RISC-V
+> - * doesn't define any ordering between the memory space and the I/O spac=
+e.
+> + * I/O barriers
+> + *
+> + * See Documentation/memory-barriers.txt, "Kernel I/O barrier effects".
+> + *
+> + * Assume that each I/O region is strongly ordered on channel 0, followi=
+ng the
+> + * RISC-V Platform Specification, "OS-A Common Requirements".
+>   */
+>  #define __io_br()	do {} while (0)
+>  #define __io_ar(v)	({ __asm__ __volatile__ ("fence i,ir" : : : "memory")=
+; })
+>  #define __io_bw()	({ __asm__ __volatile__ ("fence w,o" : : : "memory"); =
+})
+>  #define __io_aw()	mmiowb_set_pending()
+> =20
+> -#define readb(c)	({ u8  __v; __io_br(); __v =3D readb_cpu(c); __io_ar(__=
+v); __v; })
+> -#define readw(c)	({ u16 __v; __io_br(); __v =3D readw_cpu(c); __io_ar(__=
+v); __v; })
+> -#define readl(c)	({ u32 __v; __io_br(); __v =3D readl_cpu(c); __io_ar(__=
+v); __v; })
+> -
+> -#define writeb(v, c)	({ __io_bw(); writeb_cpu((v), (c)); __io_aw(); })
+> -#define writew(v, c)	({ __io_bw(); writew_cpu((v), (c)); __io_aw(); })
+> -#define writel(v, c)	({ __io_bw(); writel_cpu((v), (c)); __io_aw(); })
+> -
+> -#ifdef CONFIG_64BIT
+> -#define readq(c)	({ u64 __v; __io_br(); __v =3D readq_cpu(c); __io_ar(__=
+v); __v; })
+> -#define writeq(v, c)	({ __io_bw(); writeq_cpu((v), (c)); __io_aw(); })
+> -#endif
+> -
+>  #endif /* _ASM_RISCV_MMIO_H */
+> --=20
+> 2.34.1
+>=20
 
-As mentioned above, could you try without the DUAL_READ/QUAD_READ flags.
-You can have a look at the debugfs whether the detected capabilities
-are still the same with and without these flags.
+--lbqRmB5GpIRDGyZA
+Content-Type: application/pgp-signature; name="signature.asc"
 
--michael
+-----BEGIN PGP SIGNATURE-----
 
-[1] https://www.elinux.org/images/f/f5/Winbond-w25q32.pdf
-[2] 
-https://lore.kernel.org/all/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK5QogAKCRB4tDGHoIJi
+0r/aAQCBngLbkHKiPgKX9pi71CmamNtvQXwssaoUQwdHvDHuqAEAuIPvzEXR5fPr
+s3L9SxTdqOUKUhwbttoQjZ/4Q0qmBAc=
+=5/2+
+-----END PGP SIGNATURE-----
+
+--lbqRmB5GpIRDGyZA--
