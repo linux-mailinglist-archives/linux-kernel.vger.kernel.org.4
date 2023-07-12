@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D42674FD90
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739AF74FD96
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjGLDPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S231986AbjGLDQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjGLDPL (ORCPT
+        with ESMTP id S229505AbjGLDQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:15:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93A793;
-        Tue, 11 Jul 2023 20:15:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4995F615C4;
-        Wed, 12 Jul 2023 03:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A955CC433C8;
-        Wed, 12 Jul 2023 03:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689131708;
-        bh=cXX15OpDYjd3XmJnLey2o0GhrG8lr8HHYH3YCewR61c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Oh5folkV0QWUsh7tNheg8KRnfXa0fKakeE16XvIvmqlYaMJRyD9CBNRrkq4U/V/1J
-         iEnieM2WLLe5YUzewFiSKu29jA5/dyr+vHxs+cYAcIMbA9FwjaLL5W4Z94BU+Ke8KU
-         twzQKO8U+IdTts5daESaE6NQGCBSiIIJGgQTMuFB/1Zpb8bmQBuYI9WGhXbyHVZxMf
-         BgtDhwMPnv8ZeRjsJyY9j5typoP7A40vC4bNs25Qwh8FeY1K4hurqgCEsSoFwWUPyd
-         UWw4GINdfzi+dxzMNZqtWIwds9wBEnwt+pNjjFBCzHd4IkD1NC0uJvq4gqOBzICJDE
-         CoLErVpRODaow==
-Date:   Tue, 11 Jul 2023 20:15:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org, Qingfang DENG <qingfang.deng@siflower.com.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
-        Masahide NAKAMURA <nakam@linux-ipv6.org>,
-        Ville Nuorvala <vnuorval@tcs.hut.fi>,
-        Netdev <netdev@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 6.4 0/6] 6.4.3-rc2 review
-Message-ID: <20230711201506.25cc464d@kernel.org>
-In-Reply-To: <CA+G9fYtEr-=GbcXNDYo3XOkwR+uYgehVoDjsP0pFLUpZ_AZcyg@mail.gmail.com>
-References: <20230709203826.141774942@linuxfoundation.org>
-        <CA+G9fYtEr-=GbcXNDYo3XOkwR+uYgehVoDjsP0pFLUpZ_AZcyg@mail.gmail.com>
+        Tue, 11 Jul 2023 23:16:26 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 817F810E3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:16:24 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.9.158])
+        by gateway (Coremail) with SMTP id _____8AxjusGG65kg8cDAA--.8096S3;
+        Wed, 12 Jul 2023 11:16:22 +0800 (CST)
+Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWM0GG65kA7cpAA--.53483S2;
+        Wed, 12 Jul 2023 11:16:22 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, WANG Xuerui <kernel@xen0n.name>
+Subject: [PATCH 0/3] LoongArch: mm: Code cleanup with populate pte
+Date:   Wed, 12 Jul 2023 11:16:19 +0800
+Message-Id: <20230712031622.1888321-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxWM0GG65kA7cpAA--.53483S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrZrWkAryDAw4kJF1fKr1ruFX_yoWxAFb_Xa
+        4ftasYkr4xXayUKay8KF4rJFWjkF4v9F1qyFykJFW7GFy3Jw1UJF42yan8Za4q9FW7trs5
+        Aw45ArnYvw129osvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JFv_Jw1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
+        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
+        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
+        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1mii3UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,9 +62,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 17:11:18 +0530 Naresh Kamboju wrote:
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
->   git_sha: 3e37df3ffd9a648c9f88f6bbca158e43d5077bef
+There are some confusion between pdg and p4d when populate pte for
+kernel address space. This patch modifies this issue and adds unified
+function for pcpu and fixmap populate pte.
 
-I can't find this sha :( Please report back if you can still repro this
-and how we get get the relevant code
+Bibo Mao (3):
+  mm/percpu: Remove some local variables in pcpu_populate_pte
+  LoongArch: Code cleanup in function pcpu_populate_pte
+  LoongArch: mm: Add unified function populate_kernel_pte
+
+ arch/loongarch/include/asm/pgalloc.h |  1 +
+ arch/loongarch/kernel/numa.c         | 35 ++-----------------
+ arch/loongarch/mm/init.c             | 52 ++++++++++++++++------------
+ mm/percpu.c                          | 24 +++++--------
+ 4 files changed, 42 insertions(+), 70 deletions(-)
+
+-- 
+2.27.0
+
