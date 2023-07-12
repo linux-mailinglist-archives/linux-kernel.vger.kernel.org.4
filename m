@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5766574FC14
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 02:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175B274FC1D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 02:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjGLA2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 20:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S229668AbjGLAaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 20:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGLA2D (ORCPT
+        with ESMTP id S229551AbjGLAaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 20:28:03 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DBDDC;
-        Tue, 11 Jul 2023 17:28:02 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8c81e36c0so31703625ad.0;
-        Tue, 11 Jul 2023 17:28:02 -0700 (PDT)
+        Tue, 11 Jul 2023 20:30:05 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0108FDC;
+        Tue, 11 Jul 2023 17:30:04 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3a425ef874dso44082b6e.0;
+        Tue, 11 Jul 2023 17:30:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689121682; x=1691713682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2pyRQfW5DbXcPYwgx/o8m7UZH6m6LX8pSrhSqkuWjO8=;
-        b=aWCWG4qSdsaivaMi9gCytkAWE93sAreOfi+lQ4zwRqmBtdpKr2BVh4dmDjEARSvQqy
-         yhv8D+FCnaDTJ2T1hgnZVknaHQhe+FRBcj6qtnpSESRWcyPWMm/RdkdD5te52AoFHvQS
-         S4VUIv0SQYrFAUGNOPCdOrfIkupwIltkgEBt6OUVpInSx7gLMJhYZrf8K9/pmlHVJU9Z
-         8Jh4KE9KaDhnBTMUd6TWl+Bn9nuFas74pti+BQWmiVliWMG200g+qkA2FGTv3+p8P/4c
-         uIWhtvQ0L9APJnM2RZ+EH9ei1LnEj6dc6VB6t5lBeJCLOOox/X5G5yRYYNmtGqWUBmUI
-         vvig==
+        d=gmail.com; s=20221208; t=1689121804; x=1691713804;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AywlaY7x3Z/gX6am2crBJ9gOzJzowq37abxtBtmocQo=;
+        b=ghdEvDcr1IFDaQljt1dRUmu0HvE8cBRXow9dvmJIaaoVnpliy0H6io9/6jVjgOiCvp
+         W8ARD6eHNeqfJ+cDPA0NJgPJBqbJKcZVgnHyOUyjNKE8bjkztkk4ySHLSiUBAuECvNvG
+         mb/2DywJzkaoQruchWfaALw0QTZyIhkyMl6GdGEbXU96lEG1IIKslGtkOxNFHbPJlukV
+         cU3AAipN+IhHQaj7foFoecZ/dEzkn+h7hzibqavkPSnM3iQjwT1oNRd+xdvy8XXbjmLV
+         /C6WF+gR5Z+E29WVX3/x1rDq3OotadtwPkAl2sIQPRWVXcg0mMjVQCSxr6vu04KG1I6/
+         7Mcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689121682; x=1691713682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2pyRQfW5DbXcPYwgx/o8m7UZH6m6LX8pSrhSqkuWjO8=;
-        b=H4EzmMvRV0FjtdLpuuK7xBYdBueBrmZIbKBZny9KqGPudcE0H35NHUpxIBFu+thr59
-         Aw05p12n6Gmz5tc6wDzRcJYMvtt8jpOgKAC49LyfptnQFGAazGctczA3NpPh1r2yTnHX
-         zOksAU1HfQeaG9KtHxUX9Rh/zEpTxG+TCLXsDhB5taFQ4alWyVsEQ3rzITYhIEpQJ4X2
-         RFwgP6bbgEnepBxrix6HY3Qo6RAUaLSCIywcIMnY/8zv/i5kO2aWD57ih7H9jMmFBjNY
-         URwliHoQq1ApzJzmVnFmibUcoxmSGWzYnpCMSQ4DRDFGcjLLRxYGHBOSXGoBilRDHxqO
-         S5Mw==
-X-Gm-Message-State: ABy/qLY+G3F8Z7xjJMTHbMoLfPbAE42RMMOQ3/YR7ZbG6YzhDHssxXqV
-        VYWTekkZyYG14UaAh+4JDxQ=
-X-Google-Smtp-Source: APBJJlEeIQp9RZX1tZsYqnDkzgQVsemzMc1ww2QpkTmRGQTLSOAegaw44Fi0YF210vQOK/OY77GS5A==
-X-Received: by 2002:a17:902:b7c1:b0:1b9:e8d9:7e42 with SMTP id v1-20020a170902b7c100b001b9e8d97e42mr3985454plz.69.1689121682211;
-        Tue, 11 Jul 2023 17:28:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689121804; x=1691713804;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AywlaY7x3Z/gX6am2crBJ9gOzJzowq37abxtBtmocQo=;
+        b=bUKZe5EHmmMkMZQH/LEM14fmxXoevruRIHWM9SWwGZfoGW2awpqz8dq/NYVPX88Zcc
+         AONvZ+G7txxkEwamT8jvKUUhHnUrRIKRYC29KXCvQaC4UIs/kf0Tx0kz46J8RqbtMnTB
+         uv6hY2EsAS6sNPGZ7jamO8t5itytV0P+7yu4Sq6GDPvGAuivpxk1QtsisnDF/oDYLHld
+         hfGJ8WNlfEgBoS9ZbR5KKvtwI1yiRclBkseOV5s15pwphBLo9cEy5NzYuSGC0p6nLlEH
+         ve2y/35zk43I5r0GbrnpH58yBUFa93Nr4vlJoiow6AaAoMKI5fjr1JFo8OM8q7j4NPPv
+         Z/Sw==
+X-Gm-Message-State: ABy/qLYV8V/OOKnqnT0dEjpmCMSThclIX5eJ0HrbE2GxRert584F4GKD
+        Yh9QKPN7L9VnbvdrYyB6aBs=
+X-Google-Smtp-Source: APBJJlERzXloivjI5bk3/nTAyrXULoGFQYQ9HeldnM+GEDq5PgIauvtfIOYiM1H16bglc4CH0JAn3w==
+X-Received: by 2002:a05:6808:1aa6:b0:3a3:78dc:8c4c with SMTP id bm38-20020a0568081aa600b003a378dc8c4cmr15877789oib.46.1689121804077;
+        Tue, 11 Jul 2023 17:30:04 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:9374])
-        by smtp.gmail.com with ESMTPSA id c16-20020a170902c2d000b001b89612dc7dsm2535444pla.142.2023.07.11.17.28.01
+        by smtp.gmail.com with ESMTPSA id s10-20020a62e70a000000b006687b41c4dasm2285401pfh.110.2023.07.11.17.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 17:28:01 -0700 (PDT)
+        Tue, 11 Jul 2023 17:30:03 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 11 Jul 2023 14:27:59 -1000
+Date:   Tue, 11 Jul 2023 14:30:01 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 0/9] rust: workqueue: add bindings for the workqueue
-Message-ID: <ZK3zj4xPBD0NfaxM@slm.duckdns.org>
-References: <20230711093303.1433770-1-aliceryhl@google.com>
- <ZK3VEPeBEyErmerR@slm.duckdns.org>
- <CANiq72nktgf_j-+S7snysQgwqeqB12sfjc-vrLsnOUKiZZ5WJw@mail.gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rtc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2
+ 6/7] workqueue: Report work funcs that trigger automatic CPU_INTENSIVE
+ mechanism)
+Message-ID: <ZK30CR196rs-OWLq@slm.duckdns.org>
+References: <20230511181931.869812-1-tj@kernel.org>
+ <20230511181931.869812-7-tj@kernel.org>
+ <ZF6WsSVGX3O1d0pL@slm.duckdns.org>
+ <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
+ <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
+ <ZK3MBfPS-3-tJgjO@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANiq72nktgf_j-+S7snysQgwqeqB12sfjc-vrLsnOUKiZZ5WJw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZK3MBfPS-3-tJgjO@slm.duckdns.org>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
@@ -83,22 +94,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Miguel.
-
-On Wed, Jul 12, 2023 at 01:44:47AM +0200, Miguel Ojeda wrote:
-> > Please feel free to route the patches through the rust tree. If you want
-> > them to go through the workqueue tree, please let me know.
+On Tue, Jul 11, 2023 at 11:39:17AM -1000, Tejun Heo wrote:
+> On Tue, Jul 11, 2023 at 04:06:22PM +0200, Geert Uytterhoeven wrote:
+> > On Tue, Jul 11, 2023 at 3:55 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+...
+> > workqueue: neigh_managed_work hogged CPU for >10000us 4 times,
+> > consider switching to WQ_UNBOUND
 > 
-> As you prefer -- if you are willing to take them and/or maintain or
-> co-maintain patches to it, and it is not a lot of work for you, then
-> it would be great to get you involved, of course. Otherwise, we can
-> apply them to the Rust tree too.
+> I wonder whether the right thing to do here is somehow scaling the threshold
+> according to the relative processing power. It's difficult to come up with a
+> threshold which works well across the latest & fastest and really tiny CPUs.
+> I'll think about it some more but if you have some ideas, please feel free
+> to suggest.
 
-It's not a lot of overhead for me but I'm also not sure whether I can be
-actually useful. Once folks are happy with it, I can create a separate
-branch for this series in the wq tree so that others can easily pull from
-it. Let's see how that goes and if my involvement turns out to be pointless
-we can route future changes through the rust tree.
+Geert, do you mind posting the full kernel logs for the affected machines?
 
 Thanks.
 
