@@ -2,270 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99764750959
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362C875095C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbjGLNP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S233089AbjGLNPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbjGLNPX (ORCPT
+        with ESMTP id S232371AbjGLNPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:15:23 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3516C1984
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:15:15 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fbcbf4375dso976207e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689167713; x=1691759713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bXqt09tdVvvcw6pgsvaXQsZ0EYrCqzV7f8woQeEpum4=;
-        b=vOkATjh7+4it75svgAaTbe2ftmfOzH2OkYa5n+GWzYADnzKD0qv4h0QFV3FYNFSw9E
-         SnWMmnyS40nHU7Hj8Gba2JX5X98fplCo1SpcLHSFbp7ddomVWfFzY5/RoGti6mBT4b2w
-         QZOmD4zOnhDFTjCTmQ2qkbuQwvRsKbnl8B2UcYlLmJpze1WIVi88gLLTdfz9iC9+2blH
-         oRDU6wIvns8OANNueYhsWJjr0enXdb9E08kHFEG/Qbh2NRpx5kAWGn+0CfeImHk4OZGJ
-         BwGyc0//tOwvjFNfNVImsxF3iDyIQ2zhw+JKr6WyGCWDLYGn5/b67sseHDDSS4y0RUvG
-         fjoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689167713; x=1691759713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXqt09tdVvvcw6pgsvaXQsZ0EYrCqzV7f8woQeEpum4=;
-        b=gcXWTgtWy0RtfkuU7hMCw2/xcDeSdVmhhmv5YGqoZ2o8NaeNNAUK1kzwjDKgiI67iF
-         qOGvnwmMvy9ifrF0olfpZch4g7QdWV/Lw9YhQmQrFhEH2Ppl3exc+eeFpxI1gamJ6nEV
-         WRyexT2B2uSlHQ94xcFPR6BCPhlD5TO6ODwyuYP5NY2aUrD6ZaNdVoUpTjWFQtiEDmKb
-         vd4Un3fShZPGEDFloGNQ+7cP4tcmFybR42IPIVEvYxVjbbarU4U4H3SdBjors/3wTORi
-         oD+kw8EEeSU+sPMwSwUYGRTG9LUXoNRwoseBaDtPXbbXpWoddHOFaovMqM/zLjWe/W8e
-         p5FA==
-X-Gm-Message-State: ABy/qLaXJvgPGbCG9Q+gfEweqRzfOJjSMe4/uMAMz8TL6xV6KoKwZ1xG
-        lo951decJonEpOmpc76IaNBATA==
-X-Google-Smtp-Source: APBJJlGJTt/9jUsw1+sCODIYotgo3mCBSUX95DB0ildo4FP9AFPo1PEBBYeQSP5gEJCrEVJIepwBJA==
-X-Received: by 2002:a05:6512:3c87:b0:4fb:9f08:2909 with SMTP id h7-20020a0565123c8700b004fb9f082909mr790297lfv.3.1689167713270;
-        Wed, 12 Jul 2023 06:15:13 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id p4-20020ac246c4000000b004fbe7b01b15sm713243lfo.62.2023.07.12.06.15.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 06:15:12 -0700 (PDT)
-Message-ID: <e6a5129a-db07-977d-2ecd-328a52cbcdc0@linaro.org>
-Date:   Wed, 12 Jul 2023 16:15:12 +0300
+        Wed, 12 Jul 2023 09:15:44 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C76119B9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:15:40 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R1JBx6xhzzBS5qG
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 21:15:37 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689167737; x=1691759738; bh=lIACBBIWEslS2W9Rjwr485k8/PG
+        5Tw8UIlfYyRgLO4M=; b=I9rRep9/iqPKkZKrfpy0mQ3xzvlerKiuCT7c+m36OIP
+        /YTOQQ/60J8LKq/Xm37vXMXzui8/SpYdKR+6lmxawdF0qdOPtim79sNmRXXYd/dx
+        NuhqmezsXuwVnqhmMkBQ6IuJ0WfEqLwPDwF9TJBqEFl9vKV7Ly24fEw/yXmZhxsh
+        s4u6zv4egZQ9wGtxRiJK09J4zzKbRg9aunURqJlUYADrO2K2vbGG+py/0POvDpiz
+        jXMnl3lxQVPC3+Dk8tVHIwSBac0XQkMAEe/5P1L7Rr4cfn5XK5Dp171igTTdKq+Z
+        Wxk3kGmgC9M5rl/IO7mM4LjOP/w5WcDIkOor8a7QgoA==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4XdvfVd44kx3 for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 21:15:37 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R1JBx3bHXzBS5q7;
+        Wed, 12 Jul 2023 21:15:37 +0800 (CST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 11/14] scsi: ufs: host: Add support for parsing OPP
-Content-Language: en-GB
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <20230712103213.101770-14-manivannan.sadhasivam@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230712103213.101770-14-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Wed, 12 Jul 2023 21:15:37 +0800
+From:   huzhi001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf/x86/intel: Fix warnings in intel_ds.h
+In-Reply-To: <tencent_1C96FDD9B8D4FE5447D7CD3250D9B768B10A@qq.com>
+References: <tencent_1C96FDD9B8D4FE5447D7CD3250D9B768B10A@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <4578aecf58124c6bd268ca0de5cf1b27@208suo.com>
+X-Sender: huzhi001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2023 13:32, Manivannan Sadhasivam wrote:
-> OPP framework can be used to scale the clocks along with other entities
-> such as regulators, performance state etc... So let's add support for
-> parsing OPP from devicetree. OPP support in devicetree is added through
-> the "operating-points-v2" property which accepts the OPP table defining
-> clock frequency, regulator voltage, power domain performance state etc...
-> 
-> Since the UFS controller requires multiple clocks to be controlled for
-> proper working, devm_pm_opp_set_config() has been used which supports
-> scaling multiple clocks through custom ufshcd_opp_config_clks() callback.
-> 
-> It should be noted that the OPP support is not compatible with the old
-> "freq-table-hz" property. So only one can be used at a time even though
-> the UFS core supports both.
-> 
-> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   drivers/ufs/host/ufshcd-pltfrm.c | 116 +++++++++++++++++++++++++++++++
->   1 file changed, 116 insertions(+)
-> 
-> diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-> index 0b7430033047..068c22378c88 100644
-> --- a/drivers/ufs/host/ufshcd-pltfrm.c
-> +++ b/drivers/ufs/host/ufshcd-pltfrm.c
-> @@ -8,8 +8,10 @@
->    *	Vinayak Holikatti <h.vinayak@samsung.com>
->    */
->   
-> +#include <linux/clk.h>
->   #include <linux/module.h>
->   #include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
->   #include <linux/pm_runtime.h>
->   #include <linux/of.h>
->   
-> @@ -17,6 +19,8 @@
->   #include "ufshcd-pltfrm.h"
->   #include <ufs/unipro.h>
->   
-> +#include <trace/events/ufs.h>
-> +
->   #define UFSHCD_DEFAULT_LANES_PER_DIRECTION		2
->   
->   static int ufshcd_parse_clock_info(struct ufs_hba *hba)
-> @@ -205,6 +209,112 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
->   	}
->   }
->   
-> +static int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
-> +				  struct dev_pm_opp *opp, void *data,
-> +				  bool scaling_down)
-> +{
-> +	struct ufs_hba *hba = dev_get_drvdata(dev);
-> +	struct list_head *head = &hba->clk_list_head;
-> +	struct ufs_clk_info *clki;
-> +	unsigned long freq;
-> +	u8 idx = 0;
-> +	int ret;
-> +
-> +	list_for_each_entry(clki, head, list) {
-> +		if (!IS_ERR_OR_NULL(clki->clk)) {
-> +			freq = dev_pm_opp_get_freq_indexed(opp, idx++);
-> +
-> +			/* Do not set rate for clocks having frequency as 0 */
-> +			if (!freq)
-> +				continue;
+The following checkpatch warnings are removed:
+WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
 
-Can we omit these clocks from the opp table? I don't think they serve 
-any purpose.
+Signed-off-by: ZhiHu <huzhi001@208suo.com>
+---
+  arch/x86/include/asm/intel_ds.h | 1 +
+  1 file changed, 1 insertion(+)
 
-Maybe it would even make sense to move this function to drivers/opp 
-then, as it will be generic enough.
-
-> +
-> +			ret = clk_set_rate(clki->clk, freq);
-> +			if (ret) {
-> +				dev_err(dev, "%s: %s clk set rate(%ldHz) failed, %d\n",
-> +					__func__, clki->name, freq, ret);
-> +				return ret;
-> +			}
-> +
-> +			trace_ufshcd_clk_scaling(dev_name(dev),
-> +				(scaling_down ? "scaled down" : "scaled up"),
-> +				clki->name, hba->clk_scaling.target_freq, freq);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +} > +
-> +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
-> +{
-> +	struct device *dev = hba->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct dev_pm_opp_config config = {};
-> +	struct ufs_clk_info *clki;
-> +	const char **clk_names;
-> +	int cnt, i, ret;
-> +
-> +	if (!of_find_property(np, "operating-points-v2", NULL))
-> +		return 0;
-> +
-> +	if (of_find_property(np, "freq-table-hz", NULL)) {
-> +		dev_err(dev, "%s: operating-points and freq-table-hz are incompatible\n",
-> +			 __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	cnt = of_property_count_strings(np, "clock-names");
-> +	if (cnt <= 0) {
-> +		dev_err(dev, "%s: Missing clock-names\n",  __func__);
-> +		return -ENODEV;
-> +	}
-> +
-> +	/* OPP expects clk_names to be NULL terminated */
-> +	clk_names = devm_kcalloc(dev, cnt + 1, sizeof(*clk_names), GFP_KERNEL);
-> +	if (!clk_names)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * We still need to get reference to all clocks as the UFS core uses
-> +	 * them separately.
-> +	 */
-> +	for (i = 0; i < cnt; i++) {
-> +		ret = of_property_read_string_index(np, "clock-names", i,
-> +						    &clk_names[i]);
-> +		if (ret)
-> +			return ret;
-> +
-> +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
-> +		if (!clki)
-> +			return -ENOMEM;
-> +
-> +		clki->name = devm_kstrdup(dev, clk_names[i], GFP_KERNEL);
-> +		if (!clki->name)
-> +			return -ENOMEM;
-> +
-> +		if (!strcmp(clk_names[i], "ref_clk"))
-> +			clki->keep_link_active = true;
-> +
-> +		list_add_tail(&clki->list, &hba->clk_list_head);
-> +	}
-> +
-> +	config.clk_names = clk_names,
-> +	config.config_clks = ufshcd_opp_config_clks;
-> +
-> +	ret = devm_pm_opp_set_config(dev, &config);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_pm_opp_of_add_table(dev);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to add OPP table: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	hba->use_pm_opp = true;
-> +
-> +	return 0;
-> +}
-> +
->   /**
->    * ufshcd_get_pwr_dev_param - get finally agreed attributes for
->    *                            power mode change
-> @@ -371,6 +481,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
->   
->   	ufshcd_init_lanes_per_dir(hba);
->   
-> +	err = ufshcd_parse_operating_points(hba);
-> +	if (err) {
-> +		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-> +		goto dealloc_host;
-> +	}
-> +
->   	err = ufshcd_init(hba, mmio_base, irq);
->   	if (err) {
->   		dev_err(dev, "Initialization failed\n");
-
--- 
-With best wishes
-Dmitry
-
+diff --git a/arch/x86/include/asm/intel_ds.h 
+b/arch/x86/include/asm/intel_ds.h
+index 2f9eeb5c3069..6bc6621f6d9f 100644
+--- a/arch/x86/include/asm/intel_ds.h
++++ b/arch/x86/include/asm/intel_ds.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: GPL-2.0 */
+  #ifndef _ASM_INTEL_DS_H
+  #define _ASM_INTEL_DS_H
