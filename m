@@ -2,85 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B19B74FEB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C14574FEB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjGLF3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 01:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S231520AbjGLFcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 01:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjGLF31 (ORCPT
+        with ESMTP id S229714AbjGLFc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 01:29:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF9219B;
-        Tue, 11 Jul 2023 22:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qkUipoh9LzckasQjFT3oT/cjBw23ZeCHvwm10bQ21tI=; b=pu63hKu+Y6EW+pxvwVAsG7hhWC
-        GMMHP45auERXQ9P6kTrwFsw4uf5OompiG0bnM5muQ7WRBhb1ieo5xuw7jUN/T8j874KXD8i4Ph4Oa
-        igN4TK0OjBRVUuSu5FweVlmBI0cf9iOJN6DSxgxiwIi13BSnTmCDXEspuZx4umFBJ5hyy+qND63yi
-        nAwbvEHE8h0JVZSe3gWBfNFoTdJ1Y1RbvUSNZ/R3qRBxiTzNy4NNhfu9sXeKYzrqy7zoGOgCB0AOb
-        4iUqVmKlkGEMNC4FGJtBeJ9QQRYJas9FLvUmH18sF2Xn/lhNo6Ge0mR+0RM0itbezYj4LCM6PXNDK
-        9XmPq/8w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJSPh-00GNN6-7t; Wed, 12 Jul 2023 05:29:21 +0000
-Date:   Wed, 12 Jul 2023 06:29:21 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v5 00/38] New page table range API
-Message-ID: <ZK46Mb0jAtCxFma2@casper.infradead.org>
-References: <20230710204339.3554919-1-willy@infradead.org>
- <8cfc3eef-e387-88e1-1006-2d7d97a09213@linux.ibm.com>
- <ZK1My5hQYC2Kb6G1@casper.infradead.org>
- <20230711172440.77504856@p-imbrenda>
+        Wed, 12 Jul 2023 01:32:29 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4718A1716
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 22:32:28 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51e5d9e20ecso3239600a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 22:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689139947; x=1691731947;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cm9lqU5pPuyE1DC++4NWH2zRUzX6wSqTAdFnrSF5Rww=;
+        b=VNigY0kXhCTUccMmpH3lWTI7nxi83g7n5A1t1tz1XYVlSBCWD9Kg6QLd7Ops/wOXIW
+         JgrqUmfdDm7UX7cnWLkVBMz95ScQmC5AjulXn8LK3+WDjp1VALtpm2QZaqJhnA0NcZQn
+         74vY8XFWcy9hvefzgIeiXi9CVfmzZhB2dDky+W8StXKW5ohrK75wLI7kmcv4t0q4chrj
+         G15AqQCc3VxVHvxHXXFbpi3bbtG1xGhSpn8HQ1X0Dv9tcPXm50LjdF8YHfucYTp52V5Q
+         UkXEV8WZD76Tsp55o0hKxcAGY9S3gKTMPf53nhiPGnKPdRbRepfjLIHJYHqzEESRp/fk
+         5cQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689139947; x=1691731947;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cm9lqU5pPuyE1DC++4NWH2zRUzX6wSqTAdFnrSF5Rww=;
+        b=BLgd5qK3vr0FkGFUn2P8GTyqvkN0nKJYGulcD08yzNkT+pticpvtf1O5bjNU0KB4da
+         h8zvHlsiRaEqPAeOmHoDp8rz5y30OnMJJ/nguTRmE6/JKvadK0kpEjTKkKWBlMQ/mhPu
+         QiUZ2KOUjxim+8AVN22scpYBl+hrCj7VT4ACRqAQ8+OaN1819SPvGANCDBNFqsBK/Qwh
+         baLHqOoItR4qeCtCKHunY49gDAvwbxo/imCvYEjDihZtL2OpaG87a4+rhVzAHOcgGOUS
+         eNXG4wsNOhbVuJvbkQmKAstNtHzNkuthGaxwfJz8ExQ/jsqcEtbPV+CdXVPAoW0aaYMM
+         zCLQ==
+X-Gm-Message-State: ABy/qLZ0ZvqMdASJKNXyXsXU1GlhknFO2lc+1erZzlT9FqKCMb3MXotd
+        MHKWUUmOtU7Zbs1kP36CqGr1oA==
+X-Google-Smtp-Source: APBJJlG4YRdWN+SCSbzyfd58UWeDDH8s4zkWWVj4TV7KjDSCdVdE1A1W2FG3adOSrHXkUmi0u3mGVA==
+X-Received: by 2002:a17:906:33d0:b0:992:b3a3:81f9 with SMTP id w16-20020a17090633d000b00992b3a381f9mr15779053eja.71.1689139946740;
+        Tue, 11 Jul 2023 22:32:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id g11-20020a170906394b00b00982b204678fsm1976336eje.207.2023.07.11.22.32.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 22:32:26 -0700 (PDT)
+Message-ID: <14bed951-22ae-4aa8-5fcb-b2cd92ebdbef@linaro.org>
+Date:   Wed, 12 Jul 2023 07:32:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711172440.77504856@p-imbrenda>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/3] dt-bindings: display: panel: add startek
+ kd070fhfid015 support
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Guillaume La Roque <glaroque@baylibre.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230711-startek_display-v1-0-163917bed385@baylibre.com>
+ <20230711-startek_display-v1-1-163917bed385@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230711-startek_display-v1-1-163917bed385@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 05:24:40PM +0200, Claudio Imbrenda wrote:
-> On Tue, 11 Jul 2023 13:36:27 +0100
-> Matthew Wilcox <willy@infradead.org> wrote:
-> > > I think we do use PG_arch_1 on s390 for our secure page handling and
-> > > making this perf folio instead of physical page really seems wrong
-> > > and it probably breaks this code.  
-> > 
-> > Per-page flags are going away in the next few years, so you're going to
+On 11/07/2023 17:36, Alexandre Mergnat wrote:
+> The Startek KD070FHFID015 is a 7-inch TFT LCD display with a resolution
+> of 1024 x 600 pixels.
 > 
-> For each 4k physical page frame, we need to keep track whether it is
-> secure or not.
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  .../display/panel/startek,kd070fhfid015.yaml       | 51 ++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/startek,kd070fhfid015.yaml b/Documentation/devicetree/bindings/display/panel/startek,kd070fhfid015.yaml
+> new file mode 100644
+> index 000000000000..857658e002fd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/startek,kd070fhfid015.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/startek,kd070fhfid015.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Startek Electronic Technology Co. kd070fhfid015 7 inch TFT LCD panel
+> +
+> +maintainers:
+> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: startek,kd070fhfid015
+> +
+> +  dcdc-gpios: true
 
-Do you?  Wouldn't it make more sense to track that per allocation instead
-of per page?  ie if we allocate a 16kB anon folio for a VMA, don't you
-want the entire folio to be marked as secure vs insecure?
+From where does this come? Which schema defines it?
 
-I don't really know what secure means in this context.  I think it has
-something to do with which of the VM or the hypervisor can access it, but
-it feels like something new that I've never had properly explained to me.
+> +
+> +  height-mm:
+> +    const: 151
+> +
+> +  iovcc-supply:
+> +    description: Reference to the regulator powering the panel IO pins.
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: DSI virtual channel
+> +
+> +  reset-gpios: true
+> +
+> +  port: true
+> +
+> +  power-supply: true
+> +
+> +  width-mm:
+> +    const: 95
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - dcdc-gpios
+> +  - iovcc-supply
+> +  - reg
+> +  - reset-gpios
+> +  - port
+> +  - power-supply
 
-> A bit in struct page seems the most logical choice. If that's not
-> possible anymore, how would you propose we should do?
+Missing example.
 
-The plan is to shrink struct page down to a single pointer (which
-includes a few tag bits to say what type that pointer is -- a page
-table, anon mem, file mem, slab, etc).  So there won't be any bits
-available for something like "secure or not".  You could use a side
-structure if you really need to keep track on a per page basis.
+Best regards,
+Krzysztof
+
