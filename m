@@ -2,124 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554E1750B16
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B2D750B1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjGLOcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S233232AbjGLOfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjGLOco (ORCPT
+        with ESMTP id S232466AbjGLOfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:32:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788081992;
-        Wed, 12 Jul 2023 07:32:37 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R1Ks24TxHzPkB8;
-        Wed, 12 Jul 2023 22:30:14 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 12 Jul 2023 22:32:34 +0800
-Subject: Re: [PATCH 2/5] perf evlist: Add evlist__findnew_tracking_event()
- helper
-To:     Adrian Hunter <adrian.hunter@intel.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <irogers@google.com>,
-        <kan.liang@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>
-References: <20230704074217.240939-1-yangjihong1@huawei.com>
- <20230704074217.240939-3-yangjihong1@huawei.com>
- <5882e592-641f-71cc-7a91-66f66b58d5a6@intel.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <e77cf128-b8d2-9866-a80f-23ec46e2245b@huawei.com>
-Date:   Wed, 12 Jul 2023 22:32:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Wed, 12 Jul 2023 10:35:20 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27381981
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:35:17 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bd77424c886so8080345276.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689172517; x=1691764517;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tbTllEpx0I78Ic+EXBEuRDRVhQRIepaTuBVKvfQ1Ua0=;
+        b=Ea4t93dvufzwmX3xkWz194R62FMWEMLF5hGPXmr+Y8OTIswfM6BhkHA4tXPKbpGZZz
+         BpbPiPy+45hZHL5QeCJSPDi5L96WAq+JXo6qe6DnBsrvcDljaT8VnDtuhoysa3YH4MAN
+         FCvMUb3pmvSTyhzvx6dUX+rQbdiuknJALnYg4PmGZ4I/s2u8i4sFlr8h8VWyDlb0rr34
+         kplTU06AqliDIhK21A/1kQ/6jKyqkrAyMa93dDVzTgSmFFjHQRED64NKu/6fp/G9PGKr
+         T/fvmgnCg2juBVFsD5Y/iZGkvVdKQrdvVvEKcOYHtSxGd7Lbu8Ij10I/RWrKtzgzkRSu
+         bZRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689172517; x=1691764517;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tbTllEpx0I78Ic+EXBEuRDRVhQRIepaTuBVKvfQ1Ua0=;
+        b=TUabsUIlmUiZSKHnZp5h0pfKOFhjQhQfeRnCk5/FrFSp/nAmKhMm6A6gLBaWvJCZDY
+         RBj0RGoRR1hyr/dzHB99264+QRxl9IbyDTZX4Kp22MVpdjlf9JMSdeIY2kajamaP6J0L
+         U9BCAfBgPwrLiKEfHbSiL3uDcfpDt//aZq5aJVN73SQ8km8mNGr1ZhDQ1+D92wPCegiP
+         A6UjQbNa94hQCNQ0lMNwglyyq2heItDEw6OseHMsxVmgjQ+qjmzDYKKj+4fzCHlAYO5k
+         36bwJpvsDl8Es359NqnhnDVwY7xrT/EVRjUp7sKeH6DZul2AwS5DLaKTDsbnEUO5ohDQ
+         DJLw==
+X-Gm-Message-State: ABy/qLYECeOf2l7oHjnqafCqKyKKyNi7/3eM5dXPlJh31HkZudh4w/mm
+        9LaFLUZRpMzqz+I76aLOK7xKu5LGGhKHjYfP1hCh4A==
+X-Google-Smtp-Source: APBJJlFOHb2fSETsP1eqkByIGa7pIKNcHsnSCp51EV4sxfvYWl2o5Ta3vmVszePPggalPaZErD7+82N+DHVr7KfUX1A=
+X-Received: by 2002:a25:1e55:0:b0:c4f:c0eb:451b with SMTP id
+ e82-20020a251e55000000b00c4fc0eb451bmr18583653ybe.25.1689172517157; Wed, 12
+ Jul 2023 07:35:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5882e592-641f-71cc-7a91-66f66b58d5a6@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230621185949.2068-1-quic_amelende@quicinc.com>
+ <20230621185949.2068-2-quic_amelende@quicinc.com> <20230626135857.GA3118929-robh@kernel.org>
+ <2e871e21-a81d-0d7d-993b-9a9d7bd9d962@quicinc.com> <e7298704-5a03-0961-90a3-dab4af60c326@linaro.org>
+ <32e9a512-fd74-b2f6-6b8a-fefb9ad5912d@quicinc.com> <431faa87-d152-5f7a-40fd-8b6fe26f0bb9@linaro.org>
+ <71e1f36f-8fd8-9d61-d563-577d4fb54f10@quicinc.com> <69c01f0f-4eb0-bb44-a238-5c9ce5beede9@linaro.org>
+In-Reply-To: <69c01f0f-4eb0-bb44-a238-5c9ce5beede9@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 12 Jul 2023 17:35:05 +0300
+Message-ID: <CAA8EJppCSnEg1GjX8CavxRPiiE19JwVAOTspjWJR-OzdQMcu+g@mail.gmail.com>
+Subject: Re: [PATCH 1/7] dt-bindings: soc: qcom: Add qcom-pbs bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        Rob Herring <robh@kernel.org>, pavel@ucw.cz, lee@kernel.org,
+        thierry.reding@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 12 Jul 2023 at 17:22, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 11/07/2023 22:12, Anjelique Melendez wrote:
+>
+> >>>
+> >>> On PMI632, peripherals are partitioned over 2 different SIDs
+> >>> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/pmi632.dtsi?h=v6.5-rc1#n42
+> >>> and https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/pmi632.dtsi?h=v6.5-rc1#n149).
+> >>> Unfortunately, the pbs peripheral and the lpg peripherals are on different
+> >>> PMI632 devices and therefore have different regmaps.
+> >>>
+> >>> If we get rid of the pbs node we need to get a handle to the proper regmap.
+> >>> I see two possible options, we could either introduce a new client property
+> >>> which points to a peripheral on the same device as pbs.
+> >>>
+> >>> i.e.
+> >>>     led-controller {
+> >>>             compatible = "qcom,pmi632-lpg";
+> >>>                     #address-cells = <1>;
+> >>>                     #size-cells = <0>;
+> >>>                     #pwm-cells = <2>;
+> >>>                     nvmem-names = "lpg_chan_sdam";
+> >>>                     nvmem = <&pmi632_sdam7>;
+> >>>                     qcom,pbs-phandle = <&pmi632_gpios>;
+> >>>                     .....
+> >>>     };
+> >>> Then when client is probing could do something like the following to get the regmap
+> >>>
+> >>>     dn = of_parse_phandle(node, "qcom,pbs-phandle", 0);
+> >>>     pdev = of_find_device_by_node(dn);
+> >>>     pbs_regmap = dev_get_regmap(&pdev->dev->parent, NULL);
+> >>>
+> >>>
+> >>>
+> >>> Or we could use the nvmem phandle and just have something like this in client's probe
+> >>>
+> >>>     dn = of_parse_phandle(node, "nvmem", 0);
+> >>>     pdev = of_find_device_by_node(dn);
+> >>>     pbs_regmap = dev_get_regmap(&pdev->dev->parent, NULL);
+> >>>
+> >>>
+> >>>
+> >>> Let me know what your thoughts are on this.
+> >>
+> >> Rob asked you - "Is there more than 1 instance in a PMIC?" - and you did
+> >> not answer positively, just mentioned something about drivers in
+> >> downstream, which do not matter. So is the answer for that question:
+> >> yes, you have two instances of the same PMIC differing by presence of
+> >> PBS and other features"?
+> >>
+> > Sorry that was a misunderstanding on my part.
+> > Yes, answer to Rob's question should have been "We have two instances of PMI632,
+> > where one instance holds the pbs peripheral and the other holds the lpg
+> > peripherals. The child node for pbs is needed so lpg client can access
+> > the PMI632 regmap which contains the pbs peripheral."
+>
+> I guess I miss here something. What is "LPG client"? I don't understand
+> why this LPG client needs existence of PBS node, to be able to get the
+> regmap.
+>
+> PBS is a child of PMIC, so it can get regmap from the parent. What's
+> more, which DT property passes the regmap from PMIC to LPG client?
 
-On 2023/7/11 21:13, Adrian Hunter wrote:
-> On 4/07/23 10:42, Yang Jihong wrote:
->> Currently, intel-bts, intel-pt, and arm-spe may add a dummy event for
->> tracking to the evlist. We may need to search for the dummy event for
->> some settings. Therefore, add evlist__findnew_tracking_event() helper.
->>
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> ---
->>   tools/perf/builtin-record.c | 11 +++--------
->>   tools/perf/util/evlist.c    | 17 +++++++++++++++++
->>   tools/perf/util/evlist.h    |  1 +
->>   3 files changed, 21 insertions(+), 8 deletions(-)
->>
->> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->> index aec18db7ff23..8872cd037f2c 100644
->> --- a/tools/perf/builtin-record.c
->> +++ b/tools/perf/builtin-record.c
->> @@ -1295,14 +1295,9 @@ static int record__open(struct record *rec)
->>   	 */
->>   	if (opts->target.initial_delay || target__has_cpu(&opts->target) ||
->>   	    perf_pmus__num_core_pmus() > 1) {
->> -		pos = evlist__get_tracking_event(evlist);
->> -		if (!evsel__is_dummy_event(pos)) {
->> -			/* Set up dummy event. */
->> -			if (evlist__add_dummy(evlist))
->> -				return -ENOMEM;
->> -			pos = evlist__last(evlist);
->> -			evlist__set_tracking_event(evlist, pos);
->> -		}
->> +		pos = evlist__findnew_tracking_event(evlist);
->> +		if (!pos)
->> +			return -ENOMEM;
->>   
->>   		/*
->>   		 * Enable the dummy event when the process is forked for
->> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
->> index 7ef43f72098e..4621ddaeb8f3 100644
->> --- a/tools/perf/util/evlist.c
->> +++ b/tools/perf/util/evlist.c
->> @@ -1694,6 +1694,23 @@ void evlist__set_tracking_event(struct evlist *evlist, struct evsel *tracking_ev
->>   	tracking_evsel->tracking = true;
->>   }
->>   
->> +struct evsel *evlist__findnew_tracking_event(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel;
->> +
->> +	evsel = evlist__get_tracking_event(evlist);
->> +	if (!evsel__is_dummy_event(evsel)) {
->> +		/* Set up dummy event. */
->> +		if (evlist__add_dummy(evlist))
-> 
-> evlist__add_dummy() does not exclude_kernel so it
-> will end up relying on evsel__fallback() to work in
-> cases where the user does not have kernel access.
-> 
-> evlist__add_aux_dummy() is probably better suited.
-> Consequently perhaps pass system_wide as
-> a parameter to evlist__findnew_tracking_event() and
-> deal with that all inside evlist__findnew_tracking_event()
-> 
-OK. These two points will be modified in the next version.
+There are some PMICs which claim two SPMI SIDs. For such PMICs, each
+SID is a separate device, so it is not directly possible to get the
+regmap of the other SID.
 
-Thanks,
-Yang
+-- 
+With best wishes
+Dmitry
