@@ -2,86 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3E4750857
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C71B75085A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbjGLMdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S233146AbjGLMeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbjGLMdp (ORCPT
+        with ESMTP id S231237AbjGLMeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:33:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33481134;
-        Wed, 12 Jul 2023 05:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q28lbPibQoRUf1yZd4fvu6bxrGujY0ouRUurZ5rXnSs=; b=j7kRWgylLqK+jYPyG+Dp+9L9cI
-        NYJMrZ7LJsYQHxxEHCt9mIvYYaUA4j/4e2mt2gpgikT6Xtb4elMDlfatkCIVB2glxtc5rTumoTtgA
-        E/WMFzVxBzfJ5dgXJKCGahu4JsY2bLXmzuzlSUoi0VhJiKvSLdihmk4F0actsEVJo48Yqw/fWS1nb
-        EQ4cmqfaLTW8BMF4EWpUmAAR4IiSoLt3Q6gnDu+Z0xQBKlJg9SvkbVzazNzjzy/P5T/TB8SVtLd1T
-        Smjw8Z8hCP+yYKMOMEwQ7Z8L1fKz2k1vMOQqjIhGlhxpirtvvEs2CsJMB0d41qj64s21EEkhoxb2O
-        /V0IKhTg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJZ2N-00HXix-0L;
-        Wed, 12 Jul 2023 12:33:43 +0000
-Date:   Wed, 12 Jul 2023 05:33:43 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Ross Lagerwall <ross.lagerwall@citrix.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] blk-mq: Fix stall due to recursive flush plug
-Message-ID: <ZK6dpy7w/4YSwbBi@infradead.org>
-References: <20230711160434.248868-1-ross.lagerwall@citrix.com>
+        Wed, 12 Jul 2023 08:34:18 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D953B0;
+        Wed, 12 Jul 2023 05:34:16 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R1HGV6k34z1JCVN;
+        Wed, 12 Jul 2023 20:33:38 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 12 Jul
+ 2023 20:34:13 +0800
+Subject: Re: [PATCH v5 RFC 1/6] page_pool: frag API support for 32-bit arch
+ with 64-bit DMA
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     Yunsheng Lin <yunshenglin0825@gmail.com>, <davem@davemloft.net>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Liang Chen <liangchen.linux@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-rdma@vger.kernel.org>
+References: <20230629120226.14854-1-linyunsheng@huawei.com>
+ <20230629120226.14854-2-linyunsheng@huawei.com>
+ <20230707170157.12727e44@kernel.org>
+ <3d973088-4881-0863-0207-36d61b4505ec@gmail.com>
+ <20230710113841.482cbeac@kernel.org>
+ <8639b838-8284-05a2-dbc3-7e4cb45f163a@intel.com>
+ <20230711093705.45454e41@kernel.org>
+ <1bec23ff-d38b-3fdf-1bb3-89658c1d465a@intel.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <46ad09d9-6596-cf07-5cab-d6ceb1e36f3c@huawei.com>
+Date:   Wed, 12 Jul 2023 20:34:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711160434.248868-1-ross.lagerwall@citrix.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1bec23ff-d38b-3fdf-1bb3-89658c1d465a@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 05:04:34PM +0100, Ross Lagerwall wrote:
-> We have seen rare IO stalls as follows:
+On 2023/7/12 0:59, Alexander Lobakin wrote:
+> From: Jakub Kicinski <kuba@kernel.org>
+> Date: Tue, 11 Jul 2023 09:37:05 -0700
 > 
-> * blk_mq_plug_issue_direct() is entered with an mq_list containing two
-> requests.
-> * For the first request, it sets last == false and enters the driver's
-> queue_rq callback.
-> * The driver queue_rq callback indirectly calls schedule() which calls
-> blk_flush_plug().
-
--> this assumes BLK_MQ_F_BLOCKING is set, as otherwise ->queue_rq can't
-sleep.
-
-> * blk_flush_plug() handles the remaining request in the mq_list. mq_list
-> is now empty.
-> * The original call to queue_rq resumes (with last == false).
-> * The loop in blk_mq_plug_issue_direct() terminates because there are no
-> remaining requests in mq_list.
+>> On Tue, 11 Jul 2023 12:59:00 +0200 Alexander Lobakin wrote:
+>>> I'm fine with that, although ain't really able to work on this myself
+>>> now :s (BTW I almost finished Netlink bigints, just some more libie/IAVF
+>>> crap).
+>>
+>> FWIW I was thinking about the bigints recently, and from ynl
+>> perspective I think we may want two flavors :( One which is at
+>> most the length of platform's long long, and another which is
 > 
-> The IO is now stalled because the last request submitted to the driver
-> had last == false and there was no subsequent call to commit_rqs().
+> (not sure we shouldn't split a separate thread off this one at this
+>  point :D)
 > 
-> Fix this by returning early in blk_mq_flush_plug_list() if rq_count is 0
-> which it will be in the recursive case, rather than checking if the
-> mq_list is empty. At the same time, adjust one of the callers to skip
-> the mq_list empty check as it is not necessary.
+> `long long` or `long`? `long long` is always 64-bit unless I'm missing
+> something. On my 32-bit MIPS they were :D
+> If `long long`, what's the point then if we have %NLA_U64 and would
+> still have to add dumb padding attrs? :D I thought the idea was to carry
+> 64+ bits encapsulated in 32-bit primitives.
+> 
+>> always a bigint. The latter will be more work for user space
+>> to handle, so given 99% of use cases don't need more than 64b
+>> we should make its life easier?
+>>
+>>> It just needs to be carefully designed, because if we want move ALL the
+>>> inlines to a new header, we may end up including 2 PP's headers in each
+>>> file. That's why I'd prefer "core/driver" separation. Let's say skbuff.c
+>>> doesn't need page_pool_create(), page_pool_alloc(), and so on, while
+>>> drivers don't need some of its internal functions.
+>>> OTOH after my patch it's included in only around 20-30 files on
+>>> allmodconfig. That is literally nothing comparing to e.g. kernel.h
+>>> (w/includes) :D
+>>
+>> Well, once you have to rebuilding 100+ files it gets pretty hard to
+>> clean things up ;) 
+>>
+>> I think I described the preferred setup, previously:
+>>
+>> $path/page_pool.h:
+>>
+>> #include <$path/page_pool/types.h>
+>> #include <$path/page_pool/helpers.h>
+>>
+>> $path/page_pool/types.h - has types
+>> $path/page_pool/helpers.h - has all the inlines
+>>
+>> C sources can include $path/page_pool.h, headers should generally only
+>> include $path/page_pool/types.h.
 
-From what I can tell this looks correct, but at the same time very
-fragile.  At least we need a comment on learing plug->rq_count early
-in blk_mq_flush_plug_list about this recursion potential, probably
-paired with another one where we're checking rq_count instead of the
-list now.  I wonder if there is a better way to do this in a more
-explicit way, but I can't think of one right now.
+Does spliting the page_pool.h as above fix the problem about including
+a ton of static inline functions from "linux/dma-mapping.h" in skbuff.c?
 
+As the $path/page_pool/helpers.h which uses dma_get_cache_alignment()
+must include the "linux/dma-mapping.h" which has dma_get_cache_alignment()
+defining as a static inline function.
+and if skbuff.c include $path/page_pool.h or $path/page_pool/helpers.h,
+doesn't we still have the same problem? Or do I misunderstand something
+here?
+
+> 
+> Aaah okay, I did read it backwards ._. Moreover, generic stack barely
+> uses PP's inlines, it needs externals mostly.
+> 
+> Thanks,
+> Olek
+> 
+> .
+> 
