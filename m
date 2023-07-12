@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB3A750A44
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25088750A3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbjGLOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S232251AbjGLN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjGLOAY (ORCPT
+        with ESMTP id S231364AbjGLN7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:00:24 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC221711
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689170423; x=1720706423;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LyB0zD5+AG6Lhc8b4Tdz6GicNxX4DRWTxelGM9Tcvyg=;
-  b=ZskmJhJzSsgZtKq65M1l2JwFkI1004wLkF9wW/NnN3yggWJ8ffIp75K0
-   7PXJx4umauciH+9yuS4wzDbtDr8hvL9XtXF2GHsN4LGG6xTJHayKk/t5/
-   TpXdTKZuz7JucqVdJnWkX9yk8UxAVZ93guiGlM7+n6/6RaNL7kdqXH2f5
-   PFP6XMVmVVIR0FHNmj3/+9sALZ1bdZboNI6TCRenk3uufaLUzRrWxYTwp
-   qA+ffRq1jD/w5I+BCcDeMtq2w/IfJH8MP5T3SXxDRZWmoi7S5cy/eMptB
-   MOHVgQtoSEzAtU1yhp16m/t3NTr0frLAsgK992X9rmGPG5wkPcgm67bF+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="431027480"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="431027480"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 06:59:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="698875813"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="698875813"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jul 2023 06:59:57 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qJaNo-0005kL-1K;
-        Wed, 12 Jul 2023 13:59:56 +0000
-Date:   Wed, 12 Jul 2023 21:59:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: sound/soc/qcom/qdsp6/q6apm.c:30:14: sparse: sparse: symbol 'g_apm'
- was not declared. Should it be static?
-Message-ID: <202307122100.08XU08G6-lkp@intel.com>
+        Wed, 12 Jul 2023 09:59:52 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6653C10C7;
+        Wed, 12 Jul 2023 06:59:51 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-796d78b3f68so2290875241.0;
+        Wed, 12 Jul 2023 06:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689170390; x=1691762390;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=la7xD6v4M8WAlisTF+ijLkx9gxv01PJflmUjfs8N44g=;
+        b=hkoJF0iT6tOtmhignEwpFUrvcXpQp1ZyK84MCiIoBdRwnVbfaHNecu4NOA0STWpU1x
+         w+w7h3/jaODj4pP/JiS5oJgfcAoQoqLfmJ6PpI9inys63dr1nJLaZR5hT28K7/Ppaje+
+         pWHa7VmkmCAIch7XAScY1HBcY8jGCanzoQqejRDuL92noz5pw8zEJlfIGDOzQBH9iNTy
+         jTlfbnfnztn086ToOzEBcEcInVXsuXmyMckjdLslg2ao/BAhf+UP34oi/vYhwNQ/nKyc
+         2AsVP107fqXnuqVem9M8R6SfUhomZhMbImcEz2w/HedgT1HHMWzURVQPIqotU30Ap6Fv
+         1s+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689170390; x=1691762390;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=la7xD6v4M8WAlisTF+ijLkx9gxv01PJflmUjfs8N44g=;
+        b=Ze0Txo4aWy7gc25Yl8CJVRMBAZu/n4wkz9vq8apfDAMkHE7wTrfqU0mtUA5OMFrbW4
+         A71cXfEXHyjNyhmLiiJrEFmGvsK9ptAoaJGcl7ah9bj0Mw94sQEBpqVuO26gjPyMvLbA
+         GVSseLZcoPKuO5OlvamiKPSNJ69/VHZ6Tji34sHr3KbGzKnDNBz/Jen1V9w3t4CA+Qdy
+         345CMILH5keZbaLQ67L1QHNZUlO4CxiGta3dSv8Pg0yu8qA69eop8Wq5cqyzwn3pM/Ds
+         trDDIPb/PDmAS3TpP42LqzQMr3H1XcZZAvB+L3iVwuuxd9S3QBwY9vB0eyEOgPnvR5+N
+         DlyA==
+X-Gm-Message-State: ABy/qLb/W1y4A0RAYwCmtLhRJQsTjcbbS8TKaq1GSebKnlaN5lO9tCmU
+        ryFJRApsy8WsFCGOwV8ong81pp3sZMmCNIsV8KfS8mc+ndNitA==
+X-Google-Smtp-Source: APBJJlGHb8UgulGcSBJwSnFIW+aaN70f7DUA4/cb5cVFlzfQncuxlS8VeWHSjG/YwqF+isRC3pXWJkI44UVXWoEWq/Q=
+X-Received: by 2002:a67:eb15:0:b0:443:4302:b24b with SMTP id
+ a21-20020a67eb15000000b004434302b24bmr8424550vso.11.1689170390207; Wed, 12
+ Jul 2023 06:59:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Pintu Agarwal <pintu.ping@gmail.com>
+Date:   Wed, 12 Jul 2023 19:29:39 +0530
+Message-ID: <CAOuPNLizjBp_8ceKq=RLznXdsHD-+N55RoPh_D7_Mpkg7M-BwQ@mail.gmail.com>
+Subject: MTD: Lots of mtdblock warnings on bootup logs
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-fsdevel@kvack.org, ezequiel@collabora.com,
+        Miquel Raynal <miquel.raynal@bootlin.com>, bjorn@mork.no
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3f01e9fed8454dcd89727016c3e5b2fbb8f8e50c
-commit: 47bc8cf60e926d1fb0c5d990bf6f5e01e9b3352e ASoC: qdsp6: audioreach: Add ADSP ready check
-date:   6 months ago
-config: arm64-randconfig-r072-20230712 (https://download.01.org/0day-ci/archive/20230712/202307122100.08XU08G6-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230712/202307122100.08XU08G6-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307122100.08XU08G6-lkp@intel.com/
+We are getting below warning messages in dmesg logs on a NAND device
+for every raw partition.
+Kernel: 5.15 ; arm64 ; NAND + ubi + squashfs
+We have some RAW partitions and one UBI partition (with ubifs/squashfs volumes).
 
-sparse warnings: (new ones prefixed by >>)
->> sound/soc/qcom/qdsp6/q6apm.c:30:14: sparse: sparse: symbol 'g_apm' was not declared. Should it be static?
+We are seeing large numbers of these logs on the serial console that
+impact the boot time.
+[....]
+[    9.667240][    T9] Creating 58 MTD partitions on "1c98000.nand":
+[....]
+[   39.975707][  T519] mtdblock: MTD device 'uefi_a' is NAND, please
+consider using UBI block devices instead.
+[   39.975707][  T519] mtdblock: MTD device 'uefi_b' is NAND, please
+consider using UBI block devices instead.
+[....]
 
-vim +/g_apm +30 sound/soc/qcom/qdsp6/q6apm.c
+This was added as part of this commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/drivers/mtd/mtdblock.c?h=v5.15.120&id=f41c9418c5898c01634675150696da290fb86796
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/drivers/mtd/mtdblock.c?h=v5.15.120&id=e07403a8c6be01857ff75060b2df9a1aa8320fe5
 
-    29	
-  > 30	struct q6apm *g_apm;
-    31	
+I think this warning was decided after my last year's discussion about
+mtdblock vs ubiblock for squashfs.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+But these are raw NAND partitions and not mounted by us.
+
+What is the exact meaning of these warnings ?
+
+We have both these configs enabled:
+CONFIG_MTD_BLOCK=y
+CONFIG_MTD_UBI_BLOCK=y
+
+Through this warning, are we telling that only one of the above config
+should be enabled ?
+And the recommendation is to use ubi_block and disable mtd_block ?
+
+We are already using ubiblock for mounting squashfs volumes.
+But how to get rid of these warnings for raw NAND partitions ?
+
+Is there a way to avoid or we are missing something which we are not aware of?
+
+
+Thanks,
+Pintu
