@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5C674FDAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7644074FDB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjGLDYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S231148AbjGLD15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjGLDYU (ORCPT
+        with ESMTP id S229931AbjGLD1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:24:20 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1C1CA;
-        Tue, 11 Jul 2023 20:24:18 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 37E7424DBC0;
-        Wed, 12 Jul 2023 11:24:10 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Jul
- 2023 11:24:10 +0800
-Received: from [192.168.125.93] (183.27.98.46) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Jul
- 2023 11:24:09 +0800
-Message-ID: <52950ea0-2671-ff16-e115-c6f236a8e353@starfivetech.com>
-Date:   Wed, 12 Jul 2023 11:24:08 +0800
+        Tue, 11 Jul 2023 23:27:55 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D5E55
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:27:53 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R138k0NkMzBHXh0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:27:50 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689132469; x=1691724470; bh=IhEkEJFU0er4sX2VoeEpte+McQK
+        BkP6T/TegxX68EuI=; b=JMdK+LMWPlqYiswSju07mre69ybChq2wCe7apWadSH6
+        hHgMpUKiYzBXQEjrkeKGCwcTzwTOJ+4ytx+EYzZHoWNjPucXc/TOmlmpZ5ZKHRGN
+        ZdPVYJ+wwI/4ZRKIzrdQXrPArTyFjw5OkNCHYQBajcKzsiEDPMDpOzqtK1uZ8Ewv
+        VvHgiX8pNqsjGQ3ffD+gi0IEfgKHxmOaXq38KNcfxb1eY7xsGezZGPw5W+V9Gu2y
+        Pt2b7HXUQnFFa6J+YdInVr6jkQnUMhZKBihORquARXykFI6oz6ehx6+OTF5o5e0G
+        a0xmH3JdrF3KWCJPl7qONlBKiW1/04i7/9ZETiblm8g==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id VM7-OKanCrc7 for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 11:27:49 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R138j2lKXzBR5kb;
+        Wed, 12 Jul 2023 11:27:49 +0800 (CST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [RESEND PATCH v6 5/7] clk: starfive: jh7110-sys: Add PLL clocks
- source from DTS
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230704064610.292603-1-xingyu.wu@starfivetech.com>
- <20230704064610.292603-6-xingyu.wu@starfivetech.com>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <20230704064610.292603-6-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Wed, 12 Jul 2023 11:27:49 +0800
+From:   shijie001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com
+Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86:Fix warning in cpuid.h
+In-Reply-To: <tencent_338AFC84BFDBAD16D6D1E5B0D16558DE5306@qq.com>
+References: <tencent_338AFC84BFDBAD16D6D1E5B0D16558DE5306@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <ae64e0c7c49b4189c6a7ee1f1fa2a863@208suo.com>
+X-Sender: shijie001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.46]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 14:46:08 +0800, Xingyu Wu wrote:
-> Modify PLL clocks source to be got from DTS or
-> the fixed factor clocks.
-> 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+The following checkpatch warning is removed:
+WARNING: Use #include <linux/processor.h> instead of <asm/processor.h>
 
-Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+Signed-off-by: Jie Shi <shijie001@208suo.com>
+---
+  arch/x86/kvm/cpuid.h | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+index b1658c0de847..65188baf00be 100644
+--- a/arch/x86/kvm/cpuid.h
++++ b/arch/x86/kvm/cpuid.h
+@@ -5,7 +5,7 @@
+  #include "x86.h"
+  #include "reverse_cpuid.h"
+  #include <asm/cpu.h>
+-#include <asm/processor.h>
++#include <linux/processor.h>
+  #include <uapi/asm/kvm_para.h>
+
+  extern u32 kvm_cpu_caps[NR_KVM_CPU_CAPS] __read_mostly;
