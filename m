@@ -2,107 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE0D74FC87
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A8074FC86
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 03:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbjGLBQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 21:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S229640AbjGLBQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 21:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjGLBQl (ORCPT
+        with ESMTP id S229524AbjGLBQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:16:41 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1981726;
-        Tue, 11 Jul 2023 18:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=dVMRKCtThpA0k7vZMvJIKRYdajbcjdgx3zkYzglFpvU=; b=AGieYMQVYFIP8kjVmm6NG4qKnJ
-        mjj6Q9142L9yaOxC7IH158DUfTGzsqxXCtxHpgaU7tCgpJKxfq4giT0KqlzQgrSIvA+naYP1nsNW1
-        vzEPPfo1u3rAbW0iuKuG+u0SnjWEvX7CD8/cQKZeSmPVPpEoL54n3yQiUfp3cpNiA9Ps=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qJOSs-0015Xo-Hq; Wed, 12 Jul 2023 03:16:22 +0200
-Date:   Wed, 12 Jul 2023 03:16:22 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wei Fang <wei.fang@nxp.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net 3/3] net: fec: increase the size of tx ring and
- update thresholds of tx ring
-Message-ID: <a0e9f344-76b6-4cdc-a755-7ee9e57ea8d3@lunn.ch>
-References: <20230704082916.2135501-1-wei.fang@nxp.com>
- <20230704082916.2135501-4-wei.fang@nxp.com>
- <0443a057-767f-4f9c-afd2-37d26b606d74@lunn.ch>
- <AM5PR04MB3139789F6CCA4BEC8A871C1D882FA@AM5PR04MB3139.eurprd04.prod.outlook.com>
- <757f7803-72b6-4649-bfff-e4559d269880@lunn.ch>
- <AM5PR04MB3139A4FDA4DB6FB5A1DB1C7E8830A@AM5PR04MB3139.eurprd04.prod.outlook.com>
+        Tue, 11 Jul 2023 21:16:27 -0400
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1D1127
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:16:26 -0700 (PDT)
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b8cc7351f0so542820a34.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 18:16:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689124586; x=1691716586;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HVCDywhHpMOGTFqG/gDYk0S45lUTl1W6WhYjBIpoNpw=;
+        b=hTYbQ9NLlc9KN3t/4reGw0NNRlvsnShsVpGiMq9Btupn41JTSgvf0zzYBVelUc6Zav
+         r4wwLN1OS6CJ+e2qJxXxrOUgW7dZBIzOLyOW8pnF8P8VFKNBa+LlmIu8cDqxiHmuABlM
+         CLrJNSW96afgyiHl11OKFHSZ+yKZvyDt/VwUPchaebubv0qQS7jiu4RA/ORG2A+It8es
+         Zwl8sa108VDA0BfaXngcXrsc4wm2dSu/mhfLVLADhRVsIan/DRpGgL6YiLtq4sb6Cm7b
+         WlzswyJZ/D/7il3Wc9nCP7ffy9yUeaYcz4lJvmKqKG0K62s5gvtQ0T9Gtx3kgXkcg1eh
+         ctGQ==
+X-Gm-Message-State: ABy/qLZ68yZDJy79PTFiGt/9Zd5etmhlT0TurQOU9qoPVGyn7wAXrIfa
+        SJxm5biMvdETB6ztxzN41IIjl9xdvOc/xm1nxx0cP+lC6QNC
+X-Google-Smtp-Source: APBJJlEfdPeTrhOct9RIcxFE/RE/xuq9yIIGgVNHdByqdXJPK44xyvBuBojGYPkI1HcFu3nt3m+tr7yZqNEffrD+pg4iJnyU9rQU
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM5PR04MB3139A4FDA4DB6FB5A1DB1C7E8830A@AM5PR04MB3139.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6830:4524:b0:6b8:70f3:fd36 with SMTP id
+ i36-20020a056830452400b006b870f3fd36mr712756otv.2.1689124586175; Tue, 11 Jul
+ 2023 18:16:26 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 18:16:26 -0700
+In-Reply-To: <20230712004750.2476-1-astrajoan@yahoo.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f0c50706003ff6f3@google.com>
+Subject: Re: [syzbot] [can?] possible deadlock in j1939_sk_errqueue (2)
+From:   syzbot <syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com>
+To:     astrajoan@yahoo.com, davem@davemloft.net, dvyukov@google.com,
+        edumazet@google.com, ivan.orlov0322@gmail.com,
+        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl,
+        skhan@linuxfoundation.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Sorry, the Vybrid platform is not currently maintained by us, and Vybrid is also not
-> included in our usual Yocto SDK RC version.
+Hello,
 
-Your Yocto SDK version does not matter. We are talking about mainline
-here... You are maintaining the mainline driver, and submitting
-patches to extend the mainline driver.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> Even I find a Vybrid board, I think it
-> probably cann't run with the latest kernel image, because the latest kernel image
-> does not match with the old Yocto SDK, and new Yocto SDK does not support Vybrid
-> platform. I also asked my colleague in test team who is in charge of ethernet testing,
-> she hadn't even heard of Vybrid platform.
+Reported-and-tested-by: syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com
 
-Well 6.5-rc1 does run on Vybrid, i have a number of boards with
-it. You will also find that many inflight entertainment systems have a
-box under each row of seats in a aeroplane with a Vybrid controlling a
-Marvell switch. Take a look at arch/arm/boot/dts/vf610-zii-* You will
-also find a number of DTS files for imx5i, imx6, imx7 used for ZII
-products which are back of the seat displays, and make heavy use of
-networking with the FEC.
+Tested on:
 
-So i have in interest in the FEC for all these platforms.
+commit:         3f01e9fe Merge tag 'linux-watchdog-6.5-rc2' of git://w..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=130a98a2a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4c2acb092ca90577
+dashboard link: https://syzkaller.appspot.com/bug?extid=1591462f226d9cbf0564
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1380a782a80000
 
-> > And a bigger burst means more latency. Read about Buffer bloat.
-> > 
-> Perhaps, but not necessarily. For example, in some cases that some burst packets
-> maybe stay in Qdisc instead of hardware queue if ring size is small.
-
-Which is what you want, so high priority packets can jump to the head
-of the queue.
-
-> > While you have iperf running saturating the link, try a ping as well. How does
-> > ping latency change with more TX buffers?
-> > 
-> Per your suggestions, I tested on i.MX8ULP, i.MX8MM and i.MX93 platforms. The
-> results do not appear to be very different.
-
-Thanks for the benchmark numbers. They look O.K.
-
-       Andrew
+Note: testing is done by a robot and is best-effort only.
