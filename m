@@ -2,140 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AAF75098C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564FD75098B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjGLNYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S233113AbjGLNYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbjGLNYg (ORCPT
+        with ESMTP id S233688AbjGLNYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:24:36 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2114.outbound.protection.outlook.com [40.107.255.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20CF1BF7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:24:26 -0700 (PDT)
+        Wed, 12 Jul 2023 09:24:01 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A3D1736
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:24:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C8lgYKRxUEYc/+oVSp55h4eJ7lflueIOemItlv2d6X8OtcNvlqK/Jt0OYfYVaFfrxNsx+URfAP2SisQT1xcXk+GRBwWpKK2+5IJdS1+1ZFQZu4zfU3WNKl+JK7ivlDeDfNcpvRGsCcTL02ZyNFzmprQLmKbcge7enntt/4aIxj0qXw2OylO7vvlPNIz9l6kjclrmdcC83BCeECmB/u9aa6kFL0zWSKSNZck8+LLNDiY0q0Ocja20yY/cmgs2jmxmS6OLatoh9m5Omm94rsDW+wuQjDcMM3aSWJFgJj9jQCjYgKuQFhker+vN7K6xCWoEw8rqcJ9VTH1d0kAhQPUMVw==
+ b=XcqoiRxnls1/i4ohdH8CNSgxhlN25bJDV7TWCTg4pyeF5DD9ZU50Eh8LOIBpufDav+Mhv28rLkLwE4UTjHovog6Imc7OQ760dnw5pLizkVeXNVeyaboZlElbiLOO37jiDzlO7JBRZSQGRfNe+GuJkn+kFP5+onpxwb/ysvXO6r5836C8s51PDPt3Pan0Q8o8OPQnQpxviIUhA5Y4v6sT+/o36bgzrYtAgPZCwkBLWpvraYJtkkVYnE5brnnntc+HVKWYbgNDeVnqIv8kPfXGXEgfYVOFdzjuDr6vpkUSxIzbi7Cs7hyGg+vvilZgqCRwvfxd8uqe+EQrGL8NJA0hbg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2uqz2bE7yp51gtj1c1rObEdF/SihET8pPG3OU0DbKpg=;
- b=BviUq0ObNQZGDvGy1yGwdtceNM83KVo8V70xG3yo5z5X70u3FNalRDV8k3cVKgUjnRTqFBwZxSB3tT8qNMm7AJfgTb0TokwEs9J3U1kt9OMezMvLd/94SAB1/6m9biO2kDNyDPIJHuNa5j9bJWAtfnznfVHLVWjLYTSoWVbQ7+bPfh1MVsDScBQJzwgXNYQeXr929HAsdVar+ZKbk0ufglHgJAEQBLfkc7WvpOXsm+8LfmMKSeokXvyVjzB3w43Qse37ahGw5kYdqwaCeoLDD4nsqH2r5fq7sNwGBediu5WfVKcafVrjpa1zgzatPZfXiM69jvr1a0B9Ebp7MnDDqQ==
+ bh=R1YORnNONHStUHIGjrg0oPm++i7IRRq2x16vnHNKrME=;
+ b=PxbNIK48H+JNdzZTeBCKK/lFRukp5Za/vupAd944LMSQYoSqnHy+JfGF3V6XrKb2hoP1cvSbQfvVNQhcuAGatt17ldchlmhNZyJ2PlqzKJDw0DMFCT7kzL1cGKZyZtewjauZxbaDlW64eMN4JBuLtPJLgQgEM9+SVlddxbwL5vbaQvwNAV29MuYl2sgDLByGUzITUQUDrKKk0HM8kWy7wgBRnPoQq0G+xFMaPeqksLKGlqV6Z33RRNx6dIEZhc1DrCp23kD15k2ym2nyshYy6ecaWQJGQtPa8yb3qO1TpKlOWz/hp/jT/ZMZtHuoLhSBjf/spYxvSNcKJAlR5aSrVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2uqz2bE7yp51gtj1c1rObEdF/SihET8pPG3OU0DbKpg=;
- b=It7qnKj1j4AFlhpyEEB/zF0Cy3P8a+rmbnClzm/IQMEc34S4w+6xnWhEvGDqPlzZ7WIkGvJBSoo5Fh7SvYShFToEm1OaEaFDN8c0Lz44AFGA5+zneTMT8tCe6LubB/XCEMR+2LK3MRFOuE6ZLy25DS950wmZThbvr7You8UkkT3D1nkuRG4w2RpEnXoYoXTlAlNDXXpaitNsFKLxpCGCQntMIGO2ef5cajoWOlrKXU4DKWEbfhLudszTHc6ytYUakjeRiBBFd6KOCMZ8IA2e1LH+GNvksNUTjkxhcM/Cpv/17RiEYdL1ZnDuKn+OapFOyLt7BwaWGYQUXONeUbDTIQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
- TYSPR06MB6339.apcprd06.prod.outlook.com (2603:1096:400:412::5) with Microsoft
+ bh=R1YORnNONHStUHIGjrg0oPm++i7IRRq2x16vnHNKrME=;
+ b=SgPBzzwjVStmjgi/UbyZbZ4QJecYRBLLM/+8tfNeaY3c9iW3g1xT8eYi+1lHCncW0ExMutbEnVANUdmVYd8rsbUetH62DcNhQ5GmjknZK6yq3XJk2PHsJKT3gnCWuauzktRK5zSO/rImdTyXJl4q8LVgprUn19rxrwJayFzZIeo=
+Received: from DM4PR12MB7765.namprd12.prod.outlook.com (2603:10b6:8:102::7) by
+ DM4PR12MB6303.namprd12.prod.outlook.com (2603:10b6:8:a3::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.20; Wed, 12 Jul 2023 13:24:23 +0000
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c]) by SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c%4]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
- 13:24:23 +0000
-From:   Wang Ming <machel@vivo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wang Ming <machel@vivo.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-Subject: [PATCH v1] bus:Fix error checking for debugfs_create_dir() in mvebu_mbus_debugfs_init()
-Date:   Wed, 12 Jul 2023 21:23:28 +0800
-Message-Id: <20230712132343.8802-1-machel@vivo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYWPR01CA0028.jpnprd01.prod.outlook.com
- (2603:1096:400:aa::15) To SG2PR06MB3743.apcprd06.prod.outlook.com
- (2603:1096:4:d0::18)
+ 15.20.6565.32; Wed, 12 Jul 2023 13:23:58 +0000
+Received: from DM4PR12MB7765.namprd12.prod.outlook.com
+ ([fe80::8d98:f5c2:35b:e9ff]) by DM4PR12MB7765.namprd12.prod.outlook.com
+ ([fe80::8d98:f5c2:35b:e9ff%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 13:23:57 +0000
+From:   "Gangurde, Abhijit" <abhijit.gangurde@amd.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>
+Subject: RE: [PATCH 4/4] cdx: add sysfs for subsystem, class and revision
+Thread-Topic: [PATCH 4/4] cdx: add sysfs for subsystem, class and revision
+Thread-Index: AQHZs/EtE5KWIbDMMki7B114CBd4nq+0mMIAgAF/UTA=
+Date:   Wed, 12 Jul 2023 13:23:57 +0000
+Message-ID: <DM4PR12MB7765D5B3FC16399E7A1428898F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
+References: <20230711121027.936487-1-abhijit.gangurde@amd.com>
+ <20230711121027.936487-5-abhijit.gangurde@amd.com>
+ <2023071144-reason-defraud-b8b5@gregkh>
+In-Reply-To: <2023071144-reason-defraud-b8b5@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=80781d6e-b78b-4928-ab47-78059514ec32;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-07-12T12:54:22Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB7765:EE_|DM4PR12MB6303:EE_
+x-ms-office365-filtering-correlation-id: 62909a12-65de-459b-aca5-08db82db3f8c
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FABeJYf/1QqqJkSZwQEFEC8DppI8KRpnjZNGmWvUxKCYMkzA5Bxfhj3/9JhvTmrs3hb08iqZU4TDxYENR3hmXm6k1KLdai/4QbkYbdY0DqF3lxZkNv2F1/7VLCY1djaXD2dPMJ1Mr+hDqC69w08M19GPosc2g485NR7+NZwg7csDFylQT7PkgbYFcUGb6Lxb0HWH/oT+qDgO1PINS7WwEF2JkI2AftmjgPtwAISRDdKeuWNkNTKxxxJZannMt1XsA1AW+g0EZclwC1dUgu/2oibpG7XuKOiPWE0KaBnpqLoBl5NdklrJSi+7M1DaBEfA2df25YKEMWa3n4DTiH/XFq+hWBXFx+gLvcVyBR9ddIYeC9Rr9RizUz7rv4+LrK8mv0RfD6VYmm/993Rv0BcFafior+hswnEEuDQtnOPP6T+pzWutuKKb66nEAyXaltpjWy1NOlT2PY7a1WbJdwncngYkQtI8CRmeO4QYzUFuxkRbdgFE+1DysM5/5I9m8Yuxv70s5YU828wO9mn4bvW4JzuE69L2sekOmXXlWaEZZH8Oc1Eq1yZWH6J3gRqxqYix5uk2XVKbI5B+czhXOHhy0MYfQzLp7Ghoynlxsk2rWLgT+kvfLfIo0uaaZNvjap8r
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB7765.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(451199021)(71200400001)(186003)(9686003)(478600001)(316002)(54906003)(76116006)(66946007)(7696005)(66556008)(66476007)(64756008)(66446008)(4326008)(6916009)(41300700001)(8936002)(8676002)(55016003)(86362001)(6506007)(52536014)(5660300002)(33656002)(83380400001)(38070700005)(122000001)(38100700002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+tescV2k4oVM+UgQdGeFHr8lIHIuo5Xcxa4x2N51I7Vxu88WRaS25TyzxjT6?=
+ =?us-ascii?Q?Jx8BT3AvmfMdL+ad6tAFDKO6pU39AepsPgv/f5WjgmZXo0MH5vK8pZAsmGw/?=
+ =?us-ascii?Q?WFTX0dYDgW4azfOSFaTyz0pUXWKOUDpOdQRD6BVmmN0YY0uu6jura0uW7Z4o?=
+ =?us-ascii?Q?5FAI9FYcwHLTa6QBRBcaOLoC0Brqv/nzg0pd6lcXymcXbMIbpCqqOR9AYrRu?=
+ =?us-ascii?Q?m2urjn8FqAh1fkV2wuNUT5oARGZ3G4RJWAGe6TXB5gT/CdVha5GW5RtUVGlY?=
+ =?us-ascii?Q?7LFBlAGpYtg5K7wAFdljq5HcQZ54JVMrYRLXR3avyQz91EEewCvxynKSY5xh?=
+ =?us-ascii?Q?47UO+TprQRAaMZ5i1zUCn9/5XA/bGotj5+wiF4UwHkiyVKr78GCRfwds29w9?=
+ =?us-ascii?Q?DiHD1ik6OkaIoYdPPGu3D5R8pXIgGL9CO5axk8I+WpayPjA9SBFzaON7PtvG?=
+ =?us-ascii?Q?9Qad/HhHTTnu4yBV7Gbvw20SKV9d9ewT4CK7ZKtG+9sOls01GnAjy6ILRF+j?=
+ =?us-ascii?Q?KJkb2196GDq1BzrzijBjWQ+GcnJiLRii7D5CQFhJe8Myw8GiAhWqHyrA7CK/?=
+ =?us-ascii?Q?IJesd2wvjJL2Ckw/EXv0zZUtC2WJ5/T7vNIhle3r3VmIUyxQUHET1YHMx7Ur?=
+ =?us-ascii?Q?wlvXoXq5eM3MUlxY6YjaDYY8n3sIJQZ5yV1qcxCEMD0Ce0QQYRSBT4yS9Thc?=
+ =?us-ascii?Q?g5B7nVAaxcD5rhRrZS8F+muto6GrwpGBTYZW3VPB0h/IjLm09fn990QCA0eY?=
+ =?us-ascii?Q?QQJUNwfS3Xa4oZh1ZccMpNeZt7OMxkTy5HvL8Y5L/0r+JEqlUAO7r0vi0eG6?=
+ =?us-ascii?Q?gQL3n1Uldt/QTK4I0XUdtBPXeSIEQZ1CKWKSQjXt1kxuh9e/Tppflqh0wa6h?=
+ =?us-ascii?Q?D6vOoZk8DN6RLhxwsu3SJBRdsobonWrxr3KKjgQEX8Ors/kqsoJUK+OGklB6?=
+ =?us-ascii?Q?Asclhw3dohfP0wOD/+YaIwy1oRSlXiHV8Fc3GFuEoF74DcwfIlTgabx6LhQ5?=
+ =?us-ascii?Q?IepAChYmfQxQhM0lxiYmqkEJzFsd/xv2BdKqeaRjFKWk4+qmIStZaH5ycOZB?=
+ =?us-ascii?Q?dUbXJH5dwYicvq/pBoBVJgVtIMADrdEFji/5CoIhuKO/MKmZh+bPcaAnYXMH?=
+ =?us-ascii?Q?16R7fbQg77/zpU3OiWWGhRYDWEC5mcCKKvMIzXVbHHDODgKYstQyJB8Obr0S?=
+ =?us-ascii?Q?L+HoF/7OsCIWmz0IfxKjZFe6s8GqdBOoI4NsNLVmuLswhNJ5qSrAsIvzjJHi?=
+ =?us-ascii?Q?8YkVMy/Qtqtea90u4u8FFS26+pLCkg7HUqyW6kXSKXEBOaF13gNLbF1V42aR?=
+ =?us-ascii?Q?Yvb/hdyPCUDxsB8BRqBUVLzxzCBpDd6UwhUxV4DCPU3rtqh4TC7YxdqtgcbL?=
+ =?us-ascii?Q?hmPijTm1DGGvaUzlLb54t0hZrGvTkbBjkIwg+BV87Y2Zuszmr4au81iYpSj6?=
+ =?us-ascii?Q?ngiDtUctT+RNbrbL43ks5QzDIWgABXc/c2i2C+mC/vb97uVTuGfMPuCRIJ/h?=
+ =?us-ascii?Q?4H2vyOmFu1YLGKzg6BOppmxdJAO1iDNSZXHTlbxPhvBWwjPBxddWhtLZ+rFH?=
+ =?us-ascii?Q?jSLAJPYd25UZrM+KEoPV248ynBbHDn+jsIoi4F61OqrZBertf+1LzFC/Zny2?=
+ =?us-ascii?Q?A77ltSkgssTSqshhrIB5Mtg=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|TYSPR06MB6339:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac34f690-b390-49cf-38e3-08db82db4dfb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 18PVq5BWX1yYNsZIbx+cvcJWQg2GC9omps40sgrh/6wkWc8lTqjK9f+VEToMkYs1d9YVFExVojDEagqyP4Dwbktv15X1WFvLygeFZUGNDqiKNggVwT6F8oDYB9SSd5zVkSewjsIBTPdz40YfBgtkEK/9IZy2yQnIrjCZnkOalwTD1gFMOxWwEkWh3e+nDa0CwA74gj/V/KLh5weLD6EdQPH43l5V1rUplHxs8+6ZENwXH83jkMl1LKkinPUvQE1ZcNn1BqcT2iVegqEH21FjWNl8Y9jmwIEN2GGP8vC7ZmKjK0aOD3AuTFUSCI/bFv8HS4iknNlUVhTJQtOj3RL/5rRhriMI/j0/9dyibkNyRmCXU+WBtF34xsJav752DxEmtHu1aN9dhZ66S/02y4D15VyWiaNF3OjqCVXo5JOpAY0goo9Rc1sig3GyM5c9M6/l9pV4/G/vcrYbJHI7wV0c/f73bP4Vuvmh7n5FwvEQSBXQ8v/oLGyd54rg44jhBw2McazzPPgbXf6Q9L3/RBampFgErSsRwfwc/bUZbp3/pFFxWOwsGb6MHtFq1tfPebzZIyNTnKACBZ24dY+zijTae+SjLFpplfv6dFiTdB764nJSslpeW8d9UxeFgQqNTXpz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(136003)(376002)(396003)(451199021)(2906002)(6512007)(38100700002)(38350700002)(83380400001)(2616005)(186003)(26005)(1076003)(107886003)(86362001)(6506007)(5660300002)(8676002)(8936002)(4744005)(36756003)(110136005)(6486002)(52116002)(478600001)(66556008)(66946007)(41300700001)(66476007)(316002)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?of6gXoO6FA1kdn0JwcyE8BEWGsjjbNWeu6f39VDJBZMD/3KqPTtl9vTmUqgt?=
- =?us-ascii?Q?cjQQHDKhjN0HXYVQLiy7/n7KArvZ11SztBTSc3XBnfQELb7qxNRPAIagqeMP?=
- =?us-ascii?Q?d4GKqLeyU78sSeyCjZAb99Sl9NbHqnxRb4/jMwEZKwFk0un+2s1v2AYiH4PO?=
- =?us-ascii?Q?PeqnLyCX55foUjVwtt6fLE8kuOtKEbFxahJhLZ9X9/9fqGtwDRqJl3PlfHeU?=
- =?us-ascii?Q?M727UCa/mbiXemG6/AgmG8wwgnIQDedgZfKqKe/9QW7qsddMP6PLXtXdJ3v3?=
- =?us-ascii?Q?OVyuAaU1Zig+588+T9ZXjDDERzsqb8uz6r+DeYv9r9eeBfh7X2nylsbQhbDY?=
- =?us-ascii?Q?PbkqfhF1Sg9f4AMjYuvWdGYA/uXBue0G/RJEguyONh2ILC7KxhqBj12kOCIG?=
- =?us-ascii?Q?AtF64neNuPC3HWfC8kN/CeXf6CmgSJMd1hnzDHX6GRti+zUbfqvEmP61rNw0?=
- =?us-ascii?Q?2voR2bdAYUjuEidXwfmE9ZqQCexOyr+CtUbS+MiXh7xYtiQ8XihQlipbCwRa?=
- =?us-ascii?Q?rlo43pEeXsABOHBk3x6omJXw9yS6JTvC5XE5KZ3JHpRDFMDvhImDDVqs8gvG?=
- =?us-ascii?Q?RMNXrQZfbvv6JqpYfK6llXkgSEvtGEwvaLENoGKoAPoI2XH9+XtrE3HycOLY?=
- =?us-ascii?Q?7msHjoo+D4HZ6+EYfKITBAeVJXMwOzpVeOYlA+8w4+yfpPZvIH9ZfQApzhz/?=
- =?us-ascii?Q?f3PZkmfgCKjazw62cshhsf5QAmR0npDP+Eeg2dohGJc/yu6UNypFKMbFLEMp?=
- =?us-ascii?Q?1ZfeVeRsD1OpEkmYZLKCLNHfihjgIymWUPcIVBIsnz/syP57FReYtxLlFdhF?=
- =?us-ascii?Q?2eWOlATsIJfALqSYQEeE4sZd5acW757xtcr18bWMnbxEpS+BfDm3kPYTGN+L?=
- =?us-ascii?Q?XJavhiKXR+/EXDVo/ikexiSJ0PfovIFAeRU2fr5cn7LJSL1Wnx5A6bRHX7t7?=
- =?us-ascii?Q?ZzrRCvrvEp/v1VnUWNp9LN5KyGEA7j5AwdkQgyaJkgs7OrL8sQjwPjq6aE1t?=
- =?us-ascii?Q?wyD9DWHfUCkeIDAV2y66eGssRnHX2aJjAx5iafshXjpOHvVRSUt58yaJCeM2?=
- =?us-ascii?Q?nZK4a5wvxEgh/UUO4rFoikxZgvcCPxV7cU9hAbIQKAxTDjeF50x8JTcQXc90?=
- =?us-ascii?Q?yjxBU7V4v+nPgLHDfmDrA+T8YZ82GOIUfYZZiXjUb+LAOTQVABovSk2kvizD?=
- =?us-ascii?Q?vpsIvBEcCnwiQKOtz+Xwi/Ui9t68qU6746+K0Eh6QDy/grhl20pKMFc7zXl9?=
- =?us-ascii?Q?SYqtb4tlFYfhoZg7bknKM39sqe6PumGjYiVBqX0FLWEINKImY5As+I7Xj52D?=
- =?us-ascii?Q?wUt/W+DvDlABeBeUF3UetzzKqmbaDUmwjIV5sYM5hS68uC1BntHLSo9JVHek?=
- =?us-ascii?Q?3CegAe5aG1Ho7lV8FAwlGAU0wC3TLx0Tz0XnOp3MSmACW5etvzigTOWFpDGm?=
- =?us-ascii?Q?mKtsRcLq8wNd8GVVSrkBoVm9nokkhr7HbcaMYjICJ91iYPq8Rnv8pQc+OtUD?=
- =?us-ascii?Q?WBhS4UlcxB2CFb+m0pTZNlZpTGB2GZadsNZ0ZOvF+7Rx6jlqjbXk3zWDOSK/?=
- =?us-ascii?Q?CRD/VQmTLd775gPm+5jGkqESFWtV3X7q7+1Mh5xw?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac34f690-b390-49cf-38e3-08db82db4dfb
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 13:24:22.4337
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB7765.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62909a12-65de-459b-aca5-08db82db3f8c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2023 13:23:57.8638
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Asi5ZUEsTvPcntTZp3T+5BPPunOrLPhP5fSWo/DvLWMNcMaCAewOm5kj2lNXVUQs7TgyQ5me219KYdbXnvqzLw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6339
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mHN1Fuh3fHzupjZ1UO3jS46CUUJbRwF8GzC/FwqxyeQwBSwfJl08Hiovlmv6iJ+AumqdKatmF0WM0fxvLpapUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6303
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-debugfs_create_dir() does not return NULL,but it is
-possible to return error pointer. Most incorrect error checks
-were fixed,but the one in mvebu_mbus_debugfs_init() was forgotten.
+[AMD Official Use Only - General]
 
-Fix the remaining error check.
+> > RPU provides subsystem_vendor, subsystem_device, class and revision
+> > info of the device.
+>
+> What is "RPU"?
 
-Signed-off-by: Wang Ming <machel@vivo.com>
----
- drivers/bus/mvebu-mbus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+RPU is the remote processor on which firmware runs(controller). Will update=
+ the patch description in v2.
 
-diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-index 00cb792bda18..4c514894cc1f 100644
---- a/drivers/bus/mvebu-mbus.c
-+++ b/drivers/bus/mvebu-mbus.c
-@@ -993,7 +993,7 @@ static __init int mvebu_mbus_debugfs_init(void)
- 		return 0;
- 
- 	s->debugfs_root = debugfs_create_dir("mvebu-mbus", NULL);
--	if (s->debugfs_root) {
-+	if (!IS_ERR(s->debugfs_root)) {
- 		s->debugfs_sdram = debugfs_create_file("sdram", S_IRUGO,
- 						       s->debugfs_root, NULL,
- 						       &mvebu_sdram_debug_fops);
--- 
-2.25.1
+>
+> > Use the Subsystem vendor id, device id and class
+> > to match the cdx device. Subsystem vendor and device combination
+> > can be used to identify the card. This identification would be useful
+> > for cdx device driver for card specific operations.
+>
+> Why aren't you binding devices to drivers based on this like all other
+> bus types do?
 
+We are using similar binding to match the device to driver. Would update th=
+e patch description in v2.
+
+<snip>
+
+> >  /**
+> >   * struct cdx_ops - Callbacks supported by CDX controller.
+> > @@ -84,6 +99,10 @@ struct cdx_controller {
+> >   * @cdx: CDX controller associated with the device
+> >   * @vendor: Vendor ID for CDX device
+> >   * @device: Device ID for CDX device
+> > + * @subsystem_vendor: Subsystem Vendor ID for CDX device
+> > + * @subsystem_device: Subsystem Device ID for CDX device
+> > + * @class: Class for the CDX device
+> > + * @revision: Revision of the CDX device
+> >   * @bus_num: Bus number for this CDX device
+> >   * @dev_num: Device number for this device
+> >   * @res: array of MMIO region entries
+> > @@ -101,6 +120,10 @@ struct cdx_device {
+> >     struct cdx_controller *cdx;
+> >     u16 vendor;
+> >     u16 device;
+> > +   u16 subsystem_vendor;
+> > +   u16 subsystem_device;
+> > +   u32 class;
+>
+> What endian are these attributes?  Please be specific for all of them
+> (also for vendor and device, right?)
+>
+
+Will update this in v2.
+
+Thanks,
+Abhijit
