@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E88750285
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC66D750286
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbjGLJHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S232944AbjGLJHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjGLJHD (ORCPT
+        with ESMTP id S229610AbjGLJHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:07:03 -0400
+        Wed, 12 Jul 2023 05:07:24 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E31C10EF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:06:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7201BE6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:07:17 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R1BgX59m1zBR5lR
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 17:06:32 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4R1BhK3S3czBR5lZ
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 17:07:13 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689152792; x=1691744793; bh=TIXOAi2D/V9YUoSzSJYpAgnKBT0
-        W5l3abSG9/ysYwPA=; b=PqDQapT+iPYoYi3Vw9/oRg9tJOTF1CarUqAt6Bki3z2
-        ESWE/fCpkrcTt//F9HHA9ei3l/jThrleBlxaZJfp8leodxk6QajqL2fn4BJdespQ
-        y4J6CiVarNsmrUQVbuFVucNQHPYYgQyRNI3pzFcI4jvLgg3bvxpRy/ME+bVSjmsL
-        r0ujoT2xE7BpaZggz3llR+W1n604+31OOWP1MJKYGqldgNo7XbNBo1yquvrTIXQz
-        EoiQk4O+EOmwLO3DhpqdPqufaV50/qc1Gk9jWXvlNyIe537493bgT3QmFA/rt0eN
-        2O/zXCrfz3YrA1qBIKga8eTECYw0fGBuT782wgQJVdg==
+        dkim; t=1689152833; x=1691744834; bh=rnx2YsFWymU6M2isSb8AsLw+W4o
+        KCd+XVG6DZdNQj1U=; b=eBpwNO9fyCaYSMm8PUq5cjLN8Kag/wYW3cNmqFFap0A
+        WgF7lP+WUqLyhwUkCAi/U5ZI3ue4WeD3OqRi9Rm5U7T6jfhLj74ET0fHkKoGH53w
+        4Y8lVjD8SmNybH5cCtCsytQN64tWbuoFoy+oFhcoE8HAg1fCzOgms7EqCLjh2fAC
+        5N005IqEUQE5zfRp0JfyNTJuwFRWQPxmVcSEoh5Pjg0drkbcLfrIRj60A9eRjNa3
+        I5ETe6ZF+TZjgdRUDu6bakRtqLKo/pMtQ8PtLgG4IdgmyBoECHuqkZrXtTbEoDf/
+        69mGmMIZnEuxx86/BgAsHrn6DMvPMK5YXPsKzQuiyWQ==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DuXCfbINQLrn for <linux-kernel@vger.kernel.org>;
-        Wed, 12 Jul 2023 17:06:32 +0800 (CST)
+        with ESMTP id s7UC5zGBqXC5 for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 17:07:13 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R1BgX2jxczBR5CB;
-        Wed, 12 Jul 2023 17:06:32 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4R1BhK1948zBQR4f;
+        Wed, 12 Jul 2023 17:07:13 +0800 (CST)
 MIME-Version: 1.0
-Date:   Wed, 12 Jul 2023 17:06:32 +0800
-From:   shijie001@208suo.com
-To:     linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: mm: Fix warnings in context.c
-In-Reply-To: <tencent_B7B25B0AACAECB0523A2B09F270CF97BFF07@qq.com>
-References: <tencent_B7B25B0AACAECB0523A2B09F270CF97BFF07@qq.com>
+Date:   Wed, 12 Jul 2023 17:07:13 +0800
+From:   huzhi001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/mm: Fix warnings in mmzone_32.h
+In-Reply-To: <tencent_D97F5A9B657B360DB521D53075270C09F608@qq.com>
+References: <tencent_D97F5A9B657B360DB521D53075270C09F608@qq.com>
 User-Agent: Roundcube Webmail
-Message-ID: <60fb2068b0ee6ce2a67333c81ccd2f6b@208suo.com>
-X-Sender: shijie001@208suo.com
+Message-ID: <37068cae09dccc86b1ed2d6b3fdbde91@208suo.com>
+X-Sender: huzhi001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
@@ -61,25 +62,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following checkpatch warning is removed:
-WARNING: Use #include <linux/mmu_context.h> instead of 
-<asm/mmu_context.h>
+The following checkpatch warnings are removed:
+WARNING: Use #include <linux/smp.h> instead of <asm/smp.h>
 
-Signed-off-by: Jie Shi <shijie001@208suo.com>
+Signed-off-by: ZhiHu <huzhi001@208suo.com>
 ---
-  arch/arm/mm/context.c | 2 +-
+  arch/x86/include/asm/mmzone_32.h | 2 +-
   1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mm/context.c b/arch/arm/mm/context.c
-index 4204ffa2d104..c84ad6c786e7 100644
---- a/arch/arm/mm/context.c
-+++ b/arch/arm/mm/context.c
-@@ -13,7 +13,7 @@
-  #include <linux/smp.h>
-  #include <linux/percpu.h>
+diff --git a/arch/x86/include/asm/mmzone_32.h 
+b/arch/x86/include/asm/mmzone_32.h
+index 2d4515e8b7df..97ca734a5de9 100644
+--- a/arch/x86/include/asm/mmzone_32.h
++++ b/arch/x86/include/asm/mmzone_32.h
+@@ -7,7 +7,7 @@
+  #ifndef _ASM_X86_MMZONE_32_H
+  #define _ASM_X86_MMZONE_32_H
 
--#include <asm/mmu_context.h>
-+#include <linux/mmu_context.h>
-  #include <asm/smp_plat.h>
-  #include <asm/thread_notify.h>
-  #include <asm/tlbflush.h>
+-#include <asm/smp.h>
++#include <linux/smp.h>
+
+  #ifdef CONFIG_NUMA
+  extern struct pglist_data *node_data[];
