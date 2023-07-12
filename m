@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7848750740
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE597750742
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjGLLzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S229529AbjGLL4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbjGLLzX (ORCPT
+        with ESMTP id S233471AbjGLL4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:55:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1E198A;
-        Wed, 12 Jul 2023 04:54:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F280061792;
-        Wed, 12 Jul 2023 11:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5FBC433CB;
-        Wed, 12 Jul 2023 11:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689162800;
-        bh=OtYO6AydkEf1nb5U4ddRemn+F34bsnKJ06meNnlLDQY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hW1x64MJvYfOFj6blK0Gj805yBgRVIuPM4eUa491JazDpw/DL1kcgO4fHVEZEO9eu
-         H/LIx5WawP6V0s9E1iy8LbOJOzUHtdCKDNBsbcawYygHDzvTWNtDi46yNtIDSidRJp
-         XRlelviLWHN8nKaZ1SabyH8wIw4+3ndrx3xBsHIgzrT8q0A3ULiZ3WcRpSqVMbYyjk
-         xCH8TLhnHO46F/XAPgWOqpw+x1hsJS3lA9kX6NqZtKRq4uMgiY5M/twu1XFXPaD4zT
-         YmdUf52epWhdAzWNyrurbSEyA4J2TrRxr7tBV7XatO14BLuXkFrw0zoj36iPmT2lUp
-         AY3USyadKMtTg==
-Message-ID: <0201ab70-dff8-aa38-67c9-ca8e8ada72f0@kernel.org>
-Date:   Wed, 12 Jul 2023 14:53:15 +0300
+        Wed, 12 Jul 2023 07:56:23 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F69213E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:55:58 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A21881C000B;
+        Wed, 12 Jul 2023 11:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689162898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UII/wsuuzjNZbpiAVeF6yDZcHsS9cuVB0V5RDHl93hA=;
+        b=jwaWI0SF7ZVsRx+L0joo3eYJtnmAqCUL2W8brhepKTSZTXHTvzeDDGoWe9ZiQsiMDUwf7t
+        hkFkCd5CO0qV7DbICAuhmh0+Uf08FN7I5YFKiEvtvnquH7CtW2B2KnKOBeP1Hq7jzhvmzA
+        316H3iefNRuN+nCWQY2l2T5BtUVu7Z6Smpt69xG9Z/yN2irBcGatyWeBzXLo1bqrlALgH6
+        s4tOCgd8K3mDSeojM7Ja/l/IcnCbxb39aVAxn366LEqokJ0Uea6mvUXij+l/n4uKeuFHM4
+        kyqMGliKSaKvuYYq2U+w16qkX7QNyEMYFsLBaK8GNLvj3QelxNM5d/FJGPwMOg==
+Date:   Wed, 12 Jul 2023 13:54:55 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/18] mtd: rawnand: sunxi: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20230712135455.71fbeb5f@xps-13>
+In-Reply-To: <20230707040622.78174-1-frank.li@vivo.com>
+References: <20230707040622.78174-1-frank.li@vivo.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: usb: snps,dwc3: Add
- allow-rtsusp-on-u3 property
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
- <20230711174320.24058-3-quic_eserrao@quicinc.com>
- <20230711215645.6wclz5uffqnlpnnd@synopsys.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230711215645.6wclz5uffqnlpnnd@synopsys.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Rob
+Hi Yangtao,
 
-On 12/07/2023 00:56, Thinh Nguyen wrote:
-> On Tue, Jul 11, 2023, Elson Roy Serrao wrote:
->> This property allows dwc3 runtime suspend when bus suspend interrupt
->> is received even with cable connected. This would allow the dwc3
->> controller to enter low power mode during bus suspend scenario.
->>
->> This property would particularly benefit dwc3 IPs where hibernation is
->> not enabled and the dwc3 low power mode entry/exit is handled by the
->> glue driver. The assumption here is that the platform using this dt
->> property is capable of detecting resume events to bring the controller
->> out of suspend.
->>
->> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index a696f23730d3..18ad99a26dd9 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -403,6 +403,11 @@ properties:
->>      description:
->>        Enable USB remote wakeup.
->>  
->> +  snps,allow-rtsusp-on-u3:
-> 
-> Please spell out the whole thing as "rtsusp" isn't clear. Also, it's not
-> just for U3 right? For highspeed, it's L2.
-> 
-> How about the name that Roger use: "snps,gadget-keep-connect-sys-sleep"
+frank.li@vivo.com wrote on Fri,  7 Jul 2023 12:06:05 +0800:
 
-That property was meant to keep the USB device controller connected
-during system sleep. So that name may not be appropriate here as this
-is about allowing controller runtime suspend during USB suspend.
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>=20
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  drivers/mtd/nand/raw/sunxi_nand.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sun=
+xi_nand.c
+> index 9884304634f6..db36bd755b8d 100644
+> --- a/drivers/mtd/nand/raw/sunxi_nand.c
+> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
+> @@ -2087,8 +2087,7 @@ static int sunxi_nfc_probe(struct platform_device *=
+pdev)
+>  	nand_controller_init(&nfc->controller);
+>  	INIT_LIST_HEAD(&nfc->chips);
+> =20
+> -	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	nfc->regs =3D devm_ioremap_resource(dev, r);
+> +	nfc->regs =3D devm_platform_get_and_ioremap_resource(pdev, 0, &r);
 
-> 
->> +    description:
->> +      If True then dwc3 runtime suspend is allowed during bus suspend
->> +      case even with the USB cable connected.
->> +
->>  unevaluatedProperties: false
->>  
->>  required:
->> -- 
->> 2.17.1
->>
-> 
-> Did you Cc Rob, the devicetree maintainer?
-> 
-> Thanks,
-> Thinh
+Why do you keep a reference over the resource? Why not just
+devm_platform_ioremap_resource(pdev, 0) ?
 
--- 
-cheers,
--roger
+This comment is valid for almost all the cases in this series.
+
+When the resource is only needed in an error printk, I am also in favor
+of modifying the error message to avoid having to grab the resource.
+
+>  	if (IS_ERR(nfc->regs))
+>  		return PTR_ERR(nfc->regs);
+> =20
+
+These comments apply to the 18 patches.
+
+Thanks,
+Miqu=C3=A8l
