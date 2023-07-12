@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A109175030C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE7F75031C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjGLJ1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S233099AbjGLJaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbjGLJ1m (ORCPT
+        with ESMTP id S231472AbjGLJav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:27:42 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6CBFB;
-        Wed, 12 Jul 2023 02:27:40 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1689154051tknq755c
-Received: from linux-lab-host.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:27:30 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 0nVv8wOro77vy4UoA7x+7BKA4KP17B5ePOoos9KdPSu4lX3g/jQWX5p5bQe81
-        uk1rep7yGkn3ZK0WeEiENotC+WSBpA+y8mcpeQu3yRB++8mz9Q3eEoyOGCpryRpqclGX02t
-        HIcCXYxqyTQNggTEnh3RXxIsofcYfY6euv7vve37dHQqnzwtngwneexKq0EHaruHVpN9otS
-        jgBXB4djg1LSLZaTH27xE+gT4zzs58Cn31MvRCJCAuNWMIOqQj9A1471dpCZ2ZXrcykWVuT
-        yUng3g53nFtiz8gty0yP5fvvsCGj1Sqm1R2eATEWObbRnWtOtdpTD563Vh2B2KJqbV9Nm1H
-        p+K7+VK+6CIsHrlobIXJKohHySC/XHgdUIUZCKFvo//cV0jMrTZb75KpH2y+Id00uE7CPPJ
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8164517920057648241
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 11/11] tools/nolibc: arch-*.h: add missing space after ','
-Date:   Wed, 12 Jul 2023 17:27:26 +0800
-Message-Id: <fe980d56a21c254c0355c1e5f2a3355a4cc5fe50.1689150149.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
-References: <cover.1689150149.git.falcon@tinylab.org>
+        Wed, 12 Jul 2023 05:30:51 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DB510C7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:30:49 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-783546553ddso213440839f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689154248; x=1691746248;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AtYtKFoXSNaR0HimX7VOb+3+TUw1E5irFW1i/Ff7fdo=;
+        b=JiHaHowj0OR8KwgXRnSt+L69TkR1RoU8hgZP5ne/AABbP9RXRzfG9ZSAx0MAeVhVqZ
+         RuJx/lQyMwgysM2NJJZoGKqSiN+WMv6gWAnXqOgWSf39ZVAdpNGkMwf0z6pgOK53tZuA
+         nZHHD6009dX+C5GhWf1qYTFnrjMxXZkyN4CdO8MGWcgcWBxbLFUneXMMFHq6kXNET2dH
+         oGHEe5b9x5GgGfutXNttjbwXHcMkXsMperI26dRitbb5OFBOJ6YL0HyVS4MyAEzpmCk1
+         t/vxsrrakkSOfL3iplAd/KFb7WowFeadG8xtEht7siYoPYqUghzRkUEoi4NBlW5Y0EGe
+         SN4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689154248; x=1691746248;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AtYtKFoXSNaR0HimX7VOb+3+TUw1E5irFW1i/Ff7fdo=;
+        b=F/FRtg3dgS5x8RE6F8p+S6rh/qpCGxPuOjwWvABgGcv4nHwR7abG0DZKnUcIsezaQC
+         lik4THG/q+FjZGafbC1bT1sQvevve9knRWWBgHfIVw0ElkENTxnCqiguB8bunPQTFSUq
+         q1LKaOXJIthn2KQIxP6T0Xcs5uCvo2zsSORViNUo8JApZ3eRkCwfaYJQpH1m8mQIpwH2
+         9v8NN4hphlGsIExp0y1I7EA+wcyWlmzFj8LI5fwSWTYewSBCvudxVIQNGmbU+ulJBfC5
+         6VCAyy3phMYYwQdBsO5mDOYgiUML6wS3RJNIOP0VcsNyYgTvaT+AsQo+Th9Dip5rB6rr
+         HVCw==
+X-Gm-Message-State: ABy/qLY37nFgCXgactRypExoTwdR62e9oJBZHxscapKM8JSlIq57eYk8
+        QfRrNuypcGciRoKOLRPtK3mGr5dnzFDHVqJov1iWQg==
+X-Google-Smtp-Source: APBJJlHlumhEigpYsGGvupqXZVMHwmq5rfVisQzfEtUqsBWOohrJU8W/yjpSj7l2e4UcAkLLYOQHsAPeiX/obZxeJqU=
+X-Received: by 2002:a5e:dd0c:0:b0:786:ea57:22e2 with SMTP id
+ t12-20020a5edd0c000000b00786ea5722e2mr14334765iop.20.1689154248240; Wed, 12
+ Jul 2023 02:30:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230712081616.45177-1-zhangpeng.00@bytedance.com>
+In-Reply-To: <20230712081616.45177-1-zhangpeng.00@bytedance.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 12 Jul 2023 11:30:11 +0200
+Message-ID: <CAG_fn=Vj+rqkz0_3kvBoBVoxET10KV-zoD=YtJmCfsA8YEMemg@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: kfence: allocate kfence_metadata at runtime
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     elver@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,134 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix up such errors reported by scripts/checkpatch.pl:
+> Below is the numbers obtained in qemu (with default 256 objects).
+> before: Memory: 8134692K/8388080K available (3668K bss)
+> after: Memory: 8136740K/8388080K available (1620K bss)
+> More than expected, it saves 2MB memory. It can be seen that the size
+> of the .bss section has changed, possibly because it affects the linker.
 
-    ERROR: space required after that ',' (ctx:VxV)
-    #148: FILE: tools/include/nolibc/arch-aarch64.h:148:
-    +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-                             ^
-
-    ERROR: space required after that ',' (ctx:VxV)
-    #148: FILE: tools/include/nolibc/arch-aarch64.h:148:
-    +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-                                      ^
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/arch-aarch64.h   | 2 +-
- tools/include/nolibc/arch-arm.h       | 2 +-
- tools/include/nolibc/arch-i386.h      | 2 +-
- tools/include/nolibc/arch-loongarch.h | 2 +-
- tools/include/nolibc/arch-mips.h      | 2 +-
- tools/include/nolibc/arch-riscv.h     | 2 +-
- tools/include/nolibc/arch-s390.h      | 2 +-
- tools/include/nolibc/arch-x86_64.h    | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
-index e52fa5a20d71..c94fdca9ace6 100644
---- a/tools/include/nolibc/arch-aarch64.h
-+++ b/tools/include/nolibc/arch-aarch64.h
-@@ -145,7 +145,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 74773ddcf4ca..5f8bfc24e9c7 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -185,7 +185,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index f0d0f5c364b8..915f0e77629e 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -162,7 +162,7 @@
-  * 2) The deepest stack frame should be set to zero
-  *
-  */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
-index 9db70d6f2c31..6edec94538e0 100644
---- a/tools/include/nolibc/arch-loongarch.h
-+++ b/tools/include/nolibc/arch-loongarch.h
-@@ -151,7 +151,7 @@
- #endif
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index b1c070c5b24a..36d4bf0c6aaa 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -175,7 +175,7 @@
- })
- 
- /* startup code, note that it's called __start on MIPS */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
- {
- 	__asm__ volatile (
- 		".set push\n"
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 2e3fcf925ae9..043e2fd85ab0 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -143,7 +143,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		".option push\n"
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index 051f3f4ed19b..705576d8fd15 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -139,7 +139,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		"lgr	%r2, %r15\n"          /* save stack pointer to %r2, as arg1 of _start_c */
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index 0048adf6b11f..f5614a67f05a 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -161,7 +161,7 @@
-  * 2) The deepest stack frame should be zero (the %rbp).
-  *
-  */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
--- 
-2.25.1
-
+The size of .bss should only change by ~288K. Perhaps it has crossed
+the alignment boundary for .bss, but this effect cannot be guaranteed
+and does not depend exclusively on this patch.
+I suggest that you omit these lines from the patch description, as
+they may confuse the readers.
