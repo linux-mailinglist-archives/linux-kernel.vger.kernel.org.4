@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16037504CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F767504D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbjGLKgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S232159AbjGLKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbjGLKga (ORCPT
+        with ESMTP id S232675AbjGLKgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:36:30 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306382694
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:36:09 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3a1ebb85f99so5842193b6e.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:36:09 -0700 (PDT)
+        Wed, 12 Jul 2023 06:36:51 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A9D1FD8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:36:29 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-66869feb7d1so3752487b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689158164; x=1691750164;
+        d=linaro.org; s=google; t=1689158176; x=1691750176;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=9lRntyMiDXIrlEPonKFcypmd70adqqA/4SVPD5U+6Pw=;
-        b=csz5o2z7SM6JsEw1selBM2JSMArZw2Kj1XqTd5Dx6K1tJ55Cl0LHwyqbCboknpyqYx
-         1t7x0+1/Z8TKLY2VrTg0dJbGFa0o3Ou/Yf7v63ygHBuMX9OWYs5HPNBSBBgfgGfpMATU
-         /Go6S0a6pxh5+Lm7oCmtW9ZNEIbMEjTvk3aT7xQ6zPIldAc5AB2KwFz966fUO1Y0s/6z
-         bb+93zdyxLNvPtmL/BfdZ37pSRhN/SuUYOxZ3OTVR3d0vojIaWsKr7soHMY0MIrXhPV0
-         zAyInWURma9PkrqsV+1cJmh0dVqkOUq9FITQpXGL/ocMU5oGYBpBIhJckxQcKghjGl1e
-         66lg==
+        b=ddU83xthwqQHlQU/YGoDeOpAw9U+JX7LkQE4ctdRFq74dv4GDtENlF6DZ2gIqcGrNV
+         yFv9MgvMVOqPOSjIhpaNyUq+WFmP4myJAzbj8BlEnoqWro/Hq1relo3krXlBnBqjbYdK
+         ZFfdG6jo/q6kUwahfI1O4NH2bX6d2j8gsP+aqzgOpSwSrZAHcC75gJrbZeTU1vVXJsj+
+         SmTVhKyBQhn4kkaMNRAFR4btcb2y2d9rDbKMDqOrjJQ8Sal6335uKM6Z7bsd62gP3ijy
+         xtijtiu7X/WGwSYtaDpvrH5o05v97vKNW+KkfmRslinvlIRiueaTKlErJxNM4ZmwjMRi
+         9ZbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689158164; x=1691750164;
+        d=1e100.net; s=20221208; t=1689158176; x=1691750176;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=9lRntyMiDXIrlEPonKFcypmd70adqqA/4SVPD5U+6Pw=;
-        b=DGSREokug/jclUUCysMQ6ounkTgYA9/lGyFjkRyjezYZNd/aYixT64OAoFHBYk3LPv
-         eJ9zj6xH1p4GFadAlD8DeUMimsv08tY5RsEJk3KO3F3cBf6chYmplqu1O3M+V/vdaoYr
-         fLtoXbRAfn2Y0FYI+p5P7vOgKnvM8UCJWpSSfMRhfi7LSX9CWjdfYB8eydR/awtwZNjK
-         WpWTvww6tr1kgVEEysfRibvCDwbphRVZfI52QC/k9ErgO7TU+20CHPfdV8YeNRVzbvG8
-         eBF2CVIRoXgiqJTtj7QpyeEV3IorZ+JM2YJEDDyzDDmR0hkidWoDtMLH9ur5bXeznHzu
-         ratw==
-X-Gm-Message-State: ABy/qLZ8GIIsabK2ZxGdiODvEoqZ5QtHXe29w1g0LS3nnJGQdJBE4uE3
-        XmGljVSTWdlQzHsdUMcRxxSh
-X-Google-Smtp-Source: APBJJlHKe7eMfEyD0mRmZ1k5USSgGzYv4OcdOx42JMeVF0VlQQBVtsWt9CrzDl4gR8yV4RHdVY1W4A==
-X-Received: by 2002:a05:6808:54b:b0:3a3:7248:252a with SMTP id i11-20020a056808054b00b003a37248252amr24110902oig.0.1689158164305;
-        Wed, 12 Jul 2023 03:36:04 -0700 (PDT)
+        b=PbVsTFq3JHq9JrYCnk5+6QlON1ZNFX4xzaY0pBh9HtXs9j5mMmkWzgilvga36fQ2sx
+         catMpYny6V3s9++0htZfm8Q8tYizZ9jfpv8wbfECzsFUlzhdZaV1ST1NavswI6BWNStw
+         d+l0DK2f2znv/rLxE2qG8Aetk6gJgYHlnBR6WxWYhK7XotH9WE/78cD82k6q7JSejSSp
+         A6clKY9VYa31antly+Dl1SmQMAVk81x2SbPd0QuPXgSCnfGz02e6eQuKRHW6gAOYn56l
+         0eHf5i4HIpS8g2eUnNG5gROmGTyE7vMbFpIEBKSAZTNYtbXnFNnXgUJugpWgtMCzQ1k1
+         RnZQ==
+X-Gm-Message-State: ABy/qLZSp2I6VF4MeHh5eX5s6fqRQotvTMYhRiZFUKSewO91+y8vh7wT
+        DE3Uxqksim+V+2EUmqV4DVny
+X-Google-Smtp-Source: APBJJlGQUwDbSGJrHqVcu6A2gvQRGShHhK1KCG3qxa2uNIpsVhibSvARTj1VdpoTT6zli3Sjs1XNRQ==
+X-Received: by 2002:a05:6a00:2d0c:b0:65b:351a:e70a with SMTP id fa12-20020a056a002d0c00b0065b351ae70amr16474124pfb.29.1689158176512;
+        Wed, 12 Jul 2023 03:36:16 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.35.53
+        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.36.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 03:36:03 -0700 (PDT)
+        Wed, 12 Jul 2023 03:36:16 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -64,9 +64,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 13/13] scsi: ufs: qcom: Add support for scaling interconnects
-Date:   Wed, 12 Jul 2023 16:02:12 +0530
-Message-Id: <20230712103213.101770-18-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 14/14] scsi: ufs: qcom: Add support for scaling interconnects
+Date:   Wed, 12 Jul 2023 16:02:13 +0530
+Message-Id: <20230712103213.101770-19-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
 References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
@@ -75,7 +75,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
