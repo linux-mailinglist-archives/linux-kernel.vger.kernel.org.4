@@ -2,39 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9173874FE6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8574E74FE69
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjGLEoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 00:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S231658AbjGLEnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjGLEoC (ORCPT
+        with ESMTP id S229843AbjGLEno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 00:44:02 -0400
-Received: from n169-110.mail.139.com (n169-110.mail.139.com [120.232.169.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DCA1980
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:43:51 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM:                                                                                        
-X-RM-SPAM-FLAG: 00000000
-Received: from u22.. (unknown[14.26.80.93])
-        by rmsmtp-lg-appmail-09-12087 (RichMail) with SMTP id 2f3764ae2f7f19c-e03ce;
-        Wed, 12 Jul 2023 12:43:45 +0800 (CST)
-X-RM-TRANSID: 2f3764ae2f7f19c-e03ce
-From:   Kevin Lu <luminlong@139.com>
-To:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Kevin Lu <luminlong@139.com>
-Subject: [PATCH v1] ASoC: tas2505: Add tas2505 driver
-Date:   Wed, 12 Jul 2023 12:43:21 +0800
-Message-Id: <20230712044321.48530-1-luminlong@139.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 12 Jul 2023 00:43:44 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681CD1736
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:43:42 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-56fff21c2ebso73766197b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 21:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689137021; x=1691729021;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=32J2R02jsERy50AfXzN+Fv7mkbkTcayWxoVtpmMI0mo=;
+        b=kQgLOireKqLbQKrB+SyHisW6tHedPZ4G73Quib/4dgQ29ZxZF0aUUC9/AB1YAXJTmW
+         YfN2VLL4oxjBytasR0DDmdsA/5SwE00Qr2eUa6/BDHduLqwOHYcIxbv7cRXIJlWzEw2m
+         uoqeOZ8DbWFaiY63frmb1j9LBXR1ks+8b73KgPMot86t+OVw+MvtSmilEn/5eKnnRo9K
+         SAxgb45RUrxIr6smOzqkeoGVSl5EJPs5usxApXvZRRMwRcK/6dkO1aWOTsyUkX+UXkby
+         QrSLYbHURK0PWj/JH/BKH9qrF8fgxguY0Wuc8PElVG57pF2x2Uxoa29tGTGp97vsnB2j
+         jLjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689137021; x=1691729021;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=32J2R02jsERy50AfXzN+Fv7mkbkTcayWxoVtpmMI0mo=;
+        b=lU2GiNzJgh0GOXk3I/7U2eRqI//rnYiTs8kAlnBzBPJOuaCVcKQNgyFbogCohm0JlP
+         95VKNDFI6xRNG+hU272csYx4cv1v6/E4p4pbTJCP9L2vIjvzvQUE9BZ132A4SdsDHZlF
+         Y5059GPkkUxngajxHEYRt+BEtfpcJYVIBDE9RNyGd4plxgeWkHpibYvSF6F0TQ7+Lydy
+         aLUJCgljgD5PGrhYuN5I63hiia6W8dfAOp2BGbbEqEBmXL+ChNIza7oZ9wfOlvg76jrw
+         wDEsNKr4TrgqtT8zAFlD0h9xACVbwtukt/iVzbJ+RNxUIYUVlo7F0saBt34uNq7SlFxB
+         8eJw==
+X-Gm-Message-State: ABy/qLaxLNvsxsYeslWfP2I2VDWVGX3Ts+XzFkAa7uN+tvKyJfsQSPLA
+        HbffveDLdlTC5L1rHv0WMKxagw==
+X-Google-Smtp-Source: APBJJlEKLBPT5DnCx42X0tK5DSIxj7Xpwg5AizJaj2C86j321LP85ClVc2RWHCxTTmThFbhjxFV/0w==
+X-Received: by 2002:a81:4e46:0:b0:577:42be:1804 with SMTP id c67-20020a814e46000000b0057742be1804mr17031953ywb.29.1689137021419;
+        Tue, 11 Jul 2023 21:43:41 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id h62-20020a815341000000b0057682d3f95fsm981159ywb.136.2023.07.11.21.43.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 21:43:41 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 21:43:36 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3 11/13] mm/khugepaged: delete
+ khugepaged_collapse_pte_mapped_thps()
+In-Reply-To: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
+Message-ID: <a5dce57-6dfa-5559-4698-e817eb2f993@google.com>
+References: <7cd843a9-aa80-14f-5eb2-33427363c20@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,870 +116,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create tas2505 driver.
+Now that retract_page_tables() can retract page tables reliably, without
+depending on trylocks, delete all the apparatus for khugepaged to try
+again later: khugepaged_collapse_pte_mapped_thps() etc; and free up the
+per-mm memory which was set aside for that in the khugepaged_mm_slot.
 
-Signed-off-by: Kevin Lu <luminlong@139.com>
+But one part of that is worth keeping: when hpage_collapse_scan_file()
+found SCAN_PTE_MAPPED_HUGEPAGE, that address was noted in the mm_slot
+to be tried for retraction later - catching, for example, page tables
+where a reversible mprotect() of a portion had required splitting the
+pmd, but now it can be recollapsed.  Call collapse_pte_mapped_thp()
+directly in this case (why was it deferred before?  I assume an issue
+with needing mmap_lock for write, but now it's only needed for read).
+
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- sound/soc/codecs/Kconfig   |   5 +
- sound/soc/codecs/Makefile  |   2 +
- sound/soc/codecs/tas2505.c | 691 +++++++++++++++++++++++++++++++++++++
- sound/soc/codecs/tas2505.h | 105 ++++++
- 4 files changed, 803 insertions(+)
- create mode 100644 sound/soc/codecs/tas2505.c
- create mode 100644 sound/soc/codecs/tas2505.h
+ mm/khugepaged.c | 125 +++++++-------------------------------------------
+ 1 file changed, 16 insertions(+), 109 deletions(-)
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 8020097..2527a9b 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -229,6 +229,7 @@ config SND_SOC_ALL_CODECS
- 	imply SND_SOC_STA529
- 	imply SND_SOC_STAC9766
- 	imply SND_SOC_STI_SAS
-+	imply SND_SOC_TAS2505
- 	imply SND_SOC_TAS2552
- 	imply SND_SOC_TAS2562
- 	imply SND_SOC_TAS2764
-@@ -1676,6 +1677,10 @@ config SND_SOC_STAC9766
- config SND_SOC_STI_SAS
- 	tristate "codec Audio support for STI SAS codec"
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 46986eb4eebb..7c7aaddbe130 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -92,8 +92,6 @@ static DEFINE_READ_MOSTLY_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
  
-+config SND_SOC_TAS2505
-+	tristate "Texas Instruments TAS2505 Mono Audio amplifier"
-+	depends on I2C
-+
- config SND_SOC_TAS2552
- 	tristate "Texas Instruments TAS2552 Mono Audio amplifier"
- 	depends on I2C
-diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
-index 5cdbae8..95717d6 100644
---- a/sound/soc/codecs/Makefile
-+++ b/sound/soc/codecs/Makefile
-@@ -365,6 +365,7 @@ snd-soc-max9877-objs := max9877.o
- snd-soc-max98504-objs := max98504.o
- snd-soc-simple-amplifier-objs := simple-amplifier.o
- snd-soc-tpa6130a2-objs := tpa6130a2.o
-+snd-soc-tas2505-objs := tas2505.o
- snd-soc-tas2552-objs := tas2552.o
- snd-soc-tas2562-objs := tas2562.o
- snd-soc-tas2764-objs := tas2764.o
-@@ -629,6 +630,7 @@ obj-$(CONFIG_SND_SOC_STA350)   += snd-soc-sta350.o
- obj-$(CONFIG_SND_SOC_STA529)   += snd-soc-sta529.o
- obj-$(CONFIG_SND_SOC_STAC9766)	+= snd-soc-stac9766.o
- obj-$(CONFIG_SND_SOC_STI_SAS)	+= snd-soc-sti-sas.o
-+obj-$(CONFIG_SND_SOC_TAS2505)	+= snd-soc-tas2505.o
- obj-$(CONFIG_SND_SOC_TAS2552)	+= snd-soc-tas2552.o
- obj-$(CONFIG_SND_SOC_TAS2562)	+= snd-soc-tas2562.o
- obj-$(CONFIG_SND_SOC_TAS2764)	+= snd-soc-tas2764.o
-diff --git a/sound/soc/codecs/tas2505.c b/sound/soc/codecs/tas2505.c
-new file mode 100644
-index 0000000..cf03859
---- /dev/null
-+++ b/sound/soc/codecs/tas2505.c
-@@ -0,0 +1,691 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ALSA SoC TAS2505 codec driver
-+ *
-+ * Author: Hieu Tran Dang <dangtranhieu2012@gmail.com>
-+ *
-+ * This package is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ *
-+ * THIS PACKAGE IS PROVIDED AS IS AND WITHOUT ANY EXPRESS OR
-+ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-+ * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-+ */
-+#include <linux/version.h>
-+#include <linux/module.h>
-+#include <linux/i2c.h>
-+#include <linux/clk.h>
-+#include <linux/of.h>
-+#include <linux/of_gpio.h>
-+#include <sound/soc.h>
-+#include <sound/tlv.h>
-+#include <sound/pcm_params.h>
-+#include "tas2505.h"
-+
-+enum {
-+	MCLK = 0,
-+	BCLK = 1,
-+};
-+
-+struct tas2505 {
-+	int dac_vol;
-+	int spk_vol1;
-+} tas2505_vol;
-+
-+
-+static int tas2505_dac_getvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	ucontrol->value.integer.value[0] = tas2505_vol.dac_vol;
-+
-+	return 0;
-+}
-+
-+static int tas2505_dac_putvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component =
-+		snd_soc_kcontrol_component(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	u8 val;
-+
-+	val = ucontrol->value.integer.value[0];
-+	val = mc->invert ? mc->max - val : val;
-+	val = (val < 0) ? 0 : val;
-+	tas2505_vol.dac_vol = val;
-+	snd_soc_component_write(component, TAS2505_DACVOL, val);
-+
-+	return 0;
-+}
-+
-+static int tas2505_spkdrv_getvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component =
-+		snd_soc_kcontrol_component(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	unsigned int val;
-+
-+	val = snd_soc_component_read(component, TAS2505_SPKVOL1);
-+
-+	val = (val > mc->max) ? mc->max : val;
-+	val = mc->invert ? mc->max - val : val;
-+	ucontrol->value.integer.value[0] = val;
-+	tas2505_vol.spk_vol1 = val;
-+	return 0;
-+}
-+
-+static int tas2505_spkdrv_putvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component =
-+		snd_soc_kcontrol_component(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	u8 val;
-+
-+	val = (ucontrol->value.integer.value[0] & 0x7f);
-+	val = mc->invert ? mc->max - val : val;
-+	val = (val < 0) ? 0 : val;
-+	tas2505_vol.spk_vol1 = val;
-+	snd_soc_component_write(component, TAS2505_SPKVOL1, val);
-+
-+	return 0;
-+}
-+
-+static const DECLARE_TLV_DB_SCALE(dac_vol_tlv, -6350, 50, 0);
-+static const DECLARE_TLV_DB_LINEAR(spk_drv_vol_tlv, TLV_DB_GAIN_MUTE, 0);
-+static const DECLARE_TLV_DB_SCALE(spk_amp_vol_tlv, 0, 600, 1);
-+
-+static const struct snd_kcontrol_new tas2505_snd_controls[] = {
-+	SOC_SINGLE_RANGE_EXT_TLV("DAC Playback Volume", TAS2505_DACVOL,
-+		0, 48, 0x81, 1,
-+		tas2505_dac_getvol, tas2505_dac_putvol, dac_vol_tlv),
-+	SOC_SINGLE_RANGE_EXT_TLV("Speaker Driver Volume", TAS2505_SPKVOL1,
-+		0, 0, 117, 1,
-+		tas2505_spkdrv_getvol, tas2505_spkdrv_putvol, spk_drv_vol_tlv),
-+	SOC_SINGLE_TLV("Speaker Amplifier Volume", TAS2505_SPKVOL2,
-+		4, 5, 0, spk_amp_vol_tlv),
-+};
-+
-+static const struct snd_soc_dapm_widget tas2505_dapm_widgets[] = {
-+	SND_SOC_DAPM_DAC("DAC Channel", "Playback",
-+		TAS2505_DACSETUP1, 7, 0),
-+	SND_SOC_DAPM_OUT_DRV("Speaker Driver", TAS2505_SPKAMPCTRL1,
-+		1, 0, NULL, 0),
-+	SND_SOC_DAPM_OUTPUT("Speaker"),
-+};
-+
-+static const struct snd_soc_dapm_route tas2505_audio_map[] = {
-+	{ "Speaker Driver", NULL, "DAC Channel" },
-+	{ "Speaker", NULL, "Speaker Driver" },
-+};
-+
-+static const struct reg_default tas2505_reg_defaults[] = {
-+	{ TAS2505_CLKMUX, 0x00 },
-+	{ TAS2505_PLLPR, 0x11 },
-+	{ TAS2505_PLLJ, 0x04 },
-+	{ TAS2505_PLLDMSB, 0x00 },
-+	{ TAS2505_PLLDLSB, 0x00 },
-+	{ TAS2505_NDAC, 0x01 },
-+	{ TAS2505_MDAC, 0x01 },
-+	{ TAS2505_DOSRMSB, 0x00 },
-+	{ TAS2505_DOSRLSB, 0x80 },
-+	{ TAS2505_IFACE1, 0x00 },
-+	{ TAS2505_IFACE3, 0x00 },
-+	{ TAS2505_DACSETUP1, 0x14 },
-+	{ TAS2505_DACSETUP2, 0x0c },
-+	{ TAS2505_DACVOL, 0x00 },
-+	{ TAS2505_REF_POR_LDO_BGAP_CTRL, 0x00 },
-+	{ TAS2505_LDO_CTRL, 0x0c },
-+	{ TAS2505_SPKAMPCTRL1, 0x00 },
-+	{ TAS2505_SPKVOL1, 0x00 },
-+	{ TAS2505_SPKVOL2, 0x50 },
-+	{ TAS2505_DACFLAG1, 0x00 },
-+	{ TAS2505_DACFLAG2, 0x00 },
-+	{ TAS2505_STICKYFLAG1, 0x00 },
-+	{ TAS2505_STICKYFLAG2, 0x00 },
-+	{ TAS2505_INTFLAG1, 0x00 },
-+	{ TAS2505_INTFLAG2, 0x00 },
-+	{ TAS2505_DACINSTRSET, 0x02 },
-+	{ TAS2505_DACANLGAINFLAG, 0x00 },
-+};
-+
-+static bool tas2505_volatile(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case TAS2505_PAGECTL:
-+	case TAS2505_RESET:
-+	case TAS2505_DACFLAG1:
-+	case TAS2505_DACFLAG2:
-+	case TAS2505_STICKYFLAG1:
-+	case TAS2505_STICKYFLAG2:
-+	case TAS2505_INTFLAG1:
-+	case TAS2505_INTFLAG2:
-+	case TAS2505_DACANLGAINFLAG:
-+		return true;
-+	}
-+	return false;
-+}
-+
-+static bool tas2505_writeable(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case TAS2505_DACFLAG1:
-+	case TAS2505_DACFLAG2:
-+	case TAS2505_STICKYFLAG1:
-+	case TAS2505_STICKYFLAG2:
-+	case TAS2505_INTFLAG1:
-+	case TAS2505_INTFLAG2:
-+	case TAS2505_DACANLGAINFLAG:
-+		return false;
-+	}
-+	return true;
-+}
-+
-+static const struct regmap_range_cfg tas2505_ranges[] = {
-+	{
-+		.range_min = 0,
-+		.range_max = 69 * 128,
-+		.selector_reg = TAS2505_PAGECTL,
-+		.selector_mask = 0xff,
-+		.selector_shift = 0,
-+		.window_start = 0,
-+		.window_len = 128,
-+	},
-+};
-+
-+static const struct regmap_config tas2505_i2c_regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.writeable_reg = tas2505_writeable,
-+	.volatile_reg = tas2505_volatile,
-+	.reg_defaults = tas2505_reg_defaults,
-+	.num_reg_defaults = ARRAY_SIZE(tas2505_reg_defaults),
-+	.cache_type = REGCACHE_RBTREE,
-+	.ranges = tas2505_ranges,
-+	.num_ranges = ARRAY_SIZE(tas2505_ranges),
-+	.max_register = 69 * 128,
-+};
-+
-+struct tas2505_rate_divs {
-+	u32 mclk_p;
-+	u32 rate;
-+	u8 pll_r;
-+	u8 pll_j;
-+	u16 pll_d;
-+	u8 mdac;
-+	u8 ndac;
-+	u16 dosr;
-+};
-+
-+static const struct tas2505_rate_divs tas2505_divs_mclksrc[] = {
-+	{ 12288000, 44100, 1, 7, 35, 4, 4, 128 },
-+	{ 12288000, 48000, 1, 7, 0, 7, 2, 128 },
-+	{ 2822400, 44100, 1, 8, 4672, 3, 5, 128 },
-+	{ 11289600, 44100, 1, 8, 0, 4, 8, 64 },
-+	{ 11289600, 22050, 1, 8, 0, 4, 8, 128 },
-+	{ 2822400, 44100, 1, 8, 4672, 3, 5, 128 },
-+	{ 2822400, 22050, 1, 8, 4672, 3, 5, 256 },
-+};
-+
-+static const struct tas2505_rate_divs tas2505_divs_bclksrc[] = {
-+	{ 1536000, 48000, 1, 56, 0, 2, 7, 128 },
-+	{ 1411200, 44100, 1, 60, 0, 5, 3, 128 },
-+	{ 3072000, 48000, 1, 28, 0, 2, 7, 128 },
-+	{ 2822400, 44100, 1, 30, 0, 5, 3, 128 },
-+	{ 1024000, 32000, 2, 40, 0, 5, 4, 128 },
-+	{ 2048000, 32000, 1, 40, 0, 5, 4, 128 },
-+};
-+
-+struct tas2505_priv {
-+	void *codec;
-+	struct device *dev;
-+	struct regmap *regmap;
-+	u32 sysclk;
-+	u32 clk_src;
-+	u32 rate;
-+	int rate_div_line;
-+	int pll_clkin;
-+	int frame_size;
-+	u8 p_div;
-+};
-+
-+static int tas2505_setup_pll(struct snd_soc_component *codec)
-+{
-+	struct tas2505_priv *tas2505 = snd_soc_component_get_drvdata(codec);
-+	int mclk_p = tas2505->sysclk / tas2505->p_div;
-+	struct tas2505_rate_divs *rate_divs;
-+	int match = -1;
-+	u8 p_div;
-+	int i;
-+
-+	if (tas2505->clk_src == MCLK) {
-+		for (i = 0; i < ARRAY_SIZE(tas2505_divs_mclksrc); i++) {
-+			if (
-+				tas2505_divs_mclksrc[i].rate == tas2505->rate &&
-+				tas2505_divs_mclksrc[i].mclk_p == mclk_p
-+			) {
-+				match = i;
-+				break;
-+			}
-+		}
-+
-+		if (match == -1) {
-+			dev_err(codec->dev,
-+				"Sample rate (%u) and format not supported\n",
-+				tas2505->rate);
-+			return -EINVAL;
-+		}
-+
-+		tas2505->rate_div_line = match;
-+		rate_divs = (struct tas2505_rate_divs *)tas2505_divs_mclksrc;
-+	} else {
-+		for (i = 0; i < ARRAY_SIZE(tas2505_divs_bclksrc); i++) {
-+			if (tas2505_divs_bclksrc[i].rate ==
-+				tas2505->rate) {
-+				match = i;
-+				break;
-+			}
-+		}
-+
-+		if (match == -1) {
-+			dev_err(codec->dev,
-+				"Sample rate (%u) and format not supported\n",
-+				tas2505->rate);
-+			return -EINVAL;
-+		}
-+		rate_divs = (struct tas2505_rate_divs *)tas2505_divs_bclksrc;
-+	}
-+
-+	p_div = (tas2505->p_div == 8) ? 0 : tas2505->p_div;
-+	p_div <<= TAS2505_PLLPR_P_SHIFT;
-+	p_div |= rate_divs[match].pll_r;
-+	p_div |= TAS2505_PM_MASK;
-+
-+	snd_soc_component_write(codec, TAS2505_PLLPR, p_div);
-+	snd_soc_component_write(codec, TAS2505_PLLJ,
-+		rate_divs[match].pll_j);
-+	snd_soc_component_write(codec, TAS2505_PLLDMSB,
-+		rate_divs[match].pll_d >> 8);
-+	snd_soc_component_write(codec, TAS2505_PLLDLSB,
-+		rate_divs[match].pll_d & 0xff);
-+	mdelay(15);
-+	snd_soc_component_write(codec, TAS2505_NDAC,
-+		TAS2505_PM_MASK | rate_divs[match].ndac);
-+	snd_soc_component_write(codec, TAS2505_MDAC,
-+		TAS2505_PM_MASK | rate_divs[match].mdac);
-+	snd_soc_component_write(codec, TAS2505_DOSRMSB,
-+		rate_divs[match].dosr >> 8);
-+	snd_soc_component_write(codec, TAS2505_DOSRLSB,
-+		rate_divs[match].dosr & 0xff);
-+	if (tas2505->clk_src != MCLK)
-+		snd_soc_component_update_bits(codec, TAS2505_BCLKNDIV,
-+			TAS2505_BCLKNDIV_MASK,
-+			(rate_divs[match].dosr * rate_divs[match].mdac) /
-+			tas2505->frame_size);
-+
-+	return 0;
-+}
-+
-+static int tas2505_hw_params(struct snd_pcm_substream *substream,
-+	struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
-+{
-+	struct snd_soc_component *codec = dai->component;
-+	struct tas2505_priv *tas2505 = snd_soc_component_get_drvdata(codec);
-+	u8 data = 0;
-+
-+	switch (params_width(params)) {
-+	case 16:
-+		break;
-+
-+	case 20:
-+		data = TAS2505_WORD_LEN_20BITS;
-+		break;
-+
-+	case 24:
-+		data = TAS2505_WORD_LEN_24BITS;
-+		break;
-+
-+	case 32:
-+		data = TAS2505_WORD_LEN_32BITS;
-+		break;
-+
-+	default:
-+		dev_err(codec->dev, "Unsupported width %d\n",
-+			params_width(params));
-+		return -EINVAL;
-+	}
-+	dev_info(codec->dev, "%s: bit width = %d\n",
-+				__func__, params_width(params));
-+	data <<= TAS2505_IFACE1_DATALEN_SHIFT;
-+
-+	snd_soc_component_update_bits(codec, TAS2505_IFACE1,
-+		TAS2505_IFACE1_DATALEN_MASK, data);
-+	tas2505->rate = params_rate(params);
-+	tas2505->frame_size = snd_soc_params_to_frame_size(params);
-+
-+	return tas2505_setup_pll(codec);
-+}
-+
-+static int tas2505_dac_mute(struct snd_soc_dai *dai, int mute,
-+	int stream)
-+{
-+	struct snd_soc_component *codec = dai->component;
-+
-+	if (mute) {
-+		snd_soc_component_write(codec, TAS2505_DACVOL, 0x81);
-+		snd_soc_component_update_bits(codec, TAS2505_DACSETUP2,
-+			TAS2505_DACSETUP2_MUTE_MASK,
-+			TAS2505_DACSETUP2_MUTE_MASK);
-+		mdelay(25);
-+		snd_soc_component_update_bits(codec, TAS2505_DACSETUP1, 0x80, 0x00);
-+	} else {
-+		snd_soc_component_update_bits(codec, TAS2505_DACSETUP1, 0x80, 0x80);
-+		mdelay(25);
-+		snd_soc_component_write(codec, TAS2505_DACVOL, tas2505_vol.dac_vol);
-+		snd_soc_component_update_bits(codec, TAS2505_DACSETUP2,
-+			TAS2505_DACSETUP2_MUTE_MASK, 0x0);
-+	}
-+
-+	return 0;
-+}
-+
-+static int tas2505_set_dai_fmt(struct snd_soc_dai *codec_dai,
-+	unsigned int fmt)
-+{
-+	struct snd_soc_component *codec = codec_dai->component;
-+	u8 iface_reg1 = 0;
-+	u8 iface_reg3 = 0;
-+
-+	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
-+	case SND_SOC_DAIFMT_CBS_CFS:
-+		break;
-+
-+	case SND_SOC_DAIFMT_CBM_CFM:
-+		iface_reg1 |= TAS2505_IFACE1_BCLKDIR_MASK;
-+		iface_reg1 |= TAS2505_IFACE1_WCLKDIR_MASK;
-+		break;
-+
-+	default:
-+		dev_err(codec->dev,
-+			"%s SND_SOC_DAIFMT_MASTER_MASK 0x%x\n",
-+			__func__, fmt);
-+		return -EINVAL;
-+	}
-+
-+	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
-+	case SND_SOC_DAIFMT_NB_NF:
-+		break;
-+
-+	case SND_SOC_DAIFMT_IB_NF:
-+		iface_reg3 |= TAS2505_IFACE3_BCLKINV_MASK;
-+		break;
-+
-+	default:
-+		dev_err(codec->dev,
-+			"%s SND_SOC_DAIFMT_INV_MASK 0x%x\n",
-+			__func__, fmt);
-+		return -EINVAL;
-+	}
-+
-+	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
-+	case SND_SOC_DAIFMT_I2S:
-+		break;
-+
-+	case SND_SOC_DAIFMT_DSP_A:
-+	case SND_SOC_DAIFMT_DSP_B:
-+		iface_reg1 |= (TAS2505_DSP_MODE <<
-+			TAS2505_IFACE1_INTERFACE_SHIFT);
-+		break;
-+
-+	case SND_SOC_DAIFMT_RIGHT_J:
-+		iface_reg1 |= (TAS2505_RJF_MODE <<
-+			TAS2505_IFACE1_INTERFACE_SHIFT);
-+		break;
-+
-+	case SND_SOC_DAIFMT_LEFT_J:
-+		iface_reg1 |= (TAS2505_LJF_MODE <<
-+			TAS2505_IFACE1_INTERFACE_SHIFT);
-+		break;
-+
-+	default:
-+		dev_err(codec->dev, "Invalid DAI interface format\n");
-+		return -EINVAL;
-+	}
-+
-+	snd_soc_component_write(codec, TAS2505_IFACE1, iface_reg1);
-+	snd_soc_component_update_bits(codec, TAS2505_IFACE3,
-+		TAS2505_IFACE3_BCLKINV_MASK | TAS2505_IFACE3_BDIVCLKIN_MASK,
-+		iface_reg3);
-+
-+	return 0;
-+}
-+
-+static int tas2505_set_dai_sysclk(struct snd_soc_dai *codec_dai,
-+	int clk_id, unsigned int freq, int dir)
-+{
-+	struct snd_soc_component *codec = codec_dai->component;
-+	struct tas2505_priv *tas2505 = snd_soc_component_get_drvdata(codec);
-+	int i, x;
-+	int ret = 0;
-+
-+	dev_info(tas2505->dev, "%s: clk_id: %d, freq: %d\n",
-+		__func__, clk_id, freq);
-+
-+	if (tas2505->clk_src == MCLK) {
-+		for (i = 0; i < ARRAY_SIZE(tas2505_divs_mclksrc); i++) {
-+			for (x = 1; x < 9; x++) {
-+				if ((freq / x) == tas2505_divs_mclksrc[i].mclk_p) {
-+					tas2505->p_div = x;
-+					break;
+ static struct kmem_cache *mm_slot_cache __read_mostly;
+ 
+-#define MAX_PTE_MAPPED_THP 8
+-
+ struct collapse_control {
+ 	bool is_khugepaged;
+ 
+@@ -107,15 +105,9 @@ struct collapse_control {
+ /**
+  * struct khugepaged_mm_slot - khugepaged information per mm that is being scanned
+  * @slot: hash lookup from mm to mm_slot
+- * @nr_pte_mapped_thp: number of pte mapped THP
+- * @pte_mapped_thp: address array corresponding pte mapped THP
+  */
+ struct khugepaged_mm_slot {
+ 	struct mm_slot slot;
+-
+-	/* pte-mapped THP in this mm */
+-	int nr_pte_mapped_thp;
+-	unsigned long pte_mapped_thp[MAX_PTE_MAPPED_THP];
+ };
+ 
+ /**
+@@ -1439,50 +1431,6 @@ static void collect_mm_slot(struct khugepaged_mm_slot *mm_slot)
+ }
+ 
+ #ifdef CONFIG_SHMEM
+-/*
+- * Notify khugepaged that given addr of the mm is pte-mapped THP. Then
+- * khugepaged should try to collapse the page table.
+- *
+- * Note that following race exists:
+- * (1) khugepaged calls khugepaged_collapse_pte_mapped_thps() for mm_struct A,
+- *     emptying the A's ->pte_mapped_thp[] array.
+- * (2) MADV_COLLAPSE collapses some file extent with target mm_struct B, and
+- *     retract_page_tables() finds a VMA in mm_struct A mapping the same extent
+- *     (at virtual address X) and adds an entry (for X) into mm_struct A's
+- *     ->pte-mapped_thp[] array.
+- * (3) khugepaged calls khugepaged_collapse_scan_file() for mm_struct A at X,
+- *     sees a pte-mapped THP (SCAN_PTE_MAPPED_HUGEPAGE) and adds an entry
+- *     (for X) into mm_struct A's ->pte-mapped_thp[] array.
+- * Thus, it's possible the same address is added multiple times for the same
+- * mm_struct.  Should this happen, we'll simply attempt
+- * collapse_pte_mapped_thp() multiple times for the same address, under the same
+- * exclusive mmap_lock, and assuming the first call is successful, subsequent
+- * attempts will return quickly (without grabbing any additional locks) when
+- * a huge pmd is found in find_pmd_or_thp_or_none().  Since this is a cheap
+- * check, and since this is a rare occurrence, the cost of preventing this
+- * "multiple-add" is thought to be more expensive than just handling it, should
+- * it occur.
+- */
+-static bool khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
+-					  unsigned long addr)
+-{
+-	struct khugepaged_mm_slot *mm_slot;
+-	struct mm_slot *slot;
+-	bool ret = false;
+-
+-	VM_BUG_ON(addr & ~HPAGE_PMD_MASK);
+-
+-	spin_lock(&khugepaged_mm_lock);
+-	slot = mm_slot_lookup(mm_slots_hash, mm);
+-	mm_slot = mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
+-	if (likely(mm_slot && mm_slot->nr_pte_mapped_thp < MAX_PTE_MAPPED_THP)) {
+-		mm_slot->pte_mapped_thp[mm_slot->nr_pte_mapped_thp++] = addr;
+-		ret = true;
+-	}
+-	spin_unlock(&khugepaged_mm_lock);
+-	return ret;
+-}
+-
+ /* hpage must be locked, and mmap_lock must be held */
+ static int set_huge_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 			pmd_t *pmdp, struct page *hpage)
+@@ -1706,29 +1654,6 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 	return result;
+ }
+ 
+-static void khugepaged_collapse_pte_mapped_thps(struct khugepaged_mm_slot *mm_slot)
+-{
+-	struct mm_slot *slot = &mm_slot->slot;
+-	struct mm_struct *mm = slot->mm;
+-	int i;
+-
+-	if (likely(mm_slot->nr_pte_mapped_thp == 0))
+-		return;
+-
+-	if (!mmap_write_trylock(mm))
+-		return;
+-
+-	if (unlikely(hpage_collapse_test_exit(mm)))
+-		goto out;
+-
+-	for (i = 0; i < mm_slot->nr_pte_mapped_thp; i++)
+-		collapse_pte_mapped_thp(mm, mm_slot->pte_mapped_thp[i], false);
+-
+-out:
+-	mm_slot->nr_pte_mapped_thp = 0;
+-	mmap_write_unlock(mm);
+-}
+-
+ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
+ {
+ 	struct vm_area_struct *vma;
+@@ -2370,16 +2295,6 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+ {
+ 	BUILD_BUG();
+ }
+-
+-static void khugepaged_collapse_pte_mapped_thps(struct khugepaged_mm_slot *mm_slot)
+-{
+-}
+-
+-static bool khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
+-					  unsigned long addr)
+-{
+-	return false;
+-}
+ #endif
+ 
+ static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
+@@ -2409,7 +2324,6 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
+ 		khugepaged_scan.mm_slot = mm_slot;
+ 	}
+ 	spin_unlock(&khugepaged_mm_lock);
+-	khugepaged_collapse_pte_mapped_thps(mm_slot);
+ 
+ 	mm = slot->mm;
+ 	/*
+@@ -2462,36 +2376,29 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
+ 						khugepaged_scan.address);
+ 
+ 				mmap_read_unlock(mm);
+-				*result = hpage_collapse_scan_file(mm,
+-								   khugepaged_scan.address,
+-								   file, pgoff, cc);
+ 				mmap_locked = false;
++				*result = hpage_collapse_scan_file(mm,
++					khugepaged_scan.address, file, pgoff, cc);
++				if (*result == SCAN_PTE_MAPPED_HUGEPAGE) {
++					mmap_read_lock(mm);
++					mmap_locked = true;
++					if (hpage_collapse_test_exit(mm)) {
++						fput(file);
++						goto breakouterloop;
++					}
++					*result = collapse_pte_mapped_thp(mm,
++						khugepaged_scan.address, false);
++					if (*result == SCAN_PMD_MAPPED)
++						*result = SCAN_SUCCEED;
 +				}
-+			}
-+			if (x < 9)
-+				break;
-+		}
-+
-+		if (i != ARRAY_SIZE(tas2505_divs_mclksrc)) {
-+		} else {
-+			dev_err(tas2505->dev,
-+				"Can't produce required PLL_CLKIN frequency\n");
-+			ret = -EINVAL;
-+		}
-+		tas2505->pll_clkin = clk_id;
-+	} else {
-+		tas2505->pll_clkin = 1;
-+		tas2505->p_div = 1;
-+	}
-+
-+	if (!ret) {
-+		snd_soc_component_write(codec, TAS2505_CLKMUX,
-+			(tas2505->pll_clkin << TAS2505_PLL_CLKIN_SHIFT) |
-+			TAS2505_CODEC_CLKIN_PLL);
-+
-+		tas2505->sysclk = freq;
-+	}
-+	return ret;
-+
-+}
-+
-+static void tas2505_power_on(struct snd_soc_component *codec)
-+{
-+	snd_soc_component_update_bits(codec, TAS2505_LDO_CTRL,
-+		TAS2505_LDO_PLL_HP_LVL_MASK, 0);
-+	snd_soc_component_update_bits(codec, TAS2505_REF_POR_LDO_BGAP_CTRL,
-+		TAS2505_REF_POR_LDO_BGAP_MASTER_REF_MASK,
-+		TAS2505_REF_POR_LDO_BGAP_MASTER_REF_MASK);
-+}
-+
-+static void tas2505_power_off(struct snd_soc_component *codec)
-+{
-+	snd_soc_component_update_bits(codec, TAS2505_REF_POR_LDO_BGAP_CTRL,
-+		TAS2505_REF_POR_LDO_BGAP_MASTER_REF_MASK, 0);
-+	snd_soc_component_update_bits(codec, TAS2505_LDO_CTRL,
-+		TAS2505_LDO_PLL_HP_LVL_MASK,
-+		TAS2505_LDO_PLL_HP_LVL_MASK);
-+}
-+
-+static int tas2505_set_bias_level(struct snd_soc_component *codec,
-+	enum snd_soc_bias_level level)
-+{
-+	int current_lvl = snd_soc_component_get_bias_level(codec);
-+	int rc = 0;
-+
-+	switch (level) {
-+	case SND_SOC_BIAS_ON:
-+		break;
-+	case SND_SOC_BIAS_PREPARE:
-+		break;
-+	case SND_SOC_BIAS_STANDBY:
-+		if (current_lvl == SND_SOC_BIAS_OFF) {
-+			tas2505_power_on(codec);
-+			dev_info(codec->dev,
-+				"%s:power on\n", __func__);
-+		} else
-+			dev_info(codec->dev,
-+				"%s:SND_SOC_BIAS_STANDBY\n",
-+				__func__);
-+		break;
-+	case SND_SOC_BIAS_OFF:
-+		if (current_lvl == SND_SOC_BIAS_STANDBY) {
-+			tas2505_power_off(codec);
-+			dev_info(codec->dev,
-+				"%s:power off\n",
-+				__func__);
-+		} else
-+			dev_info(codec->dev,
-+				"%s:SND_SOC_BIAS_OFF\n",
-+				__func__);
-+		break;
-+	default:
-+		dev_err(codec->dev, "Invalid bias level\n");
-+		rc = -EINVAL;
-+	}
-+
-+	return rc;
-+}
-+
-+static int tas2505_codec_probe(struct snd_soc_component *codec)
-+{
-+	struct tas2505_priv *tas2505 = snd_soc_component_get_drvdata(codec);
-+
-+	tas2505->codec = codec;
-+	tas2505_vol.dac_vol = 0x00;
-+	tas2505_vol.spk_vol1 = 0x00;
-+
-+	snd_soc_component_write(codec, TAS2505_RESET, 1);
-+
-+	return 0;
-+}
-+
-+static const struct snd_soc_component_driver soc_codec_driver_tas2505 = {
-+	.probe			= tas2505_codec_probe,
-+	.set_bias_level		= tas2505_set_bias_level,
-+	.suspend_bias_off	= true,
-+
-+	.controls		= tas2505_snd_controls,
-+	.num_controls		= ARRAY_SIZE(tas2505_snd_controls),
-+	.dapm_widgets		= tas2505_dapm_widgets,
-+	.num_dapm_widgets	= ARRAY_SIZE(tas2505_dapm_widgets),
-+	.dapm_routes		= tas2505_audio_map,
-+	.num_dapm_routes	= ARRAY_SIZE(tas2505_audio_map),
-+};
-+
-+static const struct snd_soc_dai_ops tas2505_dai_ops = {
-+	.hw_params	= tas2505_hw_params,
-+	.set_sysclk	= tas2505_set_dai_sysclk,
-+	.set_fmt	= tas2505_set_dai_fmt,
-+	.mute_stream	= tas2505_dac_mute,
-+};
-+
-+static struct snd_soc_dai_driver tas2505_dai_driver[] = {
-+	{
-+		.name = "tas2505-hifi",
-+		.playback = {
-+			.stream_name	= "Playback",
-+			.channels_min	= 1,
-+			.channels_max	= 2,
-+			.rates		= TAS2505_RATES,
-+			.formats	= TAS2505_FORMATS,
-+		},
-+		.ops = &tas2505_dai_ops,
-+		.symmetric_rate = 1,
-+	},
-+};
-+
-+static int tas2505_i2c_probe(struct i2c_client *i2c)
-+{
-+	struct tas2505_priv *tas2505;
-+	struct device_node *np = i2c->dev.of_node;
-+	const struct regmap_config *regmap_config = &tas2505_i2c_regmap;
-+	int ret;
-+
-+	tas2505 = devm_kzalloc(&i2c->dev, sizeof(*tas2505), GFP_KERNEL);
-+	if (tas2505 == NULL)
-+		return -ENOMEM;
-+
-+	tas2505->regmap = devm_regmap_init_i2c(i2c, regmap_config);
-+	if (IS_ERR(tas2505->regmap)) {
-+		ret = PTR_ERR(tas2505->regmap);
-+		dev_err(&i2c->dev, "Failed to allocate register map: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	ret = of_get_named_gpio(np, "gpio-reset", 0);
-+	if ((ret > 0) && gpio_is_valid(ret)) {
-+		devm_gpio_request_one(&i2c->dev, ret, GPIOF_OUT_INIT_HIGH,
-+			"reset");
-+	}
-+
-+	ret = of_property_read_u32(np, "clock-source",
-+			&tas2505->clk_src);
-+
-+	dev_info(&i2c->dev, "%s: clock-source = %s\n", __func__,
-+		tas2505->clk_src?"BCLK":"MCLK");
-+
-+	tas2505->dev = &i2c->dev;
-+
-+	dev_set_drvdata(tas2505->dev, tas2505);
-+
-+	return snd_soc_register_component(&i2c->dev,
-+		&soc_codec_driver_tas2505, tas2505_dai_driver,
-+		ARRAY_SIZE(tas2505_dai_driver));
-+}
-+
-+static void tas2505_i2c_remove(struct i2c_client *i2c)
-+{
-+	snd_soc_unregister_component(&i2c->dev);
-+}
-+
-+static const struct of_device_id tas2505_of_match[] = {
-+	{ .compatible = "ti,tas2505" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, tas2505_of_match);
-+
-+static const struct i2c_device_id tas2505_i2c_id[] = {
-+	{ "tas2505", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2ic, tas2505_i2c_id);
-+
-+static struct i2c_driver tas2505_i2c_driver = {
-+	.driver = {
-+		.name		= "tas2505-codec",
-+		.of_match_table	= of_match_ptr(tas2505_of_match),
-+	},
-+	.probe		= tas2505_i2c_probe,
-+	.remove		= tas2505_i2c_remove,
-+	.id_table	= tas2505_i2c_id,
-+};
-+
-+module_i2c_driver(tas2505_i2c_driver);
-+
-+MODULE_DESCRIPTION("ASoC TAS2505 codec driver");
-+MODULE_AUTHOR("Hieu Tran Dang <dangtranhieu2012@gmail.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/sound/soc/codecs/tas2505.h b/sound/soc/codecs/tas2505.h
-new file mode 100644
-index 0000000..79c3f84
---- /dev/null
-+++ b/sound/soc/codecs/tas2505.h
-@@ -0,0 +1,105 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * ALSA SoC TAS2505 codec driver
-+ *
-+ * Author: Hieu Tran Dang <dangtranhieu2012@gmail.com>
-+ *
-+ * This package is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ *
-+ * THIS PACKAGE IS PROVIDED AS IS AND WITHOUT ANY EXPRESS OR
-+ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-+ * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-+ */
-+
-+#ifndef _TAS2505_H
-+#define _TAS2505_H
-+
-+#define TAS2505_RATES	(SNDRV_PCM_RATE_8000_96000)
-+#define TAS2505_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | \
-+	SNDRV_PCM_FMTBIT_S24_LE | \
-+	SNDRV_PCM_FMTBIT_S32_LE)
-+
-+#define TAS2505_REG(page, reg)	((page * 128) + reg)
-+
-+#define TAS2505_PAGECTL			TAS2505_REG(0, 0)
-+#define TAS2505_RESET			TAS2505_REG(0, 1)
-+#define TAS2505_CLKMUX			TAS2505_REG(0, 4)
-+#define TAS2505_PLLPR			TAS2505_REG(0, 5)
-+#define TAS2505_PLLJ			TAS2505_REG(0, 6)
-+#define TAS2505_PLLDMSB			TAS2505_REG(0, 7)
-+#define TAS2505_PLLDLSB			TAS2505_REG(0, 8)
-+#define TAS2505_NDAC			TAS2505_REG(0, 11)
-+#define TAS2505_MDAC			TAS2505_REG(0, 12)
-+#define TAS2505_DOSRMSB			TAS2505_REG(0, 13)
-+#define TAS2505_DOSRLSB			TAS2505_REG(0, 14)
-+#define TAS2505_IFACE1			TAS2505_REG(0, 27)
-+#define TAS2505_IFACE3			TAS2505_REG(0, 29)
-+#define TAS2505_BCLKNDIV		TAS2505_REG(0, 30)
-+#define TAS2505_DACFLAG1		TAS2505_REG(0, 37)
-+#define TAS2505_DACFLAG2		TAS2505_REG(0, 38)
-+#define TAS2505_STICKYFLAG1		TAS2505_REG(0, 42)
-+#define TAS2505_INTFLAG1		TAS2505_REG(0, 43)
-+#define TAS2505_STICKYFLAG2		TAS2505_REG(0, 44)
-+#define TAS2505_INTFLAG2		TAS2505_REG(0, 46)
-+#define TAS2505_DACINSTRSET		TAS2505_REG(0, 60)
-+#define TAS2505_DACSETUP1		TAS2505_REG(0, 63)
-+#define TAS2505_DACSETUP2		TAS2505_REG(0, 64)
-+#define TAS2505_DACVOL			TAS2505_REG(0, 65)
-+#define TAS2505_REF_POR_LDO_BGAP_CTRL	TAS2505_REG(1, 1)
-+#define TAS2505_LDO_CTRL		TAS2505_REG(1, 2)
-+#define TAS2505_PLAYBACKCONF1		TAS2505_REG(1, 3)
-+#define TAS2505_SPKAMPCTRL1		TAS2505_REG(1, 45)
-+#define TAS2505_SPKVOL1			TAS2505_REG(1, 46)
-+#define TAS2505_SPKVOL2			TAS2505_REG(1, 48)
-+#define TAS2505_DACANLGAINFLAG		TAS2505_REG(1, 63)
-+
-+#define TAS2505_PLLPR_P_MASK				(0x70)
-+#define TAS2505_PLLPR_R_MASK				(0xf)
-+#define TAS2505_PLL_DAC_MASK				(0x7f)
-+#define TAS2505_BCLKNDIV_MASK				(0x7f)
-+#define TAS2505_IFACE1_DATALEN_MASK			(0x30)
-+#define TAS2505_IFACE1_WCLKDIR_MASK			(0x4)
-+#define TAS2505_IFACE1_BCLKDIR_MASK			(0x8)
-+#define TAS2505_IFACE1_INTERFACE_MASK			(0xc0)
-+#define TAS2505_IFACE3_BDIVCLKIN_MASK			(0x1)
-+#define TAS2505_IFACE3_BCLKINV_MASK			(0x8)
-+#define TAS2505_DACSETUP1_PATH_CTRL_MSK			(0x30)
-+#define TAS2505_DACSETUP2_MUTE_MASK			(0x8)
-+#define TAS2505_PM_MASK					(0x80)
-+#define TAS2505_LDO_PLL_HP_LVL_MASK			(0x8)
-+#define TAS2505_REF_POR_LDO_BGAP_MASTER_REF_MASK	(0x10)
-+#define TAS2505_SPKVOL2_MSK				(0x70)
-+#define TAS2505_CODEC_CLKIN_MSK				(0x3)
-+#define TAS2505_PLL_INPUT_CLK_MSK			(0xC)
-+#define TAS2505_SPKAMPCTRL1_SPKDRV_MSK			BIT(1)
-+
-+#define TAS2505_PLLPR_P_SHIFT			(4)
-+#define TAS2505_PLL_CLKIN_SHIFT			(2)
-+#define TAS2505_IFACE1_DATALEN_SHIFT		(4)
-+#define TAS2505_IFACE1_INTERFACE_SHIFT		(6)
-+#define TAS2505_IFACE3_BCLKINV_SHIFT		(4)
-+#define TAS2505_SPKVOL2_6DB_SHIFT		(4)
-+#define TAS2505_DACSETUP1_PATH_CTRL_SHIFT	(4)
-+
-+#define TAS2505_WORD_LEN_20BITS			(1)
-+#define TAS2505_WORD_LEN_24BITS			(2)
-+#define TAS2505_WORD_LEN_32BITS			(3)
-+
-+#define TAS2505_DSP_MODE			(1)
-+#define TAS2505_RJF_MODE			(2)
-+#define TAS2505_LJF_MODE			(3)
-+
-+#define TAS2505_PLL_CLKIN_MCLK			(0)
-+#define TAS2505_PLL_CLKIN_BCLK			(1)
-+#define TAS2505_PLL_CLKIN_GPIO			(2)
-+#define TAS2505_PLL_CLKIN_DIN			(3)
-+#define TAS2505_CODEC_CLKIN_PLL			(3)
-+#define TAS2505_SPKVOL2_MUTE			(0)
-+#define TAS2505_SPKVOL2_6DB			(1)
-+#define TAS2505_DACSETUP1_PATH_CTRL_LRDIV2	(3)
-+#define TAS2505_SPKAMPCTRL1_SPKDRV_PWD		(0)
-+#define TAS2505_SPKAMPCTRL1_SPKDRV_PWU		(1)
-+
-+#endif
+ 				fput(file);
+ 			} else {
+ 				*result = hpage_collapse_scan_pmd(mm, vma,
+-								  khugepaged_scan.address,
+-								  &mmap_locked,
+-								  cc);
++					khugepaged_scan.address, &mmap_locked, cc);
+ 			}
+-			switch (*result) {
+-			case SCAN_PTE_MAPPED_HUGEPAGE: {
+-				pmd_t *pmd;
+ 
+-				*result = find_pmd_or_thp_or_none(mm,
+-								  khugepaged_scan.address,
+-								  &pmd);
+-				if (*result != SCAN_SUCCEED)
+-					break;
+-				if (!khugepaged_add_pte_mapped_thp(mm,
+-								   khugepaged_scan.address))
+-					break;
+-			} fallthrough;
+-			case SCAN_SUCCEED:
++			if (*result == SCAN_SUCCEED)
+ 				++khugepaged_pages_collapsed;
+-				break;
+-			default:
+-				break;
+-			}
+ 
+ 			/* move to next address */
+ 			khugepaged_scan.address += HPAGE_PMD_SIZE;
 -- 
-2.34.1
-
+2.35.3
 
