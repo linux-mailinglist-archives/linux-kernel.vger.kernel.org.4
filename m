@@ -2,119 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15EA6750BCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E0F750BD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233182AbjGLPGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S233214AbjGLPHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbjGLPGr (ORCPT
+        with ESMTP id S233317AbjGLPHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:06:47 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B11FDE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:06:37 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7748ca56133so55744739f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689174396; x=1691766396;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pC0bLEcnBiwLIxu3syoVMwHeIHk1xFP1scSsLouie0I=;
-        b=eS71i0anKlE6fUCJhqBlfIR7gzxmlpePoIgjdxv7LESb/DQouUJs4o95gw8uM98szf
-         N34KIxNSbgiF0oWIdBMmitBzsv1S8FM6QC3etmI/4HKMVbsIL81HtNKU57CBkmFxCOnd
-         gGx4t7h7hTRBYFGlkKZYlryCRSoEKfBNLa8m3jSYnSiSxvKrRX3yXxkClzMHk0BSC15D
-         BCpReSbIZA8ROeWiGvuK7RUZus32QHkjVWNSJhQcbn4M9oGfJUoBvR99WhIVV2SZoecW
-         +c7ZfkIWP7D6nf7S9TkDACqPmXcHdzasrXWWJj0NOAIdMMUbud52Rl2btAgdnlvBvmjG
-         u3xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689174396; x=1691766396;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pC0bLEcnBiwLIxu3syoVMwHeIHk1xFP1scSsLouie0I=;
-        b=T7hrTz/7mQUhsbk8dOlDsgmaEPxLQwCeUxALgXeuhnJfSLEuiY9ro1zbbOW5KVACE2
-         G/EMz3gn53yb9kUIlfqDwQJde+dbz7uaX0/xrMAAYQS/s9dSyLMZ4ySZ3uQShk2Hyg43
-         HEFxYTByhCS0JwY9Ee9Qyqm6A15e4vQShqOcTeLWRgzLW5itXpYnU6MzYP8zHI8oFC+P
-         byCEYnqQhKi85YIh3oDi/LRbNCukBupffdesIDtg1Y0WQ0/4zy2/KujbUZrsARr9bNoA
-         FHDArG3fifJBfuxVIyl5bWvlZ0mpSCNUDoQYBzNVCOPBhMbnePL701hfofGHGZ3Df4m8
-         iZaw==
-X-Gm-Message-State: ABy/qLaqsgOSP1ws3yS28r0vsS5IKBldMxsD5kt/v/fFFbBjQurTD2E/
-        UHmW4sbENlSLeBiEd5qL+0DlSQ==
-X-Google-Smtp-Source: APBJJlHKyhHW5PHmC2sm3pULY2t3Ytv4DMMumMPTzNWWa/3C/5MiAdbU930YyPpPhsCB0NEwz75yQw==
-X-Received: by 2002:a05:6602:474e:b0:77a:ee79:652 with SMTP id dy14-20020a056602474e00b0077aee790652mr19984055iob.1.1689174396427;
-        Wed, 12 Jul 2023 08:06:36 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id a9-20020a029f89000000b0042b76deb22fsm1212784jam.92.2023.07.12.08.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 08:06:35 -0700 (PDT)
-Message-ID: <e2d478de-24de-dc56-ca33-e008c09163ee@kernel.dk>
-Date:   Wed, 12 Jul 2023 09:06:35 -0600
+        Wed, 12 Jul 2023 11:07:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A721BFC
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:07:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECE4961803
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 15:07:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED24C433C7;
+        Wed, 12 Jul 2023 15:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689174451;
+        bh=JUkJn0tOQ/1zn5ty5hw2G+mKkQGgGt0pj2+gPzoup48=;
+        h=From:Subject:Date:To:Cc:From;
+        b=A3NzsoDq1V6Qg40QoPbF6BZFHf3/IlL18NYcrVieLcuzyWy3cEem7L4oNFqm6QkwV
+         1HFo9vfotZtY2j37nHwGEqBo/neh6XDuCXT/EIrFZBtdNlYEV8OfNcRLraddBGqPX4
+         3B3TW7QjbrQCYnXPsEHreV4Nu+litUOxt1wEuW8dJLEIuxRJrIqIR6TJHARy8+L/t9
+         Wc3ZrjdRo6qHeWaEId6t6rGieDLZam1ydC1acTcVDw1nmjq4ZDVh55pGCc+8KI60RG
+         ZeXJ0X2h+Tkax/v6W1UtXTdNQNBwsq6Az+czA4+yr8aL+pEzI0RLxUNlstjLYjJpeb
+         Z09Dliu3Ppk8w==
+From:   Michael Walle <mwalle@kernel.org>
+Subject: [PATCH net-next v3 00/11] net: phy: C45-over-C22 access
+Date:   Wed, 12 Jul 2023 17:07:00 +0200
+Message-Id: <20230620-feature-c45-over-c22-v3-0-9eb37edf7be0@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 5/7] futex: make futex_parse_waitv() available as a helper
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com
-References: <20230712004705.316157-1-axboe@kernel.dk>
- <20230712004705.316157-6-axboe@kernel.dk>
- <20230712092514.GE3100107@hirez.programming.kicks-ass.net>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230712092514.GE3100107@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAJTBrmQC/32OQQ6CMBBFr0Jm7ZhShagr72FctOUDjVrMtBIM4
+ e4WDuDy5eXn/ZkixCPSpZhJMProh5DhsCvI9SZ0YN9kJq30QdVacQuTPgJ2x4qHEcJOa1ZGl6f
+ SGttUNeWpNRFsxQTXr+OXiQmyireg9dPWu1FA4oAp0T2b3sc0yHc7MurN/2+OOcsNWmXs2TlAX
+ x+QgOd+kI7uy7L8AG4kZj3cAAAA
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>,
+        Michael Walle <mwalle@kernel.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/23 3:25?AM, Peter Zijlstra wrote:
-> On Tue, Jul 11, 2023 at 06:47:03PM -0600, Jens Axboe wrote:
-> 
->> Since we now provide a way to pass in a wake handler and data, ensure we
->> use __futex_queue() to avoid having futex_queue() overwrite our wait
->> data.
-> 
->> diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
->> index 3471af87cb7d..dfd02ca5ecfa 100644
->> --- a/kernel/futex/waitwake.c
->> +++ b/kernel/futex/waitwake.c
->> @@ -446,7 +446,8 @@ static int futex_wait_multiple_setup(struct futex_vector *vs, int count, int *wo
->>  			 * next futex. Queue each futex at this moment so hb can
->>  			 * be unlocked.
->>  			 */
->> -			futex_queue(q, hb);
->> +			__futex_queue(q, hb);
->> +			spin_unlock(&hb->lock);
->>  			continue;
->>  		}
-> 
-> I'm not following; I even applied all your patches up to this point, but
-> futex_queue() still reads:
-> 
-> static inline void futex_queue(struct futex_q *q, struct futex_hash_bucket *hb)
-> 	__releases(&hb->lock)
-> {
-> 	__futex_queue(q, hb);
-> 	spin_unlock(&hb->lock);
-> }
-> 
-> How would it be different and overwrite anything ?!?
+The goal here is to get the GYP215 and LAN8814 running on the Microchip
+LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
+LAN8814 has a bug which makes it impossible to use C45 on that bus.
+Fortunately, it was the intention of the GPY215 driver to be used on a C22
+bus. But I think this could have never really worked, because the
+phy_get_c45_ids() will always do c45 accesses and thus gpy_probe() will
+fail.
 
-Good catch, this is a leftover from storing the task/wakeup data
-separately. But I got rid of that, so it's stale comment at this point
-and we can certainly use futex_queue() here again and drop this hunk.
-Will make that edit.
+Introduce C45-over-C22 support and use it if the MDIO bus doesn't support
+C45 in the OF case. We must not use C45-over-C22 if the device being
+probed isn't a PHY because it involes register writes to standard PHY
+registers, which might not be supported in generic PHY devices.
+Therefore, we cannot use it in the generic PHY probing code. In the DT
+case, we know we are probing a PHY device and thus we can fall back to
+C45-over-C22.
 
--- 
-Jens Axboe
+The first patches convert the is_c45 property to a new "enum
+phy_access_mode". The former property is then derived from the
+access mode.
+
+To support the probing for DT, export the prevent_c45_scan logic and
+make it a property of the mii bus. Unfortunately, you'd need to stick to
+the following flow in every scanning code:
+ (1) add any c22 phys
+ (2) scan for broken phys
+ (3) add any c45 phys using either c45 or c45-over-c22 access
+
+I couldn't find a way to make that generic and move the flow into the
+phy core.
+
+Then, a new access method c45-over-c22 is added for get_phy_device() and
+phy_{read,write}_mmd(). It is the callers responsibilty to choose the
+correct mode. Esp. the generic probing code isn't using c45-over-c22.
+
+c45-over-c22 is then added for the MaxLinear PHYs if it is probed as a
+C22 device, which is always the case if there is no compatible =
+"ethernet-phy-ieee802.3-c45" in the device tree. The driver will
+automatically "promote" the PHY to a C45 one if probed as C22.
+
+The last two patches will then add c45-over-c22 fallback to the DT PHY
+registration code. As described above, the probing is split into the
+three phases.
+
+FWIW, this now triggers a bug in mscc-miim. Haven't figured out what's
+wrong yet, somehow the status register doesn't return busy/pending.
+Currently, working around that with a sleep.
+
+net: phy: add error checks in mmd_phy_indirect() and export it
+net: phy: get rid of redundant is_c45 information
+net: phy: introduce phy_is_c45()
+net: phy: replace is_c45 with phy_accces_mode
+net: phy: make the "prevent_c45_scan" a property of the MII bus
+net: phy: print an info if a broken C45 bus is found
+net: phy: add support for C45-over-C22 transfers
+net: phy: introduce phy_promote_to_c45()
+net: mdio: add C45-over-C22 fallback to fwnode_mdiobus_register_phy()
+net: mdio: scan for broken C22 PHYs when probed via OF
+
+Changes since v2:
+ - addressed the review comments, see individual patches
+ - more importantly, introduce a new helper phy_mdiobus_read_mmd() which
+   takes an enum access_mode.
+ - Link: https://lore.kernel.org/r/20230620-feature-c45-over-c22-v2-0-def0ab9ccee2@kernel.org
+
+Changes since v1:
+ - major rework to address the problem to not use c45-over-c22 on
+   bus scanning, see the description above. Except from some preparation
+   patches there is little left of the original series. The major
+   difference is that there is now a new transport mode argument and the
+   c45-over-c22 is not automatically used anymore.
+ - Link: https://lore.kernel.org/netdev/20230120224011.796097-1-michael@walle.cc/
+
+Changes since RFC v2:
+ - Reased to latest net-next
+ - new check_rc argument in mmd_phy_indirect() to retain old behavior
+ - determine bus capabilities by bus->read and bus->read_c45
+ - always set phydev->c45_over_c22 if PHY is promoted
+ - Link: https://lore.kernel.org/netdev/20220325213518.2668832-1-michael@walle.cc/
+
+Changes since RFC v1:
+ - use __phy_mmd_indirect() in mdiobus_probe_mmd_read()
+ - add new properties has_c45 c45_over_c22 (and remove is_c45)
+ - drop MDIOBUS_NO_CAP handling, Andrew is preparing a series to
+   add probe_capabilities to mark all C45 capable MDIO bus drivers
+ - Link: https://lore.kernel.org/netdev/20220323183419.2278676-1-michael@walle.cc/
+
+Signed-off-by: Michael Walle <mwalle@kernel.org>
+---
+Michael Walle (11):
+      net: phy: get rid of redundant is_c45 information
+      net: phy: introduce phy_has_c45_registers()
+      net: phy: replace is_c45 with phy_accces_mode
+      net: phy: make the "prevent_c45_scan" a property of the MII bus
+      net: phy: print an info if a broken C45 bus is found
+      net: phy: add error checks in mmd_phy_indirect()
+      net: phy: introduce phy_mdiobus_read_mmd()
+      net: phy: add support for C45-over-C22 transfers
+      net: phy: introduce phy_promote_to_c45()
+      net: mdio: add C45-over-C22 fallback to fwnode_mdiobus_register_phy()
+      net: mdio: support C45-over-C22 when probed via OF
+
+ drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c |   8 +-
+ drivers/net/ethernet/hisilicon/hns/hns_ethtool.c  |   4 +-
+ drivers/net/mdio/fwnode_mdio.c                    |  19 ++-
+ drivers/net/mdio/of_mdio.c                        |  63 +++++++---
+ drivers/net/phy/bcm84881.c                        |   2 +-
+ drivers/net/phy/marvell10g.c                      |   2 +-
+ drivers/net/phy/mdio_bus.c                        |  34 ++---
+ drivers/net/phy/mxl-gpy.c                         |   9 +-
+ drivers/net/phy/nxp-tja11xx.c                     |   3 +-
+ drivers/net/phy/phy-core.c                        | 144 ++++++++++++++++------
+ drivers/net/phy/phy.c                             |   8 +-
+ drivers/net/phy/phy_device.c                      | 107 +++++++++++-----
+ drivers/net/phy/phylink.c                         |  12 +-
+ drivers/net/phy/sfp.c                             |  12 +-
+ include/linux/phy.h                               |  48 ++++++--
+ 15 files changed, 335 insertions(+), 140 deletions(-)
+---
+base-commit: ed2f1f76bed5a7ace3c4fa90bce3457d0fe2035d
+change-id: 20230620-feature-c45-over-c22-0a2181babd56
 
