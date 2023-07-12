@@ -2,111 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E027507F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C577507F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbjGLMRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S233314AbjGLMRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232473AbjGLMQt (ORCPT
+        with ESMTP id S233233AbjGLMQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:16:49 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9F4173C;
-        Wed, 12 Jul 2023 05:16:42 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7835e5fa459so237485539f.2;
-        Wed, 12 Jul 2023 05:16:42 -0700 (PDT)
+        Wed, 12 Jul 2023 08:16:50 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA07198B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:16:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-991f956fb5aso795192766b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689164203; x=1691756203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e3tdXiD5wr9JnyQXntDLG7PAW3+GvtZ4ULR/Zqmp97Q=;
+        b=GCdQl6RnbOvQWTWaWhs0iVW9kQZA2bgHR2Fn9V97rdMSEMmQNonrVfJIb+Y9T77v2F
+         3x+EvtoHz5TmhqdxASdYEqvIA/vHqePLvCs8+6PdH+zA554vHgB3GVlvCAZ0HJtNgTxW
+         ZqrITLV0NCkYw6ZlMxz+CVS+RoQyI+28MCxD2PgQzStFIObEfKySIXYsCgk7gAx9JFni
+         bYyy9MvoHbE7dxIRQz9IZ8WN1tzmNCpsSqHFI+4bCYPw05xA+/Mr+XBir1eHuakVJIgx
+         k5cL+THNW7keMTtPb3SSbtcaumy8/eDwkfjR+2t6rXLAivDNhNpMv0H8SiOUPeaky30g
+         czsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689164202; x=1691756202;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YRfuEf8QvPMdA6+TuyHkkBUYH2h9XWzRNhgHoDqrdDk=;
-        b=USBixVWepPjrRE4rMcZ73maneDArQ0YIoGi6rNAd3c7iCEOYSLxxKjuVZyJ7kGnK4b
-         R3feBmisyrp0ofCPnfVnHGdUXff08tn7vjxsV/YJkWuzW/VO7zKPr3x7OUsrwCfTYa4w
-         DvWN3ZmHAthnqE8Z1gTx49KqaPZnzHsrmz3ILmOoLa77MJh1anqfK7yc3F61+/u5NV+7
-         RGDM9ZJc1mRrHvv/8j7kYJf36IsaAo5buU8WWjmVpRhRDJ8AI3j1YhQS15xaGHpG+sEb
-         zHt0r/rSicbUz6wzojHz93XPgmJ0XqAsLDKL+gthvSOvO5NrchVG5mwzWBYkG5hpF7X7
-         va3A==
-X-Gm-Message-State: ABy/qLaiEwiYaBd+5gubOKMnR2BhOk6yqchFJD2FCfaWyxQHnXSqY5iL
-        PqfnZrv9to6+zPlY2SojwA==
-X-Google-Smtp-Source: APBJJlHq/CeB5FNhXo+hvT0Ni2TOesVAeCW0bTRMn/zJugXXm3vQ2S8xupO8XpJFxby9VWQyKB/OUQ==
-X-Received: by 2002:a5d:8894:0:b0:760:e308:107e with SMTP id d20-20020a5d8894000000b00760e308107emr17856368ioo.0.1689164201781;
-        Wed, 12 Jul 2023 05:16:41 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id dm26-20020a0566023b9a00b0077a1d1029fcsm1308179iob.28.2023.07.12.05.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 05:16:41 -0700 (PDT)
-Received: (nullmailer pid 4079137 invoked by uid 1000);
-        Wed, 12 Jul 2023 12:16:39 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1689164203; x=1691756203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e3tdXiD5wr9JnyQXntDLG7PAW3+GvtZ4ULR/Zqmp97Q=;
+        b=PC6ixxOxXN6BXhD3Ibqs4owu7NfQSF9Bv42BRkuS6Z68kMxsuC7oZ7UmzuaCNumWQH
+         p+iu7Z2aMr3JXdfTeK6rB+cJM5Y513ooPbiGEZ+tRz6WuH86xRkA+mYkg2T8TN094H75
+         Tj/Ga60QdErk/2777o3VlxLPFQ+SnKWoWCu622LjEIvPrr5WB8SEdiSePBK+Jl6y2ULC
+         ulv4Si9jHlX1/U4sSIM8Rtfr/JiRMdpxHsvTfs/PGdP0onnlnhIbWSDQ83RHHL01ou9f
+         Y1Dd7Tq89gOc3JEj6SnX42x85vOKDW9T1xxozfiuguxU7VipL+pLk58pOT/pR51yTOgJ
+         k5LQ==
+X-Gm-Message-State: ABy/qLYF7prtqfeAlIYVZ9mJtjwwSrRRiaxlzAVFkJhIf1X/YjGYCQ2Z
+        40o7+pWquLAW518FWlUZ4djNHQ==
+X-Google-Smtp-Source: APBJJlFx+jrZFyBuraqqdj0Id4oWo944sq2YX36L9OvynOWQaSrVLAOzGb+MkpUtb1189k+Nn2RyJA==
+X-Received: by 2002:a17:907:8001:b0:96a:48ed:5333 with SMTP id ft1-20020a170907800100b0096a48ed5333mr15028000ejc.50.1689164203534;
+        Wed, 12 Jul 2023 05:16:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id b19-20020a170906661300b009920e9a3a73sm2490505ejp.115.2023.07.12.05.16.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 05:16:43 -0700 (PDT)
+Message-ID: <4747d535-43c5-6054-6823-c708c757fe6b@linaro.org>
+Date:   Wed, 12 Jul 2023 14:16:41 +0200
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: cypress,cy8c95x0: Add reset
+ pin
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230712113731.3306-3-wsa+renesas@sang-engineering.com>
-References: <20230712113731.3306-1-wsa+renesas@sang-engineering.com>
- <20230712113731.3306-3-wsa+renesas@sang-engineering.com>
-Message-Id: <168916419973.4079096.16108131261602732302.robh@kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: gnss: u-blox: add "reset-gpios"
- binding
-Date:   Wed, 12 Jul 2023 06:16:39 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 12 Jul 2023 13:37:30 +0200, Wolfram Sang wrote:
-> Needed to enable this chip on a Renesas KingFisher board. Description
-> copied over from the Mediatek driver which already supports it.
+On 12/07/2023 10:52, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> This patch adds support for an optional reset pin.
+> 
+> The reset pin is used to bring the chip into a known state and has an
+> internal pull-down, allowing it to be left floating if not needed.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > ---
->  Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Changes in V2:
+> - Update subject
+> - Update reset-gpios description.
+> ---
+>  .../devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml         | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
+> index 222d57541b65..2fa22160336f 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
+> @@ -51,6 +51,10 @@ properties:
+>      description:
+>        Optional power supply.
+>  
+> +  reset-gpios:
+> +    description: Reference to the GPIO connected to the XRES pin
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I asked you to remove redundant part...
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/gnss/u-blox,neo-6m.example.dts:23.40-41 syntax error
-FATAL ERROR: Unable to parse input tree
-make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/gnss/u-blox,neo-6m.example.dtb] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1500: dt_binding_check] Error 2
-make: *** [Makefile:234: __sub-make] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230712113731.3306-3-wsa+renesas@sang-engineering.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Best regards,
+Krzysztof
 
