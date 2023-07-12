@@ -2,87 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6240C74FDBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A9474FDD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjGLDaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S232054AbjGLDcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjGLDaZ (ORCPT
+        with ESMTP id S231891AbjGLDcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:30:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA707E5F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:30:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76003616CC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C52BEC433D9;
-        Wed, 12 Jul 2023 03:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689132623;
-        bh=A+gRtdAZ8mcZuB+d+24Fu1Ezj/v+F1WcLq9RyyvBDwo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LV1Ge056ckaYBdltXFZRoV0e2ZF1/AlfYgYrgxMXQMZzkhJ9b3Yhe99+v7fttKqSM
-         Vc6rqo0JL7zOaTad5u42O/SkZBiu3u3QZO67bvWSCXjp/eZCHf02MqYPuFfY23zyFR
-         Ft73qCkSJGQusyNKXGyq8b5vye53J3vwJ0oWJu/2f7Jmbz58bcyVby5YVqrKoDnS5z
-         x8Kv6N+JKllpSmIspjL/vWg+VrHpQMMHlmdZHKPTaXww9qkBVfcHanXvqu1kL7Ro01
-         Jp2t6ATOWog91p8x5bFyCfNxgKVG7boVifXvGiRwLQssLPV49vi219tFclBchs9RSY
-         cWEJuIGbMpE2g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6455E49BBF;
-        Wed, 12 Jul 2023 03:30:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 11 Jul 2023 23:32:21 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4F910D2;
+        Tue, 11 Jul 2023 20:32:14 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-63770af327fso43876896d6.2;
+        Tue, 11 Jul 2023 20:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689132734; x=1691724734;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jvf0nF5ZRGZZqWs6AfvhMZd8lPGLYxeXrzMNbCUatcI=;
+        b=SxWs7+NhmtFmcBIYeyB0DJkbyihTJ/eJTVplhF1PBnu+7xoaTjCtrLQrHuwdLeFQ78
+         I3V+0ZV93yvXSyymfW23KSm49bdG2+cDQerjn3yUo7EY7/0mneaPnyICynnwfA41jpPA
+         naFsV9h5672637AMbpuI5rKyDIB3JNrSXE1gmfIjsGRnHmGmIJya6kl1cK7Au5vlJ+o0
+         qZ4wu7MQKjX1Qw9kEVfq2Uud8SykO3pPpDbkvH9aneGl/oxs8a+Tgu/ldl1ny5gWRfIK
+         X1leUhBEIbA2PIMJjep3EInbKA1GWE9b1EsAy8+gD8hJkhSi7o6o9657r4Mm0u2QiaZh
+         LL3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689132734; x=1691724734;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jvf0nF5ZRGZZqWs6AfvhMZd8lPGLYxeXrzMNbCUatcI=;
+        b=O4yaN+EFP8AdfLOxS577hf0VSk7KISRInzAPBLrsjKBVlopLyYyenNcetoGrdYAIrv
+         TavCEIiCURr6qJ3OFa0BiSbD2NPEMN7Ekr7H9oYXFfjSC3iEo/rSBOtx8830LTV7jHSK
+         XKbGVVU/B9o2aB9LrWaISIg9GcYotdwu2mMGt5VTCyNGXUeuEgacU46v8udLmgMv4Ws7
+         U7ri0rHlWTly9a4M4xbVyfYrCem0Gg1nQAZUWXFA5U+7CRF7T3yS7H4q9evk3eCjI8Ik
+         9oq7Q3e7qU/4PLRKfXV68RtU8pSVFBGFXUSzMzQJs7831hbqJ6pOi1tKvTywKGkXUwHV
+         gOXA==
+X-Gm-Message-State: ABy/qLbaLPQVgpT3Tt4zlntZkxDMt/wmxlpgDJxfiJ0OS6556jfpN+Vm
+        VZUT0fL7mziTsiTd1/nJiiGDyAgv/ck=
+X-Google-Smtp-Source: APBJJlEi9cxhyg3FYQSwltq1b2CBfAz1F+0jG2fDBkJz+XscIpuisGIVjUha+zJXqw5Cv3MbLPDerw==
+X-Received: by 2002:ac8:5cc8:0:b0:403:a770:e15a with SMTP id s8-20020ac85cc8000000b00403a770e15amr17034785qta.56.1689132733918;
+        Tue, 11 Jul 2023 20:32:13 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id d7-20020aa78147000000b0067ea048cf83sm2419276pfn.186.2023.07.11.20.32.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 20:32:13 -0700 (PDT)
+Message-ID: <0475d177-4c01-0988-0b34-3099dd703498@gmail.com>
+Date:   Wed, 12 Jul 2023 12:32:10 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND net-next] bnxt_en: use dev_consume_skb_any() in
- bnxt_tx_int
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168913262367.27250.294062569408176677.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Jul 2023 03:30:23 +0000
-References: <20230710094747.943782-1-imagedong@tencent.com>
-In-Reply-To: <20230710094747.943782-1-imagedong@tencent.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     michael.chan@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imagedong@tencent.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+To:     rdunlap@infradead.org
+Cc:     amd-gfx@lists.freedesktop.org, corbet@lwn.net,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <b5ebc891-ee63-1638-0377-7b512d34b823@infradead.org>
+Subject: Re: scripts/kernel-doc does not handle duplicate struct & function
+ names (e.g., in amdgpu)
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <b5ebc891-ee63-1638-0377-7b512d34b823@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Randy,
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 10 Jul 2023 17:47:47 +0800 you wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+> [just documenting this for posterity or in case someone wants to fix it.]
 > 
-> Replace dev_kfree_skb_any() with dev_consume_skb_any() in bnxt_tx_int()
-> to clear the unnecessary noise of "kfree_skb" event.
+> In drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c, one can find both
 > 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> struct amdgpu_vm_tlb_seq_cb {...};
 > 
-> [...]
+> and
+> static void amdgpu_vm_tlb_seq_cb(...)
+> 
+> Of course C has no problem with this, but kernel-doc reports:
+> 
+> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:833: WARNING: Duplicate C declaration, also defined at gpu/amdgpu/driver-core:115.
+> 
+> And of course, if the name of one of them is changed, kernel-doc is all happy...
+> not that I am suggesting that one of them should be changed.
+> 
+> I just want to make people aware of this. (or maybe people are already aware of this?)
 
-Here is the summary with links:
-  - [RESEND,net-next] bnxt_en: use dev_consume_skb_any() in bnxt_tx_int
-    https://git.kernel.org/netdev/net-next/c/47b7acfb016b
+The duplicate warning is emitted from Sphinx, not kernel-doc.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This is a bug of Sphinx >=3.1, first reported by Mauro back in September 2020 at:
 
+    https://github.com/sphinx-doc/sphinx/issues/8241
+
+It was closed when a local fix was presented.  Unfortunately, it was not
+merged at the time and a subsequent pull request was opened at:
+
+    https://github.com/sphinx-doc/sphinx/pull/8313
+
+It is not merged yet and carries a milestone of Sphinx 7.x.
+
+Looks like we need to wait patiently.
+
+        Thanks, Akira
+
+> 
+> -- 
+> ~Randy
 
