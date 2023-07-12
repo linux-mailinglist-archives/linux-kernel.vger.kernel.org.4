@@ -2,58 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B568E7508A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B0C7508AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbjGLMsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S231418AbjGLMs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjGLMsE (ORCPT
+        with ESMTP id S231174AbjGLMsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:48:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80351712
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:48:03 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJZG7-0005XX-Sr; Wed, 12 Jul 2023 14:47:55 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJZG7-00DtMk-5J; Wed, 12 Jul 2023 14:47:55 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJZG6-004Izs-G6; Wed, 12 Jul 2023 14:47:54 +0200
-Date:   Wed, 12 Jul 2023 14:47:53 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Guiting Shen <aarongt.shen@gmail.com>,
-        claudiu.beznea@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pwm: atmel: Enable clk when pwm already enabled in
- bootloader
-Message-ID: <20230712124753.5lcao4wubwiikh2m@pengutronix.de>
-References: <20230711200905.6464-1-aarongt.shen@gmail.com>
- <20230711203017.cdfe2nrjx7lt25tm@pengutronix.de>
- <90830c22-0437-591e-cee0-67b16214bc55@gmail.com>
- <ZK6dL84DsQDhsFWl@orome>
+        Wed, 12 Jul 2023 08:48:55 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93ADA1727;
+        Wed, 12 Jul 2023 05:48:54 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CCJP25002477;
+        Wed, 12 Jul 2023 12:48:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rXIuXoAEhI7O3qWcksCIs8vl+k8098kXLaBDeBMr0vQ=;
+ b=jTTZJ+aBwiOduMuSXCZtYQjeQ8PfuxPD9wyT6GJFSNUhtXLGCnwaq7mYIY4LB+aCuaqe
+ vWHsSQkTF0jRw3iewyphAcs3iIGTARDbp8ZXnuuXUNSGU/ksSQ0ZnSMZfXSqVB9I9uGK
+ qZmVlw5T6dex7ajd3JfVaNj466GryPpRhyIDpMMyCt9Ry+EqN6Oy+96y4rLJmFSmas69
+ WIDo1kQ20OmeOdl7oC4rMb320Mvw9nYx/vipXBqOfQIFF6uH0U0M7OASaGRf/HqVnvNp
+ le+6gB29NR4VdQSUFeS/WdxIOBB+UPEmK1oEgWVi8Vgx0+Px/1F/wHa9PChn+dG1TtX1 /w== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf87hggh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 12:48:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CCmfS4003346
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 12:48:41 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
+ 2023 05:48:36 -0700
+Message-ID: <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
+Date:   Wed, 12 Jul 2023 18:18:32 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gockmt5y3tgnf4m7"
-Content-Disposition: inline
-In-Reply-To: <ZK6dL84DsQDhsFWl@orome>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: ipq5332: Add tsens node
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
+ <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
+ <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LuJVjy9CbJTPJJZScFi8q5TWucNj-56n
+X-Proofpoint-ORIG-GUID: LuJVjy9CbJTPJJZScFi8q5TWucNj-56n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_08,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=915 malwarescore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120114
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,104 +88,113 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---gockmt5y3tgnf4m7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/12/2023 5:54 PM, Dmitry Baryshkov wrote:
+> On 12/07/2023 14:35, Praveenkumar I wrote:
+>> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
+>> node with nvmem cells for calibration data.
+>>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> ---
+>> [v2]:
+>>     Included qfprom nodes only for available sensors and removed
+>>     the offset suffix.
+>>
+>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 +++++++++++++++++++++++++++
+>>   1 file changed, 66 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
+>> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> index 8bfc2db44624..0eef77e36609 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> @@ -150,6 +150,46 @@ qfprom: efuse@a4000 {
+>>               reg = <0x000a4000 0x721>;
+>>               #address-cells = <1>;
+>>               #size-cells = <1>;
+>> +
+>> +            tsens_mode: mode@3e1 {
+>> +                reg = <0x3e1 0x1>;
+>> +                bits = <0 3>;
+>> +            };
+>> +
+>> +            tsens_base0: base0@3e1 {
+>> +                reg = <0x3e1 0x2>;
+>> +                bits = <3 10>;
+>> +            };
+>> +
+>> +            tsens_base1: base1@3e2 {
+>> +                reg = <0x3e2 0x2>;
+>> +                bits = <5 10>;
+>> +            };
+>> +
+>> +            s11: s11@3a5 {
+>> +                reg = <0x3a5 0x1>;
+>> +                bits = <4 4>;
+>> +            };
+>> +
+>> +            s12: s12@3a6 {
+>> +                reg = <0x3a6 0x1>;
+>> +                bits = <0 4>;
+>> +            };
+>> +
+>> +            s13: s13@3a6 {
+>> +                reg = <0x3a6 0x1>;
+>> +                bits = <4 4>;
+>> +            };
+>> +
+>> +            s14: s14@3ad {
+>> +                reg = <0x3ad 0x2>;
+>> +                bits = <7 4>;
+>> +            };
+>> +
+>> +            s15: s15@3ae {
+>> +                reg = <0x3ae 0x1>;
+>> +                bits = <3 4>;
+>> +            };
+>>           };
+>>             rng: rng@e3000 {
+>> @@ -159,6 +199,32 @@ rng: rng@e3000 {
+>>               clock-names = "core";
+>>           };
+>>   +        tsens: thermal-sensor@4a9000 {
+>> +            compatible = "qcom,ipq5332-tsens";
+>> +            reg = <0x4a9000 0x1000>,
+>> +                  <0x4a8000 0x1000>;
+>> +            nvmem-cells = <&tsens_mode>,
+>> +                      <&tsens_base0>,
+>> +                      <&tsens_base1>,
+>> +                      <&s11>,
+>> +                      <&s12>,
+>> +                      <&s13>,
+>> +                      <&s14>,
+>> +                      <&s15>;
+>> +            nvmem-cell-names = "mode",
+>> +                       "base0",
+>> +                       "base1",
+>> +                       "s11",
+>> +                       "s12",
+>> +                       "s13",
+>> +                       "s14",
+>> +                       "s15";
+>
+> Previously you had data for other sensors here. Are they not used at 
+> all, not wired, have no known-good placement? I think it might be 
+> better to declare all sensors here (and in the driver too) and then 
+> consider enabling only a pile of them in the thermal-zone node.
 
-On Wed, Jul 12, 2023 at 02:31:43PM +0200, Thierry Reding wrote:
-> On Wed, Jul 12, 2023 at 09:45:08AM +0800, Guiting Shen wrote:
-> > On Wed, Jul 12, 2023 at 04:30:17AM GMT+8, Uwe Kleine-K=F6nig wrote:
-> > > Hello,
-> > >=20
-> > > On Wed, Jul 12, 2023 at 04:09:05AM +0800, Guiting Shen wrote:
-> > >> +static int atmel_pwm_enable_clk_if_on(struct atmel_pwm_chip *atmel_=
-pwm)
-> > >> +{
-> > >> +	unsigned int i;
-> > >> +	int err;
-> > >> +	u32 sr;
-> > >> +
-> > >> +	sr =3D atmel_pwm_readl(atmel_pwm, PWM_SR);
-> > >> +	if (!sr)
-> > >> +		return 0;
-> > >> +
-> > >> +	for (i =3D 0; i < atmel_pwm->chip.npwm; i++) {
-> > >> +		if (!(sr & (1 << i)))
-> > >> +			continue;
-> > >> +
-> > >> +		err =3D clk_enable(atmel_pwm->clk);
-> > >> +		if (err) {
-> > >> +			dev_err(atmel_pwm->chip.dev,
-> > >> +				"failed to enable clock: %pe\n", ERR_PTR(err));
-> > >=20
-> > > Here you leak possibly a few enables. While it's not likely that the
-> > > (say) third enable goes wrong, it's also not that hard to handle?!
-> >=20
-> > The driver used the enable_count member of struct clk_core to count the
-> > PWM channels(4 channels). It will enable hardware clock only when one of
-> > the PWM channels becomed on from all PWM channels off which maybe return
-> > error. And in second/third/fourth times to clk_enable(), it just
-> > increased the enable_count of struct clk_core which would never return
-> > error.
-> >=20
-> > It maybe confused at first time to view the code.
-> > Do it need to add something like that: ?
-> >=20
-> > for (i =3D 0; i < atmel_pwm->chip.npwm; i++) {
-> > 	if (!(sr & (1 << i)))
-> > 		continue;
-> >=20
-> > 	err =3D clk_enable(atmel_pwm->clk);
-> > 	if (err) {
-> > 		dev_err(atmel_pwm->chip.dev,
-> > 			"failed to enable clock: %pe\n", ERR_PTR(err));
-> >=20
-> > 		for (i =3D 0; i < cnt; i++)
-> > 			clk_disable(atmel_pwm->clk);
-> > 		return err;
-> > 	}
-> > 	cnt++;
->=20
-> You can also achieve this by decrementing i back to zero, that way you
-> avoid the additional variable and you get a more natural unwinding of
-> what you did before.
->=20
-> So something like:
->=20
-> 	while (i--)
-> 		clk_disable(atmel_pwm->clk);
+Remaining sensors are not used at all. It is not wired. Only above 
+sensors are placed in SoC.
 
-You'd need something like:
+- Praveenkumar
 
- 	while (i--) {
-		if (!(sr & (1 << i)))
-			continue;
-
- 		clk_disable(atmel_pwm->clk);
-	}
-
-Best regards
-Uwe
-
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gockmt5y3tgnf4m7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSuoPkACgkQj4D7WH0S
-/k48zwf/QkOmJBAzO28DukPhPXkCh/AkYOZDa+uISSzN+XA3m6CYtnvR8Oc2GLyW
-gg+MvfQGzbJezgfFP9ONAxfqvh7pP4sjAUtw0/hD9bxDKI74DBxxPHllO40xh6Cb
-E2Scr6L6gzUFeaRfgGtZQ7oCD7kLBn5yI4T7lsqS3achEaY0wVTBRb8CLYTqZaBM
-hUw49m+3cUXVUIaT7u9EHRCV/IJPiDqAhoPKp1HpIOpOIwnS8dd0DXvIDmhGg5uH
-x8HhBdWZFVozLVwOR8/Ua28/EVQSZyyKkuXrAvvOljx5iJp8tzIgXR9gvyoGpu8S
-gUVsjwWoPq/LpXGkLmoP2bBcu+FM/g==
-=VP4V
------END PGP SIGNATURE-----
-
---gockmt5y3tgnf4m7--
+>
+>> +            interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
+>> +            interrupt-names = "combined";
+>> +            #qcom,sensors = <5>;
+>> +            #thermal-sensor-cells = <1>;
+>> +        };
+>> +
+>>           tlmm: pinctrl@1000000 {
+>>               compatible = "qcom,ipq5332-tlmm";
+>>               reg = <0x01000000 0x300000>;
+>
