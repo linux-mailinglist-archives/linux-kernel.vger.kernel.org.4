@@ -2,156 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C84D750C4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62620750C49
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjGLPUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S232841AbjGLPUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjGLPUr (ORCPT
+        with ESMTP id S231949AbjGLPUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:20:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8ED1BFC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689175141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PCzMnIk4EUAlNIXsbTPgnejSeR7W3lLfeJIjDNvrQT4=;
-        b=CblmdDBJNYg56C3Th8glB4qo24IrSeHcRVln+V2p1mHxUc7KNeq+dXVHgSX132KuIE14kT
-        R/TUgZ9ihgZ5OS6MhsHovAqHuyiJ0WzFLv2Psr+VgNiIeSO3QSJgmzRvIPJEa8LXlQbnV/
-        +IoJ4PMiDS+RVFqdArPmlateQCek5is=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-171-cUgcfBMsNM2TEGD8_wlozg-1; Wed, 12 Jul 2023 11:18:59 -0400
-X-MC-Unique: cUgcfBMsNM2TEGD8_wlozg-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-993dc6fbdaaso286200066b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:18:58 -0700 (PDT)
+        Wed, 12 Jul 2023 11:20:05 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52371BFF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:19:39 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31297125334so603495f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689175174; x=1691767174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r2jUmgPJMl8rNeDpH2GLcq5ImDgq36YmUU+/0NveM+c=;
+        b=UCdooMkEYlmcH+/GKIRSljMulWWBGH63TzM/BqZq9bgBjr1sGdLtosqgSUbGCEEzjo
+         m7W1rk+X2V7pObvBjCST9USZDZ5VZF/1RBl6O41iXhaR275YmFfzJ7OtCj9+nRp6HPpB
+         lQKhDg1TWTYDRWOHVa4pcjQipoboO9GFErVfWepMof3s3AdkSb4H2ijilhUpquOCL/j8
+         MaAri8u5ZsVQ/TDcX2sBvarXUp79ENwuv8db663JxWVAKpMFUmOSzeTPvTMknpoePoN8
+         dDBfTTtozC5DV89B74cZ4PLVjzfWWLaW2gHahea6422LmC6nGJCjgvwjuqRrEtJ/ghj5
+         kDiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689175137; x=1691767137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PCzMnIk4EUAlNIXsbTPgnejSeR7W3lLfeJIjDNvrQT4=;
-        b=bktKjXFnuqqaEkcHQf4g4DNCuH2uRFW2sq71msctllBR0Md3PJ27P9n3OQVjKQIoAo
-         dXuofik46p7gdA11kJSw1O1i0EvkenOYxZzLVa7+UhcUO8ZmUYq49vZVgdS1Xu4kvdUG
-         gvhAnfHch4N8v1b7LloQGvChIYGjiugJirJbU1jDTI8AjY0YlSq/b9i0P62fRV+D0SS/
-         kYqog3UBugIHxpiKF1EdJytxdeJP+JXheTMudWtbCC6GXBBBm1ftaZTkp/GYyotuoC4F
-         T6dOF9ShJ5iQJIy/BT8l2h/CuUkiFqDA7Ja+2IUqYCGAUbY6lyTtxPXUl+X5zLEevG5X
-         wR9g==
-X-Gm-Message-State: ABy/qLaR1BndIwmJSZmkIOC0W+BOvGty4n/lVqSBJLhBjTxFbLvCR2WQ
-        6HGxykW9uW2lZkr9ZkrCbW5en4fsozv79ayKLuBk72/Gqvpg8MXIksO4MAdSUJD7vw5FxtW2cGc
-        PgvolOtGcCNXLuvW+vwyVyGmA
-X-Received: by 2002:a17:906:7a4c:b0:993:d617:bdc5 with SMTP id i12-20020a1709067a4c00b00993d617bdc5mr15974674ejo.37.1689175137746;
-        Wed, 12 Jul 2023 08:18:57 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFcNAAKYJsGE//IOnyL66tt6b+ZlctKs3M4YV0iRoylH/+zyuyjTaePkU8BFtzDx/53R0C8HQ==
-X-Received: by 2002:a17:906:7a4c:b0:993:d617:bdc5 with SMTP id i12-20020a1709067a4c00b00993d617bdc5mr15974659ejo.37.1689175137468;
-        Wed, 12 Jul 2023 08:18:57 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170906614600b00993a508b818sm2729216ejl.1.2023.07.12.08.18.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 08:18:56 -0700 (PDT)
-Message-ID: <365026b2-86a1-3984-e602-c818a9739df3@redhat.com>
-Date:   Wed, 12 Jul 2023 17:18:56 +0200
+        d=1e100.net; s=20221208; t=1689175174; x=1691767174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r2jUmgPJMl8rNeDpH2GLcq5ImDgq36YmUU+/0NveM+c=;
+        b=HHS6xMEDn+OR9cZN22N9DvPpNOEZWj3cFC59Elb6gLdKmjz5g6LoWGkJasA0Muh0nl
+         p68MmvwWncqcOR4RnUEJomaYINkNXa6l9qyW2rksvqeCojVqSpcZrkRdupCvLvSFkgWo
+         s2Xfb+AV0v0J2lVYuE76DZtgjALIq04MckxNuZLvhR830WQp95tngcxjerIvT70ax/Ml
+         JLEykJnY6gmGhs+R3NLIBnRu/7+InMVGhopEzRCnK8pzw+MHEbJxCdd9T4dwkUXhFEtH
+         uK3wuTVZGbM7KgQTT/4224xuUelc3u4H2O9cd7P1zbWLveqQG+OvwPQc4gKd5e191NcE
+         FySg==
+X-Gm-Message-State: ABy/qLbjszVD7d0sH3U8d+zUUrmbDEMoZPhl47mkx3npT5ZvnPWU6DpD
+        ZOonK7OJmmaNZCK3RcNt2/hNFQ==
+X-Google-Smtp-Source: APBJJlHdwL2zKIVCmmL3/riZO45YQ7rzeJE80NsRv8hjeV/nAECA/Gt5BHfQ4Nv94ah2m4kod3Me7A==
+X-Received: by 2002:a05:6000:4c3:b0:314:1d6:8aa7 with SMTP id h3-20020a05600004c300b0031401d68aa7mr1972887wri.29.1689175174315;
+        Wed, 12 Jul 2023 08:19:34 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id r8-20020a056000014800b0030fa3567541sm5349531wrx.48.2023.07.12.08.19.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 08:19:33 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 16:19:31 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>
+Subject: Re: [PATCH 02/10] tty: sysrq: switch sysrq handlers from int to u8
+Message-ID: <20230712151931.GA458038@aspen.lan>
+References: <20230712081811.29004-1-jirislaby@kernel.org>
+ <20230712081811.29004-3-jirislaby@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 0/8] platform/x86: asus-wmi:
-Content-Language: en-US, nl
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, markgross@kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net
-References: <20230630053552.976579-1-luke@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230630053552.976579-1-luke@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230712081811.29004-3-jirislaby@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jul 12, 2023 at 10:18:03AM +0200, Jiri Slaby (SUSE) wrote:
+> The passed parameter to sysrq handlers is a key (a character). So change
+> the type from 'int' to 'u8'. Let it specifically be 'u8' for two
+> reasons:
+> * unsigned: unsigned values come from the upper layers (devices) and the
+>   tty layer assumes unsigned on most places, and
+> * 8-bit: as that what's supposed to be one day in all the layers built
+>   on the top of tty. (Currently, we use mostly 'unsigned char' and
+>   somewhere still only 'char'. (But that also translates to the former
+>   thanks to -funsigned-char.))
+>
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> <snip>
+> Cc: Jason Wessel <jason.wessel@windriver.com>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
 
-On 6/30/23 07:35, Luke D. Jones wrote:
-> This patch series adds or exposes more features that are available in the ROG
-> laptop series.
-> 
-> - expose dGPU and CPU tunables for ROG
->   - These are things like GPU boost, CPU Pl1 and PL2, package power limits
-> - support setting mini-LED mode
->   - Some newer laptops have a screen that can toggle between regular style
->     backlight and using mini-LED backlight
-> - add WMI method to show if egpu connected
->   - This WMI method can be monitored/queried to see if it is possible to begin
->     the change-over to eGPU
-> - support middle fan custom curves
->   - Some newer laptops have a center/middle fan which blows across the CPU and GPU
-> - add support for showing middle fan RPM
-> - add support for showing charger mode (AC, USB-C, both plugged)
-> - add additional checks to GPU switching code
->   - These try to prevent a sceanrio such as the user disabling the dGPU while it
->     is driving the internal panel via MUX, resulting in no output at all.
->     There are no checks in the ACPI code for this, but on some newer models ASUS
->     did finally add a switch in the BIOS menu. It is best to try and prevent this
->     at the kernel level rather than userland level.
-> 
-> All patches pass ./scripts/checkpatch.pl
-
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-> 
-> Changelog:
-> - v2-0008-platform-x86-asus-wmi-expose-dGPU-and-CPU-tunable.patch
-> 	- Rename the WMI defs to match what ASUS supplied as names
-> 	- Remove EDC and TDC exposure (unsafe)
-> 	- Slight change to formatting
-> 	- Add better notes to documentation
-> 		
-> 
-> Luke D. Jones (8):
->   platform/x86: asus-wmi: add support for showing charger mode
->   platform/x86: asus-wmi: add support for showing middle fan RPM
->   platform/x86: asus-wmi: support middle fan custom curves
->   platform/x86: asus-wmi: add WMI method to show if egpu connected
->   platform/x86: asus-wmi: don't allow eGPU switching if eGPU not
->     connected
->   platform/x86: asus-wmi: add safety checks to gpu switching
->   platform/x86: asus-wmi: support setting mini-LED mode
->   platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
-> 
->  .../ABI/testing/sysfs-platform-asus-wmi       |  86 +++
->  drivers/platform/x86/asus-wmi.c               | 605 +++++++++++++++++-
->  include/linux/platform_data/x86/asus-wmi.h    |  19 +-
->  3 files changed, 707 insertions(+), 3 deletions(-)
-> 
-
+For kgdb:
+Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
