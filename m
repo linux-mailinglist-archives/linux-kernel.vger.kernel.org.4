@@ -2,145 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2DC75091E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A293F75092A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbjGLNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S233502AbjGLNDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbjGLNCm (ORCPT
+        with ESMTP id S233478AbjGLND2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:02:42 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7687D1BDF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:02:29 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b711c3ad1fso5690467a34.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689166948; x=1691758948;
-        h=content-transfer-encoding:author:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9T8piHX0bubTIqR5dsadlL99AD9gpATcetHPEAi8jTU=;
-        b=hIzKop+k4OCTCBWq4j/r6OD7aiiXPsd/rQZ1uF4S9TETD/oKB2rDcKczmsx2A0nJe5
-         NWtDC2qPPGP7IM/wx1RvH78MvjJ6gY/YwivETBUZkh+vDWikLxQdZmap/WtbV5U3p2fE
-         p5OoOEvAFa/9bydOqp6ak9+2bf8q660eCyEzrIC/1SHTOj9MIVPWcntYo5Y0VljtGzHE
-         mgZIlmKBdjkeT3791x7XiE800dSX3/EX7xIgtP5kHtO8nVPlbCyb2u7S6JXlPFNTDwAE
-         UGae6a1Zymrpqo19n1nGtitGuwQJG7H3zK3/7eS7IUQfV708JvhyXubPbr6YmxNuc0TL
-         sKPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689166948; x=1691758948;
-        h=content-transfer-encoding:author:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9T8piHX0bubTIqR5dsadlL99AD9gpATcetHPEAi8jTU=;
-        b=fxDFiowA7cZOLkvxoDLERpMNgL68RU2zMo0dy3rikx4AV5SoIWDwsHpBCliNE4LI96
-         H5O5ZxTZ3LMJaL8l0GyQOGHygcNvMrC3ra0J/fPo07p/uzl2xAph9Jr3sBJKgy5UZzvy
-         QgH0uT3u7ZclhvuhDqV+T2ZidZeGLSlxi26ssRDhq3mJUj4nzXF13Audq77wrQynK3T9
-         qLwAvpbtV15nA4g20i3UVsvbTUFM/VlNlinnrleAo3YDcZH5Ub0bfW8G+o+HTg0qLub/
-         yUQoD/qO9MJWJGKovwmzkVfjDEoEOXoN/QszpmLL24T5hJQaID1xegc6PK0hM852siXE
-         O9QQ==
-X-Gm-Message-State: ABy/qLYiUsPv/TaJEiWHkB9qU0IbfBTqg7G9r9y2BE8x6ghTyMORDOju
-        YeYm/QtCGIMG8s/hU0bTn+D3Yg==
-X-Google-Smtp-Source: APBJJlHMNeteSeTTb43sYC5YqkHocrWysDwQ9MhmzMKypOa+itOUe2NT1zrkO4ZI8Ox9NbZXCTb+1w==
-X-Received: by 2002:a05:6358:341f:b0:135:89d6:22e9 with SMTP id h31-20020a056358341f00b0013589d622e9mr1235888rwd.13.1689166948540;
-        Wed, 12 Jul 2023 06:02:28 -0700 (PDT)
-Received: from x-wing.lan ([49.207.50.231])
-        by smtp.gmail.com with ESMTPSA id p1-20020a639501000000b0054fe07d2f3dsm3417023pgd.11.2023.07.12.06.02.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 06:02:28 -0700 (PDT)
-From:   Amit Pundir <amit.pundir@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Bryan Donoghue <bryan.odonoghue@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2][v4] arm64: dts: qcom: sdm845-db845c: Mark cont splash memory region as reserved
-Date:   Wed, 12 Jul 2023 18:32:15 +0530
-Message-Id: <20230712130215.666924-2-amit.pundir@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230712130215.666924-1-amit.pundir@linaro.org>
-References: <20230712130215.666924-1-amit.pundir@linaro.org>
+        Wed, 12 Jul 2023 09:03:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF461BFD;
+        Wed, 12 Jul 2023 06:03:22 -0700 (PDT)
+X-UUID: 7815dfbe20b411ee9cb5633481061a41-20230712
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=G1HHJBk/sQvVbiomYqcZlgk1NLXE+A6QfL373AvC8Vo=;
+        b=VoYwL7RMiyz/1jncyQ4wWRS+Ueq3h/g5vL9ZdvrXIWaZlD9LU+Ruge2dcgShe2lWebCsmDgGbAjwJBwh95qM+5Hi2Ql+synKKs2EPfBqklREsncTIrmhxe7XMKWmZG1heF4jHUGjmMMCdt2zn3gtihgbXZqbHbTMYFaokjR+4E8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.28,REQID:98e51d2a-2e82-4c3c-86e0-b1f2dc874cc2,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:176cd25,CLOUDID:5693270e-c22b-45ab-8a43-3004e9216b56,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO,DKR:0,DKP:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 7815dfbe20b411ee9cb5633481061a41-20230712
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chris.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 401310188; Wed, 12 Jul 2023 21:03:17 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 12 Jul 2023 21:03:16 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 12 Jul 2023 21:03:16 +0800
+From:   Chris Lu <chris.lu@mediatek.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Von Dentz <luiz.dentz@gmail.com>
+CC:     Sean Wang <sean.wang@mediatek.com>,
+        Aaron Hou <aaron.hou@mediatek.com>,
+        Steve Lee <steve.lee@mediatek.com>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Chris Lu <chris.lu@mediatek.com>
+Subject: [PATCH v4] Bluetooth: btmtk: Fix null pointer when processing coredump
+Date:   Wed, 12 Jul 2023 21:02:19 +0800
+Message-ID: <20230712130218.376-1-chris.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Author: Amit Pundir <amit.pundir@linaro.org>
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding a reserved memory region for the framebuffer memory
-(the splash memory region set up by the bootloader).
+There may be a potential null pointer risk if offset value is
+less than 0 when doing memcmp in btmtk_process_coredump().
+Check offset is valid before doing memcmp.
 
-Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+Signed-off-by: Chris Lu <chris.lu@mediatek.com>
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 ---
-v4: Re-sending this along with a new dt-bindings patch to
-    document memory-region property in qcom,sdm845-mdss
-    schema and keep dtbs_check happy.
+v2: fix typo
+v3: fix bot checking error
+v4: reduce variable 'offset' declaration in v3
+---
+ drivers/bluetooth/btmtk.c | 12 ++++++------
+ drivers/bluetooth/btmtk.h |  1 +
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-v3: Point this reserved region to MDSS.
-
-v2: Updated commit message.
-
-There was some dicussion on v1 but it didn't go anywhere,
-https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u.
-The general consensus is that this memory should be freed and be
-made resuable but that (releasing this piece of memory) has been
-tried before and it is not trivial to return the reserved memory
-node to the system RAM pool in this case.
-
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index d6b464cb61d6..f546f6f57c1e 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -101,6 +101,14 @@ hdmi_con: endpoint {
- 		};
- 	};
+diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
+index 786f775196ae..9cc789272ab7 100644
+--- a/drivers/bluetooth/btmtk.c
++++ b/drivers/bluetooth/btmtk.c
+@@ -395,12 +395,12 @@ int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
  
-+	reserved-memory {
-+		/* Cont splash region set up by the bootloader */
-+		cont_splash_mem: framebuffer@9d400000 {
-+			reg = <0x0 0x9d400000 0x0 0x2400000>;
-+			no-map;
-+		};
-+	};
-+
- 	lt9611_1v8: lt9611-vdd18-regulator {
- 		compatible = "regulator-fixed";
- 		regulator-name = "LT9611_1V8";
-@@ -506,6 +514,7 @@ &i2c14 {
- };
+ 		/* Mediatek coredump data would be more than MTK_COREDUMP_NUM */
+ 		if (data->cd_info.cnt > MTK_COREDUMP_NUM &&
+-		    skb->len > sizeof(MTK_COREDUMP_END) &&
+-		    !memcmp((char *)&skb->data[skb->len - sizeof(MTK_COREDUMP_END)],
+-			    MTK_COREDUMP_END, sizeof(MTK_COREDUMP_END) - 1)) {
+-			bt_dev_info(hdev, "Mediatek coredump end");
+-			hci_devcd_complete(hdev);
+-		}
++		    skb->len > MTK_COREDUMP_END_LEN)
++			if (!memcmp((char *)&skb->data[skb->len - MTK_COREDUMP_END_LEN],
++			    MTK_COREDUMP_END, MTK_COREDUMP_END_LEN - 1)) {
++				bt_dev_info(hdev, "Mediatek coredump end");
++				hci_devcd_complete(hdev);
++			}
  
- &mdss {
-+	memory-region = <&cont_splash_mem>;
- 	status = "okay";
- };
+ 		break;
+ 	}
+diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
+index 68309dfe076a..56f5502baadf 100644
+--- a/drivers/bluetooth/btmtk.h
++++ b/drivers/bluetooth/btmtk.h
+@@ -24,6 +24,7 @@
  
+ #define MTK_COREDUMP_SIZE		(1024 * 1000)
+ #define MTK_COREDUMP_END		"coredump end"
++#define MTK_COREDUMP_END_LEN		(sizeof(MTK_COREDUMP_END))
+ #define MTK_COREDUMP_NUM		255
+ 
+ enum {
 -- 
-2.25.1
+2.18.0
 
