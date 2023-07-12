@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C29B74FFF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5254874FFFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 09:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjGLHQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 03:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
+        id S231558AbjGLHVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 03:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjGLHQi (ORCPT
+        with ESMTP id S229609AbjGLHV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:16:38 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6307FBE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:16:36 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R18Dc4tKNzBR5lX
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 15:16:32 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689146192; x=1691738193; bh=hW1NHKFAT/aNLxN4cBLKVxdssNR
-        L3aNh0S7mH6TQvGM=; b=ilOJ4FeRCW8RdigUHkQKR66nf/FihTXkuSSH5qD6CRr
-        2UUDYvF1jLyNpv/CFWZvdVPUyCwN8CsjGAElMjLgqkHpCJn5ZAF+YcBRzAdMpU5+
-        3AZYwFrnqCE2beXiIf5qixbIXCpdJZshgApn73SKWeHpKGJ2L1AB1pGHb9uFZxkT
-        7TItLrVNlXb4oLQW6ZbOtX7pc11JAhn7GkBgg9iSVmSIXiPW37GSAQxTf2NmB0OI
-        r7yDX0O3qoQ4INsXMi7jR/6K2QTgkBfqyodkjUH3OazdDIkR0hY2WBp1OTH5jauR
-        yiwiQk0E5hrNnVVzvROQxA9I4oZOnraeupcs64bkkxg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BM7cWnfh9k0h for <linux-kernel@vger.kernel.org>;
-        Wed, 12 Jul 2023 15:16:32 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R18Db6hX0zBR5CX;
-        Wed, 12 Jul 2023 15:16:31 +0800 (CST)
-MIME-Version: 1.0
-Date:   Wed, 12 Jul 2023 15:16:31 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau: remove spaces after '*'
-In-Reply-To: <20230712071449.12326-1-xujianghui@cdjrlc.com>
-References: <20230712071449.12326-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <1fe8c2c240beb55f655814d725070e8b@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 12 Jul 2023 03:21:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C599C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 00:21:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B235616EE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:21:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6A6C433C8;
+        Wed, 12 Jul 2023 07:21:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689146486;
+        bh=Pt5QtbN4QXl31Cj/OB/HVfx6Fab/rSszguFvG2rw/Ow=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AdG679TOno89KoirbRGpLi9w7rQcZTpRX6hO+CQiMWkX0EdDXOMJ4Sr+0POM+hU7c
+         bh1nDCLG2cYNPiCDIfe956KVEYyNm7UtoOQwSZA6i/Y3kQurs4D4O+ZDRZQDZjz+dW
+         UkDDXNdQA+6hLbkEowueqYKwhqXWrkLtG2UkU2uqixLAIkayjdpyyaC/Md0i2l+stH
+         H83LvcZbiBhBetiXAOWIC42IjZxHLO/eDQInj8EqMmAp7vxNh8y8nte9QOGIi4iOb4
+         drTJtun/vU1mNP9au0Opz1SWcTYxMPyWMx3yOQgDzKzi0aSQJt1/mfSAX7o5T/yuqb
+         A3/zuzJLrb/Aw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qJUA2-00CMRT-R2;
+        Wed, 12 Jul 2023 08:21:23 +0100
+Date:   Wed, 12 Jul 2023 08:21:07 +0100
+Message-ID: <87ilapa93w.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?IkNodW5odWkgTGkgKOadjuaYpei+iSki?= 
+        <chunhui.li@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?IkhhbmtzIENoZW4gKA==?= =?UTF-8?B?6Zmz5b2l5bu3KSI=?= 
+        <Hanks.Chen@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        =?UTF-8?B?IkNoZW5nLVl1?= =?UTF-8?B?aCBXdSAo5ZCz5pS/6KutKSI=?= 
+        <Cheng-Yuh.Wu@mediatek.com>
+Subject: Re: [PATCH] irqchip/gic-v3: Workaround for GIC-700 erratum 2941627
+In-Reply-To: <17c629f00dee2bbcd09b99a6ed1bd2a411322084.camel@mediatek.com>
+References: <17c629f00dee2bbcd09b99a6ed1bd2a411322084.camel@mediatek.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: chunhui.li@mediatek.com, linux-arm-kernel@lists.infradead.org, Hanks.Chen@mediatek.com, linux-kernel@vger.kernel.org, lpieralisi@kernel.org, Cheng-Yuh.Wu@mediatek.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix four occurrences of the checkpatch.pl error:
+On Wed, 12 Jul 2023 02:40:31 +0100,
+"Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediatek.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> We have tested the PATCH v2 with MTK platform base on kernel-6.1 and
+> can confirm that it works as expected.
 
-ERROR: "foo * bar" should be "foo *bar"
+Thanks.
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/nouveau/dispnv04/crtc.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
+> Is the PATCH v2 final version?
 
-diff --git a/drivers/gpu/drm/nouveau/dispnv04/crtc.c 
-b/drivers/gpu/drm/nouveau/dispnv04/crtc.c
-index a6f2e681bde9..5ef84f4749e1 100644
---- a/drivers/gpu/drm/nouveau/dispnv04/crtc.c
-+++ b/drivers/gpu/drm/nouveau/dispnv04/crtc.c
-@@ -114,7 +114,7 @@ static void nv_crtc_set_image_sharpening(struct 
-drm_crtc *crtc, int level)
-   * bits 28-31: related to single stage mode? (bit 8/12)
-   */
+Nothing is final until it is merged upstream. The patch is currently
+in -next. If it doesn't cause any visible regression, I'll send it to
+Thomas to push it to Linus.
 
--static void nv_crtc_calc_state_ext(struct drm_crtc *crtc, struct 
-drm_display_mode * mode, int dot_clock)
-+static void nv_crtc_calc_state_ext(struct drm_crtc *crtc, struct 
-drm_display_mode *mode, int dot_clock)
-  {
-      struct drm_device *dev = crtc->dev;
-      struct nouveau_drm *drm = nouveau_drm(dev);
-@@ -458,7 +458,7 @@ nv_crtc_mode_set_vga(struct drm_crtc *crtc, struct 
-drm_display_mode *mode)
-   * be easily turned on/off after this.
-   */
-  static void
--nv_crtc_mode_set_regs(struct drm_crtc *crtc, struct drm_display_mode * 
-mode)
-+nv_crtc_mode_set_regs(struct drm_crtc *crtc, struct drm_display_mode 
-*mode)
-  {
-      struct drm_device *dev = crtc->dev;
-      struct nouveau_drm *drm = nouveau_drm(dev);
+> If yes, maybe we can request google sync the PATCH v2 to android14-6.1
+> first.
+
+That's for you to discuss with the Android team, but from my point of
+view, things have to happen upstream first, and only then be
+backported to older kernels as required, not the other way around.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
