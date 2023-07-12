@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612DF74FE09
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EE074FE0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjGLD76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S231202AbjGLEBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjGLD74 (ORCPT
+        with ESMTP id S229473AbjGLEBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:59:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6FD10F2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:59:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9FBB616B1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4A7C433C8;
-        Wed, 12 Jul 2023 03:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689134394;
-        bh=jivmgpmc6JQfUtDNCPIZH5elztkn4Na7q9BT74Iv6i8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dVEei7kfnJpWlavWG0wwDbSPgVxo19cQ7Ubv7KKcPzdR5xTjjTYa84dTEpTRwC+u0
-         wE2QTr+9PDu+b93TNKdA/DiJR3VnqRRqn53Zfwf+kmSiYo8wU8QoJfCl9/WwQNs405
-         C98jcVCx4FFrsHkVQzEqu5QNhDGfxL+ehiiAtwnJl3SehzCBT8nl6hbP9RoYliKjAQ
-         SYPZNzPHDlSG6QQHCYi4WXu4WIfLNl/8FTg0D/vcgLwU2IenvzEjg/Y0Nft01pkZFC
-         a52yRIVNL88B4nP6B5ds6f3lqfBZGmvBxnWVoPykGlEmEkvD6IwbB0fMVM7jfiDKKH
-         eI88klINV8+uA==
-Date:   Tue, 11 Jul 2023 20:59:53 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
-        chuck.lever@oracle.com
-Subject: Re: [PATCH net-next] tools: ynl-gen: fix parse multi-attr enum
- attribute
-Message-ID: <20230711205953.346e883b@kernel.org>
-In-Reply-To: <20230711095323.121131-1-arkadiusz.kubalewski@intel.com>
-References: <20230711095323.121131-1-arkadiusz.kubalewski@intel.com>
+        Wed, 12 Jul 2023 00:01:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DE5110EF;
+        Tue, 11 Jul 2023 21:01:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F5B32F4;
+        Tue, 11 Jul 2023 21:02:27 -0700 (PDT)
+Received: from [10.162.42.6] (unknown [10.162.42.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22DE73F740;
+        Tue, 11 Jul 2023 21:01:41 -0700 (PDT)
+Message-ID: <8a7416df-1656-8380-9a42-1af3cd940f97@arm.com>
+Date:   Wed, 12 Jul 2023 09:31:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC 0/4] arm64/mm: Clean up pte_dirty() state management
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230707053331.510041-1-anshuman.khandual@arm.com>
+ <ZKvqjrpyLZVB3R2z@FVFF77S0Q05N>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <ZKvqjrpyLZVB3R2z@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,68 +52,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 11:53:23 +0200 Arkadiusz Kubalewski wrote:
-> diff --git a/tools/net/ynl/lib/ynl.py b/tools/net/ynl/lib/ynl.py
-> index 3b343d6cbbc0..553d82dd6382 100644
-> --- a/tools/net/ynl/lib/ynl.py
-> +++ b/tools/net/ynl/lib/ynl.py
-> @@ -407,7 +407,14 @@ class YnlFamily(SpecFamily):
->                  raw >>= 1
->                  i += 1
->          else:
-> -            value = enum.entries_by_val[raw - i].name
-> +            if attr_spec.is_multi:
-> +                for index in range(len(raw)):
-> +                    if (type(raw[index]) == int):
-> +                        enum_name = enum.entries_by_val[raw[index] - i].name
-> +                        rsp[attr_spec['name']][index] = enum_name
-> +                return
-> +            else:
-> +                value = enum.entries_by_val[raw - i].name
->          rsp[attr_spec['name']] = value
 
-Two asks:
 
-First this function stupidly looks at value-start. Best I can tell this
-is a leftover from when enum set was an array, but potentially "indexed
-with an offset" (ie. if value start = 10, first elem would have value
-11, second 12 etc.). When we added support for sparse enums this was
-carried forward, but it's actually incorrect. entries_by_val is indexed
-with the real value, we should not subtract the start-value. So please
-send a patch to set i to 0 at the start and ignore start-value here
-(or LMK if I should send one).
+On 7/10/23 16:55, Mark Rutland wrote:
+> On Fri, Jul 07, 2023 at 11:03:27AM +0530, Anshuman Khandual wrote:
+>> These pte_dirty() changes make things explicitly clear, while improving the
+>> code readability. This optimizes HW dirty state transfer into SW dirty bit.
+>> This also adds a new arm64 documentation explaining overall pte dirty state
+>> management in detail. This series applies on the latest mainline kernel.
+> TBH, I think this is all swings and roundabouts, and I'm not sure this is
+> worthwhile. I appreciate that as-is some people find this confusing, but I
 
-Second, instead of fixing the value up here, after already putting it
-in the rsp - can we call this function to decode the enum before?
-A bit hard to explain, let me show you the diff of what I have in mind
-for the call site:
+Current situation for pte_dirty() management is confusing when there are two
+distinct mechanisms to track PTE dirty states, but both are forced to work
+together because
 
-diff --git a/tools/net/ynl/lib/ynl.py b/tools/net/ynl/lib/ynl.py
-index 1b3a36fbb1c3..e2e8a8c5fb6b 100644
---- a/tools/net/ynl/lib/ynl.py
-+++ b/tools/net/ynl/lib/ynl.py
-@@ -466,15 +466,15 @@ genl_family_name_to_id = None
-             else:
-                 raise Exception(f'Unknown {attr_spec["type"]} with name {attr_spec["name"]}')
- 
-+            if 'enum' in attr_spec:
-+                decoded = self._decode_enum(rsp, attr_spec)
-+
-             if not attr_spec.is_multi:
-                 rsp[attr_spec['name']] = decoded
-             elif attr_spec.name in rsp:
-                 rsp[attr_spec.name].append(decoded)
-             else:
-                 rsp[attr_spec.name] = [decoded]
--
--            if 'enum' in attr_spec:
--                self._decode_enum(rsp, attr_spec)
-         return rsp
- 
-     def _decode_extack_path(self, attrs, attr_set, offset, target):
+- HW DBM cannot track non-writable dirty state (PTE_DBM == PTE_WRITE)
+- Runtime check for HW DBM is avoided
 
-Then _decode_enum() only has to ever deal with single values,
-and the caller will take care of mutli_attr like it would for any other
-type?
--- 
-pw-bot: cr
+> don't think the end result of this series is actually better, and it adds more
+> code/documentation to maintain.
+
+Agreed, it does add more code and documentation but still trying to understand
+why it is not worthwhile. Regardless, following patch does optimize a situation
+where we dont need to call pte_mkdirty() knowing it will be cleared afterwards.
+
+[RFC 2/4] arm64/mm: Call pte_sw_mkdirty() while preserving the HW dirty state
+
+> 
+> In particular, I don't think that we should add Documentation/ files for this,
+> as it's very likely that won't be updated together with the code, and I think
+> it's more of a maintenance burden than a help. If we want some introductory
+
+There are many documentation files such as Documentation/arm64/memory.rst which
+needs to be updated when kernel virtual address layout changes again. I am just
+wondering - should not there be any documentation for internal implementation
+details, just because they need updating with code changes.
+
+> text to explain how the HW/SW dirty bits work, I think that should be a comment
+> block in <asm/pgtable.h>, clearly associated with the code.
+
+Sure, will add that.
+
+> 
+> Overall, I'd prefer to leave the code as-is.
+Even if we discount individual dirty clearing functions, why should not HW dirty
+bit transfer to SW dirty be optimized and wrapped around in a helper.
