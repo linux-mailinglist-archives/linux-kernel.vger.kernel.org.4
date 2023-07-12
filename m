@@ -2,61 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD357502EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8177502EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjGLJVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S233226AbjGLJWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbjGLJUc (ORCPT
+        with ESMTP id S232190AbjGLJW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:20:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41B51726;
-        Wed, 12 Jul 2023 02:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CCB616F6;
-        Wed, 12 Jul 2023 09:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B844C433C7;
-        Wed, 12 Jul 2023 09:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689153621;
-        bh=Ex71MzvqnoPSUmJRcXm5WZyi4T6gvlCMkVAhvg0LzGE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=P2zHdNl2EydNK3q5sGc+nCH2LtNPsa7JIIjoTAxTlKKh7qQ07gNuX6wUisB9DoVQl
-         ENjdh05laikc2HkDUjtU7cMbtKj7eEQ9uqVDmfk5khfmej5ymKVwe/u0C9BaK4yAHb
-         oUD6ujNzjFukKAZgg9IcurQYyyPx78FEKUsaDX/q90pS3f9EpBA5TnZ7RfdrvZrGYh
-         M9bZqdA3aBKhP1bLtCyGjciDzFohNdIJO7ZPKYpeHQ1kaSvI3tyBJWwfPUhkcnsTk1
-         hI89322GvO7MdbIPsy4Gi2916nDEb2ydr8eVbynXyDDuoLMz91KWazPkk620WNtl/G
-         +4jUjPfrA1mEw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47AD5E29F44;
-        Wed, 12 Jul 2023 09:20:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 12 Jul 2023 05:22:28 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D43E5F;
+        Wed, 12 Jul 2023 02:21:44 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1689153656te3bxl5e
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Jul 2023 17:20:55 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: f0e3nd0UjDMWyqMb2OvZ3nICQJEiN23es6rzV5wC4cahNSci93zk5avdkN9io
+        q6BYdGJoZRmuMT5rlrQMLsTfYs1JDiRGxLhXm10fh6zUHduZJaJzzdEtPFbZO2sRNnVY/Uf
+        8Skorwq/S+JEevTOwGrg/t8gy1kUoX5xgEbi/iZ+uiG1SnDVRlw5OroSC880NrikfhbX63H
+        w4zF2E/cFDLmhtmGtHgNB6jMVLFmBbcIZL/11fBfv0u3A3oWwXw+n6Xv6ZP87Z0k4MjQdUV
+        qHnx5Qzfeg5RQdshjphvVgMsmNaMXJ6oh04J6bswf9QBTwjTrkRx8j2hcVC8HUQt2ZNFPHr
+        UkhFXblDdj8PllkZNal2brCfOMD9kbgKoDfE18K77we3a08FPPu8rZmNG75hdxty3rf8GWg
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2211699565622657830
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 05/11] tools/nolibc: i386: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:20:55 +0800
+Message-Id: <29e5222e81983e46c0dd8c043db66820ed80638b.1689150149.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
+References: <cover.1689150149.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/3] net: stmmac: dwmac-qcom-ethqos: Improve error
- handling
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168915362128.1981.13684727730813685010.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Jul 2023 09:20:21 +0000
-References: <20230710201636.200412-1-ahalaney@redhat.com>
-In-Reply-To: <20230710201636.200412-1-ahalaney@redhat.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
-        mcoquelin.stm32@gmail.com, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, joabreu@synopsys.com,
-        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
-        bhupesh.sharma@linaro.org, vkoul@kernel.org,
-        linux-arm-msm@vger.kernel.org, andrew@lunn.ch,
-        simon.horman@corigine.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,33 +51,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+move most of the _start operations to _start_c().
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-i386.h | 33 ++++++++------------------------
+ 1 file changed, 8 insertions(+), 25 deletions(-)
 
-On Mon, 10 Jul 2023 15:06:36 -0500 you wrote:
-> This series includes some very minor quality of life patches in the
-> error handling.
-> 
-> I recently ran into a few issues where these patches would have made my
-> life easier (messing with the devicetree, dependent driver of this
-> failing, and incorrect kernel configs resulting in this driver not
-> probing).
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v2,1/3] net: stmmac: dwmac-qcom-ethqos: Use of_get_phy_mode() over device_get_phy_mode()
-    https://git.kernel.org/netdev/net-next/c/a8aa20a64ef2
-  - [net-next,v2,2/3] net: stmmac: dwmac-qcom-ethqos: Use dev_err_probe()
-    https://git.kernel.org/netdev/net-next/c/b2f3d915b4fe
-  - [net-next,v2,3/3] net: stmmac: dwmac-qcom-ethqos: Log more errors in probe
-    https://git.kernel.org/netdev/net-next/c/27381e72a2db
-
-You are awesome, thank you!
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index 1d4b683bc2cd..f0d0f5c364b8 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_ARCH_I386_H
+ 
+ #include "compiler.h"
++#include "crt.h"
+ 
+ /* Syscalls for i386 :
+  *   - mostly similar to x86_64
+@@ -154,9 +155,6 @@
+ 	_eax;							\
+ })
+ 
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ /*
+  * i386 System V ABI mandates:
+@@ -168,29 +166,14 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"call __stack_chk_init\n"   /* initialize stack protector                    */
++		"call __stack_chk_init\n" /* initialize stack protector                          */
+ #endif
+-		"pop %eax\n"                /* argc   (first arg, %eax)                      */
+-		"mov %esp, %ebx\n"          /* argv[] (second arg, %ebx)                     */
+-		"lea 4(%ebx,%eax,4),%ecx\n" /* then a NULL then envp (third arg, %ecx)       */
+-		"mov %ecx, environ\n"       /* save environ                                  */
+-		"xor %ebp, %ebp\n"          /* zero the stack frame                          */
+-		"mov %ecx, %edx\n"          /* search for auxv (follows NULL after last env) */
+-		"0:\n"
+-		"add $4, %edx\n"            /* search for auxv using edx, it follows the     */
+-		"cmp -4(%edx), %ebp\n"      /* ... NULL after last env (ebp is zero here)    */
+-		"jnz 0b\n"
+-		"mov %edx, _auxv\n"         /* save it into _auxv                            */
+-		"and $-16, %esp\n"          /* x86 ABI : esp must be 16-byte aligned before  */
+-		"sub $4, %esp\n"            /* the call instruction (args are aligned)       */
+-		"push %ecx\n"               /* push all registers on the stack so that we    */
+-		"push %ebx\n"               /* support both regparm and plain stack modes    */
+-		"push %eax\n"
+-		"call main\n"               /* main() returns the status code in %eax        */
+-		"mov %eax, %ebx\n"          /* retrieve exit code (32-bit int)               */
+-		"movl $1, %eax\n"           /* NR_exit == 1                                  */
+-		"int $0x80\n"               /* exit now                                      */
+-		"hlt\n"                     /* ensure it does not                            */
++		"xor  %ebp, %ebp\n"       /* zero the stack frame                                */
++		"mov  %esp, %eax\n"       /* save stack pointer to %eax, as arg1 of _start_c     */
++		"and  $-16, %esp\n"       /* last pushed argument must be 16-byte aligned        */
++		"push %eax\n"             /* push arg1 on stack to support plain stack modes too */
++		"call _start_c\n"         /* transfer to c runtime                               */
++		"hlt\n"                   /* ensure it does not return                           */
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
