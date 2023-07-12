@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E69E750D1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A14750D1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbjGLPwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S233313AbjGLPwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjGLPv6 (ORCPT
+        with ESMTP id S233838AbjGLPwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:51:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E881BDC;
-        Wed, 12 Jul 2023 08:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689177118; x=1720713118;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gsXcqS7zpVz5SCmmkuyOPmznN8IrUzyo3KHPY7vC0ho=;
-  b=KXzebGGvGOXJsVaL+R8A7gVH//FUEZrXN1sRSKV1tElF18GeY2j6zCP0
-   mkzsGVv9tq4nJeGu/XXYi9Lb1Xw6viwVhiPd8mjh7aBaUiCVy+pU3xSaB
-   SWymtHEjy89e2WG41wiW5doN/NoomUv0+HWQwXqsp46kVn4yoahHWM8mV
-   KbG4MI6Jml4IhedcffIqFfWZlWXT9SA0OMqDeIaKh7sHJzt/diuNb9Q/y
-   MgjqQIcMy7Q1hnrx1K5xQulAX1tAikS56F+5SyzQEWSYIo8FRekFcjKDj
-   TGoWTjA2Agpumsm44y4dkD0DG4JNgSGQR8ek8cA+Dv/r0y7FC1fXW8GH7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="367546291"
-X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
-   d="scan'208";a="367546291"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 08:51:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="845703541"
-X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
-   d="scan'208";a="845703541"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 12 Jul 2023 08:51:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJc7o-002AXi-2p;
-        Wed, 12 Jul 2023 18:51:32 +0300
-Date:   Wed, 12 Jul 2023 18:51:32 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] gpiolib: order includes alphabetically in gpiolib.h
-Message-ID: <ZK7MBMIHm95xVdz0@smile.fi.intel.com>
-References: <20230712095955.105716-1-brgl@bgdev.pl>
+        Wed, 12 Jul 2023 11:52:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326AE1FC8;
+        Wed, 12 Jul 2023 08:52:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7A806189F;
+        Wed, 12 Jul 2023 15:52:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9BBC433C7;
+        Wed, 12 Jul 2023 15:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689177126;
+        bh=Jlo10pILmhB7LyeW7g/VTLcTaOOBrUbMZUZ8dB39h6Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=No3bbUwD0BUiHtjkZc7iN36OpXZ7ik+KEIA9CmNLfXXwySm3siMFgoVyM5A1cVVR9
+         9M6HJL4RGvdv0tk2HBXi5Ko8ZGIV/Ao1HmAysKXzYvWPKTlcn/yQ5+/oMlEMPvNILx
+         iERZMg5mI1kVHTilpcdduFdVlvJvsWbt9StcRK4e5oNO9e1GCWYmXUyWbWFYY5Qfj0
+         bwwxvjuXH5aRKiaZ/JNC+bMXHiaAJhaCJhvuUFwLwLRTLETycVO1vDdqlZTmPwexDa
+         wt/skTnMls7PzQe6yruuuaI2dK5V4Xx8fDIbvYVJJQ+TSsWRhIfHB8HtUQaWzvvOYy
+         Ge5AepEf9OI4g==
+Date:   Wed, 12 Jul 2023 17:52:01 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/11] i2c: qcom-geni: Convert to
+ devm_platform_ioremap_resource()
+Message-ID: <20230712155201.hlp6rtfgwi7d6sg4@intel.intel>
+References: <20230710063351.17490-1-frank.li@vivo.com>
+ <20230710063351.17490-6-frank.li@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230712095955.105716-1-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230710063351.17490-6-frank.li@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 11:59:55AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Yangtao,
+
+On Mon, Jul 10, 2023 at 02:33:45PM +0800, Yangtao Li wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
 > 
-> After adding the missing notifier.h header, let's order all includes
-> alphabetically.
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Andi
