@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB547504BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA9B7504C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 12:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjGLKgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 06:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S232554AbjGLKgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 06:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbjGLKgG (ORCPT
+        with ESMTP id S232014AbjGLKgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 06:36:06 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E00C26B7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:35:42 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-66869feb7d1so3752149b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:35:42 -0700 (PDT)
+        Wed, 12 Jul 2023 06:36:14 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7A71FE1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:35:54 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-66767d628e2so4658417b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 03:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689158141; x=1691750141;
+        d=linaro.org; s=google; t=1689158152; x=1691750152;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=aFjFH233scMmITorrcsknOFXDQIt6REL4AFr2F5rKyQ=;
-        b=lIVCmzfiGwhfAfz2uGWIeowYRjp8+snpOAbDHq407AwZMTnzrc4J+wx8Asm+l7qzDb
-         kCTgBogsYRUG8pjm+WjahHIJXlxP7tiPbqIS7C+nbGG0Kb9D62m0DetF5ThSudMjWwvT
-         WVCwixX/CMN5IgU70Mud2LkOqVxlYiculIKtHSzA54JOwl2RUid3c7aVbZu8J/P3718D
-         7C7BqRfMWICwRutqA46xEBikGgHEHZgX/Gif8d6cLcp1gQqgk/k/9fY2I6t9SdRduQ12
-         X+6AwX1HvRIZHPuBA1XMlfXTlwwQb4Hb8Wyv2/oe7EMQ1ljuWj8IfWYlDgEz9paL9dG5
-         A7cA==
+        b=EH1y6ekc5Wzc8ViAqmKnrOTF2Via7DgXFlhQockOiZt+XdNY+a+Ekqt0vPvEcK1pjV
+         Qq0FZDsNcPbtmxS9l15tWiRO1s2zathdlGaNTmudM3FszkGELXzuxZzJwLUL5/6dN0aS
+         UMYysA1FpMEZfv18ikZTQWr3ITae1uPcnQUKzNuncDaAlS5zpHb6kuHvga91Gkt1ahg5
+         BgYRUqydPzRVCPNTAee3M910vZejDtyyWXclYSJ6GCNJeDQ23o11wahoZvnC1HT02YLP
+         nw4McMLxNDEt88mZh/RrjEBq0nezN3ysJDPbdo6oyZfHi0WvQIdW/E3tRdnigkQCckv2
+         P1Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689158141; x=1691750141;
+        d=1e100.net; s=20221208; t=1689158152; x=1691750152;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=aFjFH233scMmITorrcsknOFXDQIt6REL4AFr2F5rKyQ=;
-        b=K8kxJBZTv6t4yWkblnGFrLTzb/FPn0TlZp7v1BLZLrSXzfmxoErtNMn6R/2nR4Bv90
-         qy4H/0IaKEri9u3T9cb+/WbK5A5IfJMI7sAX6k/mgFXfBf6pijZUhCsIk6aBVZD7k4QY
-         LWSIpFuDaFIDdjc1Akc5DHquEOwMkoyoMJRwg3F0M6n9Mn3ifO5ltuzjbBN9KdCsN7li
-         LTMuTTzzf6PWPfFt1f/9mDbV1gjc7Uct56HuW3jxU3XeKYdpIIaGRC5i1VQ8y/06Ip7L
-         jacMEA2jJbaR5YLwEMrckJdebpG0xZmVeochJk72H2x/v6pcS3dT9+2hSq9e+IV3wW6J
-         tQqg==
-X-Gm-Message-State: ABy/qLZPQqeBjfVLOy4KK4koidsNfe37ympLdpfX9fhxMksYrRiigV7n
-        XeweZOEqSaxs3uX+NzbVVRaU
-X-Google-Smtp-Source: APBJJlHucdxTMqfscWol8RUreM0FmijLjojt9xs1ggj8CN1q3gyLLdtC5SLntjVqsk0CbUiftfpcbg==
-X-Received: by 2002:a05:6a00:3920:b0:67e:bf65:ae68 with SMTP id fh32-20020a056a00392000b0067ebf65ae68mr15634358pfb.3.1689158141166;
-        Wed, 12 Jul 2023 03:35:41 -0700 (PDT)
+        b=X3MbFDqE9se37AYDyK03jkbzYxXKLtAxI6r6n+T6Z7s7j8ZjLdIH7cE0fxJgAFqpYi
+         ZfqJLNKYvftyE6ABydnPYQ7QM3dbP0KPr6cl4kSBSDZeidWVYGipeuRxnDEzGfyJGoGm
+         eJh+FXitldbHbTdnkv6cSTSb5UvN2ihrtIETLaV8SCGTXUwkYKcMdb8VhFc0zfW0oTrf
+         Ws1xKmJg1oGPnTRJeL3FYNnk22jClMyGJSg+afcvgYXfyG/8a7rdo2lzYwd7q3G8vC/z
+         21P8EFZoZRf8KQDVBC8db3CCkQuYG7FF6GNzjT0UIR2OMM8mLaz4LwbLd9SnpRF2CqI0
+         JCmw==
+X-Gm-Message-State: ABy/qLaGub1Nh3T/1xgkmGVTlmp4huR7imjTcdfWE+Qcn0a5BcOV3BID
+        nrnyVo+L65NnvqgaNwT7mnfu
+X-Google-Smtp-Source: APBJJlG6NS4d7h919E7mMzWP+Ffih1PggzK8zbQg3ZC763/yLWygTiAzu6+LifsJ4ZwtCGY8KL2t8w==
+X-Received: by 2002:a05:6a00:1943:b0:67a:a4d1:e70 with SMTP id s3-20020a056a00194300b0067aa4d10e70mr16361154pfk.16.1689158152681;
+        Wed, 12 Jul 2023 03:35:52 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.35.30
+        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.35.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 03:35:40 -0700 (PDT)
+        Wed, 12 Jul 2023 03:35:52 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -64,9 +64,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 12/13] arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
-Date:   Wed, 12 Jul 2023 16:02:10 +0530
-Message-Id: <20230712103213.101770-16-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 13/14] arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
+Date:   Wed, 12 Jul 2023 16:02:11 +0530
+Message-Id: <20230712103213.101770-17-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
 References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
