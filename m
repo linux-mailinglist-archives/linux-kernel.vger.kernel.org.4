@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41096750852
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3E4750857
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 14:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjGLMca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 08:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S233076AbjGLMdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 08:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGLMc3 (ORCPT
+        with ESMTP id S232739AbjGLMdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 08:32:29 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08ABB0;
-        Wed, 12 Jul 2023 05:32:27 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0559D24000C;
-        Wed, 12 Jul 2023 12:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689165146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EMAmlAAfV/E3+8xeb2DY6C2+zCz1wmbuPYuto9/gghs=;
-        b=UIBF8vAIz5VH3xswnjijkgkjrvCSy+4uPDwLYpvSwymiFlzJz4j1cFtt/yUspvcmzqK4gx
-        EGE/KIKQliTr6P5p7ZFxIf4Xb40v5dQQ/zgKyWgmUS+nhjM3NmvvPrgoUs6ZAqjSgKUS9e
-        fTGWEW3kcixsXElORuQ75dMrpu6ciq/iv5CVyyQvTtlV3402JqUShoUQVU/95L8fFffnd2
-        8jg9i10QjT7qIkILpdq+uLXnsHED36kbzME51KUa59jFalwQIWEUbmcfLOMGQ0G4wPSwsC
-        qDFwMbVMVrY26baRGsd47JnlMURXmPAXCcAOF6pyRQjnrJxGsbTYWLBqOVCQMg==
-Date:   Wed, 12 Jul 2023 14:32:20 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregory.clement@bootlin.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: mtd: Add AC5 specific binding
-Message-ID: <20230712143220.06a3d6eb@xps-13>
-In-Reply-To: <20230703035044.2063303-2-chris.packham@alliedtelesis.co.nz>
-References: <20230703035044.2063303-1-chris.packham@alliedtelesis.co.nz>
-        <20230703035044.2063303-2-chris.packham@alliedtelesis.co.nz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Jul 2023 08:33:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33481134;
+        Wed, 12 Jul 2023 05:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Q28lbPibQoRUf1yZd4fvu6bxrGujY0ouRUurZ5rXnSs=; b=j7kRWgylLqK+jYPyG+Dp+9L9cI
+        NYJMrZ7LJsYQHxxEHCt9mIvYYaUA4j/4e2mt2gpgikT6Xtb4elMDlfatkCIVB2glxtc5rTumoTtgA
+        E/WMFzVxBzfJ5dgXJKCGahu4JsY2bLXmzuzlSUoi0VhJiKvSLdihmk4F0actsEVJo48Yqw/fWS1nb
+        EQ4cmqfaLTW8BMF4EWpUmAAR4IiSoLt3Q6gnDu+Z0xQBKlJg9SvkbVzazNzjzy/P5T/TB8SVtLd1T
+        Smjw8Z8hCP+yYKMOMEwQ7Z8L1fKz2k1vMOQqjIhGlhxpirtvvEs2CsJMB0d41qj64s21EEkhoxb2O
+        /V0IKhTg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJZ2N-00HXix-0L;
+        Wed, 12 Jul 2023 12:33:43 +0000
+Date:   Wed, 12 Jul 2023 05:33:43 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ross Lagerwall <ross.lagerwall@citrix.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH] blk-mq: Fix stall due to recursive flush plug
+Message-ID: <ZK6dpy7w/4YSwbBi@infradead.org>
+References: <20230711160434.248868-1-ross.lagerwall@citrix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711160434.248868-1-ross.lagerwall@citrix.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris,
+On Tue, Jul 11, 2023 at 05:04:34PM +0100, Ross Lagerwall wrote:
+> We have seen rare IO stalls as follows:
+> 
+> * blk_mq_plug_issue_direct() is entered with an mq_list containing two
+> requests.
+> * For the first request, it sets last == false and enters the driver's
+> queue_rq callback.
+> * The driver queue_rq callback indirectly calls schedule() which calls
+> blk_flush_plug().
 
-chris.packham@alliedtelesis.co.nz wrote on Mon,  3 Jul 2023 15:50:42
-+1200:
+-> this assumes BLK_MQ_F_BLOCKING is set, as otherwise ->queue_rq can't
+sleep.
 
-> Add binding for AC5 SoC. This SoC only supports NAND SDR timings up to
-> mode 3 so a specific compatible value is needed.
->=20
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> * blk_flush_plug() handles the remaining request in the mq_list. mq_list
+> is now empty.
+> * The original call to queue_rq resumes (with last == false).
+> * The loop in blk_mq_plug_issue_direct() terminates because there are no
+> remaining requests in mq_list.
+> 
+> The IO is now stalled because the last request submitted to the driver
+> had last == false and there was no subsequent call to commit_rqs().
+> 
+> Fix this by returning early in blk_mq_flush_plug_list() if rq_count is 0
+> which it will be in the recursive case, rather than checking if the
+> mq_list is empty. At the same time, adjust one of the callers to skip
+> the mq_list empty check as it is not necessary.
 
-I need DT-binding maintainer's ack to take this patch, but this commit
-did not receive feedback (positive of negative) from them and is no
-longer in their patchwork. Can you please resend the series?
+From what I can tell this looks correct, but at the same time very
+fragile.  At least we need a comment on learing plug->rq_count early
+in blk_mq_flush_plug_list about this recursion potential, probably
+paired with another one where we're checking rq_count instead of the
+list now.  I wonder if there is a better way to do this in a more
+explicit way, but I can't think of one right now.
 
-The other patches LGTM.
-
-
-> ---
->=20
-> Notes:
->     Changes in v3:
->     - Collect ack from Conor
->     Changes in v2:
->     - Keep compatibles in alphabetical order
->     - Explain AC5 limitations in commit message
->=20
->  .../devicetree/bindings/mtd/marvell,nand-controller.yaml         | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controlle=
-r.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> index a10729bb1840..1ecea848e8b9 100644
-> --- a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> @@ -16,6 +16,7 @@ properties:
->            - const: marvell,armada-8k-nand-controller
->            - const: marvell,armada370-nand-controller
->        - enum:
-> +          - marvell,ac5-nand-controller
->            - marvell,armada370-nand-controller
->            - marvell,pxa3xx-nand-controller
->        - description: legacy bindings
-
-
-Thanks,
-Miqu=C3=A8l
