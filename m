@@ -2,365 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CFF750A2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AC4750A33
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbjGLN5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S233167AbjGLN6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjGLN5s (ORCPT
+        with ESMTP id S233401AbjGLN6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:57:48 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B11410C7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:57:45 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A2FDC20004;
-        Wed, 12 Jul 2023 13:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689170264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nxYieBDD/UDWjFAzPZZdyOGHwowhnvx3mmO2fP0LAKE=;
-        b=Q2DVoSXcl1KdQCDPhgpypP7YTE87CmV9UJndeYvo4HwwZFjZ0YiOIaXUhadMYsXYbsrVXz
-        +rxDzWWb8Tkosf/kmAnzF4mFCJJ7DAKynfcwlxJjZsSkR4f7ODqPZpExnl6IwQGlbBSRCc
-        O34S5ULzW4ix2Se2jW0tbUuRwreikKhJycCkwysA5BMsYlbFzvtplU8/cp2oroPEpqHAKE
-        ecXOGXq58AbdGjXXi0QaaHOFMB6a6RH4HOUx/6117PkweBWITXZ88uPae1E54f+T74rEMs
-        b/vefBV2tY/fG746gAgj6Aq4nIY2SQ/7Pn+XXJb5psIwBEjQoqHkur9Sp9MAAA==
-Date:   Wed, 12 Jul 2023 15:57:40 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-Subject: Re: [PATCH v3 3/3] mtd: rawnand: rockchip-nand-controller: add
- skipbbt option
-Message-ID: <20230712154142.3c49d782@xps-13>
-In-Reply-To: <3af40582-d350-8eac-8639-10c285964c49@gmail.com>
-References: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
-        <457c1da7-61dc-2a56-4f86-47413795138c@gmail.com>
-        <20230704171348.5eee98f7@xps-13>
-        <3af40582-d350-8eac-8639-10c285964c49@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        Wed, 12 Jul 2023 09:58:00 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACCB1711
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:57:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UnnLHHxJWG4iR8AwPFd+c8u2Y1r1tBybjB38kcZkoqk1FnGojZO0P1fKvTjLmM+wwV0wzvtyga8PgLi3tqpj6pNpScYbUTFQj6k8K5AKbqgfoc8nrwdHVyh3Xg/ozLj4QE86L3RA9AtOCGTD9U1GUXGoeN1nG7O1pblFvhUnuIywBjMHEiTwHjDq7llzqGB0kAQ2bsJOQXEVE+ngjOY5IWf7bQhCia4komep1w4iC7kD990ZwCh1L9i1z13fEGeQYqyRqWm+nQ7knRtSfGkToLQcFF48/R/HUa5VD+HG6rb/AIQVLFM6/JoE0ICVIXBeYBGNnHl6VRhxvgXsjwvXYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0SSnz+eiX43dWtfyKoUrrtdD18jDSD/HHVMMDiBrWAQ=;
+ b=glKfmG9j2LLeLMgpWxtqwkkHNiHEqhAsql/Ycj8jnWKjWO75DnZ7L3s1y9dg57zwhb02jx/vVorq1O87O5MfWvkpKCxXKJDGjxN0Vd08elngYB1VxO1xTqLG5qqHAyaYRdVswx54A/CN8HR4DbnyXD5QZs8KTMbVvQvd93P4b8i+WcI/S86SP9Ky/TelkFjq99SELUjQ9wtHQsAMomTR5ucdoTUEJTnPx0sD3D1YPh7gzxWtOk+o5sJ28tO6CH7s8GyzMyaL7rZJpkULD/PdLr/aaBBkzNch+30f7MuDHwHgqgIdzB4P00O3rL5v6BczPJ7vmrJmNl6h0EW3U0+Mxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0SSnz+eiX43dWtfyKoUrrtdD18jDSD/HHVMMDiBrWAQ=;
+ b=IcvdtDa6urXiamTHzWhHUuJvceZ8noATThjhChTsPXRTXwDDVzMgLoD+8IoV6JVSj8EI+1Hgyj/vcr/XIzLo3RJKyjfyr6sabsZR36c/vXNUNh3J2tmBNJhbiCoUdIZR21G0/AAWz4rrFokGzYtbtPzFmBf28KVdSWlxdTCAqWo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by DS0PR12MB8247.namprd12.prod.outlook.com (2603:10b6:8:f5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32; Wed, 12 Jul
+ 2023 13:57:56 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::4666:2db3:db1e:810c]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::4666:2db3:db1e:810c%7]) with mapi id 15.20.6565.026; Wed, 12 Jul 2023
+ 13:57:56 +0000
+Message-ID: <acee82a2-d5f9-9bf1-5138-44db14c079d1@amd.com>
+Date:   Wed, 12 Jul 2023 09:57:51 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] drm/amd/display: dc.h: eliminate kernel-doc warnings
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        amd-gfx@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, dri-devel@lists.freedesktop.org
+References: <20230712022339.17902-1-rdunlap@infradead.org>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230712022339.17902-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQXPR0101CA0040.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:14::17) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|DS0PR12MB8247:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4bff9f85-ffcf-4df7-dd5f-08db82dffe8b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4qDtz6eBmIbdKqdr0nDFcLgEAY/4rhqAKIXtENr7Z0aKloex76YwvnQ+P/5B8h28gU+XoT5Qnkyn0EizWQMWcy1W8CfhsauKZtlWoh10BZ9QixbMJkAb2sGiMzRsAeZn3nnkBfHVhDrl/K3yok/1a1K1iq7BcS4yhTQEvdhaZhZaZ9v7IiN03s/gJQi6B1VNGqp62oZlaCfpP8Y++Xx52DU6zmvsj4LLTBah0DcupYvrV3ADzs6Km5wC57Bxuj/gkcICKqA5gFCv6Wsd8wu7MHr959qif5r/qHtRKGLsn3Cu4WkVkjDpgNOgua3rBrtdlxT+jlPkeYMMMpxNT1w73ERwWJDFW7gE46ePdMwDJty+U6cUcUzZnC+N4lUi4LG25DA8/oEYsSxvIiZ3RY1Pf1TdZAmcmmTVCj4jhY4gG+g/pCTv2Z1JE7xyw8J22nIAUlHhR78+d5y4IV+IqhBFxPTl0eaJL8mFYE3fzJ2fz+NFQ5q+1WS5uEZmkwMRn6udYTs5CanOgp3J4Daxu32dVL9GvoOHg7crV5YsjzLRxPKr9aBbwuu6BPLl7gaSVUkygKuKPswH4UvO59ZPP/O+FS4xwKiqn4TNoF9T2eG8ptTgFF9v8ht07RMajaFLzsXrhxVP0urWnE+o8zS1VfBXQzf6hhSy7ho2QZCqvw3PSajP4wVqS3gnKNUQg8oIJW+W
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199021)(6486002)(6666004)(478600001)(54906003)(5660300002)(8676002)(36756003)(2906002)(86362001)(8936002)(44832011)(4326008)(316002)(66946007)(66556008)(38100700002)(66476007)(41300700001)(6506007)(26005)(53546011)(31696002)(66574015)(31686004)(83380400001)(186003)(2616005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0RMek5PZUtUaDVnbXA5MkJHaHRxeHBnK3FLa0JFQUtlbG04WWRJbWNEU0ZW?=
+ =?utf-8?B?Z01ucklwVTBSTDEzM1lZTWhXSlZhQkxrd201M0FncW4vVWc0K2w1N3pJUHVj?=
+ =?utf-8?B?cHRyS2Z0TmpxanZoOFBzdjZvNHVpZEJCbnpDTWN5OEtqb2U0MHZ1NFQwaGpY?=
+ =?utf-8?B?dUw4c1dZRWl4N0Q1RzhkMC9acE9ac05aZDljZ0ZXU3FHb1BDWWdNRkllWTdE?=
+ =?utf-8?B?aHI0eW1tYldRNDlkaXRyNDg3SU5Hc3czaUFSU2dINFZXUG1YNk4zNVNyOXdE?=
+ =?utf-8?B?WWtlbUhYV0djWGFoYjZsZmZDOWRGbjNiRUV2VVdWYzBJN1lGRDc3aGlxQTN2?=
+ =?utf-8?B?dDNldW80aGZTWUVHWHZoTDFTbkJrVjRoWDdMNm12WGNOQ0hxSWUwTXRXeGMv?=
+ =?utf-8?B?YTlRdWZrSHk0ZExmSlBjRWNzUzBiK1k2SEEyN056T3MrRExFdGsyZHM1SzJX?=
+ =?utf-8?B?MUdrdEpiYnIyY2VCR2ltSHJoMXRib0NwQlRlNTJocm9idVNjWXRtWFFvRW56?=
+ =?utf-8?B?anhGekQ0dnByZitRL2lid1ViQXNOR3ptb25UMURTMVFGOUdtY2k0MmV5QlpV?=
+ =?utf-8?B?ZUxTUHhmSnZ2bUtFaDFpVkRkTjJwQlRlellmbVMrTndxZWJja25GWjlhMTNM?=
+ =?utf-8?B?angraUtsTVo2MmRldVVkTktQenZzcU51T2Fmd2VPaEw0eDNacjVWV1g3akk0?=
+ =?utf-8?B?a29pdjhlSEgvYlJjai9lSUh1VDUyMnBBdkpySHVPeWlPUWdtb0l4ek1YT0xk?=
+ =?utf-8?B?bWV0YUdveExjUDdMZFNHVEJFZ3R4TVdqTHdrUE4vaWVpNEdmZVNIKzY0aGhG?=
+ =?utf-8?B?OWVpQ2ZiVnZORGZwRit1aUJNanpDMkhEMjJUcHdzd3JJbmR2TzVKbng2YVlX?=
+ =?utf-8?B?ZUJWUmpWaU1WLzJMWmhuemtvU2FtbEwwc0ljb3dwRUN6aERXWTkwRTdoalRk?=
+ =?utf-8?B?Y3lqUkQ5R3BmYk1CY1lOeldKSnNrckxoek15QnNKa0hDcmM0My9xU3BnY2NX?=
+ =?utf-8?B?TjRpZEU5OFVoN0VIWEh4S2U3RnlpZ0RyR2xHV1JSVURKYVlWamVERE9YamtI?=
+ =?utf-8?B?WEFQVHlPUDZBMmZma2lRZktrSWE2cVF1ZklLM1YreHgwNlpERFV2dUtzSnll?=
+ =?utf-8?B?S0tldGRLczlUMXJCQTZuSHloNS9qWEJrdGdkT0JGQXErZFl5V0JNWUdPWkJ2?=
+ =?utf-8?B?a1QvMHZ0cEsrNTY4LzA3S0dieTJOblY0cUM2dUdzVUsrVEFHeHI4TzNMT2t4?=
+ =?utf-8?B?SGxFeUs4SWFvdnkxY2MwY1VPc3BSOWxmNDh3QmxIQ0ZvV2ppNXJFV0IwemlD?=
+ =?utf-8?B?c1pYZHIrNlNLTFIzeGlwS0FIVGEzTENlRW5rK04wOXdHNTdIZXM3NmpzWlhD?=
+ =?utf-8?B?dWwrb3c5N0h1a0UrYkpUNkpSSmhXZDk2T3dMWUk4ajBNekk2SXQvaTgyaFdD?=
+ =?utf-8?B?aGwzdURiTEpCWnRtMEhzdEQyQithYmtKaGlRMWVLaGpQT2ZVelVYb21aTnE1?=
+ =?utf-8?B?QitKTkNNMHhlY2pNQ1BJOVhqUU4yTWZGSXJkTE1FYjkvUVVZL0t2K2Z0Mk9T?=
+ =?utf-8?B?VU5EZFV6d3BEZ1RuZERSNXQ5UGNMcWp1ZEhTMFVWMWxZNHg5cW5qV1pWRFp5?=
+ =?utf-8?B?YVhVbjhyOHh3VkdkUkVtMURQajZybTRnREJFeDk5U1YvVjBpNWUzOTFPYXg2?=
+ =?utf-8?B?OFU1aGlib0hPbXkzMTJ6ZVU2ajFLTURkYktrc01WVEFEakdCcXpsSWZlc01k?=
+ =?utf-8?B?amtoUHliU0xORVc1UW5UTnJlWVBpTGV5bnpGR3BsWG5ld3Q5Wm54U2Z1R0d3?=
+ =?utf-8?B?M3NnQ3dtOVJCRXM0bVZQNkdmdE1ndktVMUZ2RmFDOWw4NWdTNjBhRjhzNWxC?=
+ =?utf-8?B?ME5JRjA2cGZTQnBmODlIb1huNXhsMGRMVXBaRnJwNG1ZazFYeFEwSUx1VHdi?=
+ =?utf-8?B?bmdYWFJIL1lGcUdYTWQxbzgxb0lvYXZyejArMWtXYjc0QXVEK21zMHNKaWk0?=
+ =?utf-8?B?RksvSFlmSXNwbk5SbXppQ0JUQnRua29nZFRrTVhtY2xRbkNXdDlxYlRLaGZq?=
+ =?utf-8?B?dEpkQTZJUlRVcWdadUk2enFsZkZBbTBiT3RiZjJjN0QwbFprZGI5TVJ0Y3ZI?=
+ =?utf-8?Q?tgDa+oyf3FNhKw82Js5Uw3wpU?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bff9f85-ffcf-4df7-dd5f-08db82dffe8b
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 13:57:56.5332
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d12Ht8RZlb9DV+SvBU1SsN20Z/PXqO0Rn2TkkzK99FwKhYYyXVF96k9Hb9tHfQ7CQfkf6Cs3BomYWwbmkxfD+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8247
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On 2023-07-11 22:23, Randy Dunlap wrote:
+> Quash 175 kernel-doc warnings in dc.h by unmarking 2 struct
+> comments as containing kernel-doc notation and by spelling one
+> struct field correctly in a kernel-doc comment.
+> 
+> Fixes: 1682bd1a6b5f ("drm/amd/display: Expand kernel doc for DC")
+> Fixes: ea76895ffab1 ("drm/amd/display: Document pipe split policy")
+> Fixes: f6ae69f49fcf ("drm/amd/display: Include surface of unaffected streams")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Harry Wentland <harry.wentland@amd.com>
+> Cc: Leo Li <sunpeng.li@amd.com>
+> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> Cc: Aurabindo Pillai <aurabindo.pillai@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: Christian König <christian.koenig@amd.com>
+> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> Cc: dri-devel@lists.freedesktop.org
 
-Richard, a question for you below :-)
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-jbx6244@gmail.com wrote on Fri, 7 Jul 2023 17:27:56 +0200:
+Harry
 
-> Hi Miquel,
->=20
-> Some comments/questions below,
+> ---
+>  drivers/gpu/drm/amd/display/dc/dc.h |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff -- a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
+> --- a/drivers/gpu/drm/amd/display/dc/dc.h
+> +++ b/drivers/gpu/drm/amd/display/dc/dc.h
+> @@ -506,7 +506,7 @@ enum dcn_zstate_support_state {
+>  	DCN_ZSTATE_SUPPORT_DISALLOW,
+>  };
+>  
+> -/**
+> +/*
+>   * struct dc_clocks - DC pipe clocks
+>   *
+>   * For any clocks that may differ per pipe only the max is stored in this
+> @@ -728,7 +728,7 @@ struct resource_pool;
+>  struct dce_hwseq;
+>  struct link_service;
+>  
+> -/**
+> +/*
+>   * struct dc_debug_options - DC debug struct
+>   *
+>   * This struct provides a simple mechanism for developers to change some
+> @@ -756,7 +756,7 @@ struct dc_debug_options {
+>  	bool use_max_lb;
+>  	enum dcc_option disable_dcc;
+>  
+> -	/**
+> +	/*
+>  	 * @pipe_split_policy: Define which pipe split policy is used by the
+>  	 * display core.
+>  	 */
+> @@ -1334,7 +1334,7 @@ struct dc_validation_set {
+>  	struct dc_stream_state *stream;
+>  
+>  	/**
+> -	 * @plane_state: Surface state
+> +	 * @plane_states: Surface state
+>  	 */
+>  	struct dc_plane_state *plane_states[MAX_SURFACES];
+>  
 
-There are a lot, I've selected the ones which appear the most relevant
-to me right now.
-
-> On 7/4/23 17:13, Miquel Raynal wrote:
-> > Hi Johan,
-> >=20
-> > jbx6244@gmail.com wrote on Thu, 15 Jun 2023 19:34:26 +0200:
-> >  =20
-> >> On Rockchip SoCs the first boot stages are written on NAND =20
->=20
-> >> with help of manufacturer software that uses a different format
-> >> then the MTD framework. Skip the automatic BBT scan with the =20
->=20
-> Not only about the boot blocks.
-> The rest of the Nand is formatted as well by closed source.
-> It formats the location at the new BBT pages as well.
->=20
-> >> NAND_SKIP_BBTSCAN option so that the original content is unchanged
-> >> during the driver probe.
-> >> The NAND_NO_BBM_QUIRK option allows us to erase bad blocks with
-> >> the nand_erase_nand() function and the flash_erase command.
-> >> With these options the user has the "freedom of choice" by neutral
-> >> access mode to read and write in whatever format is needed. =20
-> >  =20
->=20
-> > Can the boot_rom_mode thing help? =20
->=20
-> This boot_rom_mode thing is for switching ECC mode in boot block pages an=
-d is not related to BBT pages.
->=20
-> >=20
-> > For writing this part you can disable the bad block protection using
-> > debugfs and then write an externally processed file in raw mode I guess=
-. =20
->=20
-> The use of debugfs only might make sense when the driver can pass the pro=
-be function without errors.
-> It does however not save guard existing data when it creates and writes t=
-o a new BBT page location.
-> When the data at the new BBT pages previously is written with a different=
- ECC or data/OOB format the hardware driver probe fails.
->=20
-> Your suggestion does not work for the Rockchip case.
-> Please advise what to do with this patch.
->=20
-> =3D=3D=3D
->=20
-> [ 2148.026403] calling  rk_nfc_driver_init+0x0/0x1000 [rockchip_nand_cont=
-roller] @ 2062
-> [ 2148.039156] rockchip-nfc 10500000.nand-controller: timing 11e1
-> [ 2148.056891] nand: device found, Manufacturer ID: 0xad, Chip ID: 0xde
-> [ 2148.067700] nand: Hynix H27UCG8T2ATR-BC 64G 3.3V 8-bit
-> [ 2148.076717] nand: 8192 MiB, MLC, erase size: 2048 KiB, page size: 8192=
-, OOB size: 640
-> [ 2148.089022] rockchip-nfc 10500000.nand-controller: hynix_nand_init
-> [ 2148.099317] rockchip-nfc 10500000.nand-controller: h27ucg8t2atrbc_choo=
-se_interface_config
-> [ 2148.111779] rockchip-nfc 10500000.nand-controller: timing 11e1
-> [ 2148.129836] rockchip-nfc 10500000.nand-controller: rd hw page: 1048575
-> [ 2148.149364] rockchip-nfc 10500000.nand-controller: read page: fffff ec=
-c error!
-> [ 2148.160742] rockchip-nfc 10500000.nand-controller: rd hw page: 1048319
-> [ 2148.180164] rockchip-nfc 10500000.nand-controller: read page: ffeff ec=
-c error!
-> [ 2148.191413] rockchip-nfc 10500000.nand-controller: rd hw page: 1048063
->=20
-> [..]
->=20
-> Check for existing BBT pages.
->=20
-> [ 2148.339836] rockchip-nfc 10500000.nand-controller: read page: ffdff ec=
-c error!
-> [ 2148.350864] rockchip-nfc 10500000.nand-controller: rd hw page: 1047807
-> [ 2148.369835] rockchip-nfc 10500000.nand-controller: read page: ffcff ec=
-c error!
-> [ 2148.380597] Bad block table not found for chip 0
-> [ 2148.388479] Scanning device for bad blocks
-> [ 2148.395591] rockchip-nfc 10500000.nand-controller: rd hw page: 255
-> [ 2148.414087] rockchip-nfc 10500000.nand-controller: read page: max_bitf=
-lips: 0
->=20
-> [..]
->=20
-> Check all pages to create a new BBT.
->=20
-> [ 2258.693279] rockchip-nfc 10500000.nand-controller: rd hw page: 1030143
-> [ 2258.710970] rockchip-nfc 10500000.nand-controller: read page: max_bitf=
-lips: 0
-> [ 2258.720804] rockchip-nfc 10500000.nand-controller: rd hw page: 1030399
-> [ 2258.738394] rockchip-nfc 10500000.nand-controller: read page: fb8ff ec=
-c error!
-> [ 2258.748229] Bad eraseblock 4024 at 0x0001f7000000
->=20
-> [..]
->=20
-> All BBT pages are marked bad, so it thinks there's no space left
->=20
-> [ 2261.403708] rockchip-nfc 10500000.nand-controller: rd hw page: 1048575
-> [ 2261.422750] rockchip-nfc 10500000.nand-controller: read page: fffff ec=
-c error!
-> [ 2261.433634] Bad eraseblock 4095 at 0x0001ffe00000
->=20
-> [ 2261.441723] No space left to write bad block table
->=20
-> This is not done.
-> A Nand disk should not be altered if it's formatted in a different format=
- unless an explicit command is given.
->=20
-> [ 2261.449860] nand_bbt: error while writing bad block table -28
-> [ 2261.467156] rockchip-nfc 10500000.nand-controller: failed to init NAND=
- chips
-> [ 2261.477917] rockchip-nfc: probe of 10500000.nand-controller failed wit=
-h error -28
-> [ 2261.497011] probe of 10500000.nand-controller returned 28 after 113456=
-649 usecs
-> [ 2261.508273] initcall rk_nfc_driver_init+0x0/0x1000 [rockchip_nand_cont=
-roller] returned 0 after 113468040 usecs
->=20
-> Probe failed, but there nothing wrong with hardware.
-> MTDx partitions are not created.
-> User space commands that rely strings like "/dev/mtd0" don't work.
->=20
-> =3D=3D=3D
->=20
-> Application
-> Kernel
-> Drivers
-> Hardware
->=20
-> Why do we fail a hardware driver probe when the level above doesn't deal =
-with all real world situations.
-> Shouldn't that be more separated in MTD levels.
->=20
-> =3D=3D=3D
->=20
-> >=20
-> > For the boot I think I proposed a DT property. I don't remember how far
-> > the discussion went. =20
->=20
-> Is there a web link of that discussion?
-
-https://lore.kernel.org/linux-mtd/20230609104426.3901df54@xps-13/
-
-Maybe the term "DT property" did not appear but that's what I had in
-mind :-) I don't know if it must be a chip or a partition property.
-
-Richard, here is where I would like your feedback, I am kind of opposed
-to a "skip_bbt" module parameter. It's not a strong opinion, if you
-think it's fine I'm open.
-
-I would rather prefer a DT property which says "do not use the
-standard pattern".
-
-Johan, how are bad blocks supposed to be tracked if the bad block
-tables are written in a way which does not allow Linux to read it?
-
-> How do I link 'compatible' to '/dev/mtd0' for example.
-> In a '/proc/mtd' entry?
-> See /drivers/mtd/spi-nor/debugfs.c
->=20
->=20
-> In order to write boot blocks in a pattern it needs to know the chip ID a=
-s used in nand_flash_ids[].
-> How can we export this ID to userspace?
-
-There was an attempt a few days back, it's not upstream, I can't find
-it back ATM. I'll send it once I find it back.
-
-> Also in a '/proc/mtd' entry?
->=20
-> =3D=3D=3D
->=20
-> 		partitions {
-> 			compatible =3D "fixed-partitions";
-> 			#address-cells =3D <2>;
-> 			#size-cells =3D <2>;
->=20
-> 			partition@0 {
-> 				reg =3D <0x0 0x0 0x0 0x02000000>;
-> 				compatible =3D "rockchip,boot-blk";
-> 				label =3D "boot-blk";
-> 			};
->=20
-> 			partition@2000000 {
-> 				reg =3D <0x0 0x02000000 0x1 0xfa000000>;
-> 				label =3D "rootfs";
-> 			};
->=20
-> 			partition@1fc000000 {
-> 				reg =3D <0x1 0xfc000000 0x0 0x04000000>;
-> 				compatible =3D "mtd,bbt"
-> 				label =3D "bbt";
-
-This does not work, it would take me hours to explain why, it's all
-about:
-- stability
-- how mtd has been implemented
-
-> 			};
-> 		};
->=20
-> How many erase blocks is MTD using for BBT pages? 4 or 8 or ?
-
-As many blocks are needed to cover the size of the device, times 2.
-
-> BBT pages are not clearly defined in the DT.
-
-No, because this is software, not hardware. MTD is a Linux thing, which
-gives you access to an mtd device through a number of operations. It
-handles bad blocks.
-
-> They are somehow marked bad in the overlapping partition.
-
-Not sure what "overlapping partition" means.
-
-> How are suppose to erase BBT pages in a automated way?
-> Is there a need for a new BBT compatible?
-
-No, Linux has run with this standard pattern for 20 years, downstream
-kernels sometimes make silly design decisions, we do not want to
-support them.
-
-> What is your idea about compatibles suggestion:
-> rockchip,boot-blk
-> mtd,bbt
->=20
-> =3D=3D=3D
->=20
-> Johan
->=20
-> >  =20
-> >>
-> >> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> >> ---
-> >>
-> >> Changes V3:
-> >>   Change prefixes
-> >>
-> >> Changed V2:
-> >>   reword
-> >>
-> >> ---
-> >>
-> >> I'm aware that the maintainer finds it "awful",
-> >> but it's absolute necessary to:
-> >> 1: read/write boot blocks in user space without touching original cont=
-ent
-> >> 2: format a NAND for MTD either with built in or external driver module
-> >>
-> >> So we keep it include in this serie.
-> >> ---
-> >>  drivers/mtd/nand/raw/rockchip-nand-controller.c | 7 +++++++
-> >>  1 file changed, 7 insertions(+)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers=
-/mtd/nand/raw/rockchip-nand-controller.c
-> >> index 5a0468034..fcda4c760 100644
-> >> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
-> >> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-> >> @@ -188,6 +188,10 @@ struct rk_nfc {
-> >>  	unsigned long assigned_cs;
-> >>  };
-> >>
-> >> +static int skipbbt;
-> >> +module_param(skipbbt, int, 0644);
-> >> +MODULE_PARM_DESC(skipbbt, "Skip BBT scan if data on the NAND chip is =
-not in MTD format.");
-> >> +
-> >>  static inline struct rk_nfc_nand_chip *rk_nfc_to_rknand(struct nand_c=
-hip *chip)
-> >>  {
-> >>  	return container_of(chip, struct rk_nfc_nand_chip, chip);
-> >> @@ -1153,6 +1157,9 @@ static int rk_nfc_nand_chip_init(struct device *=
-dev, struct rk_nfc *nfc,
-> >>
-> >>  	nand_set_controller_data(chip, nfc);
-> >>
-> >> +	if (skipbbt)
-> >> +		chip->options |=3D NAND_SKIP_BBTSCAN | NAND_NO_BBM_QUIRK;
-> >> +
-> >>  	chip->options |=3D NAND_USES_DMA | NAND_NO_SUBPAGE_WRITE;
-> >>  	chip->bbt_options =3D NAND_BBT_USE_FLASH | NAND_BBT_NO_OOB;
-> >>
-> >> --
-> >> 2.30.2
-> >> =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
-
-
-Thanks,
-Miqu=C3=A8l
