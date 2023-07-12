@@ -2,129 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6777502BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16EA17502BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjGLJTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S232129AbjGLJTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbjGLJTA (ORCPT
+        with ESMTP id S232583AbjGLJTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Jul 2023 05:19:00 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48BF1998;
-        Wed, 12 Jul 2023 02:18:55 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1689153526tjyf6k0s
-Received: from linux-lab-host.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:18:45 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: zT6n3Y95oi1Q7MFa1CSS57hNQnv1/10jeqfsHZAQQpZlJ7diAVk+VgwixNHdq
-        pPfLew8XIjf5N6Y6zQDz0VgwQbg0pOxJBb/7Y9Ns4t1fUKIfnMoL+f+OhNv8jE5PinsTe/+
-        6Ob8p8vQ51rivPl6WQQcDxak7bsvxbRn/FzV64sqW7YGjqFKlJfu0iSY89VZ4EYpSizGJer
-        xhB2OPJSGLH8ORqD3cO+8BVNxlKeBfqtdHpI/tdsl2NTFx1tnsjZ4NDuFgwKZdPmSOY0YhE
-        t+BDN0u+0jKvxQQRtxa6rGKCZOdI1hbC+EFpjK2yF6YW6DWYMOL0flgKqqFQAe4MAyRX6Cw
-        ix+dMWsCIoFvThWzd/fk7lpBhbKO9kTk5Saox0V7DiWHElQNs9RRU8A4ZvbexEqFKh42b/7
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11721497453081374856
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 03/11] tools/nolibc: arm: shrink _start with _start_c
-Date:   Wed, 12 Jul 2023 17:18:44 +0800
-Message-Id: <b06c91904facbcc647f7fce9d8f2eba3a59905d3.1689150149.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
-References: <cover.1689150149.git.falcon@tinylab.org>
+Received: from outbound-smtp19.blacknight.com (outbound-smtp19.blacknight.com [46.22.139.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F4F1986
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 02:18:49 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp19.blacknight.com (Postfix) with ESMTPS id BA66D1C3872
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 10:18:47 +0100 (IST)
+Received: (qmail 30399 invoked from network); 12 Jul 2023 09:18:47 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jul 2023 09:18:47 -0000
+Date:   Wed, 12 Jul 2023 10:18:45 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv14 5/9] efi: Add unaccepted memory support
+Message-ID: <20230712091845.hahda3xgvegv5hgf@techsingularity.net>
+References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
+ <20230606142637.5171-6-kirill.shutemov@linux.intel.com>
+ <20230703132518.3ukqyolnes47i5r3@techsingularity.net>
+ <20230704143740.bgimyg3bqsgxbm47@box.shutemov.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20230704143740.bgimyg3bqsgxbm47@box.shutemov.name>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move most of the _start operations to _start_c().
+On Tue, Jul 04, 2023 at 05:37:40PM +0300, Kirill A. Shutemov wrote:
+> On Mon, Jul 03, 2023 at 02:25:18PM +0100, Mel Gorman wrote:
+> > On Tue, Jun 06, 2023 at 05:26:33PM +0300, Kirill A. Shutemov wrote:
+> > > efi_config_parse_tables() reserves memory that holds unaccepted memory
+> > > configuration table so it won't be reused by page allocator.
+> > > 
+> > > Core-mm requires few helpers to support unaccepted memory:
+> > > 
+> > >  - accept_memory() checks the range of addresses against the bitmap and
+> > >    accept memory if needed.
+> > > 
+> > >  - range_contains_unaccepted_memory() checks if anything within the
+> > >    range requires acceptance.
+> > > 
+> > > Architectural code has to provide efi_get_unaccepted_table() that
+> > > returns pointer to the unaccepted memory configuration table.
+> > > 
+> > > arch_accept_memory() handles arch-specific part of memory acceptance.
+> > > 
+> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+> > > Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+> > 
+> > By and large, this looks ok from the page allocator perspective as the
+> > checks for unaccepted are mostly after watermark checks. However, if you
+> > look in the initial fast path, you'll see this
+> > 
+> >         /* 
+> >          * Forbid the first pass from falling back to types that fragment
+> >          * memory until all local zones are considered.
+> >          */     
+> >         alloc_flags |= alloc_flags_nofragment(ac.preferred_zoneref->zone, gfp);
+> > 
+> > While checking watermarks should be fine from a functional perspective and
+> > the fast paths are unaffected, there is a risk of premature fragmentation
+> > until all memory has been accepted. Meeting watermarks does not necessarily
+> > mean that fragmentation is avoided as pageblocks can get mixed while still
+> > meeting watermarks.
+> 
+> Could you elaborate on this scenario?
+> 
+> Current code checks the watermark, if it is met, try rmqueue().
+> 
+> If rmqueue() fails anyway, try to accept more pages and retry the zone if
+> it is successful.
+> 
+> I'm not sure how we can get to the 'if (no_fallback) {' case with any
+> unaccepted memory in the allowed zones.
+> 
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/arch-arm.h | 43 +++++----------------------------
- 1 file changed, 6 insertions(+), 37 deletions(-)
+Lets take an extreme example and assume that the low watermark is lower
+than 2MB (one pageblock). Just before the watermark is reached (free
+count between 1MB and 2MB), it is unlikely that all free pages are within
+pageblocks of the same migratetype (e.g. MIGRATE_MOVABLE). If there is an
+allocation near the watermark of a different type (e.g. MIGRATE_UNMOVABLE)
+then the page allocation could fallback to a different pageblock and now
+it is mixed.  It's a condition that is only obvious if you are explicitly
+checking for it via tracepoints.  This can happen in the normal case, but
+unaccepted memory makes it worse because the "pageblock mixing" could have
+been avoided if the "no_fallback" case accepted at least one new pageblock
+instead of mixing pageblocks.
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index ea723596ed23..74773ddcf4ca 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_ARCH_ARM_H
- 
- #include "compiler.h"
-+#include "crt.h"
- 
- /* Syscalls for ARM in ARM or Thumb modes :
-  *   - registers are 32-bit
-@@ -183,49 +184,17 @@
- 	_arg1;                                                                \
- })
- 
--
--char **environ __attribute__((weak));
--const unsigned long *_auxv __attribute__((weak));
--
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
--		"bl __stack_chk_init\n"       /* initialize stack protector                          */
-+		"bl __stack_chk_init\n" /* initialize stack protector                     */
- #endif
--		"pop {%r0}\n"                 /* argc was in the stack                               */
--		"mov %r1, %sp\n"              /* argv = sp                                           */
--
--		"add %r2, %r0, $1\n"          /* envp = (argc + 1) ...                               */
--		"lsl %r2, %r2, $2\n"          /*        * 4        ...                               */
--		"add %r2, %r2, %r1\n"         /*        + argv                                       */
--		"ldr %r3, 1f\n"               /* r3 = &environ (see below)                           */
--		"str %r2, [r3]\n"             /* store envp into environ                             */
--
--		"mov r4, r2\n"                /* search for auxv (follows NULL after last env)       */
--		"0:\n"
--		"mov r5, r4\n"                /* r5 = r4                                             */
--		"add r4, r4, #4\n"            /* r4 += 4                                             */
--		"ldr r5,[r5]\n"               /* r5 = *r5 = *(r4-4)                                  */
--		"cmp r5, #0\n"                /* and stop at NULL after last env                     */
--		"bne 0b\n"
--		"ldr %r3, 2f\n"               /* r3 = &_auxv (low bits)                              */
--		"str r4, [r3]\n"              /* store r4 into _auxv                                 */
--
--		"mov %r3, $8\n"               /* AAPCS : sp must be 8-byte aligned in the            */
--		"neg %r3, %r3\n"              /*         callee, and bl doesn't push (lr=pc)         */
--		"and %r3, %r3, %r1\n"         /* so we do sp = r1(=sp) & r3(=-8);                    */
--		"mov %sp, %r3\n"
--
--		"bl main\n"                   /* main() returns the status code, we'll exit with it. */
--		"movs r7, $1\n"               /* NR_exit == 1                                        */
--		"svc $0x00\n"
--		".align 2\n"                  /* below are the pointers to a few variables           */
--		"1:\n"
--		".word environ\n"
--		"2:\n"
--		".word _auxv\n"
-+		"mov %r0, sp\n"         /* save stack pointer to %r0, as arg1 of _start_c */
-+		"and ip, %r0, #-8\n"    /* sp must be 8-byte aligned in the callee        */
-+		"mov sp, ip\n"
-+		"bl  _start_c\n"        /* transfer to c runtime                          */
- 	);
- 	__builtin_unreachable();
- }
+That is an extreme example but the same logic applies when the free
+count is at or near MIGRATE_TYPES*pageblock_nr_pages as it is not
+guaranteed that the pageblocks with free pages are a migratetype that
+matches the allocation request.
+
+Hence, it may be more robust from a fragmentation perspective if
+ALLOC_NOFRAGMENT requests accept memory if it is available and retries
+before clearing ALLOC_NOFRAGMENT and mixing pageblocks before the watermarks
+are reached.
+
+> I see that there's preferred_zoneref and spread_dirty_pages cases, but
+> unaccepted memory seems change nothing for them.
+> 
+
+preferred_zoneref is about premature zone exhaustion and
+spread_dirty_pages is about avoiding premature stalls on a node/zone due
+to an imbalance in the number of pages waiting for writeback to
+complete. There is an arguement to be made that they also should accept
+memory but it's less clear how much of a problem this is. Both are very
+obvious when they "fail" and likely are covered by the existing
+watermark checks. Premature pageblock mixing is more subtle as the final
+impact (root cause of a premature THP allocation failure) is harder to
+detect.
+
 -- 
-2.25.1
-
+Mel Gorman
+SUSE Labs
