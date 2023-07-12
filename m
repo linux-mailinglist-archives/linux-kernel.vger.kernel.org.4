@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3BD750205
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770707501FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjGLIu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
+        id S232281AbjGLIst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbjGLIuu (ORCPT
+        with ESMTP id S230360AbjGLIsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:50:50 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2332AFB;
-        Wed, 12 Jul 2023 01:50:43 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d2e1a72fcca58-666e6541c98so6069546b3a.2;
-        Wed, 12 Jul 2023 01:50:43 -0700 (PDT)
+        Wed, 12 Jul 2023 04:48:46 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11443A9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:48:45 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b74791c948so5883497a34.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689151843; x=1691743843;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2mQDpD37vd+HTNvfDcUBr8r9HS+qHzJgD9/v2YUHJBc=;
-        b=L1Fe0l2pbQoSUobZeYgvQIyIVcYQHS3ptQWt3+w7s9gcSdLyMqNpQdKM6zwWXzPqiQ
-         Bo9Y5wnGI69tO5aV+vP0a9aksmb6weQ8VTCmShnEl8/GB1HDbaXtn/ko6tXSTlrqf2Yz
-         6QKve7MxHiwFjo9XC4tvLV4+P9CcsNBozUtQ7PBJ6bR7qv/SpBk0CfnbjacGFKYR411z
-         qcrRVCuf6YCJ1ORmIwlu7h8r4WfELr+JgkKIIoNBTdp8R2t0eEeDeFlw/LJl1CAuoP7k
-         LjghB1377RwJtKpNifFriHSpSA0fzMWhgaylnDEfRqsJjU1dBj5jt+jUllprfGFnN4IQ
-         4rqQ==
+        d=linaro.org; s=google; t=1689151724; x=1691743724;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l4HOn91Gg0fSa/oaz9zR2150f7cgWOzRjLYl9EntuWs=;
+        b=Nt41aEQ0KCvwe36xWiqfnuYBuZdqOqU25Ox6yRmaE4+hEM8XnnKfFKceOWDHMQRNfH
+         1eDnm+TcjvnL/6oJR+izR0ceZmfdVD/Vy0uF7ZOXIRAPZTu88JG2B0wlYjlbP/e7izaQ
+         f3liXqfKta7S23SYZ55iLmH/ykTRnvrb4e6/hk2rCqshYmo84ySbxZEWoSqZWXdE05ix
+         83G5T2T0w0bekA/jjNkfbgeKsKVPD2L0n4DyLSkPq3rvwGWWm6/28BjjP9Cg/xIF31jW
+         qCVH7cesYJAxzELIhyGKA8CmFIoMJolDx2Cr/MIU4c0T9drLMAFvYdauelaBUY4q1R1J
+         EYag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689151843; x=1691743843;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2mQDpD37vd+HTNvfDcUBr8r9HS+qHzJgD9/v2YUHJBc=;
-        b=Dd1gbvs+iM2t0W5agnAMjlSjTRRpzJLBc7LUSx7FfMuCg8ohBnHwrtHBC/42yL/OqE
-         9EbCI5ePAiBBnSqFjJTdh8gZ+sglx0Zno3Lt28siuujMuCMhm7T+KJ1opBhUqAULdrVE
-         vmFlWNKex8PDAVLAxsSOYYcvoMdHyx6M8I7DXk6nEOoEYB4ginXpavd6jBRCTA8u+JNW
-         GB1qS0qHD6qYo+mdHNJE6cKUFFDvye7Vj4cSZpvuSaUIC8h3W+jKWRQ36RYv3EmyNUvA
-         0F12apKssT1chXgEu47m5Y0ZQ/rKcJtbXWZjKCPbWPdB5dyzExGQUPgx3dwWs61/sMhB
-         dRDw==
-X-Gm-Message-State: ABy/qLZLLNFcpFrMs4cKWT2diVyAoatvoaQWIRu6Xmjg6Ip9u2FvbiTG
-        4twoOvyjwhh2yvczFrrQOCw=
-X-Google-Smtp-Source: APBJJlETextykBfkTT0sTb0iDjMWBugpQ/hcmSKzMF5Fk2mmrL2XzvHqxMc7+8B0MfIcII9N0v1f2A==
-X-Received: by 2002:a05:6a00:3920:b0:682:4edf:b9c7 with SMTP id fh32-20020a056a00392000b006824edfb9c7mr23750650pfb.2.1689151842760;
-        Wed, 12 Jul 2023 01:50:42 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.11])
-        by smtp.gmail.com with ESMTPSA id e26-20020a62aa1a000000b006749c22d079sm3037066pff.167.2023.07.12.01.50.38
+        d=1e100.net; s=20221208; t=1689151724; x=1691743724;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l4HOn91Gg0fSa/oaz9zR2150f7cgWOzRjLYl9EntuWs=;
+        b=kbi8fmB6VMUN7mgYx6EJDRp3mfwpMxGeSZ0cBG+bVwyiSDs4xYEiZ5O7TuCCoUJGdG
+         DI+Kp9JshQEGTlfrD/1mvXZw+AVnYdN/mNWXATMvLAKs7UHgKeYQfi7RgXn8cykWukRC
+         gk8SAMPWoYeFCiMni7CTxOK/Q/IVGgDLoJn897Rshw6oMh0+OTA5HTg8/aojVVGxgktD
+         jrN4SKvIpYSp87rNig2pcYX8gjQLmSpHhX/M48GIUj1U6UjKkcvxU0h4kBk8yNPiOeis
+         tBVqL1dYGMAqt9hoYKeVt+Z9mGzB7cYTEgkxxwIjE9IpDTw2rSuwYQtn4q/PLZnLAE3a
+         uvBQ==
+X-Gm-Message-State: ABy/qLbdGx6tYI1I48fd0V2/jE/syTQs/67VMcIw2p4E5jmYNdFhupRT
+        y2QZ4jMmlCMCNrV7ZWR67nejDA==
+X-Google-Smtp-Source: APBJJlHfkBG47mx/uRxjQ46qhJBOJ2TibMQxQT3ZBpTh/lzn91h7cfAB4hBjo6t7UvuZwzAvvY4SQQ==
+X-Received: by 2002:a05:6830:114:b0:6b9:862a:f308 with SMTP id i20-20020a056830011400b006b9862af308mr4974861otp.37.1689151724266;
+        Wed, 12 Jul 2023 01:48:44 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id z8-20020a17090ab10800b0025bf9e02e1bsm3117272pjq.51.2023.07.12.01.48.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 01:50:42 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     yhs@meta.com, daniel@iogearbox.net, alexei.starovoitov@gmail.com
-Cc:     ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        dsahern@kernel.org, jolsa@kernel.org, x86@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH bpf-next v9 3/3] selftests/bpf: add testcase for TRACING with 6+ arguments
-Date:   Wed, 12 Jul 2023 16:47:46 +0800
-Message-Id: <20230712084746.833965-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230712084746.833965-1-imagedong@tencent.com>
-References: <20230712084746.833965-1-imagedong@tencent.com>
+        Wed, 12 Jul 2023 01:48:43 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        stratos-dev@op-lists.linaro.org,
+        Erik Schilling <erik.schilling@linaro.org>,
+        Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xen: privcmd: Add support for irqfd
+Date:   Wed, 12 Jul 2023 14:18:33 +0530
+Message-Id: <d4e0233524b8c7c48614b09cae4d23f2cdf10988.1689150266.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,640 +77,394 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Xen provides support for injecting interrupts to the guests via the
+HYPERVISOR_dm_op() hypercall. The same is used by the Virtio based
+device backend implementations, in an inefficient manner currently.
 
-Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
-with 7/11 arguments. As this feature is not supported by arm64 yet, we
-disable these testcases for arm64 in DENYLIST.aarch64. We can combine
-them with fentry_test.c/fexit_test.c when arm64 is supported too.
+Generally, the Virtio backends are implemented to work with the Eventfd
+based mechanism. In order to make such backends work with Xen, another
+software layer needs to poll the Eventfds and raise an interrupt to the
+guest using the Xen based mechanism. This results in an extra context
+switch.
 
-Correspondingly, add bpf_testmod_fentry_test7() and
-bpf_testmod_fentry_test11() to bpf_testmod.c
+This is not a new problem in Linux though. It is present with other
+hypervisors like KVM, etc. as well. The generic solution implemented in
+the kernel for them is to provide an IOCTL call to pass the interrupt
+details and eventfd, which lets the kernel take care of polling the
+eventfd and raising of the interrupt, instead of handling this in user
+space (which involves an extra context switch).
 
-Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
-MODIFY_RETURN with 7 arguments.
+This patch adds support to inject a specific interrupt to guest using
+the eventfd mechanism, by preventing the extra context switch.
 
-Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
-bpf_testmod.c to test the struct in the arguments.
+Inspired by existing implementations for KVM, etc..
 
-And the testcases passed on x86_64:
-
-./test_progs -t fexit
-Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t fentry
-Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t modify_return
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t tracing_struct
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
-v9:
-- change the way to test fmod_ret
-v8:
-- split the testcases, and add fentry_many_args/fexit_many_args to
-  DENYLIST.aarch64
-v6:
-- add testcases to tracing_struct.c instead of fentry_test.c and
-  fexit_test.c
-v5:
-- add testcases for MODIFY_RETURN
-v4:
-- use different type for args in bpf_testmod_fentry_test{7,12}
-- add testcase for grabage values in ctx
-v3:
-- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
-  bpf_testmod_fentry_test{7,12} meanwhile
-- get return value by bpf_get_func_ret() in
-  "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
-  in this version
----
- net/bpf/test_run.c                            | 14 ++++-
- tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
- .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
- .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
- .../selftests/bpf/prog_tests/modify_return.c  | 10 ++--
- .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
- .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
- .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
- .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
- .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
- 11 files changed, 340 insertions(+), 13 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.c
- create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
+ drivers/xen/privcmd.c      | 285 ++++++++++++++++++++++++++++++++++++-
+ include/uapi/xen/privcmd.h |  14 ++
+ 2 files changed, 297 insertions(+), 2 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 63b11f7a5392..7d47f53f20c1 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -565,6 +565,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int *b)
- 	return a + *b;
+diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
+index e2f580e30a86..e8096b09c113 100644
+--- a/drivers/xen/privcmd.c
++++ b/drivers/xen/privcmd.c
+@@ -9,11 +9,16 @@
+ 
+ #define pr_fmt(fmt) "xen:" KBUILD_MODNAME ": " fmt
+ 
++#include <linux/eventfd.h>
++#include <linux/file.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/poll.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/string.h>
++#include <linux/workqueue.h>
+ #include <linux/errno.h>
+ #include <linux/mm.h>
+ #include <linux/mman.h>
+@@ -833,6 +838,266 @@ static long privcmd_ioctl_mmap_resource(struct file *file,
+ 	return rc;
  }
  
-+__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
-+					void *e, char f, int g)
-+{
-+	*b += 1;
-+	return a + *b + c + d + (long)e + f + g;
-+}
++/* Irqfd support */
++static struct workqueue_struct *irqfd_cleanup_wq;
++static DEFINE_MUTEX(irqfds_lock);
++static LIST_HEAD(irqfds_list);
 +
- int noinline bpf_fentry_shadow_test(int a)
- {
- 	return a + 1;
-@@ -600,6 +607,7 @@ __diag_pop();
- 
- BTF_SET8_START(bpf_test_modify_return_ids)
- BTF_ID_FLAGS(func, bpf_modify_return_test)
-+BTF_ID_FLAGS(func, bpf_modify_return_test2)
- BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
- BTF_SET8_END(bpf_test_modify_return_ids)
- 
-@@ -667,7 +675,11 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
- 	case BPF_MODIFY_RETURN:
- 		ret = bpf_modify_return_test(1, &b);
- 		if (b != 2)
--			side_effect = 1;
-+			side_effect++;
-+		b = 2;
-+		ret += bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
-+		if (b != 2)
-+			side_effect++;
- 		break;
- 	default:
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
-index 08adc805878b..3b61e8b35d62 100644
---- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-+++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-@@ -10,3 +10,5 @@ kprobe_multi_test/link_api_addrs                 # link_fd unexpected link_fd: a
- kprobe_multi_test/link_api_syms                  # link_fd unexpected link_fd: actual -95 < expected 0
- kprobe_multi_test/skel_api                       # libbpf: failed to load BPF skeleton 'kprobe_multi': -3
- module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
-+fentry_test/fentry_many_args                     # fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
-+fexit_test/fexit_many_args                       # fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index aaf6ef1201c7..a6f991b56345 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -34,6 +34,11 @@ struct bpf_testmod_struct_arg_3 {
- 	int b[];
- };
- 
-+struct bpf_testmod_struct_arg_4 {
-+	u64 a;
-+	int b;
++struct privcmd_kernel_irqfd {
++	domid_t dom;
++	u8 level;
++	u32 irq;
++	struct eventfd_ctx *eventfd;
++	struct work_struct shutdown;
++	wait_queue_entry_t wait;
++	struct list_head list;
++	poll_table pt;
 +};
 +
- __diag_push();
- __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global functions as their definitions will be in bpf_testmod.ko BTF");
-@@ -75,6 +80,24 @@ bpf_testmod_test_struct_arg_6(struct bpf_testmod_struct_arg_3 *a) {
- 	return bpf_testmod_test_struct_arg_result;
- }
- 
-+noinline int
-+bpf_testmod_test_struct_arg_7(u64 a, void *b, short c, int d, void *e,
-+			      struct bpf_testmod_struct_arg_4 f)
++/* From xen/include/public/hvm/dm_op.h */
++#define XEN_DMOP_set_irq_level 19
++
++struct xen_dm_op_set_irq_level {
++	u32 irq;
++	/* IN - Level: 0 -> deasserted, 1 -> asserted */
++	u8 level;
++	u8 pad[3];
++};
++
++struct xen_dm_op {
++	u32 op;
++	u32 pad;
++	union {
++		/*
++		 * There are more structures here, we won't be using them, so
++		 * can skip adding them here.
++		 */
++		struct xen_dm_op_set_irq_level set_irq_level;
++	} u;
++};
++
++static void irqfd_deactivate(struct privcmd_kernel_irqfd *kirqfd)
 +{
-+	bpf_testmod_test_struct_arg_result = a + (long)b + c + d +
-+		(long)e + f.a + f.b;
-+	return bpf_testmod_test_struct_arg_result;
++	lockdep_assert_held(&irqfds_lock);
++
++	list_del_init(&kirqfd->list);
++	queue_work(irqfd_cleanup_wq, &kirqfd->shutdown);
 +}
 +
-+noinline int
-+bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
-+			      struct bpf_testmod_struct_arg_4 f, int g)
++static void irqfd_shutdown(struct work_struct *work)
 +{
-+	bpf_testmod_test_struct_arg_result = a + (long)b + c + d +
-+		(long)e + f.a + f.b + g;
-+	return bpf_testmod_test_struct_arg_result;
++	struct privcmd_kernel_irqfd *kirqfd =
++		container_of(work, struct privcmd_kernel_irqfd, shutdown);
++	u64 cnt;
++
++	eventfd_ctx_remove_wait_queue(kirqfd->eventfd, &kirqfd->wait, &cnt);
++	eventfd_ctx_put(kirqfd->eventfd);
++	kfree(kirqfd);
 +}
 +
- __bpf_kfunc void
- bpf_testmod_test_mod_kfunc(int i)
- {
-@@ -191,6 +214,20 @@ noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
- 	return a + b + c;
- }
- 
-+noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
-+				      void *e, char f, int g)
++static void irqfd_inject(struct privcmd_kernel_irqfd *kirqfd)
 +{
-+	return a + (long)b + c + d + (long)e + f + g;
++	struct xen_dm_op dm_op = {
++		.op = XEN_DMOP_set_irq_level,
++		.u.set_irq_level.irq = kirqfd->irq,
++		.u.set_irq_level.level = kirqfd->level,
++	};
++	struct xen_dm_op_buf xbufs = {
++		.size = sizeof(dm_op),
++	};
++	u64 cnt;
++
++	eventfd_ctx_do_read(kirqfd->eventfd, &cnt);
++	set_xen_guest_handle(xbufs.h, &dm_op);
++
++	xen_preemptible_hcall_begin();
++	HYPERVISOR_dm_op(kirqfd->dom, 1, &xbufs);
++	xen_preemptible_hcall_end();
 +}
 +
-+noinline int bpf_testmod_fentry_test11(u64 a, void *b, short c, int d,
-+				       void *e, char f, int g,
-+				       unsigned int h, long i, __u64 j,
-+				       unsigned long k)
++static int
++irqfd_wakeup(wait_queue_entry_t *wait, unsigned mode, int sync, void *key)
 +{
-+	return a + (long)b + c + d + (long)e + f + g + h + i + j + k;
-+}
++	struct privcmd_kernel_irqfd *kirqfd =
++		container_of(wait, struct privcmd_kernel_irqfd, wait);
++	__poll_t flags = key_to_poll(key);
 +
- int bpf_testmod_fentry_ok;
- 
- noinline ssize_t
-@@ -206,6 +243,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	struct bpf_testmod_struct_arg_1 struct_arg1 = {10};
- 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
- 	struct bpf_testmod_struct_arg_3 *struct_arg3;
-+	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
- 	int i = 1;
- 
- 	while (bpf_testmod_return_ptr(i))
-@@ -216,6 +254,11 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	(void)bpf_testmod_test_struct_arg_3(1, 4, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_4(struct_arg1, 1, 2, 3, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_5();
-+	(void)bpf_testmod_test_struct_arg_7(16, (void *)17, 18, 19,
-+					    (void *)20, struct_arg4);
-+	(void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
-+					    (void *)20, struct_arg4, 23);
++	if (flags & EPOLLIN)
++		irqfd_inject(kirqfd);
 +
- 
- 	struct_arg3 = kmalloc((sizeof(struct bpf_testmod_struct_arg_3) +
- 				sizeof(int)), GFP_KERNEL);
-@@ -243,7 +286,11 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 
- 	if (bpf_testmod_fentry_test1(1) != 2 ||
- 	    bpf_testmod_fentry_test2(2, 3) != 5 ||
--	    bpf_testmod_fentry_test3(4, 5, 6) != 15)
-+	    bpf_testmod_fentry_test3(4, 5, 6) != 15 ||
-+	    bpf_testmod_fentry_test7(16, (void *)17, 18, 19, (void *)20,
-+			21, 22) != 133 ||
-+	    bpf_testmod_fentry_test11(16, (void *)17, 18, 19, (void *)20,
-+			21, 22, 23, 24, 25, 26) != 231)
- 		goto out;
- 
- 	bpf_testmod_fentry_ok = 1;
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-index c0d1d61d5f66..aee1bc77a17f 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-@@ -2,8 +2,9 @@
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
- #include "fentry_test.lskel.h"
-+#include "fentry_many_args.skel.h"
- 
--static int fentry_test(struct fentry_test_lskel *fentry_skel)
-+static int fentry_test_common(struct fentry_test_lskel *fentry_skel)
- {
- 	int err, prog_fd, i;
- 	int link_fd;
-@@ -37,7 +38,7 @@ static int fentry_test(struct fentry_test_lskel *fentry_skel)
- 	return 0;
- }
- 
--void test_fentry_test(void)
-+static void fentry_test(void)
- {
- 	struct fentry_test_lskel *fentry_skel = NULL;
- 	int err;
-@@ -46,13 +47,47 @@ void test_fentry_test(void)
- 	if (!ASSERT_OK_PTR(fentry_skel, "fentry_skel_load"))
- 		goto cleanup;
- 
--	err = fentry_test(fentry_skel);
-+	err = fentry_test_common(fentry_skel);
- 	if (!ASSERT_OK(err, "fentry_first_attach"))
- 		goto cleanup;
- 
--	err = fentry_test(fentry_skel);
-+	err = fentry_test_common(fentry_skel);
- 	ASSERT_OK(err, "fentry_second_attach");
- 
- cleanup:
- 	fentry_test_lskel__destroy(fentry_skel);
- }
++	if (flags & EPOLLHUP) {
++		mutex_lock(&irqfds_lock);
++		irqfd_deactivate(kirqfd);
++		mutex_unlock(&irqfds_lock);
++	}
 +
-+static void fentry_many_args(void)
-+{
-+	struct fentry_many_args *fentry_skel = NULL;
-+	int err;
-+
-+	fentry_skel = fentry_many_args__open_and_load();
-+	if (!ASSERT_OK_PTR(fentry_skel, "fentry_many_args_skel_load"))
-+		goto cleanup;
-+
-+	err = fentry_many_args__attach(fentry_skel);
-+	if (!ASSERT_OK(err, "fentry_many_args_attach"))
-+		goto cleanup;
-+
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
-+	ASSERT_EQ(fentry_skel->bss->test1_result, 1,
-+		  "fentry_many_args_result1");
-+	ASSERT_EQ(fentry_skel->bss->test2_result, 1,
-+		  "fentry_many_args_result2");
-+	ASSERT_EQ(fentry_skel->bss->test3_result, 1,
-+		  "fentry_many_args_result3");
-+
-+cleanup:
-+	fentry_many_args__destroy(fentry_skel);
-+}
-+
-+void test_fentry_test(void)
-+{
-+	if (test__start_subtest("fentry"))
-+		fentry_test();
-+	if (test__start_subtest("fentry_many_args"))
-+		fentry_many_args();
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_test.c b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-index 101b7343036b..1c13007e37dd 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-@@ -2,8 +2,9 @@
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
- #include "fexit_test.lskel.h"
-+#include "fexit_many_args.skel.h"
- 
--static int fexit_test(struct fexit_test_lskel *fexit_skel)
-+static int fexit_test_common(struct fexit_test_lskel *fexit_skel)
- {
- 	int err, prog_fd, i;
- 	int link_fd;
-@@ -37,7 +38,7 @@ static int fexit_test(struct fexit_test_lskel *fexit_skel)
- 	return 0;
- }
- 
--void test_fexit_test(void)
-+static void fexit_test(void)
- {
- 	struct fexit_test_lskel *fexit_skel = NULL;
- 	int err;
-@@ -46,13 +47,47 @@ void test_fexit_test(void)
- 	if (!ASSERT_OK_PTR(fexit_skel, "fexit_skel_load"))
- 		goto cleanup;
- 
--	err = fexit_test(fexit_skel);
-+	err = fexit_test_common(fexit_skel);
- 	if (!ASSERT_OK(err, "fexit_first_attach"))
- 		goto cleanup;
- 
--	err = fexit_test(fexit_skel);
-+	err = fexit_test_common(fexit_skel);
- 	ASSERT_OK(err, "fexit_second_attach");
- 
- cleanup:
- 	fexit_test_lskel__destroy(fexit_skel);
- }
-+
-+static void fexit_many_args(void)
-+{
-+	struct fexit_many_args *fexit_skel = NULL;
-+	int err;
-+
-+	fexit_skel = fexit_many_args__open_and_load();
-+	if (!ASSERT_OK_PTR(fexit_skel, "fexit_many_args_skel_load"))
-+		goto cleanup;
-+
-+	err = fexit_many_args__attach(fexit_skel);
-+	if (!ASSERT_OK(err, "fexit_many_args_attach"))
-+		goto cleanup;
-+
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
-+	ASSERT_EQ(fexit_skel->bss->test1_result, 1,
-+		  "fexit_many_args_result1");
-+	ASSERT_EQ(fexit_skel->bss->test2_result, 1,
-+		  "fexit_many_args_result2");
-+	ASSERT_EQ(fexit_skel->bss->test3_result, 1,
-+		  "fexit_many_args_result3");
-+
-+cleanup:
-+	fexit_many_args__destroy(fexit_skel);
-+}
-+
-+void test_fexit_test(void)
-+{
-+	if (test__start_subtest("fexit"))
-+		fexit_test();
-+	if (test__start_subtest("fexit_many_args"))
-+		fexit_many_args();
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-index 5d9955af6247..a70c99c2f8c8 100644
---- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-+++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-@@ -41,6 +41,10 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- 	ASSERT_EQ(skel->bss->fexit_result, 1, "modify_return fexit_result");
- 	ASSERT_EQ(skel->bss->fmod_ret_result, 1, "modify_return fmod_ret_result");
- 
-+	ASSERT_EQ(skel->bss->fentry_result2, 1, "modify_return fentry_result2");
-+	ASSERT_EQ(skel->bss->fexit_result2, 1, "modify_return fexit_result2");
-+	ASSERT_EQ(skel->bss->fmod_ret_result2, 1, "modify_return fmod_ret_result2");
-+
- cleanup:
- 	modify_return__destroy(skel);
- }
-@@ -49,9 +53,9 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- void serial_test_modify_return(void)
- {
- 	run_test(0 /* input_retval */,
--		 1 /* want_side_effect */,
--		 4 /* want_ret */);
-+		 2 /* want_side_effect */,
-+		 33 /* want_ret */);
- 	run_test(-EINVAL /* input_retval */,
- 		 0 /* want_side_effect */,
--		 -EINVAL /* want_ret */);
-+		 -EINVAL * 2 /* want_ret */);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 1c75a32186d6..fe0fb0c9849a 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -55,6 +55,25 @@ static void test_fentry(void)
- 
- 	ASSERT_EQ(skel->bss->t6, 1, "t6 ret");
- 
-+	ASSERT_EQ(skel->bss->t7_a, 16, "t7:a");
-+	ASSERT_EQ(skel->bss->t7_b, 17, "t7:b");
-+	ASSERT_EQ(skel->bss->t7_c, 18, "t7:c");
-+	ASSERT_EQ(skel->bss->t7_d, 19, "t7:d");
-+	ASSERT_EQ(skel->bss->t7_e, 20, "t7:e");
-+	ASSERT_EQ(skel->bss->t7_f_a, 21, "t7:f.a");
-+	ASSERT_EQ(skel->bss->t7_f_b, 22, "t7:f.b");
-+	ASSERT_EQ(skel->bss->t7_ret, 133, "t7 ret");
-+
-+	ASSERT_EQ(skel->bss->t8_a, 16, "t8:a");
-+	ASSERT_EQ(skel->bss->t8_b, 17, "t8:b");
-+	ASSERT_EQ(skel->bss->t8_c, 18, "t8:c");
-+	ASSERT_EQ(skel->bss->t8_d, 19, "t8:d");
-+	ASSERT_EQ(skel->bss->t8_e, 20, "t8:e");
-+	ASSERT_EQ(skel->bss->t8_f_a, 21, "t8:f.a");
-+	ASSERT_EQ(skel->bss->t8_f_b, 22, "t8:f.b");
-+	ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
-+	ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
-+
- 	tracing_struct__detach(skel);
- destroy_skel:
- 	tracing_struct__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/fentry_many_args.c b/tools/testing/selftests/bpf/progs/fentry_many_args.c
-new file mode 100644
-index 000000000000..b61bb92fee2c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_many_args.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Tencent */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u64 test1_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test7")
-+int BPF_PROG(test1, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g)
-+{
-+	test1_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22;
 +	return 0;
 +}
 +
-+__u64 test2_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test11")
-+int BPF_PROG(test2, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g, unsigned int h, long i, __u64 j, unsigned long k)
++static void
++irqfd_poll_func(struct file *file, wait_queue_head_t *wqh, poll_table *pt)
 +{
-+	test2_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26;
-+	return 0;
++	struct privcmd_kernel_irqfd *kirqfd =
++		container_of(pt, struct privcmd_kernel_irqfd, pt);
++
++	add_wait_queue_priority(wqh, &kirqfd->wait);
 +}
 +
-+__u64 test3_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test11")
-+int BPF_PROG(test3, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f,
-+	     __u64 g, __u64 h, __u64 i, __u64 j, __u64 k)
++static int privcmd_irqfd_assign(struct privcmd_irqfd *irqfd)
 +{
-+	test3_result = a == 16 && b == 17 && c == 18 && d == 19 &&
-+		e == 20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fexit_many_args.c b/tools/testing/selftests/bpf/progs/fexit_many_args.c
-new file mode 100644
-index 000000000000..53b335c2dafb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fexit_many_args.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Tencent */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
++	struct privcmd_kernel_irqfd *kirqfd, *tmp;
++	struct eventfd_ctx *eventfd;
++	__poll_t events;
++	struct fd f;
++	int ret;
 +
-+char _license[] SEC("license") = "GPL";
++	kirqfd = kzalloc(sizeof(*kirqfd), GFP_KERNEL);
++	if (!kirqfd)
++		return -ENOMEM;
 +
-+__u64 test1_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test7")
-+int BPF_PROG(test1, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g, int ret)
-+{
-+	test1_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && ret == 133;
-+	return 0;
-+}
++	kirqfd->irq = irqfd->irq;
++	kirqfd->dom = irqfd->dom;
++	kirqfd->level = irqfd->level;
++	INIT_LIST_HEAD(&kirqfd->list);
++	INIT_WORK(&kirqfd->shutdown, irqfd_shutdown);
 +
-+__u64 test2_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test11")
-+int BPF_PROG(test2, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g, unsigned int h, long i, __u64 j, unsigned long k,
-+	     int ret)
-+{
-+	test2_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26 && ret == 231;
-+	return 0;
-+}
++	f = fdget(irqfd->fd);
++	if (!f.file) {
++		ret = -EBADF;
++		goto error_kfree;
++	}
 +
-+__u64 test3_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test11")
-+int BPF_PROG(test3, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f,
-+	     __u64 g, __u64 h, __u64 i, __u64 j, __u64 k, __u64 ret)
-+{
-+	test3_result = a == 16 && b == 17 && c == 18 && d == 19 &&
-+		e == 20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26 && ret == 231;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
-index 8b7466a15c6b..3376d4849f58 100644
---- a/tools/testing/selftests/bpf/progs/modify_return.c
-+++ b/tools/testing/selftests/bpf/progs/modify_return.c
-@@ -47,3 +47,43 @@ int BPF_PROG(fexit_test, int a, __u64 b, int ret)
- 
- 	return 0;
- }
++	eventfd = eventfd_ctx_fileget(f.file);
++	if (IS_ERR(eventfd)) {
++		ret = PTR_ERR(eventfd);
++		goto error_fd_put;
++	}
 +
-+static int sequence2;
++	kirqfd->eventfd = eventfd;
 +
-+__u64 fentry_result2 = 0;
-+SEC("fentry/bpf_modify_return_test2")
-+int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
-+	     int g)
-+{
-+	sequence2++;
-+	fentry_result2 = (sequence2 == 1);
-+	return 0;
-+}
-+
-+__u64 fmod_ret_result2 = 0;
-+SEC("fmod_ret/bpf_modify_return_test2")
-+int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
-+	     int g, int ret)
-+{
-+	sequence2++;
-+	/* This is the first fmod_ret program, the ret passed should be 0 */
-+	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
-+	return input_retval;
-+}
-+
-+__u64 fexit_result2 = 0;
-+SEC("fexit/bpf_modify_return_test2")
-+int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
-+	     int g, int ret)
-+{
-+	sequence2++;
-+	/* If the input_reval is non-zero a successful modification should have
-+	 * occurred.
++	/*
++	 * Install our own custom wake-up handling so we are notified via a
++	 * callback whenever someone signals the underlying eventfd.
 +	 */
-+	if (input_retval)
-+		fexit_result2 = (sequence2 == 3 && ret == input_retval);
-+	else
-+		fexit_result2 = (sequence2 == 3 && ret == 29);
++	init_waitqueue_func_entry(&kirqfd->wait, irqfd_wakeup);
++	init_poll_funcptr(&kirqfd->pt, irqfd_poll_func);
++
++	mutex_lock(&irqfds_lock);
++
++	list_for_each_entry(tmp, &irqfds_list, list) {
++		if (kirqfd->eventfd == tmp->eventfd) {
++			ret = -EBUSY;
++			mutex_unlock(&irqfds_lock);
++			goto error_eventfd;
++		}
++	}
++
++	list_add_tail(&kirqfd->list, &irqfds_list);
++	mutex_unlock(&irqfds_lock);
++
++	/*
++	 * Check if there was an event already pending on the eventfd before we
++	 * registered, and trigger it as if we didn't miss it.
++	 */
++	events = vfs_poll(f.file, &kirqfd->pt);
++	if (events & EPOLLIN)
++		irqfd_inject(kirqfd);
++
++	/*
++	 * Do not drop the file until the kirqfd is fully initialized, otherwise
++	 * we might race against the EPOLLHUP.
++	 */
++	fdput(f);
++	return 0;
++
++error_eventfd:
++	eventfd_ctx_put(eventfd);
++
++error_fd_put:
++	fdput(f);
++
++error_kfree:
++	kfree(kirqfd);
++	return ret;
++}
++
++static int privcmd_irqfd_deassign(struct privcmd_irqfd *irqfd)
++{
++	struct privcmd_kernel_irqfd *kirqfd, *tmp;
++	struct eventfd_ctx *eventfd;
++
++	eventfd = eventfd_ctx_fdget(irqfd->fd);
++	if (IS_ERR(eventfd))
++		return PTR_ERR(eventfd);
++
++	mutex_lock(&irqfds_lock);
++
++	list_for_each_entry_safe(kirqfd, tmp, &irqfds_list, list) {
++		if (kirqfd->eventfd == eventfd) {
++			irqfd_deactivate(kirqfd);
++			break;
++		}
++	}
++
++	mutex_unlock(&irqfds_lock);
++
++	eventfd_ctx_put(eventfd);
++
++	/*
++	 * Block until we know all outstanding shutdown jobs have completed so
++	 * that we guarantee there will not be any more interrupts once this
++	 * deassign function returns.
++	 */
++	flush_workqueue(irqfd_cleanup_wq);
 +
 +	return 0;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-index c435a3a8328a..515daef3c84b 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-@@ -18,6 +18,11 @@ struct bpf_testmod_struct_arg_3 {
- 	int b[];
- };
- 
-+struct bpf_testmod_struct_arg_4 {
-+	u64 a;
-+	int b;
-+};
 +
- long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
- __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
- long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
-@@ -25,6 +30,9 @@ long t3_a, t3_b, t3_c_a, t3_c_b, t3_ret;
- long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
- long t5_ret;
- int t6;
-+long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
-+long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
++static long privcmd_ioctl_irqfd(struct file *file, void __user *udata)
++{
++	struct privcmd_data *data = file->private_data;
++	struct privcmd_irqfd irqfd;
 +
++	if (copy_from_user(&irqfd, udata, sizeof(irqfd)))
++		return -EFAULT;
++
++	/* No other flags should be set */
++	if (irqfd.flags & ~PRIVCMD_IRQFD_FLAG_DEASSIGN)
++		return -EINVAL;
++
++	/* If restriction is in place, check the domid matches */
++	if (data->domid != DOMID_INVALID && data->domid != irqfd.dom)
++		return -EPERM;
++
++	if (irqfd.flags & PRIVCMD_IRQFD_FLAG_DEASSIGN)
++		return privcmd_irqfd_deassign(&irqfd);
++
++	return privcmd_irqfd_assign(&irqfd);
++}
++
++static int privcmd_irqfd_init(void)
++{
++	irqfd_cleanup_wq = alloc_workqueue("privcmd-irqfd-cleanup", 0, 0);
++	if (!irqfd_cleanup_wq)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static void privcmd_irqfd_exit(void)
++{
++	struct privcmd_kernel_irqfd *kirqfd, *tmp;
++
++	mutex_lock(&irqfds_lock);
++
++	list_for_each_entry_safe(kirqfd, tmp, &irqfds_list, list)
++		irqfd_deactivate(kirqfd);
++
++	mutex_unlock(&irqfds_lock);
++
++	destroy_workqueue(irqfd_cleanup_wq);
++}
++
+ static long privcmd_ioctl(struct file *file,
+ 			  unsigned int cmd, unsigned long data)
+ {
+@@ -868,6 +1133,10 @@ static long privcmd_ioctl(struct file *file,
+ 		ret = privcmd_ioctl_mmap_resource(file, udata);
+ 		break;
  
- SEC("fentry/bpf_testmod_test_struct_arg_1")
- int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int, b, int, c)
-@@ -130,4 +138,50 @@ int BPF_PROG2(test_struct_arg_11, struct bpf_testmod_struct_arg_3 *, a)
++	case IOCTL_PRIVCMD_IRQFD:
++		ret = privcmd_ioctl_irqfd(file, udata);
++		break;
++
+ 	default:
+ 		break;
+ 	}
+@@ -992,15 +1261,27 @@ static int __init privcmd_init(void)
+ 	err = misc_register(&xen_privcmdbuf_dev);
+ 	if (err != 0) {
+ 		pr_err("Could not register Xen hypercall-buf device\n");
+-		misc_deregister(&privcmd_dev);
+-		return err;
++		goto err_privcmdbuf;
++	}
++
++	err = privcmd_irqfd_init();
++	if (err != 0) {
++		pr_err("irqfd init failed\n");
++		goto err_irqfd;
+ 	}
+ 
  	return 0;
++
++err_irqfd:
++	misc_deregister(&xen_privcmdbuf_dev);
++err_privcmdbuf:
++	misc_deregister(&privcmd_dev);
++	return err;
  }
  
-+SEC("fentry/bpf_testmod_test_struct_arg_7")
-+int BPF_PROG2(test_struct_arg_12, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f)
-+{
-+	t7_a = a;
-+	t7_b = (long)b;
-+	t7_c = c;
-+	t7_d = d;
-+	t7_e = (long)e;
-+	t7_f_a = f.a;
-+	t7_f_b = f.b;
-+	return 0;
-+}
+ static void __exit privcmd_exit(void)
+ {
++	privcmd_irqfd_exit();
+ 	misc_deregister(&privcmd_dev);
+ 	misc_deregister(&xen_privcmdbuf_dev);
+ }
+diff --git a/include/uapi/xen/privcmd.h b/include/uapi/xen/privcmd.h
+index d2029556083e..47334bb91a09 100644
+--- a/include/uapi/xen/privcmd.h
++++ b/include/uapi/xen/privcmd.h
+@@ -98,6 +98,18 @@ struct privcmd_mmap_resource {
+ 	__u64 addr;
+ };
+ 
++/* For privcmd_irqfd::flags */
++#define PRIVCMD_IRQFD_FLAG_DEASSIGN (1 << 0)
 +
-+SEC("fexit/bpf_testmod_test_struct_arg_7")
-+int BPF_PROG2(test_struct_arg_13, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f, int, ret)
-+{
-+	t7_ret = ret;
-+	return 0;
-+}
++struct privcmd_irqfd {
++	__u32 fd;
++	__u32 flags;
++	__u32 irq;
++	domid_t dom;
++	__u8 level;
++	__u8 pad;
++};
 +
-+SEC("fentry/bpf_testmod_test_struct_arg_8")
-+int BPF_PROG2(test_struct_arg_14, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f, int, g)
-+{
-+	t8_a = a;
-+	t8_b = (long)b;
-+	t8_c = c;
-+	t8_d = d;
-+	t8_e = (long)e;
-+	t8_f_a = f.a;
-+	t8_f_b = f.b;
-+	t8_g = g;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_test_struct_arg_8")
-+int BPF_PROG2(test_struct_arg_15, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f, int, g,
-+	      int, ret)
-+{
-+	t8_ret = ret;
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ /*
+  * @cmd: IOCTL_PRIVCMD_HYPERCALL
+  * @arg: &privcmd_hypercall_t
+@@ -125,5 +137,7 @@ struct privcmd_mmap_resource {
+ 	_IOC(_IOC_NONE, 'P', 6, sizeof(domid_t))
+ #define IOCTL_PRIVCMD_MMAP_RESOURCE				\
+ 	_IOC(_IOC_NONE, 'P', 7, sizeof(struct privcmd_mmap_resource))
++#define IOCTL_PRIVCMD_IRQFD					\
++	_IOC(_IOC_NONE, 'P', 8, sizeof(struct privcmd_irqfd))
+ 
+ #endif /* __LINUX_PUBLIC_PRIVCMD_H__ */
 -- 
-2.40.1
+2.31.1.272.g89b43f80a514
 
