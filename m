@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920A2750C79
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCE7750C7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjGLPaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S232587AbjGLPbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjGLPaS (ORCPT
+        with ESMTP id S232559AbjGLPbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:30:18 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030C81BD5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:30:17 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-666e916b880so3599026b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:30:16 -0700 (PDT)
+        Wed, 12 Jul 2023 11:31:03 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D051D1BE2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:30:53 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb7769f15aso11612112e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689175816; x=1691767816;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=loka7yyam4HH4hk5o77esG6TL283l3EmLjPyoPIKm/E=;
-        b=nc07v8jEidhBLwyehKkHTpbfeCgLDkXx4cFAUn8xa2dTdXPGDXqCtqTreOsjII8P2a
-         YOb7hHtVXlagsGhk3uF6zgI12dg+0pmzQNrjufPZIdoR7iFCN4damvTqhjvmSfjiACNk
-         noZr+GKgZAmuR6uHD77kVE0PC9AwczMjhzSuTi20G7t6UJpssqdlbW1YwQ4Spe87d9+p
-         FIAsAqFhWW4vDBzxn87K1JxP13fvxFckagmpTP4sAj1RJL/Y/1xQW499nfQIiIhqcbLH
-         In9quvnpwJkpAGATPd87VMbXe8hS7yrrrPbr4+mapIFN2SOxFNaa6TceU8eakVCYcWi0
-         y5eA==
+        d=linaro.org; s=google; t=1689175852; x=1691767852;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5FApRcAbKU3D+hMPXf1fqvobd8bBItL8xQBsYQGqYbg=;
+        b=XiJpjGY/f2JchBKGpVyqD04K+WjJ6SQfb795/ayMXwBtsOl1D5pIHUY5VbOom9j3wg
+         o2IIAa+kuwDtO7h6A5TaWel5Mi09Zb4yfqVks2p4ro5FbEpV9YZpLCZRKNBuUoc2aw0e
+         NVfgtkMK2PMsKJuXjvaiRHTdybO9X8KNCCIAPKpboDXryOn59EsOg+XrGDZHANg5buJ0
+         Y8vW+wYRfp5eB8t/h7id3YsrVCHCkehDP1FfGG3VU04rqpqnOIpIXcNmcAAUH+A6chbs
+         6D6OnAloCCByl3zRVjwBYx97rYDu8k4dFICaSM363vRz0wAaj7N4SdeU3DIgWOvUONvS
+         nxnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689175816; x=1691767816;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loka7yyam4HH4hk5o77esG6TL283l3EmLjPyoPIKm/E=;
-        b=l0U8gmqBsdnR/GgifDGqkQ1lsLX1Nf+myAciJSdl+KeaYgP7exdOsrd2eB0WIRjx2L
-         g3DMXAvo54UU1TB6VL0XfmbN7T39vwT5mXIzRmANuE8eOcXKKu0gCXA2mNSw3/yIxWlG
-         MPL0r9cu0CsKdb3Qx/D/1BbLehpoYQBXPR3FzC05RUOmqbEYj9AfQGpyrddDqClD1FGk
-         VYOxhifN3UkDlx9xEUVx+Yab+O62gtIMy04XhL3srw39GH7l7twPX+3jq07S+Xs02cmj
-         s5Xa/Eq4cTI0twAtEHScCm8ew99JoL3Zytfs2gZnNiIVfLrrDZ6LjoBYVM/hkURsNcdo
-         NYeg==
-X-Gm-Message-State: ABy/qLbndb9mInv+ZHfN+OOpNIMYbRnvC0YGuZg1hcx6Omnz9Q32zR7g
-        /QHj9kiH+oF8EGu8wSfrHmZ/
-X-Google-Smtp-Source: APBJJlH7b4UCDOU8YjQreDELwjYmIJ8MtN4tTdRE4VqJyUBoQtRp52SogLW/SJHoRn59x8mW+JwQfg==
-X-Received: by 2002:a05:6a00:148b:b0:67a:8f2a:2cb2 with SMTP id v11-20020a056a00148b00b0067a8f2a2cb2mr18306254pfu.20.1689175816352;
-        Wed, 12 Jul 2023 08:30:16 -0700 (PDT)
-Received: from thinkpad ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id n18-20020a62e512000000b0064d57ecaa1dsm3772892pff.28.2023.07.12.08.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 08:30:15 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 21:00:03 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: dwc: Provide deinit callback for i.MX
-Message-ID: <20230712153003.GF102757@thinkpad>
-References: <20230712-pci-imx-regulator-cleanup-v2-1-3b1f6e9d26bc@kernel.org>
+        d=1e100.net; s=20221208; t=1689175852; x=1691767852;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5FApRcAbKU3D+hMPXf1fqvobd8bBItL8xQBsYQGqYbg=;
+        b=howkaVsqKxCwtmd7iYoS1O+55c7FSNr+CaU//kPsCQhCYtpOEb/SLWiCD+9PdwF4lU
+         OdCHLRCMaE3GHJU8eccBLV1WOKopErKtKVIxl7dcUXeB9OrTV+d7uhAFEvIJLenlGGAA
+         3IzUicE7rb9TUvQDDXOHy3T+nFgltRDSRDnd5hf4P1AFFJSbTNRaZbq8Wf27Ubeiif2Q
+         Rfgagb4iorrZnzg2pXw5LQBVLt+j0+83iQzmemq7Rk79NgV2pLj8QoOpq873VLiM4pmz
+         uex7Vn8eBBZRnyK7+as9Q8PyhtCZGmX2oIAVPsVGpGxVulIsbbGgNK05BMnIG/9oyr/k
+         t7vg==
+X-Gm-Message-State: ABy/qLbwo2yj4WjHWoeLfGwoz24pL17L6vGSwg5DVOpFP2nVIVdGUzOW
+        qQIL4g9ix9vaQE/4m6/YVnCzqgNKhGdnGJl/IYl+Tw==
+X-Google-Smtp-Source: APBJJlHURxrcGvzm9de9OQNp5GQvfExUmVyKnB0KwvjWfMufAHlivX2Wx5QN2BcQOBm2y6WovYKB+2pqxHJZ0S1b2+U=
+X-Received: by 2002:a19:4f42:0:b0:4fb:7de4:c837 with SMTP id
+ a2-20020a194f42000000b004fb7de4c837mr15457897lfk.68.1689175851897; Wed, 12
+ Jul 2023 08:30:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230712-pci-imx-regulator-cleanup-v2-1-3b1f6e9d26bc@kernel.org>
+References: <20230706135144.324311-1-vincent.guittot@linaro.org> <20230711154718.gudn32sru5opwvlw@airbuntu>
+In-Reply-To: <20230711154718.gudn32sru5opwvlw@airbuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 12 Jul 2023 17:30:39 +0200
+Message-ID: <CAKfTPtC2NyZcVukzsYAEdhyxv__AURVuJ1JUoh8NGBmq0mL1hQ@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: remove util_est boosting
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -84,60 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 12:02:57PM +0100, Mark Brown wrote:
-> The i.MX integration for the DesignWare PCI controller has a _host_exit()
-> operation which undoes everything that the _host_init() operation does but
-> does not wire this up as the host_deinit callback for the core, or call it
-> in any path other than suspend. This means that if we ever unwind the
-> initial probe of the device, for example because it fails, the regulator
-> core complains that the regulators for the device were left enabled:
-> 
-> imx6q-pcie 33800000.pcie: iATU: unroll T, 4 ob, 4 ib, align 64K, limit 16G
-> imx6q-pcie 33800000.pcie: Phy link never came up
-> imx6q-pcie 33800000.pcie: Phy link never came up
-> imx6q-pcie: probe of 33800000.pcie failed with error -110
-> ------------[ cut here ]------------
-> WARNING: CPU: 2 PID: 46 at drivers/regulator/core.c:2396 _regulator_put+0x110/0x128
-> 
-> Wire up the callback so that the core can clean up after itself.
-> 
-> Reviewed-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Tested-by: Fabio Estevam <festevam@gmail.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On Tue, 11 Jul 2023 at 17:47, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> On 07/06/23 15:51, Vincent Guittot wrote:
+> > There is no need to use runnable_avg when estimating util_est and that
+> > even generates wrong behavior because one includes blocked tasks whereas
+> > the other one doesn't. This can lead to accounting twice the waking task p,
+> > once with the blocked runnable_avg and another one when adding its
+> > util_est.
+> >
+> > cpu's runnable_avg is already used when computing util_avg which is then
+> > compared with util_est.
+> >
+> > In some situation, feec will not select prev_cpu but another one on the
+> > same performance domain because of higher max_util
+> >
+> > Fixes: 7d0583cf9ec7 ("sched/fair, cpufreq: Introduce 'runnable boosting'")
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+>
+> Can we verify the numbers that introduced this magic boost are still valid
+> please?
 
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+TBH I don't expect it but I agree it's worth checking. Dietmar could
+you rerun your tests with this change ?
 
-- Mani
-
-> ---
-> Changes in v2:
-> - Rebase onto v6.5-rc1.
-> - Link to v1: https://lore.kernel.org/r/20230703-pci-imx-regulator-cleanup-v1-1-b6c050ae2bad@kernel.org
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 27aaa2a6bf39..a18c20085e94 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -1040,6 +1040,7 @@ static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
->  
->  static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
->  	.host_init = imx6_pcie_host_init,
-> +	.host_deinit = imx6_pcie_host_exit,
->  };
->  
->  static const struct dw_pcie_ops dw_pcie_ops = {
-> 
-> ---
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> change-id: 20230703-pci-imx-regulator-cleanup-a17c8fd15ec5
-> 
-> Best regards,
-> -- 
-> Mark Brown <broonie@kernel.org>
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+>
+> Otherwise LGTM.
+>
+>
+> Thanks!
+>
+> --
+>
+> Qais Yousef
+>
+> >  kernel/sched/fair.c | 3 ---
+> >  1 file changed, 3 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index a80a73909dc2..77c9f5816c31 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -7289,9 +7289,6 @@ cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
+> >
+> >               util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
+> >
+> > -             if (boost)
+> > -                     util_est = max(util_est, runnable);
+> > -
+> >               /*
+> >                * During wake-up @p isn't enqueued yet and doesn't contribute
+> >                * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
+> > --
+> > 2.34.1
+> >
