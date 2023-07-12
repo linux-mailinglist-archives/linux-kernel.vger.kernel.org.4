@@ -2,144 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC62A75028F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10592750295
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbjGLJMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S232806AbjGLJMt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jul 2023 05:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGLJMJ (ORCPT
+        with ESMTP id S229610AbjGLJMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:12:09 -0400
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E588FB;
-        Wed, 12 Jul 2023 02:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=To:References:Message-Id:Content-Transfer-Encoding:Cc:Date:
-        In-Reply-To:From:Subject:Mime-Version:Content-Type:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=aQra3Uq/mkNc3te3ij718BXDMrPqbP8wZ5ecEv6aL4k=;
-        b=SIGrgma6Kq5y2QQwAagG/1vXkByFdmBj98YZy8r2KaSM66jDgH/fKCNjxzQfoMxyg1EKK2zLFbs
-        7GQQiTnRXBzRY4oIbnTbUDxo0D9AeK5M32rjCgxg2gpywg6EQqYT401JRObGezIWEJY4md1kyaD3f
-        B/nxt8uwDa/qSBY7OXUHkIU2c+HI4R64MVqh80oJywklq7ToWne4JxWuzNvb2qYxDb43PKjQPt236
-        +dG1H3ZeLU/g9+1K0IDhEmosWD3olRaD8RuTQnttK8gQ+2/LP/u8FtdKD2m4IGB6yqyEQAG2+Tat2
-        ZLN3A3MQ/EZqIZB8P3VQOFSNy3NsAToBtBJQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sean@geanix.com>)
-        id 1qJVtF-000EK2-De; Wed, 12 Jul 2023 11:12:05 +0200
-Received: from [2a06:4004:10df:0:6cc7:3173:9f32:f330] (helo=smtpclient.apple)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sean@geanix.com>)
-        id 1qJVtE-00048P-N4; Wed, 12 Jul 2023 11:12:04 +0200
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH v3 7/8] dt-bindings: arm: stm32: add extra SiP compatible
- for oct,stm32mp157c-osd32-red
-From:   Sean Nyekjaer <sean@geanix.com>
-In-Reply-To: <92f7f4cd-c9cc-8a1a-74c7-39eed955cd6a@pengutronix.de>
-Date:   Wed, 12 Jul 2023 11:11:53 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Wed, 12 Jul 2023 05:12:44 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFC8F9;
+        Wed, 12 Jul 2023 02:12:43 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso7771951276.2;
+        Wed, 12 Jul 2023 02:12:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689153163; x=1691745163;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K9F/x6582lk37reIeB18SnK4WCkuUe1D9J8p4xQoxLk=;
+        b=GyZpZxu9DfV8ebVuI9GfzgPn/5x6Xy2uhg1RwBR1aQIhMcxCgSlxgmvOC1qv401ZvF
+         5cxbSeZGrpoGTHh4r3UXjw/89Aq7mKROxYImuI6sBraty4Z52pYd4eDGpgXg9+huzSMb
+         zuItOLPHHfqaJ9YN9O7IyHqov17trzCeeTyj69lyEi1PHzZEhCOVpeKh4IisPF735w6c
+         VOs9jFYqaz6Hwi3DIMbWW9JNRcDmJjtlV0MuL7Y/Zm82+cloLHTDIy33DgTQGsSiBH4n
+         dtRDyr7/UvgFxgD8vtE74K4t475U1lZEbtV0vZZTneNcTPUnq2udnvFB4JSa5rEsUfwD
+         HMTA==
+X-Gm-Message-State: ABy/qLYaqOGxo3lsRARw9V0dSkUU6R2erOKak0Q993ZBtns2lOt0pj+9
+        6InVTWHiZwkyVuvPb5UVlJ2BYZin/CgFsA==
+X-Google-Smtp-Source: APBJJlFXS1MAWsa3tSyUiLO/LR1WxuGeQRENeoebikp/W8MX90mLJPrpyHYkg4Y/kxrNaaY6iFU7cA==
+X-Received: by 2002:a25:adda:0:b0:c76:173c:6718 with SMTP id d26-20020a25adda000000b00c76173c6718mr11346245ybe.1.1689153162722;
+        Wed, 12 Jul 2023 02:12:42 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id p8-20020a25f448000000b00c62e0df7ca8sm856853ybe.24.2023.07.12.02.12.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 02:12:42 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so7771211276.3;
+        Wed, 12 Jul 2023 02:12:42 -0700 (PDT)
+X-Received: by 2002:a25:4c85:0:b0:c24:4536:1723 with SMTP id
+ z127-20020a254c85000000b00c2445361723mr17223170yba.26.1689153162357; Wed, 12
+ Jul 2023 02:12:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230712-squealer-walmart-9587342ddec1@wendy>
+In-Reply-To: <20230712-squealer-walmart-9587342ddec1@wendy>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jul 2023 11:12:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWzHSPRjJRyj0BWEBD6t6MMmRSzkbu9coGZS4bcd8yEjA@mail.gmail.com>
+Message-ID: <CAMuHMdWzHSPRjJRyj0BWEBD6t6MMmRSzkbu9coGZS4bcd8yEjA@mail.gmail.com>
+Subject: Re: [PATCH v1] riscv: dts: renesas: clean up dtbs_check W=1 warning
+ due to empty phy node
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     conor@kernel.org, Magnus Damm <magnus.damm@gmail.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dantuguf14105@gmail.com, Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <92C36A18-F359-497E-8267-03E5C62811F6@geanix.com>
-References: <20230712062954.2194505-1-sean@geanix.com>
- <20230712062954.2194505-7-sean@geanix.com>
- <92f7f4cd-c9cc-8a1a-74c7-39eed955cd6a@pengutronix.de>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-Authenticated-Sender: sean@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26967/Wed Jul 12 09:28:32 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 12, 2023 at 10:15 AM Conor Dooley
+<conor.dooley@microchip.com> wrote:
+> dtbs_check w/ W=1 complains:
+> Warning (unit_address_vs_reg): /soc/ethernet@11c20000/ethernet-phy@7: node has a unit name, but no reg or ranges property
+> Warning (avoid_unnecessary_addr_size): /soc/ethernet@11c20000: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+>
+> The ethernet@11c20000 node is guarded by an `#if (!SW_ET0_EN_N)` in
+> rzg2ul-smarc-som.dtsi, where the phy child node is added. In
+> rzfive-smarc-som.dtsi, the ethernet node is marked disabled & the
+> interrupt properties are deleted from the phy child node. As a result,
+> the produced dts looks like:
+>         ethernet@11c20000 {
+>                 compatible = "renesas,r9a07g043-gbeth\0renesas,rzg2l-gbeth";
+>                 /* snip */
+>                 #address-cells = <0x01>;
+>                 #size-cells = <0x00>;
+>                 status = "disabled";
+>
+>                 ethernet-phy@7 {
+>                 };
+>         };
+>
+> Adding a corresponding `#if (!SW_ET0_EN_N)` around the node in
+> rzfive-smarc-som.dtsi avoids the complaint, as the empty child node is
+> not added:
+>         ethernet@11c20000 {
+>                 compatible = "renesas,r9a07g043-gbeth\0renesas,rzg2l-gbeth";
+>                 /* snip */
+>                 #address-cells = <0x01>;
+>                 #size-cells = <0x00>;
+>                 status = "disabled";
+>         };
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.6.
 
-> On 12 Jul 2023, at 10.38, Ahmad Fatoum <a.fatoum@pengutronix.de> =
-wrote:
->=20
-> Hello Sean,
->=20
-> On 12.07.23 08:29, Sean Nyekjaer wrote:
->> Add binding support for the Octavo OSD32MP1-RED development board.
->>=20
->> General features:
->> - STM32MP157C
->> - 512MB DDR3
->> - CAN-FD
->> - HDMI
->> - USB-C OTG
->> - UART
->>=20
->> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
->> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> Just a heads up: The LXA TAC, another OSD32MP1 board has been merged =
-into
-> stm32-next yesterday, so applying your series onto that tree may =
-result
-> in conflicts. You may want to rebase for v4.
->=20
-> Cheers,
-> Ahmad
+Gr{oetje,eeting}s,
 
-Thanks, will do :)
+                        Geert
 
-Can I get you to look at 4/8, 5/8 and 6/8 in this series? Will they =
-break anything for LXA TAC?
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-/Sean
-
->=20
->=20
->> ---
->> Documentation/devicetree/bindings/arm/stm32/stm32.yaml | 3 ++-
->> 1 file changed, 2 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml =
-b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->> index 13e34241145b..55e45db1af26 100644
->> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->> @@ -143,7 +143,8 @@ properties:
->>       - description: Octavo OSD32MP15x System-in-Package based boards
->>         items:
->>           - enum:
->> -              - lxa,stm32mp157c-mc1 # Linux Automation MC-1
->> +              - lxa,stm32mp157c-mc1       # Linux Automation MC-1
->> +              - oct,stm32mp157c-osd32-red # Octavo OSD32MP1 RED =
-board
->>           - const: oct,stm32mp15xx-osd32
->>           - enum:
->>               - st,stm32mp157
->=20
-> --=20
-> Pengutronix e.K.                           |                           =
-  |
-> Steuerwalder Str. 21                       | =
-http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0  =
-  |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   =
-+49-5121-206917-5555 |
-
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
