@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71B7750A36
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B71750A35
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbjGLN6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S232717AbjGLN6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbjGLN6N (ORCPT
+        with ESMTP id S233319AbjGLN6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:58:13 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF851BE4;
-        Wed, 12 Jul 2023 06:58:05 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51e5da802afso3814328a12.3;
-        Wed, 12 Jul 2023 06:58:05 -0700 (PDT)
+        Wed, 12 Jul 2023 09:58:08 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0EA19A7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:58:01 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso5329701a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689170284; x=1691762284;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZQMNrclAvbBRhoVuUDnVsRXEIxi79plmNKhRa3O3DBM=;
-        b=HQvvqi0OUTWIdNrva1Tjj8y2tOJS10SHIVs1TIJzV3j50yz5mHRmEzrpAqXP+VJ9QD
-         An6/xGn1l/lshfiSqMikHIu7uUId2liQ9MbMYDdFljMWIf1N4uioQwA83muAgKs6+kRf
-         0XH3gmfSrcx8RLiCc14vqlAHQ7CSjHTqa+mV6dkYboG9Mgj4ITzLmJiWxjZLxwbsfAJM
-         aDGF07OxV52iGmj0h/MRR/EmruaoHiZL33kQ0MzVupYUx/eR0lPJIf7CZwS/DDTyd/yA
-         5c6fhGHwYogiWW14EQW5DptXk11CEo+9wLsCE6wJ90HPmjlgbUTvLSBxBdMV+8FCwLka
-         yJkQ==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1689170281; x=1691762281;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5oC9OkzryYNUsrIJJk91LArI6yaBglzBIZ57i2Rttt4=;
+        b=0I6prQ+o9hBKlVQK65s7zJ7P1j/BlSBXRgq9K89ET4q1kyAVoaQNR057+BT5H0+Fcq
+         sE9AyJJP2iqUTpTvQhPV30I84yZm8zaxaV4tFF5Dbwg6bFr2Smh0E5Ed1NmksRxcTInD
+         gKswgUhD4v7fWEpGm/hxipkDqNxf85J2bdnuH0emePe9I3bOTrvB7kFM0J7dyfgmELvj
+         P5aY3YG3ZtRdiU3OK6jUTjqzTK0/RlW5GR4/zP1+/ogqDLhgJ3WnzTztmsthnyDusg1s
+         z3H3A2BfuKxZlqDxtNJNjpaEM3BvwKAN8aIH9YPfMlA9+srHGi8GmOeuW2U/b9EY96yQ
+         A1lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689170284; x=1691762284;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZQMNrclAvbBRhoVuUDnVsRXEIxi79plmNKhRa3O3DBM=;
-        b=VJUzqD44dDP40c+KaXlB8c9dse9FyS037FxzUY309mI/wqaskKazl6EoHKijenj2Gd
-         /cgtFzOFf9cF7pRIYB7vmE4UA8dsnC0HoRX3sm4STNK5lIa4oozLvUKkaHE63qCXo95L
-         q0XxlRfrvwbrl4Hi2208X6a2J9ORFEji6nkHHHlttHwKASJi32lU0+U0PkGd5LSa07E2
-         4l1QBxbPzQB0foQc9frV8zvkzZZEieDkn/bclk6+b2bR3XB8WVwTMADZuOIlTI0HULIx
-         RnxO4itwwwQjomrE5IjCZDvQa7jBkq9T+FsMSZl+xZ2zwhtyELmlJVNopCxQebJHD9PJ
-         laPg==
-X-Gm-Message-State: ABy/qLZjnGlWdC0SxTQPv3wIR7Wa+RGpC2pzYVn6nAr33xnSg7VxVMj4
-        Uspe0vwAoUhlG44I5AzXOAuu2htpoZCy/INssfDKaUb3oDFypg==
-X-Google-Smtp-Source: APBJJlHt79RDWYwWyxdwpwmNbYK4JBEubv4rtJYHkdFRlAy5aWbuuA20bhUVo7hGir8i0MlX9DbzkpHyxnnOGoV7Nkg=
-X-Received: by 2002:aa7:d74f:0:b0:51d:9905:6f60 with SMTP id
- a15-20020aa7d74f000000b0051d99056f60mr16391700eds.41.1689170283768; Wed, 12
- Jul 2023 06:58:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230712134853.1044134-1-haowenchao2@huawei.com>
-In-Reply-To: <20230712134853.1044134-1-haowenchao2@huawei.com>
-From:   Wenchao Hao <haowenchao22@gmail.com>
-Date:   Wed, 12 Jul 2023 21:57:55 +0800
-Message-ID: <CAOptpSN6ce=1Ydmux3zrkNhOJ-JPZ+Pp-yP1CnWf5sT8Lo1qXg@mail.gmail.com>
-Subject: Re: [PATCH] NFS: Fix memleak in nfs_sysfs_move_sb_to_server
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wenchao Hao <haowenchao2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        d=1e100.net; s=20221208; t=1689170281; x=1691762281;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5oC9OkzryYNUsrIJJk91LArI6yaBglzBIZ57i2Rttt4=;
+        b=Ns1hlDXQSeC/xONzPiO1Shs1PQ1tAZRzYlRftsLnV28QAsbNak+Qxn2SagE12dpsgl
+         89G+DNI4pVNgF0civmbpna/N0ojbaC7TRR1oJYnGCjMMaFBCRHnqlABD/iTaJFbJzrS2
+         LNY9AcJk5pRJ7DMv7ipMbRteydlXS1nuEI6e7FSFmIrNNL1ZwJgpyKEoW7bdlmKZiv50
+         Oho+FjGjmOUMMhVe74rer1toCydlMSQIlo17jEcBviq3sdNJKXtyV7lz1WkuyUcFciXd
+         4/utLjJt6AMT1pSszzrfDSDUFeAho+z5zPN0xd5xJMg503qUWArXheh4G7wKPb9sX2Iy
+         W8Kg==
+X-Gm-Message-State: ABy/qLY7bNZ9PBcNqFZqaX4BJEjx1jmnnrJuOsKLf80oVEGbP5uhXeAL
+        hYJnpkTv5Azs4NMiZXWCpwUPNw==
+X-Google-Smtp-Source: APBJJlGMmRhlspwbc2SXLIA/EgEjHhFgOkiHVK6IGfF+ogbpCjLazhHNp932RmH00pOHrbsBL79krA==
+X-Received: by 2002:a17:90a:b011:b0:263:4164:dfba with SMTP id x17-20020a17090ab01100b002634164dfbamr17923406pjq.6.1689170280755;
+        Wed, 12 Jul 2023 06:58:00 -0700 (PDT)
+Received: from localhost ([50.38.6.230])
+        by smtp.gmail.com with ESMTPSA id g7-20020a63b147000000b00553b9e0510esm3551363pgp.60.2023.07.12.06.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 06:58:00 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 06:58:00 -0700 (PDT)
+X-Google-Original-Date: Wed, 12 Jul 2023 06:57:13 PDT (-0700)
+Subject:     Re: [PATCH] riscv: correct pt_level name via pgtable_l5/4_enabled
+In-Reply-To: <a7bb09c9-870a-d8f2-23c3-7f6fd2c68e2b@ghiti.fr>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        alexghiti@rivosinc.com, Bjorn Topel <bjorn@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alex@ghiti.fr, suagrfillet@gmail.com
+Message-ID: <mhng-05add620-8132-496a-a514-4b78c78b3694@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,63 +72,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 9:48=E2=80=AFPM Wenchao Hao <haowenchao22@gmail.com=
-> wrote:
+On Tue, 11 Jul 2023 04:14:10 PDT (-0700), alex@ghiti.fr wrote:
+> Hi Song,
 >
-> call kfree() to free memory allocated in kasprintf() to fix
-> memleak. It's easy to recurrent this memleak, just mount and
-> remount nfs at NFS client.
 >
+> On 11/07/2023 12:52, Song Shuai wrote:
+>> The pt_level uses CONFIG_PGTABLE_LEVELS to display page table names.
+>> But if downgrading page mode from kernel cmdline in 64BIT, it will
+>> give a wrong name.
+>>
+>> Like, using no4lvl for sv39, ptdump named the 1G-mapping as "PUD"
+>> that should be "PGD":
+>>
+>> 0xffffffd840000000-0xffffffd900000000    0x00000000c0000000         3G PUD     D A G . . W R V
+>>
+>> So select "P4D/PUD" or "PGD" via pgtable_l5/4_enabled to correct it.
+>>
+>> Fixes: 26e7aacb83df ("riscv: Allow to downgrade paging mode from the command line")
+>> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+>> ---
+>>   arch/riscv/mm/ptdump.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
+>> index 20a9f991a6d7..cfdd327981ee 100644
+>> --- a/arch/riscv/mm/ptdump.c
+>> +++ b/arch/riscv/mm/ptdump.c
+>> @@ -384,6 +384,11 @@ static int __init ptdump_init(void)
+>>
+>>   	kernel_ptd_info.base_addr = KERN_VIRT_START;
+>>
+>> +#ifdef CONFIG_64BIT
+>> +	pg_level[1].name = pgtable_l5_enabled ? "P4D" : "PGD";
+>> +	pg_level[2].name = pgtable_l4_enabled ? "PUD" : "PGD";
+>> +#endif
+>
+>
+> You don't need the #ifdef here as pgtable_lX_enabled are always declared.
+>
+>
+>> +
+>>   	for (i = 0; i < ARRAY_SIZE(pg_level); i++)
+>>   		for (j = 0; j < ARRAY_SIZE(pte_bits); j++)
+>>   			pg_level[i].mask |= pte_bits[j].mask;
+>
+>
+> The Fixes tag is wrong to me, if satp mode is restricted by the hardware
+> itself (not from the command line), the same problem happens. Maybe that
+> should be the sv48 introduction patch? Or the sv57? It will be more
+> cumbersome to backport with the sv48 introduction though as this patch
+> won't apply as-is.
 
-I did not check the mail list before send this patch, Benjamin
-Coddingto has fixed
-it, so ignore this  please.
+Sometimes it's easier to base the fix on the original offending commit 
+and then forward-port it via a merge, I haven't looked at this one to 
+know for sure though.
 
-> The bug is detected by kmemleak with following stack:
-> unreferenced object 0xffffa31a91fdf2c0 (size 16):
->   comm "mount.nfs", pid 960, jiffies 4294724478 (age 111892.067s)
->   hex dump (first 16 bytes):
->     73 65 72 76 65 72 2d 30 00 f2 fd 91 1a a3 ff ff  server-0........
->   backtrace:
->     [<00000000de9b21a9>] create_object+0x11/0x17
->     [<00000000ed17aa96>] kmemleak_alloc+0x6c/0x7a
->     [<000000009f4acc69>] slab_post_alloc_hook.constprop.0+0x81/0x99
->     [<00000000d2446455>] __kmem_cache_alloc_node+0x10c/0x13a
->     [<00000000eca4a704>] __kmalloc_node_track_caller+0x83/0xb7
->     [<0000000076cdb22f>] kvasprintf+0x65/0xc3
->     [<00000000f6f2e879>] kasprintf+0x4e/0x69
->     [<00000000e49d03be>] nfs_sysfs_move_sb_to_server+0x24/0x5f
->     [<0000000039127597>] nfs_kill_super+0x25/0x49
->     [<00000000e6ecf809>] deactivate_locked_super+0x35/0x74
->     [<000000003b9c3350>] deactivate_super+0x3c/0x44
->     [<00000000777c86be>] cleanup_mnt+0x6c/0xe7
->     [<000000009f181749>] __cleanup_mnt+0x12/0x18
->     [<00000000a709602e>] task_work_run+0x75/0x8c
->     [<0000000075da06ba>] exit_to_user_mode_prepare+0x79/0x102
->     [<0000000093a53d48>] syscall_exit_to_user_mode+0x1c/0x30
+> Otherwise, you can add:
 >
-> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
-> ---
->  fs/nfs/sysfs.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Thanks.
+
+Song: do you have a v2 that addresses the comments?
+
 >
-> diff --git a/fs/nfs/sysfs.c b/fs/nfs/sysfs.c
-> index acda8f033d30..bf378ecd5d9f 100644
-> --- a/fs/nfs/sysfs.c
-> +++ b/fs/nfs/sysfs.c
-> @@ -345,8 +345,10 @@ void nfs_sysfs_move_sb_to_server(struct nfs_server *=
-server)
->         int ret =3D -ENOMEM;
+> Thanks,
 >
->         s =3D kasprintf(GFP_KERNEL, "server-%d", server->s_sysfs_id);
-> -       if (s)
-> +       if (s) {
->                 ret =3D kobject_rename(&server->kobj, s);
-> +               kfree(s);
-> +       }
->         if (ret < 0)
->                 pr_warn("NFS: rename sysfs %s failed (%d)\n",
->                                         server->kobj.name, ret);
-> --
-> 2.35.3
->
+> Alex
