@@ -2,96 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E07750AB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BA5750AB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjGLOWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S232108AbjGLOWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjGLOWS (ORCPT
+        with ESMTP id S229993AbjGLOWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:22:18 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B5B12E
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hNojfaeHD+yrJAfrSYxA2Q8X5xc6RjcCbY6fFnfWjYM=; b=M/htLnYcOEEz6NgTH+HZW+QcUA
-        x/3Mp/J1pnIq2n0pbpPrWbFvIeah8PsS71ml9hc7Ob649/zxzzSMxORszXK5KFQVtnS2rqWDJNO1z
-        dzI40Vd9EQIkF+KXfbf4JuA2ZYYU1Izue4Lb2N/I9Csghpqh5z8Knh4BSO2/8Oun77HDsarSgzKms
-        bAUjxUO7lmplmiTwb0V5BMdnf4jGZxPr6gnxVG84vR3RtgibMgSVdYs3cYE9sHQ9/Fp4NXeQNgOwo
-        xJFnMN7tqfezvYv/QTqyIwyfuo5dy0zwNdtgfza3Ou/VITW3bcVu8DZvZsZeplfzOMKjlmjmuT/6T
-        NePXFHMA==;
-Received: from [177.34.168.16] (helo=[192.168.0.8])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qJaiz-00D93L-Iw; Wed, 12 Jul 2023 16:21:49 +0200
-Message-ID: <598d39ca-c1be-a57f-9ab5-d90403c78cd0@igalia.com>
-Date:   Wed, 12 Jul 2023 11:21:42 -0300
+        Wed, 12 Jul 2023 10:22:20 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD615E70;
+        Wed, 12 Jul 2023 07:22:17 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4370EC0004;
+        Wed, 12 Jul 2023 14:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689171736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S9jnw+toN9EeY6OX+EqtUPKBA1qAOSWPjY0T6FQGzUo=;
+        b=Sml7oRqc9FZlkoUmkEJGPnsbtSld3wIs8bdyNwNO3A/p6Zm7gkJBa7lHYIzKDTXSzcAARU
+        ezXwOKvNUdJ2OsegmyMWUq5uQJp/8JNcPfa2C0a6EWyLPOgAqRZcoHLifgKaQKmP1kPTiR
+        A8TcFoz8RlLmzNWYSZdy2odLYy3wOU9WAFZli+wv9NpuZlXnVQjg0Xtgn+Xc1gheECOSwq
+        4lytmkfg1bNObDxe0OmV7z2koGH5cgQlQu+wvmetH5o9t8Gl7mTi2Zdug3fdTPVUGfheTq
+        Om2IKD9N1Q2cyqygFCsCeQtmnVXY4SnXgF7nWDxctmesF5T+Lh/maatPyz5j8g==
+Date:   Wed, 12 Jul 2023 16:22:13 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Pintu Agarwal <pintu.ping@gmail.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-fsdevel@kvack.org, ezequiel@collabora.com, bjorn@mork.no
+Subject: Re: MTD: Lots of mtdblock warnings on bootup logs
+Message-ID: <20230712162213.79bc889c@xps-13>
+In-Reply-To: <CAOuPNLizjBp_8ceKq=RLznXdsHD-+N55RoPh_D7_Mpkg7M-BwQ@mail.gmail.com>
+References: <CAOuPNLizjBp_8ceKq=RLznXdsHD-+N55RoPh_D7_Mpkg7M-BwQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/gem-fb-helper: Consistenly use drm_dbg_kms()
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <7c2182b365c5b0a574744a2832e0209aa1fc009e.1689169087.git.geert+renesas@glider.be>
-From:   Maira Canal <mcanal@igalia.com>
-In-Reply-To: <7c2182b365c5b0a574744a2832e0209aa1fc009e.1689169087.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/23 10:42, Geert Uytterhoeven wrote:
-> All debug messages in drm_gem_framebuffer_helper.c use drm_dbg_kms(),
-> except for one, which uses drm_dbg().
-> Replace the outlier by drm_dbg_kms() to restore consistency.
-> 
-> Fixes: c91acda3a380bcaf ("drm/gem: Check for valid formats")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi Pintu,
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+pintu.ping@gmail.com wrote on Wed, 12 Jul 2023 19:29:39 +0530:
 
-Thanks for sending this fix!
+> Hi,
+>=20
+> We are getting below warning messages in dmesg logs on a NAND device
+> for every raw partition.
+> Kernel: 5.15 ; arm64 ; NAND + ubi + squashfs
+> We have some RAW partitions and one UBI partition (with ubifs/squashfs vo=
+lumes).
+>=20
+> We are seeing large numbers of these logs on the serial console that
+> impact the boot time.
+> [....]
+> [    9.667240][    T9] Creating 58 MTD partitions on "1c98000.nand":
+> [....]
+> [   39.975707][  T519] mtdblock: MTD device 'uefi_a' is NAND, please
+> consider using UBI block devices instead.
+> [   39.975707][  T519] mtdblock: MTD device 'uefi_b' is NAND, please
+> consider using UBI block devices instead.
+> [....]
+>=20
+> This was added as part of this commit:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/d=
+rivers/mtd/mtdblock.c?h=3Dv5.15.120&id=3Df41c9418c5898c01634675150696da290f=
+b86796
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/d=
+rivers/mtd/mtdblock.c?h=3Dv5.15.120&id=3De07403a8c6be01857ff75060b2df9a1aa8=
+320fe5
+>=20
+> I think this warning was decided after my last year's discussion about
+> mtdblock vs ubiblock for squashfs.
+>=20
+> But these are raw NAND partitions and not mounted by us.
+>=20
+> What is the exact meaning of these warnings ?
 
-Best Regards,
-- Maíra
+mtdblock is legacy, ubiblock is better (on NAND devices).
 
-> ---
->   drivers/gpu/drm/drm_gem_framebuffer_helper.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_gem_framebuffer_helper.c b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
-> index b8a615a138cd675f..3bdb6ba37ff42fb6 100644
-> --- a/drivers/gpu/drm/drm_gem_framebuffer_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
-> @@ -168,8 +168,8 @@ int drm_gem_fb_init_with_funcs(struct drm_device *dev,
->   	if (drm_drv_uses_atomic_modeset(dev) &&
->   	    !drm_any_plane_has_format(dev, mode_cmd->pixel_format,
->   				      mode_cmd->modifier[0])) {
-> -		drm_dbg(dev, "Unsupported pixel format %p4cc / modifier 0x%llx\n",
-> -			&mode_cmd->pixel_format, mode_cmd->modifier[0]);
-> +		drm_dbg_kms(dev, "Unsupported pixel format %p4cc / modifier 0x%llx\n",
-> +			    &mode_cmd->pixel_format, mode_cmd->modifier[0]);
->   		return -EINVAL;
->   	}
->   
+> We have both these configs enabled:
+> CONFIG_MTD_BLOCK=3Dy
+> CONFIG_MTD_UBI_BLOCK=3Dy
+>=20
+> Through this warning, are we telling that only one of the above config
+> should be enabled ?
+
+If you don't need both, then yes.
+
+> And the recommendation is to use ubi_block and disable mtd_block ?
+
+Yes.
+
+> We are already using ubiblock for mounting squashfs volumes.
+> But how to get rid of these warnings for raw NAND partitions ?
+>=20
+> Is there a way to avoid or we are missing something which we are not awar=
+e of?
+>=20
+
+In theory the warning should only appear if you open the device (IOW,
+only if you use it). For this to happen, you need:
+96a3295c351d ("mtdblock: warn if opened on NAND")
+This commit was maybe not backported to stable kernels, you can send it
+to stable@vger.kernel.org in order to ask for that. I also see that the
+mtdblock_ro path was not corrected, maybe that's also a problem in your
+case? Same, you can adapt the above patch and send it upstream.
+
+Thanks,
+Miqu=C3=A8l
