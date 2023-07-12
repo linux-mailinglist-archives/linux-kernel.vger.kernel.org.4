@@ -2,139 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9937501F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B123E7501F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbjGLIny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S231651AbjGLIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGLInu (ORCPT
+        with ESMTP id S230360AbjGLIq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:43:50 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDBCBE;
-        Wed, 12 Jul 2023 01:43:47 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6ff1ada5dso107261361fa.2;
-        Wed, 12 Jul 2023 01:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689151425; x=1691743425;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qVexWb2xIiXfUmTRUoCRaVuTZQZYZCzaepAYfAfny6A=;
-        b=S8H1DZo6S6oQzSMdoqsaJsn2wsCdkpAS6Wr+I3Kjxr3lDPbQ85eUpKWcgRsiITqLdQ
-         wJzAQW7baTZr9RBhSDA+HatQjx591NVZ0LVv2rZ3d+oVGHVGJU1ESDjlbDeLUZbMG9PC
-         5cIppAmouxuH+LNS/TDrZDNHY7QtcYT3i098pf+E9c6S6108x7oGjCdNgbdCqYOkPpcI
-         sq1NLvXLSvzbFoDXtp50/1gCHTZ2qksUvh2apFoqTCB+NzJEJLUvXTPgI541YmkVjDgl
-         Kl1X26JqNjAJ276rAWr/sPACtx47sZ0k9EKq8H3qM805xZjIrCbqWDmzJaTgq+X6ct8P
-         NlAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689151425; x=1691743425;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qVexWb2xIiXfUmTRUoCRaVuTZQZYZCzaepAYfAfny6A=;
-        b=T2sBb8cCixc0yhHesMMZysRPX+yawoUXWyYprgZpvzPLKos8xJCxK21qoXErozz8sp
-         37kyNc44FUehJmTHbgRVwYZmfv3ku6YTiNNFA1m7UaWE9fvnhfUCD0O14aiHABGc7Q08
-         Zru+LUsvuq81KMK3NoKnIx90KYQWVypgkdaIJs2WTUsT9JMn+zjqZ08yKx4VSfKKZJY2
-         DGWH2ZH7dLh8kP93eV9t5igDUoqT2qPP0884fe/xh7fFbfogTNimN0U39mE/sjxyJJfy
-         IXakryvOqsneEeJ4XZ7/USfDvjaO/3fXmi9px6ylfVLz2aIu4ckyRjhbpIoyc4vZybc6
-         2Ceg==
-X-Gm-Message-State: ABy/qLbCvISypUt3u9RXI/dsdCpnyQN+pKTncmu1yuPKmxJ9YJZxrLUG
-        Z5x2KygC4btUiv64tClHejD+2YRdsNE=
-X-Google-Smtp-Source: APBJJlHYyuAaAq9x1E+AS9xHlZdQSOvaU3bH2T8KCkjCt4c+/0MdGf1zMrqalHo9Eu8nEvUrqhQTIA==
-X-Received: by 2002:a2e:a16e:0:b0:2b6:cf6f:159e with SMTP id u14-20020a2ea16e000000b002b6cf6f159emr15173716ljl.44.1689151425348;
-        Wed, 12 Jul 2023 01:43:45 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.82.245])
-        by smtp.gmail.com with ESMTPSA id l24-20020a2e8698000000b00295a96a0f6csm826389lji.102.2023.07.12.01.43.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 01:43:44 -0700 (PDT)
-Subject: Re: [PATCH v1] riscv: dts: renesas: clean up dtbs_check W=1 warning
- due to empty phy node
-To:     Conor Dooley <conor.dooley@microchip.com>, geert+renesas@glider.be
-Cc:     conor@kernel.org, Magnus Damm <magnus.damm@gmail.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230712-squealer-walmart-9587342ddec1@wendy>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <18871eff-f2be-9eed-ee4c-99eba87686d8@gmail.com>
-Date:   Wed, 12 Jul 2023 11:43:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 12 Jul 2023 04:46:59 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1B94;
+        Wed, 12 Jul 2023 01:46:56 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69E2F1BF205;
+        Wed, 12 Jul 2023 08:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689151615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aibOqbCHqtQ94rqSgA1NeKBgTC97ZqqxHBicTgNuv6A=;
+        b=UUueM1MlhMbkJR87nN22cscz6BjMaeuTtQFICC2Q+v2VeISpIjF8ivjCngL2bZ0D7pY4zt
+        0xrJjVZI33zMvveQtlKndfcHg2hBps1mDBy2C/WdE+RnDfZ9DzVqvfZX4+pp/63V9ybl43
+        WlBBVSJ7QgTZztNbJVvQWu4FW4pBEZWeA9wg6/CswSZwmo3mJWXxdnZSwL+YbgtAmCi5zx
+        wvaVaieooJEAtsh559on7i1jPAFrgahRlfjsrdltJOUT3c3HppqBtiI0CgHIoXUVds32zS
+        KvNEijzloMHe2y8ffIr1rVlE1Mpa9rJRYo+ynS8VM4TkHdaBSkHSzpQqFuwVVA==
+Date:   Wed, 12 Jul 2023 10:46:49 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/27] thermal/drivers/armada: Convert to platform
+ remove callback returning void
+Message-ID: <20230712104649.3d843fb3@xps-13>
+In-Reply-To: <20230712081258.29254-2-frank.li@vivo.com>
+References: <20230712081258.29254-1-frank.li@vivo.com>
+        <20230712081258.29254-2-frank.li@vivo.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20230712-squealer-walmart-9587342ddec1@wendy>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hi Yangtao,
 
-On 7/12/23 11:14 AM, Conor Dooley wrote:
+frank.li@vivo.com wrote on Wed, 12 Jul 2023 16:12:33 +0800:
 
-> dtbs_check w/ W=1 complains:
-> Warning (unit_address_vs_reg): /soc/ethernet@11c20000/ethernet-phy@7: node has a unit name, but no reg or ranges property
-> Warning (avoid_unnecessary_addr_size): /soc/ethernet@11c20000: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
-> 
-> The ethernet@11c20000 node is guarded by an `#if (!SW_ET0_EN_N)` in
-> rzg2ul-smarc-som.dtsi, where the phy child node is added. In
-> rzfive-smarc-som.dtsi, the ethernet node is marked disabled & the
-> interrupt properties are deleted from the phy child node. As a result,
-> the produced dts looks like:
-> 	ethernet@11c20000 {
-> 		compatible = "renesas,r9a07g043-gbeth\0renesas,rzg2l-gbeth";
-> 		/* snip */
-> 		#address-cells = <0x01>;
-> 		#size-cells = <0x00>;
-> 		status = "disabled";
-> 
-> 		ethernet-phy@7 {
-> 		};
-> 	};
-> 
-> Adding a corresponding `#if (!SW_ET0_EN_N)` around the node in
-> rzfive-smarc-som.dtsi avoids the complaint, as the empty child node is
-> not added:
-> 	ethernet@11c20000 {
-> 		compatible = "renesas,r9a07g043-gbeth\0renesas,rzg2l-gbeth";
-> 		/* snip */
-> 		#address-cells = <0x01>;
-> 		#size-cells = <0x00>;
-> 		status = "disabled";
-> 	};
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-[...]
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+>=20
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Cc: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-> diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> index d6f18754eb5d..c62debc7ca7e 100644
-> --- a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> @@ -22,6 +22,7 @@ &dmac {
->  	status = "disabled";
->  };
->  
-> +#if (!SW_ET0_EN_N)
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-   Are the parens really needed here?
+> ---
+>  drivers/thermal/armada_thermal.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_th=
+ermal.c
+> index 9f6dc4fc9112..94783e374d37 100644
+> --- a/drivers/thermal/armada_thermal.c
+> +++ b/drivers/thermal/armada_thermal.c
+> @@ -964,19 +964,17 @@ static int armada_thermal_probe(struct platform_dev=
+ice *pdev)
+>  	return 0;
+>  }
+> =20
+> -static int armada_thermal_exit(struct platform_device *pdev)
+> +static void armada_thermal_exit(struct platform_device *pdev)
+>  {
+>  	struct armada_drvdata *drvdata =3D platform_get_drvdata(pdev);
+> =20
+>  	if (drvdata->type =3D=3D LEGACY)
+>  		thermal_zone_device_unregister(drvdata->data.tz);
+> -
+> -	return 0;
+>  }
+> =20
+>  static struct platform_driver armada_thermal_driver =3D {
+>  	.probe =3D armada_thermal_probe,
+> -	.remove =3D armada_thermal_exit,
+> +	.remove_new =3D armada_thermal_exit,
+>  	.driver =3D {
+>  		.name =3D "armada_thermal",
+>  		.of_match_table =3D armada_thermal_id_table,
 
->  &eth0 {
->  	status = "disabled";
->  
-[...]
 
-MBR, Sergey
+Thanks,
+Miqu=C3=A8l
