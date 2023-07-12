@@ -2,71 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCA2750D20
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C325750D24
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbjGLPw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S233399AbjGLPxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbjGLPw4 (ORCPT
+        with ESMTP id S231592AbjGLPxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:52:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02AEA2;
-        Wed, 12 Jul 2023 08:52:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D89361888;
-        Wed, 12 Jul 2023 15:52:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13465C433C8;
-        Wed, 12 Jul 2023 15:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689177174;
-        bh=r+kChX2C24ujI3cqakNo4nQuT6sumweAW1ikpYPWIbQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ovKo+lYenOpY2U9lxPuiwnm+74AOMO9ytQ6D3UE8i+Cirp8VTvzetCoBV71R3Vayq
-         zbRO8JjLmcBKMNDp8ZPTh2xRj722yRDlRbosN7lwkTmAqM0rtZnzqXHfBJkliu17ce
-         u8I0cXNF6M1w64dV1FLCeu4767UzOhKDYwGCQktzcgyu30XpbaKgSl+NEGt0BakcNC
-         JQaqnXmrgBcdcESBQ9vynD6Ch07OkGndL0Zbry2/cMvRwsbORStH1sOTi9j6kPxQHJ
-         xMeVzwAIrBjA/5T84pcpDPs3GqhRS/7K7RY+NbowcNE/RRta17f9lcSO2kk3DQAAXj
-         +p81lS6HYCyEA==
-Date:   Wed, 12 Jul 2023 17:52:50 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/11] i2c: st: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <20230712155250.6aageby5dqmep24m@intel.intel>
-References: <20230710063351.17490-1-frank.li@vivo.com>
- <20230710063351.17490-7-frank.li@vivo.com>
+        Wed, 12 Jul 2023 11:53:42 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0A01BD4;
+        Wed, 12 Jul 2023 08:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689177221; x=1720713221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JyJLilC7lSpSEXwLkk2Nl0wlhmfEXlOLLuDZFu3Vyj4=;
+  b=LlGe8hT6Be3025Jy/puWuho4C2+WxnOpoyTsEXyUl1j1H6zjuTnEyrsB
+   vZXjGiRVbyLxM/Zt+ViRNWW7tKft/5kEBvBcmh+bpwCETgHf9Un4hE5Hq
+   xG1an83yxIjbsWknLK5+hSyklAmJizy1qUyEQUBCjbsxp7awp+uKjmHCm
+   wLjoeEoU055OrKSXfWxPkKGlsMvMjXl9yS+zeBE9Pm3qEgKtDwO56j462
+   U7GHHf+h0J9+PDlG+v7l7737wS8xT46+pdldzM4iv7mwHNRjJU3N3ZmML
+   VnyJGWHfk2hdhbeYrISoyArVnUGjvqHRkxBVlG348qab7aXZoUHr7+UY+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="362391803"
+X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
+   d="scan'208";a="362391803"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 08:53:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="895674100"
+X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
+   d="scan'208";a="895674100"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 12 Jul 2023 08:53:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJc9o-002AZF-0w;
+        Wed, 12 Jul 2023 18:53:36 +0300
+Date:   Wed, 12 Jul 2023 18:53:36 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 12/13] ASoC: SOF: Intel: Convert to PCI device IDs defines
+Message-ID: <ZK7MgNH7KM7rHris@smile.fi.intel.com>
+References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
+ <20230711125726.3509391-13-amadeuszx.slawinski@linux.intel.com>
+ <ZK1kPXm+FieJ+vya@smile.fi.intel.com>
+ <ec6a8f88-ae94-21a5-ec01-013c68fd8feb@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230710063351.17490-7-frank.li@vivo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ec6a8f88-ae94-21a5-ec01-013c68fd8feb@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
+On Wed, Jul 12, 2023 at 02:16:17PM +0200, Amadeusz Sławiński wrote:
+> On 7/11/2023 4:16 PM, Andy Shevchenko wrote:
+> > On Tue, Jul 11, 2023 at 02:57:25PM +0200, Amadeusz Sławiński wrote:
 
-On Mon, Jul 10, 2023 at 02:33:46PM +0800, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+...
+
+> > Oh, additional remark below.
+
+> > > +	{ PCI_DEVICE_DATA(INTEL, HDA_APL, &bxt_desc) },
+> > > +	{ PCI_DEVICE_DATA(INTEL, HDA_APL_T, &bxt_desc) },
+> > 
+> > Have we ever had APL-T? What is that? I remember that we have had two or
+> > three BXTs inside, and then products become for Broxton and Apollo Lake
+> > SoC codenames. I never have heard about -T...
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> I've talked a bit with Cezary and it seems that 0x1a98 is BXT-M (not -T) and
+> it's an RVP, BXT-M B0 to be specific. From what we know no BXT is available
+> on market. Perhaps we can just remove it?
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+If you go this way, it should be in a separate patch and it seems it has
+already pre-cooked commit message (as per previous paragraph) :-)
 
-Andi
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
