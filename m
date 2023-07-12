@@ -2,76 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E0174FCF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 04:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5298F74FE11
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 06:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjGLCOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 22:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S231308AbjGLEEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 00:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGLCOS (ORCPT
+        with ESMTP id S229473AbjGLED6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 22:14:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033BAE55
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 19:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689128056; x=1720664056;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jOZlgulkaAhJj75ZTbddxJP9X6qs4DH4+rWBFfuBjtE=;
-  b=YL7FTdfHOUtYSCEcOSJ+qlAZAl+FOw51nYW7ro7bk2Lr6I4EDPsv+C9M
-   c3jJg4b/9nqLT7ZFF1gcRYNFcUlZNTHVUysMdwAryL0V+jO4CxOI5ehDd
-   LEpK0triyAHi2BCKCad4p+UA1DG5MfujFmcqi/WXjcIL1bj8FQK4S1oR5
-   DmlxkUwJWU6dAUOdR3z4dqznXxNRbp8Mt3yPv3GW+JdQusNaDd2Wp65uA
-   gU75HlBAvxeX7ulW1cIfhZjcWjemI4FHYAEXwC57v+pYTxDEhrDQ+Qszc
-   UCJKWc3IqRpzltK073+z9qq2fSCoPFB1rstcecDSPHKmGXqkW7vcNMeUo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="430908236"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="430908236"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 19:14:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="671657614"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="671657614"
-Received: from brentlu-desktop.itwn.intel.com ([10.5.252.92])
-  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2023 19:14:12 -0700
-From:   Brent Lu <brent.lu@intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Yong Zhi <yong.zhi@intel.com>,
-        Uday M Bhat <uday.m.bhat@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gongjun Song <gongjun.song@intel.com>,
-        Brent Lu <brent.lu@intel.com>,
-        Terry Cheong <htcheong@chromium.org>,
-        Mac Chiang <mac.chiang@intel.com>,
-        "Dharageswari . R" <dharageswari.r@intel.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] ASoC: Intel: sof_rt5682: add jsl_rt5650 board config
-Date:   Wed, 12 Jul 2023 18:08:55 +0800
-Message-Id: <20230712100855.272467-1-brent.lu@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 12 Jul 2023 00:03:58 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2080.outbound.protection.outlook.com [40.107.22.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3254F9B;
+        Tue, 11 Jul 2023 21:03:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dwpqGpsH0lwJGjlWLk+Do4SLqHdSeam2qTvzmtYnTo+I3faxc/nKfim+dxFhPqtCk3NRYU+Uyo4T+sVY6m3gcnB1BH3Dj04cI3cqItIuOjVQ/AIAd7s0rqQVbyw0UIK5AJpjusL261kh1HuWX55KNxfTSlAVXmrtD3N92RWUc1j7uh6b6BTTBki4rSSwfrriHVWGvRpgG94sYEQ1VlUG7GmBxfYZU5hYWKXnqW0GstNZ13R5h1CJG0xhCB4zOImSdCi2sI9ORjOebomRsubbZ+yF3UFDTw+j321e/J2ApwBd0bgjJeg2frEx9XzO/c5MsVI1+x989niLeALUDHuWHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rLc7ahvRf4/huSDKQ0+B7eoSgNypkZLh6J2x3saZdtM=;
+ b=Ga6kpLOsxGc/vLKtSOOLtKy2Zc2m3LAi36G6+Qob/5XPQ1+QHHBiA1hTKiQBHOSJAwJR9laNS7aAtxpYud8HW3pax/Q1w7Hbt/POsxSw8yeQb7TA1RuBZzEysjUOP+ndV8eBlkup/76U5X+fxNWIIFr4pbJTVtRpVn6v6WUQ/hHt+R17tpovk47NhEtNXjXpkLTPwc6wGPzJCd3vuiqGYtxOqJmRsNG+W1ILY6fomUTWH7WcQkItRdhznD2KOfjzA/sqhwQ1bmN3buiyD+b0CvRVQDOw/VjxXvEZUh+2emgcctbv2m+0N5iBmsGh55miMwrInbGU3T3E7KCGZr1S4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.74) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=siemens.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rLc7ahvRf4/huSDKQ0+B7eoSgNypkZLh6J2x3saZdtM=;
+ b=kQ4IHd2m+N92imMx/w7VSbWPrRK85hOZLBycMC77x+lCSTEMu4jujWWzX4kLSOO3uHjTTNRGRjpr5qELRzw65ARnVqwUNybOIiaySgpOpjsi8HLrTtzTyWVEf8hvpiA+4xEb+f3ztUpGOpViX9JKFlDyMyl3dRq6MBJA1+voeZQ/9kj8AB1zNVMfLs7BXHk2p/GVGGGp2Tt9Kr1qpGnsguL1oP8bpvkFlmYYLZ02xR8UouExKxcqwXkLeOvQYMiVX7MG+BP0TBkZhW9c0MZdjSUJX4DpNw5jmszEXTmBGF7PDuV5iSsx9EZqMQkhvR0MGgrUBtX6pELMF7TlMWQQYQ==
+Received: from GVYP280CA0018.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:fa::28)
+ by PRAPR10MB5153.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:29d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32; Wed, 12 Jul
+ 2023 04:03:54 +0000
+Received: from HE1EUR01FT053.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:150:fa:cafe::cc) by GVYP280CA0018.outlook.office365.com
+ (2603:10a6:150:fa::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20 via Frontend
+ Transport; Wed, 12 Jul 2023 04:03:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.74)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.74 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.74; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.74) by
+ HE1EUR01FT053.mail.protection.outlook.com (10.152.1.73) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.20 via Frontend Transport; Wed, 12 Jul 2023 04:03:53 +0000
+Received: from CNPEK01M09MSX.ad011.siemens.net (139.24.237.227) by
+ DEMCHDC8VQA.ad011.siemens.net (194.138.21.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 12 Jul 2023 06:03:50 +0200
+Received: from CNPEK01M03MSX.ad011.siemens.net (139.24.237.220) by
+ CNPEK01M09MSX.ad011.siemens.net (139.24.237.227) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 12 Jul 2023 12:03:48 +0800
+Received: from CNPEK01M03MSX.ad011.siemens.net ([139.24.237.220]) by
+ CNPEK01M03MSX.ad011.siemens.net ([139.24.237.220]) with mapi id
+ 15.01.2507.027; Wed, 12 Jul 2023 12:03:48 +0800
+From:   "Li, Hua Qian" <HuaQian.Li@siemens.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "kristo@kernel.org" <kristo@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "huaqianlee@gmail.com" <huaqianlee@gmail.com>,
+        "nm@ti.com" <nm@ti.com>, "vigneshr@ti.com" <vigneshr@ti.com>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Su, Bao Cheng" <baocheng.su@siemens.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] watchdog:rit_wdt: Add support for WDIOF_CARDRESET
+Thread-Topic: [PATCH v2 3/3] watchdog:rit_wdt: Add support for WDIOF_CARDRESET
+Thread-Index: AQHZs9iTW+HS9TjwuU6ojS6PQTnTFq+05GKAgAAZfwA=
+Date:   Wed, 12 Jul 2023 04:03:48 +0000
+Message-ID: <0d1b15b1016d451862b895f851c6c6c81472755f.camel@siemens.com>
+References: <20230711091713.1113010-1-huaqian.li@siemens.com>
+         <20230711091713.1113010-4-huaqian.li@siemens.com>
+         <165cf95b-663b-5dac-b686-a515f2111656@roeck-us.net>
+In-Reply-To: <165cf95b-663b-5dac-b686-a515f2111656@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [139.24.129.47]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <769C42A9F12F334E87B40B1F363FBEEF@siemens.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1EUR01FT053:EE_|PRAPR10MB5153:EE_
+X-MS-Office365-Filtering-Correlation-Id: e67d5cf7-016c-4f05-067f-08db828d019e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6uxeW+9VPK5I7bR3w+TN9fGx3GYOnxqPPd+cyd2HU/bow+k3F6QW8DN+X8cSyJ2h+reFgeYstPGZiW6VqEP+FvUXqPGekS3zdL+N1x8McqwDSGnNA3KRMq9a+X+2/lq2BeJgrGRdF8TD+lT1WziPbKu7dKPCd9NSnUXYwzT4zsQFADDlPMCPqpj2/QHearN4Q8LWtClM1ZDxrz4acSRc7vpqn0P/rYHKEluy1n7fnyIVh40PbnLqgFU7S2jxJWSffI1rAyol98n5hoQEX4rhClo5a50iRE/S0G8hO4JDxvhgsNNigFM1i8MQNeYTTuJDRvgbRcAAdHufDZgd+mn9uzFbKX38GeYFlokhRC5OkyrNRSwiacmvd/hinZLf/VU3XvQHuhPcbtdli8kXHmhj5M3ucQYg21T90KCmV1tskeqYdqJPvi6JStD0e+FNPEk1n6ENrqYfE7gm3wXM7Ksz4qCh6aSNkG970wF2u/3xVjq5cDmNBKGfaizj6ew10oP2mTc23BufQtCUKt7S9hPdfeWGIFfpKh6g158DIJgRbqKu6GoXkh7BtHYrY5Hdi5FT6iJFTrTfWe+NKEKdBa6rEpBUy9sWaZHfwVfUjWsH76yPM6ZCJo4+reJ/7fm7qnrbPUbvDoA0aDigXnkoz4v4pC5CFuvyv/ovFYOQl+9EvHHdv1PwFlCFJ3S/+LxiWZn12rht+Ze5GCiDUa+5raXFR3T9CuDgZnT/HeUt3iHzlG++7Vb+qKfnGlTrEnCNAhFG
+X-Forefront-Antispam-Report: CIP:194.138.21.74;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(39860400002)(136003)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(83380400001)(47076005)(36860700001)(2906002)(956004)(336012)(2616005)(36756003)(82310400005)(86362001)(82740400003)(7636003)(356005)(7596003)(82960400001)(40480700001)(41300700001)(4326008)(316002)(5660300002)(8936002)(8676002)(478600001)(70586007)(70206006)(54906003)(110136005)(26005)(186003)(7416002)(53546011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 04:03:53.1096
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e67d5cf7-016c-4f05-067f-08db828d019e
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.74];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT053.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PRAPR10MB5153
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,264 +127,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This configuration supports JSL boards which implement ALC5650 dual
-I2S interface codec. Two DAI links are added: AIF1 (on codec side) for
-headphone and AIF2 for speakers.
-
-Signed-off-by: Brent Lu <brent.lu@intel.com>
----
- sound/soc/intel/boards/Kconfig                |  5 +-
- sound/soc/intel/boards/sof_rt5682.c           | 80 ++++++++++++++++++-
- .../intel/common/soc-acpi-intel-jsl-match.c   | 12 +++
- 3 files changed, 93 insertions(+), 4 deletions(-)
-
-diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
-index f472f603ab75..1fe830af2b84 100644
---- a/sound/soc/intel/boards/Kconfig
-+++ b/sound/soc/intel/boards/Kconfig
-@@ -475,7 +475,7 @@ endif ## SND_SOC_INTEL_SKYLAKE_HDAUDIO_CODEC || SND_SOC_SOF_HDA_AUDIO_CODEC
- 
- if SND_SOC_SOF_HDA_LINK || SND_SOC_SOF_BAYTRAIL
- config SND_SOC_INTEL_SOF_RT5682_MACH
--	tristate "SOF with rt5682 codec in I2S Mode"
-+	tristate "SOF with rt5650/rt5682 codec in I2S Mode"
- 	depends on I2C && ACPI
- 	depends on ((SND_HDA_CODEC_HDMI && SND_SOC_SOF_HDA_AUDIO_CODEC) &&\
- 		    (MFD_INTEL_LPSS || COMPILE_TEST)) ||\
-@@ -485,6 +485,7 @@ config SND_SOC_INTEL_SOF_RT5682_MACH
- 	select SND_SOC_RT1011
- 	select SND_SOC_RT1015
- 	select SND_SOC_RT1015P
-+	select SND_SOC_RT5645
- 	select SND_SOC_RT5682_I2C
- 	select SND_SOC_RT5682S
- 	select SND_SOC_DMIC
-@@ -494,7 +495,7 @@ config SND_SOC_INTEL_SOF_RT5682_MACH
- 	select SND_SOC_INTEL_SOF_REALTEK_COMMON
- 	help
- 	   This adds support for ASoC machine driver for SOF platforms
--	   with rt5682 codec.
-+	   with rt5650 or rt5682 codec.
- 	   Say Y if you have such a device.
- 	   If unsure select "N".
- 
-diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
-index 7c034d671cf3..b4f07bdcf8b4 100644
---- a/sound/soc/intel/boards/sof_rt5682.c
-+++ b/sound/soc/intel/boards/sof_rt5682.c
-@@ -22,6 +22,7 @@
- #include <sound/soc-acpi.h>
- #include "../../codecs/rt5682.h"
- #include "../../codecs/rt5682s.h"
-+#include "../../codecs/rt5645.h"
- #include "../../codecs/hdac_hdmi.h"
- #include "../common/soc-intel-quirks.h"
- #include "hda_dsp_common.h"
-@@ -60,6 +61,7 @@
- #define SOF_MAX98390_SPEAKER_AMP_PRESENT	BIT(24)
- #define SOF_MAX98390_TWEETER_SPEAKER_PRESENT	BIT(25)
- #define SOF_RT1019_SPEAKER_AMP_PRESENT	BIT(26)
-+#define SOF_RT5650_HEADPHONE_CODEC_PRESENT	BIT(27)
- 
- 
- /* Default: MCLK on, MCLK 19.2M, SSP0  */
-@@ -305,6 +307,7 @@ static int sof_rt5682_codec_init(struct snd_soc_pcm_runtime *rtd)
- 	struct sof_card_private *ctx = snd_soc_card_get_drvdata(rtd->card);
- 	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
- 	struct snd_soc_jack *jack;
-+	int extra_jack_data;
- 	int ret;
- 
- 	/* need to enable ASRC function for 24MHz mclk rate */
-@@ -315,7 +318,16 @@ static int sof_rt5682_codec_init(struct snd_soc_pcm_runtime *rtd)
- 						 RT5682S_DA_STEREO1_FILTER |
- 						 RT5682S_AD_STEREO1_FILTER,
- 						 RT5682S_CLK_SEL_I2S1_ASRC);
--		else
-+		else if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT) {
-+			rt5645_sel_asrc_clk_src(component,
-+						RT5645_DA_STEREO_FILTER |
-+						RT5645_AD_STEREO_FILTER,
-+						RT5645_CLK_SEL_I2S1_ASRC);
-+			rt5645_sel_asrc_clk_src(component,
-+						RT5645_DA_MONO_L_FILTER |
-+						RT5645_DA_MONO_R_FILTER,
-+						RT5645_CLK_SEL_I2S2_ASRC);
-+		} else
- 			rt5682_sel_asrc_clk_src(component,
- 						RT5682_DA_STEREO1_FILTER |
- 						RT5682_AD_STEREO1_FILTER,
-@@ -365,7 +377,12 @@ static int sof_rt5682_codec_init(struct snd_soc_pcm_runtime *rtd)
- 	snd_jack_set_key(jack->jack, SND_JACK_BTN_1, KEY_VOICECOMMAND);
- 	snd_jack_set_key(jack->jack, SND_JACK_BTN_2, KEY_VOLUMEUP);
- 	snd_jack_set_key(jack->jack, SND_JACK_BTN_3, KEY_VOLUMEDOWN);
--	ret = snd_soc_component_set_jack(component, jack, NULL);
-+
-+	if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT) {
-+		extra_jack_data = SND_JACK_MICROPHONE | SND_JACK_BTN_0;
-+		ret = snd_soc_component_set_jack(component, jack, &extra_jack_data);
-+	} else
-+		ret = snd_soc_component_set_jack(component, jack, NULL);
- 
- 	if (ret) {
- 		dev_err(rtd->dev, "Headset Jack call-back failed: %d\n", ret);
-@@ -402,6 +419,8 @@ static int sof_rt5682_hw_params(struct snd_pcm_substream *substream,
- 
- 		if (sof_rt5682_quirk & SOF_RT5682S_HEADPHONE_CODEC_PRESENT)
- 			pll_source = RT5682S_PLL_S_MCLK;
-+		else if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT)
-+			pll_source = RT5645_PLL1_S_MCLK;
- 		else
- 			pll_source = RT5682_PLL1_S_MCLK;
- 
-@@ -422,6 +441,8 @@ static int sof_rt5682_hw_params(struct snd_pcm_substream *substream,
- 	} else {
- 		if (sof_rt5682_quirk & SOF_RT5682S_HEADPHONE_CODEC_PRESENT)
- 			pll_source = RT5682S_PLL_S_BCLK1;
-+		else if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT)
-+			pll_source = RT5645_PLL1_S_BCLK1;
- 		else
- 			pll_source = RT5682_PLL1_S_BCLK1;
- 
-@@ -431,6 +452,9 @@ static int sof_rt5682_hw_params(struct snd_pcm_substream *substream,
- 	if (sof_rt5682_quirk & SOF_RT5682S_HEADPHONE_CODEC_PRESENT) {
- 		pll_id = RT5682S_PLL2;
- 		clk_id = RT5682S_SCLK_S_PLL2;
-+	} else if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT) {
-+		pll_id = 0; /* not used in codec driver */
-+		clk_id = RT5645_SCLK_S_PLL1;
- 	} else {
- 		pll_id = RT5682_PLL1;
- 		clk_id = RT5682_SCLK_S_PLL1;
-@@ -559,11 +583,30 @@ static const struct snd_soc_dapm_route sof_map[] = {
- 	{ "IN1P", NULL, "Headset Mic" },
- };
- 
-+static const struct snd_soc_dapm_route rt5650_spk_dapm_routes[] = {
-+	/* speaker */
-+	{ "Left Spk", NULL, "SPOL" },
-+	{ "Right Spk", NULL, "SPOR" },
-+};
-+
- static const struct snd_soc_dapm_route dmic_map[] = {
- 	/* digital mics */
- 	{"DMic", NULL, "SoC DMIC"},
- };
- 
-+static int rt5650_spk_init(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_card *card = rtd->card;
-+	int ret;
-+
-+	ret = snd_soc_dapm_add_routes(&card->dapm, rt5650_spk_dapm_routes,
-+				      ARRAY_SIZE(rt5650_spk_dapm_routes));
-+	if (ret)
-+		dev_err(rtd->dev, "fail to add dapm routes, ret=%d\n", ret);
-+
-+	return ret;
-+}
-+
- static int dmic_init(struct snd_soc_pcm_runtime *rtd)
- {
- 	struct snd_soc_card *card = rtd->card;
-@@ -614,6 +657,17 @@ static struct snd_soc_dai_link_component rt5682s_component[] = {
- 	}
- };
- 
-+static struct snd_soc_dai_link_component rt5650_components[] = {
-+	{
-+		.name = "i2c-10EC5650:00",
-+		.dai_name = "rt5645-aif1",
-+	},
-+	{
-+		.name = "i2c-10EC5650:00",
-+		.dai_name = "rt5645-aif2",
-+	}
-+};
-+
- static struct snd_soc_dai_link_component dmic_component[] = {
- 	{
- 		.name = "dmic-codec",
-@@ -652,6 +706,9 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
- 	if (sof_rt5682_quirk & SOF_RT5682S_HEADPHONE_CODEC_PRESENT) {
- 		links[id].codecs = rt5682s_component;
- 		links[id].num_codecs = ARRAY_SIZE(rt5682s_component);
-+	} else if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT) {
-+		links[id].codecs = &rt5650_components[0];
-+		links[id].num_codecs = 1;
- 	} else {
- 		links[id].codecs = rt5682_component;
- 		links[id].num_codecs = ARRAY_SIZE(rt5682_component);
-@@ -804,6 +861,11 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
- 			links[id].init = max_98390_spk_codec_init;
- 			links[id].ops = &max_98390_ops;
- 
-+		} else if (sof_rt5682_quirk & SOF_RT5650_HEADPHONE_CODEC_PRESENT) {
-+			links[id].codecs = &rt5650_components[1];
-+			links[id].num_codecs = 1;
-+			links[id].init = rt5650_spk_init;
-+			links[id].ops = &sof_rt5682_ops;
- 		} else {
- 			max_98357a_dai_link(&links[id]);
- 		}
-@@ -890,6 +952,12 @@ static int sof_audio_probe(struct platform_device *pdev)
- 	/* Detect the headset codec variant */
- 	if (acpi_dev_present("RTL5682", NULL, -1))
- 		sof_rt5682_quirk |= SOF_RT5682S_HEADPHONE_CODEC_PRESENT;
-+	else if (acpi_dev_present("10EC5650", NULL, -1)) {
-+		sof_rt5682_quirk |= SOF_RT5650_HEADPHONE_CODEC_PRESENT;
-+
-+		sof_audio_card_rt5682.name = devm_kstrdup(&pdev->dev, "rt5650",
-+							  GFP_KERNEL);
-+	}
- 
- 	if (soc_intel_is_byt() || soc_intel_is_cht()) {
- 		is_legacy_cpu = 1;
-@@ -1178,6 +1246,14 @@ static const struct platform_device_id board_ids[] = {
- 					SOF_RT5682_SSP_AMP(0) |
- 					SOF_RT5682_NUM_HDMIDEV(3)),
- 	},
-+	{
-+		.name = "jsl_rt5650",
-+		.driver_data = (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
-+					SOF_RT5682_MCLK_24MHZ |
-+					SOF_RT5682_SSP_CODEC(0) |
-+					SOF_SPEAKER_AMP_PRESENT |
-+					SOF_RT5682_SSP_AMP(1)),
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(platform, board_ids);
-diff --git a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
-index f5c7e1bbded0..36ea2bacbe7d 100644
---- a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
-+++ b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
-@@ -34,6 +34,11 @@ static const struct snd_soc_acpi_codecs mx98360a_spk = {
- 	.codecs = {"MX98360A"}
- };
- 
-+static struct snd_soc_acpi_codecs rt5650_spk = {
-+	.num_codecs = 1,
-+	.codecs = {"10EC5650"}
-+};
-+
- static const struct snd_soc_acpi_codecs rt5682_rt5682s_hp = {
- 	.num_codecs = 2,
- 	.codecs = {"10EC5682", "RTL5682"},
-@@ -98,6 +103,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
- 					SND_SOC_ACPI_TPLG_INTEL_SSP_MSB |
- 					SND_SOC_ACPI_TPLG_INTEL_DMIC_NUMBER,
- 	},
-+	{
-+		.id = "10EC5650",
-+		.drv_name = "jsl_rt5650",
-+		.machine_quirk = snd_soc_acpi_codec_list,
-+		.quirk_data = &rt5650_spk,
-+		.sof_tplg_filename = "sof-jsl-rt5650-dual.tplg",
-+	},
- 	{},
- };
- EXPORT_SYMBOL_GPL(snd_soc_acpi_intel_jsl_machines);
--- 
-2.34.1
-
+T24gVHVlLCAyMDIzLTA3LTExIGF0IDE5OjMyIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOgo+
+IE9uIDcvMTEvMjMgMDI6MTcsIGh1YXFpYW4ubGlAc2llbWVucy5jb23CoHdyb3RlOgo+ID4gRnJv
+bTogTGkgSHVhIFFpYW4gPGh1YXFpYW4ubGlAc2llbWVucy5jb20+Cj4gPiAKPiA+IFRoaXMgcGF0
+Y2ggYWRkcyB0aGUgV0RJT0ZfQ0FSRFJFU0VUIHN1cHBvcnQgZm9yIHRoZSBwbGF0Zm9ybQo+ID4g
+d2F0Y2hkb2cKPiA+IHdob3NlIGhhcmR3YXJlIGRvZXMgbm90IHN1cHBvcnQgdGhpcyBmZWF0dXJl
+LCB0byBrbm93IGlmIHRoZSBib2FyZAo+ID4gcmVib290IGlzIGR1ZSB0byBhIHdhdGNoZG9nIHJl
+c2V0Lgo+ID4gCj4gPiBUaGlzIGlzIGRvbmUgdmlhIHJlc2VydmVkIG1lbW9yeShSQU0pLCB3aGlj
+aCBpbmRpY2F0ZXMgaWYgc3BlY2lmaWMKPiA+IGluZm8gc2F2ZWQsIHRyaWdnZXJpbmcgdGhlIHdh
+dGNoZG9nIHJlc2V0IGluIGxhc3QgYm9vdC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTGkgSHVh
+IFFpYW4gPGh1YXFpYW4ubGlAc2llbWVucy5jb20+Cj4gPiAtLS0KPiA+IMKgIGRyaXZlcnMvd2F0
+Y2hkb2cvcnRpX3dkdC5jIHwgNDgKPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrCj4gPiDCoCAxIGZpbGUgY2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBk
+aWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9ydGlfd2R0LmMKPiA+IGIvZHJpdmVycy93YXRj
+aGRvZy9ydGlfd2R0LmMKPiA+IGluZGV4IGNlOGYxOGU5M2FhOS4uNzdmZDZiNTQxMzdjIDEwMDY0
+NAo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9ydGlfd2R0LmMKPiA+ICsrKyBiL2RyaXZlcnMv
+d2F0Y2hkb2cvcnRpX3dkdC5jCj4gPiBAQCAtMTgsNiArMTgsNyBAQAo+ID4gwqAgI2luY2x1ZGUg
+PGxpbnV4L3BtX3J1bnRpbWUuaD4KPiA+IMKgICNpbmNsdWRlIDxsaW51eC90eXBlcy5oPgo+ID4g
+wqAgI2luY2x1ZGUgPGxpbnV4L3dhdGNoZG9nLmg+Cj4gPiArI2luY2x1ZGUgPGxpbnV4L29mLmg+
+Cj4gPiDCoCAKPiA+IMKgICNkZWZpbmUgREVGQVVMVF9IRUFSVEJFQVQgNjAKPiA+IMKgIAo+ID4g
+QEAgLTUyLDYgKzUzLDExIEBACj4gPiDCoCAKPiA+IMKgICNkZWZpbmUgRFdEU1TCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgQklUKDEpCj4gPiDCoCAKPiA+ICsjZGVmaW5lIFBPTl9S
+RUFTT05fU09GX05VTcKgwqDCoMKgwqAweEJCQkJDQ0NDCj4gPiArI2RlZmluZSBQT05fUkVBU09O
+X01BR0lDX05VTcKgwqDCoDB4REREREREREQKPiA+ICsjZGVmaW5lIFBPTl9SRUFTT05fRU9GX05V
+TcKgwqDCoMKgwqAweENDQ0NCQkJCCj4gPiArI2RlZmluZSBQT05fUkVBU09OX0lURU1fQklUU8Kg
+wqDCoDB4RkZGRkZGRkYKPiA+ICsKPiA+IMKgIHN0YXRpYyBpbnQgaGVhcnRiZWF0ID0gREVGQVVM
+VF9IRUFSVEJFQVQ7Cj4gPiDCoCAKPiA+IMKgIC8qCj4gPiBAQCAtMTk4LDYgKzIwNCwxMSBAQCBz
+dGF0aWMgaW50IHJ0aV93ZHRfcHJvYmUoc3RydWN0Cj4gPiBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHJ0aV93ZHRfZGV2aWNlICp3ZHQ7Cj4gPiDCoMKg
+wqDCoMKgwqDCoMKgc3RydWN0IGNsayAqY2xrOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHUzMiBsYXN0
+X3BpbmcgPSAwOwo+ID4gK8KgwqDCoMKgwqDCoMKgdTMyIHJlc2VydmVkX21lbV9zaXplOwo+ID4g
+K8KgwqDCoMKgwqDCoMKgdW5zaWduZWQgbG9uZyAqdmFkZHI7Cj4gPiArwqDCoMKgwqDCoMKgwqB1
+bnNpZ25lZCBsb25nIHBhZGRyOwo+ID4gK8KgwqDCoMKgwqDCoMKgdTMyIGRhdGFbM107Cj4gPiAr
+wqDCoMKgwqDCoMKgwqB1MzIgcmVnWzhdOwo+ID4gwqAgCj4gPiDCoMKgwqDCoMKgwqDCoMKgd2R0
+ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCp3ZHQpLCBHRlBfS0VSTkVMKTsKPiA+IMKgwqDC
+oMKgwqDCoMKgwqBpZiAoIXdkdCkKPiA+IEBAIC0yODQsNiArMjk1LDQzIEBAIHN0YXRpYyBpbnQg
+cnRpX3dkdF9wcm9iZShzdHJ1Y3QKPiA+IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiA+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+IMKg
+IAo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0ID0gb2ZfcHJvcGVydHlfcmVhZF92YXJpYWJsZV91MzJf
+YXJyYXkocGRldi0KPiA+ID5kZXYub2Zfbm9kZSwgInJlZyIsIHJlZywKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgMCwgQVJSQVlfU0laRShyZWcpKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChy
+ZXQgPCAwKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2VycihkZXYs
+ICJjYW5ub3QgcmVhZCB0aGUgcmVnIGluZm8uXG4iKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBnb3RvIGVycl9pb21hcDsKPiA+ICvCoMKgwqDCoMKgwqDCoH0KPiAKPiBUaGlz
+IGFib3J0cyBpZiB0aGUgcHJvcGVydHkgZG9lcyBub3QgZXhpc3QsIHdoaWNoIGlzIHVuYWNjZXB0
+YWJsZS4KPiBBbnkgc3VjaCBhZGRpdGlvbiBtdXN0IGJlIG9wdGlvbmFsLgpBZ3JlZSwgcmVmYWN0
+b3IgaXQuCj4gCj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqAvKgo+ID4gK8KgwqDCoMKgwqDCoMKg
+ICogSWYgcmVzZXJ2ZWQgbWVtb3J5IGlzIGRlZmluZWQgZm9yIHdhdGNoZG9nIHJlc2V0IGNhdXNl
+Lgo+ID4gK8KgwqDCoMKgwqDCoMKgICogUmVhZG91dCB0aGUgUG93ZXItb24oUE9OKSByZWFzb24g
+YW5kIHBhc3MgdG8gYm9vdHN0YXR1cy4KPiA+ICvCoMKgwqDCoMKgwqDCoCAqLwo+ID4gK8KgwqDC
+oMKgwqDCoMKgaWYgKHJldCA9PSA4KSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgcGFkZHIgPSByZWdbNV07Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVz
+ZXJ2ZWRfbWVtX3NpemUgPSByZWdbN107Cj4gCj4gSXQgc2VlbXMgb2RkIHRoYXQgcmVzZXJ2ZWRf
+bWVtX3NpemUgaXMgbm90IGNoZWNrZWQswqAKQUNLCj4gYW5kIHRoYXQgaXQgaXMgZXZlbiBwcm92
+aWRlZAo+IGdpdmVuIHRoYXQgaXQgbmVlZHMgdG8gYmUgKGF0IGxlYXN0KSAyNCBieXRlcywgYW5k
+IGFueSBvdGhlciB2YWx1ZQo+IGRvZXMgbm90IHJlYWxseQo+IG1ha2Ugc2Vuc2UuCj4gCkkgd2Fz
+IHRoaW5rZyB0byBhZGQgdGhlIHJlbGlhYmlsaXR5LCBidXQgaXQgc2VlbXMgdG8gYmUgdW5uZWNl
+c3NhcnkgYW5kCnBvaW50bGVzcy4gV2VyZSB5b3Ugc3VnZ2VzdGluZyB0aGF0IDggYnl0ZXMgYXJl
+IGVub3VnaD8KCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdmFkZHIgPSBtZW1y
+ZW1hcChwYWRkciwgcmVzZXJ2ZWRfbWVtX3NpemUsCj4gPiBNRU1SRU1BUF9XQik7Cj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHZhZGRyID09IE5VTEwpIHsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2VycihkZXYsICJG
+YWlsZWQgdG8gbWFwIG1lbW9yeS0KPiA+IHJlZ2lvbi5cbiIpOwo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIGVycl9pb21hcDsKPiAKPiBUaGlz
+IHJldHVybnMgOCwgd2hpY2ggd291bGQgYmUgYW4gb2RkIGVycm9yIHJldHVybi4KPiAKQUNLLHJl
+ZmFjdG9yIGl0Lgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KPiA+ICsKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhWzBdID0gKnZhZGRyICYgUE9OX1JF
+QVNPTl9JVEVNX0JJVFM7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YVsx
+XSA9ICoodmFkZHIgKyAxKSAmIFBPTl9SRUFTT05fSVRFTV9CSVRTOwo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGRhdGFbMl0gPSAqKHZhZGRyICsgMikgJiBQT05fUkVBU09OX0lU
+RU1fQklUUzsKPiA+ICsKPiAKPiBUaGUgJiBzZWVtcyBwb2ludGxlc3MgLyB3YXN0ZWZ1bC4gV2h5
+IGlnbm9yZSB0aGUgdXBwZXIgMzIgYml0cyBvZgo+IGVhY2ggbG9jYXRpb24gPwo+IEVpdGhlciBt
+YWtlIGl0IHUzMiBvciBtYWtlIGl0IHU2NCBhbmQgdXNlIHRoZSBlbnRpcmUgNjQgYml0LiBCZXNp
+ZGVzLAo+IHZhZGRyWzAuLjJdIHdvdWxkIG1ha2UgdGhlIGNvZGUgbXVjaCBlYXNpZXIgdG8gcmVh
+ZC4KPiAKQUNLLCByZWZhY3RvciBpdC4KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBkZXZfZGJnKGRldiwgIldhdGNoZG9nOiBzb2YgPSAlbFgsIGRhdGEgPSAlbFgsIGVvZgo+ID4g
+PSAlbFhcbiIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGRhdGFbMF0sIGRhdGFbMV0sIGRhdGFbMl0pOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGlmICgoZGF0YVswXSA9PSBQT05fUkVBU09OX1NPRl9OVU0pCj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICYmIChkYXRhWzFdID09IFBPTl9S
+RUFTT05fTUFHSUNfTlVNKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCAmJiAoZGF0YVsxXSA9PSBQT05fUkVBU09OX01BR0lDX05VTSkpIHsKPiAKPiBVbm5lY2Vzc2Fy
+eSBpbm5lciAoKSwgYW5kIEkgZG9uJ3Qgc2VlIHRoZSBwb2ludCBvZiBjaGVja2luZyBkYXRhWzFd
+Cj4gdHdpY2UuClllYWgsIGEgdHlwbyBoYXBwZW5lZC4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2luZm8oZGV2LCAiV2F0Y2hkb2cgcmVz
+ZXQgY2F1c2UKPiA+IGRldGVjdGVkLlxuIik7Cj4gCj4gVW5uZWNlc3Nhcnkgbm9pc2UuCkFDSyxy
+ZW5hbWUgZGV2X2luZm8gdG8gZGV2X2RiZy4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgd2RkLT5ib290c3RhdHVzIHw9IFdESU9GX0NBUkRSRVNF
+VDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgbWVtc2V0KHZhZGRyLCAwLCByZXNlcnZlZF9tZW1fc2l6ZSk7Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWVtdW5tYXAodmFkZHIpOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgfQo+IAo+IEFuZCBzb21lIHJhbmRvbSBkYXRhIGluIHRoZSBwcm9wZXJ0eSBp
+cyBhY2NlcHRhYmxlID8gVGhhdCBpcyBvZGQsCj4gZXNwZWNpYWxseQo+IGFmdGVyIG1hbmRhdGlu
+ZyB0aGUgcHJvcGVydHkgaXRzZWxmLgo+IApZZWFoLCBkbyB5b3UgaGF2ZSBhbnkgc3VnZ2VzdGlv
+bnMgYWJvdXQgaG93IHRvIHN0b3JlIHRoZSB3YXRjaGRvZwpyZXNldCBjYXVzZT8KCkJlc3QgcmVn
+YXJkcywKTGkgSHVhIFFpYW4KPiA+ICsKPiA+IMKgwqDCoMKgwqDCoMKgwqB3YXRjaGRvZ19pbml0
+X3RpbWVvdXQod2RkLCBoZWFydGJlYXQsIGRldik7Cj4gPiDCoCAKPiA+IMKgwqDCoMKgwqDCoMKg
+wqByZXQgPSB3YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2Uod2RkKTsKPiAKCg==
