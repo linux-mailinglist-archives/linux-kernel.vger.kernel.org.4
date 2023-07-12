@@ -2,86 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959E474FEE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694CE74FEDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 07:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjGLFs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 01:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S231535AbjGLFqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 01:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjGLFsZ (ORCPT
+        with ESMTP id S229718AbjGLFqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 01:48:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ED71734
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 22:48:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14FB4616B1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 05:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DF6C433C8;
-        Wed, 12 Jul 2023 05:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689140903;
-        bh=Ph89/PDCTb67KoGJxfj2/yR3pVcD15l3oyUTGy2LX7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B8AHyhd+uwAoolnd7MOHn1G1WfzKPRB4vE7T1IivHKtVsIFbFBF1RMtt44rOYsXd0
-         yCmc+3TpTPBfhV/kQzB4L0yip0EuEkMfuLZHvmg68fzkZWLjkkWA4mpk+ZMyNPHeud
-         4gYdaKiIq3sMFJy60e6UALdlvDIXsZEdnjPCxro+FuYOm47N9XpKlwRgdcxVflTbww
-         LK7ACKVhApjTx9qxsn1OekfdnX+y1pXdzc9OZlL0cCKbF7cLM/tl+pJE76vDI4jIvt
-         dTUXPssODeEoqwCkxEw9Qud+u7UWPWEwWYidofBe+vKcwgx2dVWmZg/nWXWnB5va0l
-         eVOsR2zwQPxyg==
-Date:   Wed, 12 Jul 2023 08:48:19 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     menglong8.dong@gmail.com, michael.chan@broadcom.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH net-next v2] bnxt_en: use dev_consume_skb_any() in
- bnxt_tx_int
-Message-ID: <20230712054819.GV41919@unreal>
-References: <20230711110743.39067-1-imagedong@tencent.com>
- <20230711200955.2d3a4494@kernel.org>
+        Wed, 12 Jul 2023 01:46:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FE71734;
+        Tue, 11 Jul 2023 22:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689140775; x=1720676775;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XDmxtgjF22hjZt3RXCpO8XNp3Xx7XXlQUG+MBO2cAg4=;
+  b=D7O7HgOP8jT6AYl6Ji0BVVJII6xkgTMGo4BohVHWm8YXlCWacbNCAoZ2
+   jl0kQ13b0TzKdlhICVpJYzpFpQwdN82mJDPkv4ohoEpkYGZJJuqvPum+x
+   BhYhmZOIP0I3HkgvZDTdaNtK3CnQJ4sMACEqfixk3SimpN9VpRukm5h0y
+   E/8ZeAtrAKPiSILjomeMLUzKNWZolqYYBq+XeN2ha8kJUBphd8mAtgRfQ
+   gOF1Fgxr58RscDRTZQV18KksYG26zzxoShjYG8IQszZXH0XTmISNypj0M
+   JmB5l0WIDSqZDopxc8N6jYvy+UZuhoYQgKj8PEkJWqStIdcLcc4zrmhvi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="354712561"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="354712561"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 22:46:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="756637896"
+X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
+   d="scan'208";a="756637896"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 22:46:14 -0700
+Date:   Tue, 11 Jul 2023 22:51:11 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        dmaengine@vger.kernel.org, vkoul@kernel.org,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>, rex.zhang@intel.com,
+        xiaochen.shen@intel.com, narayan.ranganathan@intel.com,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v9 0/7] Re-enable IDXD kernel workqueue under DMA API
+Message-ID: <20230711225111.567894c8@jacob-builder>
+In-Reply-To: <d6399f56-0528-d923-910c-822611137e2d@linux.intel.com>
+References: <20230621205947.1327094-1-jacob.jun.pan@linux.intel.com>
+        <20230710101810.40098ce3@jacob-builder>
+        <d6399f56-0528-d923-910c-822611137e2d@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711200955.2d3a4494@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 08:09:55PM -0700, Jakub Kicinski wrote:
-> On Tue, 11 Jul 2023 19:07:43 +0800 menglong8.dong@gmail.com wrote:
-> > In bnxt_tx_int(), the skb in the tx ring buffer will be freed after the
-> > transmission completes with dev_kfree_skb_any(), which will produce
-> > the noise on the tracepoint "skb:kfree_skb":
-> > 
-> > $ perf script record -e skb:kfree_skb -a
-> > $ perf script
-> >   swapper     0 [014] 12814.337522: skb:kfree_skb: skbaddr=0xffff88818f145ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [003] 12814.338318: skb:kfree_skb: skbaddr=0xffff888108380600 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12814.375258: skb:kfree_skb: skbaddr=0xffff88818f147ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12814.451960: skb:kfree_skb: skbaddr=0xffff88818f145ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [008] 12814.562166: skb:kfree_skb: skbaddr=0xffff888112664600 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12814.732517: skb:kfree_skb: skbaddr=0xffff88818f145ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12814.800608: skb:kfree_skb: skbaddr=0xffff88810025d100 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12814.861501: skb:kfree_skb: skbaddr=0xffff888108295a00 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12815.377038: skb:kfree_skb: skbaddr=0xffff88818f147ce0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
-> >   swapper     0 [014] 12815.395530: skb:kfree_skb: skbaddr=0xffff88818f145ee0 protocol=2048 location=dev_kfree_skb_any_reason+0x2e reason: NOT_SPECIFIED
+Hi Baolu,
+
+On Tue, 11 Jul 2023 10:29:10 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
+
+> >> Changelog:
+> >> v9:
+> >> 	- Fix an IDXD driver issue where user interrupt enable bit got
+> >> cleared during device enable/disable cycle. Reported and tested by
+> >> 	  Tony Zhu<tony.zhu@intel.com>
+> >> 	- Rebased to v6.4-rc7  
 > 
-> I think this is way too verbose, people looking at networking code 
-> are expected to understand kfree_skb vs consume_skb. 
+> Thanks for fixing this.
+> 
+> It seems that you missed some review comments for v8. I can help to test
+> and merge when all comments are addressed.
+Right, I missed the max_pasid = 0 case as you pointed out. Let me respin
+the set and do some testing on my side as well.
 
-There are many people who look in git log and don't understand networking
-code at all. Verbose commit messages are intended for them.
+Thanks,
 
-Thanks
+Jacob
