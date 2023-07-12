@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9995D7506B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEE87506BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 13:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbjGLLrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 07:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S233122AbjGLLsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 07:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232985AbjGLLrl (ORCPT
+        with ESMTP id S233241AbjGLLrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:47:41 -0400
+        Wed, 12 Jul 2023 07:47:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B3319BC;
-        Wed, 12 Jul 2023 04:47:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E721980
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 04:47:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 995B96179C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D21261796
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:47:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E57FC433CC;
         Wed, 12 Jul 2023 11:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D464C433CA;
-        Wed, 12 Jul 2023 11:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689162439;
-        bh=bTeEZPf59lqakPF2P640QhtCaifAT8KzWjxjRQAvfnc=;
+        s=k20201202; t=1689162442;
+        bh=tKLfC2rwGbl8YnK4YjwgLzW6T3SVz9CzEGa1Le2ZqKA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=EiZoQjZ6OT3Ns26mOvM2p7uoHP09mmBq3LcJaYDrau8QaSqCuLLuh4DZ3E49nM2/1
-         M4cI+gkdiZMs6TAXBaWLu5RVN3pd7cdo6fCfyTe9OLCwdXj/3WKcKYQwd3NFr0QhzO
-         dNxUG3G8BX0lkYfp247WRyI9LMejNflUkUboKNMRs9Yd8g73JHBFMi+rsjzfU4+j0G
-         hRgHDvhfkHlCNb87ystKScAvOaNpBqpGy/6VNHSnbXO5B/uc3k14eqUvL+73sqkLd9
-         /PEku4ywk9LwSaWCUoB/watjzaDERPKE1t7xn7T44egvjg47elD5Wtikk4+Ud0kCS9
-         KW+qXVVi1XuuA==
+        b=NgADLBweT0/pL8STLLYgRap71SqW9W3ABpkb1f5xw6T76IBKC/4jctVi2o7+yzp8G
+         zEBXWmB+QvSOe0ZX54kbZV7SfMHRd4sdjWNQrHgBBNSwKVxougyW3N8I6uLVCzgpO+
+         +zzoDG4Qkagy71dOKACXasOojrtg0Fa69MDoZFLgjVwROvXa1TxscPExwh1lENdC1t
+         ri82wt37Gl7VYX+ikEzWDn5Zzjz7MFubp7Vuj/Qk8iffvl+tApUECx/kEM4nULNHw8
+         vyvxzH+9VQo6vCrvN8sPNScnAAIFR5GjGtCXo388Fl8uc07s6SwZrasv1BLRDn/sN1
+         9252cpsggdlxQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        David Lin <CTLIN0@nuvoton.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Antti Palosaari <crope@iki.fi>,
-        Sergey Kozlov <serjk@netup.ru>, Abylay Ospan <aospan@netup.ru>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Michael Krufky <mkrufky@linuxtv.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Akihiro Tsukada <tskd08@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20230703135211.87416-1-andriy.shevchenko@linux.intel.com>
-References: <20230703135211.87416-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 0/4] ASoC: remove copy of intlog10()
-Message-Id: <168916243503.46574.8648492910653154560.b4-ty@kernel.org>
-Date:   Wed, 12 Jul 2023 12:47:15 +0100
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+In-Reply-To: <20230705214800.193244-1-cristian.ciocaltea@collabora.com>
+References: <20230705214800.193244-1-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH v3 0/3] AMD Vangogh support for NAU8821/MAX98388
+Message-Id: <168916243923.46574.4640392228923703244.b4-ty@kernel.org>
+Date:   Wed, 12 Jul 2023 12:47:19 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -68,13 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jul 2023 16:52:07 +0300, Andy Shevchenko wrote:
-> The first three patches moves intlog10() to be available in entire
-> kernel. The last one removes copy of it in one driver. Besides already
-> good Lines of Code (LoC) statistics the upcoming users, if any, can
-> utilize the exported functions.
+On Thu, 06 Jul 2023 00:47:57 +0300, Cristian Ciocaltea wrote:
+> This patch series extends the Vangogh machine driver to support a variant
+> based on the Nuvoton NAU88L21 Codec and the Analog Devices MAX98388
+> Speaker Amplifier.
 > 
-> The series can be routed via ASoC tree (as Mauro suggested).
+> Changes in v3:
+>  * Dropped acp5x_max98388_hw_params() in PATCH 3/3 and rely on dai_link
+>    to set format, according to Mark's review
+>  * v2: https://lore.kernel.org/all/20230705134341.175889-1-cristian.ciocaltea@collabora.com/
 > 
 > [...]
 
@@ -84,14 +83,12 @@ Applied to
 
 Thanks!
 
-[1/4] lib/math: Move dvb_math.c into lib/math/int_log.c
-      commit: f97fa3dcb2db02013e6904c032a1d2d45707ee40
-[2/4] lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
-      commit: 08f6a14b2d376e96cb7166694193ec3c3a496d25
-[3/4] lib/math/int_log: Replace LGPL-2.1-or-later boilerplate with SPDX identifier
-      commit: 9ab04d7ed8bdd395b0617a1647dd475681f99151
-[4/4] ASoC: nau8825: Replace copied'n'pasted intlog10()
-      commit: a04616321f50bc389cd8d19a6d300d3c3f1be77b
+[1/3] ASoC: amd: vangogh: Make use of DRV_NAME
+      commit: a0cb05cb70b469198ad86c0b13b02cbba3ecd8fd
+[2/3] ASoC: amd: vangogh: Use dmi_first_match() for DMI quirk handling
+      commit: 3dd26e27ccb4f18b4d25c0a49e1888eca9c6a724
+[3/3] ASoC: amd: vangogh: Add support for NAU8821/MAX98388 variant
+      commit: dba22efd0d177a23c6da2a161e9a1ad29718924c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
