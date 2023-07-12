@@ -2,227 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4901174FEEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FEA74FEF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjGLGCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 02:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S231977AbjGLGCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 02:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjGLGCZ (ORCPT
+        with ESMTP id S231975AbjGLGCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 02:02:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B031995
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689141743; x=1720677743;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=q8YW+Ak1aFSHS6ap1YknDbUFbazLnvkg+GE8oMd5GIc=;
-  b=enRLnjAyfbywbEY81IxqlMNG7o2X8GJXfjfhkjMMe30vy9nHF5QIlrLO
-   pk7GQQEcbmRTdT7CRnEMrEDTyuHlAQvNKVwSRogWVSJ+Xb8K/gDvEx6Ld
-   AcFFP5iC+aQgBHb1nPrlvlP1Dp6BnAjYunmHyexrcpRtBlFamgq6gvGbk
-   A0C3HwsITopl4phQz+mzoL3Iau5PNh2IIMiMPXaOirR6XDBP68Hw3801M
-   wCH5yjghn1s57dln24wKUlhptM6beOsXshyjvOnU9Ybrv/1chhBEwCkPE
-   Ja1Ce058+MAMmBCUlb3WKNlzYYk81R8p1ii39aJKKvBrDdvNmnm02uqly
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="349662855"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="349662855"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 23:02:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865994265"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="865994265"
-Received: from fyin-dev.sh.intel.com ([10.239.159.32])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 23:02:20 -0700
-From:   Yin Fengwei <fengwei.yin@intel.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, yuzhao@google.com, willy@infradead.org,
-        david@redhat.com, ryan.roberts@arm.com, shy828301@gmail.com
-Cc:     fengwei.yin@intel.com
-Subject: [RFC PATCH v2 3/3] mm: mlock: update mlock_pte_range to handle large folio
-Date:   Wed, 12 Jul 2023 14:01:44 +0800
-Message-Id: <20230712060144.3006358-4-fengwei.yin@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230712060144.3006358-1-fengwei.yin@intel.com>
-References: <20230712060144.3006358-1-fengwei.yin@intel.com>
+        Wed, 12 Jul 2023 02:02:41 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22845173B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:02:40 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R16bH5PQPzBR5lP
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 14:02:35 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689141755; x=1691733756; bh=XftksNkbaGgeHrSFH4tY5Gx98LB
+        UKIB1AKJqkGcq9Oc=; b=jBGylL5XVKqXlX04z1cI2Nms+NetQG51vXOVl8B89Vt
+        XYGD+HJ5pdPuCRf8N1tdewfYQBdJ3nQO695FT20sCKueGLtD5lO2RrfyjiDZFHZm
+        DiwX35Y7IQUPMg9r0ng83K+2FheVraei2M/mkrp4MY+RBly+x62VxveDf7K4RNHb
+        FZIYJ6fe1OR20ACfpHmP7SlOIdS5PQOQd1zzRvvXVniqY6uE6xizXmpX5/UVcZ6h
+        L9n6ydg/ug7DjDE2ugH5v8LI5Z72U2j2p86U5hSca/izwrBXbJbJQA8u6JSgRgmo
+        uBivVlR1/T37C5Hc7a9qB4/awQYV6CfYFXhVfays6jw==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id OzszFEKPXDi8 for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 14:02:35 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R16bH2L4qzBHXhj;
+        Wed, 12 Jul 2023 14:02:35 +0800 (CST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 12 Jul 2023 14:02:35 +0800
+From:   shijie001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        seanjc@google.com, pbonzini@redhat.com
+Subject: [PATCH] KVM: x86: Fix error & warning in i8254.h
+In-Reply-To: <tencent_EA89B0582F8F8C3CC33C9F7AE407FC956F09@qq.com>
+References: <tencent_EA89B0582F8F8C3CC33C9F7AE407FC956F09@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <f1a0806ffdb74240f9bfbba9f4ece732@208suo.com>
+X-Sender: shijie001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current kernel only lock base size folio during mlock syscall.
-Add large folio support with following rules:
-  - Only mlock large folio when it's in VM_LOCKED VMA range
+The following checkpatch error & warning are removed:
+WARNING: please, no space before tabs
+ERROR: Macros with complex values should be enclosed in parentheses
 
-  - If there is cow folio, mlock the cow folio as cow folio
-    is also in VM_LOCKED VMA range.
-
-  - munlock will apply to the large folio which is in VMA range
-    or cross the VMA boundary.
-
-The last rule is used to handle the case that the large folio is
-mlocked, later the VMA is split in the middle of large folio
-and this large folio become cross VMA boundary.
-
-Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+Signed-off-by: Jie Shi <shijie001@208suo.com>
 ---
- mm/mlock.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 99 insertions(+), 5 deletions(-)
+  arch/x86/kvm/i8254.h | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 0a0c996c5c214..f49e079066870 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -305,6 +305,95 @@ void munlock_folio(struct folio *folio)
- 	local_unlock(&mlock_fbatch.lock);
- }
- 
-+static inline bool should_mlock_folio(struct folio *folio,
-+					struct vm_area_struct *vma)
-+{
-+	if (vma->vm_flags & VM_LOCKED)
-+		return (!folio_test_large(folio) ||
-+				folio_within_vma(folio, vma));
-+
-+	/*
-+	 * For unlock, allow munlock large folio which is partially
-+	 * mapped to VMA. As it's possible that large folio is
-+	 * mlocked and VMA is split later.
-+	 *
-+	 * During memory pressure, such kind of large folio can
-+	 * be split. And the pages are not in VM_LOCKed VMA
-+	 * can be reclaimed.
-+	 */
-+
-+	return true;
-+}
-+
-+static inline unsigned int get_folio_mlock_step(struct folio *folio,
-+			pte_t pte, unsigned long addr, unsigned long end)
-+{
-+	unsigned int nr;
-+
-+	nr = folio_pfn(folio) + folio_nr_pages(folio) - pte_pfn(pte);
-+	return min_t(unsigned int, nr, (end - addr) >> PAGE_SHIFT);
-+}
-+
-+void mlock_folio_range(struct folio *folio, struct vm_area_struct *vma,
-+		pte_t *pte, unsigned long addr, unsigned int nr)
-+{
-+	struct folio *cow_folio;
-+	unsigned int step = 1;
-+
-+	mlock_folio(folio);
-+	if (nr == 1)
-+		return;
-+
-+	for (; nr > 0; pte += step, addr += (step << PAGE_SHIFT), nr -= step) {
-+		pte_t ptent;
-+
-+		step = 1;
-+		ptent = ptep_get(pte);
-+
-+		if (!pte_present(ptent))
-+			continue;
-+
-+		cow_folio = vm_normal_folio(vma, addr, ptent);
-+		if (!cow_folio || cow_folio == folio) {
-+			continue;
-+		}
-+
-+		mlock_folio(cow_folio);
-+		step = get_folio_mlock_step(folio, ptent,
-+				addr, addr + (nr << PAGE_SHIFT));
-+	}
-+}
-+
-+void munlock_folio_range(struct folio *folio, struct vm_area_struct *vma,
-+		pte_t *pte, unsigned long addr, unsigned int nr)
-+{
-+	struct folio *cow_folio;
-+	unsigned int step = 1;
-+
-+	munlock_folio(folio);
-+	if (nr == 1)
-+		return;
-+
-+	for (; nr > 0; pte += step, addr += (step << PAGE_SHIFT), nr -= step) {
-+		pte_t ptent;
-+
-+		step = 1;
-+		ptent = ptep_get(pte);
-+
-+		if (!pte_present(ptent))
-+			continue;
-+
-+		cow_folio = vm_normal_folio(vma, addr, ptent);
-+		if (!cow_folio || cow_folio == folio) {
-+			continue;
-+		}
-+
-+		munlock_folio(cow_folio);
-+		step = get_folio_mlock_step(folio, ptent,
-+				addr, addr + (nr << PAGE_SHIFT));
-+	}
-+}
-+
- static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
- 			   unsigned long end, struct mm_walk *walk)
- 
-@@ -314,6 +403,7 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
- 	pte_t *start_pte, *pte;
- 	pte_t ptent;
- 	struct folio *folio;
-+	unsigned int step = 1;
- 
- 	ptl = pmd_trans_huge_lock(pmd, vma);
- 	if (ptl) {
-@@ -329,24 +419,28 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
- 		goto out;
- 	}
- 
--	start_pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-+	pte = start_pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	if (!start_pte) {
- 		walk->action = ACTION_AGAIN;
- 		return 0;
- 	}
--	for (pte = start_pte; addr != end; pte++, addr += PAGE_SIZE) {
-+
-+	for (; addr != end; pte += step, addr += (step << PAGE_SHIFT)) {
-+		step = 1;
- 		ptent = ptep_get(pte);
- 		if (!pte_present(ptent))
- 			continue;
- 		folio = vm_normal_folio(vma, addr, ptent);
- 		if (!folio || folio_is_zone_device(folio))
- 			continue;
--		if (folio_test_large(folio))
-+		if (!should_mlock_folio(folio, vma))
- 			continue;
-+
-+		step = get_folio_mlock_step(folio, ptent, addr, end);
- 		if (vma->vm_flags & VM_LOCKED)
--			mlock_folio(folio);
-+			mlock_folio_range(folio, vma, pte, addr, step);
- 		else
--			munlock_folio(folio);
-+			munlock_folio_range(folio, vma, pte, addr, step);
- 	}
- 	pte_unmap(start_pte);
- out:
--- 
-2.39.2
+diff --git a/arch/x86/kvm/i8254.h b/arch/x86/kvm/i8254.h
+index a768212ba821..89eab61cfc51 100644
+--- a/arch/x86/kvm/i8254.h
++++ b/arch/x86/kvm/i8254.h
+@@ -27,7 +27,7 @@ struct kvm_kpit_state {
+      struct kvm_kpit_channel_state channels[3];
+      u32 flags;
+      bool is_periodic;
+-    s64 period;                 /* unit: ns */
++    s64 period;                /* unit: ns */
+      struct hrtimer timer;
 
+      struct mutex lock;
+@@ -52,7 +52,7 @@ struct kvm_pit {
+  #define KVM_SPEAKER_BASE_ADDRESS    0x61
+  #define KVM_PIT_MEM_LENGTH        4
+  #define KVM_PIT_FREQ            1193181
+-#define KVM_MAX_PIT_INTR_INTERVAL   HZ / 100
++#define KVM_MAX_PIT_INTR_INTERVAL   (HZ / 100)
+  #define KVM_PIT_CHANNEL_MASK        0x3
+
+  struct kvm_pit *kvm_create_pit(struct kvm *kvm, u32 flags);
