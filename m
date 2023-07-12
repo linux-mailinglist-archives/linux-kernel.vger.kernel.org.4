@@ -2,143 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E162750A09
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EC4750A14
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 15:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjGLNw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 09:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        id S231555AbjGLNxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 09:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjGLNwy (ORCPT
+        with ESMTP id S231302AbjGLNxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 09:52:54 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2104.outbound.protection.outlook.com [40.107.255.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80D6EA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 06:52:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iWrrufyAApJIFqWxphfdxwuyua1/k006BBgHs7Qfj9L/fC9N6iY2TrmlP8SdP1pCIAI/m9cvjAsfI1/Jww4Eq7ds/gN0Y1iZC3999g+vjIr+OPmhpP3+kYVlIadFhXXuqsEPFuvkByRy3rdndVYNYbjiRMfrT+LnGYym/laQU0quFxjHXpEZH500UM8mjgSYBCm4Aik48NDbjKaLB6rplEy1pkQN+nXsbQS6YSqzys5LWOHyyZxLsWNbR9R2bIJeS93SKQEGxRl7Xf8jZzhbDUJsvoNT2thDoMrdkit0S0Jv5pqOyiJH25i2DSeJt8WX/CknxHhYj+IifQNhdGHZRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d8L7QHZ1RvGOtmqWj1WAmDaJm12+PcAVs8XIF3G34EE=;
- b=IluxIOnlHfk8/LX3+0UuFhR/hKFH07zMDIlQwEJ62V4WgFx3hai7jtUg4iHN9Nq6US3+2OwJyF+WS+Fmsfj3fJqDLtzPNxLe8VMgPyQQawc5iMqWcOQAXO9REjo0oHCg9E52gGND+HzOncEnEy/6T7tLAYelR9GxgaNMh8bEvICpFqdJUOnLaT7kcizKYXxn2FL0RgMF5JzG/35/yXxDDtMO6rLByWvpSdpR7Y34HzOv9VWW8jEX6sstbhVFwGGunB4N37eXneD3SQq9VuWA2h3ovtOMYmO+QDRqNs1fFMEG8LLzSjdUAXd2orVlh5u0yuZElllZMJ62bGtSK+q6/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d8L7QHZ1RvGOtmqWj1WAmDaJm12+PcAVs8XIF3G34EE=;
- b=dHT/gOyqbtseiiABe+ruanA+Qx8J2y8BiJMbyIZebpnwXG5Wli8Ih29r2efe6RBaZtK5BsnHeerEsEuDjMAK0HYA5mZeIBMs2dJjdewUY7uAbhQunAPZR+43HyxJ5c8P2OIVbOeH8rpA/VR54WkNyzsRBDPgDtuswXNzQcbwVVGsHnf4/VxbZ7kP1GXRZZOUL8A03NcfFxvoPHG2qDSjKnCGmAhm7g74vE83mxeTTVLkkVRi9H2p4/wvnCP1mcCJzdtSVJqZqpkG2z8lWOMAxPh+op0v90JDgYRsmgD8pYz4JYOTJOU3s/K9fG0nHXgXUU2aiiiBHinRXea2UxsXKw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
- SEZPR06MB6762.apcprd06.prod.outlook.com (2603:1096:101:17a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
- 2023 13:52:47 +0000
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c]) by SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c%4]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
- 13:52:47 +0000
-From:   Wang Ming <machel@vivo.com>
-To:     David Hildenbrand <david@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Wang Ming <machel@vivo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-Subject: [PATCH v1] lib:Fix an NULL vs IS_ERR() bug for debugfs_create_dir() in err_inject_init()
-Date:   Wed, 12 Jul 2023 21:52:11 +0800
-Message-Id: <20230712135226.10041-1-machel@vivo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR0101CA0033.apcprd01.prod.exchangelabs.com
- (2603:1096:404:8000::19) To SG2PR06MB3743.apcprd06.prod.outlook.com
- (2603:1096:4:d0::18)
+        Wed, 12 Jul 2023 09:53:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AB9E74;
+        Wed, 12 Jul 2023 06:53:50 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBRlVV032033;
+        Wed, 12 Jul 2023 13:53:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WNF/7l4V0z/b41e1Or2MthOLiwBjpuDAS7snjo562Vg=;
+ b=AUSFV0Do5Gu0CMcI4/7ywzgjIokzQMneC6y69Y+05MK8GVF0sevTpp+OiRvyLiY6HhxA
+ FxQqYyvN7AVULK/GR/JZoriCRo0DqvGhYCopUnPPD/3hLeNZPiR+xNN17Xq6zlhtPiup
+ srYRK9Yxk0/U5EeouiN/qWnNOXXc1jEwVUSL1cge0Y6PsJYhV4j+8w5vymNvNofRi83M
+ EPh+I3p21TbMH6yUWMW+1wrY+5zXaRV5AAs4R0zm3voD2aKrnrrV3UUf5fxnq2+l5WtN
+ Q2eUXtQ1dBC5biHNu+Pnxt1V7dsUjxBH6piLNBq6+hRksOUBw577iuXx91TqPvqYFJiO Sg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rser0spry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 13:53:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CDrQN3010385
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 13:53:27 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
+ 2023 06:53:22 -0700
+Message-ID: <d3849c2a-8826-62a7-1749-0d4b3ee47259@quicinc.com>
+Date:   Wed, 12 Jul 2023 21:53:02 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|SEZPR06MB6762:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6e3f1553-08f6-41e5-6bad-08db82df463b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NmPoxAlkyzaD9qVQa8s+8hWVSXpktI3krjsrMUNiG2RBJXi7iLN7ueH6zzWUw5+d4YNxj+vByinh0ur4KNWaH+ANNek2OuQmJVTjNdKe/uuOS3lI7XqoDQGF2NxE21V6hbiHzzwZEl2deIRiDd40OCxV2TfROCT/UqtGEIDiCN+ozg6450ad5qMK1bJfX4+NGnpoOC0Oh2WHu+obIELb9NDoBidgfBOw9e9xTb5rhp+A/x4V22HN7DWJdIWNoLt1qqCzLjb9vZPUZnGb0hRvZtzfXWphmQL4vvj0j544TUjP9uDiS8E+3p176N9QjrTPdgFxmKk/Lv0ZaqGhl7hgeimxGDBbHN79E7CTmS4mG12jSIZ16MUKyLjQ6VppL/4LsPQjEwRhjDHMgVNerrL9f9KMrwLJMQa4V9+AbPPOy/DHZmV9WVP81F0wFu83D6O4tG0g3J0uC/WBIK5BtRUQexDqFHTMv8ExLcLwLpAQZyqC7hfiC/Imsft/B2bE8BOW0j2yzcy129mWv0uehP4E5qsKLMlBUeDGrSqxWAm1Zd9pFsQ/Rc2bc+5K3f69L1PdEdj6xhI6mIYlr2ETGTbCZcAcPItgxzaieyC2hzmNkWU0k3CaGivBydGKF12sM8Ap
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(366004)(346002)(396003)(451199021)(41300700001)(4326008)(4744005)(2906002)(66946007)(66476007)(66556008)(38350700002)(5660300002)(478600001)(316002)(86362001)(8676002)(52116002)(38100700002)(8936002)(6666004)(6486002)(6512007)(107886003)(36756003)(26005)(83380400001)(6506007)(1076003)(186003)(110136005)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k255KQ0pd0jLD29zK7nPN6dz9BPKBNt4vWusEL5lsNoI3nfkhyi+AfD9yaL5?=
- =?us-ascii?Q?kxc0SxKDStXpHeKVmby415mZaItx4iEYs3iIbcl+gG5mIU3ybQ/s1BcdKHsW?=
- =?us-ascii?Q?sITMgrSxI+vuN31HfvL0U7mPC/tySTXM2n7rLmjSPeWOV72MRZJY08DxT2Yl?=
- =?us-ascii?Q?xLc4+V6ocN+wwPA+PdkLsL3f72CR+OsnNgDcjXolyCGZ6jX7T0ga20HYjFbk?=
- =?us-ascii?Q?2pS7VYJ7b2i/zGEeG85SvkbDzuC1aULMcRNlFUYQ+kRGG9lslyiFpobwyslG?=
- =?us-ascii?Q?vC/95pI7nY2Z4+DHkIWTu37SabApR7wfhoA35eTN0UmkOFdcgecn9g+GqTbj?=
- =?us-ascii?Q?zcaC9H67DkRYRc5oTf7p+7zm4P571SP4zDk+pbSTjcmMp0pdY7m7yytfik1f?=
- =?us-ascii?Q?A77R3fkn3UVApsQyTKfKuVgADrNERPveRGS2S8AmobgBzwnfgWprlnoRw3fc?=
- =?us-ascii?Q?X4/rc6XhsVEQfUaLvQAmiIBQdX5Rtf8ugTVj39civUds/2QyAAg8DzTo4oKE?=
- =?us-ascii?Q?jIotfqNTui9o+2oXxaq2avhbYtoTRs7fQbehvWC7iWcFuG7CUnAI6gk/41vH?=
- =?us-ascii?Q?vEzIIPA8Sz0rC//iP872892uJqZSzxGZ6kMFZh2V1BxNTfKyhwDf6HaQt0OI?=
- =?us-ascii?Q?4Uc7JNAOXenCDyexCBpGEhfHgQsf/Xl+NxTTXYVjcmpSUBgq1fXPc1sOmFi+?=
- =?us-ascii?Q?6jAF6fXFCYQ6jED9zCm/dGrOZCWwOVanp2oyPyP/i3oU5Hfr/emNHEfSmxQk?=
- =?us-ascii?Q?4X046xH94uGfTMr3rA4ILj2AKQeMn80FqvEFBFV+XipcZTXkwiGvqoy2Nyr/?=
- =?us-ascii?Q?lvQQHGnx6pbXcywRNEJgSGyoXgvU4bMKzBcXBrfJvE932KmfkeL3Im7j15ex?=
- =?us-ascii?Q?oWHWPZtQFOyYfCL5tDxeMaWOTJrmiJ/adzkH+v1SsFE/NTCw1EhFvrBbdfFm?=
- =?us-ascii?Q?lpK7N1AFvB/mNUplQ8dI00mkUbNmoqBRFJHW3mCgqg4iIJSxdGpmH7DdoKfq?=
- =?us-ascii?Q?NOe4AyxVL4ydT2e3Q0b2HLUp4r+qnOtWchCHQPCsyk376fgsVL8k4g4cwdf3?=
- =?us-ascii?Q?Vy9xBIWPSE3j0tYbvtiWNcxZFToao+c0fdDDTshhMf0epxiyn/LYiZ1Z7oZh?=
- =?us-ascii?Q?qGGVXS4QNa9OaDuqfUUPv+hWV6z4yqsKL61eM0OYvbCytvxIBI4Z8Gm5m9XZ?=
- =?us-ascii?Q?8TM/ril1LfckKVCSM2W2BY0HP0uGKY9Rnhl6KigYiDmrKoVO0fJIdP0iUBx1?=
- =?us-ascii?Q?sCJ8cKlL9M1xhRRiGmjTmrtqUJPF5i469Ik5Db7Z7NLVcIF6vvLyeT5jITJl?=
- =?us-ascii?Q?X43DUeC3GNa8gUMVm1p2XhxTivJGN20XFR4QH7/rO1nq+v3qgrI/eCJeLpj3?=
- =?us-ascii?Q?1MKIG/SPHCi3/KH9VWX3jQ913CDA6nzvVEwH3X/YbdQ8exSwFgBGsJ18Y0O1?=
- =?us-ascii?Q?NuHlokEpe1z1ENlnGHbB5URP3Ou/FcQwtDidGQlWf78wKusR6e9vSsiTBkyR?=
- =?us-ascii?Q?Y+ZmhYLeX2Be2ciew+mZHmZYNomaTNiBF3NaXUhNrot3gbmJvRoFWKm6ej7T?=
- =?us-ascii?Q?V6LTxGaNJixKQiLtCBAZlOlOpfp6wQ1UgJwtNDgy?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e3f1553-08f6-41e5-6bad-08db82df463b
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 13:52:47.2476
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Oa1I58f40Fd4dSHpTPYV4HRrKkHAM2Q8p/eEkkfZkvLXYCtuVNm+HSjw9E4vFTPO5CYtUF9nvfHMy0breu6dDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6762
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 09/13] Add nodes for dsb edge control
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>
+References: <1687246361-23607-1-git-send-email-quic_taozha@quicinc.com>
+ <1687246361-23607-10-git-send-email-quic_taozha@quicinc.com>
+ <2023062024-sincere-tripod-95dc@gregkh>
+ <3aca4a55-0dc7-b34c-d2c0-111a96c33ec3@quicinc.com>
+ <e82385f1-de55-4c70-5c5c-35b93a5b2488@arm.com>
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <e82385f1-de55-4c70-5c5c-35b93a5b2488@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lkv3c6CNrQZrHTcMIFfTohgNMLjs4a0b
+X-Proofpoint-ORIG-GUID: lkv3c6CNrQZrHTcMIFfTohgNMLjs4a0b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_08,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=0 mlxscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120124
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The debugfs_create_dir() function returns error pointers.
-It never returns NULL. Most incorrect error checks were fixed,
-but the one in err_inject_init() was forgotten.
 
-Fix the remaining error check.
+On 6/20/2023 9:41 PM, Suzuki K Poulose wrote:
+> On 20/06/2023 09:31, Tao Zhang wrote:
+>>
+>> On 6/20/2023 3:37 PM, Greg Kroah-Hartman wrote:
+>>> On Tue, Jun 20, 2023 at 03:32:37PM +0800, Tao Zhang wrote:
+>>>> Add the nodes to set value for DSB edge control and DSB edge
+>>>> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
+>>>> resgisters to configure edge control. DSB edge detection control
+>>>> 00: Rising edge detection
+>>>> 01: Falling edge detection
+>>>> 10: Rising and falling edge detection (toggle detection)
+>>>> And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
+>>>> configure mask. Eight 32 bit registers providing DSB interface
+>>>> edge detection mask control.
+>>>>
+>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>>> ---
+>>>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  32 +++++
+>>>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 143 
+>>>> ++++++++++++++++++++-
+>>>>   drivers/hwtracing/coresight/coresight-tpdm.h       |  22 ++++
+>>>>   3 files changed, 196 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git 
+>>>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
+>>>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>> index 2a82cd0..34189e4a 100644
+>>>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>> @@ -60,3 +60,35 @@ Description:
+>>>>           Bit[3] : Set to 0 for low performance mode.
+>>>>                    Set to 1 for high performance mode.
+>>>>           Bit[4:8] : Select byte lane for high performance mode.
+>>>> +
+>>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
+>>>> +Date:        March 2023
+>>>> +KernelVersion    6.5
+>>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
+>>>> Zhang (QUIC) <quic_taozha@quicinc.com>
+>>>> +Description:
+>>>> +        Read/Write a set of the edge control registers of the DSB
+>>>> +        in TPDM.
+>>>> +
+>>>> +        Expected format is the following:
+>>>> +        <integer1> <integer2> <integer3>
+>>> sysfs is "one value", not 3.  Please never have to parse a sysfs file.
+>>
+>> Do you mean sysfs file can only accept "one value"?
+>>
+>> I see that more than one value are written to the sysfs file 
+>> "trigout_attach".
+>>
+>>>
+>>>> +static ssize_t dsb_edge_ctrl_show(struct device *dev,
+>>>> +                       struct device_attribute *attr,
+>>>> +                       char *buf)
+>>>> +{
+>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>>>> +    ssize_t size = 0;
+>>>> +    unsigned long bytes;
+>>>> +    int i;
+>>>> +
+>>>> +    spin_lock(&drvdata->spinlock);
+>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
+>>>> +        bytes = sysfs_emit_at(buf, size,
+>>>> +                  "Index:0x%x Val:0x%x\n", i,
+>>> Again, no, one value, no "string" needed to parse anything.
+>>
+>> I also see other sysfs files can be read more than one value in other 
+>> drivers.
+>>
+>> Is this "one value" limitation the usage rule of Linux sysfs system?
+>>
+>> Or am I misunderstanding what you mean?
+>
+> Please fix the other sysfs tunables in the following patches.
 
-Signed-off-by: Wang Ming <machel@vivo.com>
----
- lib/notifier-error-inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+List a new solution for the similar cases below, please see if this 
+design is reasonable?
 
-diff --git a/lib/notifier-error-inject.c b/lib/notifier-error-inject.c
-index 2b24ea6c9497..c49354c23802 100644
---- a/lib/notifier-error-inject.c
-+++ b/lib/notifier-error-inject.c
-@@ -83,7 +83,7 @@ static int __init err_inject_init(void)
- 	notifier_err_inject_dir =
- 		debugfs_create_dir("notifier-error-inject", NULL);
- 
--	if (!notifier_err_inject_dir)
-+	if (IS_ERR(notifier_err_inject_dir))
- 		return -ENOMEM;
- 
- 	return 0;
--- 
-2.25.1
+1. Two SysFS files("dsb_edge_ctrl_idx" and "dsb_edge_ctrl_val") will be 
+created in this case.
 
+2. First write to the node "dsb_edge_ctrl_idx" to set the index number 
+of the edge detection.
+
+3. Then write to the node "dsb_edge_ctrl_val" to set the value of the 
+edge detection.
+
+For example, if we need need to set "Falling edge detection" to the edge 
+detection #220-#222, we can issue the following commands.
+
+echo 0xdc > tpdm1/dsb_edge_ctrl_idx
+
+echo 0x1 > tpdm1/dsb_edge_ctrl_val
+
+echo 0xdd > tpdm1/dsb_edge_ctrl_idx
+
+echo 0x1 > tpdm1/dsb_edge_ctrl_val
+
+echo 0xde > tpdm1/dsb_edge_ctrl_idx
+
+echo 0x1 > tpdm1/dsb_edge_ctrl_val
+
+If this design is acceptable, we will rewrite other similar nodes based 
+on this solution.
+
+Let me know if you have any concerns or good suggestions for this solution.
+
+
+Best,
+
+Tao
+
+>
+> Kind regards
+> Suzuki
+>
+>
