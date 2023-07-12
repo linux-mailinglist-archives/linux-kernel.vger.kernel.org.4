@@ -2,151 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0D6750184
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016E775018A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbjGLI3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S232317AbjGLIbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbjGLI32 (ORCPT
+        with ESMTP id S232314AbjGLIar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:29:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16252688;
-        Wed, 12 Jul 2023 01:24:14 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C70G38001653;
-        Wed, 12 Jul 2023 08:24:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ST3kHIjWR2FCKglmIIjkBGh/Mzwd05a/izvjUr8jmXI=;
- b=QxV6zU+Xhryu+LiKhay0sN8I1mmgVTpGJhIP3A4B407IDyRNaH9LWpCRMawfW05ZtumI
- 5kBwQsV52ZAwCOd+SSV2tLNRmvWorEdaeA6HozKlQsN4ulWMnma/+F7KijvSFH2sOp3W
- LqijGazSnCl9JLmXZxJlh9rPJJ6jYUqAHhm6WC4HntNg8P/dmHIKa88YvfFtzpxBPzhx
- Q+XWs78ZB1tf2TP0bCsLuTurmPZ+DrJHexVKO3LQOCGQ8DE+6zfhEcHVffhvqY6uX2uu
- zzQe63f8b0Q567zuDCk38IS6sXw/L1L+DFUq4wUa3Ev2xq0LpG0sR+czzOWvBCJPp914 VA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf4s8ywr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 08:24:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C8OBxc010792
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 08:24:11 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
- 2023 01:24:07 -0700
-Message-ID: <77991119-a200-fbfe-5dba-580a0b0d3228@quicinc.com>
-Date:   Wed, 12 Jul 2023 13:54:04 +0530
+        Wed, 12 Jul 2023 04:30:47 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB111BD7;
+        Wed, 12 Jul 2023 01:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1689150333; x=1720686333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xyIWm5FV5uRNjw92jUC5ce28JX8oOFOKKacHgKLY0MY=;
+  b=FJ9aXpMwT3ABNuc0mJW/EczqfXXPb48BPeyTCixHGA3K44z8ZeEDlCQ0
+   P7SRsXDkhKiKi/TDI6whq1NxowTUWubgSNziSEMf7xf0tkXZiz5dVaHM3
+   wWviVM4Hoz4jh5TP6OZrL/U7pATnirQKAkipUuQBQUFQQhbBU7JRs8blZ
+   bvWUNK2D46Q1241eCuihcui3T7+u/wseVH0nZDXgbqw/MQwImkiUfUk6J
+   UxH9DMY6g4f9noJARyD5EoG233INY2LVSrtPkf1MzeGdTPAD2WIeJw5D4
+   3I63JrNQpFnh5D2V6gXDx5QcrcBauxRzlwDKPMGYdMGZMVVHBGct/wgAm
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="asc'?scan'208";a="219973705"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 01:25:32 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 12 Jul 2023 01:25:32 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 12 Jul 2023 01:25:30 -0700
+Date:   Wed, 12 Jul 2023 09:24:58 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH] dt-bindings: iio: adi,ad74115: remove ref from -nanoamp
+Message-ID: <20230712-pound-frail-572a5362ba41@wendy>
+References: <20230712080512.94964-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: power: rpmhpd: Add Generic RPMh PD
- indexes
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1689054169-10800-1-git-send-email-quic_rohiagar@quicinc.com>
- <1689054169-10800-2-git-send-email-quic_rohiagar@quicinc.com>
- <6746ceb6-dac4-ee8e-411f-8de0ff8f12e0@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <6746ceb6-dac4-ee8e-411f-8de0ff8f12e0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QcBSYRNAae83QpAs7pN_PqOvb4mEVBsU
-X-Proofpoint-ORIG-GUID: QcBSYRNAae83QpAs7pN_PqOvb4mEVBsU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_04,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 spamscore=0
- mlxscore=0 mlxlogscore=686 phishscore=0 adultscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120073
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7VYnBipMzYAZfg7z"
+Content-Disposition: inline
+In-Reply-To: <20230712080512.94964-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--7VYnBipMzYAZfg7z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 7/11/2023 8:41 PM, Dmitry Baryshkov wrote:
-> On 11/07/2023 08:42, Rohit Agarwal wrote:
->> Add Generic RPMh Power Domain indexes that can be used
->> for all the Qualcomm SoC henceforth.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   include/dt-bindings/power/qcom-rpmhpd.h | 30 
->> ++++++++++++++++++++++++++++++
->>   1 file changed, 30 insertions(+)
->>   create mode 100644 include/dt-bindings/power/qcom-rpmhpd.h
->>
->> diff --git a/include/dt-bindings/power/qcom-rpmhpd.h 
->> b/include/dt-bindings/power/qcom-rpmhpd.h
->> new file mode 100644
->> index 0000000..4da2e04
->> --- /dev/null
->> +++ b/include/dt-bindings/power/qcom-rpmhpd.h
->> @@ -0,0 +1,30 @@
->> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->> +/*
->> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + */
->> +
->> +#ifndef _DT_BINDINGS_POWER_QCOM_RPMHPD_H
->> +#define _DT_BINDINGS_POWER_QCOM_RPMHPD_H
->> +
->> +/* Generic RPMH Power Domain Indexes */
->> +#define CX               0
->> +#define MX               1
->> +#define CX_AO            2
->> +#define MX_AO            3
->> +#define GFX              4
->> +#define MSS              5
->> +#define EBI              6
->> +#define LCX              7
->> +#define LMX              8
->> +#define MMCX             9
->> +#define MMCX_AO          10
->> +#define MXC              11
->> +#define MXC_AO           12
->> +#define NSP              13
->> +#define NSP0             14
->> +#define NSP1             15
->> +#define QPHY             16
->> +#define DDR              17
->> +#define XO               18
->
-> I went through the existing defines. If we adopt the order of defines 
-> for sm8550, we can migrate that platform and all of sm8[234]50 without 
-> breaking ABI. This would be a minor gain, but still something.
->
-Actually, I added them in the sequence based on the frequency with which 
-they occur in the driver, so that there are less NULL entries created 
-for any target additions. Shouldnt we keep it this way and ignore for 
-previous targets then?
+On Wed, Jul 12, 2023 at 10:05:12AM +0200, Krzysztof Kozlowski wrote:
+> dtschema v2023.06 comes with support for properties with -nanoamp
+> suffix, thus bindings should not have a ref for it:
+>=20
+>   adi,ad74115.yaml: properties:adi,ext1-burnout-current-nanoamp: '$ref' s=
+hould not be valid under {'const': '$ref'}
+>=20
+> Cc: Cosmin Tanislav <demonsingur@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-Rohit.
->> +
->> +#endif
->
+Heh, was just about to go and do this myself - good thing I checked first.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--7VYnBipMzYAZfg7z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK5jWgAKCRB4tDGHoIJi
+0mXcAPsHTRpr3H6jsOo7jbTH9rgP3UZCpEo9wClxybWVe5ZmCwEAvhX4m5CFF5da
+kFeiG4mEv3v+Kq7ERy6tNWbJGLrWXgI=
+=XyXI
+-----END PGP SIGNATURE-----
+
+--7VYnBipMzYAZfg7z--
