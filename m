@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D43274FD67
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD1E74FD6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjGLDGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S230163AbjGLDIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGLDGw (ORCPT
+        with ESMTP id S229718AbjGLDIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:06:52 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778BA1712;
-        Tue, 11 Jul 2023 20:06:51 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b6b98ac328so100094041fa.0;
-        Tue, 11 Jul 2023 20:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689131210; x=1691723210;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y195SUNCHBbNT/VMVyexhThJQuOxhdoX1raDncFr8bA=;
-        b=aTHRDnU31zxNZOqU2uGReCqyJg78q/Erygx2xiERN3mbbK2gPYq2IGyIyYOzDehcLQ
-         RX5Dtx1/X30BycYP2hKuoWccnowvh/alpuBett6/AdKIXqDwf20YGVP+nUSDPWYtXm4o
-         VQkJoGSaVaTU6jS+6wdI0tpzBWKL5jWImaBEInwoq8gde0PDngbkwDJUag5rM81/whcc
-         uNoeBopym5vvkO13Nr2QIetrGUQ3zJGjguTuhdEe2TdB2/p840dYV6VeVWcpvAjrgPPu
-         j+djbl0zjnpmljFkkuk+Qi16zvxM4Lyrm4Fp9HXpIXGDRvg7yYMShAURLp3Qg/qPhKxb
-         SEtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689131210; x=1691723210;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y195SUNCHBbNT/VMVyexhThJQuOxhdoX1raDncFr8bA=;
-        b=LOUxFsg1cNI9Rp6pSgiTntUnHHYS6wLF7j/KvVRJeRTkcWfilzCFDo9V4z+TZ81thZ
-         P1xHLyDDPvZfJWvV/i615SwFixfjhP/abSKuIL4ZMHQk++4n0sBhhWweLXjCx7rOYs02
-         5xUJkKTYenVV45zeINolLDfHOSY4Z7UFdeO/cmtxOhG73lTmEOEHTh5mVYf2jMyk1b2M
-         NfU3FxB686mYzRDlw8j23H2lRs/XIUwYNGb7pKGmiII6xy8pojhQjWZeh1llqXMnx56J
-         TocfG0Xxj0ysJfxU5scXD0/il13PUxtMZX29XhDBC1AVL9zl+bHZuSv1pKz4Cigiskon
-         CrPw==
-X-Gm-Message-State: ABy/qLZ+ZNT0fJkPqvCr8MuAxAUiKcjNZwxyrdnK/fIbHcSJr3psbdEy
-        CayDYOJBMCVpOR+Oq/NcC+BdcTCZPHB1DANpMOg=
-X-Google-Smtp-Source: APBJJlGzjs8HpdbveKPMn8j8O4frDBHf+8FXEux2iNVNzNMvSZq4fzzxSP2ZXxCogWGXhE4DA4zQNdPlQIatrv+N5lY=
-X-Received: by 2002:a2e:7c0c:0:b0:2b6:cf5e:5da0 with SMTP id
- x12-20020a2e7c0c000000b002b6cf5e5da0mr14569879ljc.40.1689131209534; Tue, 11
- Jul 2023 20:06:49 -0700 (PDT)
+        Tue, 11 Jul 2023 23:08:37 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01141712
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 20:08:34 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R12kS6z45zBS5pk
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 11:08:32 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689131312; x=1691723313; bh=0CcwIDO4opsdPdT4gBowEy44D9V
+        0u/t38EtRWkFSWAU=; b=bBnaNlAQyesxeAgkFte1OKh/5DV8Hu3PWYdRzp2uaq4
+        w2kmA40H/ylOK1VsSZW25+dcB61IxoDF/JkvVj/51aGn6D0jDFkjqonHG9SlsVob
+        z4xm5FFk8KHYkK/6hfPULHVr5HcAmguBq2isZErHNIq0AIu9k+KtRXb3+cMtJMTl
+        zbF3s3MN9p3ZYd8u2lV08PLWnjGnJt5CmbIfCnr36bKDdCAeEarciwML0Oh6gSvo
+        JZEdsyZ2LlvZIVr0DjSniZR7/B3wxVPiIzxDwwXQV10AJubMJRNafBFuRW0GRAxi
+        FixeLcVTuPyU0nfaHb1MIPnUXoDnbLqK8hUfQqnqUKw==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id fSEAcqpiBu4S for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jul 2023 11:08:32 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R12kS3r3pzBJ8lQ;
+        Wed, 12 Jul 2023 11:08:32 +0800 (CST)
 MIME-Version: 1.0
-References: <20230711105930.29170-1-larysa.zaremba@intel.com>
- <a05a4ac2-40c8-da67-6727-b9844930386e@redhat.com> <CAKH8qBtBHD=1bXQyPUczLRUSNagNTKC6DNhO1rqHmrGE5kLHWQ@mail.gmail.com>
-In-Reply-To: <CAKH8qBtBHD=1bXQyPUczLRUSNagNTKC6DNhO1rqHmrGE5kLHWQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 11 Jul 2023 20:06:38 -0700
-Message-ID: <CAADnVQ+Peos-Y08_h27EYf=cO8ewdNwf-T0mmHvcEREv9+C04Q@mail.gmail.com>
-Subject: Re: [PATCH bpf] xdp: use trusted arguments in XDP hints kfuncs
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        bpf <bpf@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 12 Jul 2023 11:08:32 +0800
+From:   shijie001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86:Fix warnings in debugfs.c
+In-Reply-To: <tencent_5FEF30EB273BF931FF82DB522CA8CB13A307@qq.com>
+References: <tencent_5FEF30EB273BF931FF82DB522CA8CB13A307@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <d02e47813a9b22b2c625caf8ac5ae0fb@208suo.com>
+X-Sender: shijie001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 10:00=E2=80=AFAM Stanislav Fomichev <sdf@google.com=
-> wrote:
->
-> On Tue, Jul 11, 2023 at 7:21=E2=80=AFAM Jesper Dangaard Brouer
-> <jbrouer@redhat.com> wrote:
-> >
-> >
-> > On 11/07/2023 12.59, Larysa Zaremba wrote:
-> > > Currently, verifier does not reject XDP programs that pass NULL point=
-er to
-> > > hints functions. At the same time, this case is not handled in any dr=
-iver
-> > > implementation (including veth). For example, changing
-> > >
-> > > bpf_xdp_metadata_rx_timestamp(ctx, &timestamp);
-> > >
-> > > to
-> > >
-> > > bpf_xdp_metadata_rx_timestamp(ctx, NULL);
-> > >
-> > > in xdp_metadata test successfully crashes the system.
-> > >
-> > > Add KF_TRUSTED_ARGS flag to hints kfunc definitions, so driver code
-> > > does not have to worry about getting invalid pointers.
-> > >
-> >
-> > Looks good to me, assuming this means verifier will reject BPF-prog's
-> > supplying NULL.
-> >
-> > Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
-> >
-> > > Fixes: 3d76a4d3d4e5 ("bpf: XDP metadata RX kfuncs")
-> > > Reported-by: Stanislav Fomichev <sdf@google.com>
-> > > Closes: https://lore.kernel.org/bpf/ZKWo0BbpLfkZHbyE@google.com/
-> > > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
->
-> Acked-by: Stanislav Fomichev <sdf@google.com>
->
-> Thank you for the fix!
+The following checkpatch warning is removed:
+WARNING: Prefer seq_puts to seq_printf
 
-Applied. Thanks
+Signed-off-by: Jie Shi <shijie001@208suo.com>
+---
+  arch/x86/kvm/debugfs.c | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
+index ee8c4c3496ed..a3e118397aa3 100644
+--- a/arch/x86/kvm/debugfs.c
++++ b/arch/x86/kvm/debugfs.c
+@@ -133,20 +133,20 @@ static int kvm_mmu_rmaps_stat_show(struct seq_file 
+*m, void *v)
+      mutex_unlock(&kvm->slots_lock);
+
+      /* index=0 counts no rmap; index=1 counts 1 rmap */
+-    seq_printf(m, "Rmap_Count:\t0\t1\t");
++    seq_puts(m, "Rmap_Count:\t0\t1\t");
+      for (i = 2; i < RMAP_LOG_SIZE; i++) {
+          j = 1 << (i - 1);
+          k = (1 << i) - 1;
+          seq_printf(m, "%d-%d\t", j, k);
+      }
+-    seq_printf(m, "\n");
++    seq_puts(m, "\n");
+
+      for (i = 0; i < KVM_NR_PAGE_SIZES; i++) {
+          seq_printf(m, "Level=%s:\t", kvm_lpage_str[i]);
+          cur = log[i];
+          for (j = 0; j < RMAP_LOG_SIZE; j++)
+              seq_printf(m, "%d\t", cur[j]);
+-        seq_printf(m, "\n");
++        seq_puts(m, "\n");
+      }
+
+      ret = 0;
