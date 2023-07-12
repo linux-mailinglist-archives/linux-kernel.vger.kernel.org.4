@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5519A750165
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3169D750173
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjGLI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S232389AbjGLI23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbjGLIZt (ORCPT
+        with ESMTP id S232817AbjGLI2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:25:49 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3316E1BFA;
-        Wed, 12 Jul 2023 01:20:54 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb96e2b573so10626243e87.3;
-        Wed, 12 Jul 2023 01:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689150050; x=1691742050;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Stm2+briN7xTHjyU1YYMiw0ahBy2NrW0BYxEeVzHaDk=;
-        b=feG9mMNPxVH2E1hZYUaeSzFYUPfTzCgAfJQTdrm/iWAC/FRfKwwsii5R3IGUhDbwgx
-         bc3cgKrNPPquwMrXL5Ixcbanxjo6hnnneTcSurxDT+rVWwhbaO6QXMkTu2Nrckm5BCa7
-         yR0A6kDOv89asIAau6ARtVReRSfO9ZRJjdvYlcL5gSyR7HSyDCuUO4XY6QLGCrHLUdlj
-         jSpYdIZZSx/3cD8xlHZ0h6eZ8lp2ZTkK1/lwmwTibHeuS8kQYABYp8jU28YcWgZ1NBSz
-         jMMdjB3kSSMfdqWz5P1IF5vjoZjawglCahR2YSyQ4X7MNnhhWgygXMogP8PFDf15F4n3
-         eHag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689150050; x=1691742050;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Stm2+briN7xTHjyU1YYMiw0ahBy2NrW0BYxEeVzHaDk=;
-        b=SernVOh4abjz3kN6XFbeoZqhF2PYZxtKZDQ3FaaVYmFSb0tWhyFGBuEvVnnwAPzaW8
-         mt9XiBEjuPFZP4KoIzrTiKrPB0mi3zhXZOChvI4OJ5tTr9Le+Y4xYLXciTkJzM7TH1UX
-         4o9q3fwII5fwFrYc+B7Z9xfArQwqN4EkiW+DNH0IbfVqfsEeQDuZzZoLKoP5PllTpTfH
-         cQG4ehfs3VaOsqqQuKuBH4f6sV9C8xnHNUg1i1ZffnmAgwMrXQu1GghiHGxjg9PCLt4w
-         Ai9VvaacZvBaA33fCSraLNNIOzQahsGvsaVwBc362IOTzVYnIvRZSEOVVuJtJIL3rtUy
-         njsA==
-X-Gm-Message-State: ABy/qLaEZKORDFxY2TyqKhTWYB8nzCyEPoird/YmPKE6CZn/bcYvEHaH
-        Yd426dyHBWZsdOryWKWLU5wrfnNvj9s=
-X-Google-Smtp-Source: APBJJlHz4hYlxCwgr1mnFSAkZqZCx64MZvnbcWfrr2bR7jLPqI0yB4T6F1AhFbmI6sIrFbRLZQFG1Q==
-X-Received: by 2002:ac2:4e07:0:b0:4f8:5e49:c613 with SMTP id e7-20020ac24e07000000b004f85e49c613mr17263551lfr.43.1689150049426;
-        Wed, 12 Jul 2023 01:20:49 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.82.245])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004fbdf1c85b5sm614017lfi.116.2023.07.12.01.20.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 01:20:48 -0700 (PDT)
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'John Paul Adrian Glaubitz' <glaubitz@physik.fu-berlin.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
- <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
- <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
- <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
- <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
- <a0a0d4d06eecc9c3194afe2cee0b61ebed5e0392.camel@physik.fu-berlin.de>
- <c5ad5c59fcfa4888bd03fb8a855c989c@AcuMS.aculab.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <c9483d7f-7f5f-dd29-2bba-5659a1dae7e0@gmail.com>
-Date:   Wed, 12 Jul 2023 11:20:46 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 12 Jul 2023 04:28:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79659422B;
+        Wed, 12 Jul 2023 01:23:10 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C1RvVn014752;
+        Wed, 12 Jul 2023 08:23:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=aTLQpedi2LvXzzjoGzLBOF15YzPK0gUSq9WXyYp39F8=;
+ b=aAldiDb16RIS/Lm/CaT5mfOtGoGY+9MkFeHgICINBVV65z+V8aW7UDWkR2Gkw6MPieh3
+ S5od0sGfCY7PMCRqWc3I/pUmqdxispxWozM7oPhexiIzygnokvAvvM4zkHriP+jOZlwq
+ CFDb1fW/q98y0EKOrQi9Nqz312/nSCdfV21WzOjH4z+YUzahVFbXj2yv0GFAvXLOlbmH
+ BCC9slgopsYkp8q37qDFfKbqFi1+fE9EvgiSn6CB9yt7ZCTlxoZSvu/lEE7Im7HlVSem
+ 4p4eMAdvIVa6HYVp0UlYQkftRtrHA1O0Gq792yqq1hX8BTeReF/m2d3GiN/Ma7AmniNM xA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf4s8yuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 08:23:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C8Mxn5014175
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 08:22:59 GMT
+Received: from hu-schowdhu-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 12 Jul 2023 01:22:55 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V1 0/3] Add notifier call chain to Embedded USB Debug(EUD) driver
+Date:   Wed, 12 Jul 2023 13:52:37 +0530
+Message-ID: <cover.1689148711.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <c5ad5c59fcfa4888bd03fb8a855c989c@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: m0v9ANWWf2pAAeQT65KBvNd6-fGMuUxk
+X-Proofpoint-ORIG-GUID: m0v9ANWWf2pAAeQT65KBvNd6-fGMuUxk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_04,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 mlxlogscore=320 phishscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/23 11:12 AM, David Laight wrote:
+This patch series adds the notifier chain to the Embedded USB Debug(EUD) driver.
+The notifier chain is used to check the role switch status of EUD. Since EUD can
+function only in device mode, other modules trying to do role-switch on the same
+port have to first check the EUD status by calling this notifier chain and based
+on the status proceed or block their role-switching step. The modules can call
+the notifier through the call eud_notifier_call_chain and pass their own
+role switch state as the argument. This chain will also be able to handle the
+scenario of multiple modules switching roles on the same port since this can
+create a priority and ordering among them for conflict resolution.
 
->> Sent: 09 July 2023 00:13
-> ....
->> Looking at arch/sh/boards/mach-r2d/irq.c, there is some IRQ translation going
->> on and maybe that's the part where we need to correct the offset by 16?
-> 
-> Would it be less problematic to use (say) 16 for IRQ_0
-> leaving IRQ_1+ as 1+ ?
+Souradeep Chowdhury (3):
+  usb: misc: Add the interface for notifier call for Embedded USB
+    Debugger(EUD)
+  usb: misc: Add notifier call chain to Embedded USB Debug(EUD) driver
+  MAINTAINERS: Add the header file entry for Embedded USB debugger(EUD)
 
-   I don't think so.
+ MAINTAINERS                          |  1 +
+ drivers/usb/misc/qcom_eud.c          | 52 ++++++++++++++++++++++++++--
+ drivers/usb/misc/qcom_eud_notifier.h | 10 ++++++
+ 3 files changed, 61 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/usb/misc/qcom_eud_notifier.h
 
-> At least that would only cause issues for code that needed
-> to use IRQ_0.
-> 
-> (It has to be said that making IRQ 0 invalid seemed wrong
-> to me. x86 (IBM PC) gets away with it because IRQ 0 is
-> always assigned to platform specific hardware.)
+--
+2.17.1
 
-   Not only x86, IIRC.
-   Have you seen the commit below?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ce753ad1549cbe9ccaea4c06a1f5fa47432c8289
-
-   IOW, try arguing with Linus. :-)
-
-> 	David
-
-MBR, Sergey
