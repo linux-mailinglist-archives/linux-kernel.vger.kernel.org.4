@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E29750300
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34334750305
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjGLJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S232675AbjGLJZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjGLJZ2 (ORCPT
+        with ESMTP id S231472AbjGLJZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:25:28 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199E11D;
-        Wed, 12 Jul 2023 02:25:27 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1689153918teu0uwlk
-Received: from linux-lab-host.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:25:16 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 239gR2IZrltKqPhg8ID3o5Pz4jyanvYhDcSzbwRy7HgWu927QkXaP4ef5OeRN
-        qtA9Ik35h1ELNf5DWNXSj7UaPkRlJGClZXDclFLxWUvN7KYVyo83R+DOFY7E3AdM+TNayuy
-        SaxbUW6yO0YCJcRelPEYJCsdW/6qQAEJCIgLIaG6+H7toJ8VV2DoHLkZKcG9NduG5oRIISv
-        KcHn7LkesJ/IKzGbXcvQx3e2SJCFID2ajOR9LQOrwlLP3+LFuGka6gfsl8fE/wSaNB3kQuW
-        6F8sNOemZ2blYajmIvx7sSPXS8XShYwFwvHJbF14LQKNzJqisl7xnvJTpihGc/VfsVCkDxi
-        kQQHgX4gJ/qH+IxomMFe677EKQIx7GjPvFkKvIF1HyBv1/q3lXej7b6FudZP7TvpdOVejS9
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 86389509092924257
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 09/11] tools/nolibc: riscv: shrink _start with _start_c
-Date:   Wed, 12 Jul 2023 17:25:15 +0800
-Message-Id: <29559df55935d61e7ca774bb36fa3c73e2011090.1689150149.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
-References: <cover.1689150149.git.falcon@tinylab.org>
+        Wed, 12 Jul 2023 05:25:50 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DEBE5F;
+        Wed, 12 Jul 2023 02:25:48 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 472E361E5FE03;
+        Wed, 12 Jul 2023 11:25:21 +0200 (CEST)
+Message-ID: <b8a27d63-c214-0af6-7ad0-b82402208e3b@molgen.mpg.de>
+Date:   Wed, 12 Jul 2023 11:25:20 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3] Bluetooth: btmtk: Fix null pointer when processing
+ coredump
+To:     =?UTF-8?B?Q2hyaXMgTHUgKOmZuOeomuazkyk=?= <Chris.Lu@mediatek.com>
+Cc:     marcel@holtmann.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, johan.hedberg@gmail.com,
+        =?UTF-8?B?U3RldmUgTGVlICjmnY7oppboqqAp?= <steve.lee@mediatek.com>,
+        Sean Wang <Sean.Wang@mediatek.com>,
+        =?UTF-8?B?QWFyb24gSG91ICjkvq/kv4rku7Ap?= <Aaron.Hou@mediatek.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+References: <20230712051857.13812-1-chris.lu@mediatek.com>
+ <0cb29d27-a76f-47f2-86c3-f39ba25e8bc2@molgen.mpg.de>
+ <d8f82d97496c73c01521dbbce5455ad23521036c.camel@mediatek.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <d8f82d97496c73c01521dbbce5455ad23521036c.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,83 +54,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move most of the _start operations to _start_c().
+Dear Chris,
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/arch-riscv.h | 43 +++++--------------------------
- 1 file changed, 6 insertions(+), 37 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 2b89ea59c5e4..2e3fcf925ae9 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -8,18 +8,7 @@
- #define _NOLIBC_ARCH_RISCV_H
- 
- #include "compiler.h"
--
--#if   __riscv_xlen == 64
--#define PTRLOG "3"
--#define SZREG  "8"
--#define REG_L  "ld"
--#define REG_S  "sd"
--#elif __riscv_xlen == 32
--#define PTRLOG "2"
--#define SZREG  "4"
--#define REG_L  "lw"
--#define REG_S  "sw"
--#endif
-+#include "crt.h"
- 
- /* Syscalls for RISCV :
-  *   - stack is 16-byte aligned
-@@ -153,40 +142,20 @@
- 	_arg1;                                                                \
- })
- 
--char **environ __attribute__((weak));
--const unsigned long *_auxv __attribute__((weak));
--
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		".option push\n"
- 		".option norelax\n"
--		"lla   gp, __global_pointer$\n"
-+		"lla  gp, __global_pointer$\n"
- 		".option pop\n"
- #ifdef _NOLIBC_STACKPROTECTOR
--		"call __stack_chk_init\n"    /* initialize stack protector                          */
-+		"call __stack_chk_init\n" /* initialize stack protector                    */
- #endif
--		REG_L" a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
--		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
--		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
--		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
--		"add   a2,a2,a1\n"           /*             + argv                                  */
--
--		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
--		"0:\n"                       /* do {                                                */
--		REG_L" a4, 0(a3)\n"          /*   a4 = *a3;                                         */
--		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
--		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
--		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
--		REG_S" a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
--
--		"lui   a3, %hi(environ)\n"   /* a3 = &environ (high bits)                           */
--		REG_S" a2,%lo(environ)(a3)\n"/* store envp(a2) into environ                         */
--		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
--		"call  main\n"               /* main() returns the status code, we'll exit with it. */
--		"li a7, 93\n"                /* NR_exit == 93                                       */
--		"ecall\n"
-+		"mv   a0, sp\n"           /* save stack pointer to a0, as arg1 of _start_c */
-+		"andi sp, a0, -16\n"      /* sp must be 16-byte aligned                    */
-+		"call _start_c\n"         /* transfer to c runtime                         */
- 	);
- 	__builtin_unreachable();
- }
--- 
-2.25.1
+Am 12.07.23 um 10:53 schrieb Chris Lu (陸稚泓):
+> On Wed, 2023-07-12 at 08:11 +0200, Paul Menzel wrote:
+>>   	
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
 
+(It’d be nice if you removed such (automatically added) phrases from 
+your reply.)
+
+> Thanks for your review and feedback to Mediatek's Bluetooth driver
+> code.
+
+Thank you for your reply.
+
+>> Am 12.07.23 um 07:18 schrieb Chris Lu:
+>>> There may be a potential null pointer risk if offset value is
+>>> less than 0 when doing memcmp in btmtk_process_coredump().
+>>> Checking offset is valid before doing memcmp.
+>>
+>> Use imperative mood: Check offset …
+>>
+>>> Signed-off-by: Chris Lu <chris.lu@mediatek.com>
+>>> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+>>> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+>>> ---
+>>> v2: fix typo
+>>> v3: fix bot checking error
+>>> ---
+>>>    drivers/bluetooth/btmtk.c | 16 ++++++++--------
+>>>    1 file changed, 8 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
+>>> index 786f775196ae..0f290430ae0e 100644
+>>> --- a/drivers/bluetooth/btmtk.c
+>>> +++ b/drivers/bluetooth/btmtk.c
+>>> @@ -370,7 +370,7 @@ EXPORT_SYMBOL_GPL(btmtk_register_coredump);
+>>>    int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
+>>>    {
+>>>    struct btmediatek_data *data = hci_get_priv(hdev);
+>>> -int err;
+>>> +int err, offset;
+>>>    
+>>>    if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
+>>>    return 0;
+>>> @@ -392,15 +392,15 @@ int btmtk_process_coredump(struct hci_dev
+>> *hdev, struct sk_buff *skb)
+>>>    if (err < 0)
+>>>    break;
+>>>    data->cd_info.cnt++;
+>>> +offset = skb->len - sizeof(MTK_COREDUMP_END);
+>>
+>> For `sizeof()` shouldn’t you use `size_t`? But that is unsigned of
+>> course. Maybe ssize_t then?
+>
+> yes, it's better to use ssize_t or size_t, I'll change declaratins of
+> offset from int to ssize_t.
+> 
+>>>    
+>>>    /* Mediatek coredump data would be more than MTK_COREDUMP_NUM */
+>>> -if (data->cd_info.cnt > MTK_COREDUMP_NUM &&
+>>> -    skb->len > sizeof(MTK_COREDUMP_END) &&
+>>> -    !memcmp((char *)&skb->data[skb->len - sizeof(MTK_COREDUMP_END)],
+>>> -    MTK_COREDUMP_END, sizeof(MTK_COREDUMP_END) - 1)) {
+>>> -bt_dev_info(hdev, "Mediatek coredump end");
+>>> -hci_devcd_complete(hdev);
+>>> -}
+>>> +if (data->cd_info.cnt > MTK_COREDUMP_NUM && offset > 0)
+>>
+>> Why not keep it like before, and just add the condition `skb->len <
+>> sizeof(MTK_COREDUMP_END)`? The compiler is probably going to optimize
+>> so the value is not calculated twice.
+
+> The reason why I send this patch is when I backport devcoredump feature
+> to specific project with older kernel version, the compiler might not
+> so optimized that it would cause kernel panic when run into memcmp.
+> As a result, make sure `skb->len > sizeof(MTK_COREDUMP_END) ` before
+> doing memcmp part can avoid null pointer issue.
+> Besides, only in condition 'data->cd_info.cnt > MTK_COREDUMP_NUM &&
+> offset > 0' need to do memcmp to check the end of coredump. Driver do
+> noting with condition `skb->len < sizeof(MTK_COREDUMP_END) ` that
+> additional condiction is not really necessary.
+
+Just to avoid misunderstandings, my point, to add the comparison and get 
+rid of the variable `offset`.
+
+
+Kind regards,
+
+Paul
+
+
+>>> +if (!memcmp((char *)&skb->data[offset], MTK_COREDUMP_END,
+>>> +    sizeof(MTK_COREDUMP_END) - 1)) {
+>>> +bt_dev_info(hdev, "Mediatek coredump end");
+>>> +hci_devcd_complete(hdev);
+>>> +}
+>>>    
+>>>    break;
+>>>    }
