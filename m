@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7930575031A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725F075031E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjGLJal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S233084AbjGLJbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjGLJai (ORCPT
+        with ESMTP id S232145AbjGLJbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:30:38 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA151FB;
-        Wed, 12 Jul 2023 02:30:37 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qJWB7-0004Ip-WA; Wed, 12 Jul 2023 11:30:34 +0200
-Message-ID: <a97a37bf-86b5-cd8e-a8ce-00e38720cee4@leemhuis.info>
-Date:   Wed, 12 Jul 2023 11:30:30 +0200
+        Wed, 12 Jul 2023 05:31:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 867FB12F;
+        Wed, 12 Jul 2023 02:31:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A97302F4;
+        Wed, 12 Jul 2023 02:32:04 -0700 (PDT)
+Received: from [10.57.78.6] (unknown [10.57.78.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B5353F73F;
+        Wed, 12 Jul 2023 02:31:21 -0700 (PDT)
+Message-ID: <67f68464-cc1f-dea3-6850-a1cad190073a@arm.com>
+Date:   Wed, 12 Jul 2023 10:31:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <cover.1689008220.git.linux@leemhuis.info>
- <2023071002-phrasing-tranquil-49d6@gregkh>
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [RFC PATCH v1 0/3] docs: stable-kernel-rules: add delayed
- backporting option and a few tweaks
-In-Reply-To: <2023071002-phrasing-tranquil-49d6@gregkh>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH] mm/mlock: Fix vma iterator conversion of
+ apply_vma_lock_flags()
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     stable@vger.kernel.org
+References: <20230711175020.4091336-1-Liam.Howlett@oracle.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230711175020.4091336-1-Liam.Howlett@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1689154237;3fac27df;
-X-HE-SMSGID: 1qJWB7-0004Ip-WA
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,57 +46,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.07.23 21:51, Greg KH wrote:
-> On Mon, Jul 10, 2023 at 07:10:10PM +0200, Thorsten Leemhuis wrote:
->> This is a RFC and a bit rough for now. I only set down to create the
->> first of the three patches. But while doing so I noticed a few things
->> that seemed odd for me with my background on writing and editing texts.
->> So I just quickly performed a few additional changes to fix those to see
->> if the stable team would appreciate them, as this document is clearly
->> their domain.
->>
->> If those changes or even the initial patch are not welcomed, I'll simply
->> drop them. I'd totally understand this, as texts like these are delicate
->> and it's easy to accidentlly change the intent or the meaning while
->> adjusting things in good faith.
->>
->> At the same time I might be willing to do a few more changes, if people
->> like the direction this takes and want a bit more fine tuning.
+On 11/07/2023 18:50, Liam R. Howlett wrote:
+> apply_vma_lock_flags() calls mlock_fixup(), which could merge the VMA
+> after where the vma iterator is located.  Although this is not an issue,
+> the next iteration of the loop will check the start of the vma to be
+> equal to the locally saved 'tmp' variable and cause an incorrect failure
+> scenario.  Fix the error by setting tmp to the end of the vma iterator
+> value before restarting the loop.
 > 
-> I do like it, many thanks for taking the time to do this work, it's much
-> appreciated.
->
-> If you resend the first 2 as a non-RFC patch, 
+> There is also a potential of the error code being overwritten when the
+> loop terminates early.  Fix the return issue by directly returning when
+> an error is encountered since there is nothing to undo after the loop.
+> 
+> Reported-by: Ryan Roberts <ryan.roberts@arm.com>
+> Link: https://lore.kernel.org/linux-mm/50341ca1-d582-b33a-e3d0-acb08a65166f@arm.com/
+> Cc: <stable@vger.kernel.org>
+> Fixes: 37598f5a9d8b ("mlock: convert mlock to vma iterator")
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-BTW: thx again for your uplifting feedback! And in case anyone missed
-it, I send those two patches out yesterday here:
-https://lore.kernel.org/all/cover.1689056247.git.linux@leemhuis.info/
+Wow; thanks for the quick fix! I've tested this on arm64/v6.4 with the failing
+mm selftests that I reported: they are now passing.
 
-> the last one needs some more work as mentioned.
+Tested-by: Ryan Roberts <ryan.roberts@arm.com>
 
-I have that one in a separate branch now and spitted into four patches;
-the first three basically move text around, which results in a much
-cleaner diff for the last patch that contains actual content changes.
-While working on the latter I noticed one more thing:
+> ---
+>  mm/mlock.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index d7db94519884..0a0c996c5c21 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -477,7 +477,6 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  {
+>  	unsigned long nstart, end, tmp;
+>  	struct vm_area_struct *vma, *prev;
+> -	int error;
+>  	VMA_ITERATOR(vmi, current->mm, start);
+>  
+>  	VM_BUG_ON(offset_in_page(start));
+> @@ -498,6 +497,7 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  	nstart = start;
+>  	tmp = vma->vm_start;
+>  	for_each_vma_range(vmi, vma, end) {
+> +		int error;
+>  		vm_flags_t newflags;
+>  
+>  		if (vma->vm_start != tmp)
+> @@ -511,14 +511,15 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  			tmp = end;
+>  		error = mlock_fixup(&vmi, vma, &prev, nstart, tmp, newflags);
+>  		if (error)
+> -			break;
+> +			return error;
+> +		tmp = vma_iter_end(&vmi);
+>  		nstart = tmp;
+>  	}
+>  
+> -	if (vma_iter_end(&vmi) < end)
+> +	if (tmp < end)
+>  		return -ENOMEM;
+>  
+> -	return error;
+> +	return 0;
+>  }
+>  
+>  /*
 
-```
-    .. warning::
-       The -stable-rc tree is a snapshot in time of the stable-queue
-tree and
-       will change frequently, hence will be rebased often. It should
-only be
-       used for testing purposes (e.g. to be consumed by CI systems).
-```
-
-That sounded a bit odd to me, as it will scare people away that want to
-test stable -rc's using git; and I think it doesn't match current
-practices. I'll thus likely change the text to something like this,
-unless I'm missing something or someone has a better idea:
-```
-  .. warning::
-     The branches in the -stable-rc tree are rebased each time a new -rc
-     is released, as they are created by taking the latest release and
-     applying the patches from the stable-queue on top.
-```
-
-Ciao, Thorsten
