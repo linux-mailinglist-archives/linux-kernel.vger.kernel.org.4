@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BCB74FD5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F5674FD61
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 05:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjGLDDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 23:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S231218AbjGLDEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 23:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjGLDDD (ORCPT
+        with ESMTP id S229505AbjGLDEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:03:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0181171F;
-        Tue, 11 Jul 2023 20:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689130978; x=1720666978;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QK32cJv9qYLbn/6zU+E5RkqF3WLxlh7y7udGakhTrRA=;
-  b=YdVkFEW37nJLSPf0gqhQWBmcqq7+fQ8zEoldogTXtopkgOEw3pagDsKX
-   P5QHZ9eii1Uo7oKBBoRUka1TuUdM8Lfn4AxAbP+e2tOIpIMC0sdPoNH8R
-   Jk0ZsK7JCzb1kr/8CdwUfdPPvpiF5e6xgjAmLSCN+rEwiDt7sdsHkEOOr
-   Ebe3V+wJzgqaHtnXQfxzTwPqnGTkqup5uOttlWorTk8hSE3PqHx8bgyze
-   kj1JRasVzgx4+o2K6ok/1DfO8OqotOiXpgZyPL2unzYtjd4KWYK8yFb/j
-   Lk+SuqQpE3hEI5isvVNkWcUWvhi8fPHXCGIkgpAitoz+JtWcvssSwuQK6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="344390067"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="344390067"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 20:02:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="715412363"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="715412363"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.60]) ([10.252.187.60])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 20:02:53 -0700
-Message-ID: <98d6e7a3-8988-604f-1b67-27a25fadb627@linux.intel.com>
-Date:   Wed, 12 Jul 2023 11:02:50 +0800
+        Tue, 11 Jul 2023 23:04:36 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB3D1712;
+        Tue, 11 Jul 2023 20:04:34 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso103519911fa.0;
+        Tue, 11 Jul 2023 20:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689131073; x=1691723073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PN0oGQ8AorTIXTWyQga8RykNuxoH3ndOd/siNCCXBTQ=;
+        b=oKstHnuGaNI2uzY/Z5i5pHksvtbSHFOndi07P1Nk09ilz+R6axIcIlktSO3gPZTr66
+         3bxAw8EUehjHLzqnuFaMjXMkqz85yzY/WHdxBnvBQkZCIgcKiGacHx4Piz49lm1xan5+
+         Ua8zZ+/GWYFO+rptlUb2tOqjSZm6Mmmmqd6ZOq8saaH/u4KIG/daBBcYzy4mg+0LINIj
+         7QN9qbi1YajLKsW3bjA8tXWO/QsAcfJCF6o9oqx1HQ3t6Miod0P9TeEkWZNDzAvKnv17
+         4H6VjgiMuKes9/IfKh3nO1hfEXwTpFtsI4eyQUkfkBvRYjOMXEQ9cCh38ozocT03QCtK
+         KL0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689131073; x=1691723073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PN0oGQ8AorTIXTWyQga8RykNuxoH3ndOd/siNCCXBTQ=;
+        b=j+SuBnyuY7T0thvnmSgmPiFoeEGCSt5OYU0iDOHo7ktw6WOYimxH414e+8U7fr3/qh
+         ImvxbSzD1P8Plpm8xANK2DtLfV3/mAdD9BEWpMkQNNQ9Ki80ACerMXaFNxyyf2EODwbI
+         7v1XrF4qhJn1x5f7g0uQXiD9kohULviIQqhqkoZHJR4oltRZ5uoz7AdicNwqd8+NVW6V
+         Pz+ijVnzYpBcrDiyovhW3ZHp5Snmkvlp20pPREwmrJTpEfjAOhI9fPz2gSb4URPujq+l
+         4rQPeNs0zuEQZcRrZ/HCek69+qSEm1F1i9gJkvDgaZs3ZfUq78bpkrdTK56IeHYwYFB1
+         nURw==
+X-Gm-Message-State: ABy/qLZbiZoyao0W4Dwbe245m5gJ2p2rYXnlmJhssjhxH5SEgDchnP8p
+        lgomg0GEXt2tmsKCbzFMjm7TRoFzpnMZCCoDufLHrpnk
+X-Google-Smtp-Source: APBJJlHGCz8YsgqDiTdCsNf/0Ljja1GYMV6hcL+/1A2cIPg8A7phVwMifvH5KzPzBOrF644CgsIDnmWsmVREvRe/c4w=
+X-Received: by 2002:a05:651c:120c:b0:2b6:fc80:c45f with SMTP id
+ i12-20020a05651c120c00b002b6fc80c45fmr13847457lja.13.1689131072627; Tue, 11
+ Jul 2023 20:04:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>, iommu@lists.linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] iommu: Make fault_param generic
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230711010642.19707-1-baolu.lu@linux.intel.com>
- <20230711010642.19707-6-baolu.lu@linux.intel.com>
- <20230711143151.3191f23c@jacob-builder>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230711143151.3191f23c@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230711115848.2701559-1-pulehui@huaweicloud.com> <e065f385-3baf-eacb-7ca5-6ade14491eee@huaweicloud.com>
+In-Reply-To: <e065f385-3baf-eacb-7ca5-6ade14491eee@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 11 Jul 2023 20:04:21 -0700
+Message-ID: <CAADnVQJ=g9jpNq8YEg-NxHmwKfZ6VsPtsW6ix1=u25zoPjNOSQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: cpumap: Fix memory leak in cpu_map_update_elem
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     Pu Lehui <pulehui@huaweicloud.com>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>, Pu Lehui <pulehui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,134 +83,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/12 5:31, Jacob Pan wrote:
-> On Tue, 11 Jul 2023 09:06:38 +0800, Lu Baolu<baolu.lu@linux.intel.com>
-> wrote:
-> 
->> The iommu faults, including recoverable faults (IO page faults) and
->> unrecoverable faults (DMA faults), are generic to all devices. The
->> iommu faults could possibly be triggered for every device.
->>
->> The fault_param pointer under struct dev_iommu is the per-device fault
->> data. Therefore, the fault_param pointer should be allocated during
->> iommu device probe and freed when the device is released.
->>
->> With this done, the individual iommu drivers that support iopf have no
->> need to call iommu_[un]register_device_fault_handler() any more.
->> This will make it easier for the iommu drivers to support iopf, and it
->> will also make the fault_param allocation and free simpler.
->>
->> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
->> ---
->>   .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    | 13 +------------
->>   drivers/iommu/intel/iommu.c                    | 18 ++++--------------
->>   drivers/iommu/iommu.c                          | 14 ++++++++++++++
->>   3 files changed, 19 insertions(+), 26 deletions(-)
->>
->> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
->> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c index
->> a5a63b1c947e..fa8ab9d413f8 100644 ---
->> a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c +++
->> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c @@ -437,7 +437,6 @@
->> bool arm_smmu_master_sva_enabled(struct arm_smmu_master *master)
->>   static int arm_smmu_master_sva_enable_iopf(struct arm_smmu_master
->> *master) {
->> -	int ret;
->>   	struct device *dev = master->dev;
->>   
->>   	/*
->> @@ -450,16 +449,7 @@ static int arm_smmu_master_sva_enable_iopf(struct
->> arm_smmu_master *master) if (!master->iopf_enabled)
->>   		return -EINVAL;
->>   
->> -	ret = iopf_queue_add_device(master->smmu->evtq.iopf, dev);
->> -	if (ret)
->> -		return ret;
->> -
->> -	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf,
->> dev);
->> -	if (ret) {
->> -		iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
->> -		return ret;
->> -	}
->> -	return 0;
->> +	return iopf_queue_add_device(master->smmu->evtq.iopf, dev);
->>   }
->>   
->>   static void arm_smmu_master_sva_disable_iopf(struct arm_smmu_master
->> *master) @@ -469,7 +459,6 @@ static void
->> arm_smmu_master_sva_disable_iopf(struct arm_smmu_master *master) if
->> (!master->iopf_enabled) return;
->>   
->> -	iommu_unregister_device_fault_handler(dev);
->>   	iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
->>   }
->>   
->> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
->> index 5c8c5cdc36cf..22e43db20252 100644
->> --- a/drivers/iommu/intel/iommu.c
->> +++ b/drivers/iommu/intel/iommu.c
->> @@ -4594,23 +4594,14 @@ static int intel_iommu_enable_iopf(struct device
->> *dev) if (ret)
->>   		return ret;
->>   
->> -	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf,
->> dev);
->> -	if (ret)
->> -		goto iopf_remove_device;
->> -
->>   	ret = pci_enable_pri(pdev, PRQ_DEPTH);
->> -	if (ret)
->> -		goto iopf_unregister_handler;
->> +	if (ret) {
->> +		iopf_queue_remove_device(iommu->iopf_queue, dev);
->> +		return ret;
->> +	}
->>   	info->pri_enabled = 1;
->>   
->>   	return 0;
->> -
->> -iopf_unregister_handler:
->> -	iommu_unregister_device_fault_handler(dev);
->> -iopf_remove_device:
->> -	iopf_queue_remove_device(iommu->iopf_queue, dev);
->> -
->> -	return ret;
->>   }
->>   
->>   static int intel_iommu_disable_iopf(struct device *dev)
->> @@ -4637,7 +4628,6 @@ static int intel_iommu_disable_iopf(struct device
->> *dev)
->>   	 * fault handler and removing device from iopf queue should never
->>   	 * fail.
->>   	 */
->> -	WARN_ON(iommu_unregister_device_fault_handler(dev));
->>   	WARN_ON(iopf_queue_remove_device(iommu->iopf_queue, dev));
->>   
->>   	return 0;
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 65895b987e22..8d1f0935ea71 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -299,7 +299,15 @@ static int dev_iommu_get(struct device *dev)
->>   		return -ENOMEM;
->>   
->>   	mutex_init(&param->lock);
->> +	param->fault_param = kzalloc(sizeof(*param->fault_param),
->> GFP_KERNEL);
-> since fault_param is_always_  allocated/freed along with param, can we merge
-> into one allocation? i.e.
->   struct dev_iommu {
->          struct mutex lock;
-> -       struct iommu_fault_param        *fault_param;
-> +       struct iommu_fault_param        fault_param;
+On Tue, Jul 11, 2023 at 7:12=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wr=
+ote:
+>
+>
+>
+> On 7/11/2023 7:58 PM, Pu Lehui wrote:
+> > From: Pu Lehui <pulehui@huawei.com>
+> >
+> > Syzkaller reported a memory leak as follows:
+> >
+> > BUG: memory leak
+> > unreferenced object 0xff110001198ef748 (size 192):
+> >   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
+> >   hex dump (first 32 bytes):
+> >     00 00 00 00 4a 19 00 00 80 ad e3 e4 fe ff c0 00  ....J...........
+> >     00 b2 d3 0c 01 00 11 ff 28 f5 8e 19 01 00 11 ff  ........(.......
+> >   backtrace:
+> >     [<ffffffffadd28087>] __cpu_map_entry_alloc+0xf7/0xb00
+> >     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
+> >     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
+> >     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
+> >     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
+> >     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
+> >     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> >
+> > BUG: memory leak
+> > unreferenced object 0xff110001198ef528 (size 192):
+> >   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
+> >   hex dump (first 32 bytes):
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >   backtrace:
+> >     [<ffffffffadd281f0>] __cpu_map_entry_alloc+0x260/0xb00
+> >     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
+> >     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
+> >     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
+> >     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
+> >     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
+> >     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> >
+> > BUG: memory leak
+> > unreferenced object 0xff1100010fd93d68 (size 8):
+> >   comm "syz-executor.3", pid 17672, jiffies 4298118891 (age 9.906s)
+> >   hex dump (first 8 bytes):
+> >     00 00 00 00 00 00 00 00                          ........
+> >   backtrace:
+> >     [<ffffffffade5db3e>] kvmalloc_node+0x11e/0x170
+> >     [<ffffffffadd28280>] __cpu_map_entry_alloc+0x2f0/0xb00
+> >     [<ffffffffadd28d8e>] cpu_map_update_elem+0x2fe/0x3d0
+> >     [<ffffffffadc6d0fd>] bpf_map_update_value.isra.0+0x2bd/0x520
+> >     [<ffffffffadc7349b>] map_update_elem+0x4cb/0x720
+> >     [<ffffffffadc7d983>] __se_sys_bpf+0x8c3/0xb90
+> >     [<ffffffffb029cc80>] do_syscall_64+0x30/0x40
+> >     [<ffffffffb0400099>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> >
+> > In the cpu_map_update_elem flow, when kthread_stop is called before
+> > calling the threadfn of rcpu->kthread, since the KTHREAD_SHOULD_STOP bi=
+t
+> > of kthread has been set by kthread_stop, the threadfn of rcpu->kthread
+> > will never be executed, and rcpu->refcnt will never be 0, which will
+> > lead to the allocated rcpu, rcpu->queue and rcpu->queue->queue cannot b=
+e
+> > released.
+> >
+> > Calling kthread_stop before executing kthread's threadfn will return
+> > -EINTR. We can complete the release of memory resources in this state.
+> >
+> > Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_=
+CPUMAP")
+> > Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>
+> Acked-by: Hou Tao <houtao1@huawei.com>
+>
 
-I am not pretty sure about the change in this patch. It's a simple-and-
-stupid way. But it also wastes memory for devices that have not pri-
-capable domain attached.
-
-So probably it's better to allocate fault_param at the place where a
-real pri-capable domain is attached to the device?
-
-Best regards,
-baolu
+Applied. Thanks
