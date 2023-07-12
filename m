@@ -2,367 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966C874FC5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 02:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436A174FC66
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 02:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjGLArh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 20:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
+        id S229512AbjGLAuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 20:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjGLArY (ORCPT
+        with ESMTP id S229714AbjGLAuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 20:47:24 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB611989
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 17:47:21 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b898cfa6a1so9141285ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 17:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689122841; x=1689727641;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybabf6Mx4VMuhxCixGmKPdJebzTyct2xBcgC4A4QTHE=;
-        b=jplCC0xsZilG74DILpEjVEcJAUe8+fabKs3V5dzMOA/MRxevrMTrfCsq5J8kwB4it9
-         yaq6LQmO55fkvLM9PkUBtS8Vd+9hPjkLC/z+ctQwPYiD+IXWSn5VSM6ZOMB8w+S82lnN
-         zJsNx2XDTbzxqfwZnAlQtzeb3c+aQ+7CPf4uEAoAY/3TnZ7CHx30kYV0pdFx8ugI2WpN
-         +7zLN+EyS2SmVPA0PobdaLBphljLcWlQHCbTxGF33YU1BSOIkP1puvtC13xCFHSQ/FY5
-         pkAZ3E12S/zah08ptHaKyTMOQW92q0+qKaFslkh39kRHH1BXj2m+B66uV9mLDQa3gkro
-         VN4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689122841; x=1689727641;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ybabf6Mx4VMuhxCixGmKPdJebzTyct2xBcgC4A4QTHE=;
-        b=jYevEzIwdxb733gHiOArj6x9SZNnNV/Sl7Og+GgLRbW6V1KFAB0iBwfLPsX1Oh4A0S
-         MTCSo7Z2Gq1U6CNHB5/lmi83btYgWWS7wjkCcC66CPGXmzMIPMf3K3HPGOnjiHmpEYgH
-         MVTiAH60ioHpN9sOujvuT3PovflPA/R2xsR1F1ZH52j5nlORy10+SPe/svTtduFF7g9T
-         0WEelj2OChvAvJgjThHAzrMilMovqJgIbtToMm3Msv/kwTdO5DCvq2N/Vgi1h7SK2FEQ
-         yNrsJfm0AjFa6ZnXGwY5KAh62FFbgiHUzpST+qxY9FqWGXD27igyx5akxXo5ki1qQMJl
-         K45A==
-X-Gm-Message-State: ABy/qLZfxaFcP+BrL/nAxq0OV1r78RdN7fzCl8uNXi6a7ytFYSKw2zsR
-        7C+9zG+869V8F6aH3h/fxVClRA==
-X-Google-Smtp-Source: APBJJlHEg/AwTm78Dq6O8WVJlRDk8pyUyhJoGvYjko3I2P2q+wSFXyqKnOsqjZ0AQ/vpoX0AWye6Uw==
-X-Received: by 2002:a17:902:da92:b0:1b3:d8ac:8db3 with SMTP id j18-20020a170902da9200b001b3d8ac8db3mr21326390plx.6.1689122840987;
-        Tue, 11 Jul 2023 17:47:20 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s8-20020a170902b18800b001b694140d96sm2543542plr.170.2023.07.11.17.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 17:47:20 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, peterz@infradead.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 7/7] io_uring: add futex waitv
-Date:   Tue, 11 Jul 2023 18:47:05 -0600
-Message-Id: <20230712004705.316157-8-axboe@kernel.dk>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230712004705.316157-1-axboe@kernel.dk>
-References: <20230712004705.316157-1-axboe@kernel.dk>
+        Tue, 11 Jul 2023 20:50:11 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C94319A3;
+        Tue, 11 Jul 2023 17:49:41 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BNicDM029801;
+        Wed, 12 Jul 2023 00:49:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yzFP01+q6Qw/NDndp57HUfUzC6iX8nOheoGH3LA29MI=;
+ b=QuBstOdkmdKDHL0bgbwsdlDZcb1CRXHXHMe4OOBljypfQ17OSuI6GeqKQGAxmSSbrtP2
+ WaGIQECEDv41mJb/dxVuKOmjdZrLdGoJVsz5UmMmF9+baynykSSHxEcnR8MaC7P9eebA
+ vpRhYFVYxYVXicvqnMVVHy0ej7n+JC5RSmu43x7DkyS3qof50T1HtofZvOrOa1izjfRj
+ BE2ruVnk+dZTSeWcE1sytRDidrozVgrmVJqEwNT8RmVxuYKmrBid7AU22YUDUiKzYzRB
+ N5cUOpyjgXJKzjMPxe8/RF7E1HiOzEoQUkJQ+XDR3hKFcYnp7kKT1cI1Rv3RjWX0znbh MA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rse45gca1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 00:49:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C0nUpN009105
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 00:49:30 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 17:49:30 -0700
+Message-ID: <79d06059-124e-9eb4-a332-4164ad75a1f0@quicinc.com>
+Date:   Tue, 11 Jul 2023 17:49:28 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 3/4] drm/msm/dpu: rename enable_compression() to
+ program_intf_cmd_cfg()
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        "David Airlie" <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
+        <andersson@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230712003310.31961-1-quic_abhinavk@quicinc.com>
+ <20230712003310.31961-4-quic_abhinavk@quicinc.com>
+ <b834fc46-80c8-b75d-d7e9-e525ac27077e@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <b834fc46-80c8-b75d-d7e9-e525ac27077e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 63npszpOq1ZZaRgYRaIIBJ5ZFFcCkVPg
+X-Proofpoint-ORIG-GUID: 63npszpOq1ZZaRgYRaIIBJ5ZFFcCkVPg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_14,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120003
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Needs a bit of splitting and a few hunks should go further back (like
-the wake handler typedef).
 
-WIP, adds IORING_OP_FUTEX_WAITV - pass in an array of futex addresses,
-and wait on all of them until one of them triggers.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- include/uapi/linux/io_uring.h |   1 +
- io_uring/futex.c              | 165 +++++++++++++++++++++++++++++++---
- io_uring/futex.h              |   2 +
- io_uring/opdef.c              |  11 +++
- 4 files changed, 169 insertions(+), 10 deletions(-)
+On 7/11/2023 5:42 PM, Dmitry Baryshkov wrote:
+> On 12/07/2023 03:33, Abhinav Kumar wrote:
+>> Rename the intf's enable_compression() op to program_intf_cmd_cfg()
+>> and allow it to accept a struct intf_cmd_mode_cfg to program
+>> all the bits at once. This can be re-used by widebus later on as
+>> well as it touches the same register.
+>>
+>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  8 ++++++--
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          |  8 +++++---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          | 11 +++++++++--
+>>   3 files changed, 20 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>> index b856c6286c85..052824eac9f3 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>> @@ -50,6 +50,7 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+>>               to_dpu_encoder_phys_cmd(phys_enc);
+>>       struct dpu_hw_ctl *ctl;
+>>       struct dpu_hw_intf_cfg intf_cfg = { 0 };
+>> +    struct intf_cmd_mode_cfg cmd_mode_cfg = {};
+>>       ctl = phys_enc->hw_ctl;
+>>       if (!ctl->ops.setup_intf_cfg)
+>> @@ -68,8 +69,11 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+>>                   phys_enc->hw_intf,
+>>                   phys_enc->hw_pp->idx);
+>> -    if (intf_cfg.dsc != 0 && phys_enc->hw_intf->ops.enable_compression)
+>> -        phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
+>> +    if (intf_cfg.dsc != 0)
+>> +        cmd_mode_cfg.data_compress = true;
+>> +
+>> +    if (phys_enc->hw_intf->ops.program_intf_cmd_cfg)
+>> +        
+>> phys_enc->hw_intf->ops.program_intf_cmd_cfg(phys_enc->hw_intf, 
+>> &cmd_mode_cfg);
+>>   }
+>>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> index d766791438e7..7323c713dad1 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> @@ -513,11 +513,13 @@ static void 
+>> dpu_hw_intf_disable_autorefresh(struct dpu_hw_intf *intf,
+>>   }
+>> -static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
+>> +static void dpu_hw_intf_program_intf_cmd_cfg(struct dpu_hw_intf *ctx,
+>> +                         struct intf_cmd_mode_cfg *cmd_mode_cfg)
+>>   {
+>>       u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
+>> -    intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
+>> +    if (cmd_mode_cfg->data_compress)
+>> +        intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
+>>       DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2);
+>>   }
+>> @@ -544,7 +546,7 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops 
+>> *ops,
+>>       }
+>>       if (mdss_rev->core_major_ver >= 7)
+>> -        ops->enable_compression = dpu_hw_intf_enable_compression;
+>> +        ops->program_intf_cmd_cfg = dpu_hw_intf_program_intf_cmd_cfg;
+>>   }
+>>   struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> index 3b5f18dbcb4b..c15f4973de5e 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> @@ -48,6 +48,11 @@ struct intf_status {
+>>       u32 line_count;        /* current line count including blanking */
+>>   };
+>> +struct intf_cmd_mode_cfg {
+> 
+> My first reaction was that usually all DPU structure names start with 
+> dpu_. Then I discovered that dpu_hw_intf.h diverges from this useful 
+> custom. Could you please: fix existing structure struct intf_* names to 
+> bear the dpu_ prefix. Then this structure can also be named as struct 
+> dpu_intf_cmd_mode_cfg.
+> 
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 3bd2d765f593..420f38675769 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -238,6 +238,7 @@ enum io_uring_op {
- 	IORING_OP_SENDMSG_ZC,
- 	IORING_OP_FUTEX_WAIT,
- 	IORING_OP_FUTEX_WAKE,
-+	IORING_OP_FUTEX_WAITV,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
-diff --git a/io_uring/futex.c b/io_uring/futex.c
-index ff0f6b394756..b22120545d31 100644
---- a/io_uring/futex.c
-+++ b/io_uring/futex.c
-@@ -14,11 +14,16 @@
- 
- struct io_futex {
- 	struct file	*file;
--	u32 __user	*uaddr;
-+	union {
-+		u32 __user			*uaddr;
-+		struct futex_waitv __user	*uwaitv;
-+	};
- 	int		futex_op;
- 	unsigned int	futex_val;
- 	unsigned int	futex_flags;
- 	unsigned int	futex_mask;
-+	unsigned int	futex_nr;
-+	unsigned long	futexv_owned;
- };
- 
- struct io_futex_data {
-@@ -45,6 +50,13 @@ void io_futex_cache_free(struct io_ring_ctx *ctx)
- 	io_alloc_cache_free(&ctx->futex_cache, io_futex_cache_entry_free);
- }
- 
-+static void __io_futex_complete(struct io_kiocb *req, struct io_tw_state *ts)
-+{
-+	req->async_data = NULL;
-+	hlist_del_init(&req->hash_node);
-+	io_req_task_complete(req, ts);
-+}
-+
- static void io_futex_complete(struct io_kiocb *req, struct io_tw_state *ts)
- {
- 	struct io_futex_data *ifd = req->async_data;
-@@ -53,22 +65,59 @@ static void io_futex_complete(struct io_kiocb *req, struct io_tw_state *ts)
- 	io_tw_lock(ctx, ts);
- 	if (!io_alloc_cache_put(&ctx->futex_cache, &ifd->cache))
- 		kfree(ifd);
--	req->async_data = NULL;
--	hlist_del_init(&req->hash_node);
--	io_req_task_complete(req, ts);
-+	__io_futex_complete(req, ts);
- }
- 
--static bool __io_futex_cancel(struct io_ring_ctx *ctx, struct io_kiocb *req)
-+static void io_futexv_complete(struct io_kiocb *req, struct io_tw_state *ts)
- {
--	struct io_futex_data *ifd = req->async_data;
-+	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-+	struct futex_vector *futexv = req->async_data;
-+	struct io_ring_ctx *ctx = req->ctx;
-+	int res = 0;
- 
--	/* futex wake already done or in progress */
--	if (!futex_unqueue(&ifd->q))
-+	io_tw_lock(ctx, ts);
-+
-+	res = futex_unqueue_multiple(futexv, iof->futex_nr);
-+	if (res != -1)
-+		io_req_set_res(req, res, 0);
-+
-+	kfree(req->async_data);
-+	req->flags &= ~REQ_F_ASYNC_DATA;
-+	__io_futex_complete(req, ts);
-+}
-+
-+static bool io_futexv_claimed(struct io_futex *iof)
-+{
-+	return test_bit(0, &iof->futexv_owned);
-+}
-+
-+static bool io_futexv_claim(struct io_futex *iof)
-+{
-+	if (test_bit(0, &iof->futexv_owned) ||
-+	    test_and_set_bit(0, &iof->futexv_owned))
- 		return false;
-+	return true;
-+}
-+
-+static bool __io_futex_cancel(struct io_ring_ctx *ctx, struct io_kiocb *req)
-+{
-+	/* futex wake already done or in progress */
-+	if (req->opcode == IORING_OP_FUTEX_WAIT) {
-+		struct io_futex_data *ifd = req->async_data;
-+
-+		if (!futex_unqueue(&ifd->q))
-+			return false;
-+		req->io_task_work.func = io_futex_complete;
-+	} else {
-+		struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-+
-+		if (!io_futexv_claim(iof))
-+			return false;
-+		req->io_task_work.func = io_futexv_complete;
-+	}
- 
- 	hlist_del_init(&req->hash_node);
- 	io_req_set_res(req, -ECANCELED, 0);
--	req->io_task_work.func = io_futex_complete;
- 	io_req_task_work_add(req);
- 	return true;
- }
-@@ -124,7 +173,7 @@ int io_futex_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
- 
--	if (unlikely(sqe->addr2 || sqe->buf_index || sqe->addr3))
-+	if (unlikely(sqe->buf_index || sqe->addr3))
- 		return -EINVAL;
- 
- 	iof->futex_op = READ_ONCE(sqe->fd);
-@@ -135,6 +184,53 @@ int io_futex_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (iof->futex_flags & FUTEX_CMD_MASK)
- 		return -EINVAL;
- 
-+	iof->futexv_owned = 0;
-+	return 0;
-+}
-+
-+static void io_futex_wakev_fn(struct wake_q_head *wake_q, struct futex_q *q)
-+{
-+	struct io_kiocb *req = q->wake_data;
-+	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-+
-+	if (!io_futexv_claim(iof))
-+		return;
-+
-+	__futex_unqueue(q);
-+	smp_store_release(&q->lock_ptr, NULL);
-+
-+	io_req_set_res(req, 0, 0);
-+	req->io_task_work.func = io_futexv_complete;
-+	io_req_task_work_add(req);
-+}
-+
-+int io_futexv_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-+	struct futex_vector *futexv;
-+	int ret;
-+
-+	ret = io_futex_prep(req, sqe);
-+	if (ret)
-+		return ret;
-+
-+	iof->futex_nr = READ_ONCE(sqe->off);
-+	if (!iof->futex_nr || iof->futex_nr > FUTEX_WAITV_MAX)
-+		return -EINVAL;
-+
-+	futexv = kcalloc(iof->futex_nr, sizeof(*futexv), GFP_KERNEL);
-+	if (!futexv)
-+		return -ENOMEM;
-+
-+	ret = futex_parse_waitv(futexv, iof->uwaitv, iof->futex_nr,
-+				io_futex_wakev_fn, req);
-+	if (ret) {
-+		kfree(futexv);
-+		return ret;
-+	}
-+
-+	req->flags |= REQ_F_ASYNC_DATA;
-+	req->async_data = futexv;
- 	return 0;
- }
- 
-@@ -162,6 +258,55 @@ static struct io_futex_data *io_alloc_ifd(struct io_ring_ctx *ctx)
- 	return kmalloc(sizeof(struct io_futex_data), GFP_NOWAIT);
- }
- 
-+int io_futex_waitv(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-+	struct futex_vector *futexv = req->async_data;
-+	struct io_ring_ctx *ctx = req->ctx;
-+	int ret, woken = -1;
-+
-+	io_ring_submit_lock(ctx, issue_flags);
-+
-+	ret = futex_wait_multiple_setup(futexv, iof->futex_nr, &woken);
-+
-+	/*
-+	 * The above call leaves us potentially non-running. This is fine
-+	 * for the sync syscall as it'll be blocking unless we already got
-+	 * one of the futexes woken, but it obviously won't work for an async
-+	 * invocation. Mark is runnable again.
-+	 */
-+	__set_current_state(TASK_RUNNING);
-+
-+	/*
-+	 * We got woken while setting up, let that side do the completion
-+	 */
-+	if (io_futexv_claimed(iof)) {
-+skip:
-+		io_ring_submit_unlock(ctx, issue_flags);
-+		return IOU_ISSUE_SKIP_COMPLETE;
-+	}
-+
-+	/*
-+	 * 0 return means that we successfully setup the waiters, and that
-+	 * nobody triggered a wakeup while we were doing so. < 0 or 1 return
-+	 * is either an error or we got a wakeup while setting up.
-+	 */
-+	if (!ret) {
-+		hlist_add_head(&req->hash_node, &ctx->futex_list);
-+		goto skip;
-+	}
-+
-+	io_ring_submit_unlock(ctx, issue_flags);
-+	if (ret < 0)
-+		req_set_fail(req);
-+	else if (woken != -1)
-+		ret = woken;
-+	io_req_set_res(req, ret, 0);
-+	kfree(futexv);
-+	req->flags &= ~REQ_F_ASYNC_DATA;
-+	return IOU_OK;
-+}
-+
- int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-diff --git a/io_uring/futex.h b/io_uring/futex.h
-index ddc9e0d73c52..7828e27e4184 100644
---- a/io_uring/futex.h
-+++ b/io_uring/futex.h
-@@ -3,7 +3,9 @@
- #include "cancel.h"
- 
- int io_futex_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-+int io_futexv_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags);
-+int io_futex_waitv(struct io_kiocb *req, unsigned int issue_flags);
- int io_futex_wake(struct io_kiocb *req, unsigned int issue_flags);
- 
- #if defined(CONFIG_FUTEX)
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index c9f23c21a031..2034acfe10d0 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -443,6 +443,14 @@ const struct io_issue_def io_issue_defs[] = {
- 		.issue			= io_futex_wake,
- #else
- 		.prep			= io_eopnotsupp_prep,
-+#endif
-+	},
-+	[IORING_OP_FUTEX_WAITV] = {
-+#if defined(CONFIG_FUTEX)
-+		.prep			= io_futexv_prep,
-+		.issue			= io_futex_waitv,
-+#else
-+		.prep			= io_eopnotsupp_prep,
- #endif
- 	},
- };
-@@ -670,6 +678,9 @@ const struct io_cold_def io_cold_defs[] = {
- 	[IORING_OP_FUTEX_WAKE] = {
- 		.name			= "FUTEX_WAKE",
- 	},
-+	[IORING_OP_FUTEX_WAITV] = {
-+		.name			= "FUTEX_WAITV",
-+	},
- };
- 
- const char *io_uring_get_opcode(u8 opcode)
--- 
-2.40.1
+Yeah I thought so too .... Ok, I can clean that up in this series and 
+rename this.
 
+Ack on the below comments.
+
+>> +    u8 data_compress;    /* enable data compress between dpu and dsi */
+>> +    /* can be expanded for other programmable bits */
+> 
+> Please drop this comment.
+> 
+>> +};
+>> +
+>>   /**
+>>    * struct dpu_hw_intf_ops : Interface to the interface Hw driver 
+>> functions
+>>    *  Assumption is these functions will be called after clocks are 
+>> enabled
+>> @@ -70,7 +75,7 @@ struct intf_status {
+>>    * @get_autorefresh:            Retrieve autorefresh config from 
+>> hardware
+>>    *                              Return: 0 on success, -ETIMEDOUT on 
+>> timeout
+>>    * @vsync_sel:                  Select vsync signal for tear-effect 
+>> configuration
+>> - * @enable_compression:         Enable data compression
+>> + * @program_intf_cmd_cfg:       Program the DPU to interface datapath 
+>> for command mode
+>>    */
+>>   struct dpu_hw_intf_ops {
+>>       void (*setup_timing_gen)(struct dpu_hw_intf *intf,
+>> @@ -108,7 +113,9 @@ struct dpu_hw_intf_ops {
+>>        */
+>>       void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t 
+>> encoder_id, u16 vdisplay);
+>> -    void (*enable_compression)(struct dpu_hw_intf *intf);
+>> +    // Program the datapath between DPU and intf for command mode
+> 
+> We have been using c99 comments in the code, Moreover, there is already 
+> description for this field in the comment above, so it can be dropped too.
+> 
+>> +    void (*program_intf_cmd_cfg)(struct dpu_hw_intf *intf,
+>> +                     struct intf_cmd_mode_cfg *cmd_mode_cfg);
+>>   };
+>>   struct dpu_hw_intf {
+> 
