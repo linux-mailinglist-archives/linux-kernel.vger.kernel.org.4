@@ -2,125 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCB674FF6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AE574FF72
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 08:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjGLGeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 02:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S231765AbjGLGem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 02:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjGLGdc (ORCPT
+        with ESMTP id S231615AbjGLGeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 02:33:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2E1FE0;
-        Tue, 11 Jul 2023 23:32:00 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C5QMKI006708;
-        Wed, 12 Jul 2023 06:30:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=l4GSwNcYz45Z7kHbz6leKQCTC7P1L7teTt+V2+ddnHk=;
- b=UUBIDpTbP4pPPe1hE0pu4Bk2jes/BKe5QbggNynx0EVRFhPma9ljH2JYEj0pb/eAR3DO
- jfAjcaFdfUOQ34l/mCov7x7cU5uU9e06SwaZteJgvbKVTuTWNG1zBXuRePTeG0pleBQH
- V8UQ4Ej4Ky6sMnJDtSCTBWHCegn05hNWBOXOLr9BvL4Hzmb8Aju4/qtLGlhQgHyY8Txn
- cMcXxRE4nooHPbzw/RMlsSn1NVV2JGF+YEN2l1jO6syn0hLe5LOCCqER4oHokqTzpG4r
- 41OgVVmxHx7WzjTdrayc0/ui2SdZI74N2M5J2MM+l6pHail5QsEDVXuLqiMK4lj2OnKk +w== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsfeq0q3t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 06:30:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36C6UGgN020800
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 06:30:16 GMT
-Received: from [10.216.14.217] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
- 2023 23:30:09 -0700
-Message-ID: <42bee6c5-6e1f-2b41-3013-023bd95fe8b7@quicinc.com>
-Date:   Wed, 12 Jul 2023 12:00:05 +0530
+        Wed, 12 Jul 2023 02:34:13 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DE72D40
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:32:31 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4036bd4fff1so134501cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 23:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689143550; x=1691735550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zZpxFys7nJdvmBPjIJ49j1uiao8v048XzoTDU+vGGrY=;
+        b=uyGuYrzeVa5Bc8Dj1mPDQiSMBckJ1dcgG3j7LVGxZ1wlmcdmZsHIo6jNJnlYit7fJ1
+         xH2BVbT3dBlHskg1w8DmNVmZuIpItmo6RTWYbvXMg3vGtbEGJ+e4yYK0Iq7BFv5dnVA7
+         uGG3nK4TiJRvLJYoz6sV8EYvCNUpyCpm16/SjGJRR4qXZ055HeFwRZBs15YdtKKEpCxF
+         UcVH3luQlSPFkvH9WeRTBoLWMoFL+gquZx3y0z/vvV2sR+l9z7TtXgHLJcOywowfc6VW
+         FfYLSi4aDV6S1trmPRat3youSjdpEcp/id5GxR4cLAVkvhm5pzfnXJyjCCFKvBtsrHYm
+         1aKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689143550; x=1691735550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zZpxFys7nJdvmBPjIJ49j1uiao8v048XzoTDU+vGGrY=;
+        b=enIFthliQlYqaBIbZ1wfYpyTYzVURGxajoaJ6yOFFypi2C4CgaOwLq/itcxdGm9XgA
+         loJxW2k4m8FSQInqpT624xVCthGwW0Q96yD40g0clIZ4cmhAtaLcvFvLL5eARSDovLQy
+         Yf2SwXy6qCC1HdcyY+wzkhrLwpMIgqn+OBUi5cQ+GzH6L9H4SaIflhVLOzZYAQ1ieSMA
+         e2mEUMlsHyFw9wMSNbn1J3mCNvCibbrz0+2EwLvhymk12fQNn+I16+5Ahn+oE0KB8YXv
+         TJLNZ+W49lwZWWe7XTbGiT8J4Vh07tCaYXJvh5/1wcq1jt+N168jMapAGsJYyq7yeg0o
+         AkLg==
+X-Gm-Message-State: ABy/qLaMfhEU1nOgoe+fLZ8heMcUsaPLV+qdb6jgqMszzDsBwqcOxDDH
+        Z1C8uWrHXi349Sdb88znLKPAIuJqO4Cvm/jrY3aPMP4NpvZDKhyMT+eZmJR0
+X-Google-Smtp-Source: APBJJlHitQTlvL6I4z82gB03QXe0/JP5JePZh/j6YDTLZIyn9YFxONiiRnRDGZg9nAyqPQvt4Prx16OpGyUGDkeOfEI=
+X-Received: by 2002:a05:622a:1898:b0:403:b242:3e30 with SMTP id
+ v24-20020a05622a189800b00403b2423e30mr80006qtc.1.1689143550478; Tue, 11 Jul
+ 2023 23:32:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V4 3/4] dt-bindings: qcom-qce: add SoC compatible string
- for ipq9574
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <bhupesh.sharma@linaro.org>, <conor+dt@kernel.org>,
-        <davem@davemloft.net>, <devicetree@vger.kernel.org>,
-        <herbert@gondor.apana.org.au>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mturquette@baylibre.com>, <p.zabel@pengutronix.de>,
-        <quic_arajkuma@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_poovendh@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_srichara@quicinc.com>,
-        <robh+dt@kernel.org>, <sboyd@kernel.org>,
-        <thara.gopinath@gmail.com>
-References: <20230526161129.1454-4-quic_anusha@quicinc.com>
- <20230623115525.7300-1-quic_anusha@quicinc.com>
- <7ceba3df-bee8-9f1d-a27d-85e0b5f35d83@linaro.org>
-From:   Anusha Canchi <quic_anusha@quicinc.com>
-In-Reply-To: <7ceba3df-bee8-9f1d-a27d-85e0b5f35d83@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6sSh4cedaofY5TvIYKyQIB2E656d8RkO
-X-Proofpoint-GUID: 6sSh4cedaofY5TvIYKyQIB2E656d8RkO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_03,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 adultscore=0 clxscore=1011
- priorityscore=1501 mlxlogscore=741 suspectscore=0 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307120055
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230712060144.3006358-1-fengwei.yin@intel.com> <20230712060144.3006358-4-fengwei.yin@intel.com>
+In-Reply-To: <20230712060144.3006358-4-fengwei.yin@intel.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 12 Jul 2023 00:31:54 -0600
+Message-ID: <CAOUHufYef--8MxFettL6fOGjVx2vyZHZQU6EEaTCoW0XBvuC8Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] mm: mlock: update mlock_pte_range to handle
+ large folio
+To:     Yin Fengwei <fengwei.yin@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, willy@infradead.org, david@redhat.com,
+        ryan.roberts@arm.com, shy828301@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/23/2023 6:23 PM, Krzysztof Kozlowski wrote:
-> On 23/06/2023 13:55, Anusha Rao wrote:
->>> Document the compatible string for ipq9574.
->>>
->>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->>> Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->>> ---
->>>   Changes in V4:
->>> 	- Picked up Reviewed-by tag.
->> A gentle reminder to pick the dt-binding patch.
->> As the dts change is picked, this patch is required to resolve dt-bindings check issues.
-> One patchset with four patches targeting three different subsystems, so
-> no wonder it gets missed. You will usually receive better results with
-> splitting such patchsets per subsystems.
+On Wed, Jul 12, 2023 at 12:02=E2=80=AFAM Yin Fengwei <fengwei.yin@intel.com=
+> wrote:
 >
-> One more thing is lack of proper subject prefix which indicates the
-> subsystem. Without it why anyone would pick it up? For example me, I
-> would just ignore it for my subsystem...
-Ok..Referred previous commit titles of this file and added subject 
-prefix. Do you suggest to repost it with
-"dt-bindings: crypto: qcom-qce: add SoC compatible string for ipq9574" ?
-
-Thanks,
-Anusha
+> Current kernel only lock base size folio during mlock syscall.
+> Add large folio support with following rules:
+>   - Only mlock large folio when it's in VM_LOCKED VMA range
 >
-> Best regards,
-> Krzysztof
+>   - If there is cow folio, mlock the cow folio as cow folio
+>     is also in VM_LOCKED VMA range.
 >
+>   - munlock will apply to the large folio which is in VMA range
+>     or cross the VMA boundary.
+>
+> The last rule is used to handle the case that the large folio is
+> mlocked, later the VMA is split in the middle of large folio
+> and this large folio become cross VMA boundary.
+>
+> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+> ---
+>  mm/mlock.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 99 insertions(+), 5 deletions(-)
+>
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index 0a0c996c5c214..f49e079066870 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -305,6 +305,95 @@ void munlock_folio(struct folio *folio)
+>         local_unlock(&mlock_fbatch.lock);
+>  }
+>
+> +static inline bool should_mlock_folio(struct folio *folio,
+> +                                       struct vm_area_struct *vma)
+> +{
+> +       if (vma->vm_flags & VM_LOCKED)
+> +               return (!folio_test_large(folio) ||
+> +                               folio_within_vma(folio, vma));
+> +
+> +       /*
+> +        * For unlock, allow munlock large folio which is partially
+> +        * mapped to VMA. As it's possible that large folio is
+> +        * mlocked and VMA is split later.
+> +        *
+> +        * During memory pressure, such kind of large folio can
+> +        * be split. And the pages are not in VM_LOCKed VMA
+> +        * can be reclaimed.
+> +        */
+> +
+> +       return true;
 
+Looks good, or just
+
+should_mlock_folio() // or whatever name you see fit, can_mlock_folio()?
+{
+  return !(vma->vm_flags & VM_LOCKED) || folio_within_vma();
+}
+
+> +}
+> +
+> +static inline unsigned int get_folio_mlock_step(struct folio *folio,
+> +                       pte_t pte, unsigned long addr, unsigned long end)
+> +{
+> +       unsigned int nr;
+> +
+> +       nr =3D folio_pfn(folio) + folio_nr_pages(folio) - pte_pfn(pte);
+> +       return min_t(unsigned int, nr, (end - addr) >> PAGE_SHIFT);
+> +}
+> +
+> +void mlock_folio_range(struct folio *folio, struct vm_area_struct *vma,
+> +               pte_t *pte, unsigned long addr, unsigned int nr)
+> +{
+> +       struct folio *cow_folio;
+> +       unsigned int step =3D 1;
+> +
+> +       mlock_folio(folio);
+> +       if (nr =3D=3D 1)
+> +               return;
+> +
+> +       for (; nr > 0; pte +=3D step, addr +=3D (step << PAGE_SHIFT), nr =
+-=3D step) {
+> +               pte_t ptent;
+> +
+> +               step =3D 1;
+> +               ptent =3D ptep_get(pte);
+> +
+> +               if (!pte_present(ptent))
+> +                       continue;
+> +
+> +               cow_folio =3D vm_normal_folio(vma, addr, ptent);
+> +               if (!cow_folio || cow_folio =3D=3D folio) {
+> +                       continue;
+> +               }
+> +
+> +               mlock_folio(cow_folio);
+> +               step =3D get_folio_mlock_step(folio, ptent,
+> +                               addr, addr + (nr << PAGE_SHIFT));
+> +       }
+> +}
+> +
+> +void munlock_folio_range(struct folio *folio, struct vm_area_struct *vma=
+,
+> +               pte_t *pte, unsigned long addr, unsigned int nr)
+> +{
+> +       struct folio *cow_folio;
+> +       unsigned int step =3D 1;
+> +
+> +       munlock_folio(folio);
+> +       if (nr =3D=3D 1)
+> +               return;
+> +
+> +       for (; nr > 0; pte +=3D step, addr +=3D (step << PAGE_SHIFT), nr =
+-=3D step) {
+> +               pte_t ptent;
+> +
+> +               step =3D 1;
+> +               ptent =3D ptep_get(pte);
+> +
+> +               if (!pte_present(ptent))
+> +                       continue;
+> +
+> +               cow_folio =3D vm_normal_folio(vma, addr, ptent);
+> +               if (!cow_folio || cow_folio =3D=3D folio) {
+> +                       continue;
+> +               }
+> +
+> +               munlock_folio(cow_folio);
+> +               step =3D get_folio_mlock_step(folio, ptent,
+> +                               addr, addr + (nr << PAGE_SHIFT));
+> +       }
+> +}
+
+I'll finish the above later.
+
+>  static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
+>                            unsigned long end, struct mm_walk *walk)
+>
+> @@ -314,6 +403,7 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long =
+addr,
+>         pte_t *start_pte, *pte;
+>         pte_t ptent;
+>         struct folio *folio;
+> +       unsigned int step =3D 1;
+>
+>         ptl =3D pmd_trans_huge_lock(pmd, vma);
+>         if (ptl) {
+> @@ -329,24 +419,28 @@ static int mlock_pte_range(pmd_t *pmd, unsigned lon=
+g addr,
+>                 goto out;
+>         }
+>
+> -       start_pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+> +       pte =3D start_pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, =
+&ptl);
+>         if (!start_pte) {
+>                 walk->action =3D ACTION_AGAIN;
+>                 return 0;
+>         }
+> -       for (pte =3D start_pte; addr !=3D end; pte++, addr +=3D PAGE_SIZE=
+) {
+> +
+> +       for (; addr !=3D end; pte +=3D step, addr +=3D (step << PAGE_SHIF=
+T)) {
+> +               step =3D 1;
+>                 ptent =3D ptep_get(pte);
+>                 if (!pte_present(ptent))
+>                         continue;
+>                 folio =3D vm_normal_folio(vma, addr, ptent);
+>                 if (!folio || folio_is_zone_device(folio))
+>                         continue;
+> -               if (folio_test_large(folio))
+> +               if (!should_mlock_folio(folio, vma))
+>                         continue;
+> +
+> +               step =3D get_folio_mlock_step(folio, ptent, addr, end);
+>                 if (vma->vm_flags & VM_LOCKED)
+> -                       mlock_folio(folio);
+> +                       mlock_folio_range(folio, vma, pte, addr, step);
+>                 else
+> -                       munlock_folio(folio);
+> +                       munlock_folio_range(folio, vma, pte, addr, step);
+>         }
+>         pte_unmap(start_pte);
+>  out:
+
+Looks good.
