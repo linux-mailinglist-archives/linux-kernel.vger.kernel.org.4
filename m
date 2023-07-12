@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001577502A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31467502A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 11:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbjGLJOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 05:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S231528AbjGLJPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 05:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbjGLJOj (ORCPT
+        with ESMTP id S231251AbjGLJPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:14:39 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD6FA10A;
-        Wed, 12 Jul 2023 02:14:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8DxPOv5bq5km+YDAA--.5918S3;
-        Wed, 12 Jul 2023 17:14:33 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax3c74bq5kGiAqAA--.53735S3;
-        Wed, 12 Jul 2023 17:14:32 +0800 (CST)
-Message-ID: <79450f26-fc21-fdbc-50c3-00dc2c3d4967@loongson.cn>
-Date:   Wed, 12 Jul 2023 17:14:32 +0800
+        Wed, 12 Jul 2023 05:15:43 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770A8FB;
+        Wed, 12 Jul 2023 02:15:40 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1689153330t5p9jpia
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Jul 2023 17:15:29 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: aBJFcW+uBGY71Xw51Pe1VJBZqwvWdfJudhp8fr67SS8yC+nzmZ3yNaYAkBZ9Z
+        0KoDdePXRy7AD5YTUUYWPlEGt0VlVeybPyqOLrF+nHwjvp19vX3qfpAvqqqCpBtkNORNZ+h
+        ZraN06Z40Y5k6J2sO9vWuI/osGFxCfKwNl689WfAHzTQLmEk7lJvB2A1GturBchy+jglFv1
+        XxO5lZF7F1eVW8vzZpuKUBbyivMpwDUYZQIGSQ8Q/fcZhu8nBboLJaYGSG88JdLh9E5tpE5
+        SkQto6Apu9lK+jztXYtXZckKklQsc3FACntjPRZMoBhyDkc5vZSs6s4jGB+ZBUfd7X+BfMJ
+        Tnvz0qYVsSIwUfs05aQd0GgX+1olLfhjcxz9ieW8mRVK3MJu6mEkUd9gL8aNDxLPJt67A2h
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3322903985340973383
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v3 00/11] tools/nolibc: shrink arch support
+Date:   Wed, 12 Jul 2023 17:15:28 +0800
+Message-Id: <cover.1689150149.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
- checking of eiointc_index
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230711120807.1805186-1-maobibo@loongson.cn>
- <20230711120807.1805186-2-maobibo@loongson.cn> <865y6pwlsm.wl-maz@kernel.org>
-From:   bibo mao <maobibo@loongson.cn>
-In-Reply-To: <865y6pwlsm.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax3c74bq5kGiAqAA--.53735S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KF1xXFWxXr1DtFy3CFyrZrc_yoW8Cr13pF
-        W7Aayq9w45Ka47C3s3tF18JFyYvws3t39rKayxJay7X3Z8Jw13Gr4Fyas0kr1SkrW7CF1I
-        qF4rXF4UC3Z0yrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j1
-        WlkUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Willy, Thomas
 
+Here is the revision of the v2 arch support shrink patchset [1], it
+mainly applies suggestions from you.
 
-在 2023/7/12 16:56, Marc Zyngier 写道:
-> On Tue, 11 Jul 2023 13:08:06 +0100,
-> Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> Return value of function eiointc_index is int, however it is converted
->> into uint32_t and then compared smaller than zero. This causes logic
->> problem. There is eioint initialization problem on qemu virt-machine
->> where there is only one eioint node and more than 4 vcpus. Nodemap of
->> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
->> other vcpus can not response any external device interrupts and only local
->> processor interrupts like ipi/timer can work.
->>
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> ---
->>  drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
->>  1 file changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
->> index 92d8aa28bdf5..1c5a5b59f199 100644
->> --- a/drivers/irqchip/irq-loongson-eiointc.c
->> +++ b/drivers/irqchip/irq-loongson-eiointc.c
->> @@ -144,12 +144,14 @@ static int eiointc_router_init(unsigned int cpu)
->>  	int i, bit;
->>  	uint32_t data;
->>  	uint32_t node = cpu_to_eio_node(cpu);
->> -	uint32_t index = eiointc_index(node);
->> +	int index = eiointc_index(node);
->>  
->> -	if (index < 0) {
->> -		pr_err("Error: invalid nodemap!\n");
->> -		return -1;
->> -	}
->> +	/*
->> +	 * qemu virt-machine has only one eio intc and more than four cpus
->> +	 * irq from eio can only be routed to cpu 0-3 on virt machine
->> +	 */
->> +	if (index < 0)
->> +		return 0;
->>  
->>  	if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
->>  		eiointc_enable();
-> 
-> This sort of thing really needs a Fixes: tag.
-Sure, will add Fixes tag.
+It is based on the 20230710-nolibc-ser2-tom-syscall-configv4-report
+branch of nolibc repo.
 
-I am a newbie to lkml, thanks for kindly pointing it out :)
+Tested for all of the supported archs:
 
-Regards
-Bibo Mao
+           arch/board | result
+          ------------|------------
+      arm/versatilepb | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+      arm/vexpress-a9 | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+             arm/virt | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+         aarch64/virt | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+              i386/pc | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+            x86_64/pc | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+         mipsel/malta | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+     loongarch64/virt | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+         riscv64/virt | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
+         riscv32/virt | 151 test(s): 122 passed,   7 skipped,  22 failed => status: failure.
+s390x/s390-ccw-virtio | 151 test(s): 144 passed,   7 skipped,   0 failed => status: warning.
 
-> 
-> Thanks,
-> 
-> 	M.
-> 
+Changes from v2 --> v3:
+
+* tools/nolibc: remove the old sys_stat support
+
+    Revert the reorg operation, basically the same as v1
+
+* tools/nolibc: add new crt.h with _start_c
+
+    Revert the reorg operation
+    Add crt.h in Makefile
+    Add _nolibc_main alias for main to silence the compile warning about 
+
+* tools/nolibc: arm: shrink _start with _start_c
+  tools/nolibc: aarch64: shrink _start with _start_c
+  tools/nolibc: i386: shrink _start with _start_c
+  tools/nolibc: x86_64: shrink _start with _start_c
+  tools/nolibc: mips: shrink _start with _start_c
+  tools/nolibc: loongarch: shrink _start with _start_c
+  tools/nolibc: riscv: shrink _start with _start_c
+  tools/nolibc: s390: shrink _start with _start_c
+
+    Revert the reorg operation, but still use post-whitespaces instead of post-tab.
+    Include "crt.h" in arch-<ARCH>.h
+
+* tools/nolibc: arch-*.h: add missing space after ','
+
+    Fix up the errors reported by scripts/checkpatch.pl
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/cover.1688828139.git.falcon@tinylab.org/
+
+Zhangjin Wu (11):
+  tools/nolibc: remove the old sys_stat support
+  tools/nolibc: add new crt.h with _start_c
+  tools/nolibc: arm: shrink _start with _start_c
+  tools/nolibc: aarch64: shrink _start with _start_c
+  tools/nolibc: i386: shrink _start with _start_c
+  tools/nolibc: x86_64: shrink _start with _start_c
+  tools/nolibc: mips: shrink _start with _start_c
+  tools/nolibc: loongarch: shrink _start with _start_c
+  tools/nolibc: riscv: shrink _start with _start_c
+  tools/nolibc: s390: shrink _start with _start_c
+  tools/nolibc: arch-*.h: add missing space after ','
+
+ tools/include/nolibc/Makefile         |  1 +
+ tools/include/nolibc/arch-aarch64.h   | 56 ++----------------
+ tools/include/nolibc/arch-arm.h       | 82 +++------------------------
+ tools/include/nolibc/arch-i386.h      | 61 +++-----------------
+ tools/include/nolibc/arch-loongarch.h | 45 ++-------------
+ tools/include/nolibc/arch-mips.h      | 76 ++++---------------------
+ tools/include/nolibc/arch-riscv.h     | 68 +++-------------------
+ tools/include/nolibc/arch-s390.h      | 63 ++------------------
+ tools/include/nolibc/arch-x86_64.h    | 57 +++----------------
+ tools/include/nolibc/crt.h            | 59 +++++++++++++++++++
+ tools/include/nolibc/sys.h            | 63 ++++----------------
+ tools/include/nolibc/types.h          |  4 +-
+ 12 files changed, 133 insertions(+), 502 deletions(-)
+ create mode 100644 tools/include/nolibc/crt.h
+
+-- 
+2.25.1
 
