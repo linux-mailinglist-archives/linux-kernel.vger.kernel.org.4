@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9056750209
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4BC75020E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjGLIvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S232608AbjGLIwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbjGLIvf (ORCPT
+        with ESMTP id S231960AbjGLIwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:51:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287381703;
-        Wed, 12 Jul 2023 01:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DHhCKGZdH/5rZrSaKb5E3CgdrbPl5nVO/J8xZtPwSIg=; b=bppyBLuE3mFHmPDyFqjlD16QRs
-        kbWcuGabWQi3MxItLRYSjS3ID0w2ySs657uAfNbwq9a22eHx+BmRuMX8END5Fnlpmu3RLCirWSK10
-        gEVXuBz25d7dAL4Wu3yBqTrvAKHDbMgFq5yrIITWfWxjKaILJvb0+My4oOoqwvDwbR5H85282KG9e
-        GHCmBZXHqGYfKLK2Ucn+jUBzFERxMgIv4k85RqpKJ3AFME5wAfLn9jzMV9lZT2tdkphSwVpx3E47A
-        /9AiWwB43320Wen1xa+FoBTAPxb77GIOMDMv5sKpbFsWWsY2u7G1vphtsxAANoaqOaVtsuN7K9dUq
-        eAIAj7Rw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qJVZ7-00GVq5-Ts; Wed, 12 Jul 2023 08:51:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1493B3002CE;
-        Wed, 12 Jul 2023 10:51:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F3850243AF2B7; Wed, 12 Jul 2023 10:51:16 +0200 (CEST)
-Date:   Wed, 12 Jul 2023 10:51:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com
-Subject: Re: [PATCH 3/7] io_uring: add support for futex wake and wait
-Message-ID: <20230712085116.GC3100107@hirez.programming.kicks-ass.net>
-References: <20230712004705.316157-1-axboe@kernel.dk>
- <20230712004705.316157-4-axboe@kernel.dk>
+        Wed, 12 Jul 2023 04:52:43 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC875A9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:52:41 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso68397535e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1689151960; x=1691743960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3KQT6tn3IkIMgWvQdIWn/fFTIkPGq6wDM785k0TXyQ4=;
+        b=fCk/E7k6Bn7G1jB3D236SgDCOfp+FSKoiEbYUigL0ygKoT2l/c5FpK4FVwFC+1vZsH
+         NXRb3uv1hnEZ1dP0Tg2Et9reupONnDU2Pl+GetssCAHcVDagCq0PdxeMmq3ayNdX4hxn
+         3gM7rBzfmGWoyWNj5Hx+ajHD9Ov2Stl2GlPzikjkUpLZnafn9qsNr/lYC9YjQ4taEyTm
+         1T/sC+/Uw4c5c6S5PcTr/ooObNTzQR6MbuZCwTJJLWoRkhv+CUaXJIF38LllSGoenFes
+         weXA2qDI9KOXrhAhAOInpjN/PD3MJsjTuQ+GiS6AgjuswjO1uhmtxVjUVxz9lxb+OKVK
+         n+0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689151960; x=1691743960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3KQT6tn3IkIMgWvQdIWn/fFTIkPGq6wDM785k0TXyQ4=;
+        b=MylfsuON7zPglTzaisik7XvCjoASs5ADJY92cborhwWSd1zqSwv7VKS+Vx08YXULd6
+         VmGWjciCEeFNqjUmLwko4ov37GaIvE1NBm1O2ohhMmURi4cHwSPdvZ/JFjsVq7sqV5o3
+         Z5ew0c2k3e6AHFxmcCxLF/L2CPGL7qDffmFYfrvkE/dgAChgoi+z1CVL+Kv4OlKT/GFp
+         IlE0dUp0JYKypmLkvH4B/gfWDd9EVp3FeoEktxtUgWTC+LPjDjw5I56NstfQtBb4Gkux
+         ht4JSOCImV/J1GmPCDRMDdBGWCncY89Y1k8Zk+SRfyTdUwfuIC3iaCX8MYe8CjBMo8pq
+         CW/w==
+X-Gm-Message-State: ABy/qLakZeaYtoZn9r4cx0P/fMQdRRKWdXM/HD1CwwrgfuqGtlK3jWGB
+        +w63sLnOs0XWW/HE8raECsL4zw==
+X-Google-Smtp-Source: APBJJlFyrNrVeGP+d5vQvvHiSEn3WlxIabBLopJEroWzR+YQwwdTDNSSb+n7pHkTmK1IDPvNwSMoLQ==
+X-Received: by 2002:a5d:45d1:0:b0:314:321a:4bc7 with SMTP id b17-20020a5d45d1000000b00314321a4bc7mr16268948wrs.15.1689151960309;
+        Wed, 12 Jul 2023 01:52:40 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id t9-20020a5d5349000000b003143b7449ffsm4475140wrv.25.2023.07.12.01.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 01:52:39 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: pinctrl: cypress,cy8c95x0: Add reset pin
+Date:   Wed, 12 Jul 2023 10:52:34 +0200
+Message-ID: <20230712085236.2496651-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230712004705.316157-4-axboe@kernel.dk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,106 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 06:47:01PM -0600, Jens Axboe wrote:
-> Add support for FUTEX_WAKE/WAIT primitives.
-> 
-> IORING_OP_FUTEX_WAKE is mix of FUTEX_WAKE and FUTEX_WAKE_BITSET, as
-> it does support passing in a bitset.
-> 
-> Similary, IORING_OP_FUTEX_WAIT is a mix of FUTEX_WAIT and
-> FUTEX_WAIT_BITSET.
-> 
-> FUTEX_WAKE is straight forward, as we can always just do those inline.
-> FUTEX_WAIT will queue the futex with an appropriate callback, and
-> that callback will in turn post a CQE when it has triggered.
-> 
-> Cancelations are supported, both from the application point-of-view,
-> but also to be able to cancel pending waits if the ring exits before
-> all events have occurred.
-> 
-> This is just the barebones wait/wake support. PI or REQUEUE support is
-> not added at this point, unclear if we might look into that later.
-> 
-> Likewise, explicit timeouts are not supported either. It is expected
-> that users that need timeouts would do so via the usual io_uring
-> mechanism to do that using linked timeouts.
-> 
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-I'm not sure I'm qualified to review this :/ I really don't know
-anything about how io-uring works. And the above doesn't really begin to
-explain things.
+This patch adds support for an optional reset pin.
 
+The reset pin is used to bring the chip into a known state and has an
+internal pull-down, allowing it to be left floating if not needed.
 
-> +static void io_futex_wake_fn(struct wake_q_head *wake_q, struct futex_q *q)
-> +{
-> +	struct io_futex_data *ifd = container_of(q, struct io_futex_data, q);
-> +	struct io_kiocb *req = ifd->req;
-> +
-> +	__futex_unqueue(q);
-> +	smp_store_release(&q->lock_ptr, NULL);
-> +
-> +	io_req_set_res(req, 0, 0);
-> +	req->io_task_work.func = io_futex_complete;
-> +	io_req_task_work_add(req);
-> +}
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+Changes in V2:
+- Update subject
+- Update reset-gpios description.
+---
+ .../devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml         | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I'm noting the WARN from futex_wake_mark() went walk-about.
-
-Perhaps something like so?
-
-
-diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
-index ba01b9408203..07758d48d5db 100644
---- a/kernel/futex/waitwake.c
-+++ b/kernel/futex/waitwake.c
-@@ -106,20 +106,11 @@
-  * double_lock_hb() and double_unlock_hb(), respectively.
-  */
+diff --git a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
+index 222d57541b65..2fa22160336f 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cypress,cy8c95x0.yaml
+@@ -51,6 +51,10 @@ properties:
+     description:
+       Optional power supply.
  
--/*
-- * The hash bucket lock must be held when this is called.
-- * Afterwards, the futex_q must not be accessed. Callers
-- * must ensure to later call wake_up_q() for the actual
-- * wakeups to occur.
-- */
--void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
-+bool __futex_wake_mark(struct futex_q *q)
- {
--	struct task_struct *p = q->task;
--
- 	if (WARN(q->pi_state || q->rt_waiter, "refusing to wake PI futex\n"))
--		return;
-+		return false;
- 
--	get_task_struct(p);
- 	__futex_unqueue(q);
- 	/*
- 	 * The waiting task can free the futex_q as soon as q->lock_ptr = NULL
-@@ -130,6 +121,26 @@ void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
- 	 */
- 	smp_store_release(&q->lock_ptr, NULL);
- 
-+	return true;
-+}
++  reset-gpios:
++    description: Reference to the GPIO connected to the XRES pin
++    maxItems: 1
 +
-+/*
-+ * The hash bucket lock must be held when this is called.
-+ * Afterwards, the futex_q must not be accessed. Callers
-+ * must ensure to later call wake_up_q() for the actual
-+ * wakeups to occur.
-+ */
-+void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
-+{
-+	struct task_struct *p = q->task;
-+
-+	get_task_struct(p);
-+
-+	if (!__futex_wake_mark(q)) {
-+		put_task_struct(p);
-+		return;
-+	}
-+
- 	/*
- 	 * Queue the task for later wakeup for after we've released
- 	 * the hb->lock.
+ patternProperties:
+   '-pins$':
+     type: object
+
+base-commit: 3bc551a3007a751a53bfba5b37fa16157f4fb861
+-- 
+2.41.0
+
