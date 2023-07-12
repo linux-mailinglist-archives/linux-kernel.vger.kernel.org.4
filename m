@@ -2,312 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF347501D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF387501D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 10:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjGLIjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 04:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S232859AbjGLIjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 04:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjGLIi3 (ORCPT
+        with ESMTP id S232825AbjGLIim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:38:29 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A74E2685
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:37:16 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-66869feb7d1so3683876b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 01:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1689151036; x=1691743036;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rBUqtpQ/qPgW5u7ywMLTowE+PlXrM3g8tx27h51sMCE=;
-        b=VqzN9T6Qk0SmNiMem+kRtijR440z3E/ALzGAi5DDK6EoHaDzEG/nn3Ed2Qv6pH6Iyw
-         VHphXyz81s1pWvpd9DYqoqyVUxrs9jGYhkmJrFtpjhHBEwogtxcBINhKqQHqVblVqUO8
-         /KeWzOyK6V4UDu0itEHFvgsvtfZKNRJXn+mbCx2r8H8oYSb/p0K+H5e7vx4a0/h3Zpm1
-         twR1Zo4NCjJTuFY8b1HAl+Q6DJYwJjOe4MC1k0S6I7CrK3mu0QXpEHzbyOFcxsuTgfNz
-         JplpzbKV72uyfouPy9r3K5hfutrfi3qrrOPCi5u3iYE8E9zF8IVLRtOX9LffJXqcWJSw
-         D5qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689151036; x=1691743036;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rBUqtpQ/qPgW5u7ywMLTowE+PlXrM3g8tx27h51sMCE=;
-        b=EXYHF+yRzbWHOoRQWnMVG6pG2VohZ0GbPnp4BN4BUz+/HvrI1wic9M8xMBJsndva7r
-         q5HM6mLbO80EMUMiWx3hHqFl3riOP7PAZ/Qrgap38AxLxnMnpNcZ/X9SXD8V1fbCWbaH
-         E/I48vOcoRnTRq5M6omW6sLpCsWXi0nkMZsU9KapdhZQgUMhgja1dbvLys6jY0Xa3NK3
-         MQVyUMMoawMtGlIe/hB34/+wlmq+YYBYcXoHXb4ZucyZzcFBpi57pBMhQOhgnWyO2C/r
-         c0p66f+AMxU9NdnGm4fO6pEVBArwOhIH84FI4XCHvmGW76Q2CRtrovATmdhrIOnIKkMr
-         IUbA==
-X-Gm-Message-State: ABy/qLY4PDHPhT4bLloeykCMz3QfjAMJxytZOM8w9G4k1ptvJcdT99iJ
-        zbEPZh776EXH2bc9cY+OkVccVw==
-X-Google-Smtp-Source: APBJJlH41zH8i6+u4OkMNyNGL+1U7FgwlqKFvL7f8wmCC510ncVN0Y1EGYRFfKG++mLfEqfgMFyv7w==
-X-Received: by 2002:a05:6a00:1409:b0:673:5d1e:6654 with SMTP id l9-20020a056a00140900b006735d1e6654mr16234608pfu.33.1689151036022;
-        Wed, 12 Jul 2023 01:37:16 -0700 (PDT)
-Received: from [10.254.22.102] ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa78e13000000b00682b2fbd20fsm3078868pfr.31.2023.07.12.01.37.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 01:37:15 -0700 (PDT)
-Message-ID: <ed82e6b9-3d9f-259a-82bc-cc51f9131f29@bytedance.com>
-Date:   Wed, 12 Jul 2023 16:37:10 +0800
+        Wed, 12 Jul 2023 04:38:42 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B81CA1998;
+        Wed, 12 Jul 2023 01:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=iqmSU
+        ZwzBw1hM5T9jJOZyxbxjgisyiiptjpGYA/61SM=; b=DlQ4LhKM1FT98BQwQJvww
+        4jSnB2wL+d32M/MHYsISXivV5jvklDzN9hoRXsXvLysrJd/RGGdmF7btwC5YAXzO
+        VKsi5V252l5W3UlVWSfTDLwY5IeB9tshY+hgMlyyqYB/LBZMkQ27pD7tDzsoW5mY
+        VuEgVRiN4t9fJiFDMaWmxc=
+Received: from jbd-ThinkPad-X1-Nano-Gen-2.web.setting (unknown [223.160.228.167])
+        by zwqz-smtp-mta-g5-1 (Coremail) with SMTP id _____wBXbUZXZq5kZhRCAA--.6187S2;
+        Wed, 12 Jul 2023 16:37:44 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, loic.poulain@linaro.org
+Cc:     fabio.porcedda@gmail.com, bhelgaas@google.com, song.fc@gmail.com,
+        duke_xinanwen@163.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] bus: mhi: host: pci_generic: Add support for Dell DW5932e
+Date:   Wed, 12 Jul 2023 16:37:41 +0800
+Message-Id: <20230712083741.7615-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH] mm: kfence: allocate kfence_metadata at runtime
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
-        Marco Elver <elver@google.com>
-References: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
- <CANpmjNOHz+dRbJsAyg29nksPMcd2P6109iPxTem_-b2qfUvXtw@mail.gmail.com>
- <2a16a76c-506c-f325-6792-4fb58e8da531@bytedance.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <2a16a76c-506c-f325-6792-4fb58e8da531@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wBXbUZXZq5kZhRCAA--.6187S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrZw1xKry3KF18CFWxJF4xWFg_yoW8Jr4DpF
+        4F934jyF4kJr4jyaykt3yDXas8Wan3Gry7KF4xK34Y9F4qyFWYgr92gry2gF15Ka9Yqa1a
+        qFy8XFWjg3WqkF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUbXowUUUUU=
+X-Originating-IP: [223.160.228.167]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbioxmqZGNfupXBtAAAsS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The DW5932e has 2 variants: eSIM(DW5932e-eSIM) and non-eSIM(DW5932e).
+Both of them are designed based on Qualcomm SDX62 and it will
+align with the Foxconn sdx65 settings.
 
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/bus/mhi/host/pci_generic.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-在 2023/7/12 16:28, Peng Zhang 写道:
-> 
-> 
-> 在 2023/7/10 18:19, Marco Elver 写道:
->> On Mon, 10 Jul 2023 at 05:27, 'Peng Zhang' via kasan-dev
->> <kasan-dev@googlegroups.com> wrote:
->>>
->>> kfence_metadata is currently a static array. For the purpose of
->>> allocating scalable __kfence_pool, we first change it to runtime
->>> allocation of metadata. Since the size of an object of kfence_metadata
->>> is 1160 bytes, we can save at least 72 pages (with default 256 objects)
->>> without enabling kfence.
->>>
->>> Below is the numbers obtained in qemu (with default 256 objects).
->>> before: Memory: 8134692K/8388080K available (3668K bss)
->>> after: Memory: 8136740K/8388080K available (1620K bss)
->>> More than expected, it saves 2MB memory.
->>>
->>> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
->>
->> Seems like a reasonable optimization, but see comments below.
->>
->> Also with this patch applied on top of v6.5-rc1, KFENCE just doesn't
->> init at all anymore (early init). Please fix.
-> I'm very sorry because I made a slight modification before sending the
-> patch but it has not been tested, which caused it to not work properly.
-> I fixed some of the issues you mentioned in v2[1].
-> 
-> [1] 
-> https://lore.kernel.org/lkml/20230712081616.45177-1-zhangpeng.00@bytedance.com/
-> 
->>
->>> ---
->>>   mm/kfence/core.c   | 102 ++++++++++++++++++++++++++++++++-------------
->>>   mm/kfence/kfence.h |   5 ++-
->>>   2 files changed, 78 insertions(+), 29 deletions(-)
->>>
->>> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
->>> index dad3c0eb70a0..b9fec1c46e3d 100644
->>> --- a/mm/kfence/core.c
->>> +++ b/mm/kfence/core.c
->>> @@ -116,7 +116,7 @@ EXPORT_SYMBOL(__kfence_pool); /* Export for test 
->>> modules. */
->>>    * backing pages (in __kfence_pool).
->>>    */
->>>   static_assert(CONFIG_KFENCE_NUM_OBJECTS > 0);
->>> -struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
->>> +struct kfence_metadata *kfence_metadata;
->>>
->>>   /* Freelist with available objects. */
->>>   static struct list_head kfence_freelist = 
->>> LIST_HEAD_INIT(kfence_freelist);
->>> @@ -643,13 +643,56 @@ static unsigned long kfence_init_pool(void)
->>>          return addr;
->>>   }
->>>
->>> +static int kfence_alloc_metadata(void)
->>> +{
->>> +       unsigned long nr_pages = KFENCE_METADATA_SIZE / PAGE_SIZE;
->>> +
->>> +#ifdef CONFIG_CONTIG_ALLOC
->>> +       struct page *pages;
->>> +
->>> +       pages = alloc_contig_pages(nr_pages, GFP_KERNEL, 
->>> first_online_node,
->>> +                                  NULL);
->>> +       if (pages)
->>> +               kfence_metadata = page_to_virt(pages);
->>> +#else
->>> +       if (nr_pages > MAX_ORDER_NR_PAGES) {
->>> +               pr_warn("KFENCE_NUM_OBJECTS too large for buddy 
->>> allocator\n");
->>
->> Does this mean that KFENCE won't work at all if we can't allocate the
->> metadata? I.e. it won't work either in early nor late init modes?
->>
->> I know we already have this limitation for _late init_ of the KFENCE 
->> pool.
->>
->> So I have one major question: when doing _early init_, what is the
->> maximum size of the KFENCE pool (#objects) with this change?
-> It will be limited to 2^10/sizeof(struct kfence_metadata) by buddy
-                 Sorry,  2^10*PAGE_SIZE/sizeof(struct kfence_metadata)
-> system, so I used memblock to allocate kfence_metadata in v2.
->>
->>> +               return -EINVAL;
->>> +       }
->>> +       kfence_metadata = alloc_pages_exact(KFENCE_METADATA_SIZE,
->>> +                                           GFP_KERNEL);
->>> +#endif
->>> +
->>> +       if (!kfence_metadata)
->>> +               return -ENOMEM;
->>> +
->>> +       memset(kfence_metadata, 0, KFENCE_METADATA_SIZE);
->>
->> memzero_explicit, or pass __GFP_ZERO to alloc_pages?
-> Unfortunately, __GFP_ZERO does not work successfully in
-> alloc_contig_pages(), so I used memzero_explicit() in v2.
-> Even though I don't know if memzero_explicit() is necessary
-> (it just uses the barrier).
->>
->>> +       return 0;
->>> +}
->>> +
->>> +static void kfence_free_metadata(void)
->>> +{
->>> +       if (WARN_ON(!kfence_metadata))
->>> +               return;
->>> +#ifdef CONFIG_CONTIG_ALLOC
->>> +       free_contig_range(page_to_pfn(virt_to_page((void 
->>> *)kfence_metadata)),
->>> +                         KFENCE_METADATA_SIZE / PAGE_SIZE);
->>> +#else
->>> +       free_pages_exact((void *)kfence_metadata, KFENCE_METADATA_SIZE);
->>> +#endif
->>> +       kfence_metadata = NULL;
->>> +}
->>> +
->>>   static bool __init kfence_init_pool_early(void)
->>>   {
->>> -       unsigned long addr;
->>> +       unsigned long addr = (unsigned long)__kfence_pool;
->>>
->>>          if (!__kfence_pool)
->>>                  return false;
->>>
->>> +       if (!kfence_alloc_metadata())
->>> +               goto free_pool;
->>> +
->>>          addr = kfence_init_pool();
->>>
->>>          if (!addr) {
->>> @@ -663,6 +706,7 @@ static bool __init kfence_init_pool_early(void)
->>>                  return true;
->>>          }
->>>
->>> +       kfence_free_metadata();
->>>          /*
->>>           * Only release unprotected pages, and do not try to go back 
->>> and change
->>>           * page attributes due to risk of failing to do so as well. 
->>> If changing
->>> @@ -670,31 +714,12 @@ static bool __init kfence_init_pool_early(void)
->>>           * fails for the first page, and therefore expect 
->>> addr==__kfence_pool in
->>>           * most failure cases.
->>>           */
->>> +free_pool:
->>>          memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - 
->>> (unsigned long)__kfence_pool));
->>>          __kfence_pool = NULL;
->>>          return false;
->>>   }
->>>
->>> -static bool kfence_init_pool_late(void)
->>> -{
->>> -       unsigned long addr, free_size;
->>> -
->>> -       addr = kfence_init_pool();
->>> -
->>> -       if (!addr)
->>> -               return true;
->>> -
->>> -       /* Same as above. */
->>> -       free_size = KFENCE_POOL_SIZE - (addr - (unsigned 
->>> long)__kfence_pool);
->>> -#ifdef CONFIG_CONTIG_ALLOC
->>> -       free_contig_range(page_to_pfn(virt_to_page((void *)addr)), 
->>> free_size / PAGE_SIZE);
->>> -#else
->>> -       free_pages_exact((void *)addr, free_size);
->>> -#endif
->>> -       __kfence_pool = NULL;
->>> -       return false;
->>> -}
->>> -
->>>   /* === DebugFS Interface 
->>> ==================================================== */
->>>
->>>   static int stats_show(struct seq_file *seq, void *v)
->>> @@ -896,6 +921,10 @@ void __init kfence_init(void)
->>>   static int kfence_init_late(void)
->>>   {
->>>          const unsigned long nr_pages = KFENCE_POOL_SIZE / PAGE_SIZE;
->>> +       unsigned long addr = (unsigned long)__kfence_pool;
->>> +       unsigned long free_size = KFENCE_POOL_SIZE;
->>> +       int ret;
->>> +
->>>   #ifdef CONFIG_CONTIG_ALLOC
->>>          struct page *pages;
->>>
->>> @@ -913,15 +942,29 @@ static int kfence_init_late(void)
->>>                  return -ENOMEM;
->>>   #endif
->>>
->>> -       if (!kfence_init_pool_late()) {
->>> -               pr_err("%s failed\n", __func__);
->>> -               return -EBUSY;
->>> +       ret = kfence_alloc_metadata();
->>> +       if (!ret)
->>> +               goto free_pool;
->>> +
->>> +       addr = kfence_init_pool();
->>> +       if (!addr) {
->>> +               kfence_init_enable();
->>> +               kfence_debugfs_init();
->>> +               return 0;
->>>          }
->>>
->>> -       kfence_init_enable();
->>> -       kfence_debugfs_init();
->>> +       pr_err("%s failed\n", __func__);
->>> +       kfence_free_metadata();
->>> +       free_size = KFENCE_POOL_SIZE - (addr - (unsigned 
->>> long)__kfence_pool);
->>> +       ret = -EBUSY;
->>>
->>> -       return 0;
->>> +free_pool:
->>> +#ifdef CONFIG_CONTIG_ALLOC
->>> +       free_contig_range(page_to_pfn(virt_to_page((void *)addr)), 
->>> free_size / PAGE_SIZE);
->>> +#else
->>> +       free_pages_exact((void *)addr, free_size);
->>> +#endif
->>
->> You moved this from kfence_init_pool_late - that did "__kfence_pool =
->> NULL" which is missing now.
-> Thanks for spotting this, I added it in v2.
-> 
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index 9ca0dc3a3bfe..07172789b197 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -625,6 +625,12 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+ 	/* T99W510 (sdx24), variant 3 */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f2),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx24_info },
++	/* DW5932e-eSIM (sdx62), With eSIM */
++	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f5),
++		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
++	/* DW5932e (sdx62), Non-eSIM*/
++	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f9),
++		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
+ 	/* MV31-W (Cinterion) */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b3),
+ 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+-- 
+2.25.1
+
