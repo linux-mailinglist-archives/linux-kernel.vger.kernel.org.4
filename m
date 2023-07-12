@@ -2,122 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFDE750BED
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E460B750BF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 17:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbjGLPKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 11:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S232634AbjGLPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 11:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbjGLPKP (ORCPT
+        with ESMTP id S232984AbjGLPKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:10:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C9F1FE1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:09:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30A3561803
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 15:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EBE3C433C9;
-        Wed, 12 Jul 2023 15:09:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689174558;
-        bh=e3MaI1/jz0lN6S/DnrtBmXU3uvqKZWpqSOP/vDadgxM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gYamKjhUuIxcF4zvummTVldw0pp8SJoCDz2y1Xw7KBBt2WY0SZ/1wehxIdLnk/3pU
-         OQTPGpyeei3RJtWaAZI6Z1qX8cdQ27BOrruAogPUHm7YpQ0VX2DI11eJJtSJH4hAMZ
-         RkvgznfsG7zmaBD6pEkuF5Eti4xooZbW3bnam2HM=
-Date:   Wed, 12 Jul 2023 17:09:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Gangurde, Abhijit" <abhijit.gangurde@amd.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>
-Subject: Re: [PATCH 1/4] cdx: add support for bus enable and disable
-Message-ID: <2023071223-unstopped-marsupial-9c89@gregkh>
-References: <20230711121027.936487-1-abhijit.gangurde@amd.com>
- <20230711121027.936487-2-abhijit.gangurde@amd.com>
- <2023071109-saturate-purist-d854@gregkh>
- <DM4PR12MB7765F182AAF927F780DEE8848F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
+        Wed, 12 Jul 2023 11:10:45 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B231BE2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:10:26 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-346636b9761so2916535ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 08:10:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689174624; x=1691766624;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wj4QF04GqhfOXgZJMhxX0dNs4/SeSh8zekCeq3JhY6c=;
+        b=eKp/sXs6Ml16YA4OH/lW4DNToyGScZHnMnfPYDFmhHAQgA2lAGDlOM25FFJEO8L+7A
+         YgCULt/hhJ6QiwITARC9bKlXBI7jTuU4Wii5cj8JR+cOMVeDRzoYHl2iP66U9RVNVHB5
+         Kw6tF8MMDal1eg8hFM6Ul1Oke6Q54fCx556iUuIKUT+TI/bhFaCqyeKAZ8aLIf2HQiU4
+         oS+1Natvid4McB1vsKSOu0U/NOpwQ6eKpp5N3mXpDdrPJ7LhIbneOy0b0BUkiic+5ZHJ
+         yeA6jq/LQHAbtOzLKsallr8luwe4DrXI7eH+WgqZ9ODOOaNh6/uVdpViuVokMniUEXKd
+         sQyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689174624; x=1691766624;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wj4QF04GqhfOXgZJMhxX0dNs4/SeSh8zekCeq3JhY6c=;
+        b=k9HtmFOxiHl3LqOaOGMBxTSnde3LoFCkL4hIS6Que/vlR+8h4NkkmojP/Gn7+snUHz
+         czYXWU2rWjQTFunXzyWEXYa6jCvgnw5Cr8CvsGRdItTWVi0GO1SOjP0/6KggiBfUg4T8
+         SDU087szQ1/bAgS6hFR95/2QE9/Ev2ZQsKBZ48YT+IRu2o3P4vNljy6ZHgFq0XTymBrc
+         pe8XqNv0RXSr6L68Kd/Tl0kRd0ANhJcEAW8WbnugNB6ig1EiE/RPLGI6vKhyKdDrm+Xf
+         CUfhQEBPhcsQzZgOo4nm6pN17cotsxpxvAONaf5pzNkHdEr7o2uqMOzNxfRP8YAMp5FI
+         RvKA==
+X-Gm-Message-State: ABy/qLaDtAJPJjwmzi0SysB0qupXAhZiWZQKr8WmC4PVCbBBLszzSpo4
+        etK8uAJE7Aheda31+Ts8+xEufg==
+X-Google-Smtp-Source: APBJJlFz9hDdB5LE4AQRO6QY4eCL9IIK0r/ENpBZTtRFvn/hT3E/u+TSgEV3F6rjZTaWcCzZGKap3w==
+X-Received: by 2002:a05:6e02:e04:b0:345:e438:7381 with SMTP id a4-20020a056e020e0400b00345e4387381mr15577306ilk.2.1689174623958;
+        Wed, 12 Jul 2023 08:10:23 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id i15-20020a92c94f000000b003460bb48516sm1368429ilq.67.2023.07.12.08.10.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 08:10:23 -0700 (PDT)
+Message-ID: <0ffd2e2f-a179-393b-bd0d-cd62a41ecb92@kernel.dk>
+Date:   Wed, 12 Jul 2023 09:10:22 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB7765F182AAF927F780DEE8848F36A@DM4PR12MB7765.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 7/7] io_uring: add futex waitv
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com
+References: <20230712004705.316157-1-axboe@kernel.dk>
+ <20230712004705.316157-8-axboe@kernel.dk>
+ <20230712093152.GF3100107@hirez.programming.kicks-ass.net>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230712093152.GF3100107@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 01:21:13PM +0000, Gangurde, Abhijit wrote:
-> [AMD Official Use Only - General]
+On 7/12/23 3:31?AM, Peter Zijlstra wrote:
+> On Tue, Jul 11, 2023 at 06:47:05PM -0600, Jens Axboe wrote:
+>> Needs a bit of splitting and a few hunks should go further back (like
+>> the wake handler typedef).
+>>
+>> WIP, adds IORING_OP_FUTEX_WAITV - pass in an array of futex addresses,
+>> and wait on all of them until one of them triggers.
+>>
 > 
-> > > CDX bus needs to be disabled before updating/writing devices
-> > > in the FPGA. Once the devices are written, the bus shall be
-> > > enabled. This change provides sysfs entry to enable/disable the
-> > > CDX bus.
-> > >
-> > > Co-developed-by: Nipun Gupta <nipun.gupta@amd.com>
-> > > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> > > Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-> > > Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-
-> > vuuren@amd.com>
-> > > Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-bus-cdx | 11 +++++
-> > >  drivers/cdx/cdx.c                       | 26 ++++++++++++
-> > >  drivers/cdx/controller/cdx_controller.c | 27 +++++++++++++
-> > >  drivers/cdx/controller/mc_cdx_pcol.h    | 54
-> > +++++++++++++++++++++++++
-> > >  drivers/cdx/controller/mcdi_functions.c | 24 +++++++++++
-> > >  drivers/cdx/controller/mcdi_functions.h | 16 ++++++++
-> > >  include/linux/cdx/cdx_bus.h             |  6 +++
-> > >  7 files changed, 164 insertions(+)
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-bus-cdx
-> > b/Documentation/ABI/testing/sysfs-bus-cdx
-> > > index 7af477f49998..0afa85b3c63b 100644
-> > > --- a/Documentation/ABI/testing/sysfs-bus-cdx
-> > > +++ b/Documentation/ABI/testing/sysfs-bus-cdx
-> > > @@ -11,6 +11,17 @@ Description:
-> > >
-> > >               # echo 1 > /sys/bus/cdx/rescan
-> > >
-> > > +What:              /sys/bus/cdx/enable
-> > > +Date:              July 2023
-> > > +Contact:   nipun.gupta@amd.com
-> > > +Description:
-> > > +           Writing y/1/on to this file enables the CDX bus and
-> > > +           writing n/0/off disables the bus.
-> > > +
-> > > +           For example to disable CDX bus::
-> > > +
-> > > +             # echo 0 > /sys/bus/cdx/enable
-> >
-> > What could go wrong!  :)
-> >
-> > You don't say why disabling / enabling the bus is needed, this feels
-> > like a very huge stick, why is this for all busses, and not just an
-> > individual CDX bus?
-> >
+> So I'm once again not following. FUTEX_WAITV is to wait on multiple
+> futexes and get a notification when any one of them wakes up with an
+> index to indicate which one.
+
+Right
+
+> How exactly is that different from multiple FUTEX_WAIT entries in the
+> io_uring thing itself? Admittedly I don't actually know much of anything
+> when it comes to io_uring, but isn't the idea that queue multiple
+> 'syscall' like things and get individual completions back?
 > 
-> As said in the description of the patch, disabling/enabling is needed when FPGA is being reprogrammed.
+> So how does WAITV make sense here?
 
-Ok, why would this not also be in the description for when you need to
-look up what this file does?  You will not be able to track it back to
-the commit log very easily.
+You most certainly could just queue N FUTEX_WAIT operations rather than
+a single FUTEX_WAITV, but it becomes pretty cumbersome to deal with.
+First of all, you'd now get N completions you have to deal with. That's
+obviously doable, but you'd probably also need to care about
+cancelations of the N-1 FUTEX_WAIT that weren't triggered.
 
-thanks,
+For those reasons, I do think having a separate FUTEX_WAITV makes a lot
+more sense. It's a single request and there's no cleanup or cancelation
+work to run when just one futex triggers. Tongue in cheek, but you could
+also argue that why would you need futex waitv support in the kernel,
+when you could just have N processes wait on N futexes? We can certainly
+do that a LOT more efficiently with io_uring even without FUTEX_WAITV,
+but from an efficiency and usability point of view, having FUTEX_WAITV
+makes this a lot easier than dealing with N requests and cancelations on
+completion.
 
-greg k-h
+-- 
+Jens Axboe
+
