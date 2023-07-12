@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACE3750B43
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13C7750B3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jul 2023 16:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbjGLOor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jul 2023 10:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
+        id S232425AbjGLOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jul 2023 10:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbjGLOon (ORCPT
+        with ESMTP id S231792AbjGLOoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jul 2023 10:44:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B39C1998
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689173035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C34WsFlKYjYWkTFb9HgsWdoRE76RVrfdGiTYT+vpVqI=;
-        b=gfWUPjjl+cxln4qi/dVrXBYB8tEIaeAo8fgjFWVykJV3EP5RbnGwORQ26j7b4pXtZ+TgiV
-        JfOjbpHd+FESBWiNuLwHAG+af0gbDlojcH1rntulDtzEIOqTNaqe2b6RIEXlp7n3kq/SGR
-        INvqElybSshW4KMN72uYKVLEzgRbOOU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-527-GDEssEVIObSjFK9mCmq9HA-1; Wed, 12 Jul 2023 10:43:53 -0400
-X-MC-Unique: GDEssEVIObSjFK9mCmq9HA-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51e10b6148cso1162539a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jul 2023 07:43:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689173032; x=1691765032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C34WsFlKYjYWkTFb9HgsWdoRE76RVrfdGiTYT+vpVqI=;
-        b=g5oswi78Q5ZkhK+HtXFwsSJTbUEAUyQy3d0R6k3waehKFvNyyo87VJrFL7qV2GLMUG
-         mxQuQGv4s2fLQMGaTdYZ7xgjuQBQIaOPn9DnzEkyBplcmVgJZGO0NcIXD47BAphNbTRL
-         zReZ9RtouUZVPadvv3lvEnN53EhKs3wRkrUTDAeeBRrwYzTQXufqiEHFMGrFfHLO/19c
-         Oso/LCnZ2P/LnfNg8V75MtZkfTrJXSe2OLdk5uP75cfhutlywvIelyUP5bjFqTGTd662
-         VyOXVHRHtqyfB5eLRYgTzyYHruqldHqYtIrh/cKQOoY2y2r3FaN7y+uI9Dp5PqC6OVZe
-         CmVw==
-X-Gm-Message-State: ABy/qLatYxpSi8x/9hLXWsTxOEmXuszlQsgTM165ebk1SMhKwnuxRTp0
-        ZREzmuaQG9uS7GaSqcUnJebXr27GcSREnWkJ+UdZ+AB6GKG/vop0bYjkrJJXfefmQpEwoMgslgX
-        7Mm+cjqOVfPjOHwIlk1Zxz1RNqXZF4Rqd
-X-Received: by 2002:a05:6402:5245:b0:51f:c6a1:4355 with SMTP id t5-20020a056402524500b0051fc6a14355mr3025299edd.4.1689173032283;
-        Wed, 12 Jul 2023 07:43:52 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEa35eKJ9IGbLw5gzEbWDSaeBN07RQx+T2XC+mOrnyClSMdlCkLN6eYHK5OBBuZ4tkrEJMU7Q==
-X-Received: by 2002:a05:6402:5245:b0:51f:c6a1:4355 with SMTP id t5-20020a056402524500b0051fc6a14355mr3025281edd.4.1689173032056;
-        Wed, 12 Jul 2023 07:43:52 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id u7-20020aa7d0c7000000b0051a2d2f82fdsm2877251edo.6.2023.07.12.07.43.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 07:43:51 -0700 (PDT)
-Message-ID: <0f50cb97-0507-bcbb-03c6-e3394690ae80@redhat.com>
-Date:   Wed, 12 Jul 2023 16:43:50 +0200
+        Wed, 12 Jul 2023 10:44:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1EAE6F;
+        Wed, 12 Jul 2023 07:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Cl8ZlZiRFcpCnQDdALLt0daQ8db1oTNHsErrm3r9t1Y=; b=FymAXj62zEYXrd8MbUppdm1Ys7
+        3YIzUyGiQIHWY0eIhzA2dcGwxuHLYBKah0/Nh5b0IYD1oIw/3pemTCJ0WKhaLC04wa9ulyBIY4wmY
+        AsE+6Yj1PUb6XLwcKBnz3xJOaTZ356HEa6P/YP4F2AUv3tQHFthwVZkX97r364iMjv0eW4Ke7bpgn
+        RaGAIf+EgHlxcadKyCqBS/gvZSRarktUnw3C/AwmSZeySh81oHveVyjmOqTF9D2ZzdAL5VMp5T1A2
+        zT6WXNmTnTjFm6hmMkrmaueaIJoMRZqN/unWlinxejCNxVbjH/qr8qHDcWVgthzhn7JlDXw26YhXu
+        Gi4R9Mxw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJb4S-000EMI-3C;
+        Wed, 12 Jul 2023 14:44:01 +0000
+Message-ID: <46ed999e-f6b5-3087-20a2-5505c7c9845b@infradead.org>
+Date:   Wed, 12 Jul 2023 07:43:59 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 5/8] platform/x86: asus-wmi: don't allow eGPU switching
- if eGPU not connected
-Content-Language: en-US, nl
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, markgross@kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net
-References: <20230630053552.976579-1-luke@ljones.dev>
- <20230630053552.976579-6-luke@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230630053552.976579-6-luke@ljones.dev>
+Subject: Re: [PATCH -next] scsi: ufs: core: Fix some kernel-doc comments
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230712075836.15375-1-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230712075836.15375-1-yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 6/30/23 07:35, Luke D. Jones wrote:
-> Check the ASUS_WMI_DEVID_EGPU_CONNECTED method for eGPU connection
-> before allowing the ASUS_WMI_DEVID_EGPU method to run.
+
+On 7/12/23 00:58, Yang Li wrote:
+> Use colons to separate parameter names from their specific meanings.
+> silencethe warnings:
 > 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> drivers/ufs/core/ufs-mcq.c:499: warning: Function parameter or member 'hba' not described in 'ufshcd_mcq_sq_cleanup'
+> drivers/ufs/core/ufs-mcq.c:499: warning: Function parameter or member 'task_tag' not described in 'ufshcd_mcq_sq_cleanup'
+> drivers/ufs/core/ufs-mcq.c:560: warning: Function parameter or member 'utrd' not described in 'ufshcd_mcq_nullify_sqe'
+> drivers/ufs/core/ufs-mcq.c:583: warning: Function parameter or member 'hba' not described in 'ufshcd_mcq_sqe_search'
+> drivers/ufs/core/ufs-mcq.c:583: warning: Function parameter or member 'hwq' not described in 'ufshcd_mcq_sqe_search'
+> drivers/ufs/core/ufs-mcq.c:583: warning: Function parameter or member 'task_tag' not described in 'ufshcd_mcq_sqe_search'
+> drivers/ufs/core/ufs-mcq.c:630: warning: Function parameter or member 'cmd' not described in 'ufshcd_mcq_abort'
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5850
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Thanks, patch looks good to me:
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-Regards,
-
-Hans
+Thanks.
 
 > ---
->  drivers/platform/x86/asus-wmi.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  drivers/ufs/core/ufs-mcq.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 0c8a4a46b121..821addb284d7 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -693,6 +693,15 @@ static ssize_t egpu_enable_store(struct device *dev,
->  	if (enable > 1)
->  		return -EINVAL;
+> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+> index e8bad5e9518e..1e23ba3e2bdf 100644
+> --- a/drivers/ufs/core/ufs-mcq.c
+> +++ b/drivers/ufs/core/ufs-mcq.c
+> @@ -490,8 +490,8 @@ static int ufshcd_mcq_sq_start(struct ufs_hba *hba, struct ufs_hw_queue *hwq)
+>  /**
+>   * ufshcd_mcq_sq_cleanup - Clean up submission queue resources
+>   * associated with the pending command.
+> - * @hba - per adapter instance.
+> - * @task_tag - The command's task tag.
+> + * @hba: per adapter instance.
+> + * @task_tag: The command's task tag.
+>   *
+>   * Returns 0 for success; error code otherwise.
+>   */
+> @@ -554,7 +554,7 @@ int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
+>   * Write the sqe's Command Type to 0xF. The host controller will not
+>   * fetch any sqe with Command Type = 0xF.
+>   *
+> - * @utrd - UTP Transfer Request Descriptor to be nullified.
+> + * @utrd: UTP Transfer Request Descriptor to be nullified.
+>   */
+>  static void ufshcd_mcq_nullify_sqe(struct utp_transfer_req_desc *utrd)
+>  {
+> @@ -571,9 +571,9 @@ static void ufshcd_mcq_nullify_sqe(struct utp_transfer_req_desc *utrd)
+>   * If the command is in the submission queue and not issued to the device yet,
+>   * nullify the sqe so the host controller will skip fetching the sqe.
+>   *
+> - * @hba - per adapter instance.
+> - * @hwq - Hardware Queue to be searched.
+> - * @task_tag - The command's task tag.
+> + * @hba: per adapter instance.
+> + * @hwq: Hardware Queue to be searched.
+> + * @task_tag: The command's task tag.
+>   *
+>   * Returns true if the SQE containing the command is present in the SQ
+>   * (not fetched by the controller); returns false if the SQE is not in the SQ.
+> @@ -622,7 +622,7 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
 >  
-> +	err = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU_CONNECTED);
-> +	if (err < 0)
-> +		return err;
-> +	if (err < 1) {
-> +		err = -ENODEV;
-> +		pr_warn("Failed to set egpu disable: %d\n", err);
-> +		return err;
-> +	}
-> +
->  	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, enable, &result);
->  	if (err) {
->  		pr_warn("Failed to set egpu disable: %d\n", err);
+>  /**
+>   * ufshcd_mcq_abort - Abort the command in MCQ.
+> - * @cmd - The command to be aborted.
+> + * @cmd: The command to be aborted.
+>   *
+>   * Returns SUCCESS or FAILED error codes
+>   */
 
+-- 
+~Randy
